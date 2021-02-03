@@ -1,0 +1,33 @@
+.sort-container {
+	position: relative;
+	text-align: center;
+	display: flex;
+	align-content: flex-start;
+	justify-content: space-around;
+	margin-top: 2rem;
+	cursor: pointer;
+}
+
+.sort-button {
+	border-radius: 20px;
+	background-color: #8e23d1;
+}
+
+.sort-button:hover {
+	border-radius: 20px;
+	background-color: #8e23d1;
+}
+
+.sort-item {
+	color: #fdfdfd;
+	font-size: 1rem;
+	margin: 0.4rem 0.8rem;
+}
+
+.sort-item:hover {
+	color: #fdfdfd;
+}
+
+.sort-item:active {
+	color: #fdfdfd;
+}
