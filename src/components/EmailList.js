@@ -10,40 +10,34 @@ const api = createApiClient()
 
 function EmailList() {
   const [emailList, setEmailList] = useState([])
-  const [loading, setLoading] = useState('')
 
-  // useEffect(() => {
-  //   db.collection('emails').orderBy('timestamp', 'desc').onSnapshot(snapshot => setEmailList(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data()}))))
-  // }, [])
-
-  // useEffect(() => {
-  //   setEmailList(api.getThreads())
-  // }, [loading])
-
-  const LoadEmails = async () => {
-    const emails = await api.getThreads()
-    setEmailList(emails || 'No emails loaded')
-    console.log(emails)
-  }
+  useEffect(() => {
+    const LoadEmails = async () => {
+      const metaList = await api.getThreads()
+      metaList.forEach(async (item) => {
+        const emailList = await api.getMessageDetail(item.id)
+        setEmailList((prevState) => [...prevState, emailList])
+      })
+    }
+  LoadEmails()
+  },[])
 
   return (
     <div>
-      <button onClick={() => LoadEmails()}>Fetch Emails</button>
       <div className="scroll">
         <div className="tlOuterContainer">
           <div className="thread-list">
             {emailList ? (
-              emailList
+              <div className="base">
+                {emailList.map((email) => (
+                  <EmailListItem
+                    href={`mail/${email.id}`}
+                    key={email.id}
+                    email={email}
+                  />
+                ))}
+              </div>
             ) : (
-              // <div className="base">
-              //   {emailList.map((email) => (
-              //     <EmailListItem
-              //       href={`mail/${email.id}`}
-              //       key={email.id}
-              //       email={email}
-              //     />
-              //   ))}
-              // </div>
               <h2>Loading</h2>
             )}
           </div>

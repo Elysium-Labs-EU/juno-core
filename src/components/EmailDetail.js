@@ -4,82 +4,36 @@ import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 
+import { createApiClient } from '../data/api'
 import EmailDetailBody from './EmailDetailBody'
 import EmailDetOptions from './EmailDetOptions'
 import EmailAvatar from './EmailAvatar'
 import EmailAttachment from './EmailAttachment'
 import TimeStamp from './TimeStamp'
 
+const api = createApiClient()
+
 function EmailDetail() {
   const { threadId } = useParams()
-  const [login, setLogin] = useState(null)
   const [threadDetail, setThreadDetail] = useState(null)
 
-  function authenticate() {
-    return window.gapi.auth2
-      .getAuthInstance()
-      .signIn({
-        scope:
-          'https://mail.google.com/ https://www.googleapis.com/auth/gmail.modify https://www.googleapis.com/auth/gmail.readonly',
-      })
-      .then(
-        function () {
-          console.log('Sign-in successful')
-        },
-        function (err) {
-          console.error('Error signing in', err)
-        }
-      )
-  }
-
-  function loadClient() {
-    window.gapi.client.setApiKey(process.env.REACT_APP_GAPI_API_KEY)
-    return window.gapi.client
-      .load('https://gmail.googleapis.com/$discovery/rest?version=v1')
-      .then(
-        function () {
-          console.log('GAPI client loaded for API')
-          setLogin({ login: 'Success' })
-        },
-        function (err) {
-          console.error('Error loading GAPI client for API', err)
-        }
-      )
-  }
 
   useEffect(() => {
-    if (login != null) {
-      return window.gapi.client.gmail.users.threads
-        .get({
-          userId: 'me',
-          id: `${threadId}`,
-        })
-
-        .then((response) => {
-          // console.log(response.result.messages[0].payload.body)
-          setThreadDetail(response.result)
-        })
-
-        .catch((error) => {
-          console.log(error)
-        })
+    const LoadEmail = async () => {
+      const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
+      setThreadDetail(threadDetailFeed || 'No email loaded')
+      console.log(threadDetailFeed)
     }
-  }, [login])
+    LoadEmail()
+  }, [threadId])
 
 
   return (
     <div className="tlOuterContainer">
-      <button
-        className="btn btn-sm btn-outline-secondary"
-        onClick={() => authenticate().then(loadClient)}
-      >
-        Authorize and load
-      </button>
       <div className="detail-row">
         <div className="p-4 mb-3 email-detail-container">
           <div className="detail-base">
             <div className="cardFullWidth">
-              {/* <div> */}
               {threadDetail ? (
                 threadDetail.messages.map((message) => (
                   <div className="email" key={message.id}>
