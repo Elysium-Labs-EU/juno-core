@@ -29,7 +29,7 @@ const ThreadBase = styled.a`
 `
 
 const EmailListItem = ({ email }) => {
-  console.log('EmailListItem', email)
+  // console.log('EmailListItem', email)
 
   return (
     <div>

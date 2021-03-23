@@ -7,17 +7,36 @@ const api = createApiClient()
 
 function EmailList() {
   const [emailList, setEmailList] = useState([])
+  const [nextPageToken, setNextPageToken] = useState(undefined)
 
   useEffect(() => {
-    const LoadEmails = async () => {
-      const metaList = await api.getThreads()
-      metaList.forEach(async (item) => {
+    LoadEmails()
+  }, [])
+
+  const LoadEmails = async (nextPageToken) => {
+    if (nextPageToken) {
+      const metaList = await api.getAdditionalThreads(nextPageToken)
+      setNextPageToken(metaList.nextPageToken)
+      console.log(metaList)
+      metaList.threads.forEach(async (item) => {
+        const emailList = await api.getMessageDetail(item.id)
+        setEmailList((prevState) => [...prevState, emailList])
+      })
+    } else {
+      const metaList = await api.getInitialThreads()
+      setNextPageToken(metaList.nextPageToken)
+      console.log(metaList)
+      metaList.threads.forEach(async (item) => {
         const emailList = await api.getMessageDetail(item.id)
         setEmailList((prevState) => [...prevState, emailList])
       })
     }
-  LoadEmails()
-  },[])
+  }
+  
+  const loadNextPage = (nextPageToken) => {
+    console.log(nextPageToken)
+    LoadEmails(nextPageToken)
+  }
 
   return (
     <div>
@@ -39,7 +58,7 @@ function EmailList() {
             )}
           </div>
           <div className="d-flex justify-content-center">
-            <button>Test</button>
+            <button onClick={() => loadNextPage(nextPageToken)}>Load more</button>
           </div>
         </div>
       </div>
