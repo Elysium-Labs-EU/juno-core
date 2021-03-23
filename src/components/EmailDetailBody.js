@@ -14,9 +14,7 @@ const EmailDetailBody = ({ threadDetailBody }) => {
       return { __html: str }
     } else if (threadDetailBody.mimeType === 'multipart/mixed') {
       console.log('multipart/mixed')
-      var str = base64url.decode(
-        `${threadDetailBody.parts[0].parts[1].body.data}`
-      )
+      var str = base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
       return { __html: str }
     } else {
       console.log('regular body')

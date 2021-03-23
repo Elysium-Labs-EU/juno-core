@@ -12,13 +12,13 @@ import MessageCount from './MessageCount'
 
 const ThreadBase = styled.a`
   font-weight: ${(props) => (props.labelIds === 'UNREAD' ? 'bold' : 'regular')};
-	position: relative;
+  position: relative;
   user-select: none;
-	--line-margin: 30px;
-	--padding-left: 30px;
-	--padding-right: 30px;
-	--primary-text: #535358;
-	--mindful-text: #8e8e99;
+  --line-margin: 30px;
+  --padding-left: 30px;
+  --padding-right: 30px;
+  --primary-text: #535358;
+  --mindful-text: #8e8e99;
   --discreet-text: #aeaeb4;
   color: #535358;
 
@@ -46,34 +46,20 @@ const EmailListItem = ({ email }) => {
           <div className="cellName">
             <div className="avatars">
               <EmailAvatar
-                avatarURL={
-                  email?.messages[0].payload.headers.find(
-                    (e) => e.name === 'From'
-                  ).value
-                }
+                avatarURL={email?.messages[0].payload.headers.find((e) => e.name === 'From').value}
               />
             </div>
             <span className="text-truncate">
-              {
-                email?.messages[0].payload.headers.find(
-                  (e) => e.name === 'From'
-                ).value
-              }
+              {email?.messages[0].payload.headers.find((e) => e.name === 'From').value}
             </span>
             <MessageCount countOfMessage={email?.messages} />
           </div>
           <div className="cellMessage">
             <div className="subjectSnippet text-truncate">
               <span className="subject">
-                {
-                  email?.messages[0].payload.headers.find(
-                    (e) => e.name === 'Subject'
-                  ).value
-                }
+                {email?.messages[0].payload.headers.find((e) => e.name === 'Subject').value}
               </span>
-              <span className="snippet">
-                &nbsp;&nbsp;—&nbsp;&nbsp;{email?.messages[0].snippet}
-              </span>
+              <span className="snippet">&nbsp;&nbsp;—&nbsp;&nbsp;{email?.messages[0].snippet}</span>
             </div>
           </div>
 

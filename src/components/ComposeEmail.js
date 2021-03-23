@@ -31,9 +31,7 @@ function ComposeEmail() {
                   <div className="input">
                     <div data-focus-on-click="true" className="input-base">
                       <div className="wrapper-participants praticipantsInput">
-                        <div className="react-autosuggest__container">
-                          ReactAutoSuggest
-                        </div>
+                        <div className="react-autosuggest__container">ReactAutoSuggest</div>
                       </div>
                       <div className="ccBcc">
                         <div className="ccBccButtons">
@@ -57,10 +55,7 @@ function ComposeEmail() {
                   <div className="jsx-785063291 button">
                     <label>robberttg@gmail.com</label>
                     <select tabIndex="2" className="select">
-                      <option
-                        value="R Tuerlings <robberttg@gmail.com>"
-                        className="jsx-785063291"
-                      >
+                      <option value="R Tuerlings <robberttg@gmail.com>" className="jsx-785063291">
                         R Tuerlings &lt;robberttg@gmail.com&gt;
                       </option>
                     </select>

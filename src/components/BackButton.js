@@ -8,10 +8,7 @@ function BackButton() {
   }
 
   return (
-    <button
-      className="btn btn-sm btn-outline-secondary"
-      onClick={navigateToHome}
-    >
+    <button className="btn btn-sm btn-outline-secondary" onClick={navigateToHome}>
       Back
     </button>
   )

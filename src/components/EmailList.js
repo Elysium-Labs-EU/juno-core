@@ -16,21 +16,20 @@ function EmailList() {
     } else {
       const metaList = await api.getInitialThreads()
       setEmails(metaList)
-      }
+    }
   }
-  
+
   useEffect(() => {
     LoadEmails()
   }, [])
 
-  
-const setEmails = async (metaList) => {
-  setNextPageToken(metaList.nextPageToken)
-  metaList.threads.forEach(async (item) => {
-    const emailList = await api.getMessageDetail(item.id)
-    setEmailList((prevState) => [...prevState, emailList])
-  })
-}
+  const setEmails = async (metaList) => {
+    setNextPageToken(metaList.nextPageToken)
+    metaList.threads.forEach(async (item) => {
+      const emailList = await api.getMessageDetail(item.id)
+      setEmailList((prevState) => [...prevState, emailList])
+    })
+  }
 
   const loadNextPage = (nextPageToken) => {
     LoadEmails(nextPageToken)
@@ -44,11 +43,7 @@ const setEmails = async (metaList) => {
             {emailList ? (
               <div className="base">
                 {emailList.map((email) => (
-                  <EmailListItem
-                    href={`mail/${email.id}`}
-                    key={email.id}
-                    email={email}
-                  />
+                  <EmailListItem href={`mail/${email.id}`} key={email.id} email={email} />
                 ))}
               </div>
             ) : (

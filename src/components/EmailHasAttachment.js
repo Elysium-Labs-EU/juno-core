@@ -5,15 +5,9 @@ const EmailAttachment = ({ hasAttachment }) => {
   // const file = hasAttachment.parts[1].filename
   //Check if the message contains a parts.object that has an attachmentId. Don't return if no id is found.
   function CheckAttachment() {
-    if (
-      hasAttachment.filter((thread) => thread.payload.hasOwnProperty('parts'))
-        .length > 0
-    ) {
+    if (hasAttachment.filter((thread) => thread.payload.hasOwnProperty('parts')).length > 0) {
       // console.log('Is multiple parts')
-      if (
-        hasAttachment.filter((thread) => thread.payload.parts.filename).length >
-        0
-      ) {
+      if (hasAttachment.filter((thread) => thread.payload.parts.filename).length > 0) {
         return <FiPaperclip />
       } else {
         return null
@@ -56,9 +50,7 @@ const EmailAttachment = ({ hasAttachment }) => {
   // ))))}
 
   function checkmap3() {
-    hasAttachment.map((thread) =>
-      thread.payload.parts.map((part) => part.filename)
-    )
+    hasAttachment.map((thread) => thread.payload.parts.map((part) => part.filename))
   }
 
   // console.log(checkmap3)
@@ -72,9 +64,7 @@ const EmailAttachment = ({ hasAttachment }) => {
   // }
 
   function hasAttachmentId2() {
-    console.log(
-      parts.filter((part) => part.body.hasOwnProperty('attachmentId'))
-    )
+    console.log(parts.filter((part) => part.body.hasOwnProperty('attachmentId')))
   }
 
   function hasAttachmentId3() {

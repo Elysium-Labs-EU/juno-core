@@ -17,7 +17,6 @@ function EmailDetail() {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
-
   useEffect(() => {
     const LoadEmail = async () => {
       const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
@@ -26,7 +25,6 @@ function EmailDetail() {
     }
     LoadEmail()
   }, [threadId])
-
 
   return (
     <div className="tlOuterContainer">
@@ -39,18 +37,11 @@ function EmailDetail() {
                   <div className="email" key={message.id}>
                     <div className="d-flex align-items-center">
                       <EmailAvatar
-                        avatarURL={
-                          message.payload.headers.find((e) => e.name === 'From')
-                            .value
-                        }
+                        avatarURL={message.payload.headers.find((e) => e.name === 'From').value}
                       />
                       <div className="headerFullWidth text-truncate d-flex">
                         <span className="email-detail-title">
-                          {
-                            message.payload.headers.find(
-                              (e) => e.name === 'Subject'
-                            ).value
-                          }
+                          {message.payload.headers.find((e) => e.name === 'Subject').value}
                         </span>
                         {/* <div className="text-truncate date">{message.payload.headers.find(e => e.name === 'Date').value}</div> */}
                         <div className="ml-auto">
@@ -60,11 +51,7 @@ function EmailDetail() {
                     </div>
                     <div className="d-flex align-items-center mt-2">
                       <div className="text-truncate email-detail-from">
-                        From:{' '}
-                        {
-                          message.payload.headers.find((e) => e.name === 'From')
-                            .value
-                        }
+                        From: {message.payload.headers.find((e) => e.name === 'From').value}
                       </div>
                     </div>
                     <div className="EmailBody mt-3 mb-3">
@@ -74,9 +61,7 @@ function EmailDetail() {
                       />
                     </div>
                     <div className="mt-3 mb-3">
-                      <p className="email-detail-from">
-                        Message id: {message.id}
-                      </p>
+                      <p className="email-detail-from">Message id: {message.id}</p>
                     </div>
                     <EmailAttachment />
                   </div>
