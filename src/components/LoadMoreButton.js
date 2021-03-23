@@ -31,8 +31,7 @@ function LoadMore() {
                   if (thread.id !== email.id) {
                     setEmailList((prevState) =>
                       [...prevState, response.result].filter(
-                        (email, index, self) =>
-                          index === self.findIndex((e) => e.id === email.id)
+                        (email, index, self) => index === self.findIndex((e) => e.id === email.id)
                       )
                     )
                   }
@@ -53,10 +52,7 @@ function LoadMore() {
 
   return (
     <div>
-      <button
-        className="btn btn-sm btn-outline-secondary"
-        onClick={() => executeLoadMore()}
-      >
+      <button className="btn btn-sm btn-outline-secondary" onClick={() => executeLoadMore()}>
         Load more
       </button>
     </div>

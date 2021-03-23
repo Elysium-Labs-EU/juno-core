@@ -12,13 +12,13 @@ import MessageCount from './MessageCount'
 
 const ThreadBase = styled.a`
   font-weight: ${(props) => (props.labelIds === 'UNREAD' ? 'bold' : 'regular')};
-	position: relative;
+  position: relative;
   user-select: none;
-	--line-margin: 30px;
-	--padding-left: 30px;
-	--padding-right: 30px;
-	--primary-text: #535358;
-	--mindful-text: #8e8e99;
+  --line-margin: 30px;
+  --padding-left: 30px;
+  --padding-right: 30px;
+  --primary-text: #535358;
+  --mindful-text: #8e8e99;
   --discreet-text: #aeaeb4;
   color: #535358;
 
@@ -69,8 +69,7 @@ function EmailList() {
                   if (thread.id !== email.id) {
                     setEmailList((prevState) =>
                       [...prevState, response.result].filter(
-                        (email, index, self) =>
-                          index === self.findIndex((e) => e.id === email.id)
+                        (email, index, self) => index === self.findIndex((e) => e.id === email.id)
                       )
                     )
                   }
@@ -108,11 +107,7 @@ function EmailList() {
               {/* add hover class on this base item */}
               {email ? (
                 email.map((e) => (
-                  <ThreadBase
-                    href={`mail/${e.id}`}
-                    key={e.id}
-                    labelIds={e.messages[0].labelIds[0]}
-                  >
+                  <ThreadBase href={`mail/${e.id}`} key={e.id} labelIds={e.messages[0].labelIds[0]}>
                     <div className="threadRow">
                       {/* <LinkWrapper className="g-email-list" href={`${e.id}`} key={e.id} unread={e.messages[0].labelIds.find(e => e.name === 'UNREAD')}></LinkWrapper> */}
                       {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
@@ -122,29 +117,19 @@ function EmailList() {
                         <div className="avatars">
                           <EmailAvatar
                             avatarURL={
-                              e.messages[0].payload.headers.find(
-                                (e) => e.name === 'From'
-                              ).value
+                              e.messages[0].payload.headers.find((e) => e.name === 'From').value
                             }
                           />
                         </div>
                         <span className="text-truncate">
-                          {
-                            e.messages[0].payload.headers.find(
-                              (e) => e.name === 'From'
-                            ).value
-                          }
+                          {e.messages[0].payload.headers.find((e) => e.name === 'From').value}
                         </span>
                         <MessageCount countOfMessage={e.messages} />
                       </div>
                       <div className="cellMessage">
                         <div className="subjectSnippet text-truncate">
                           <span className="subject">
-                            {
-                              e.messages[0].payload.headers.find(
-                                (e) => e.name === 'Subject'
-                              ).value
-                            }
+                            {e.messages[0].payload.headers.find((e) => e.name === 'Subject').value}
                           </span>
                           <span className="snippet">
                             &nbsp;&nbsp;—&nbsp;&nbsp;{e.messages[0].snippet}
@@ -159,9 +144,7 @@ function EmailList() {
                       <div className="cellDate">
                         <div className="datePosition">
                           <span className="date">
-                            <TimeStamp
-                              threadTimeStamp={e.messages[0].internalDate}
-                            />
+                            <TimeStamp threadTimeStamp={e.messages[0].internalDate} />
                           </span>
                         </div>
                       </div>
@@ -178,10 +161,7 @@ function EmailList() {
             </div>
           </div>
           <div className="d-flex justify-content-center">
-            <button
-              className="btn btn-sm btn-outline-secondary"
-              onClick={() => loadMore()}
-            >
+            <button className="btn btn-sm btn-outline-secondary" onClick={() => loadMore()}>
               Load more
             </button>
           </div>

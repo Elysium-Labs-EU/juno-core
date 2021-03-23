@@ -1,19 +1,13 @@
 import { FiPaperclip } from 'react-icons/fi'
 
 const EmailAttachment = ({ hasAttachment }) => {
-  console.log('hasAttachment', hasAttachment)
+  // console.log('hasAttachment', hasAttachment)
   // const file = hasAttachment.parts[1].filename
   //Check if the message contains a parts.object that has an attachmentId. Don't return if no id is found.
   function CheckAttachment() {
-    if (
-      hasAttachment.filter((thread) => thread.payload.hasOwnProperty('parts'))
-        .length > 0
-    ) {
-      console.log('Is multiple parts')
-      if (
-        hasAttachment.filter((thread) => thread.payload.parts.filename).length >
-        0
-      ) {
+    if (hasAttachment.filter((thread) => thread.payload.hasOwnProperty('parts')).length > 0) {
+      // console.log('Is multiple parts')
+      if (hasAttachment.filter((thread) => thread.payload.parts.filename).length > 0) {
         return <FiPaperclip />
       } else {
         return null
@@ -56,12 +50,10 @@ const EmailAttachment = ({ hasAttachment }) => {
   // ))))}
 
   function checkmap3() {
-    hasAttachment.map((thread) =>
-      thread.payload.parts.map((part) => part.filename)
-    )
+    hasAttachment.map((thread) => thread.payload.parts.map((part) => part.filename))
   }
 
-  console.log(checkmap3)
+  // console.log(checkmap3)
   // console.log("checkmap2", hasAttachment.map(thread => thread.payload.parts.map(part => part.filename[0].filter(object => object.length > 0))))
   // console.log("checkmap", hasAttachment.map(thread => thread.payload.map(part => part.filename))
 
@@ -72,9 +64,7 @@ const EmailAttachment = ({ hasAttachment }) => {
   // }
 
   function hasAttachmentId2() {
-    console.log(
-      parts.filter((part) => part.body.hasOwnProperty('attachmentId'))
-    )
+    console.log(parts.filter((part) => part.body.hasOwnProperty('attachmentId')))
   }
 
   function hasAttachmentId3() {

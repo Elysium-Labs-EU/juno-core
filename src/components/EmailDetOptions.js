@@ -1,11 +1,6 @@
 import './../App.scss'
 import styled from 'styled-components'
-import {
-  FiArchive,
-  FiCornerUpLeft,
-  FiClock,
-  FiMoreHorizontal,
-} from 'react-icons/fi'
+import { FiArchive, FiCornerUpLeft, FiClock, FiMoreHorizontal } from 'react-icons/fi'
 
 const EmailOptionsContainer = styled.div`
     position: relative;

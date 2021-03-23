@@ -7,17 +7,33 @@ const api = createApiClient()
 
 function EmailList() {
   const [emailList, setEmailList] = useState([])
+  const [nextPageToken, setNextPageToken] = useState(undefined)
+
+  const LoadEmails = async (nextPageToken) => {
+    if (nextPageToken) {
+      const metaList = await api.getAdditionalThreads(nextPageToken)
+      setEmails(metaList)
+    } else {
+      const metaList = await api.getInitialThreads()
+      setEmails(metaList)
+    }
+  }
 
   useEffect(() => {
-    const LoadEmails = async () => {
-      const metaList = await api.getThreads()
-      metaList.forEach(async (item) => {
-        const emailList = await api.getMessageDetail(item.id)
-        setEmailList((prevState) => [...prevState, emailList])
-      })
-    }
-  LoadEmails()
-  },[])
+    LoadEmails()
+  }, [])
+
+  const setEmails = async (metaList) => {
+    setNextPageToken(metaList.nextPageToken)
+    metaList.threads.forEach(async (item) => {
+      const emailList = await api.getMessageDetail(item.id)
+      setEmailList((prevState) => [...prevState, emailList])
+    })
+  }
+
+  const loadNextPage = (nextPageToken) => {
+    LoadEmails(nextPageToken)
+  }
 
   return (
     <div>
@@ -27,11 +43,7 @@ function EmailList() {
             {emailList ? (
               <div className="base">
                 {emailList.map((email) => (
-                  <EmailListItem
-                    href={`mail/${email.id}`}
-                    key={email.id}
-                    email={email}
-                  />
+                  <EmailListItem href={`mail/${email.id}`} key={email.id} email={email} />
                 ))}
               </div>
             ) : (
@@ -39,7 +51,7 @@ function EmailList() {
             )}
           </div>
           <div className="d-flex justify-content-center">
-            <button>Test</button>
+            <button onClick={() => loadNextPage(nextPageToken)}>Load more</button>
           </div>
         </div>
       </div>
