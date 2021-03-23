@@ -7,32 +7,32 @@ import 'bootstrap/dist/css/bootstrap.css'
 import { createStore } from 'redux'
 import allReducers from './reducers'
 import { Provider } from 'react-redux'
-import { createApiClient } from './data/api'
+// import { createApiClient } from './data/api'
 
 const store = createStore(
   allReducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
-const api = createApiClient()
+// const api = createApiClient()
 
-const main = async () => {
-  await api.initGapi()
-  // await api.authenticate()
-  // await api.loadClient()
-}
+// const main = async () => {
+//   await api.initGapi()
+//   // await api.authenticate()
+//   // await api.loadClient()
+// }
 
-const loadMainfunction = async () => {
-  api.authenticate()
-  await api.loadClient()
-}
+// const loadMainfunction = async () => {
+//   api.authenticate()
+//   await api.loadClient()
+// }
 
-setTimeout(() => {
-  loadMainfunction()
-}, 1000)
+// setTimeout(() => {
+//   loadMainfunction()
+// }, 1000)
 
-main().catch((err) => {
-  console.error(err)
-})
+// main().catch((err) => {
+//   console.error(err)
+// })
 
 ReactDOM.render(
   <Provider store={store}>

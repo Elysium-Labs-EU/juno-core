@@ -2,6 +2,7 @@
   "name": "react-gmail-minimal",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -10,7 +11,6 @@
     "base64url": "^3.0.1",
     "bootstrap": "^4.5.3",
     "moment": "^2.29.1",
-    "node-sass": "4.14.1",
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -21,6 +21,7 @@
     "react-scripts": "4.0.1",
     "reactstrap": "^8.7.1",
     "redux": "^4.0.5",
+    "sass": "^1.32.8",
     "styled-components": "^5.2.1",
     "web-vitals": "^0.2.4"
   },
