@@ -9,32 +9,30 @@ function EmailList() {
   const [emailList, setEmailList] = useState([])
   const [nextPageToken, setNextPageToken] = useState(undefined)
 
+  const LoadEmails = async (nextPageToken) => {
+    if (nextPageToken) {
+      const metaList = await api.getAdditionalThreads(nextPageToken)
+      setEmails(metaList)
+    } else {
+      const metaList = await api.getInitialThreads()
+      setEmails(metaList)
+      }
+  }
+  
   useEffect(() => {
     LoadEmails()
   }, [])
 
-  const LoadEmails = async (nextPageToken) => {
-    if (nextPageToken) {
-      const metaList = await api.getAdditionalThreads(nextPageToken)
-      setNextPageToken(metaList.nextPageToken)
-      console.log(metaList)
-      metaList.threads.forEach(async (item) => {
-        const emailList = await api.getMessageDetail(item.id)
-        setEmailList((prevState) => [...prevState, emailList])
-      })
-    } else {
-      const metaList = await api.getInitialThreads()
-      setNextPageToken(metaList.nextPageToken)
-      console.log(metaList)
-      metaList.threads.forEach(async (item) => {
-        const emailList = await api.getMessageDetail(item.id)
-        setEmailList((prevState) => [...prevState, emailList])
-      })
-    }
-  }
   
+const setEmails = async (metaList) => {
+  setNextPageToken(metaList.nextPageToken)
+  metaList.threads.forEach(async (item) => {
+    const emailList = await api.getMessageDetail(item.id)
+    setEmailList((prevState) => [...prevState, emailList])
+  })
+}
+
   const loadNextPage = (nextPageToken) => {
-    console.log(nextPageToken)
     LoadEmails(nextPageToken)
   }
 
