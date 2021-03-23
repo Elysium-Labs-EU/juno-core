@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import './../App.scss'
+// import './../App.scss'
+// import
 import styled from 'styled-components'
 // import { FiPaperclip } from "react-icons/fi";
 
-import EmailAvatar from './EmailAvatar'
-import EmailHasAttachment from './EmailHasAttachment'
-import TimeStamp from './TimeStamp'
-import MessageCount from './MessageCount'
+import EmailAvatar from '../EmailAvatar'
+import EmailHasAttachment from '../EmailHasAttachment'
+import TimeStamp from '../TimeStamp'
+import MessageCount from '../MessageCount'
+import Snippet from './Snippet'
 
 const ThreadBase = styled.a`
-  font-weight: ${(props) => (props.labelIds === 'UNREAD' ? 'bold' : 'regular')};
+  font-weight: ${(props) => (props.labelIds === 'UNREAD' ? '500' : 'regular')};
   position: relative;
   user-select: none;
   --line-margin: 30px;
@@ -31,46 +33,46 @@ const ThreadBase = styled.a`
 const EmailListItem = ({ email }) => {
   // console.log('EmailListItem', email)
 
+  const LatestEmail = email !== undefined ? email.messages.slice(-1) : null
+
   return (
     <div>
       <ThreadBase
         href={`mail/${email?.id}`}
         key={email?.id}
-        labelIds={email?.messages[0].labelIds[0]}
+        labelIds={LatestEmail[0].labelIds[0]}
       >
         <div className="threadRow">
-          {/* <LinkWrapper className="g-email-list" href={`${e.id}`} key={e.id} unread={e.messages[0].labelIds.find(e => e.name === 'UNREAD')}></LinkWrapper> */}
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
           <div className="cellName">
             <div className="avatars">
               <EmailAvatar
-                avatarURL={email?.messages[0].payload.headers.find((e) => e.name === 'From').value}
+                avatarURL={LatestEmail[0].payload.headers.find((data) => data.name === 'From').value}
               />
             </div>
             <span className="text-truncate">
-              {email?.messages[0].payload.headers.find((e) => e.name === 'From').value}
+              {LatestEmail[0].payload.headers.find((data) => data.name === 'From').value}
             </span>
             <MessageCount countOfMessage={email?.messages} />
           </div>
           <div className="cellMessage">
             <div className="subjectSnippet text-truncate">
               <span className="subject">
-                {email?.messages[0].payload.headers.find((e) => e.name === 'Subject').value}
+                {LatestEmail[0].payload.headers.find((data) => data.name === 'Subject').value}
               </span>
-              <span className="snippet">&nbsp;&nbsp;—&nbsp;&nbsp;{email?.messages[0].snippet}</span>
+              <Snippet email={email?.messages} />
             </div>
           </div>
 
           <div className="cellAttachment">
-            {/* <EmailAttachment hasAttachment={e.messages[0].payload} /> */}
             <EmailHasAttachment hasAttachment={email?.messages} />
           </div>
           <div className="cellDate">
             <div className="datePosition">
               <span className="date">
-                <TimeStamp threadTimeStamp={email?.messages[0].internalDate} />
+                <TimeStamp threadTimeStamp={LatestEmail[0].internalDate} />
               </span>
             </div>
           </div>

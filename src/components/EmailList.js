@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { createApiClient } from '../data/api'
 import './../App.scss'
-import EmailListItem from './EmailListItem'
+import EmailListItem from './EmailListItem/EmailListItem'
 
 const api = createApiClient()
 
@@ -12,10 +12,14 @@ function EmailList() {
   const LoadEmails = async (nextPageToken) => {
     if (nextPageToken) {
       const metaList = await api.getAdditionalThreads(nextPageToken)
-      setEmails(metaList)
+      if (metaList) {
+        setEmails(metaList)
+      }
     } else {
       const metaList = await api.getInitialThreads()
-      setEmails(metaList)
+      if (metaList) {
+        setEmails(metaList)
+      }
     }
   }
 
@@ -35,27 +39,41 @@ function EmailList() {
     LoadEmails(nextPageToken)
   }
 
-  return (
-    <div>
-      <div className="scroll">
-        <div className="tlOuterContainer">
-          <div className="thread-list">
-            {emailList ? (
-              <div className="base">
-                {emailList.map((email) => (
-                  <EmailListItem href={`mail/${email.id}`} key={email.id} email={email} />
-                ))}
-              </div>
-            ) : (
-              <h2>Loading</h2>
-            )}
-          </div>
-          <div className="d-flex justify-content-center">
-            <button onClick={() => loadNextPage(nextPageToken)}>Load more</button>
+  const renderEmailList = (emailList) => {
+    return (
+      <div>
+        <div className="scroll">
+          <div className="tlOuterContainer">
+            <div className="thread-list">
+              {emailList ? (
+                <div className="base">
+                  {emailList.map((email) => (
+                    <EmailListItem href={`mail/${email.id}`} key={email.id} email={email} />
+                  ))}
+                </div>
+              ) : (
+                <h2>Loading</h2>
+              )}
+            </div>
+            <div className="d-flex justify-content-center">
+              <button onClick={() => loadNextPage(nextPageToken)}>Load more</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
+  }
+
+  return (
+    <>
+      {emailList.length > 0 ? (
+        renderEmailList(emailList)
+      ) : (
+        <>
+          <h3>Fetching emails</h3>
+        </>
+      )}
+    </>
   )
 }
 
