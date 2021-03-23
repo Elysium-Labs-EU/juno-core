@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-// import { useSelector } from 'react-redux'
 import { createApiClient } from '../data/api'
-// import { db } from './firebase'
 import './../App.scss'
-// import { FiPaperclip } from "react-icons/fi";
 import EmailListItem from './EmailListItem'
 
 const api = createApiClient()
@@ -41,7 +38,9 @@ function EmailList() {
               <h2>Loading</h2>
             )}
           </div>
-          <div className="d-flex justify-content-center"></div>
+          <div className="d-flex justify-content-center">
+            <button>Test</button>
+          </div>
         </div>
       </div>
     </div>
