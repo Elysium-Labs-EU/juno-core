@@ -91,7 +91,7 @@ function EmailList() {
   }, [])
 
   return (
-    <div>
+    <>
       {/* <button
         className="btn btn-sm btn-outline-secondary"
         onClick={() => authenticate().then(loadClient)}
@@ -147,7 +147,7 @@ function EmailList() {
                           </span>
                         </div>
                       </div>
-                      <div></div>
+                      <></div>
                       <div className="cellGradientRight"></div>
                       <div className="inlineThreadActions">TA</div>
                     </div>

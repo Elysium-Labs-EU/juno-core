@@ -17,7 +17,7 @@ const ComposerContainer = styled.div`
 function ComposeEmail() {
   return (
     <Wrapper>
-      <div>
+      <>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <div style={{ marginBottom: `7px` }}>
@@ -103,7 +103,7 @@ function ComposeEmail() {
             </div>
           </div>
         </ComposerContainer>
-      </div>
+      </>
     </Wrapper>
   )
 }

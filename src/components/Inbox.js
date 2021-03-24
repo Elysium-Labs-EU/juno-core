@@ -1,10 +1,12 @@
 import EmailList from './EmailList'
 
-function Inbox() {
+const LABEL = ['UNREAD', 'INBOX']
+
+const Inbox = () => {
   return (
-    <div>
-      <EmailList />
-    </div>
+    <>
+      <EmailList Labels={LABEL}/>
+    </>
   )
 }
 

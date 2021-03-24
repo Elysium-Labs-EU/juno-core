@@ -33,11 +33,11 @@ const EmailAttachment = ({ hasAttachment }) => {
   }
 
   return (
-    <div>
+    <>
       <FiPaperclip />
       {/* <div onLoad={fetchAttachment()} /> */}
       <button onClick={() => fetchAttachment()}>Click me</button>
-    </div>
+    </>
   )
 }
 

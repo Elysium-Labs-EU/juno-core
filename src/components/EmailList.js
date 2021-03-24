@@ -5,18 +5,19 @@ import EmailListItem from './EmailListItem/EmailListItem'
 
 const api = createApiClient()
 
-function EmailList() {
+const EmailList = (labels) => {
   const [emailList, setEmailList] = useState([])
   const [nextPageToken, setNextPageToken] = useState(undefined)
+  const labelIds = labels.Labels
 
-  const LoadEmails = async (nextPageToken) => {
+  const LoadEmails = async (labelIds, nextPageToken) => {
     if (nextPageToken) {
-      const metaList = await api.getAdditionalThreads(nextPageToken)
+      const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
       if (metaList) {
         setEmails(metaList)
       }
     } else {
-      const metaList = await api.getInitialThreads()
+      const metaList = await api.getInitialThreads(labelIds)
       if (metaList) {
         setEmails(metaList)
       }
@@ -24,8 +25,8 @@ function EmailList() {
   }
 
   useEffect(() => {
-    LoadEmails()
-  }, [])
+    LoadEmails(labelIds)
+  }, [labelIds])
 
   const setEmails = async (metaList) => {
     setNextPageToken(metaList.nextPageToken)
@@ -35,8 +36,8 @@ function EmailList() {
     })
   }
 
-  const loadNextPage = (nextPageToken) => {
-    LoadEmails(nextPageToken)
+  const loadNextPage = (labelIds, nextPageToken) => {
+    LoadEmails(labelIds, nextPageToken)
   }
 
   const renderEmailList = (emailList) => {
@@ -56,7 +57,7 @@ function EmailList() {
               )}
             </div>
             <div className="d-flex justify-content-center">
-              <button className="btn btn-sm btn-light" onClick={() => loadNextPage(nextPageToken)}>Load more</button>
+              <button className="btn btn-sm btn-light" onClick={() => loadNextPage(labelIds, nextPageToken)}>Load more</button>
             </div>
           </div>
         </div>

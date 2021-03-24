@@ -4,6 +4,6 @@ import GoogleLogin from 'react-google-login'
 import axios from 'axios'
 
 function Login() {
-  return <div></div>
+  return <></div>
 }
 export default Login

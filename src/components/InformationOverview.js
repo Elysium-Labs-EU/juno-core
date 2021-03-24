@@ -1,5 +1,5 @@
 function InformationOverview() {
-  return <div>InformationOverview</div>
+  return <>InformationOverview</>
 }
 
 export default InformationOverview
