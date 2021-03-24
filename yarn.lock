@@ -2547,11 +2547,6 @@ axe-core@^4.0.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.1.1.tgz#70a7855888e287f7add66002211a423937063eaf"
   integrity sha512-5Kgy8Cz6LPC9DJcNb3yjAXTu3XihQgEdnIg50c//zOC/MyLP0Clg+Y8Sh9ZjjnvBrDZU4DgXS9C3T9r4/scGZQ==
 
-axios-response-logger@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/axios-response-logger/-/axios-response-logger-0.1.0.tgz#96b79a6a4d0c94aae0f277059f3aaa292a8b8da9"
-  integrity sha1-lreaak0MlKrg8ncFnzqqKSqLjak=
-
 axios@^0.21.0:
   version "0.21.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.0.tgz#26df088803a2350dff2c27f96fef99fe49442aca"

@@ -49,7 +49,5 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "axios-response-logger": "^0.1.0"
-  }
+  "devDependencies": {}
 }

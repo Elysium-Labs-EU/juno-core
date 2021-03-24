@@ -5,11 +5,11 @@ import EmailList from './EmailList'
 
 function Home() {
   return (
-    <div>
+    <>
       <div className="tlOuterContainer">
         <EmailList />
       </div>
-    </div>
+    </>
   )
 }
 

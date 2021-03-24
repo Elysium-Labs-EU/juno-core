@@ -33,7 +33,7 @@ const EmailAvatar = ({ avatarURL }) => {
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
     <EmailAvatarContainer>
-      <div>{initials}</div>
+      <>{initials}</>
     </EmailAvatarContainer>
   )
 }

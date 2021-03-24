@@ -1,5 +1,5 @@
 function Settings() {
-  return <div>Settings</div>
+  return <>Settings</>
 }
 
 export default Settings

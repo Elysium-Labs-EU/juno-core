@@ -1,7 +1,7 @@
 function FileOverview() {
   return (
     <div className="tlOuterContainer">
-      <div>FileOverview</div>
+      <>FileOverview</>
     </div>
   )
 }

@@ -2,15 +2,15 @@ import axios from 'axios'
 
 export const createApiClient = () => {
   return {
-    getInitialThreads: () => {
+    getInitialThreads: (labelIds) => {
       return axios
-        .get(`/api/threads/`)
+        .get(`/api/threads/${labelIds}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getAdditionalThreads: (nextPageToken) => {
+    getAdditionalThreads: (labelIds, nextPageToken) => {
       return axios
-        .get(`/api/threads/${nextPageToken}`)
+        .get(`/api/threads/${labelIds}/${nextPageToken}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
