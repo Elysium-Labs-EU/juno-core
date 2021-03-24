@@ -23,7 +23,6 @@ const ThreadBase = styled.a`
   color: #535358;
 
   :hover {
-    background-color: #c3c3ca;
     text-decoration: none;
   }
 `

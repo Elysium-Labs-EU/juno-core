@@ -11,6 +11,7 @@ import EmailHasAttachment from '../EmailHasAttachment'
 import TimeStamp from '../TimeStamp'
 import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
+import InlineThreadActions from './InlineThreadActions'
 
 const ThreadBase = styled.a`
   font-weight: ${(props) => (props.labelIds === 'UNREAD' ? '500' : 'regular')};
@@ -25,7 +26,6 @@ const ThreadBase = styled.a`
   color: #535358;
 
   :hover {
-    background-color: #c3c3ca;
     text-decoration: none;
   }
 `
@@ -37,11 +37,7 @@ const EmailListItem = ({ email }) => {
 
   return (
     <>
-      <ThreadBase
-        href={`mail/${email?.id}`}
-        key={email?.id}
-        labelIds={LatestEmail[0].labelIds[0]}
-      >
+      <ThreadBase href={`mail/${email?.id}`} key={email?.id} labelIds={LatestEmail[0].labelIds[0]}>
         <div className="threadRow">
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
@@ -49,7 +45,9 @@ const EmailListItem = ({ email }) => {
           <div className="cellName">
             <div className="avatars">
               <EmailAvatar
-                avatarURL={LatestEmail[0].payload.headers.find((data) => data.name === 'From').value}
+                avatarURL={
+                  LatestEmail[0].payload.headers.find((data) => data.name === 'From').value
+                }
               />
             </div>
             <span className="text-truncate">
@@ -78,7 +76,8 @@ const EmailListItem = ({ email }) => {
           </div>
           <div></div>
           <div className="cellGradientRight"></div>
-          <div className="inlineThreadActions">TA</div>
+          {/* <div className="inlineThreadActions">TA</div> */}
+          <InlineThreadActions />
         </div>
       </ThreadBase>
     </>
