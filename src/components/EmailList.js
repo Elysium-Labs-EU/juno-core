@@ -56,7 +56,7 @@ function EmailList() {
               )}
             </div>
             <div className="d-flex justify-content-center">
-              <button onClick={() => loadNextPage(nextPageToken)}>Load more</button>
+              <button className="btn btn-sm btn-light" onClick={() => loadNextPage(nextPageToken)}>Load more</button>
             </div>
           </div>
         </div>
