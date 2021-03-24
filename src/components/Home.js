@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <div className="tlOuterContainer">
-        <EmailList />
+        <p>Home sweet home.</p>
       </div>
     </>
   )

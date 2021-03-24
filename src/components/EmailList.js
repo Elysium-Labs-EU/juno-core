@@ -8,10 +8,7 @@ const api = createApiClient()
 const EmailList = (labels) => {
   const [emailList, setEmailList] = useState([])
   const [nextPageToken, setNextPageToken] = useState(undefined)
-
   const labelIds = labels.Labels
-  const test = labels.Labels
-  console.log('labelIds',test)
 
   const LoadEmails = async (labelIds, nextPageToken) => {
     if (nextPageToken) {
@@ -44,9 +41,6 @@ const EmailList = (labels) => {
   }
 
   const renderEmailList = (emailList) => {
-    // const filteredEmailList = emailList.map((email) => email.messages.map((data) => data.labelIds.filter((label) => label.toLowerCase().includes(Label.toLowerCase()))))
-    // console.log(filteredEmailList)
-
     return (
       <>
         <div className="scroll">
