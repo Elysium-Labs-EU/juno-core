@@ -36,7 +36,7 @@ const EmailListItem = ({ email }) => {
   const LatestEmail = email !== undefined ? email.messages.slice(-1) : null
 
   return (
-    <div>
+    <>
       <ThreadBase
         href={`mail/${email?.id}`}
         key={email?.id}
@@ -81,7 +81,7 @@ const EmailListItem = ({ email }) => {
           <div className="inlineThreadActions">TA</div>
         </div>
       </ThreadBase>
-    </div>
+    </>
   )
 }
 
