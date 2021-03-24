@@ -41,7 +41,7 @@ function EmailList() {
 
   const renderEmailList = (emailList) => {
     return (
-      <div>
+      <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
@@ -60,7 +60,7 @@ function EmailList() {
             </div>
           </div>
         </div>
-      </div>
+      </>
     )
   }
 
