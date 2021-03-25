@@ -20,5 +20,12 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    sendMessage: (data) => {
+      console.log('data', data)
+      return axios
+        .post('/api/send-message', data)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    }
   }
 }

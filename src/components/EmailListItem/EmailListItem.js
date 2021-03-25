@@ -31,9 +31,7 @@ const ThreadBase = styled.a`
 `
 
 const EmailListItem = ({ email }) => {
-  // console.log('EmailListItem', email)
-
-  const LatestEmail = email !== undefined ? email.messages.slice(-1) : null
+  const LatestEmail = email.message !== undefined ? email.message.messages.slice(-1) : null
 
   return (
     <>
@@ -53,19 +51,19 @@ const EmailListItem = ({ email }) => {
             <span className="text-truncate">
               {LatestEmail[0].payload.headers.find((data) => data.name === 'From').value}
             </span>
-            <MessageCount countOfMessage={email?.messages} />
+            <MessageCount countOfMessage={email?.message.messages} />
           </div>
           <div className="cellMessage">
             <div className="subjectSnippet text-truncate">
               <span className="subject">
                 {LatestEmail[0].payload.headers.find((data) => data.name === 'Subject').value}
               </span>
-              <Snippet email={email?.messages} />
+              <Snippet email={email?.message.messages} />
             </div>
           </div>
 
           <div className="cellAttachment">
-            <EmailHasAttachment hasAttachment={email?.messages} />
+            <EmailHasAttachment hasAttachment={email?.message.messages} />
           </div>
           <div className="cellDate">
             <div className="datePosition">
