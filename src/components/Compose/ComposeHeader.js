@@ -1,6 +1,6 @@
-import BackButton from './BackButton'
-import NavControls from './NavControls'
-import './NavControls.scss'
+import BackButton from './../BackButton'
+import NavControls from './../NavControls'
+import './../NavControls.scss'
 
 function ComposeHeader() {
   return (

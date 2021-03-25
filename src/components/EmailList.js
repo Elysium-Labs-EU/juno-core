@@ -30,7 +30,7 @@ const EmailList = (labels) => {
 
   const setEmails = async (metaList) => {
     setNextPageToken(metaList.nextPageToken)
-    metaList.threads.forEach(async (item) => {
+    metaList.message.threads.forEach(async (item) => {
       const emailList = await api.getMessageDetail(item.id)
       setEmailList((prevState) => [...prevState, emailList])
     })

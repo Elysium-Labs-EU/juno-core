@@ -1,5 +1,8 @@
 import styled from 'styled-components'
-import './../App.scss'
+import './../../App.scss'
+import { createApiClient } from '../../data/api'
+import { useForm } from 'react-hook-form';
+import axios from 'axios'
 
 const Wrapper = styled.div`
   max-width: 850px;
@@ -14,12 +17,31 @@ const ComposerContainer = styled.div`
   padding-bottom: 121px;
 `
 
+const api = createApiClient()
+
 function ComposeEmail() {
+  const { register, handleSubmit, errors } = useForm(); // initialize the hook
+  // const onSubmit = (data) => {
+  //   api.sendMessage(data)
+  // };
+  const onSubmit = (data) => {
+      axios
+        .post('/api/send-message', {
+            firstName: 'Finn',
+            lastName: 'Williams'
+        })
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
+    }
+
+
   return (
     <Wrapper>
       <>
-        <ComposerContainer className="composer composerIsVisible">
+        <button onClick={onSubmit}>Click</button>
+        {/* <ComposerContainer className="composer composerIsVisible">
           <div className="base">
+            <form onSubmit={handleSubmit(onSubmit)}>
             <div style={{ marginBottom: `7px` }}>
               <div className="base">
                 <div className="row-1">
@@ -101,8 +123,9 @@ function ComposeEmail() {
                 <span className="label">Drop here to attach</span>
               </div>
             </div>
+          </form>
           </div>
-        </ComposerContainer>
+        </ComposerContainer> */}
       </>
     </Wrapper>
   )
