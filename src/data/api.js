@@ -20,6 +20,12 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    getAttachment: (messageId, attachmentId) => {
+      return axios
+        .get(`/api/message/attachment/${messageId}/${attachmentId}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
     sendMessage: (data) => {
       console.log('data', data)
       return axios

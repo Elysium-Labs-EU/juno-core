@@ -4,22 +4,22 @@ const EmailDetailBody = ({ threadDetailBody }) => {
   //Check if feed contains singular body or not, if not - use the html version.
   function GrabBody() {
     if (threadDetailBody.mimeType === 'text/html') {
-      console.log('text/html')
+      // console.log('text/html')
       let str = base64url.decode(`${threadDetailBody.body.data}`)
       return { __html: str }
     } else if (threadDetailBody.mimeType === 'multipart/alternative') {
-      console.log('multipart/alternative')
+      // console.log('multipart/alternative')
       let str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
       // let str = base64url.decode(`${threadDetailBody.parts[1].parts[0].body.data}`)
       return { __html: str }
     } else if (threadDetailBody.mimeType === 'multipart/mixed') {
-      console.log('multipart/mixed')
+      // console.log('multipart/mixed')
       var str = base64url.decode(
         `${threadDetailBody.parts[0].parts[1].body.data}`
       )
       return { __html: str }
     } else {
-      console.log('regular body')
+      // console.log('regular body')
       let str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
       return { __html: str }
     }
