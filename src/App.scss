@@ -62,40 +62,8 @@ body {
 	color: #a5a5a5;
 }
 
-.email-detail-container {
-	border-radius: 6px;
-	background-color: #ffff;
-	max-width: 1040px;
-	flex: 1 1 0%;
-	padding-bottom: 200px;
-}
-
-.email-detail-from {
-	font-size: 0.75rem;
-	font-weight: normal;
-	font-stretch: normal;
-	font-style: normal;
-	line-height: 1.17;
-	letter-spacing: normal;
-	text-align: left;
-	color: #a5a5a5;
-}
-
 .email-avatar {
 	background-color: #a5a5a5;
-}
-
-.email-detail-title {
-	font-size: 1.5rem;
-	font-weight: bold;
-	font-stretch: normal;
-	font-style: normal;
-	line-height: 1.21;
-	letter-spacing: normal;
-	text-align: left;
-	color: #1c1c1c;
-	font-family: 'Barlow-SemiBold';
-	margin-left: 0.5rem;
 }
 
 .option-link {
@@ -114,23 +82,6 @@ body {
 .option-link:hover {
 	color: #1c1c1c;
 	text-decoration: none;
-}
-
-.detail-row {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	flex: 1 1 0%;
-}
-
-.detail-base {
-	position: relative;
-	display: flex;
-	flex-direction: row;
-}
-
-.cardFullWidth {
-	width: 100%;
 }
 
 // .card {
