@@ -1,6 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
-import { FiArchive, FiCornerUpLeft, FiClock, FiMoreHorizontal } from 'react-icons/fi'
+import {
+  FiArchive,
+  FiCornerUpLeft,
+  FiClock,
+  FiMoreHorizontal,
+} from 'react-icons/fi'
 
 const Wrapper = styled.div`
   opacity: 0;

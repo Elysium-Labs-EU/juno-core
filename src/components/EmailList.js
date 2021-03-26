@@ -49,7 +49,11 @@ const EmailList = (labels) => {
               {emailList ? (
                 <div className="base">
                   {emailList.map((email) => (
-                    <EmailListItem href={`mail/${email.id}`} key={email.id} email={email} />
+                    <EmailListItem
+                      href={`mail/${email.id}`}
+                      key={email.id}
+                      email={email}
+                    />
                   ))}
                 </div>
               ) : (
@@ -57,7 +61,12 @@ const EmailList = (labels) => {
               )}
             </div>
             <div className="d-flex justify-content-center">
-              <button className="btn btn-sm btn-light" onClick={() => loadNextPage(labelIds, nextPageToken)}>Load more</button>
+              <button
+                className="btn btn-sm btn-light"
+                onClick={() => loadNextPage(labelIds, nextPageToken)}
+              >
+                Load more
+              </button>
             </div>
           </div>
         </div>

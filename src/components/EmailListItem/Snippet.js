@@ -5,7 +5,9 @@ const Snippet = ({ email }) => {
 
   return (
     <>
-      <span className="snippet">&nbsp;&nbsp;—&nbsp;&nbsp;{LatestSnippet[0].snippet}</span>
+      <span className="snippet">
+        &nbsp;&nbsp;—&nbsp;&nbsp;{LatestSnippet[0].snippet}
+      </span>
     </>
   )
 }

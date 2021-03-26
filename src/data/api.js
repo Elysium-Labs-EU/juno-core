@@ -26,6 +26,6 @@ export const createApiClient = () => {
         .post('/api/send-message', data)
         .then((res) => res.data)
         .catch((err) => console.log(err))
-    }
+    },
   }
 }

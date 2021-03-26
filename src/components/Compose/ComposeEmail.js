@@ -1,8 +1,7 @@
 import styled from 'styled-components'
 import './../../App.scss'
 import { createApiClient } from '../../data/api'
-import { useForm } from 'react-hook-form';
-import axios from 'axios'
+import { useForm } from 'react-hook-form'
 
 const Wrapper = styled.div`
   max-width: 850px;
@@ -20,112 +19,78 @@ const ComposerContainer = styled.div`
 const api = createApiClient()
 
 function ComposeEmail() {
-  const { register, handleSubmit, errors } = useForm(); // initialize the hook
-  // const onSubmit = (data) => {
-  //   api.sendMessage(data)
-  // };
-  const onSubmit = (data) => {
-      axios
-        .post('/api/send-message', {
-            firstName: 'Finn',
-            lastName: 'Williams'
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-    }
+  const { register, handleSubmit, errors } = useForm({
+    defaultValues: {
+      from: 'Robbert Tuerlings <robberttg@gmail.com>',
+    },
+  })
 
+  const onSubmit = (data) => {
+    console.log(data)
+    api.sendMessage(data)
+  }
 
   return (
     <Wrapper>
       <>
-        <button onClick={onSubmit}>Click</button>
-        {/* <ComposerContainer className="composer composerIsVisible">
+        <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={handleSubmit(onSubmit)}>
-            <div style={{ marginBottom: `7px` }}>
-              <div className="base">
-                <div className="row-1">
-                  <div className="label-1">
-                    <label htmlFor="to" className="label-base">
-                      To
-                    </label>
-                  </div>
-                  <div className="input">
-                    <div data-focus-on-click="true" className="input-base">
-                      <div className="wrapper-participants praticipantsInput">
-                        <div className="react-autosuggest__container">ReactAutoSuggest</div>
-                      </div>
-                      <div className="ccBcc">
-                        <div className="ccBccButtons">
-                          <button className="ccBccButton">CC</button>
-                          <button className="ccBccButton">BCC</button>
-                        </div>
-                      </div>
+              <div style={{ marginBottom: `7px` }}>
+                <div className="base">
+                  <div className="row-1">
+                    <div className="label-1">
+                      <label htmlFor="to" className="label-base">
+                        To
+                      </label>
                     </div>
+                    <input
+                      name="to"
+                      autoFocus
+                      ref={register({ required: true})}
+                      className="jsx-3232806250 textareaReset textarea mousetrap"
+                    />
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="row-1 rowEmailInput">
-              <div className="label-1">
-                <label htmlFor="fromTextarea" className="base baseIsDimmed">
-                  From
-                </label>
-              </div>
-              <div className="jsx-3232806250 inputContainer">
-                <div className="jsx-785063291 base">
-                  <div className="jsx-785063291 button">
-                    <label>robberttg@gmail.com</label>
-                    <select tabIndex="2" className="select">
-                      <option value="R Tuerlings <robberttg@gmail.com>" className="jsx-785063291">
-                        R Tuerlings &lt;robberttg@gmail.com&gt;
-                      </option>
-                    </select>
-                  </div>
+              <div className="row-1">
+                <div className="label-1">
+                  <label htmlFor="subjectTextarea" className="base">
+                    Subject
+                  </label>
+                </div>
+                <div className="inputContainer">
+                  <input
+                    // type="text"
+                    name="subject"
+                    ref={register({ required: true})}
+                    // id="subjectTextarea"
+                    // tabIndex="2"
+                    // spellCheck="true"
+                    className="jsx-3232806250 textareaReset textarea mousetrap"
+                  />
                 </div>
               </div>
-            </div>
-            <div className="row-1">
-              <div className="label-1">
-                <label htmlFor="subjectTextarea" className="base">
-                  Subject
-                </label>
+              <div className="row-1">
+                <div className="label-1">
+                  <label htmlFor="bodyTextarea" className="base">
+                    Body
+                  </label>
+                </div>
+                <div className="inputContainer">
+                  <textarea
+                    data-provide="markdown"
+                    style={{ minHeight: '20rem' }}
+                    name="body"
+                    ref={register({ required: true })}
+                    className="jsx-3232806250 textareaReset textarea mousetrap"
+                  />
+                </div>
               </div>
-              <div className="inputContainer">
-                <input
-                  type="text"
-                  id="subjectTextarea"
-                  tabIndex="2"
-                  spellCheck="true"
-                  className="jsx-3232806250 textareaReset textarea mousetrap"
-                  value=""
-                  placeholder="sub"
-                />
-              </div>
-            </div>
-            <div className="row-1">
-              <div className="label-1">
-                <label htmlFor="bodyTextarea" className="base">
-                  Body
-                </label>
-              </div>
-              <div className="inputContainer">Input field</div>
-            </div>
-            <div className="row-1">
-              <div className="signatureLabel">Dropdown to be made</div>
-              <div className="inputContainer inputContainerDimmed inputContainerSignature">
-                Input field
-              </div>
-            </div>
-            <div className="attachmentList"></div>
-            <div style={{ marginTop: `10px`, opacity: `0` }}>
-              <div className="dnd-base">
-                <span className="label">Drop here to attach</span>
-              </div>
-            </div>
-          </form>
+              <button className="btn btn-sm btn-light" type="submit">Send</button>
+            </form>
           </div>
-        </ComposerContainer> */}
+        </ComposerContainer>
       </>
     </Wrapper>
   )
