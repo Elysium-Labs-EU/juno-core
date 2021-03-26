@@ -14,12 +14,12 @@ const EmailList = (labels) => {
     if (nextPageToken) {
       const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
       if (metaList) {
-        setEmails(metaList)
+        setEmails(metaList.message)
       }
     } else {
       const metaList = await api.getInitialThreads(labelIds)
       if (metaList) {
-        setEmails(metaList)
+        setEmails(metaList.message)
       }
     }
   }
@@ -30,7 +30,7 @@ const EmailList = (labels) => {
 
   const setEmails = async (metaList) => {
     setNextPageToken(metaList.nextPageToken)
-    metaList.message.threads.forEach(async (item) => {
+    metaList.threads.forEach(async (item) => {
       const emailList = await api.getMessageDetail(item.id)
       setEmailList((prevState) => [...prevState, emailList])
     })
@@ -39,6 +39,9 @@ const EmailList = (labels) => {
   const loadNextPage = (labelIds, nextPageToken) => {
     LoadEmails(labelIds, nextPageToken)
   }
+
+  // console.log(emailList)
+  // console.log(emailList.map((email) => email.message.id))
 
   const renderEmailList = (emailList) => {
     return (
@@ -50,8 +53,7 @@ const EmailList = (labels) => {
                 <div className="base">
                   {emailList.map((email) => (
                     <EmailListItem
-                      href={`mail/${email.id}`}
-                      key={email.id}
+                      key={email.message.id}
                       email={email}
                     />
                   ))}

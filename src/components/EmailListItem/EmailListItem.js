@@ -37,8 +37,8 @@ const EmailListItem = ({ email }) => {
   return (
     <>
       <ThreadBase
-        href={`mail/${email?.id}`}
-        key={email?.id}
+        href={`mail/${email?.message?.id}`}
+        key={email?.message?.id}
         labelIds={LatestEmail[0].labelIds[0]}
       >
         <div className="threadRow">

@@ -20,8 +20,8 @@ function EmailDetail() {
   useEffect(() => {
     const LoadEmail = async () => {
       const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
-      setThreadDetail(threadDetailFeed || 'No email loaded')
-      console.log(threadDetailFeed)
+      setThreadDetail(threadDetailFeed.message || 'No email loaded')
+      console.log(threadDetailFeed.message)
     }
     LoadEmail()
   }, [threadId])

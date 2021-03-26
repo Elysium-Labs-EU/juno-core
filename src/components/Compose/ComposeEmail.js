@@ -47,7 +47,7 @@ function ComposeEmail() {
                     <input
                       name="to"
                       autoFocus
-                      ref={register({ required: true})}
+                      ref={register({ required: true })}
                       className="jsx-3232806250 textareaReset textarea mousetrap"
                     />
                   </div>
@@ -63,7 +63,7 @@ function ComposeEmail() {
                   <input
                     // type="text"
                     name="subject"
-                    ref={register({ required: true})}
+                    ref={register({ required: true })}
                     // id="subjectTextarea"
                     // tabIndex="2"
                     // spellCheck="true"
@@ -87,7 +87,9 @@ function ComposeEmail() {
                   />
                 </div>
               </div>
-              <button className="btn btn-sm btn-light" type="submit">Send</button>
+              <button className="btn btn-sm btn-light" type="submit">
+                Send
+              </button>
             </form>
           </div>
         </ComposerContainer>
