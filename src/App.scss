@@ -74,14 +74,18 @@ body {
 	line-height: 1.13;
 	letter-spacing: normal;
 	text-align: left;
-	color: #a5a5a5 !important;
-	display: flex !important;
+	color: #a5a5a5;
+	display: flex;
 	align-items: center;
 }
 
 .option-link:hover {
 	color: #1c1c1c;
 	text-decoration: none;
+}
+
+.warning {
+	color: hsl(0, 23%, 68%);
 }
 
 // .card {

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-// import './../App.scss'
-// import
 import styled from 'styled-components'
-// import { FiPaperclip } from "react-icons/fi";
 
 import EmailAvatar from '../EmailAvatar'
 import EmailHasAttachment from '../EmailHasAttachment'
@@ -13,7 +11,7 @@ import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
 
-const ThreadBase = styled.a`
+const ThreadBase = styled.div`
   font-weight: ${(props) => (props.labelIds === 'UNREAD' ? '500' : 'regular')};
   position: relative;
   user-select: none;
@@ -31,13 +29,18 @@ const ThreadBase = styled.a`
 `
 
 const EmailListItem = ({ email }) => {
+  const history = useHistory()
+
   const LatestEmail =
     email.message !== undefined ? email.message.messages.slice(-1) : null
+  
+  const handleClick = (data) => {
+    history.push(`mail/${data}`)
+  }
 
   return (
     <>
       <ThreadBase
-        href={`mail/${email?.message?.id}`}
         key={email?.message?.id}
         labelIds={LatestEmail[0].labelIds[0]}
       >
@@ -45,7 +48,7 @@ const EmailListItem = ({ email }) => {
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
-          <div className="cellName">
+          <div className="cellName" onClick={() => handleClick(email?.message?.id)}>
             <div className="avatars">
               <EmailAvatar
                 avatarURL={
@@ -64,7 +67,7 @@ const EmailListItem = ({ email }) => {
             </span>
             <MessageCount countOfMessage={email?.message.messages} />
           </div>
-          <div className="cellMessage">
+          <div className="cellMessage" onClick={() => handleClick(email?.message?.id)}>
             <div className="subjectSnippet text-truncate">
               <span className="subject">
                 {
@@ -90,7 +93,7 @@ const EmailListItem = ({ email }) => {
           <div></div>
           <div className="cellGradientRight"></div>
           {/* <div className="inlineThreadActions">TA</div> */}
-          <InlineThreadActions />
+          <InlineThreadActions messageId={email?.message?.id}/>
         </div>
       </ThreadBase>
     </>

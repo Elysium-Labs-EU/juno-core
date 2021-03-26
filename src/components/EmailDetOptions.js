@@ -6,11 +6,11 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
+import ArchiveMail from './EmailOptions/ArchiveMail'
 
 const EmailOptionsContainer = styled.div`
     position: relative;
     padding: 30px;
-    }
 `
 const StickyOptions = styled.div`
   position: sticky;
@@ -21,7 +21,7 @@ const InnerOptionsContainer = styled.div`
   width: 110px;
 `
 
-const EmailDetOptions = ({ avatarURL }) => {
+const EmailDetOptions = (messageId) => {
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
     <EmailOptionsContainer>
@@ -48,7 +48,7 @@ const EmailDetOptions = ({ avatarURL }) => {
               <div className="icon">
                 <FiArchive />
               </div>
-              <div className="labelContainer">Archive</div>
+              <div onClick={() => ArchiveMail(messageId)} className="labelContainer">Archive</div>
             </button>
           </div>
           <div>
