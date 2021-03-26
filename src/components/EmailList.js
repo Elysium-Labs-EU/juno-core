@@ -52,10 +52,7 @@ const EmailList = (labels) => {
               {emailList ? (
                 <div className="base">
                   {emailList.map((email) => (
-                    <EmailListItem
-                      key={email.message.id}
-                      email={email}
-                    />
+                    <EmailListItem key={email.message.id} email={email} />
                   ))}
                 </div>
               ) : (

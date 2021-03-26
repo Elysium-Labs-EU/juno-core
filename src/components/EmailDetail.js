@@ -21,7 +21,6 @@ function EmailDetail() {
     const LoadEmail = async () => {
       const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
       setThreadDetail(threadDetailFeed.message || 'No email loaded')
-      console.log(threadDetailFeed.message)
     }
     LoadEmail()
   }, [threadId])
@@ -76,7 +75,7 @@ function EmailDetail() {
                         Message id: {message.id}
                       </p>
                     </div>
-                    <EmailAttachment />
+                    <EmailAttachment message={message} />
                   </div>
                 ))
               ) : (
