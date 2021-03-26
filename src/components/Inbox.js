@@ -5,7 +5,7 @@ const LABEL = ['UNREAD', 'INBOX']
 const Inbox = () => {
   return (
     <>
-      <EmailList Labels={LABEL}/>
+      <EmailList Labels={LABEL} />
     </>
   )
 }

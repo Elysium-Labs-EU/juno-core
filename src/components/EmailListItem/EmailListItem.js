@@ -31,11 +31,16 @@ const ThreadBase = styled.a`
 `
 
 const EmailListItem = ({ email }) => {
-  const LatestEmail = email.message !== undefined ? email.message.messages.slice(-1) : null
+  const LatestEmail =
+    email.message !== undefined ? email.message.messages.slice(-1) : null
 
   return (
     <>
-      <ThreadBase href={`mail/${email?.id}`} key={email?.id} labelIds={LatestEmail[0].labelIds[0]}>
+      <ThreadBase
+        href={`mail/${email?.id}`}
+        key={email?.id}
+        labelIds={LatestEmail[0].labelIds[0]}
+      >
         <div className="threadRow">
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
@@ -44,19 +49,29 @@ const EmailListItem = ({ email }) => {
             <div className="avatars">
               <EmailAvatar
                 avatarURL={
-                  LatestEmail[0].payload.headers.find((data) => data.name === 'From').value
+                  LatestEmail[0].payload.headers.find(
+                    (data) => data.name === 'From'
+                  ).value
                 }
               />
             </div>
             <span className="text-truncate">
-              {LatestEmail[0].payload.headers.find((data) => data.name === 'From').value}
+              {
+                LatestEmail[0].payload.headers.find(
+                  (data) => data.name === 'From'
+                ).value
+              }
             </span>
             <MessageCount countOfMessage={email?.message.messages} />
           </div>
           <div className="cellMessage">
             <div className="subjectSnippet text-truncate">
               <span className="subject">
-                {LatestEmail[0].payload.headers.find((data) => data.name === 'Subject').value}
+                {
+                  LatestEmail[0].payload.headers.find(
+                    (data) => data.name === 'Subject'
+                  ).value
+                }
               </span>
               <Snippet email={email?.message.messages} />
             </div>
