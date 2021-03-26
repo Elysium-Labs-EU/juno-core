@@ -88,7 +88,9 @@ function EmailDetail() {
             </div>
           </div>
         </div>
-        <EmailDetOptions />
+        {threadDetail &&
+        <EmailDetOptions messageId={threadDetail.id}/>
+        }
       </div>
     </div>
   )

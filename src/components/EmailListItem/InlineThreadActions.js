@@ -6,6 +6,7 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
+import ArchiveMail from '../EmailOptions/ArchiveMail'
 
 const Wrapper = styled.div`
   opacity: 0;
@@ -13,13 +14,14 @@ const Wrapper = styled.div`
   top: 18px;
   right: 30px;
   bottom: 0;
+  z-index: 10;
 
   :hover {
     opacity: 1;
     background-color: rgb(240, 240, 240);
   }
 `
-const InlineThreadActions = () => {
+const InlineThreadActions = (messageId) => {
   return (
     <Wrapper>
       <div className="d-flex flex-row">
@@ -33,7 +35,7 @@ const InlineThreadActions = () => {
             <FiClock />
           </div>
         </button>
-        <button type="button" className="btn btn-sm option-link">
+        <button onClick={() => ArchiveMail(messageId)} type="button" className="btn btn-sm option-link">
           <div className="icon">
             <FiArchive />
           </div>

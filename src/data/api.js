@@ -33,5 +33,12 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    updateMessage: (messageId, body) => {
+      console.log('body', body)
+      return axios
+        .patch(`/api/message/${messageId}`, body)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
   }
 }
