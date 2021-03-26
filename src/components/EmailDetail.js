@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
+import './EmailDetail.scss'
 
 import { createApiClient } from '../data/api'
 import EmailDetailBody from './EmailDetailBody'
@@ -28,12 +29,12 @@ function EmailDetail() {
   return (
     <div className="tlOuterContainer">
       <div className="detail-row">
-        <div className="p-4 mb-3 email-detail-container">
+        <div className="pb-4 pt-4 mb-3 email-detail-container">
           <div className="detail-base">
             <div className="cardFullWidth">
               {threadDetail ? (
                 threadDetail.messages.map((message) => (
-                  <div className="email" key={message.id}>
+                  <div className="p-4 mb-1 email" key={message.id}>
                     <div className="d-flex align-items-center">
                       <EmailAvatar
                         avatarURL={
@@ -57,17 +58,20 @@ function EmailDetail() {
                     </div>
                     <div className="d-flex align-items-center mt-2">
                       <div className="text-truncate email-detail-from">
-                        From:{' '}
+                        From{' '}
+                        <span>
                         {
                           message.payload.headers.find((e) => e.name === 'From')
                             .value
-                        }
+                          }
+                        </span>
                       </div>
                     </div>
                     <div className="EmailBody mt-3 mb-3">
                       <EmailDetailBody
                         className="EmailDetailBody"
                         threadDetailBody={message.payload}
+                        messageId={message.id}
                       />
                     </div>
                     <div className="mt-3 mb-3">
