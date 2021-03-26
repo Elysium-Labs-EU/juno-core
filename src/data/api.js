@@ -40,5 +40,12 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    thrashMessage: (messageId) => {
+      console.log('trashed')
+      return axios
+        .post(`/api/message/thrash/${messageId}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
   }
 }
