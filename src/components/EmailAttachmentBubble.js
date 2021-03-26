@@ -3,6 +3,7 @@ import { FiDownload, FiFile } from 'react-icons/fi'
 import './EmailAttachmentBubble.scss'
 import { createApiClient } from '../data/api'
 import prettyBytes from 'pretty-bytes'
+import base64url from 'base64url'
 
 const api = createApiClient()
 
