@@ -26,8 +26,6 @@ const Wrapper = styled.div`
 const InlineThreadActions = (messageId) => {
   const [showMenu, setShowMenu] = React.useState(false)
 
-  console.log(showMenu)
-
   return (
     <Wrapper>
       <div className="d-flex flex-row">
