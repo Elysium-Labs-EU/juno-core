@@ -1,13 +1,34 @@
-export const listAddEmail = (email) => {
+export const ACTION_TYPE = {
+  LIST_ADD_EMAIL: 'LIST_ADD_EMAIL',
+  LIST_REMOVE_EMAIL: 'LIST_REMOVE_EMAIL',
+  LIST_ADD_DETAIL: 'LIST_ADD_DETAIL',
+  LIST_REMOVE_DETAIL: 'LIST_REMOVE_DETAIL',
+}
+
+export const listAddEmail = (metaList) => {
   return {
-    type: 'LIST-ADD-EMAIL',
-    payload: email,
+    type: ACTION_TYPE.LIST_ADD_EMAIL,
+    payload: metaList,
   }
 }
 
-export const listRemoveEmail = (selectedBreedId) => {
+export const listRemoveEmail = (metaList) => {
   return {
-    type: 'LIST-REMOVE-EMAIL',
-    payload: selectedBreedId,
+    type: ACTION_TYPE.LIST_REMOVE_EMAIL,
+    payload: metaList,
+  }
+}
+
+export const listAddEmailDetail = (emailList) => {
+  return {
+    type: ACTION_TYPE.LIST_ADD_DETAIL,
+    payload: emailList,
+  }
+}
+
+export const listRemoveEmailDetail = (emailList) => {
+  return {
+    type: ACTION_TYPE.LIST_REMOVE_DETAIL,
+    payload: emailList,
   }
 }

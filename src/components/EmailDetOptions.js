@@ -7,12 +7,12 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import ArchiveMail from './EmailOptions/ArchiveMail'
+import ArchiveMail from './emailOptions/ArchiveMail'
 import EmailMoreOptions from './EmailMoreOptions'
 
 const EmailOptionsContainer = styled.div`
-    position: relative;
-    padding: 30px;
+  position: relative;
+  padding: 30px;
 `
 const StickyOptions = styled.div`
   position: sticky;
@@ -52,20 +52,27 @@ const EmailDetOptions = (messageId) => {
               <div className="icon">
                 <FiArchive />
               </div>
-              <div onClick={() => ArchiveMail(messageId)} className="labelContainer">Archive</div>
+              <div
+                onClick={() => ArchiveMail(messageId)}
+                className="labelContainer"
+              >
+                Archive
+              </div>
             </button>
           </div>
           <div>
-            <button onClick={() => setShowMenu(!showMenu)} type="button" className="btn option-link d-flex">
+            <button
+              onClick={() => setShowMenu(!showMenu)}
+              type="button"
+              className="btn option-link d-flex"
+            >
               <div className="icon">
                 <FiMoreHorizontal />
               </div>
               <div className="labelContainer">More</div>
             </button>
           </div>
-          {showMenu &&
-        <EmailMoreOptions messageId={messageId}/>
-      }
+          {showMenu && <EmailMoreOptions messageId={messageId} />}
         </InnerOptionsContainer>
       </StickyOptions>
     </EmailOptionsContainer>

@@ -22,15 +22,15 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
           onClick={() =>
             fetchAttachment(messageId, attachmentData.body.attachmentId)
           }
-              >
-                  <FiFile size={20}/>
-                  <div  className="attachment-inner">
-                      <span>{attachmentData.filename}</span>
-                      <div className="attachment-details">
-                          File - {prettyBytes(attachmentData.body.size)}
-                      </div>
-                      </div>
-                      <FiDownload size={20}/>
+        >
+          <FiFile size={20} />
+          <div className="attachment-inner">
+            <span>{attachmentData.filename}</span>
+            <div className="attachment-details">
+              File - {prettyBytes(attachmentData.body.size)}
+            </div>
+          </div>
+          <FiDownload size={20} />
         </div>
       ) : null}
     </>
