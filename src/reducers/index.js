@@ -1,11 +1,35 @@
-import { combineReducers } from 'redux'
+export const initialState = {
+  metaList: [],
+  emailList: [],
+}
 
-import emailListReducer from './emailList'
-import isLoggedReducer from './isLogged'
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'LIST-ADD-EMAIL':
+      return {
+        ...state,
+        metaList: action.payload,
+      }
+    case 'LIST-REMOVE-EMAIL':
+      return {
+        ...state,
+        metaList: action.payload,
+      }
+    case 'LIST-ADD-DETAILS':
+      return {
+        ...state,
+        emailList: action.payload,
+      }
+    case 'LIST-REMOVE-DETAILS':
+      return {
+        ...state,
+        emailList: action.payload,
+      }
+    default:
+      return {
+        ...state,
+      }
+  }
+}
 
-const allReducers = combineReducers({
-  emailList: emailListReducer,
-  // isLogged: isLoggedReducer
-})
-
-export default allReducers
+export default rootReducer

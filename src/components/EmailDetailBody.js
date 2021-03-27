@@ -5,7 +5,6 @@ import React from 'react'
 const api = createApiClient()
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
-
   const fetchAttachment = async (messageId, attachmentId) => {
     const fetchedAttachment = await api.getAttachment(messageId, attachmentId)
     // console.log(fetchedAttachment.messageAttachment.data)
@@ -19,35 +18,36 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
     if (threadDetailBody.mimeType === 'text/html') {
       let str = base64url.decode(`${threadDetailBody.body.data}`)
       // console.log('1')
-      return <div dangerouslySetInnerHTML={{__html:str}} />
+      return <div dangerouslySetInnerHTML={{ __html: str }} />
     } else if (threadDetailBody.mimeType === 'multipart/alternative') {
       let str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
       // console.log('2')
-      return <div dangerouslySetInnerHTML={{__html:str}} />
+      return <div dangerouslySetInnerHTML={{ __html: str }} />
     } else if (threadDetailBody.mimeType === 'multipart/mixed') {
       let str = base64url.decode(
         `${threadDetailBody.parts[0].parts[1].body.data}`
       )
       // console.log('3')
-      return <div dangerouslySetInnerHTML={{__html:str}} />
-    } else if (threadDetailBody.mimeType === 'multipart/related') {      
-      let body = fetchAttachment(messageId, threadDetailBody.parts[1].body.attachmentId)
+      return <div dangerouslySetInnerHTML={{ __html: str }} />
+    } else if (threadDetailBody.mimeType === 'multipart/related') {
+      let body = fetchAttachment(
+        messageId,
+        threadDetailBody.parts[1].body.attachmentId
+      )
       // console.log('4')
       // console.log(body)
-      return <div dangerouslySetInnerHTML={{__html:body.value}} />
+      return <div dangerouslySetInnerHTML={{ __html: body.value }} />
     } else {
       let str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
       // console.log('5')
-      return <div dangerouslySetInnerHTML={{__html:str}} />
+      return <div dangerouslySetInnerHTML={{ __html: str }} />
     }
-    }
+  }
 
-  return (
-      DetailBody(messageId)
-      )
-      }
+  return DetailBody(messageId)
+}
 
-      export default EmailDetailBody
+export default EmailDetailBody
 
 //mimeType: "multipart/alternative" <= contains no partId , has two parts
 //mimeType: "text/html" <= contains no partId , has simple body

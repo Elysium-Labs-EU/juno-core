@@ -1,7 +1,7 @@
 import './App.scss'
 import Home from './components/Home'
 import EmailDetail from './components/EmailDetail'
-import ComposeEmail from './components/Compose/ComposeEmail'
+import ComposeEmail from './components/compose/ComposeEmail'
 import Settings from './components/Settings'
 import InformationOverview from './components/InformationOverview'
 import FileOverview from './components/FileOverview'

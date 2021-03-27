@@ -60,9 +60,10 @@ function EmailDetail() {
                       <div className="text-truncate email-detail-from">
                         From{' '}
                         <span>
-                        {
-                          message.payload.headers.find((e) => e.name === 'From')
-                            .value
+                          {
+                            message.payload.headers.find(
+                              (e) => e.name === 'From'
+                            ).value
                           }
                         </span>
                       </div>
@@ -88,9 +89,7 @@ function EmailDetail() {
             </div>
           </div>
         </div>
-        {threadDetail &&
-        <EmailDetOptions messageId={threadDetail.id}/>
-        }
+        {threadDetail && <EmailDetOptions messageId={threadDetail.id} />}
       </div>
     </div>
   )

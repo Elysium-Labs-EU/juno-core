@@ -1,11 +1,21 @@
 import NavControls from './NavControls'
 import Menu from './Menu'
+import DetailNavigation from './DetailNavigation'
+import styled from 'styled-components'
+
+const InnerMenu = styled.div`
+  margin-top: 4rem;
+  display: flex;
+`
 
 function HomeHeader() {
   return (
     <div className="tlOuterContainer">
       <NavControls />
-      <Menu />
+      <InnerMenu>
+        <Menu />
+        <DetailNavigation />
+      </InnerMenu>
     </div>
   )
 }

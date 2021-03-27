@@ -33,7 +33,7 @@ const EmailListItem = ({ email }) => {
 
   const LatestEmail =
     email.message !== undefined ? email.message.messages.slice(-1) : null
-  
+
   const handleClick = (data) => {
     history.push(`mail/${data}`)
   }
@@ -48,7 +48,10 @@ const EmailListItem = ({ email }) => {
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
-          <div className="cellName" onClick={() => handleClick(email?.message?.id)}>
+          <div
+            className="cellName"
+            onClick={() => handleClick(email?.message?.id)}
+          >
             <div className="avatars">
               <EmailAvatar
                 avatarURL={
@@ -67,7 +70,10 @@ const EmailListItem = ({ email }) => {
             </span>
             <MessageCount countOfMessage={email?.message.messages} />
           </div>
-          <div className="cellMessage" onClick={() => handleClick(email?.message?.id)}>
+          <div
+            className="cellMessage"
+            onClick={() => handleClick(email?.message?.id)}
+          >
             <div className="subjectSnippet text-truncate">
               <span className="subject">
                 {
@@ -93,7 +99,7 @@ const EmailListItem = ({ email }) => {
           <div></div>
           <div className="cellGradientRight"></div>
           {/* <div className="inlineThreadActions">TA</div> */}
-          <InlineThreadActions messageId={email?.message?.id}/>
+          <InlineThreadActions messageId={email?.message?.id} />
         </div>
       </ThreadBase>
     </>
