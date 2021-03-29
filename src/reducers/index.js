@@ -1,26 +1,34 @@
+import { ACTION_TYPE } from '../actions'
+
 export const initialState = {
+  nextPageToken: undefined,
   metaList: [],
   emailList: [],
 }
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'LIST-ADD-EMAIL':
+    case ACTION_TYPE.SET_NEXTPAGETOKEN:
+      return {
+        ...state,
+        nextPageToken: action.payload,
+      }
+    case ACTION_TYPE.LIST_ADD_EMAIL:
       return {
         ...state,
         metaList: action.payload,
       }
-    case 'LIST-REMOVE-EMAIL':
+    case ACTION_TYPE.LIST_REMOVE_EMAIL:
       return {
         ...state,
         metaList: action.payload,
       }
-    case 'LIST-ADD-DETAILS':
+    case ACTION_TYPE.LIST_ADD_DETAILS:
       return {
         ...state,
         emailList: action.payload,
       }
-    case 'LIST-REMOVE-DETAILS':
+    case ACTION_TYPE.LIST_REMOVE_DETAILS:
       return {
         ...state,
         emailList: action.payload,
