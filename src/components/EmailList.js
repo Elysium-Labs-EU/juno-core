@@ -3,7 +3,6 @@ import { createApiClient } from '../data/api'
 import './../App.scss'
 import EmailListItem from './emailListItem/EmailListItem'
 import { useDispatch, useSelector } from 'react-redux'
-import { ACTION_TYPE } from '../actions'
 
 const api = createApiClient()
 const selectMetaList = (state) => state.metaList
@@ -18,36 +17,36 @@ const EmailList = (labels) => {
   const dispatch = useDispatch()
   const labelIds = labels.Labels
 
-  const LoadEmails = async (labelIds, nextPageToken) => {
-    if (nextPageToken) {
-      const tempMetaList = await api.getAdditionalThreads(
-        labelIds,
-        nextPageToken
-      )
-      const appendedList = metaList.concat(tempMetaList.message.threads)
-      console.log('appendedList', appendedList)
-      dispatch({
-        type: ACTION_TYPE.LIST_ADD_EMAIL,
-        payload: appendedList,
-      })
-      dispatch({
-        type: ACTION_TYPE.SET_NEXTPAGETOKEN,
-        payload: tempMetaList.message.nextPageToken,
-      })
-      LoadEmailDetails(metaList)
-    } else {
-      const tempMetaList = await api.getInitialThreads(labelIds)
-      dispatch({
-        type: ACTION_TYPE.LIST_ADD_EMAIL,
-        payload: tempMetaList.message.threads,
-      })
-      dispatch({
-        type: ACTION_TYPE.SET_NEXTPAGETOKEN,
-        payload: tempMetaList.message.nextPageToken,
-      })
-      LoadEmailDetails(metaList)
-    }
-  }
+  // const LoadEmails = async (labelIds, nextPageToken) => {
+  //   if (nextPageToken) {
+  //     const tempMetaList = await api.getAdditionalThreads(
+  //       labelIds,
+  //       nextPageToken
+  //     )
+  //     const appendedList = metaList.concat(tempMetaList.message.threads)
+  //     console.log('appendedList', appendedList)
+  //     dispatch({
+  //       type: ACTION_TYPE.LIST_ADD_EMAIL,
+  //       payload: appendedList,
+  //     })
+  //     dispatch({
+  //       type: ACTION_TYPE.SET_NEXTPAGETOKEN,
+  //       payload: tempMetaList.message.nextPageToken,
+  //     })
+  //     LoadEmailDetails(metaList)
+  //   } else {
+  //     const tempMetaList = await api.getInitialThreads(labelIds)
+  //     dispatch({
+  //       type: ACTION_TYPE.LIST_ADD_EMAIL,
+  //       payload: tempMetaList.message.threads,
+  //     })
+  //     dispatch({
+  //       type: ACTION_TYPE.SET_NEXTPAGETOKEN,
+  //       payload: tempMetaList.message.nextPageToken,
+  //     })
+  //     LoadEmailDetails(metaList)
+  //   }
+  // }
 
   useEffect(() => {
     // metaList.length >
@@ -55,20 +54,20 @@ const EmailList = (labels) => {
   }, [labelIds])
 
   const LoadEmailDetails = async (metaList) => {
-    console.log('metaList', metaList)
-    console.log(metaList.length)
-    // setNextPageToken(metaList2.nextPageToken)
-    // metaList.threads.forEach(async (item) => {
-    metaList.length > 0 &&
-      metaList.forEach(async (item) => {
-        const tempEmailList = await api.getMessageDetail(item.id)
-        console.log('tempEmailList', tempEmailList)
-        console.log('emailList', emailList)
-        const appendedEmailList = emailList.push(tempEmailList)
-        console.log('appendedEmailList', appendedEmailList)
-        dispatch({ type: ACTION_TYPE.LIST_ADD_DETAIL, payload: appendedEmailList })
-        // setEmailList((prevState) => [...prevState, emailList])
-      })
+  //   console.log('metaList', metaList)
+  //   console.log(metaList.length)
+  //   // setNextPageToken(metaList2.nextPageToken)
+  //   // metaList.threads.forEach(async (item) => {
+  //   metaList.length > 0 &&
+  //     metaList.forEach(async (item) => {
+  //       const tempEmailList = await api.getMessageDetail(item.id)
+  //       console.log('tempEmailList', tempEmailList)
+  //       console.log('emailList', emailList)
+  //       const appendedEmailList = emailList.push(tempEmailList)
+  //       console.log('appendedEmailList', appendedEmailList)
+  //       dispatch({ type: ACTION_TYPE.LIST_ADD_DETAIL, payload: appendedEmailList })
+  //       // setEmailList((prevState) => [...prevState, emailList])
+  //     })
   }
 
   const loadNextPage = (labelIds, nextPageToken) => {
