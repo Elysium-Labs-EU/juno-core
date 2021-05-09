@@ -1,6 +1,7 @@
 export const ACTION_TYPE = {
   SET_IS_LOADING: 'SET_IS_LOADING',
   SET_NEXTPAGETOKEN: 'SET_NEXTPAGETOKEN',
+  SET_CURR_EMAIL: 'SET_CURR_EMAIL',
   LIST_ADD_META: 'LIST_ADD_META',
   LIST_REMOVE_META: 'LIST_REMOVE_META',
   LIST_UPDATE_META: 'LIST_UPDATE_META',
@@ -18,6 +19,13 @@ export const setNextPageToken = (nextPageToken) => {
   return {
     type: ACTION_TYPE.SET_NEXTPAGETOKEN,
     payload: nextPageToken,
+  }
+}
+
+export const setCurrentEmail = (threadId) => {
+  return {
+    type: ACTION_TYPE.SET_CURR_EMAIL,
+    payload: threadId,
   }
 }
 

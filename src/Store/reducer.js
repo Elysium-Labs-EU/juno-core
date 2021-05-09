@@ -1,10 +1,11 @@
 import { ACTION_TYPE } from './actions'
 
 export const initialState = {
+  isLoading: false,
   nextPageToken: undefined,
+  currEmail: '',
   metaList: [],
   emailList: [],
-  isLoading: false,
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         nextPageToken: action.payload,
+      }
+    case ACTION_TYPE.SET_CURR_EMAIL:
+      return {
+        ...state,
+        currEmail: action.payload,
       }
     case ACTION_TYPE.LIST_ADD_META:
       return {

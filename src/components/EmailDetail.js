@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
+import { setCurrentEmail } from './../Store/actions'
+import { connect } from 'react-redux'
 
 import { createApiClient } from '../data/api'
 import EmailDetailBody from './EmailDetailBody'
@@ -14,7 +16,12 @@ import TimeStamp from './TimeStamp'
 
 const api = createApiClient()
 
-const EmailDetail = () => {
+const mapStateToProps = (state) => {
+  const { isLoading, threadId } = state
+  return { isLoading, threadId }
+}
+
+const EmailDetail = ({ dispatch }) => {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
@@ -24,6 +31,9 @@ const EmailDetail = () => {
       setThreadDetail(threadDetailFeed.thread || 'No email loaded')
     }
     LoadEmail()
+    if (threadId !== undefined) {
+      dispatch(setCurrentEmail(threadId))
+    }
   }, [threadId])
 
   return (
@@ -95,4 +105,4 @@ const EmailDetail = () => {
   )
 }
 
-export default EmailDetail
+export default connect(mapStateToProps)(EmailDetail)
