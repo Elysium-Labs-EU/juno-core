@@ -17,18 +17,25 @@ import TimeStamp from './TimeStamp'
 const api = createApiClient()
 
 const mapStateToProps = (state) => {
-  const { isLoading, threadId } = state
-  return { isLoading, threadId }
+  const { emailList, isLoading, threadId } = state
+  return { emailList, isLoading, threadId }
 }
 
-const EmailDetail = ({ dispatch }) => {
+const EmailDetail = ({ dispatch, emailList }) => {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
   useEffect(() => {
     const LoadEmail = async () => {
-      const threadDetailFeed = await api.getThreadDetail(`${threadId}`)
-      setThreadDetail(threadDetailFeed.thread || 'No email loaded')
+      if (emailList.length > 0) {
+        const activeEmail = await emailList.filter(
+          (item) => item.thread.id === threadId
+        )
+        setThreadDetail(activeEmail[0].thread)
+      } else {
+        const threadDetailFeed = await api.getThreadDetail(`${threadId}`)
+        setThreadDetail(threadDetailFeed.thread || 'No email loaded')
+      }
     }
     LoadEmail()
     if (threadId !== undefined) {
