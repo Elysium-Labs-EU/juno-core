@@ -3,6 +3,7 @@ import { FiPaperclip } from 'react-icons/fi'
 const EmailAttachment = ({ hasAttachment }) => {
   const CheckAttachment = () => {
     if (
+      hasAttachment &&
       hasAttachment.filter((thread) => thread.payload.hasOwnProperty('parts'))
         .length > 0
     ) {

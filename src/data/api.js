@@ -15,8 +15,28 @@ export const createApiClient = () => {
         .catch((err) => console.log(err))
     },
     getMessageDetail: (messageId) => {
+      // console.log(messageId)
       return axios
         .get(`/api/message/${messageId}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    getInitialThreads: (labelIds) => {
+      return axios
+        .get(`/api/threads/${labelIds}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    getAdditionalThreads: (labelIds, nextPageToken) => {
+      return axios
+        .get(`/api/threads/${labelIds}/${nextPageToken}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    getThreadDetail: (messageId) => {
+      // console.log(messageId)
+      return axios
+        .get(`/api/thread/${messageId}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },

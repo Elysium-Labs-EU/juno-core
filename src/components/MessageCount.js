@@ -1,6 +1,6 @@
 const MessageCount = ({ countOfMessage }) => {
-  function LengthMessageCount() {
-    let length = countOfMessage.length
+  const LengthMessageCount = () => {
+    let length = countOfMessage && countOfMessage.length
     if (length > 1) {
       return <span className="messageCount">({length})</span>
     } else {

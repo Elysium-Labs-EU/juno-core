@@ -14,14 +14,14 @@ import TimeStamp from './TimeStamp'
 
 const api = createApiClient()
 
-function EmailDetail() {
+const EmailDetail = () => {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
   useEffect(() => {
     const LoadEmail = async () => {
-      const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
-      setThreadDetail(threadDetailFeed.message || 'No email loaded')
+      const threadDetailFeed = await api.getThreadDetail(`${threadId}`)
+      setThreadDetail(threadDetailFeed.thread || 'No email loaded')
     }
     LoadEmail()
   }, [threadId])

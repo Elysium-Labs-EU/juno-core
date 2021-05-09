@@ -1,9 +1,9 @@
 import React from 'react'
 import './DetailNavigation.scss'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
-import NavigatePreviousMail from './emailOptions/NavigatePreviousMail'
-import NavigateNextMail from './emailOptions/NavigateNextMail'
-import CloseMail from './emailOptions/CloseMail'
+import NavigatePreviousMail from './EmailOptions/NavigatePreviousMail'
+import NavigateNextMail from './EmailOptions/NavigateNextMail'
+import CloseMail from './EmailOptions/CloseMail'
 
 const DetailNavigation = () => {
   return (

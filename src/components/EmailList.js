@@ -1,81 +1,70 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { createApiClient } from '../data/api'
+import EmailListItem from './EmailListItem/EmailListItem'
+import { connect } from 'react-redux'
+import {
+  listUpdateDetail,
+  listUpdateMeta,
+  setNextPageToken,
+  setIsLoading
+} from '../Store/actions'
 import './../App.scss'
-import EmailListItem from './emailListItem/EmailListItem'
-import { useDispatch, useSelector } from 'react-redux'
 
 const api = createApiClient()
-const selectMetaList = (state) => state.metaList
-const selectNextPageToken = (state) => state.nextPageToken
-const selectEmailList = (state) => state.emailList
 
-const EmailList = (labels) => {
-  // const [emailList, setEmailList] = useState([])
-  const metaList = useSelector(selectMetaList)
-  const nextPageToken = useSelector(selectNextPageToken)
-  const emailList = useSelector(selectEmailList)
-  const dispatch = useDispatch()
-  const labelIds = labels.Labels
+const mapStateToProps = (state) => {
+  const { metaList, nextPageToken, emailList, isLoading } = state
+  return { metaList, nextPageToken, emailList, isLoading }
+}
 
-  // const LoadEmails = async (labelIds, nextPageToken) => {
-  //   if (nextPageToken) {
-  //     const tempMetaList = await api.getAdditionalThreads(
-  //       labelIds,
-  //       nextPageToken
-  //     )
-  //     const appendedList = metaList.concat(tempMetaList.message.threads)
-  //     console.log('appendedList', appendedList)
-  //     dispatch({
-  //       type: ACTION_TYPE.LIST_ADD_EMAIL,
-  //       payload: appendedList,
-  //     })
-  //     dispatch({
-  //       type: ACTION_TYPE.SET_NEXTPAGETOKEN,
-  //       payload: tempMetaList.message.nextPageToken,
-  //     })
-  //     LoadEmailDetails(metaList)
-  //   } else {
-  //     const tempMetaList = await api.getInitialThreads(labelIds)
-  //     dispatch({
-  //       type: ACTION_TYPE.LIST_ADD_EMAIL,
-  //       payload: tempMetaList.message.threads,
-  //     })
-  //     dispatch({
-  //       type: ACTION_TYPE.SET_NEXTPAGETOKEN,
-  //       payload: tempMetaList.message.nextPageToken,
-  //     })
-  //     LoadEmailDetails(metaList)
-  //   }
-  // }
+const EmailList = ({
+  labelIds,
+  dispatch,
+  metaList,
+  nextPageToken,
+  emailList,
+  isLoading,
+}) => {
+  const LoadEmails = async (labelIds, nextPageToken) => {
+    if (nextPageToken) {
+      const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
+      const { threads } = metaList.message
+      dispatch(listUpdateMeta(threads))
+      dispatch(setNextPageToken(metaList.message.nextPageToken))
+      LoadEmailDetails(metaList)
+    } else {
+      const metaList = await api.getInitialThreads(labelIds)
+      const { threads, nextPageToken } = metaList.message
+      dispatch(listUpdateMeta(threads))
+      dispatch(setNextPageToken(nextPageToken))
+      LoadEmailDetails(metaList)
+    }
+  }
 
   useEffect(() => {
-    // metaList.length >
-    LoadEmails(labelIds)
-  }, [labelIds])
+    if (metaList.length === 0) {
+      LoadEmails(labelIds)
+    }
+  }, [labelIds, metaList])
 
   const LoadEmailDetails = async (metaList) => {
-  //   console.log('metaList', metaList)
-  //   console.log(metaList.length)
-  //   // setNextPageToken(metaList2.nextPageToken)
-  //   // metaList.threads.forEach(async (item) => {
-  //   metaList.length > 0 &&
-  //     metaList.forEach(async (item) => {
-  //       const tempEmailList = await api.getMessageDetail(item.id)
-  //       console.log('tempEmailList', tempEmailList)
-  //       console.log('emailList', emailList)
-  //       const appendedEmailList = emailList.push(tempEmailList)
-  //       console.log('appendedEmailList', appendedEmailList)
-  //       dispatch({ type: ACTION_TYPE.LIST_ADD_DETAIL, payload: appendedEmailList })
-  //       // setEmailList((prevState) => [...prevState, emailList])
-  //     })
+    const { threads } = metaList.message
+    threads.length > 0 &&
+      threads.forEach(async (item) => {
+        const threadDetail = await api.getThreadDetail(item.id)
+        dispatch(listUpdateDetail([...emailList, threadDetail]))
+      })
+    dispatch(setIsLoading(true))
+    // console.log(metaList.length, emailList.length)
+    // if (metaList.length === emailList.length){
+    // console.log('hey')}
   }
 
   const loadNextPage = (labelIds, nextPageToken) => {
     LoadEmails(labelIds, nextPageToken)
   }
-  // const emailList = useSelector(selectEmailList)
+
   const renderEmailList = (emailList) => {
-    console.log('rendered', emailList)
     return (
       <>
         <div className="scroll">
@@ -84,7 +73,7 @@ const EmailList = (labels) => {
               {emailList ? (
                 <div className="base">
                   {emailList.map((email) => (
-                    <EmailListItem key={email.message.id} email={email} />
+                    <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               ) : (
@@ -118,4 +107,4 @@ const EmailList = (labels) => {
   )
 }
 
-export default EmailList
+export default connect(mapStateToProps)(EmailList)

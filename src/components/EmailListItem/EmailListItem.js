@@ -29,77 +29,71 @@ const ThreadBase = styled.div`
 `
 
 const EmailListItem = ({ email }) => {
+  const {
+    thread,
+    thread: { id, messages },
+  } = email
   const history = useHistory()
 
   const LatestEmail =
-    email.message !== undefined ? email.message.messages.slice(-1) : null
+    thread !== undefined && messages !== undefined ? messages.slice(-1) : thread
 
-  const handleClick = (data) => {
-    history.push(`mail/${data}`)
+  const emailLabels = Array.isArray(LatestEmail)
+    ? LatestEmail[0].labelIds[0]
+    : LatestEmail.labelIds[0]
+  const fromEmail = Array.isArray(LatestEmail)
+    ? LatestEmail[0].payload.headers.find((data) => data.name === 'From').value
+    : LatestEmail.payload.headers.find((data) => data.name === 'From').value
+  const emailSubject = Array.isArray(LatestEmail)
+    ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
+        .value
+    : LatestEmail.payload.headers.find((data) => data.name === 'Subject').value
+  const emailSnippet = Array.isArray(LatestEmail)
+    ? LatestEmail[0].snippet
+    : LatestEmail.snippet
+  const timeStamp = Array.isArray(LatestEmail)
+    ? LatestEmail[0].internalDate
+    : LatestEmail.internalDate
+
+  const handleClick = (id) => {
+    history.push(`mail/${id}`)
   }
 
   return (
     <>
-      <ThreadBase
-        key={email?.message?.id}
-        labelIds={LatestEmail[0].labelIds[0]}
-      >
+      <ThreadBase key={id} labelIds={emailLabels}>
         <div className="threadRow">
           {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
-          <div
-            className="cellName"
-            onClick={() => handleClick(email?.message?.id)}
-          >
+          <div className="cellName" onClick={() => handleClick(id)}>
             <div className="avatars">
-              <EmailAvatar
-                avatarURL={
-                  LatestEmail[0].payload.headers.find(
-                    (data) => data.name === 'From'
-                  ).value
-                }
-              />
+              <EmailAvatar avatarURL={fromEmail} />
             </div>
-            <span className="text-truncate">
-              {
-                LatestEmail[0].payload.headers.find(
-                  (data) => data.name === 'From'
-                ).value
-              }
-            </span>
-            <MessageCount countOfMessage={email?.message.messages} />
+            <span className="text-truncate">{fromEmail}</span>
+            <MessageCount countOfMessage={messages} />
           </div>
-          <div
-            className="cellMessage"
-            onClick={() => handleClick(email?.message?.id)}
-          >
+          <div className="cellMessage" onClick={() => handleClick(id)}>
             <div className="subjectSnippet text-truncate">
-              <span className="subject">
-                {
-                  LatestEmail[0].payload.headers.find(
-                    (data) => data.name === 'Subject'
-                  ).value
-                }
-              </span>
-              <Snippet email={email?.message.messages} />
+              <span className="subject">{emailSubject}</span>
+              <Snippet snippet={emailSnippet} />
             </div>
           </div>
 
           <div className="cellAttachment">
-            <EmailHasAttachment hasAttachment={email?.message.messages} />
+            <EmailHasAttachment hasAttachment={messages} />
           </div>
           <div className="cellDate">
             <div className="datePosition">
               <span className="date">
-                <TimeStamp threadTimeStamp={LatestEmail[0].internalDate} />
+                <TimeStamp threadTimeStamp={timeStamp} />
               </span>
             </div>
           </div>
           <div></div>
           <div className="cellGradientRight"></div>
           {/* <div className="inlineThreadActions">TA</div> */}
-          <InlineThreadActions messageId={email?.message?.id} />
+          <InlineThreadActions messageId={id} />
         </div>
       </ThreadBase>
     </>
