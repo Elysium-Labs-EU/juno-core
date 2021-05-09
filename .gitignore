@@ -24,3 +24,4 @@ yarn-error.log*
 .eslintcache
 .vscode/snipsnap.code-snippets
 .env
+yarn.lock

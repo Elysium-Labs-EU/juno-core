@@ -6,7 +6,7 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import ArchiveMail from '../emailOptions/ArchiveMail'
+import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 
 const Wrapper = styled.div`

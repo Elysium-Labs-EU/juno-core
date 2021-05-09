@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import ThrashMail from './emailOptions/ThrashMail'
+import ThrashMail from './EmailOptions/ThrashMail'
 
 const Wrapper = styled.div`
   z-index: 10;

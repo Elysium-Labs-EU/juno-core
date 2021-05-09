@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
+import { setCurrentEmail } from './../Store/actions'
+import { connect } from 'react-redux'
 
 import { createApiClient } from '../data/api'
 import EmailDetailBody from './EmailDetailBody'
@@ -14,16 +16,31 @@ import TimeStamp from './TimeStamp'
 
 const api = createApiClient()
 
-function EmailDetail() {
+const mapStateToProps = (state) => {
+  const { emailList, isLoading, threadId } = state
+  return { emailList, isLoading, threadId }
+}
+
+const EmailDetail = ({ dispatch, emailList }) => {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
   useEffect(() => {
     const LoadEmail = async () => {
-      const threadDetailFeed = await api.getMessageDetail(`${threadId}`)
-      setThreadDetail(threadDetailFeed.message || 'No email loaded')
+      if (emailList.length > 0) {
+        const activeEmail = await emailList.filter(
+          (item) => item.thread.id === threadId
+        )
+        setThreadDetail(activeEmail[0].thread)
+      } else {
+        const threadDetailFeed = await api.getThreadDetail(`${threadId}`)
+        setThreadDetail(threadDetailFeed.thread || 'No email loaded')
+      }
     }
     LoadEmail()
+    if (threadId !== undefined) {
+      dispatch(setCurrentEmail(threadId))
+    }
   }, [threadId])
 
   return (
@@ -95,4 +112,4 @@ function EmailDetail() {
   )
 }
 
-export default EmailDetail
+export default connect(mapStateToProps)(EmailDetail)

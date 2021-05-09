@@ -2,6 +2,25 @@ import axios from 'axios'
 
 export const createApiClient = () => {
   return {
+    getInitialMessages: (labelIds) => {
+      return axios
+        .get(`/api/messages/${labelIds}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    getAdditionalMessages: (labelIds, nextPageToken) => {
+      return axios
+        .get(`/api/messages/${labelIds}/${nextPageToken}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    getMessageDetail: (messageId) => {
+      // console.log(messageId)
+      return axios
+        .get(`/api/message/${messageId}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
     getInitialThreads: (labelIds) => {
       return axios
         .get(`/api/threads/${labelIds}`)
@@ -14,9 +33,10 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getMessageDetail: (messageId) => {
+    getThreadDetail: (messageId) => {
+      // console.log(messageId)
       return axios
-        .get(`/api/message/${messageId}`)
+        .get(`/api/thread/${messageId}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },

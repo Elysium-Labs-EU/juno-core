@@ -1,4 +1,4 @@
-import ComposeHeader from './compose/ComposeHeader'
+import ComposeHeader from './Compose/ComposeHeader'
 import InboxHeader from './InboxHeader'
 import HomeHeader from './HomeHeader'
 import { useLocation } from 'react-router-dom'
