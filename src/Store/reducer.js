@@ -30,7 +30,6 @@ const reducer = (state = initialState, action) => {
         metaList: action.payload,
       }
     case ACTION_TYPE.LIST_UPDATE_META:
-      console.log(action.payload)
       if (Array.isArray(action.payload)) {
         return {
           ...state,
@@ -57,8 +56,7 @@ const reducer = (state = initialState, action) => {
           // ],
         }
       }
-    case ACTION_TYPE.LIST_UPDATE_DETAILS:
-      console.log(action.payload)
+    case ACTION_TYPE.LIST_UPDATE_DETAIL:
       // if (Array.isArray(action.payload)) {
       return {
         ...state,
@@ -85,12 +83,12 @@ const reducer = (state = initialState, action) => {
         //     // ],
         //   }
       }
-    case ACTION_TYPE.LIST_ADD_DETAILS:
+    case ACTION_TYPE.LIST_ADD_DETAIL:
       return {
         ...state,
-        emailList: action.payload,
+        emailList: [...state.emailList, ...action.payload],
       }
-    case ACTION_TYPE.LIST_REMOVE_DETAILS:
+    case ACTION_TYPE.LIST_REMOVE_DETAIL:
       return {
         ...state,
         emailList: action.payload,

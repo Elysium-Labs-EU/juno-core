@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createApiClient } from '../data/api'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
 import {
-  listUpdateDetail,
+  listAddDetail,
   listUpdateMeta,
   setNextPageToken,
-  setIsLoading
+  setIsLoading,
 } from '../Store/actions'
 import './../App.scss'
 
 const api = createApiClient()
+const LOAD_MORE = 'Load more'
 
 const mapStateToProps = (state) => {
   const { metaList, nextPageToken, emailList, isLoading } = state
@@ -25,6 +27,9 @@ const EmailList = ({
   emailList,
   isLoading,
 }) => {
+  const [loadCount, setLoadCount] = useState(0)
+  const [buffer, setBuffer] = useState([])
+
   const LoadEmails = async (labelIds, nextPageToken) => {
     if (nextPageToken) {
       const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
@@ -49,16 +54,25 @@ const EmailList = ({
 
   const LoadEmailDetails = async (metaList) => {
     const { threads } = metaList.message
+    setLoadCount(threads.length)
     threads.length > 0 &&
       threads.forEach(async (item) => {
         const threadDetail = await api.getThreadDetail(item.id)
-        dispatch(listUpdateDetail([...emailList, threadDetail]))
+        setBuffer((prevState) => [...prevState, threadDetail])
+        setLoadCount((prevState) => prevState - 1)
       })
     dispatch(setIsLoading(true))
-    // console.log(metaList.length, emailList.length)
-    // if (metaList.length === emailList.length){
-    // console.log('hey')}
   }
+
+  useEffect(() => {
+    if (loadCount === 0) {
+      if (buffer.length > 0) {
+        dispatch(listAddDetail(buffer))
+        setBuffer([])
+        dispatch(setIsLoading(false))
+      }
+    }
+  }, [loadCount])
 
   const loadNextPage = (labelIds, nextPageToken) => {
     LoadEmails(labelIds, nextPageToken)
@@ -70,23 +84,25 @@ const EmailList = ({
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {emailList ? (
+              {emailList && (
                 <div className="base">
                   {emailList.map((email) => (
                     <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
-              ) : (
-                <h2>Loading</h2>
               )}
             </div>
-            <div className="d-flex justify-content-center">
-              <button
-                className="btn btn-sm btn-light"
-                onClick={() => loadNextPage(labelIds, nextPageToken)}
-              >
-                Load more
-              </button>
+            <div className="d-flex justify-content-center mb-5">
+              {!isLoading && (
+                <button
+                  className="btn btn-sm btn-light"
+                  disabled={isLoading}
+                  onClick={() => loadNextPage(labelIds, nextPageToken)}
+                >
+                  {LOAD_MORE}
+                </button>
+              )}
+              {isLoading && <CircularProgress />}
             </div>
           </div>
         </div>
@@ -99,9 +115,9 @@ const EmailList = ({
       {emailList.length > 0 ? (
         renderEmailList(emailList)
       ) : (
-        <>
-          <h3>Fetching emails</h3>
-        </>
+        <div className="mt-5 d-flex justify-content-center">
+          <CircularProgress />
+        </div>
       )}
     </>
   )

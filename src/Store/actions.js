@@ -6,7 +6,7 @@ export const ACTION_TYPE = {
   LIST_UPDATE_META: 'LIST_UPDATE_META',
   LIST_ADD_DETAIL: 'LIST_ADD_DETAIL',
   LIST_REMOVE_DETAIL: 'LIST_REMOVE_DETAIL',
-  LIST_UPDATE_DETAILS: 'LIST_UPDATE_DETAILS',
+  LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
 }
 
 export const setIsLoading = (isLoading) => ({
@@ -42,14 +42,14 @@ export const listRemoveMeta = (metaList) => {
   }
 }
 
-export const listAddEmailDetail = (emailList) => {
+export const listAddDetail = (emailList) => {
   return {
     type: ACTION_TYPE.LIST_ADD_DETAIL,
     payload: emailList,
   }
 }
 
-export const listRemoveEmailDetail = (emailList) => {
+export const listRemoveDetail = (emailList) => {
   return {
     type: ACTION_TYPE.LIST_REMOVE_DETAIL,
     payload: emailList,
@@ -58,7 +58,7 @@ export const listRemoveEmailDetail = (emailList) => {
 
 export const listUpdateDetail = (emailList) => {
   return {
-    type: ACTION_TYPE.LIST_UPDATE_DETAILS,
+    type: ACTION_TYPE.LIST_UPDATE_DETAIL,
     payload: emailList,
   }
 }
