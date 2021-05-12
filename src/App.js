@@ -1,6 +1,6 @@
 import './App.scss'
 import Home from './components/Home'
-import EmailDetail from './components/EmailDetail'
+import EmailDetail from './components/EmailDetail/EmailDetail'
 import ComposeEmail from './components/Compose/ComposeEmail'
 import Settings from './components/Settings'
 import InformationOverview from './components/InformationOverview'

@@ -1,6 +1,7 @@
-import NavControls from './NavControls'
-import Menu from './Menu'
-import DetailNavigation from './DetailNavigation'
+import React from 'react'
+import NavControls from './../NavControls'
+import Menu from './../Menu'
+import DetailNavigation from './../DetailNavigation'
 import styled from 'styled-components'
 
 const InnerMenu = styled.div`
@@ -8,7 +9,7 @@ const InnerMenu = styled.div`
   display: flex;
 `
 
-const HomeHeader = () => {
+const Emaildetailheader = () => {
   return (
     <div className="tlOuterContainer">
       <NavControls />
@@ -20,4 +21,4 @@ const HomeHeader = () => {
   )
 }
 
-export default HomeHeader
+export default Emaildetailheader

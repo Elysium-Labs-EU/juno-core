@@ -1,5 +1,5 @@
 import base64url from 'base64url'
-import { createApiClient } from '../data/api'
+import { createApiClient } from './../../data/api'
 import React from 'react'
 
 const api = createApiClient()

@@ -1,5 +1,5 @@
 import React from 'react'
-import './../App.scss'
+import './../../App.scss'
 import styled from 'styled-components'
 import {
   FiArchive,
@@ -7,8 +7,8 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import ArchiveMail from './EmailOptions/ArchiveMail'
-import EmailMoreOptions from './EmailMoreOptions'
+import ArchiveMail from './../EmailOptions/ArchiveMail'
+import EmailMoreOptions from './../EmailMoreOptions'
 
 const EmailOptionsContainer = styled.div`
   position: relative;

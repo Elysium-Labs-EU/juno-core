@@ -5,32 +5,34 @@ import { useHistory } from 'react-router-dom'
 import { NavButton, Wrapper } from './DetailNavigationStyles'
 
 const mapStateToProps = (state) => {
-  const { currEmail, metaList, isLoading } = state
-  return { currEmail, metaList, isLoading }
+  const { currEmail, emailList, isLoading } = state
+  return { currEmail, emailList, isLoading }
 }
 
-const DetailNavigation = ({ metaList, currEmail }) => {
+const DetailNavigation = ({ emailList, currEmail }) => {
   const [currLocal, setCurrLocal] = useState('')
   const [viewIndex, setViewIndex] = useState(0)
   const history = useHistory()
 
   const NavigatePreviousMail = () => {
-    history.push(metaList[viewIndex - 1].id)
+    console.log(emailList[viewIndex - 1].thread.id)
+    history.push(emailList[viewIndex - 1].thread.id)
   }
   const NavigateNextMail = () => {
-    history.push(metaList[viewIndex + 1].id)
+    console.log(emailList[viewIndex + 1].thread.id)
+    history.push(`/mail/${emailList[viewIndex + 1].thread.id}`)
   }
   const CloseMail = () => {
     history.push(`/inbox`)
   }
 
-  const isDisabledPrev = metaList[viewIndex - 1] === undefined ? true : false
-  const isDisabledNext = metaList[viewIndex + 1] === undefined ? true : false
+  const isDisabledPrev = emailList[viewIndex - 1] === undefined ? true : false
+  const isDisabledNext = emailList[viewIndex + 1] === undefined ? true : false
 
   useEffect(() => {
     if (currEmail !== currLocal) {
       setCurrLocal(currEmail)
-      const viewingIndex = metaList
+      const viewingIndex = emailList
         .map(function (e) {
           return e.id
         })
