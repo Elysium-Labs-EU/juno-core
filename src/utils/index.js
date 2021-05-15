@@ -14,7 +14,6 @@ export const NavigatePreviousMail = (
 }
 
 export const NavigateNextMail = (history, labelURL, emailList, viewIndex) => {
-  console.log(history, labelURL, emailList, viewIndex)
   const nextID = emailList[viewIndex + 1].thread.id
   return history.push(`/mail/${labelURL}/${nextID}`)
 }
