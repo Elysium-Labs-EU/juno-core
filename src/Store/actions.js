@@ -1,3 +1,6 @@
+import { createApiClient } from '../data/api'
+const api = createApiClient()
+
 export const ACTION_TYPE = {
   SET_IS_LOADING: 'SET_IS_LOADING',
   SET_NEXTPAGETOKEN: 'SET_NEXTPAGETOKEN',
@@ -84,5 +87,49 @@ export const listUpdateDetail = (emailList) => {
   return {
     type: ACTION_TYPE.LIST_UPDATE_DETAIL,
     payload: emailList,
+  }
+}
+
+export const loadEmails = (labelIds, nextPageToken) => {
+  return async (dispatch) => {
+    dispatch(setIsLoading(true))
+    if (nextPageToken) {
+      const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
+      if (metaList) {
+        const { threads, nextPageToken } = metaList.message
+        dispatch(listUpdateMeta(threads))
+        dispatch(setNextPageToken(nextPageToken))
+        dispatch(loadEmailDetails(metaList))
+      } else {
+        console.log('No feed found.')
+      }
+    } else {
+      const metaList = await api.getInitialThreads(labelIds)
+      if (metaList) {
+        const { threads, nextPageToken } = metaList.message
+        dispatch(listUpdateMeta(threads))
+        dispatch(setNextPageToken(nextPageToken))
+        dispatch(loadEmailDetails(metaList))
+      } else {
+        console.log('No feed found.')
+      }
+    }
+  }
+}
+
+export const loadEmailDetails = (metaList) => {
+  return async (dispatch) => {
+    const { threads } = metaList.message
+    let buffer = []
+    let loadCount = threads.length
+    threads.length > 0 &&
+      threads.forEach(async (item) => {
+        const threadDetail = await api.getThreadDetail(item.id)
+        buffer.push(threadDetail)
+        if (buffer.length === loadCount) {
+          dispatch(listAddDetail(buffer))
+          dispatch(setIsLoading(false))
+        }
+      })
   }
 }
