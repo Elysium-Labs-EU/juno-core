@@ -12,7 +12,7 @@ import {
 import './../App.scss'
 
 const api = createApiClient()
-const LOAD_MORE = 'Load more'
+const LOAD_OLDER = 'Load older messages'
 
 const mapStateToProps = (state) => {
   const { labelIds, metaList, nextPageToken, emailList, isLoading } = state
@@ -107,7 +107,7 @@ const EmailList = ({
                   disabled={isLoading}
                   onClick={() => loadNextPage(labelIds, nextPageToken)}
                 >
-                  {LOAD_MORE}
+                  {LOAD_OLDER}
                 </button>
               )}
               {isLoading && <CircularProgress />}
