@@ -1,7 +1,7 @@
 .nav-container {
 	margin-top: 1.5rem;
-	align-self: center;
 	display: flex;
+	padding: 0 1rem;
 }
 
 .nav-content {
@@ -75,7 +75,6 @@
 }
 
 .nav-controls {
-	margin-right: 2rem;
 	margin-left: auto;
 	display: flex;
 }
@@ -86,7 +85,9 @@
 
 .header-center {
 	display: flex;
-	margin-left: 40%;
+	width: 100%;
+	place-content: center;
+	padding-left: 7rem;
 }
 
 .nav-item-button {
