@@ -3,28 +3,29 @@ import { connect } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import { NavButton, Wrapper } from './DetailNavigationStyles'
+import {
+  convertArrayToString,
+  CloseMail,
+  NavigatePreviousMail,
+  NavigateNextMail,
+} from './../utils'
+import { setViewingIndex } from '../Store/actions'
 
 const mapStateToProps = (state) => {
-  const { currEmail, emailList, isLoading } = state
-  return { currEmail, emailList, isLoading }
+  const { labelIds, currEmail, emailList, isLoading, viewIndex } = state
+  return { labelIds, currEmail, emailList, isLoading, viewIndex }
 }
 
-const DetailNavigation = ({ emailList, currEmail }) => {
+const DetailNavigation = ({
+  labelIds,
+  emailList,
+  currEmail,
+  viewIndex,
+  dispatch,
+}) => {
   const [currLocal, setCurrLocal] = useState('')
-  const [viewIndex, setViewIndex] = useState(0)
   const history = useHistory()
-
-  const NavigatePreviousMail = () => {
-    console.log(emailList[viewIndex - 1].thread.id)
-    history.push(emailList[viewIndex - 1].thread.id)
-  }
-  const NavigateNextMail = () => {
-    console.log(emailList[viewIndex + 1].thread.id)
-    history.push(`/mail/${emailList[viewIndex + 1].thread.id}`)
-  }
-  const CloseMail = () => {
-    history.push(`/inbox`)
-  }
+  const labelURL = convertArrayToString(labelIds)
 
   const isDisabledPrev = emailList[viewIndex - 1] === undefined ? true : false
   const isDisabledNext = emailList[viewIndex + 1] === undefined ? true : false
@@ -32,27 +33,37 @@ const DetailNavigation = ({ emailList, currEmail }) => {
   useEffect(() => {
     if (currEmail !== currLocal) {
       setCurrLocal(currEmail)
-      const viewingIndex = emailList
-        .map(function (e) {
-          return e.id
-        })
-        .indexOf(currEmail)
-      setViewIndex(viewingIndex)
+      const requestBody = {
+        emailList: emailList,
+        currEmail: currEmail,
+      }
+      dispatch(setViewingIndex(requestBody))
     }
   }, [currEmail])
+
+  useEffect(() => {
+    console.log(currLocal)
+  }, [currLocal])
 
   return (
     <Wrapper>
       <NavButton
-        onClick={() => NavigatePreviousMail()}
+        onClick={() =>
+          NavigatePreviousMail(history, labelURL, emailList, viewIndex)
+        }
         disabled={isDisabledPrev}
       >
         <FiChevronLeft size={20} />
       </NavButton>
-      <NavButton onClick={() => NavigateNextMail()} disabled={isDisabledNext}>
+      <NavButton
+        onClick={() =>
+          NavigateNextMail(history, labelURL, emailList, viewIndex)
+        }
+        disabled={isDisabledNext}
+      >
         <FiChevronRight size={20} />
       </NavButton>
-      <NavButton onClick={CloseMail}>
+      <NavButton onClick={() => CloseMail(history)}>
         <FiX size={20} />
       </NavButton>
     </Wrapper>

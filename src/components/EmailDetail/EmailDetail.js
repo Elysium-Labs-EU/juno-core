@@ -50,7 +50,8 @@ const EmailDetail = ({ dispatch, emailList, isLoading }) => {
         <div className="pb-4 pt-4 mb-3 email-detail-container">
           <div className="detail-base">
             <div className="cardFullWidth">
-              {threadDetail && !isLoading &&
+              {threadDetail &&
+                !isLoading &&
                 threadDetail.messages.map((message) => (
                   <div className="p-4 mb-1 email" key={message.id}>
                     <div className="d-flex align-items-center">

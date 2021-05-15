@@ -21,12 +21,12 @@ function App() {
         {/* Fix the bug with the path of the email id detail not being accurate */}
         <Switch>
           <Route path="/" exact={true} component={Home} />
-          <Route path="/mail/:threadId" component={EmailDetail} />
+          <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
           <Route path="/compose" component={ComposeEmail} />
           <Route path="/settings" component={Settings} />
-          <Route path="/InformationOverview" component={InformationOverview} />
-          <Route path="/FileOverview" component={FileOverview} />
-          <Route path="/Inbox" component={Inbox} />
+          <Route path="/information-overview" component={InformationOverview} />
+          <Route path="/file-overview" component={FileOverview} />
+          <Route path="/inbox" component={Inbox} />
         </Switch>
       </div>
     </Router>

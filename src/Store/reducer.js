@@ -4,6 +4,8 @@ export const initialState = {
   isLoading: false,
   nextPageToken: undefined,
   currEmail: '',
+  viewIndex: 0,
+  labelIds: '',
   metaList: [],
   emailList: [],
 }
@@ -20,10 +22,25 @@ const reducer = (state = initialState, action) => {
         ...state,
         nextPageToken: action.payload,
       }
+    case ACTION_TYPE.SET_LABEL_IDS:
+      return {
+        ...state,
+        labelIds: action.payload,
+      }
     case ACTION_TYPE.SET_CURR_EMAIL:
       return {
         ...state,
         currEmail: action.payload,
+      }
+    case ACTION_TYPE.SET_VIEW_INDEX:
+      const viewingIndex = action.payload.emailList
+        .map(function (e) {
+          return e.thread.id
+        })
+        .indexOf(action.payload.currEmail)
+      return {
+        ...state,
+        viewIndex: viewingIndex,
       }
     case ACTION_TYPE.LIST_ADD_META:
       return {

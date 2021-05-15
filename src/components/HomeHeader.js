@@ -1,4 +1,4 @@
-import NavControls from './NavControls'
+import NavControls from './Navigation/NavControls'
 import Menu from './Menu'
 import DetailNavigation from './DetailNavigation'
 import styled from 'styled-components'

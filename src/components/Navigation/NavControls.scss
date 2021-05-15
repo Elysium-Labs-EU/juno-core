@@ -88,3 +88,16 @@
 	display: flex;
 	margin-left: 40%;
 }
+
+.nav-item-button {
+	border: none;
+	color: #a6a6a6;
+	outline: none;
+
+	&:hover {
+		color: #1c1c1c;
+	}
+	&:active {
+		color: #1c1c1c;
+	}
+}

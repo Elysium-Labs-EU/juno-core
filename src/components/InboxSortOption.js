@@ -2,24 +2,26 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import './InboxSortOption.scss'
+import { convertArrayToString, startSort } from '../utils'
 
 const INBOX_BUTTON = 'Sort inbox'
 
 const mapStateToProps = (state) => {
-  const { emailList, isLoading } = state
-  return { emailList, isLoading }
+  const { emailList, labelIds, isLoading } = state
+  return { emailList, labelIds, isLoading }
 }
 
-const SortInbox = ({ emailList, isLoading }) => {
+const SortInbox = ({ emailList, labelIds, isLoading }) => {
   const history = useHistory()
-
-  const startSort = () => {
-    history.push(`/mail/${emailList[0].thread.id}`)
-  }
+  const labelURL = convertArrayToString(labelIds)
 
   return (
     <div className="sort-container">
-      <button className="sort-button" onClick={startSort} disabled={isLoading}>
+      <button
+        className="sort-button"
+        onClick={() => startSort(history, labelURL, emailList)}
+        disabled={isLoading}
+      >
         <p className="sort-item">{INBOX_BUTTON}</p>
       </button>
     </div>
