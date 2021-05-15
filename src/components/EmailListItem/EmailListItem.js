@@ -1,34 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-
-import styled from 'styled-components'
-
 import EmailAvatar from '../EmailAvatar'
 import EmailHasAttachment from '../EmailHasAttachment'
 import TimeStamp from '../TimeStamp'
 import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
+import { connect } from 'react-redux'
+import { ThreadBase } from './EmailListItemStyles'
+import { convertArrayToString } from './../../utils'
 
-const ThreadBase = styled.div`
-  font-weight: ${(props) => (props.labelIds === 'UNREAD' ? '500' : 'regular')};
-  position: relative;
-  user-select: none;
-  --line-margin: 30px;
-  --padding-left: 30px;
-  --padding-right: 30px;
-  --primary-text: #535358;
-  --mindful-text: #8e8e99;
-  --discreet-text: #aeaeb4;
-  color: #535358;
+const mapStateToProps = (state) => {
+  const { labelIds } = state
+  return { labelIds }
+}
 
-  :hover {
-    text-decoration: none;
-  }
-`
-
-const EmailListItem = ({ email }) => {
+const EmailListItem = ({ email, labelIds }) => {
   const {
     thread,
     thread: { id, messages },
@@ -56,14 +43,14 @@ const EmailListItem = ({ email }) => {
     : LatestEmail.internalDate
 
   const handleClick = (id) => {
-    history.push(`mail/${id}`)
+    const labelURL = convertArrayToString(labelIds)
+    history.push(`mail/${labelURL}/${id}`)
   }
 
   return (
     <>
       <ThreadBase key={id} labelIds={emailLabels}>
         <div className="threadRow">
-          {/* <div className="row pb-2 pt-2 d-flex align-content-center"> */}
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
           <div className="cellName" onClick={() => handleClick(id)}>
@@ -92,7 +79,6 @@ const EmailListItem = ({ email }) => {
           </div>
           <div></div>
           <div className="cellGradientRight"></div>
-          {/* <div className="inlineThreadActions">TA</div> */}
           <InlineThreadActions messageId={id} />
         </div>
       </ThreadBase>
@@ -100,4 +86,4 @@ const EmailListItem = ({ email }) => {
   )
 }
 
-export default EmailListItem
+export default connect(mapStateToProps)(EmailListItem)

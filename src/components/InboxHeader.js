@@ -1,15 +1,17 @@
 import BackButton from './BackButton'
-import NavControls from './NavControls'
+import NavControls from './Navigation/NavControls'
 import InboxSortOption from './InboxSortOption'
-import './NavControls.scss'
+import './Navigation/NavControls.scss'
 
-function InboxHeader() {
+const INBOX_HEADER = 'Inbox'
+
+const InboxHeader = () => {
   return (
     <div className="tlOuterContainer">
       <div className="nav-container">
         <BackButton />
         <div className="header-center">
-          <h2>Inbox</h2>
+          <h2>{INBOX_HEADER}</h2>
         </div>
         <NavControls />
       </div>

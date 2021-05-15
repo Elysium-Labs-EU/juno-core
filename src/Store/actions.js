@@ -2,6 +2,8 @@ export const ACTION_TYPE = {
   SET_IS_LOADING: 'SET_IS_LOADING',
   SET_NEXTPAGETOKEN: 'SET_NEXTPAGETOKEN',
   SET_CURR_EMAIL: 'SET_CURR_EMAIL',
+  SET_VIEW_INDEX: 'SET_VIEW_INDEX',
+  SET_LABEL_IDS: 'SET_LABEL_IDS',
   LIST_ADD_META: 'LIST_ADD_META',
   LIST_REMOVE_META: 'LIST_REMOVE_META',
   LIST_UPDATE_META: 'LIST_UPDATE_META',
@@ -26,6 +28,20 @@ export const setCurrentEmail = (threadId) => {
   return {
     type: ACTION_TYPE.SET_CURR_EMAIL,
     payload: threadId,
+  }
+}
+
+export const setViewingIndex = (requestBody) => {
+  return {
+    type: ACTION_TYPE.SET_VIEW_INDEX,
+    payload: requestBody,
+  }
+}
+
+export const setCurrentLabels = (labels) => {
+  return {
+    type: ACTION_TYPE.SET_LABEL_IDS,
+    payload: labels,
   }
 }
 

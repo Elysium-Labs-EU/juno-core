@@ -15,8 +15,8 @@ const api = createApiClient()
 const LOAD_MORE = 'Load more'
 
 const mapStateToProps = (state) => {
-  const { metaList, nextPageToken, emailList, isLoading } = state
-  return { metaList, nextPageToken, emailList, isLoading }
+  const { labelIds, metaList, nextPageToken, emailList, isLoading } = state
+  return { labelIds, metaList, nextPageToken, emailList, isLoading }
 }
 
 const EmailList = ({
@@ -33,16 +33,24 @@ const EmailList = ({
   const LoadEmails = async (labelIds, nextPageToken) => {
     if (nextPageToken) {
       const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
-      const { threads } = metaList.message
-      dispatch(listUpdateMeta(threads))
-      dispatch(setNextPageToken(metaList.message.nextPageToken))
-      LoadEmailDetails(metaList)
+      if (metaList) {
+        const { threads, nextPageToken } = metaList.message
+        dispatch(listUpdateMeta(threads))
+        dispatch(setNextPageToken(nextPageToken))
+        LoadEmailDetails(metaList)
+      } else {
+        console.log('No feed found.')
+      }
     } else {
       const metaList = await api.getInitialThreads(labelIds)
-      const { threads, nextPageToken } = metaList.message
-      dispatch(listUpdateMeta(threads))
-      dispatch(setNextPageToken(nextPageToken))
-      LoadEmailDetails(metaList)
+      if (metaList) {
+        const { threads, nextPageToken } = metaList.message
+        dispatch(listUpdateMeta(threads))
+        dispatch(setNextPageToken(nextPageToken))
+        LoadEmailDetails(metaList)
+      } else {
+        console.log('No feed found.')
+      }
     }
   }
 

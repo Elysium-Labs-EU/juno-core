@@ -1,26 +1,25 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import routes from '../constants/routes.json'
-
 import './NavControls.scss'
 import { FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
+import { CustomIconLink } from '../Elements/CustomIconLink'
 
-function Navigation() {
+const Navigation = () => {
   return (
     <div className="nav-controls">
       <div className="nav-c-item">
         <Link to="/inbox">
-          <FiInbox />
+          <CustomIconLink className="nav-item-button" icon={<FiInbox />} />
         </Link>
       </div>
       <div className="nav-c-item">
         <Link to="/settings">
-          <FiSettings />
+          <CustomIconLink className="nav-item-button" icon={<FiSettings />} />
         </Link>
       </div>
       <div className="nav-c-item">
         <Link to="/compose">
-          <FiEdit />
+          <CustomIconLink className="nav-item-button" icon={<FiEdit />} />
         </Link>
       </div>
     </div>

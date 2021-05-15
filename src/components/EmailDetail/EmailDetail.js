@@ -1,18 +1,19 @@
-import './../App.scss'
+import './../../App.scss'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
-import { setCurrentEmail } from './../Store/actions'
+import { setCurrentEmail } from '../../Store/actions'
 import { connect } from 'react-redux'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
-import { createApiClient } from '../data/api'
+import { createApiClient } from './../../data/api'
 import EmailDetailBody from './EmailDetailBody'
 import EmailDetOptions from './EmailDetOptions'
-import EmailAvatar from './EmailAvatar'
-import EmailAttachment from './EmailAttachment'
-import TimeStamp from './TimeStamp'
+import EmailAvatar from '../EmailAvatar'
+import EmailAttachment from '../EmailAttachment'
+import TimeStamp from '../TimeStamp'
 
 const api = createApiClient()
 
@@ -21,7 +22,7 @@ const mapStateToProps = (state) => {
   return { emailList, isLoading, threadId }
 }
 
-const EmailDetail = ({ dispatch, emailList }) => {
+const EmailDetail = ({ dispatch, emailList, isLoading }) => {
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
@@ -49,7 +50,8 @@ const EmailDetail = ({ dispatch, emailList }) => {
         <div className="pb-4 pt-4 mb-3 email-detail-container">
           <div className="detail-base">
             <div className="cardFullWidth">
-              {threadDetail ? (
+              {threadDetail &&
+                !isLoading &&
                 threadDetail.messages.map((message) => (
                   <div className="p-4 mb-1 email" key={message.id}>
                     <div className="d-flex align-items-center">
@@ -99,10 +101,8 @@ const EmailDetail = ({ dispatch, emailList }) => {
                     </div>
                     <EmailAttachment message={message} />
                   </div>
-                ))
-              ) : (
-                <p>No email available</p>
-              )}
+                ))}
+              {!threadDetail && isLoading && <CircularProgress />}
             </div>
           </div>
         </div>

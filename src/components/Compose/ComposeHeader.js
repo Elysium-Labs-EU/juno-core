@@ -1,14 +1,16 @@
 import BackButton from './../BackButton'
-import NavControls from './../NavControls'
-import './../NavControls.scss'
+import NavControls from './../Navigation/NavControls'
+import './../Navigation/NavControls.scss'
 
-function ComposeHeader() {
+const COMPOSE = 'Compose'
+
+const ComposeHeader = () => {
   return (
     <div className="tlOuterContainer">
       <div className="nav-container">
         <BackButton />
         <div className="header-center">
-          <h2>Compose</h2>
+          <h2>{COMPOSE}</h2>
         </div>
         <NavControls />
       </div>
