@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import './../../App.scss'
 import styled from 'styled-components'
 import {
@@ -11,7 +11,7 @@ import ArchiveMail from './../EmailOptions/ArchiveMail'
 import EmailMoreOptions from './../EmailMoreOptions'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import {convertArrayToString} from '../../utils'
+import { convertArrayToString } from '../../utils'
 
 const EmailOptionsContainer = styled.div`
   position: relative;
@@ -40,7 +40,6 @@ const EmailDetOptions = ({ messageId, labelIds, emailList, viewIndex }) => {
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
-  console.log(messageId, labelIds, emailList, viewIndex)
 
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
@@ -69,7 +68,15 @@ const EmailDetOptions = ({ messageId, labelIds, emailList, viewIndex }) => {
                 <FiArchive />
               </div>
               <div
-                onClick={() => ArchiveMail(messageId, history, labelURL, emailList, viewIndex)}
+                onClick={() =>
+                  ArchiveMail(
+                    messageId,
+                    history,
+                    labelURL,
+                    emailList,
+                    viewIndex
+                  )
+                }
                 className="labelContainer"
               >
                 {ARCHIVE_BUTTON}

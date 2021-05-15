@@ -41,10 +41,6 @@ const DetailNavigation = ({
     }
   }, [currEmail])
 
-  useEffect(() => {
-    console.log(currLocal)
-  }, [currLocal])
-
   return (
     <Wrapper>
       <NavButton

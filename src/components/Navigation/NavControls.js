@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import './NavControls.scss'
 import { FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
-import { CustomIconLink } from '../Elements/CustomIconLink'
+import { CustomIconLink } from '../Elements'
 
 const Navigation = () => {
   return (
