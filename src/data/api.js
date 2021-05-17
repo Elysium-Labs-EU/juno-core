@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 
 export const createApiClient = () => {
   return {
@@ -15,26 +16,29 @@ export const createApiClient = () => {
         .catch((err) => console.log(err))
     },
     getMessageDetail: (messageId) => {
-      // console.log(messageId)
       return axios
         .get(`/api/message/${messageId}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getInitialThreads: (labelIds) => {
+
+    getThreads: (query) => {
       return axios
-        .get(`/api/threads/${labelIds}`)
+        .get(`/api/threads/`, {
+          params: {
+            labelIds: query.labelIds,
+            maxResults: query.maxResults ?? 20,
+            pageToken: query.nextPageToken ?? undefined
+          },
+          paramsSerializer: (params) => {
+            return qs.stringify(params, { arrayFormat: 'repeat' })
+          },
+        })
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getAdditionalThreads: (labelIds, nextPageToken) => {
-      return axios
-        .get(`/api/threads/${labelIds}/${nextPageToken}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-    },
+
     getThreadDetail: (messageId) => {
-      // console.log(messageId)
       return axios
         .get(`/api/thread/${messageId}`)
         .then((res) => res.data)
@@ -69,3 +73,22 @@ export const createApiClient = () => {
     },
   }
 }
+
+// getJobOpenings: (body) => {
+//   console.log('body', body)
+//   // const HEADER = fetchToken()
+//   const token = localStorage.getItem('sessionToken')
+//   return axios
+//     .get(`${BASE_API_URL}/jobs/job_listing/`, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${token}`,
+//       },
+//       params: { page: body.page ?? 0, keywords: body.keyword },
+//       paramsSerializer: (params) => {
+//         return qs.stringify(params, { arrayFormat: 'repeat' })
+//       },
+//     })
+//     .then((res) => res.data)
+//     .catch((err) => console.error(err))
+// },
