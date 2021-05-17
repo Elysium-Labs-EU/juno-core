@@ -54,43 +54,52 @@ const reducer = (state = initialState, action) => {
       }
     case ACTION_TYPE.LIST_UPDATE_META:
       if (Array.isArray(action.payload)) {
+        let newMetaList = [
+          ...new Set([
+            ...state.metaList,
+            ...(Array.isArray(action.payload)
+              ? action.payload
+              : [action.payload]),
+          ]),
+        ]
+        let sortedMetaList = newMetaList.sort((a, b) => {
+          return parseInt(b.historyId) - parseInt(a.historyId)
+        })
         return {
           ...state,
-          metaList: [
-            ...new Set([
-              ...state.metaList,
-              ...(Array.isArray(action.payload)
-                ? action.payload
-                : [action.payload]),
-            ]),
-          ],
+          metaList: sortedMetaList,
         }
       } else {
         let new_metaList = state.metaList.filter(
           (item) => action.payload.id !== item.id
         )
-        // console.log(action.payload)
         return {
           ...state,
           metaList: new_metaList,
-          // historyDiscoverKeywords: [
-          //   ...state.historyDiscoverKeywords,
-          //   action.payload,
-          // ],
         }
       }
     case ACTION_TYPE.LIST_UPDATE_DETAIL:
-      // if (Array.isArray(action.payload)) {
       return {
         ...state,
-        emailList: [
-          ...new Set([
-            ...state.emailList,
-            ...(Array.isArray(action.payload)
-              ? action.payload
-              : [action.payload]),
-          ]),
-        ],
+        // emailList: sortedEmailList,
+        // }
+      }
+    case ACTION_TYPE.LIST_ADD_DETAIL:
+      let newEmailList = [
+        ...new Set([
+          ...state.emailList,
+          ...(Array.isArray(action.payload)
+            ? action.payload
+            : [action.payload]),
+        ]),
+      ]
+      let sortedEmailList = newEmailList.sort((a, b) => {
+        return parseInt(b.thread.historyId) - parseInt(a.thread.historyId)
+      })
+      console.log(sortedEmailList)
+      return {
+        ...state,
+        emailList: sortedEmailList,
         // }
         // } else {
         //   let new_emailList = state.emailList.filter(
@@ -105,11 +114,6 @@ const reducer = (state = initialState, action) => {
         //     //   action.payload,
         //     // ],
         //   }
-      }
-    case ACTION_TYPE.LIST_ADD_DETAIL:
-      return {
-        ...state,
-        emailList: [...state.emailList, ...action.payload],
       }
     case ACTION_TYPE.LIST_REMOVE_DETAIL:
       return {

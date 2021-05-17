@@ -90,11 +90,13 @@ export const listUpdateDetail = (emailList) => {
   }
 }
 
-export const loadEmails = (labelIds, nextPageToken) => {
+export const loadEmails = (labelIds, nextPageToken, maxResults) => {
+  console.log(maxResults)
+  console.log(nextPageToken)
   return async (dispatch) => {
     dispatch(setIsLoading(true))
     if (nextPageToken) {
-      const metaList = await api.getAdditionalThreads(labelIds, nextPageToken)
+      const metaList = await api.getAdditionalThreads(labelIds, maxResults, nextPageToken)
       if (metaList) {
         const { threads, nextPageToken } = metaList.message
         dispatch(listUpdateMeta(threads))
@@ -104,7 +106,7 @@ export const loadEmails = (labelIds, nextPageToken) => {
         console.log('No feed found.')
       }
     } else {
-      const metaList = await api.getInitialThreads(labelIds)
+      const metaList = await api.getInitialThreads(labelIds, maxResults)
       if (metaList) {
         const { threads, nextPageToken } = metaList.message
         dispatch(listUpdateMeta(threads))
@@ -131,5 +133,17 @@ export const loadEmailDetails = (metaList) => {
           dispatch(setIsLoading(false))
         }
       })
+  }
+}
+
+export const refreshEmailFeed = (labelIds, metaList) => {
+  return async (dispatch) => {
+    const maxResults = 200
+    const checkFeed = await api.getInitialThreads(labelIds, maxResults)
+    if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
+      dispatch(loadEmails(labelIds))
+    } else {
+      console.log('No new messages')
+    }
   }
 }

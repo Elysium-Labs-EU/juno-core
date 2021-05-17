@@ -27,7 +27,7 @@ export const CustomIconLink = (props) => {
       disabled={props.disabled}
     >
       <div>
-        <span style={{ paddingRight: `8px` }}>{props.icon}</span>
+        <span>{props.icon}</span>
       </div>
     </button>
   )

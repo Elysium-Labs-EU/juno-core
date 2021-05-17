@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 
 export const createApiClient = () => {
   return {
@@ -21,15 +22,23 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getInitialThreads: (labelIds) => {
+    getInitialThreads: (labelIds, maxResults) => {
+      console.log(maxResults)
       return axios
-        .get(`/api/threads/${labelIds}`)
+        // .get(`/api/threads/${labelIds}/${maxResults}`)
+        .get(`/api/threads/`, {
+          params: { labelIds: labelIds, maxResults: maxResults ?? 10 },
+          paramsSerializer: (params) => {
+            return qs.stringify(params, { arrayFormat: 'repeat' })
+          },
+        })
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    getAdditionalThreads: (labelIds, nextPageToken) => {
+    getAdditionalThreads: (labelIds, nextPageToken, maxResults) => {
+      console.log(maxResults)
       return axios
-        .get(`/api/threads/${labelIds}/${nextPageToken}`)
+        .get(`/api/threads/${labelIds}/${maxResults}/${nextPageToken}`)
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
@@ -69,3 +78,23 @@ export const createApiClient = () => {
     },
   }
 }
+
+
+    // getJobOpenings: (body) => {
+    //   console.log('body', body)
+    //   // const HEADER = fetchToken()
+    //   const token = localStorage.getItem('sessionToken')
+    //   return axios
+    //     .get(`${BASE_API_URL}/jobs/job_listing/`, {
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       params: { page: body.page ?? 0, keywords: body.keyword },
+    //       paramsSerializer: (params) => {
+    //         return qs.stringify(params, { arrayFormat: 'repeat' })
+    //       },
+    //     })
+    //     .then((res) => res.data)
+    //     .catch((err) => console.error(err))
+    // },

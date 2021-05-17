@@ -6,6 +6,7 @@ import { loadEmails } from '../Store/actions'
 import './../App.scss'
 
 const LOAD_OLDER = 'Load older messages'
+const maxResults = 20
 
 const mapStateToProps = (state) => {
   const { labelIds, metaList, nextPageToken, emailList, isLoading } = state
@@ -22,12 +23,12 @@ const EmailList = ({
 }) => {
   useEffect(() => {
     if (metaList.length === 0 && labelIds) {
-      dispatch(loadEmails(labelIds))
+      dispatch(loadEmails(labelIds, maxResults))
     }
   }, [labelIds, metaList])
 
-  const loadNextPage = (labelIds, nextPageToken) => {
-    dispatch(loadEmails(labelIds, nextPageToken))
+  const loadNextPage = (labelIds, nextPageToken, maxResults) => {
+    dispatch(loadEmails(labelIds, nextPageToken, maxResults))
   }
 
   const renderEmailList = (emailList) => {
@@ -49,7 +50,7 @@ const EmailList = ({
                 <button
                   className="btn btn-sm btn-light"
                   disabled={isLoading}
-                  onClick={() => loadNextPage(labelIds, nextPageToken)}
+                  onClick={() => loadNextPage(labelIds, nextPageToken, maxResults)}
                 >
                   {LOAD_OLDER}
                 </button>
