@@ -90,31 +90,17 @@ export const listUpdateDetail = (emailList) => {
   }
 }
 
-export const loadEmails = (labelIds, nextPageToken, maxResults) => {
-  console.log(maxResults)
-  console.log(nextPageToken)
+export const loadEmails = (params) => {
   return async (dispatch) => {
     dispatch(setIsLoading(true))
-    if (nextPageToken) {
-      const metaList = await api.getAdditionalThreads(labelIds, maxResults, nextPageToken)
-      if (metaList) {
-        const { threads, nextPageToken } = metaList.message
-        dispatch(listUpdateMeta(threads))
-        dispatch(setNextPageToken(nextPageToken))
-        dispatch(loadEmailDetails(metaList))
-      } else {
-        console.log('No feed found.')
-      }
+    const metaList = await api.getThreads(params)
+    if (metaList) {
+      const { threads, nextPageToken } = metaList.message
+      dispatch(listUpdateMeta(threads))
+      dispatch(setNextPageToken(nextPageToken))
+      dispatch(loadEmailDetails(metaList))
     } else {
-      const metaList = await api.getInitialThreads(labelIds, maxResults)
-      if (metaList) {
-        const { threads, nextPageToken } = metaList.message
-        dispatch(listUpdateMeta(threads))
-        dispatch(setNextPageToken(nextPageToken))
-        dispatch(loadEmailDetails(metaList))
-      } else {
-        console.log('No feed found.')
-      }
+      console.log('No feed found.')
     }
   }
 }
@@ -136,12 +122,17 @@ export const loadEmailDetails = (metaList) => {
   }
 }
 
-export const refreshEmailFeed = (labelIds, metaList) => {
+
+//Use a checkfeed of 100 items, compare this to the current MetaList, if the checkFeeds newest item
+// is newer than the metaList, cut off the items from the checkfeed which are older than the newest metaList item
+export const refreshEmailFeed = (params, metaList) => {
   return async (dispatch) => {
-    const maxResults = 200
-    const checkFeed = await api.getInitialThreads(labelIds, maxResults)
+    const checkFeed = await api.getThreads(params)
     if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
-      dispatch(loadEmails(labelIds))
+      const newThreads = checkFeed.message.threads.filter(thread => thread.historyId > metaList[0].historyId)
+      const newThreadsObject = { message: { threads: [ ...newThreads] } }
+      dispatch(listUpdateMeta(newThreads))
+      dispatch(loadEmailDetails(newThreadsObject))
     } else {
       console.log('No new messages')
     }

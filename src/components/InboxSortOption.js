@@ -19,23 +19,26 @@ const SortInbox = ({ metaList, emailList, labelIds, isLoading, dispatch }) => {
   const labelURL = convertArrayToString(labelIds)
 
   const refreshFeed = () => {
-    console.log('refresh started')
-    dispatch(refreshEmailFeed(labelIds, metaList))
+    const params = {
+      labelIds: labelIds,
+      maxResults: 100,
+    }
+    dispatch(refreshEmailFeed(params, metaList))
   }
 
   return (
     <div className="sort-container">
-      <CustomButtonText
-        className="sort-button"
-        onClick={() => startSort(history, labelURL, emailList)}
-        disabled={isLoading}
-        label={INBOX_BUTTON}
-      />
       <CustomIconLink
         className="btn btn-light"
         onClick={() => refreshFeed()}
         disabled={isLoading}
         icon={<MdRefresh />}
+      />
+      <CustomButtonText
+        className="sort-button"
+        onClick={() => startSort(history, labelURL, emailList)}
+        disabled={isLoading}
+        label={INBOX_BUTTON}
       />
     </div>
   )

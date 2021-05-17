@@ -96,7 +96,6 @@ const reducer = (state = initialState, action) => {
       let sortedEmailList = newEmailList.sort((a, b) => {
         return parseInt(b.thread.historyId) - parseInt(a.thread.historyId)
       })
-      console.log(sortedEmailList)
       return {
         ...state,
         emailList: sortedEmailList,
