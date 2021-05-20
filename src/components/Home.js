@@ -1,17 +1,23 @@
 import React, { useEffect } from 'react'
 import EmailList from './EmailList'
 import { connect } from 'react-redux'
-import { setCurrentLabels } from './../Store/actions'
+import { fetchLabelIds } from './../Store/actions'
 
-// const LABEL = ['Juno/To do']
-const LABEL = ['INBOX']
+const mapStateToProps = (state) => {
+  const { baseLoaded } = state
+  return { baseLoaded }
+}
 
-const Home = ({ dispatch }) => {
+const LABEL = 'Juno/To Do'
+
+const Home = ({ baseLoaded, dispatch }) => {
   useEffect(() => {
-    dispatch(setCurrentLabels(LABEL))
-  }, [])
+    if (baseLoaded) {
+      dispatch(fetchLabelIds(LABEL))
+    }
+  }, [baseLoaded])
 
   return <EmailList />
 }
 
-export default connect()(Home)
+export default connect(mapStateToProps)(Home)

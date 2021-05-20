@@ -4,6 +4,7 @@ import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
 import { loadEmails } from '../Store/actions'
 import './../App.scss'
+import Emptystate from './Elements/EmptyState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
@@ -27,6 +28,7 @@ const EmailList = ({
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
+      console.log('Here', labelIds)
       dispatch(loadEmails(params))
     }
   }, [labelIds, metaList])
@@ -76,9 +78,9 @@ const EmailList = ({
 
   return (
     <>
-      {emailList.length > 0 ? (
-        renderEmailList(emailList)
-      ) : (
+      {!isLoading && emailList.length > 0 && renderEmailList(emailList)}
+      {!isLoading && emailList.length === 0 && <Emptystate />}
+      {isLoading && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>

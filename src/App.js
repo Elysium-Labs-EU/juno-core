@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import {checkBase} from './Store/actions'
+import { checkBase } from './Store/actions'
 import './App.scss'
 import Home from './components/Home'
 import EmailDetail from './components/EmailDetail/EmailDetail'
@@ -14,17 +14,16 @@ import Header from './components/Header'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 const mapStateToProps = (state) => {
-  const { baseLoaded} = state
+  const { baseLoaded } = state
   return { baseLoaded }
 }
 
 const App = ({ baseLoaded, dispatch }) => {
-  
   useEffect(() => {
     if (!baseLoaded) {
       dispatch(checkBase())
     }
-  },[baseLoaded])
+  }, [baseLoaded])
 
   return (
     <Router>

@@ -82,7 +82,7 @@ export const createApiClient = () => {
     deleteLabel: (id) => {
       console.log('id', id)
       return axios
-        .delete(`/api/labels`, { data: { id: id }})
+        .delete(`/api/labels`, { data: { id: id } })
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },

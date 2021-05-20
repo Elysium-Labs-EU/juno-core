@@ -1,3 +1,4 @@
+import { createLabel } from '../utils'
 import { createApiClient } from '../data/api'
 const api = createApiClient()
 
@@ -23,8 +24,8 @@ export const setBaseLoaded = (baseLoaded) => ({
 })
 
 export const setServiceUnavailable = (serviceUnavailableError) => ({
-  type: ACTION_TYPE.SET_BASE_LOADED,
-  payload: serviceUnavailableError
+  type: ACTION_TYPE.SET_SERVICE_UNAVAILABLE,
+  payload: serviceUnavailableError,
 })
 
 export const setIsLoading = (isLoading) => ({
@@ -103,15 +104,41 @@ export const listUpdateDetail = (emailList) => {
 }
 
 export const checkBase = () => {
+  const BASE_ARRAY = ['Juno', 'Juno/To Do', 'Juno/Keep', 'Juno/Reminder']
   return async (dispatch) => {
     dispatch(setIsLoading(true))
     const labels = await api.fetchLabel()
     if (labels) {
       if (labels.message.labels.length > 0) {
-        console.log(labels.message.labels.filter(label => label.name.includes('API TEST 2' || 'Tempo/Keep')))
+        let labelArray = labels.message.labels
+        const multipleIncludes = (first, second) => {
+          const indexArray = first.map((el) => {
+            return second.indexOf(el)
+          })
+          return indexArray.indexOf(-1) === -1
+        }
+        if (
+          !multipleIncludes(
+            BASE_ARRAY,
+            labelArray.map((item) => item.name)
+          )
+        ) {
+          console.log('You do not have all labels.')
+          BASE_ARRAY.map((item) =>
+            labelArray.map((label) => label.name).includes(item)
+          ).map(
+            (checkValue, index) => !checkValue && createLabel(BASE_ARRAY[index])
+          )
+          dispatch(setBaseLoaded(true))
+          dispatch(setIsLoading(false))
+        } else {
+          dispatch(setBaseLoaded(true))
+          dispatch(setIsLoading(false))
+        }
+      } else {
+        dispatch(setServiceUnavailable('Network Error. Please try again later'))
+        dispatch(setIsLoading(false))
       }
-      dispatch(setBaseLoaded(true))
-      dispatch(setIsLoading(false))
     } else {
       dispatch(setServiceUnavailable('Network Error. Please try again later'))
       dispatch(setIsLoading(false))
@@ -123,11 +150,18 @@ export const loadEmails = (params) => {
   return async (dispatch) => {
     dispatch(setIsLoading(true))
     const metaList = await api.getThreads(params)
+    console.log('metaList', metaList)
     if (metaList) {
-      const { threads, nextPageToken } = metaList.message
-      dispatch(listUpdateMeta(threads))
-      dispatch(setNextPageToken(nextPageToken))
-      dispatch(loadEmailDetails(metaList))
+      if (metaList.message.resultSizeEstimate > 0) {
+        const { threads, nextPageToken } = metaList.message
+        dispatch(listUpdateMeta(threads))
+        dispatch(setNextPageToken(nextPageToken))
+        dispatch(loadEmailDetails(metaList))
+      } else {
+        dispatch(setServiceUnavailable('No feed found'))
+        console.log('Empty Label Inbox')
+        dispatch(setIsLoading(false))
+      }
     } else {
       dispatch(setServiceUnavailable('No feed found'))
     }
@@ -137,17 +171,22 @@ export const loadEmails = (params) => {
 export const loadEmailDetails = (metaList) => {
   return async (dispatch) => {
     const { threads } = metaList.message
-    let buffer = []
-    let loadCount = threads.length
-    threads.length > 0 &&
-      threads.forEach(async (item) => {
-        const threadDetail = await api.getThreadDetail(item.id)
-        buffer.push(threadDetail)
-        if (buffer.length === loadCount) {
-          dispatch(listAddDetail(buffer))
-          dispatch(setIsLoading(false))
-        }
-      })
+    if (threads) {
+      let buffer = []
+      let loadCount = threads.length
+      threads.length > 0 &&
+        threads.forEach(async (item) => {
+          const threadDetail = await api.getThreadDetail(item.id)
+          buffer.push(threadDetail)
+          if (buffer.length === loadCount) {
+            dispatch(listAddDetail(buffer))
+            dispatch(setIsLoading(false))
+          }
+        })
+    } else {
+      console.log('Empty Label Inbox')
+      dispatch(setIsLoading(false))
+    }
   }
 }
 
@@ -166,5 +205,21 @@ export const refreshEmailFeed = (params, metaList) => {
     } else {
       console.log('No new messages')
     }
+  }
+}
+
+export const fetchLabelIds = (LABEL) => {
+  return async (dispatch) => {
+    const listAllLabels = await api.fetchLabel()
+    const {
+      message: { labels },
+    } = listAllLabels
+    if (labels) {
+      const labelObject = labels.filter((label) => label.name === LABEL)
+      dispatch(setCurrentLabels(labelObject[0].id))
+    } else {
+      dispatch(setServiceUnavailable('Error fetching label.'))
+    }
+    //TO-DO: What if multiple labels are used
   }
 }
