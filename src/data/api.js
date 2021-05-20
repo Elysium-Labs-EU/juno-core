@@ -3,18 +3,6 @@ import qs from 'qs'
 
 export const createApiClient = () => {
   return {
-    getInitialMessages: (labelIds) => {
-      return axios
-        .get(`/api/messages/${labelIds}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-    },
-    getAdditionalMessages: (labelIds, nextPageToken) => {
-      return axios
-        .get(`/api/messages/${labelIds}/${nextPageToken}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-    },
     getMessageDetail: (messageId) => {
       return axios
         .get(`/api/message/${messageId}`)
@@ -28,7 +16,7 @@ export const createApiClient = () => {
           params: {
             labelIds: query.labelIds,
             maxResults: query.maxResults ?? 20,
-            pageToken: query.nextPageToken ?? undefined
+            pageToken: query.nextPageToken ?? undefined,
           },
           paramsSerializer: (params) => {
             return qs.stringify(params, { arrayFormat: 'repeat' })
@@ -71,24 +59,26 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    createLabel: (body) => {
+      console.log('body', body)
+      return axios
+        .post(`/api/labels`, body)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    updateLabel: (body) => {
+      console.log('body', body)
+      return axios
+        .patch(`/api/labels`, body)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
+    deleteLabel: (id) => {
+      console.log('id', id)
+      return axios
+        .delete(`/api/labels`, { data: { id: id }})
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
   }
 }
-
-// getJobOpenings: (body) => {
-//   console.log('body', body)
-//   // const HEADER = fetchToken()
-//   const token = localStorage.getItem('sessionToken')
-//   return axios
-//     .get(`${BASE_API_URL}/jobs/job_listing/`, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`,
-//       },
-//       params: { page: body.page ?? 0, keywords: body.keyword },
-//       paramsSerializer: (params) => {
-//         return qs.stringify(params, { arrayFormat: 'repeat' })
-//       },
-//     })
-//     .then((res) => res.data)
-//     .catch((err) => console.error(err))
-// },

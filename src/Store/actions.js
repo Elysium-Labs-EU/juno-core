@@ -122,15 +122,16 @@ export const loadEmailDetails = (metaList) => {
   }
 }
 
-
 //Use a checkfeed of 100 items, compare this to the current MetaList, if the checkFeeds newest item
 // is newer than the metaList, cut off the items from the checkfeed which are older than the newest metaList item
 export const refreshEmailFeed = (params, metaList) => {
   return async (dispatch) => {
     const checkFeed = await api.getThreads(params)
     if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
-      const newThreads = checkFeed.message.threads.filter(thread => thread.historyId > metaList[0].historyId)
-      const newThreadsObject = { message: { threads: [ ...newThreads] } }
+      const newThreads = checkFeed.message.threads.filter(
+        (thread) => thread.historyId > metaList[0].historyId
+      )
+      const newThreadsObject = { message: { threads: [...newThreads] } }
       dispatch(listUpdateMeta(newThreads))
       dispatch(loadEmailDetails(newThreadsObject))
     } else {
