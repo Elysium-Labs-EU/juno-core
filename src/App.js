@@ -1,3 +1,6 @@
+import React, {useEffect} from 'react'
+import { connect } from 'react-redux'
+import {checkBase} from './Store/actions'
 import './App.scss'
 import Home from './components/Home'
 import EmailDetail from './components/EmailDetail/EmailDetail'
@@ -10,7 +13,19 @@ import Header from './components/Header'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
-function App() {
+const mapStateToProps = (state) => {
+  const { baseLoaded} = state
+  return { baseLoaded }
+}
+
+const App = ({ baseLoaded, dispatch }) => {
+  
+  useEffect(() => {
+    if (!baseLoaded) {
+      dispatch(checkBase())
+    }
+  },[baseLoaded])
+
   return (
     <Router>
       <div className="App">
@@ -33,4 +48,4 @@ function App() {
   )
 }
 
-export default App
+export default connect(mapStateToProps)(App)

@@ -1,6 +1,8 @@
 import { ACTION_TYPE } from './actions'
 
 export const initialState = {
+  baseLoaded: false,
+  serviceUnavailable: null,
   isLoading: false,
   nextPageToken: undefined,
   currEmail: '',
@@ -12,6 +14,16 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ACTION_TYPE.SET_BASE_LOADED:
+      return {
+        ...state,
+        baseLoaded: action.payload,
+      }
+    case ACTION_TYPE.SET_SERVICE_UNAVAILABLE:
+      return {
+        ...state,
+        serviceUnavailable: action.payload,
+      }
     case ACTION_TYPE.SET_IS_LOADING:
       return {
         ...state,

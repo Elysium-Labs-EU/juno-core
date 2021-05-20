@@ -3,6 +3,7 @@ import EmailList from './EmailList'
 import { connect } from 'react-redux'
 import { setCurrentLabels } from './../Store/actions'
 
+// const LABEL = ['Juno/To do']
 const LABEL = ['INBOX']
 
 const Home = ({ dispatch }) => {

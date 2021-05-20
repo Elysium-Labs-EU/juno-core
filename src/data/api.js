@@ -59,6 +59,12 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    fetchLabel: () => {
+      return axios
+        .get(`/api/labels`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
     createLabel: (body) => {
       console.log('body', body)
       return axios

@@ -2,6 +2,8 @@ import { createApiClient } from '../data/api'
 const api = createApiClient()
 
 export const ACTION_TYPE = {
+  SET_BASE_LOADED: 'SET_BASE_LOADED',
+  SET_SERVICE_UNAVAILABLE: 'SET_SERVICE_UNAVAILABLE',
   SET_IS_LOADING: 'SET_IS_LOADING',
   SET_NEXTPAGETOKEN: 'SET_NEXTPAGETOKEN',
   SET_CURR_EMAIL: 'SET_CURR_EMAIL',
@@ -14,6 +16,16 @@ export const ACTION_TYPE = {
   LIST_REMOVE_DETAIL: 'LIST_REMOVE_DETAIL',
   LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
 }
+
+export const setBaseLoaded = (baseLoaded) => ({
+  type: ACTION_TYPE.SET_BASE_LOADED,
+  payload: baseLoaded,
+})
+
+export const setServiceUnavailable = (serviceUnavailableError) => ({
+  type: ACTION_TYPE.SET_BASE_LOADED,
+  payload: serviceUnavailableError
+})
 
 export const setIsLoading = (isLoading) => ({
   type: ACTION_TYPE.SET_IS_LOADING,
@@ -90,6 +102,23 @@ export const listUpdateDetail = (emailList) => {
   }
 }
 
+export const checkBase = () => {
+  return async (dispatch) => {
+    dispatch(setIsLoading(true))
+    const labels = await api.fetchLabel()
+    if (labels) {
+      if (labels.message.labels.length > 0) {
+        console.log(labels.message.labels.filter(label => label.name.includes('API TEST 2' || 'Tempo/Keep')))
+      }
+      dispatch(setBaseLoaded(true))
+      dispatch(setIsLoading(false))
+    } else {
+      dispatch(setServiceUnavailable('Network Error. Please try again later'))
+      dispatch(setIsLoading(false))
+    }
+  }
+}
+
 export const loadEmails = (params) => {
   return async (dispatch) => {
     dispatch(setIsLoading(true))
@@ -100,7 +129,7 @@ export const loadEmails = (params) => {
       dispatch(setNextPageToken(nextPageToken))
       dispatch(loadEmailDetails(metaList))
     } else {
-      console.log('No feed found.')
+      dispatch(setServiceUnavailable('No feed found'))
     }
   }
 }
