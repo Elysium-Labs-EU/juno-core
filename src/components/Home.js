@@ -1,16 +1,16 @@
-import React from 'react'
-// import './App.scss';
-
+import React, { useEffect } from 'react'
 import EmailList from './EmailList'
+import { connect } from 'react-redux'
+import { setCurrentLabels } from './../Store/actions'
 
-function Home() {
-  return (
-    <>
-      <div className="tlOuterContainer">
-        <p>Home sweet home.</p>
-      </div>
-    </>
-  )
+const LABEL = ['INBOX']
+
+const Home = ({ dispatch }) => {
+  useEffect(() => {
+    dispatch(setCurrentLabels(LABEL))
+  }, [])
+
+  return <EmailList />
 }
 
-export default Home
+export default connect()(Home)
