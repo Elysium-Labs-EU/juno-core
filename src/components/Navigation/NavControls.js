@@ -6,9 +6,7 @@ import { CustomIconLink } from '../Elements'
 
 const Navigation = () => {
   const [active, setActive] = useState('')
-
   const location = useLocation()
-  console.log(location)
 
   useEffect(() => {
     if (location) {
