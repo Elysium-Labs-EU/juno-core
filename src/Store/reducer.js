@@ -7,6 +7,7 @@ export const initialState = {
   nextPageToken: undefined,
   currEmail: '',
   viewIndex: 0,
+  storageLabels: [],
   labelIds: '',
   metaList: [],
   emailList: [],
@@ -38,6 +39,23 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         labelIds: action.payload,
+      }
+    case ACTION_TYPE.SET_STORAGE_LABELS:
+      if (!Array.isArray(action.payload)) {
+        const labelIdName = { id: action.payload.id, name: action.payload.name }
+        return {
+          ...state,
+          storageLabels: [...state.storageLabels, labelIdName],
+        }
+      } else {
+        const minimalLabelArray = action.payload.map((label) => ({
+          id: label[0].id,
+          name: label[0].name,
+        }))
+        return {
+          ...state,
+          storageLabels: [...state.storageLabels, ...minimalLabelArray],
+        }
       }
     case ACTION_TYPE.SET_CURR_EMAIL:
       return {

@@ -28,12 +28,3 @@ export const CloseMail = (history) => {
 export const startSort = (history, labelURL, emailList) => {
   return history.push(`/mail/${labelURL}/${emailList[0].thread.id}`)
 }
-
-export const createLabel = (label) => {
-  const body = {
-    labelVisibility: label.labelVisibility ?? 'labelShow',
-    messageListVisibility: label.messageListVisibility ?? 'show',
-    name: label.name ?? label,
-  }
-  api.createLabel(body)
-}

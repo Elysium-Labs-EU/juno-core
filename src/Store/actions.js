@@ -1,4 +1,4 @@
-import { createLabel } from '../utils'
+import axios from 'axios'
 import { createApiClient } from '../data/api'
 const api = createApiClient()
 
@@ -10,6 +10,7 @@ export const ACTION_TYPE = {
   SET_CURR_EMAIL: 'SET_CURR_EMAIL',
   SET_VIEW_INDEX: 'SET_VIEW_INDEX',
   SET_LABEL_IDS: 'SET_LABEL_IDS',
+  SET_STORAGE_LABELS: 'SET_STORAGE_LABELS',
   LIST_ADD_META: 'LIST_ADD_META',
   LIST_REMOVE_META: 'LIST_REMOVE_META',
   LIST_UPDATE_META: 'LIST_UPDATE_META',
@@ -51,6 +52,13 @@ export const setViewingIndex = (requestBody) => {
   return {
     type: ACTION_TYPE.SET_VIEW_INDEX,
     payload: requestBody,
+  }
+}
+
+export const setStorageLabels = (labels) => {
+  return {
+    type: ACTION_TYPE.SET_STORAGE_LABELS,
+    payload: labels,
   }
 }
 
@@ -127,11 +135,26 @@ export const checkBase = () => {
           BASE_ARRAY.map((item) =>
             labelArray.map((label) => label.name).includes(item)
           ).map(
-            (checkValue, index) => !checkValue && createLabel(BASE_ARRAY[index])
+            (checkValue, index) =>
+              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
           )
           dispatch(setBaseLoaded(true))
           dispatch(setIsLoading(false))
         } else {
+          console.log('Gotcha! All minimal required labels.')
+          // BASE_ARRAY.map((item) =>
+          //   labelArray.map((label) => label.name).includes(item) && dispatch(setStorageLabels(label)))
+          // labelArray.map(item =>
+          //   BASE_ARRAY.map((label) => label.name).includes(item)).map((checkValue, index) => checkValue && dispatch(setStorageLabels(labelArray[index])))
+          // labelArray.map(item =>
+          //   BASE_ARRAY.map((label) => label.name).filter())
+          dispatch(
+            setStorageLabels(
+              BASE_ARRAY.map((baseLabel) =>
+                labelArray.filter((item) => item.name === baseLabel)
+              )
+            )
+          )
           dispatch(setBaseLoaded(true))
           dispatch(setIsLoading(false))
         }
@@ -150,7 +173,7 @@ export const loadEmails = (params) => {
   return async (dispatch) => {
     dispatch(setIsLoading(true))
     const metaList = await api.getThreads(params)
-    console.log('metaList', metaList)
+    // console.log('metaList', metaList)
     if (metaList) {
       if (metaList.message.resultSizeEstimate > 0) {
         const { threads, nextPageToken } = metaList.message
@@ -216,10 +239,35 @@ export const fetchLabelIds = (LABEL) => {
     } = listAllLabels
     if (labels) {
       const labelObject = labels.filter((label) => label.name === LABEL)
-      dispatch(setCurrentLabels(labelObject[0].id))
+      if (labelObject.length > 0) {
+        // console.log(labelObject)
+        dispatch(setCurrentLabels(labelObject[0].id))
+      } else {
+        dispatch(setServiceUnavailable('Error fetching label.'))
+      }
     } else {
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
     //TO-DO: What if multiple labels are used
+  }
+}
+
+export const createLabel = (label) => {
+  return async (dispatch) => {
+    const body = {
+      labelVisibility: label.labelVisibility ?? 'labelShow',
+      messageListVisibility: label.messageListVisibility ?? 'show',
+      name: label.name ?? label,
+    }
+    return axios
+      .post(`/api/labels`, body)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setStorageLabels(res.data.message))
+        } else {
+          dispatch(setServiceUnavailable('Error creating label.'))
+        }
+      })
+      .catch((err) => console.log(err))
   }
 }

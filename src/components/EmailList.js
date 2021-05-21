@@ -28,7 +28,7 @@ const EmailList = ({
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
-      console.log('Here', labelIds)
+      // console.log('Here', labelIds)
       dispatch(loadEmails(params))
     }
   }, [labelIds, metaList])

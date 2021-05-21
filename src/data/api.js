@@ -65,13 +65,17 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
-    createLabel: (body) => {
-      console.log('body', body)
-      return axios
-        .post(`/api/labels`, body)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-    },
+    // createLabel: (body) => {
+    //   console.log('body', body)
+    //   return axios
+    //     .post(`/api/labels`, body)
+    //     .then((res) => res.data)
+    //     .then((res) => {
+    //       if (res.status === 'success') {
+
+    //       })
+    //     .catch((err) => console.log(err))
+    // },
     updateLabel: (body) => {
       console.log('body', body)
       return axios
