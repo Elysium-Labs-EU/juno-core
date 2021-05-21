@@ -172,7 +172,7 @@ export const loadEmails = (params) => {
       if (metaList.message.resultSizeEstimate > 0) {
         const { threads, nextPageToken } = metaList.message
         dispatch(listUpdateMeta(threads))
-        dispatch(setNextPageToken(nextPageToken))
+        dispatch(setNextPageToken(nextPageToken ?? null))
         dispatch(loadEmailDetails(metaList))
       } else {
         dispatch(setServiceUnavailable('No feed found'))

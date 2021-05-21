@@ -57,18 +57,20 @@ const EmailList = ({
                 </div>
               )}
             </div>
-            <div className="d-flex justify-content-center mb-5">
-              {!isLoading && (
-                <button
-                  className="btn btn-sm btn-light"
-                  disabled={isLoading}
-                  onClick={() => loadNextPage(labelIds, nextPageToken)}
-                >
-                  {LOAD_OLDER}
-                </button>
-              )}
-              {isLoading && <CircularProgress />}
-            </div>
+            {emailList.length > 0 && nextPageToken && (
+              <div className="d-flex justify-content-center mb-5">
+                {!isLoading && (
+                  <button
+                    className="btn btn-sm btn-light"
+                    disabled={isLoading}
+                    onClick={() => loadNextPage(labelIds, nextPageToken)}
+                  >
+                    {LOAD_OLDER}
+                  </button>
+                )}
+                {isLoading && <CircularProgress />}
+              </div>
+            )}
           </div>
         </div>
       </>
