@@ -12,9 +12,10 @@ const SetToDoMail = props => {
     console.log(storageLabels)
     const TODO_LABEL = storageLabels && storageLabels.filter(label => label.name === 'Juno/To Do')
     console.log(TODO_LABEL)
+    const TODO_ACTION = { removeLabelIds: ['INBOX', 'UNREAD'], addLabelIds: [TODO_LABEL[0].id] }
 
   const MarkEmailToDo = async () => {
-    await api.updateMessage(messageId, TODO_LABEL[0].id)
+    await api.updateMessage(messageId, TODO_ACTION)
     NavigateNextMail(history, labelURL, emailList, viewIndex)
   }
 
