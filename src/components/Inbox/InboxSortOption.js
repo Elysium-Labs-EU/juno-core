@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import './InboxSortOption.scss'
-import { CustomButtonText, CustomIconLink } from '../components/Elements'
-import { convertArrayToString, startSort } from '../utils'
+import { CustomButtonText, CustomIconLink } from '../../components/Elements'
+import { convertArrayToString, startSort } from '../../utils'
 import { MdRefresh } from 'react-icons/md'
-import { refreshEmailFeed } from './../Store/actions'
+import { refreshEmailFeed } from './../../Store/actions'
 
 const INBOX_BUTTON = 'Sort inbox'
 

@@ -2,13 +2,13 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { checkBase } from './Store/actions'
 import './App.scss'
-import Home from './components/Home'
+import ToDo from './components/ToDo/Todo'
 import EmailDetail from './components/EmailDetail/EmailDetail'
 import ComposeEmail from './components/Compose/ComposeEmail'
 import Settings from './components/Settings'
 import InformationOverview from './components/InformationOverview'
 import FileOverview from './components/FileOverview'
-import Inbox from './components/Inbox'
+import Inbox from './components/Inbox/Inbox'
 import Header from './components/Header'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -34,7 +34,7 @@ const App = ({ baseLoaded, dispatch }) => {
 
         {/* Fix the bug with the path of the email id detail not being accurate */}
         <Switch>
-          <Route path="/" exact={true} component={Home} />
+          <Route path="/" exact={true} component={ToDo} />
           <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
           <Route path="/compose" component={ComposeEmail} />
           <Route path="/settings" component={Settings} />
