@@ -39,7 +39,13 @@ const mapStateToProps = (state) => {
   return { storageLabels, labelIds, emailList, viewIndex }
 }
 
-const EmailDetOptions = ({ messageId, storageLabels, labelIds, emailList, viewIndex }) => {
+const EmailDetOptions = ({
+  messageId,
+  storageLabels,
+  labelIds,
+  emailList,
+  viewIndex,
+}) => {
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
@@ -62,17 +68,21 @@ const EmailDetOptions = ({ messageId, storageLabels, labelIds, emailList, viewIn
               <div className="icon">
                 <FiCheckCircle />
               </div>
-              <div onClick={() =>
+              <div
+                onClick={() =>
                   SetToDoMail({
                     storageLabels,
                     messageId,
                     history,
                     labelURL,
                     emailList,
-                    viewIndex}
-                  )
+                    viewIndex,
+                  })
                 }
-                className="labelContainer">{TODO_BUTTON}</div>
+                className="labelContainer"
+              >
+                {TODO_BUTTON}
+              </div>
             </button>
           </div>
           <div>
@@ -95,8 +105,8 @@ const EmailDetOptions = ({ messageId, storageLabels, labelIds, emailList, viewIn
                     history,
                     labelURL,
                     emailList,
-                    viewIndex}
-                  )
+                    viewIndex,
+                  })
                 }
                 className="labelContainer"
               >
