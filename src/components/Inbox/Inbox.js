@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import EmailList from './EmailList'
+import EmailList from '../EmailList'
 import { connect } from 'react-redux'
-import { setCurrentLabels } from './../Store/actions'
+import { setCurrentLabels } from '../../Store/actions'
 
 const LABEL = ['UNREAD', 'INBOX']
 

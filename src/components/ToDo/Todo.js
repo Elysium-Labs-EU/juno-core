@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
-import EmailList from './EmailList'
+import EmailList from '../EmailList'
 import { connect } from 'react-redux'
-import { fetchLabelIds } from './../Store/actions'
+import { fetchLabelIds } from '../../Store/actions'
 
 const mapStateToProps = (state) => {
   const { baseLoaded } = state
@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const LABEL = 'Juno/To Do'
 
-const Home = ({ baseLoaded, dispatch }) => {
+const Todo = ({ baseLoaded, dispatch }) => {
   useEffect(() => {
     if (baseLoaded) {
       dispatch(fetchLabelIds(LABEL))
@@ -20,4 +20,4 @@ const Home = ({ baseLoaded, dispatch }) => {
   return <EmailList />
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(Todo)
