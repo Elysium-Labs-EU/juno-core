@@ -5,12 +5,19 @@ import { setCurrentLabels } from './../Store/actions'
 
 const LABEL = ['UNREAD', 'INBOX']
 
-const Inbox = ({ dispatch }) => {
+const mapStateToProps = (state) => {
+  const { baseLoaded } = state
+  return { baseLoaded }
+}
+
+const Inbox = ({ baseLoaded, dispatch }) => {
   useEffect(() => {
-    dispatch(setCurrentLabels(LABEL))
-  }, [])
+    if (baseLoaded) {
+      dispatch(setCurrentLabels(LABEL))
+    }
+  }, [baseLoaded])
 
   return <EmailList />
 }
 
-export default connect()(Inbox)
+export default connect(mapStateToProps)(Inbox)

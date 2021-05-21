@@ -1,10 +1,13 @@
 import { ACTION_TYPE } from './actions'
 
 export const initialState = {
+  baseLoaded: false,
+  serviceUnavailable: null,
   isLoading: false,
   nextPageToken: undefined,
   currEmail: '',
   viewIndex: 0,
+  storageLabels: [],
   labelIds: '',
   metaList: [],
   emailList: [],
@@ -12,6 +15,16 @@ export const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case ACTION_TYPE.SET_BASE_LOADED:
+      return {
+        ...state,
+        baseLoaded: action.payload,
+      }
+    case ACTION_TYPE.SET_SERVICE_UNAVAILABLE:
+      return {
+        ...state,
+        serviceUnavailable: action.payload,
+      }
     case ACTION_TYPE.SET_IS_LOADING:
       return {
         ...state,
@@ -26,6 +39,23 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         labelIds: action.payload,
+      }
+    case ACTION_TYPE.SET_STORAGE_LABELS:
+      if (!Array.isArray(action.payload)) {
+        const labelIdName = { id: action.payload.id, name: action.payload.name }
+        return {
+          ...state,
+          storageLabels: [...state.storageLabels, labelIdName],
+        }
+      } else {
+        const minimalLabelArray = action.payload.map((label) => ({
+          id: label[0].id,
+          name: label[0].name,
+        }))
+        return {
+          ...state,
+          storageLabels: [...state.storageLabels, ...minimalLabelArray],
+        }
       }
     case ACTION_TYPE.SET_CURR_EMAIL:
       return {

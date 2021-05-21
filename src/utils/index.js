@@ -1,3 +1,6 @@
+import { createApiClient } from '../data/api'
+const api = createApiClient()
+
 export const convertArrayToString = (data) => {
   const converted = data.toString().replace(',', '-')
   return converted
