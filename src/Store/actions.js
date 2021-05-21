@@ -142,12 +142,6 @@ export const checkBase = () => {
           dispatch(setIsLoading(false))
         } else {
           console.log('Gotcha! All minimal required labels.')
-          // BASE_ARRAY.map((item) =>
-          //   labelArray.map((label) => label.name).includes(item) && dispatch(setStorageLabels(label)))
-          // labelArray.map(item =>
-          //   BASE_ARRAY.map((label) => label.name).includes(item)).map((checkValue, index) => checkValue && dispatch(setStorageLabels(labelArray[index])))
-          // labelArray.map(item =>
-          //   BASE_ARRAY.map((label) => label.name).filter())
           dispatch(
             setStorageLabels(
               BASE_ARRAY.map((baseLabel) =>
