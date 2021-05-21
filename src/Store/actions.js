@@ -114,7 +114,7 @@ export const listUpdateDetail = (emailList) => {
 export const checkBase = () => {
   const BASE_ARRAY = ['Juno', 'Juno/To Do', 'Juno/Keep', 'Juno/Reminder']
   return async (dispatch) => {
-    dispatch(setIsLoading(true))
+    // dispatch(setIsLoading(true))
     const labels = await api.fetchLabel()
     if (labels) {
       if (labels.message.labels.length > 0) {
