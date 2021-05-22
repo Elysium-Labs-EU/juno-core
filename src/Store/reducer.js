@@ -48,13 +48,13 @@ const reducer = (state = initialState, action) => {
           storageLabels: [...state.storageLabels, labelIdName],
         }
       } else {
-        const minimalLabelArray = action.payload.map((label) => ({
+        const labelIdNameArray = action.payload.map((label) => ({
           id: label[0].id,
           name: label[0].name,
         }))
         return {
           ...state,
-          storageLabels: [...state.storageLabels, ...minimalLabelArray],
+          storageLabels: [...state.storageLabels, ...labelIdNameArray],
         }
       }
     case ACTION_TYPE.SET_CURR_EMAIL:

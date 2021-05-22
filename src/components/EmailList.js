@@ -44,6 +44,21 @@ const EmailList = ({
   }
 
   const renderEmailList = (emailList) => {
+    const standardizeLabelIds = !Array.isArray(labelIds) ? [labelIds] : labelIds
+    console.log(emailList)
+    // const filteredEmailList = emailList && emailList.map(item => console.log(item.thread.messages[0].labelIds))
+    // const filteredEmailList2 = emailList && emailList.map(item => item.thread.filter(e => e.messages[0].labelIds = standardizeLabelIds))
+    
+    // const filteredEmailList2 = emailList && emailList.map(item => item.thread.messages[0].labelIds.includes(labelIds))
+
+    // const filteredEmailList2 = emailList && emailList.map(thread => thread.filter(item => item.thread.messages[0].labelIds.includes(labelIds)))
+    const filteredEmailList2 = emailList && emailList.filter(threadElement => threadElement.thread.messages[0].labelIds.includes(...standardizeLabelIds))
+
+    // let compareSkills = uniqueSubSets.map((set) =>
+    //   set.filter((item) => !userSkills.includes(item))
+    // )
+    // console.log(filteredEmailList)
+    console.log(filteredEmailList2)
     return (
       <>
         <div className="scroll">
