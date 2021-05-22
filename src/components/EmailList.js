@@ -45,34 +45,23 @@ const EmailList = ({
 
   const renderEmailList = (emailList) => {
     const standardizeLabelIds = !Array.isArray(labelIds) ? [labelIds] : labelIds
-    console.log(emailList)
-    // const filteredEmailList = emailList && emailList.map(item => console.log(item.thread.messages[0].labelIds))
-    // const filteredEmailList2 = emailList && emailList.map(item => item.thread.filter(e => e.messages[0].labelIds = standardizeLabelIds))
-    
-    // const filteredEmailList2 = emailList && emailList.map(item => item.thread.messages[0].labelIds.includes(labelIds))
+    const filteredEmailList = emailList && emailList.filter(threadElement => threadElement.thread.messages[0].labelIds.includes(...standardizeLabelIds))
 
-    // const filteredEmailList2 = emailList && emailList.map(thread => thread.filter(item => item.thread.messages[0].labelIds.includes(labelIds)))
-    const filteredEmailList2 = emailList && emailList.filter(threadElement => threadElement.thread.messages[0].labelIds.includes(...standardizeLabelIds))
-
-    // let compareSkills = uniqueSubSets.map((set) =>
-    //   set.filter((item) => !userSkills.includes(item))
-    // )
-    // console.log(filteredEmailList)
-    console.log(filteredEmailList2)
+    console.log(filteredEmailList)
     return (
       <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {emailList && (
+              {filteredEmailList && (
                 <div className="base">
-                  {emailList.map((email) => (
+                  {filteredEmailList.map((email) => (
                     <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               )}
             </div>
-            {emailList.length > 0 && nextPageToken && (
+            {filteredEmailList.length > 0 && nextPageToken && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button
