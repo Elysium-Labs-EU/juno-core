@@ -4,6 +4,7 @@ export const initialState = {
   baseLoaded: false,
   serviceUnavailable: null,
   isLoading: false,
+  loadedInbox: [],
   nextPageToken: undefined,
   currEmail: '',
   viewIndex: 0,
@@ -29,6 +30,17 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: action.payload,
+      }
+    case ACTION_TYPE.SET_LOADED_INBOX:
+      if (!state.loadedInbox.includes(action.payload)) {
+        return {
+          ...state,
+          loadedInbox: [...state.loadedInbox, action.payload],
+        }
+      } else {
+        return {
+          ...state,
+        }
       }
     case ACTION_TYPE.SET_NEXTPAGETOKEN:
       return {

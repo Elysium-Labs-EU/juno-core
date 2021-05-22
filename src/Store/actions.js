@@ -6,6 +6,7 @@ export const ACTION_TYPE = {
   SET_BASE_LOADED: 'SET_BASE_LOADED',
   SET_SERVICE_UNAVAILABLE: 'SET_SERVICE_UNAVAILABLE',
   SET_IS_LOADING: 'SET_IS_LOADING',
+  SET_LOADED_INBOX: 'SET_LOADED_INBOX',
   SET_NEXTPAGETOKEN: 'SET_NEXTPAGETOKEN',
   SET_CURR_EMAIL: 'SET_CURR_EMAIL',
   SET_VIEW_INDEX: 'SET_VIEW_INDEX',
@@ -32,6 +33,11 @@ export const setServiceUnavailable = (serviceUnavailableError) => ({
 export const setIsLoading = (isLoading) => ({
   type: ACTION_TYPE.SET_IS_LOADING,
   payload: isLoading,
+})
+
+export const setLoadedInbox = (loadedInbox) => ({
+  type: ACTION_TYPE.SET_LOADED_INBOX,
+  payload: loadedInbox,
 })
 
 export const setNextPageToken = (nextPageToken) => {
@@ -167,18 +173,16 @@ export const loadEmails = (params) => {
   return async (dispatch) => {
     dispatch(setIsLoading(true))
     const metaList = await api.getThreads(params)
-    console.log(params)
-    const {labelIds} = params
+    const { labelIds } = params
     // console.log('metaList', metaList)
     if (metaList) {
       if (metaList.message.resultSizeEstimate > 0) {
         const { threads, nextPageToken } = metaList.message
-        const labeledThreads = threads.map(item => ({ ...item, labelIds }))
-        // console.log(labeledThreads)
+        const labeledThreads = threads.map((item) => ({ ...item, labelIds }))
         dispatch(listUpdateMeta(labeledThreads))
         dispatch(setNextPageToken(nextPageToken ?? null))
-        // dispatch(loadEmailDetails(metaList))
         dispatch(loadEmailDetails(metaList))
+        dispatch(setLoadedInbox(labelIds))
       } else {
         dispatch(setServiceUnavailable('No feed found'))
         console.log('Empty Label Inbox')

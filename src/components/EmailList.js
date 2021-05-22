@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
@@ -10,8 +10,22 @@ const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
 
 const mapStateToProps = (state) => {
-  const { labelIds, metaList, nextPageToken, emailList, isLoading } = state
-  return { labelIds, metaList, nextPageToken, emailList, isLoading }
+  const {
+    labelIds,
+    metaList,
+    nextPageToken,
+    emailList,
+    isLoading,
+    loadedInbox,
+  } = state
+  return {
+    labelIds,
+    metaList,
+    nextPageToken,
+    emailList,
+    isLoading,
+    loadedInbox,
+  }
 }
 
 const EmailList = ({
@@ -21,16 +35,17 @@ const EmailList = ({
   nextPageToken,
   emailList,
   isLoading,
+  loadedInbox,
 }) => {
   useEffect(() => {
-    if (metaList.length === 0 && labelIds) {
+    if (labelIds && !loadedInbox.includes(labelIds)) {
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
       dispatch(loadEmails(params))
     }
-  }, [labelIds, metaList])
+  }, [labelIds])
 
   const loadNextPage = (labelIds, nextPageToken) => {
     if (labelIds && nextPageToken) {
@@ -44,10 +59,16 @@ const EmailList = ({
   }
 
   const renderEmailList = (emailList) => {
-    const standardizeLabelIds = !Array.isArray(labelIds) ? [labelIds] : labelIds
-    const filteredEmailList = emailList && emailList.filter(threadElement => threadElement.thread.messages[0].labelIds.includes(...standardizeLabelIds))
+    const standardizedLabelIds =
+      labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+    const filteredEmailList =
+      emailList &&
+      emailList.filter((threadElement) =>
+        threadElement.thread.messages[0].labelIds.includes(
+          ...standardizedLabelIds
+        )
+      )
 
-    console.log(filteredEmailList)
     return (
       <>
         <div className="scroll">
@@ -86,6 +107,7 @@ const EmailList = ({
       {!isLoading && emailList.length > 0 && renderEmailList(emailList)}
       {!isLoading && emailList.length === 0 && <Emptystate />}
       {isLoading && (
+        // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>
