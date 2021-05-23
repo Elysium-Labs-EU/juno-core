@@ -13,27 +13,27 @@ const EmailAvatarContainer = styled.div`
 `
 
 const EmailAvatar = ({ avatarURL }) => {
-  const splittedURL = avatarURL.split('<')
+  const intialCreator = (avatarURL) => {
+    const splittedURL = avatarURL && avatarURL.split('<')
+    if (splittedURL) {
+      let name = splittedURL[0]
+      let initials = name.match(/\b\w/g) || []
+      let finalIntials = (initials = (
+        (initials.shift() || '') + (initials.pop() || '')
+      ).toUpperCase())
+      return finalIntials
+    }
+  }
 
-  // const matchedURL = splittedURL.match(/.com/g)
-
-  // function grabAvatar() {
-  //     let `http://s2.googleusercontent.com/s2/favicons?domain_url=http://{splittedURL}`
-  // }
-
-  let name = splittedURL[0]
-  // var name = 'Foo Bar 1Name too Long';
-  let initials = name.match(/\b\w/g) || []
-  initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
-  // console.log(initials);
-
-  // console.log("splittedURL", splittedURL[0])
-  // console.log("matchedURL", matchedURL)
+  // let name = splittedURL[0]
+  // let initials = name.match(/\b\w/g) || []
+  // initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
 
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
     <EmailAvatarContainer>
-      <>{initials}</>
+      {/* <>{finalIntials}</> */}
+      {intialCreator(avatarURL)}
     </EmailAvatarContainer>
   )
 }

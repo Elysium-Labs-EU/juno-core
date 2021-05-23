@@ -16,6 +16,7 @@ const mapStateToProps = (state) => {
 }
 
 const EmailListItem = ({ email, labelIds }) => {
+  console.log(email)
   const {
     thread,
     thread: { id, messages },
@@ -29,11 +30,16 @@ const EmailListItem = ({ email, labelIds }) => {
     ? LatestEmail[0].labelIds[0]
     : LatestEmail.labelIds[0]
   const fromEmail = Array.isArray(LatestEmail)
-    ? LatestEmail[0].payload.headers.find((data) => data.name === 'From').value
+    ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
+      ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
+          .value
+      : undefined
     : LatestEmail.payload.headers.find((data) => data.name === 'From').value
   const emailSubject = Array.isArray(LatestEmail)
     ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
-        .value
+      ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
+          .value
+      : '(no subject)'
     : LatestEmail.payload.headers.find((data) => data.name === 'Subject').value
   const emailSnippet = Array.isArray(LatestEmail)
     ? LatestEmail[0].snippet

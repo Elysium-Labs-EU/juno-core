@@ -12,6 +12,7 @@ import Inbox from './components/Inbox/Inbox'
 import Header from './components/Header'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import DraftEmail from './components/Draft/DraftEmail'
 
 const mapStateToProps = (state) => {
   const { baseLoaded } = state
@@ -37,6 +38,7 @@ const App = ({ baseLoaded, dispatch }) => {
           <Route path="/" exact={true} component={ToDo} />
           <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
           <Route path="/compose" component={ComposeEmail} />
+          <Route path="/drafts" component={DraftEmail} />
           <Route path="/settings" component={Settings} />
           <Route path="/information-overview" component={InformationOverview} />
           <Route path="/file-overview" component={FileOverview} />

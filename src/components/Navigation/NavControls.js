@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './NavControls.scss'
-import { FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
+import { FiClipboard, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
 import { CustomIconLink } from '../Elements'
 
 const Navigation = () => {
@@ -16,6 +16,8 @@ const Navigation = () => {
         setActive('settings')
       } else if (location.pathname.includes('compose')) {
         setActive('compose')
+      } else if (location.pathname.includes('drafts')) {
+        setActive('drafts')
       }
     }
   }, [location])
@@ -55,6 +57,18 @@ const Navigation = () => {
                 : 'nav-item-button'
             }
             icon={<FiEdit />}
+          />
+        </Link>
+      </div>
+      <div className="nav-c-item">
+        <Link to="/drafts">
+          <CustomIconLink
+            className={
+              active === 'drafts'
+                ? 'nav-item-selected nav-item-button'
+                : 'nav-item-button'
+            }
+            icon={<FiClipboard />}
           />
         </Link>
       </div>
