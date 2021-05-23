@@ -8,10 +8,25 @@ import Emptystate from './Elements/EmptyState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
+const INBOX_LABELS = ['UNREAD', 'INBOX']
 
 const mapStateToProps = (state) => {
-  const { labelIds, metaList, nextPageToken, emailList, isLoading } = state
-  return { labelIds, metaList, nextPageToken, emailList, isLoading }
+  const {
+    labelIds,
+    metaList,
+    nextPageToken,
+    emailList,
+    isLoading,
+    loadedInbox,
+  } = state
+  return {
+    labelIds,
+    metaList,
+    nextPageToken,
+    emailList,
+    isLoading,
+    loadedInbox,
+  }
 }
 
 const EmailList = ({
@@ -21,16 +36,17 @@ const EmailList = ({
   nextPageToken,
   emailList,
   isLoading,
+  loadedInbox,
 }) => {
   useEffect(() => {
-    if (metaList.length === 0 && labelIds) {
+    if (labelIds && !loadedInbox.includes(labelIds)) {
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
       dispatch(loadEmails(params))
     }
-  }, [labelIds, metaList])
+  }, [labelIds])
 
   const loadNextPage = (labelIds, nextPageToken) => {
     if (labelIds && nextPageToken) {
@@ -43,21 +59,35 @@ const EmailList = ({
     }
   }
 
-  const renderEmailList = (emailList) => {
+  const standardizedLabelIds =
+    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+  const filteredEmailList =
+    emailList &&
+    emailList.filter((threadElement) =>
+      threadElement.thread.messages[0].labelIds.includes(
+        ...standardizedLabelIds
+      )
+    )
+  
+    console.log(labelIds === INBOX_LABELS)
+    console.log(labelIds.includes(...INBOX_LABELS))
+  
+  const renderEmailList = (filteredEmailList) => {
+    console.log(filteredEmailList)
     return (
       <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {emailList && (
+              {filteredEmailList && (
                 <div className="base">
-                  {emailList.map((email) => (
+                  {filteredEmailList.map((email) => (
                     <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               )}
             </div>
-            {emailList.length > 0 && nextPageToken && (
+            {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button
@@ -79,9 +109,12 @@ const EmailList = ({
 
   return (
     <>
-      {!isLoading && emailList.length > 0 && renderEmailList(emailList)}
-      {!isLoading && emailList.length === 0 && <Emptystate />}
-      {isLoading && (
+      {loadedInbox.includes(labelIds) &&
+        filteredEmailList.length > 0 &&
+        renderEmailList(filteredEmailList)}
+      {!isLoading && loadedInbox.includes(labelIds) && filteredEmailList.length === 0 && <Emptystate />}
+      {isLoading && filteredEmailList.length === 0 && (
+        // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>

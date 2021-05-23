@@ -4,6 +4,7 @@ export const initialState = {
   baseLoaded: false,
   serviceUnavailable: null,
   isLoading: false,
+  loadedInbox: [],
   nextPageToken: undefined,
   currEmail: '',
   viewIndex: 0,
@@ -30,6 +31,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLoading: action.payload,
       }
+    case ACTION_TYPE.SET_LOADED_INBOX:
+      if (!state.loadedInbox.includes(action.payload)) {
+        return {
+          ...state,
+          loadedInbox: [...state.loadedInbox, action.payload],
+        }
+      } else {
+        return {
+          ...state,
+        }
+      }
     case ACTION_TYPE.SET_NEXTPAGETOKEN:
       return {
         ...state,
@@ -48,13 +60,13 @@ const reducer = (state = initialState, action) => {
           storageLabels: [...state.storageLabels, labelIdName],
         }
       } else {
-        const minimalLabelArray = action.payload.map((label) => ({
+        const labelIdNameArray = action.payload.map((label) => ({
           id: label[0].id,
           name: label[0].name,
         }))
         return {
           ...state,
-          storageLabels: [...state.storageLabels, ...minimalLabelArray],
+          storageLabels: [...state.storageLabels, ...labelIdNameArray],
         }
       }
     case ACTION_TYPE.SET_CURR_EMAIL:
