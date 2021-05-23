@@ -64,14 +64,11 @@ const EmailList = ({
   const filteredEmailList =
     emailList &&
     emailList.filter((threadElement) =>
-      threadElement.thread.messages[0].labelIds.includes(
-        ...standardizedLabelIds
+      threadElement.thread.messages.map((item) =>
+        item.labelIds.includes(...standardizedLabelIds)
       )
     )
-  
-    console.log(labelIds === INBOX_LABELS)
-    console.log(labelIds.includes(...INBOX_LABELS))
-  
+
   const renderEmailList = (filteredEmailList) => {
     console.log(filteredEmailList)
     return (
@@ -112,7 +109,9 @@ const EmailList = ({
       {loadedInbox.includes(labelIds) &&
         filteredEmailList.length > 0 &&
         renderEmailList(filteredEmailList)}
-      {!isLoading && loadedInbox.includes(labelIds) && filteredEmailList.length === 0 && <Emptystate />}
+      {!isLoading &&
+        loadedInbox.includes(labelIds) &&
+        filteredEmailList.length === 0 && <Emptystate />}
       {isLoading && filteredEmailList.length === 0 && (
         // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
