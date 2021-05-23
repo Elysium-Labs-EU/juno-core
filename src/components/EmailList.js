@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
@@ -8,6 +8,7 @@ import Emptystate from './Elements/EmptyState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
+const INBOX_LABELS = ['UNREAD', 'INBOX']
 
 const mapStateToProps = (state) => {
   const {
@@ -58,17 +59,21 @@ const EmailList = ({
     }
   }
 
-  const renderEmailList = (emailList) => {
-    const standardizedLabelIds =
-      labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-    const filteredEmailList =
-      emailList &&
-      emailList.filter((threadElement) =>
-        threadElement.thread.messages[0].labelIds.includes(
-          ...standardizedLabelIds
-        )
+  const standardizedLabelIds =
+    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+  const filteredEmailList =
+    emailList &&
+    emailList.filter((threadElement) =>
+      threadElement.thread.messages[0].labelIds.includes(
+        ...standardizedLabelIds
       )
-
+    )
+  
+    console.log(labelIds === INBOX_LABELS)
+    console.log(labelIds.includes(...INBOX_LABELS))
+  
+  const renderEmailList = (filteredEmailList) => {
+    console.log(filteredEmailList)
     return (
       <>
         <div className="scroll">
@@ -82,7 +87,7 @@ const EmailList = ({
                 </div>
               )}
             </div>
-            {filteredEmailList.length > 0 && nextPageToken && (
+            {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button
@@ -104,9 +109,11 @@ const EmailList = ({
 
   return (
     <>
-      {!isLoading && emailList.length > 0 && renderEmailList(emailList)}
-      {!isLoading && emailList.length === 0 && <Emptystate />}
-      {isLoading && (
+      {loadedInbox.includes(labelIds) &&
+        filteredEmailList.length > 0 &&
+        renderEmailList(filteredEmailList)}
+      {!isLoading && loadedInbox.includes(labelIds) && filteredEmailList.length === 0 && <Emptystate />}
+      {isLoading && filteredEmailList.length === 0 && (
         // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
