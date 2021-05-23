@@ -10,13 +10,14 @@ import { connect } from 'react-redux'
 import { ThreadBase } from './EmailListItemStyles'
 import { convertArrayToString } from './../../utils'
 
+const DRAFT_LABEL = ['DRAFT']
+
 const mapStateToProps = (state) => {
   const { labelIds } = state
   return { labelIds }
 }
 
 const EmailListItem = ({ email, labelIds }) => {
-  console.log(email)
   const {
     thread,
     thread: { id, messages },
@@ -35,6 +36,11 @@ const EmailListItem = ({ email, labelIds }) => {
           .value
       : undefined
     : LatestEmail.payload.headers.find((data) => data.name === 'From').value
+  const toEmail = Array.isArray(LatestEmail)
+    ? LatestEmail[0].payload.headers.find((data) => data.name === 'To')
+      ? LatestEmail[0].payload.headers.find((data) => data.name === 'To').value
+      : 'Draft'
+    : LatestEmail.payload.headers.find((data) => data.name === 'From').value
   const emailSubject = Array.isArray(LatestEmail)
     ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
       ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
@@ -49,8 +55,12 @@ const EmailListItem = ({ email, labelIds }) => {
     : LatestEmail.internalDate
 
   const handleClick = (id) => {
-    const labelURL = convertArrayToString(labelIds)
-    history.push(`mail/${labelURL}/${id}`)
+    if (!labelIds.includes(...DRAFT_LABEL)) {
+      const labelURL = convertArrayToString(labelIds)
+      history.push(`mail/${labelURL}/${id}`)
+    } else {
+      console.log('Open compose')
+    }
   }
 
   return (
@@ -61,9 +71,19 @@ const EmailListItem = ({ email, labelIds }) => {
           <div className="cellCheckbox"></div>
           <div className="cellName" onClick={() => handleClick(id)}>
             <div className="avatars">
-              <EmailAvatar avatarURL={fromEmail} />
+              {!labelIds.includes(...DRAFT_LABEL) && (
+                <EmailAvatar avatarURL={fromEmail} />
+              )}
+              {labelIds.includes(...DRAFT_LABEL) && (
+                <EmailAvatar avatarURL={toEmail} />
+              )}
             </div>
-            <span className="text-truncate">{fromEmail}</span>
+            {!labelIds.includes(...DRAFT_LABEL) && (
+              <span className="text-truncate">{fromEmail}</span>
+            )}
+            {labelIds.includes(...DRAFT_LABEL) && (
+              <span className="text-truncate">{toEmail}</span>
+            )}
             <MessageCount countOfMessage={messages} />
           </div>
           <div className="cellMessage" onClick={() => handleClick(id)}>

@@ -11,6 +11,8 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
     return base64url.decode(fetchedAttachment.messageAttachment.data)
   }
 
+  console.log(threadDetailBody)
+
   // console.log(threadDetailBody)
   // console.log(threadDetailBody.parts[1].body.attachmentId)
   //Check if feed contains singular body or not, if not - use the html version.
@@ -24,9 +26,9 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
       // console.log('2')
       return <div dangerouslySetInnerHTML={{ __html: str }} />
     } else if (threadDetailBody.mimeType === 'multipart/mixed') {
-      let str = base64url.decode(
-        `${threadDetailBody.parts[0].parts[1].body.data}`
-      )
+      let str = threadDetailBody.parts[0].parts
+        ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
+        : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
       // console.log('3')
       return <div dangerouslySetInnerHTML={{ __html: str }} />
     } else if (threadDetailBody.mimeType === 'multipart/related') {
