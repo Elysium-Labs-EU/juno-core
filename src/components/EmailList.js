@@ -39,7 +39,8 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    if (labelIds && !loadedInbox.includes(labelIds)) {
+    if (labelIds && loadedInbox.map(labels => !labels.includes(labelIds))) {
+      console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
@@ -59,18 +60,60 @@ const EmailList = ({
     }
   }
 
-  const standardizedLabelIds =
-    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+  useEffect(() => {
+    if (labelIds.length > 0 && emailList.length > 0) {
+     filterList({labelIds, emailList})
+   }
+  }, [labelIds, emailList])
+  
+  // GOAL: only show the emails that have the label in one of their linked messages. Messages are elements within an object, and that object is within the main array.
+  // The labelIds are inside each message object as an array
+
   const filteredEmailList =
-    emailList &&
+    emailList && emailList.length > 0 &&
     emailList.filter((threadElement) =>
       threadElement.thread.messages.map((item) =>
-        item.labelIds.includes(...standardizedLabelIds)
+        item.labelIds.map(labelId => labelId.includes(labelIds))
       )
     )
+  // const filteredEmailList2 =
+  //   emailList && emailList.length > 0 &&
+  //   emailList.filter(item => item.thread.messages.includes(item.thread.messages.map((item2) =>
+  //       item2.labelIds.map(labelId => labelId.includes(standardizedLabelIds.map(label => label)))
+  //   )))
+  // console.log(filteredEmailList2)
+  
+  const filterList = (props) => {
+    const { emailList, labelIds } = props
+    const standardizedLabelIds =
+      labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+    const containsLabels = (data) => data.labelIds.includes(...standardizedLabelIds)
+
+
+
+    const messageLabelIds = emailList.map(threads => threads.thread.messages.map(item => item.labelIds))
+    console.log(messageLabelIds.filter(thread => thread.some(label => label.includes(...standardizedLabelIds))))
+    // console.log(messageLabelIds.filter(thread => thread.map(label => label.includes(...standardizedLabelIds))))
+    
+
+
+
+      // const messageLabelIds2 = emailList.filter(threads => threads.thread.messages.map(item => containsLabels(item)))
+      console.log(...standardizedLabelIds)
+    // console.log(messageLabelIds2)
+    // const testLabels = emailList.map(threads => threads.thread.messages)
+    // console.log(testLabels)
+    // console.log(messageLabelIds)  
+    if (standardizedLabelIds) {
+      // console.log(messageLabelIds.map(thread => thread.filter(item => item.includes(standardizedLabelIds))))
+    }
+  }
+
+    //   let compareSkills = uniqueSubSets.map((set) =>
+    //   set.filter((item) => !userSkills.includes(item))
+    // )
 
   const renderEmailList = (filteredEmailList) => {
-    console.log(filteredEmailList)
     return (
       <>
         <div className="scroll">
@@ -106,7 +149,7 @@ const EmailList = ({
 
   return (
     <>
-      {loadedInbox.includes(labelIds) &&
+      {loadedInbox.map(labels => labels.includes(labelIds)) &&
         filteredEmailList.length > 0 &&
         renderEmailList(filteredEmailList)}
       {!isLoading &&

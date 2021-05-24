@@ -32,10 +32,12 @@ const reducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case ACTION_TYPE.SET_LOADED_INBOX:
+      console.log(action.payload)
+      const labelArray = (Array.isArray(action.payload) ? action.payload : [action.payload])
       if (!state.loadedInbox.includes(action.payload)) {
         return {
           ...state,
-          loadedInbox: [...state.loadedInbox, action.payload],
+          loadedInbox: [...new Set([...state.loadedInbox, labelArray])],
         }
       } else {
         return {
@@ -109,7 +111,7 @@ const reducer = (state = initialState, action) => {
         })
         return {
           ...state,
-          metaList: sortedMetaList,
+          metaList: [...new Set([...sortedMetaList])],
         }
       } else {
         let new_metaList = state.metaList.filter(
