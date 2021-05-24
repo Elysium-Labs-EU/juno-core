@@ -120,7 +120,6 @@ export const listUpdateDetail = (emailList) => {
 export const checkBase = () => {
   const BASE_ARRAY = ['Juno', 'Juno/To Do', 'Juno/Keep', 'Juno/Reminder']
   return async (dispatch) => {
-    // dispatch(setIsLoading(true))
     const labels = await api.fetchLabel()
     if (labels) {
       if (labels.message.labels.length > 0) {
@@ -145,7 +144,6 @@ export const checkBase = () => {
               !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
           )
           dispatch(setBaseLoaded(true))
-          // dispatch(setIsLoading(false))
         } else {
           console.log('Gotcha! All minimal required labels.')
           dispatch(
@@ -156,15 +154,12 @@ export const checkBase = () => {
             )
           )
           dispatch(setBaseLoaded(true))
-          // dispatch(setIsLoading(false))
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))
-        // dispatch(setIsLoading(false))
       }
     } else {
       dispatch(setServiceUnavailable('Network Error. Please try again later'))
-      // dispatch(setIsLoading(false))
     }
   }
 }
@@ -190,6 +185,7 @@ export const loadEmails = (params) => {
       }
     } else {
       dispatch(setServiceUnavailable('No feed found'))
+      dispatch(setIsLoading(false))
     }
   }
 }

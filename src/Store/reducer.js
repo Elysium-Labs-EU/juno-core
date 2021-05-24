@@ -33,7 +33,9 @@ const reducer = (state = initialState, action) => {
       }
     case ACTION_TYPE.SET_LOADED_INBOX:
       console.log(action.payload)
-      const labelArray = (Array.isArray(action.payload) ? action.payload : [action.payload])
+      const labelArray = Array.isArray(action.payload)
+        ? action.payload
+        : [action.payload]
       if (!state.loadedInbox.includes(action.payload)) {
         return {
           ...state,

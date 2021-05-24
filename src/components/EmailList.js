@@ -39,7 +39,7 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    if (labelIds && loadedInbox.map(labels => !labels.includes(labelIds))) {
+    if (labelIds && !loadedInbox.some(label => label === labelIds)) {
       console.log('triggered')
       const params = {
         labelIds: labelIds,
@@ -60,72 +60,67 @@ const EmailList = ({
     }
   }
 
-  useEffect(() => {
-    if (labelIds.length > 0 && emailList.length > 0) {
-     filterList({labelIds, emailList})
-   }
-  }, [labelIds, emailList])
-  
+  // useEffect(() => {
+  //   if (labelIds.length > 0 && emailList.length > 0) {
+  //    filterList({labelIds, emailList})
+  //  }
+  // }, [labelIds, emailList])
+
   // GOAL: only show the emails that have the label in one of their linked messages. Messages are elements within an object, and that object is within the main array.
   // The labelIds are inside each message object as an array
 
+  // const filteredEmailList =
+  //   emailList && emailList.length > 0 &&
+  //   emailList.filter((threadElement) =>
+  //     threadElement.thread.messages.map((item) =>
+  //       item.labelIds.map(labelId => labelId.includes(labelIds))
+  //     )
+  //   )
+
+  const standardizedLabelIds =
+    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+
   const filteredEmailList =
-    emailList && emailList.length > 0 &&
-    emailList.filter((threadElement) =>
-      threadElement.thread.messages.map((item) =>
-        item.labelIds.map(labelId => labelId.includes(labelIds))
+    emailList &&
+    emailList.length > 0 &&
+    emailList.filter((threads) =>
+      threads.thread.messages.map((item) =>
+        item.labelIds.some((label) => label.includes(...standardizedLabelIds))
       )
     )
-  // const filteredEmailList2 =
-  //   emailList && emailList.length > 0 &&
-  //   emailList.filter(item => item.thread.messages.includes(item.thread.messages.map((item2) =>
-  //       item2.labelIds.map(labelId => labelId.includes(standardizedLabelIds.map(label => label)))
-  //   )))
-  // console.log(filteredEmailList2)
-  
+
   const filterList = (props) => {
+    console.log('triggered')
     const { emailList, labelIds } = props
     const standardizedLabelIds =
       labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-    const containsLabels = (data) => data.labelIds.includes(...standardizedLabelIds)
-
-
-
-    const messageLabelIds = emailList.map(threads => threads.thread.messages.map(item => item.labelIds))
-    console.log(messageLabelIds.filter(thread => thread.some(label => label.includes(...standardizedLabelIds))))
-    // console.log(messageLabelIds.filter(thread => thread.map(label => label.includes(...standardizedLabelIds))))
-    
-
-
-
-      // const messageLabelIds2 = emailList.filter(threads => threads.thread.messages.map(item => containsLabels(item)))
-      console.log(...standardizedLabelIds)
-    // console.log(messageLabelIds2)
-    // const testLabels = emailList.map(threads => threads.thread.messages)
-    // console.log(testLabels)
-    // console.log(messageLabelIds)  
+    console.log(standardizedLabelIds)
     if (standardizedLabelIds) {
-      // console.log(messageLabelIds.map(thread => thread.filter(item => item.includes(standardizedLabelIds))))
+      const filteredMailArray = emailList.filter((threads) =>
+        threads.thread.messages.map((item) =>
+          item.labelIds.some((label) => !label.includes(...standardizedLabelIds))
+        )
+      )
+      return renderEmailList(filteredMailArray)
     }
   }
 
-    //   let compareSkills = uniqueSubSets.map((set) =>
-    //   set.filter((item) => !userSkills.includes(item))
-    // )
-
-  const renderEmailList = (filteredEmailList) => {
+  const renderEmailList = (filteredMailArray) => {
+    console.log(filteredMailArray)
+    console.log(filteredMailArray.length)
     return (
       <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {filteredEmailList && (
+              {filteredMailArray.length > 0 && (
                 <div className="base">
-                  {filteredEmailList.map((email) => (
+                  {filteredMailArray.map((email) => (
                     <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               )}
+              {filteredMailArray.length === 0 && <Emptystate />}
             </div>
             {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
@@ -149,13 +144,17 @@ const EmailList = ({
 
   return (
     <>
-      {loadedInbox.map(labels => labels.includes(labelIds)) &&
-        filteredEmailList.length > 0 &&
-        renderEmailList(filteredEmailList)}
+      {/* {loadedInbox.map((labels) => labels.includes(...labelIds)) &&
+        emailList.length > 0 &&
+        renderEmailList(filteredEmailList)} */}
       {!isLoading &&
-        loadedInbox.includes(labelIds) &&
-        filteredEmailList.length === 0 && <Emptystate />}
-      {isLoading && filteredEmailList.length === 0 && (
+        loadedInbox.map((labels) => labels.includes(...labelIds)) &&
+        emailList.length > 0 &&
+        filterList({ labelIds, emailList })}
+      {/* {!isLoading && loadedInbox.includes(labelIds) && listCount === 0 && (
+        <Emptystate />
+      )} */}
+      {isLoading && emailList.length === 0 && (
         // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
