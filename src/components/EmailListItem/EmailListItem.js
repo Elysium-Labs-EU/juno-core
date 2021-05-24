@@ -55,12 +55,12 @@ const EmailListItem = ({ email, labelIds }) => {
     : LatestEmail.internalDate
 
   const handleClick = (id) => {
-    if (!labelIds.includes(...DRAFT_LABEL)) {
+    // if (!labelIds.includes(...DRAFT_LABEL)) {
       const labelURL = convertArrayToString(labelIds)
       history.push(`mail/${labelURL}/${id}`)
-    } else {
-      console.log('Open compose')
-    }
+    // } else {
+    //   console.log('Open compose')
+    // }
   }
 
   return (

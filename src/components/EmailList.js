@@ -90,24 +90,55 @@ const EmailList = ({
     )
 
   const filterList = (props) => {
-    console.log('triggered')
     const { emailList, labelIds } = props
     const standardizedLabelIds =
       labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-    console.log(standardizedLabelIds)
     if (standardizedLabelIds) {
+      console.log(standardizedLabelIds)
       const filteredMailArray = emailList.filter((threads) =>
         threads.thread.messages.map((item) =>
           item.labelIds.some((label) => !label.includes(...standardizedLabelIds))
         )
       )
+      console.log(emailList.filter((threads) =>
+        threads.thread.messages.map((item) =>
+          item.labelIds.some(label => label === standardizedLabelIds)
+        )
+      ))
+      // console.log(emailList.filter((threads) =>
+      //   threads.thread.messages.map((item) =>
+      //     item.labelIds.some(label => label === [...standardizedLabelIds])
+      //   )
+      // ))
+      console.log(emailList.filter((threads) =>
+        threads.thread.messages.map((item) =>
+          item.labelIds.some(element => element.includes('DRAFT'))
+        )
+      ))
+      const test1 = emailList.map((threads) =>
+        threads.thread.messages.filter((item) =>
+          item.labelIds.includes('DRAFT'))
+      )
+      console.log(test1)
+      const test2 = test1.filter(item => item.length !== 0)
+      console.log(test2)
+      // console.log(emailList.filter((threads) =>
+      //   threads.thread.messages.map((item) =>
+      //     item.labelIds.some(element => element.length > 4)
+      //   )
+      // ))
+      // console.log(emailList.filter((threads) =>
+      //   threads.thread.messages.map((item) =>
+      //     item.labelIds.map(label => label).includes(...standardizedLabelIds)
+      //   )
+      // ))
       return renderEmailList(filteredMailArray)
     }
   }
 
   const renderEmailList = (filteredMailArray) => {
-    console.log(filteredMailArray)
-    console.log(filteredMailArray.length)
+    // console.log(filteredMailArray)
+    // console.log(filteredMailArray.length)
     return (
       <>
         <div className="scroll">

@@ -79,9 +79,9 @@ const reducer = (state = initialState, action) => {
         currEmail: action.payload,
       }
     case ACTION_TYPE.SET_VIEW_INDEX:
-      const viewingIndex = action.payload.emailList
+      const viewingIndex = action.payload.metaList
         .map(function (e) {
-          return e.thread.id
+          return e.id
         })
         .indexOf(action.payload.currEmail)
       return {

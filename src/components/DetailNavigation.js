@@ -12,8 +12,8 @@ import {
 import { setViewingIndex } from '../Store/actions'
 
 const mapStateToProps = (state) => {
-  const { labelIds, currEmail, emailList, isLoading, viewIndex } = state
-  return { labelIds, currEmail, emailList, isLoading, viewIndex }
+  const { labelIds, currEmail, emailList, isLoading, viewIndex, metaList } = state
+  return { labelIds, currEmail, emailList, isLoading, viewIndex, metaList }
 }
 
 const DetailNavigation = ({
@@ -22,19 +22,26 @@ const DetailNavigation = ({
   currEmail,
   viewIndex,
   dispatch,
+  metaList,
 }) => {
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
 
-  const isDisabledPrev = emailList[viewIndex - 1] === undefined ? true : false
-  const isDisabledNext = emailList[viewIndex + 1] === undefined ? true : false
+  const isDisabledPrev = metaList[viewIndex - 1] === undefined ? true : false
+  const isDisabledNext = metaList[viewIndex + 1] === undefined ? true : false
+  // const isDisabledPrev = emailList[viewIndex - 1] === undefined ? true : false
+  // const isDisabledNext = emailList[viewIndex + 1] === undefined ? true : false
 
   useEffect(() => {
     if (currEmail !== currLocal) {
       setCurrLocal(currEmail)
+      // const requestBody = {
+      //   emailList: emailList,
+      //   currEmail: currEmail,
+      // }
       const requestBody = {
-        emailList: emailList,
+        metaList: metaList,
         currEmail: currEmail,
       }
       dispatch(setViewingIndex(requestBody))
@@ -45,7 +52,8 @@ const DetailNavigation = ({
     <Wrapper>
       <NavButton
         onClick={() =>
-          NavigatePreviousMail(history, labelURL, emailList, viewIndex)
+          NavigatePreviousMail({history, labelURL, metaList, viewIndex})
+          // NavigatePreviousMail(history, labelURL, emailList, viewIndex)
         }
         disabled={isDisabledPrev}
       >
@@ -53,13 +61,14 @@ const DetailNavigation = ({
       </NavButton>
       <NavButton
         onClick={() =>
-          NavigateNextMail(history, labelURL, emailList, viewIndex)
+          NavigateNextMail({history, labelURL, metaList, viewIndex})
+          // NavigateNextMail(history, labelURL, emailList, viewIndex)
         }
         disabled={isDisabledNext}
       >
         <FiChevronRight size={20} />
       </NavButton>
-      <NavButton onClick={() => CloseMail(history)}>
+      <NavButton onClick={() => CloseMail({history})}>
         <FiX size={20} />
       </NavButton>
     </Wrapper>
