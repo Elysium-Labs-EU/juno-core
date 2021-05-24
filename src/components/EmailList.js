@@ -100,39 +100,17 @@ const EmailList = ({
           item.labelIds.some((label) => !label.includes(...standardizedLabelIds))
         )
       )
-      console.log(emailList.filter((threads) =>
-        threads.thread.messages.map((item) =>
-          item.labelIds.some(label => label === standardizedLabelIds)
-        )
-      ))
-      // console.log(emailList.filter((threads) =>
-      //   threads.thread.messages.map((item) =>
-      //     item.labelIds.some(label => label === [...standardizedLabelIds])
-      //   )
-      // ))
-      console.log(emailList.filter((threads) =>
-        threads.thread.messages.map((item) =>
-          item.labelIds.some(element => element.includes('DRAFT'))
-        )
-      ))
-      const test1 = emailList.map((threads) =>
+      console.log(emailList.map((threads) =>
         threads.thread.messages.filter((item) =>
-          item.labelIds.includes('DRAFT'))
+          item.labelIds.includes(...standardizedLabelIds))
+      ))
+      const filterOnLabel = emailList.map((threads) =>
+        threads.thread.messages.filter((item) =>
+          item.labelIds.includes(...standardizedLabelIds))
       )
-      console.log(test1)
-      const test2 = test1.filter(item => item.length !== 0)
-      console.log(test2)
-      // console.log(emailList.filter((threads) =>
-      //   threads.thread.messages.map((item) =>
-      //     item.labelIds.some(element => element.length > 4)
-      //   )
-      // ))
-      // console.log(emailList.filter((threads) =>
-      //   threads.thread.messages.map((item) =>
-      //     item.labelIds.map(label => label).includes(...standardizedLabelIds)
-      //   )
-      // ))
-      return renderEmailList(filteredMailArray)
+      const removedEmptyArrays = filterOnLabel.filter(item => item.length !== 0)
+      return renderEmailList(removedEmptyArrays)
+      // return renderEmailList(filteredMailArray)
     }
   }
 
@@ -147,7 +125,8 @@ const EmailList = ({
               {filteredMailArray.length > 0 && (
                 <div className="base">
                   {filteredMailArray.map((email) => (
-                    <EmailListItem key={email.thread.id} email={email} />
+                    <EmailListItem key={email.id} email={email} />
+                    // <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               )}
