@@ -60,63 +60,22 @@ const EmailList = ({
     }
   }
 
-  // useEffect(() => {
-  //   if (labelIds.length > 0 && emailList.length > 0) {
-  //    filterList({labelIds, emailList})
-  //  }
-  // }, [labelIds, emailList])
-
-  // GOAL: only show the emails that have the label in one of their linked messages. Messages are elements within an object, and that object is within the main array.
-  // The labelIds are inside each message object as an array
-
-  // const filteredEmailList =
-  //   emailList && emailList.length > 0 &&
-  //   emailList.filter((threadElement) =>
-  //     threadElement.thread.messages.map((item) =>
-  //       item.labelIds.map(labelId => labelId.includes(labelIds))
-  //     )
-  //   )
-
-  const standardizedLabelIds =
-    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-
-  const filteredEmailList =
-    emailList &&
-    emailList.length > 0 &&
-    emailList.filter((threads) =>
-      threads.thread.messages.map((item) =>
-        item.labelIds.some((label) => label.includes(...standardizedLabelIds))
-      )
-    )
 
   const filterList = (props) => {
     const { emailList, labelIds } = props
     const standardizedLabelIds =
       labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
     if (standardizedLabelIds) {
-      console.log(standardizedLabelIds)
-      const filteredMailArray = emailList.filter((threads) =>
-        threads.thread.messages.map((item) =>
-          item.labelIds.some((label) => !label.includes(...standardizedLabelIds))
-        )
-      )
-      console.log(emailList.map((threads) =>
-        threads.thread.messages.filter((item) =>
-          item.labelIds.includes(...standardizedLabelIds))
-      ))
       const filterOnLabel = emailList.map((threads) =>
         threads.thread.messages.filter((item) =>
           item.labelIds.includes(...standardizedLabelIds))
       )
       const removedEmptyArrays = filterOnLabel.filter(item => item.length !== 0)
       return renderEmailList(removedEmptyArrays)
-      // return renderEmailList(filteredMailArray)
     }
   }
 
   const renderEmailList = (filteredMailArray) => {
-    // console.log(filteredMailArray)
-    // console.log(filteredMailArray.length)
     return (
       <>
         <div className="scroll">
@@ -126,7 +85,6 @@ const EmailList = ({
                 <div className="base">
                   {filteredMailArray.map((email) => (
                     <EmailListItem key={email.id} email={email} />
-                    // <EmailListItem key={email.thread.id} email={email} />
                   ))}
                 </div>
               )}
@@ -154,18 +112,11 @@ const EmailList = ({
 
   return (
     <>
-      {/* {loadedInbox.map((labels) => labels.includes(...labelIds)) &&
-        emailList.length > 0 &&
-        renderEmailList(filteredEmailList)} */}
       {!isLoading &&
         loadedInbox.map((labels) => labels.includes(...labelIds)) &&
         emailList.length > 0 &&
         filterList({ labelIds, emailList })}
-      {/* {!isLoading && loadedInbox.includes(labelIds) && listCount === 0 && (
-        <Emptystate />
-      )} */}
       {isLoading && emailList.length === 0 && (
-        // {isLoading && !loadedInbox.includes(labelIds) && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>
