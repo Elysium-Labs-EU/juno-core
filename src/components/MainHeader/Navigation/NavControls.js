@@ -61,7 +61,7 @@ const Navigation = () => {
         </Link>
       </div>
       <div className="nav-c-item">
-      <button
+        <button
           onClick={() => setShowMenu(!showMenu)}
           type="button"
           className="nav-item-button"

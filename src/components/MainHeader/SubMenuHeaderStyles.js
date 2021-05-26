@@ -14,11 +14,8 @@ export const Wrapper = styled.nav`
 `
 
 export const InnerMenu = styled.div`
-    display: flex;
-    flex-flow: column;
+  display: flex;
+  flex-flow: column;
 `
 
-export const MenuItem = styled(Link)`
-    
-
-`
+export const MenuItem = styled(Link)``

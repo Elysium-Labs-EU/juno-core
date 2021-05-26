@@ -59,6 +59,20 @@ export const createApiClient = () => {
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
+    // unThrashMessage: (messageId) => {
+    //   console.log('trashed')
+    //   return axios
+    //     .post(`/api/message/thrash/${messageId}`)
+    //     .then((res) => res.data)
+    //     .catch((err) => console.log(err))
+    // },
+    deleteMessage: (messageId) => {
+      console.log('deleted')
+      return axios
+        .delete(`/api/message/`, { data: { id: messageId } })
+        .then((res) => res.data)
+        .catch((err) => console.log(err))
+    },
     fetchLabel: () => {
       return axios
         .get(`/api/labels`)
