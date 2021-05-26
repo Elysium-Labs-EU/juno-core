@@ -39,12 +39,15 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    if (labelIds && !loadedInbox.some(label => label === labelIds)) {
+    console.log(labelIds)
+    console.log(!loadedInbox.some((label) => label === labelIds))
+    if (labelIds && !loadedInbox.some((label) => label === labelIds)) {
       console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
+      console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
     }
   }, [labelIds])
@@ -60,7 +63,6 @@ const EmailList = ({
     }
   }
 
-
   const filterList = (props) => {
     const { emailList, labelIds } = props
     const standardizedLabelIds =
@@ -68,9 +70,12 @@ const EmailList = ({
     if (standardizedLabelIds) {
       const filterOnLabel = emailList.map((threads) =>
         threads.thread.messages.filter((item) =>
-          item.labelIds.includes(...standardizedLabelIds))
+          item.labelIds.includes(...standardizedLabelIds)
+        )
       )
-      const removedEmptyArrays = filterOnLabel.filter(item => item.length !== 0)
+      const removedEmptyArrays = filterOnLabel.filter(
+        (item) => item.length !== 0
+      )
       return renderEmailList(removedEmptyArrays)
     }
   }

@@ -1,10 +1,9 @@
 import { useHistory } from 'react-router-dom'
 import NavControls from '../MainHeader/Navigation/NavControls'
-import InboxSortOption from './InboxSortOption'
 import '../MainHeader/Navigation/NavControls.scss'
 
-const INBOX_HEADER = 'Inbox'
-const BACK_BUTTON = 'Back'
+const DRAFT_HEADER = 'Drafts'
+const BACK_BUTTON = "Back"
 
 const InboxHeader = () => {
   const history = useHistory()
@@ -20,11 +19,10 @@ const InboxHeader = () => {
           {BACK_BUTTON}
         </button>
         <div className="header-center">
-          <h2>{INBOX_HEADER}</h2>
+          <h2>{DRAFT_HEADER}</h2>
         </div>
         <NavControls />
       </div>
-      <InboxSortOption />
     </div>
   )
 }

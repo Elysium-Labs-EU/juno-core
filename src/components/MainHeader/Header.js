@@ -1,7 +1,8 @@
-import ComposeHeader from './Compose/ComposeHeader'
-import InboxHeader from './Inbox/InboxHeader'
-import TodoHeader from './ToDo/TodoHeader'
-import EmailDetailHeader from './EmailDetail/EmailDetailHeader'
+import ComposeHeader from '../Compose/ComposeHeader'
+import InboxHeader from '../Inbox/InboxHeader'
+import TodoHeader from '../ToDo/TodoHeader'
+import DraftHeader from '../Draft/DraftHeader'
+import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
 import { useLocation } from 'react-router-dom'
 
 function Header() {
@@ -14,6 +15,8 @@ function Header() {
       return <ComposeHeader />
     } else if (location.pathname === '/') {
       return <TodoHeader />
+    } else if (location.pathname === '/drafts') {
+      return <DraftHeader />
     } else {
       return <EmailDetailHeader />
     }

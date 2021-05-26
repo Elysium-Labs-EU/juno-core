@@ -1,6 +1,6 @@
 import BackButton from './../BackButton'
-import NavControls from './../Navigation/NavControls'
-import './../Navigation/NavControls.scss'
+import NavControls from '../MainHeader/Navigation/NavControls'
+import '../MainHeader/Navigation/NavControls.scss'
 
 const COMPOSE = 'Compose'
 

@@ -1,4 +1,4 @@
-import NavControls from '../Navigation/NavControls'
+import NavControls from '../MainHeader/Navigation/NavControls'
 import TodoFocusOption from './TodoFocusOption'
 
 const TODO_HEADER = 'To Do'

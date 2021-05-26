@@ -12,7 +12,14 @@ import {
 import { setViewingIndex } from '../Store/actions'
 
 const mapStateToProps = (state) => {
-  const { labelIds, currEmail, emailList, isLoading, viewIndex, metaList } = state
+  const {
+    labelIds,
+    currEmail,
+    emailList,
+    isLoading,
+    viewIndex,
+    metaList,
+  } = state
   return { labelIds, currEmail, emailList, isLoading, viewIndex, metaList }
 }
 
@@ -51,8 +58,8 @@ const DetailNavigation = ({
   return (
     <Wrapper>
       <NavButton
-        onClick={() =>
-          NavigatePreviousMail({history, labelURL, metaList, viewIndex})
+        onClick={
+          () => NavigatePreviousMail({ history, labelURL, metaList, viewIndex })
           // NavigatePreviousMail(history, labelURL, emailList, viewIndex)
         }
         disabled={isDisabledPrev}
@@ -60,15 +67,15 @@ const DetailNavigation = ({
         <FiChevronLeft size={20} />
       </NavButton>
       <NavButton
-        onClick={() =>
-          NavigateNextMail({history, labelURL, metaList, viewIndex})
+        onClick={
+          () => NavigateNextMail({ history, labelURL, metaList, viewIndex })
           // NavigateNextMail(history, labelURL, emailList, viewIndex)
         }
         disabled={isDisabledNext}
       >
         <FiChevronRight size={20} />
       </NavButton>
-      <NavButton onClick={() => CloseMail({history})}>
+      <NavButton onClick={() => CloseMail({ history })}>
         <FiX size={20} />
       </NavButton>
     </Wrapper>

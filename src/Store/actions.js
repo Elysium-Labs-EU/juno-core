@@ -169,6 +169,7 @@ export const loadEmails = (params) => {
     dispatch(setIsLoading(true))
     const metaList = await api.getThreads(params)
     const { labelIds } = params
+    console.log(labelIds)
     // console.log('metaList', metaList)
     if (metaList) {
       if (metaList.message.resultSizeEstimate > 0) {
@@ -240,7 +241,8 @@ export const fetchLabelIds = (LABEL) => {
       const labelObject = labels.filter((label) => label.name === LABEL)
       if (labelObject.length > 0) {
         // console.log(labelObject)
-        dispatch(setCurrentLabels(labelObject[0].id))
+        dispatch(setCurrentLabels([labelObject[0].id]))
+        dispatch(setStorageLabels([labelObject[0].id]))
       } else {
         dispatch(setServiceUnavailable('Error fetching label.'))
       }

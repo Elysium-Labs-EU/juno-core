@@ -36,7 +36,8 @@ const reducer = (state = initialState, action) => {
       const labelArray = Array.isArray(action.payload)
         ? action.payload
         : [action.payload]
-      if (!state.loadedInbox.includes(action.payload)) {
+      console.log(labelArray)
+      if (!state.loadedInbox.includes(labelArray)) {
         return {
           ...state,
           loadedInbox: [...new Set([...state.loadedInbox, labelArray])],

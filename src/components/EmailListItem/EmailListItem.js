@@ -18,14 +18,11 @@ const mapStateToProps = (state) => {
 }
 
 const EmailListItem = ({ email, labelIds }) => {
-  console.log(email)
   // const {
   //   thread,
   //   thread: { id, messages },
   // } = email
-  const {
-     threadId
-  } = email
+  const { threadId } = email
   const history = useHistory()
 
   // const LatestEmail =
@@ -58,24 +55,25 @@ const EmailListItem = ({ email, labelIds }) => {
   //   ? LatestEmail[0].internalDate
   //   : LatestEmail.internalDate
   const emailLabels = email && email[0].labelIds
-  const fromEmail = email && email[0].payload.headers.find((data) => data.name === 'From')
-      ? email[0].payload.headers.find((data) => data.name === 'From')
-          .value
+  const fromEmail =
+    email && email[0].payload.headers.find((data) => data.name === 'From')
+      ? email[0].payload.headers.find((data) => data.name === 'From').value
       : undefined
-  const toEmail = email && email[0].payload.headers.find((data) => data.name === 'To')
+  const toEmail =
+    email && email[0].payload.headers.find((data) => data.name === 'To')
       ? email[0].payload.headers.find((data) => data.name === 'To').value
       : 'Draft'
-  const emailSubject = email && email[0].payload.headers.find((data) => data.name === 'Subject')
-      ? email[0].payload.headers.find((data) => data.name === 'Subject')
-          .value
+  const emailSubject =
+    email && email[0].payload.headers.find((data) => data.name === 'Subject')
+      ? email[0].payload.headers.find((data) => data.name === 'Subject').value
       : '(no subject)'
   const emailSnippet = email && email[0].snippet
-  const timeStamp = email &&  email[0].internalDate
+  const timeStamp = email && email[0].internalDate
 
   const handleClick = (id) => {
     // if (!labelIds.includes(...DRAFT_LABEL)) {
-      const labelURL = convertArrayToString(labelIds)
-      history.push(`mail/${labelURL}/${id}`)
+    const labelURL = convertArrayToString(labelIds)
+    history.push(`mail/${labelURL}/${id}`)
     // } else {
     //   console.log('Open compose')
     // }

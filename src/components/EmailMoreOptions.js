@@ -11,6 +11,8 @@ const Wrapper = styled.div`
   border-radius: 5px;
 `
 
+const DELETE_BUTTON = 'Delete'
+
 const EmailMoreOptions = ({ messageId }) => {
   return (
     <Wrapper>
@@ -18,7 +20,7 @@ const EmailMoreOptions = ({ messageId }) => {
         className="btn option-link text-danger"
         onClick={() => ThrashMail(messageId)}
       >
-        Delete
+        {DELETE_BUTTON}
       </button>
     </Wrapper>
   )

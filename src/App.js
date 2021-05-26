@@ -9,7 +9,7 @@ import Settings from './components/Settings'
 import InformationOverview from './components/InformationOverview'
 import FileOverview from './components/FileOverview'
 import Inbox from './components/Inbox/Inbox'
-import Header from './components/Header'
+import Header from './components/MainHeader/Header'
 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import DraftEmail from './components/Draft/DraftEmail'
