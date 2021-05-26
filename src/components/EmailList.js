@@ -39,10 +39,10 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    console.log(labelIds)
-    console.log(!loadedInbox.some((label) => label === labelIds))
+    // console.log(labelIds)
+    // console.log(!loadedInbox.some((label) => label === labelIds))
     if (labelIds && !loadedInbox.some((label) => label === labelIds)) {
-      console.log('triggered')
+      // console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,

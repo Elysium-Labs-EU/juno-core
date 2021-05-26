@@ -3,7 +3,7 @@ import NavControls from '../MainHeader/Navigation/NavControls'
 import '../MainHeader/Navigation/NavControls.scss'
 
 const DRAFT_HEADER = 'Drafts'
-const BACK_BUTTON = "Back"
+const BACK_BUTTON = 'Back'
 
 const InboxHeader = () => {
   const history = useHistory()
