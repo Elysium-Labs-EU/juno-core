@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import {
   FiArchive,
@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 `
 
 const InlineThreadActions = (messageId) => {
-  const [showMenu, setShowMenu] = React.useState(false)
+  const [showMenu, setShowMenu] = useState(false)
 
   return (
     <Wrapper>

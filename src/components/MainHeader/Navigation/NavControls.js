@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './NavControls.scss'
-import { FiClipboard, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
-import { CustomIconLink } from '../Elements'
+import { FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
+import { CustomIconLink } from '../../Elements'
+import SubMenuHeader from '../SubMenuHeader'
 
 const Navigation = () => {
   const [active, setActive] = useState('')
+  const [showMenu, setShowMenu] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
@@ -16,8 +18,6 @@ const Navigation = () => {
         setActive('settings')
       } else if (location.pathname.includes('compose')) {
         setActive('compose')
-      } else if (location.pathname.includes('drafts')) {
-        setActive('drafts')
       }
     }
   }, [location])
@@ -61,17 +61,17 @@ const Navigation = () => {
         </Link>
       </div>
       <div className="nav-c-item">
-        <Link to="/drafts">
-          <CustomIconLink
-            className={
-              active === 'drafts'
-                ? 'nav-item-selected nav-item-button'
-                : 'nav-item-button'
-            }
-            icon={<FiClipboard />}
-          />
-        </Link>
+      <button
+          onClick={() => setShowMenu(!showMenu)}
+          type="button"
+          className="nav-item-button"
+        >
+          <div className="icon">
+            <FiMoreHorizontal />
+          </div>
+        </button>
       </div>
+      {showMenu && <SubMenuHeader />}
     </div>
   )
 }

@@ -18,58 +18,74 @@ const mapStateToProps = (state) => {
 }
 
 const EmailListItem = ({ email, labelIds }) => {
-  const {
-    thread,
-    thread: { id, messages },
-  } = email
+  // const {
+  //   thread,
+  //   thread: { id, messages },
+  // } = email
+  const { threadId } = email
   const history = useHistory()
 
-  const LatestEmail =
-    thread !== undefined && messages !== undefined ? messages.slice(-1) : thread
+  // const LatestEmail =
+  //   thread !== undefined && messages !== undefined ? messages.slice(-1) : thread
 
-  const emailLabels = Array.isArray(LatestEmail)
-    ? LatestEmail[0].labelIds[0]
-    : LatestEmail.labelIds[0]
-  const fromEmail = Array.isArray(LatestEmail)
-    ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
-      ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
-          .value
+  // const emailLabels = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].labelIds[0]
+  //   : LatestEmail.labelIds[0]
+  // const fromEmail = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
+  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
+  //         .value
+  //     : undefined
+  //   : LatestEmail.payload.headers.find((data) => data.name === 'From').value
+  // const toEmail = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'To')
+  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'To').value
+  //     : 'Draft'
+  //   : LatestEmail.payload.headers.find((data) => data.name === 'From').value
+  // const emailSubject = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
+  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
+  //         .value
+  //     : '(no subject)'
+  //   : LatestEmail.payload.headers.find((data) => data.name === 'Subject').value
+  // const emailSnippet = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].snippet
+  //   : LatestEmail.snippet
+  // const timeStamp = Array.isArray(LatestEmail)
+  //   ? LatestEmail[0].internalDate
+  //   : LatestEmail.internalDate
+  const emailLabels = email && email[0].labelIds
+  const fromEmail =
+    email && email[0].payload.headers.find((data) => data.name === 'From')
+      ? email[0].payload.headers.find((data) => data.name === 'From').value
       : undefined
-    : LatestEmail.payload.headers.find((data) => data.name === 'From').value
-  const toEmail = Array.isArray(LatestEmail)
-    ? LatestEmail[0].payload.headers.find((data) => data.name === 'To')
-      ? LatestEmail[0].payload.headers.find((data) => data.name === 'To').value
+  const toEmail =
+    email && email[0].payload.headers.find((data) => data.name === 'To')
+      ? email[0].payload.headers.find((data) => data.name === 'To').value
       : 'Draft'
-    : LatestEmail.payload.headers.find((data) => data.name === 'From').value
-  const emailSubject = Array.isArray(LatestEmail)
-    ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
-      ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
-          .value
+  const emailSubject =
+    email && email[0].payload.headers.find((data) => data.name === 'Subject')
+      ? email[0].payload.headers.find((data) => data.name === 'Subject').value
       : '(no subject)'
-    : LatestEmail.payload.headers.find((data) => data.name === 'Subject').value
-  const emailSnippet = Array.isArray(LatestEmail)
-    ? LatestEmail[0].snippet
-    : LatestEmail.snippet
-  const timeStamp = Array.isArray(LatestEmail)
-    ? LatestEmail[0].internalDate
-    : LatestEmail.internalDate
+  const emailSnippet = email && email[0].snippet
+  const timeStamp = email && email[0].internalDate
 
   const handleClick = (id) => {
-    if (!labelIds.includes(...DRAFT_LABEL)) {
-      const labelURL = convertArrayToString(labelIds)
-      history.push(`mail/${labelURL}/${id}`)
-    } else {
-      console.log('Open compose')
-    }
+    // if (!labelIds.includes(...DRAFT_LABEL)) {
+    const labelURL = convertArrayToString(labelIds)
+    history.push(`mail/${labelURL}/${id}`)
+    // } else {
+    //   console.log('Open compose')
+    // }
   }
 
   return (
     <>
-      <ThreadBase key={id} labelIds={emailLabels}>
+      <ThreadBase key={threadId} labelIds={emailLabels}>
         <div className="threadRow">
           <div className="cellGradientLeft"></div>
           <div className="cellCheckbox"></div>
-          <div className="cellName" onClick={() => handleClick(id)}>
+          <div className="cellName" onClick={() => handleClick(threadId)}>
             <div className="avatars">
               {!labelIds.includes(...DRAFT_LABEL) && (
                 <EmailAvatar avatarURL={fromEmail} />
@@ -84,9 +100,9 @@ const EmailListItem = ({ email, labelIds }) => {
             {labelIds.includes(...DRAFT_LABEL) && (
               <span className="text-truncate">{toEmail}</span>
             )}
-            <MessageCount countOfMessage={messages} />
+            <MessageCount countOfMessage={email} />
           </div>
-          <div className="cellMessage" onClick={() => handleClick(id)}>
+          <div className="cellMessage" onClick={() => handleClick(threadId)}>
             <div className="subjectSnippet text-truncate">
               <span className="subject">{emailSubject}</span>
               <Snippet snippet={emailSnippet} />
@@ -94,7 +110,7 @@ const EmailListItem = ({ email, labelIds }) => {
           </div>
 
           <div className="cellAttachment">
-            <EmailHasAttachment hasAttachment={messages} />
+            {/* <EmailHasAttachment hasAttachment={messages} /> */}
           </div>
           <div className="cellDate">
             <div className="datePosition">
@@ -105,7 +121,7 @@ const EmailListItem = ({ email, labelIds }) => {
           </div>
           <div></div>
           <div className="cellGradientRight"></div>
-          <InlineThreadActions messageId={id} />
+          <InlineThreadActions messageId={threadId} />
         </div>
       </ThreadBase>
     </>

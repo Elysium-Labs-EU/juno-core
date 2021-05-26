@@ -39,11 +39,15 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    if (labelIds && !loadedInbox.includes(labelIds)) {
+    console.log(labelIds)
+    console.log(!loadedInbox.some((label) => label === labelIds))
+    if (labelIds && !loadedInbox.some((label) => label === labelIds)) {
+      console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
       }
+      console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
     }
   }, [labelIds])
@@ -59,30 +63,37 @@ const EmailList = ({
     }
   }
 
-  const standardizedLabelIds =
-    labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-  const filteredEmailList =
-    emailList &&
-    emailList.filter((threadElement) =>
-      threadElement.thread.messages.map((item) =>
-        item.labelIds.includes(...standardizedLabelIds)
+  const filterList = (props) => {
+    const { emailList, labelIds } = props
+    const standardizedLabelIds =
+      labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
+    if (standardizedLabelIds) {
+      const filterOnLabel = emailList.map((threads) =>
+        threads.thread.messages.filter((item) =>
+          item.labelIds.includes(...standardizedLabelIds)
+        )
       )
-    )
+      const removedEmptyArrays = filterOnLabel.filter(
+        (item) => item.length !== 0
+      )
+      return renderEmailList(removedEmptyArrays)
+    }
+  }
 
-  const renderEmailList = (filteredEmailList) => {
-    console.log(filteredEmailList)
+  const renderEmailList = (filteredMailArray) => {
     return (
       <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {filteredEmailList && (
+              {filteredMailArray.length > 0 && (
                 <div className="base">
-                  {filteredEmailList.map((email) => (
-                    <EmailListItem key={email.thread.id} email={email} />
+                  {filteredMailArray.map((email) => (
+                    <EmailListItem key={email.id} email={email} />
                   ))}
                 </div>
               )}
+              {filteredMailArray.length === 0 && <Emptystate />}
             </div>
             {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
@@ -106,14 +117,11 @@ const EmailList = ({
 
   return (
     <>
-      {loadedInbox.includes(labelIds) &&
-        filteredEmailList.length > 0 &&
-        renderEmailList(filteredEmailList)}
       {!isLoading &&
-        loadedInbox.includes(labelIds) &&
-        filteredEmailList.length === 0 && <Emptystate />}
-      {isLoading && filteredEmailList.length === 0 && (
-        // {isLoading && !loadedInbox.includes(labelIds) && (
+        loadedInbox.map((labels) => labels.includes(...labelIds)) &&
+        emailList.length > 0 &&
+        filterList({ labelIds, emailList })}
+      {isLoading && emailList.length === 0 && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>

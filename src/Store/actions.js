@@ -120,7 +120,6 @@ export const listUpdateDetail = (emailList) => {
 export const checkBase = () => {
   const BASE_ARRAY = ['Juno', 'Juno/To Do', 'Juno/Keep', 'Juno/Reminder']
   return async (dispatch) => {
-    // dispatch(setIsLoading(true))
     const labels = await api.fetchLabel()
     if (labels) {
       if (labels.message.labels.length > 0) {
@@ -145,7 +144,6 @@ export const checkBase = () => {
               !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
           )
           dispatch(setBaseLoaded(true))
-          // dispatch(setIsLoading(false))
         } else {
           console.log('Gotcha! All minimal required labels.')
           dispatch(
@@ -156,15 +154,12 @@ export const checkBase = () => {
             )
           )
           dispatch(setBaseLoaded(true))
-          // dispatch(setIsLoading(false))
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))
-        // dispatch(setIsLoading(false))
       }
     } else {
       dispatch(setServiceUnavailable('Network Error. Please try again later'))
-      // dispatch(setIsLoading(false))
     }
   }
 }
@@ -174,6 +169,7 @@ export const loadEmails = (params) => {
     dispatch(setIsLoading(true))
     const metaList = await api.getThreads(params)
     const { labelIds } = params
+    console.log(labelIds)
     // console.log('metaList', metaList)
     if (metaList) {
       if (metaList.message.resultSizeEstimate > 0) {
@@ -190,6 +186,7 @@ export const loadEmails = (params) => {
       }
     } else {
       dispatch(setServiceUnavailable('No feed found'))
+      dispatch(setIsLoading(false))
     }
   }
 }
@@ -244,7 +241,8 @@ export const fetchLabelIds = (LABEL) => {
       const labelObject = labels.filter((label) => label.name === LABEL)
       if (labelObject.length > 0) {
         // console.log(labelObject)
-        dispatch(setCurrentLabels(labelObject[0].id))
+        dispatch(setCurrentLabels([labelObject[0].id]))
+        dispatch(setStorageLabels([labelObject[0].id]))
       } else {
         dispatch(setServiceUnavailable('Error fetching label.'))
       }

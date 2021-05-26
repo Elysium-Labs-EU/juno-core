@@ -32,10 +32,15 @@ const reducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case ACTION_TYPE.SET_LOADED_INBOX:
-      if (!state.loadedInbox.includes(action.payload)) {
+      console.log(action.payload)
+      const labelArray = Array.isArray(action.payload)
+        ? action.payload
+        : [action.payload]
+      console.log(labelArray)
+      if (!state.loadedInbox.includes(labelArray)) {
         return {
           ...state,
-          loadedInbox: [...state.loadedInbox, action.payload],
+          loadedInbox: [...new Set([...state.loadedInbox, labelArray])],
         }
       } else {
         return {
@@ -75,9 +80,9 @@ const reducer = (state = initialState, action) => {
         currEmail: action.payload,
       }
     case ACTION_TYPE.SET_VIEW_INDEX:
-      const viewingIndex = action.payload.emailList
+      const viewingIndex = action.payload.metaList
         .map(function (e) {
-          return e.thread.id
+          return e.id
         })
         .indexOf(action.payload.currEmail)
       return {
@@ -109,7 +114,7 @@ const reducer = (state = initialState, action) => {
         })
         return {
           ...state,
-          metaList: sortedMetaList,
+          metaList: [...new Set([...sortedMetaList])],
         }
       } else {
         let new_metaList = state.metaList.filter(

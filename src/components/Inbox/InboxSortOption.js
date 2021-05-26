@@ -36,7 +36,8 @@ const SortInbox = ({ metaList, emailList, labelIds, isLoading, dispatch }) => {
       />
       <CustomButtonText
         className="sort-button"
-        onClick={() => startSort(history, labelURL, emailList)}
+        onClick={() => startSort({ history, labelURL, metaList })}
+        // onClick={() => startSort(history, labelURL, emailList)}
         disabled={isLoading}
         label={INBOX_BUTTON}
       />
