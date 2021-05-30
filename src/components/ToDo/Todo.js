@@ -14,12 +14,10 @@ const Todo = ({ baseLoaded, storageLabels, dispatch }) => {
   useEffect(() => {
     if (baseLoaded && !storageLabels.some((label) => label.name === LABEL)) {
       dispatch(fetchLabelIds(LABEL))
-      console.log('here1')
     } else if (
       baseLoaded &&
       storageLabels.some((label) => label.name === LABEL)
     ) {
-      console.log('here2')
       const labelId = storageLabels.filter((label) => label.name === LABEL)
       dispatch(setCurrentLabels([labelId[0].id]))
     }

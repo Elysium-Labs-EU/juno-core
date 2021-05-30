@@ -7,15 +7,17 @@ export const convertArrayToString = (data) => {
 }
 
 export const NavigatePreviousMail = (props) => {
-  const { history, labelURL, metaList, viewIndex } = props
-  const prevID = metaList[viewIndex - 1].id
+  const { history, labelURL, filteredMetaList, viewIndex } = props
+  const prevID = filteredMetaList[0].threads[viewIndex - 1].id
   // const prevID = emailList[viewIndex - 1].thread.id
   return history.push(`/mail/${labelURL}/${prevID}`)
 }
 
 export const NavigateNextMail = (props) => {
-  const { history, labelURL, metaList, viewIndex } = props
-  const nextID = metaList[viewIndex + 1].id
+  console.log(props)
+  const { history, labelURL, filteredMetaList, viewIndex } = props
+  const nextID = filteredMetaList[0].threads[viewIndex + 1].id
+  console.log(nextID)
   // const nextID = emailList[viewIndex + 1].thread.id
   return history.push(`/mail/${labelURL}/${nextID}`)
 }

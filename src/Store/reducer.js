@@ -17,9 +17,13 @@ export const initialState = {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case ACTION_TYPE.SET_BASE_LOADED:
-      return {
-        ...state,
-        baseLoaded: action.payload,
+      if (!state.baseLoaded) {
+        return {
+          ...state,
+          baseLoaded: action.payload,
+        }
+      } else {
+        return { ...state }
       }
     case ACTION_TYPE.SET_SERVICE_UNAVAILABLE:
       return {
@@ -32,11 +36,10 @@ const reducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case ACTION_TYPE.SET_LOADED_INBOX:
-      console.log(action.payload)
+      // console.log(action.payload)
       const labelArray = Array.isArray(action.payload)
         ? action.payload
         : [action.payload]
-      console.log(labelArray)
       if (!state.loadedInbox.includes(labelArray)) {
         return {
           ...state,
@@ -92,7 +95,7 @@ const reducer = (state = initialState, action) => {
     case ACTION_TYPE.LIST_ADD_META:
       return {
         ...state,
-        metaList: action.payload,
+        metaList: [...state.metaList, action.payload],
       }
     case ACTION_TYPE.LIST_REMOVE_META:
       return {
@@ -132,20 +135,21 @@ const reducer = (state = initialState, action) => {
         // }
       }
     case ACTION_TYPE.LIST_ADD_DETAIL:
-      let newEmailList = [
-        ...new Set([
-          ...state.emailList,
-          ...(Array.isArray(action.payload)
-            ? action.payload
-            : [action.payload]),
-        ]),
-      ]
-      let sortedEmailList = newEmailList.sort((a, b) => {
-        return parseInt(b.thread.historyId) - parseInt(a.thread.historyId)
-      })
+      // let newEmailList = [
+      //   ...new Set([
+      //     ...state.emailList,
+      //     ...(Array.isArray(action.payload)
+      //       ? action.payload
+      //       : [action.payload]),
+      //   ]),
+      // ]
+      // let sortedEmailList = newEmailList.sort((a, b) => {
+      //   return parseInt(b.thread.historyId) - parseInt(a.thread.historyId)
+      // })
       return {
         ...state,
-        emailList: sortedEmailList,
+        emailList: [...state.emailList, action.payload],
+        // emailList: sortedEmailList,
         // }
         // } else {
         //   let new_emailList = state.emailList.filter(

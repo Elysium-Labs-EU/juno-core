@@ -22,7 +22,7 @@ const EmailListItem = ({ email, labelIds }) => {
   //   thread,
   //   thread: { id, messages },
   // } = email
-  const { threadId } = email
+  const { id } = email
   const history = useHistory()
 
   // const LatestEmail =
@@ -54,21 +54,28 @@ const EmailListItem = ({ email, labelIds }) => {
   // const timeStamp = Array.isArray(LatestEmail)
   //   ? LatestEmail[0].internalDate
   //   : LatestEmail.internalDate
-  const emailLabels = email && email[0].labelIds
+  const emailLabels = email && email.messages[0].labelIds
   const fromEmail =
-    email && email[0].payload.headers.find((data) => data.name === 'From')
-      ? email[0].payload.headers.find((data) => data.name === 'From').value
+    email &&
+    email.messages[0].payload.headers.find((data) => data.name === 'From')
+      ? email.messages[0].payload.headers.find((data) => data.name === 'From')
+          .value
       : undefined
   const toEmail =
-    email && email[0].payload.headers.find((data) => data.name === 'To')
-      ? email[0].payload.headers.find((data) => data.name === 'To').value
+    email &&
+    email.messages[0].payload.headers.find((data) => data.name === 'To')
+      ? email.messages[0].payload.headers.find((data) => data.name === 'To')
+          .value
       : 'Draft'
   const emailSubject =
-    email && email[0].payload.headers.find((data) => data.name === 'Subject')
-      ? email[0].payload.headers.find((data) => data.name === 'Subject').value
+    email &&
+    email.messages[0].payload.headers.find((data) => data.name === 'Subject')
+      ? email.messages[0].payload.headers.find(
+          (data) => data.name === 'Subject'
+        ).value
       : '(no subject)'
-  const emailSnippet = email && email[0].snippet
-  const timeStamp = email && email[0].internalDate
+  const emailSnippet = email && email.messages[0].snippet
+  const timeStamp = email && email.messages[0].internalDate
 
   const handleClick = (id) => {
     // if (!labelIds.includes(...DRAFT_LABEL)) {
@@ -80,51 +87,49 @@ const EmailListItem = ({ email, labelIds }) => {
   }
 
   return (
-    <>
-      <ThreadBase key={threadId} labelIds={emailLabels}>
-        <div className="threadRow">
-          <div className="cellGradientLeft"></div>
-          <div className="cellCheckbox"></div>
-          <div className="cellName" onClick={() => handleClick(threadId)}>
-            <div className="avatars">
-              {!labelIds.includes(...DRAFT_LABEL) && (
-                <EmailAvatar avatarURL={fromEmail} />
-              )}
-              {labelIds.includes(...DRAFT_LABEL) && (
-                <EmailAvatar avatarURL={toEmail} />
-              )}
-            </div>
+    <ThreadBase key={id} labelIds={emailLabels}>
+      <div className="threadRow">
+        <div className="cellGradientLeft"></div>
+        <div className="cellCheckbox"></div>
+        <div className="cellName" onClick={() => handleClick(id)}>
+          <div className="avatars">
             {!labelIds.includes(...DRAFT_LABEL) && (
-              <span className="text-truncate">{fromEmail}</span>
+              <EmailAvatar avatarURL={fromEmail} />
             )}
             {labelIds.includes(...DRAFT_LABEL) && (
-              <span className="text-truncate">{toEmail}</span>
+              <EmailAvatar avatarURL={toEmail} />
             )}
-            <MessageCount countOfMessage={email} />
           </div>
-          <div className="cellMessage" onClick={() => handleClick(threadId)}>
-            <div className="subjectSnippet text-truncate">
-              <span className="subject">{emailSubject}</span>
-              <Snippet snippet={emailSnippet} />
-            </div>
-          </div>
-
-          <div className="cellAttachment">
-            {/* <EmailHasAttachment hasAttachment={messages} /> */}
-          </div>
-          <div className="cellDate">
-            <div className="datePosition">
-              <span className="date">
-                <TimeStamp threadTimeStamp={timeStamp} />
-              </span>
-            </div>
-          </div>
-          <div></div>
-          <div className="cellGradientRight"></div>
-          <InlineThreadActions messageId={threadId} />
+          {!labelIds.includes(...DRAFT_LABEL) && (
+            <span className="text-truncate">{fromEmail}</span>
+          )}
+          {labelIds.includes(...DRAFT_LABEL) && (
+            <span className="text-truncate">{toEmail}</span>
+          )}
+          <MessageCount countOfMessage={email} />
         </div>
-      </ThreadBase>
-    </>
+        <div className="cellMessage" onClick={() => handleClick(id)}>
+          <div className="subjectSnippet text-truncate">
+            <span className="subject">{emailSubject}</span>
+            <Snippet snippet={emailSnippet} />
+          </div>
+        </div>
+
+        <div className="cellAttachment">
+          {/* <EmailHasAttachment hasAttachment={messages} /> */}
+        </div>
+        <div className="cellDate">
+          <div className="datePosition">
+            <span className="date">
+              <TimeStamp threadTimeStamp={timeStamp} />
+            </span>
+          </div>
+        </div>
+        <div></div>
+        <div className="cellGradientRight"></div>
+        <InlineThreadActions messageId={id} />
+      </div>
+    </ThreadBase>
   )
 }
 

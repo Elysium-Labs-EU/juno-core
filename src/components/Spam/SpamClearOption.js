@@ -33,8 +33,7 @@ const Spamclearoption = ({ isLoading }) => {
 
   const archiveAllSpam = () => {
     setOpen(false)
-      console.log('remove spam')
-      
+    console.log('remove spam')
   }
 
   return (
@@ -61,7 +60,12 @@ const Spamclearoption = ({ isLoading }) => {
           <Button onClick={handleClose} color="primary">
             {CANCEL_BUTTON}
           </Button>
-          <Button variant="contained" onClick={archiveAllSpam} color="primary" autoFocus>
+          <Button
+            variant="contained"
+            onClick={archiveAllSpam}
+            color="primary"
+            autoFocus
+          >
             {OK_BUTTON}
           </Button>
         </DialogActions>

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
-import { loadEmails } from '../Store/actions'
+import { loadEmails, setIsLoading } from '../Store/actions'
 import './../App.scss'
 import Emptystate from './Elements/EmptyState'
 
@@ -39,10 +39,11 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    // console.log(labelIds)
-    // console.log(!loadedInbox.some((label) => label === labelIds))
-    if (labelIds && !loadedInbox.some((label) => label === labelIds)) {
-      // console.log('triggered')
+    if (
+      labelIds &&
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
+    ) {
+      console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
@@ -63,37 +64,31 @@ const EmailList = ({
     }
   }
 
-  const filterList = (props) => {
+  const labeledInbox = (props) => {
     const { emailList, labelIds } = props
-    const standardizedLabelIds =
-      labelIds && !Array.isArray(labelIds) ? [labelIds] : labelIds
-    if (standardizedLabelIds) {
-      const filterOnLabel = emailList.map((threads) =>
-        threads.thread.messages.filter((item) =>
-          item.labelIds.includes(...standardizedLabelIds)
-        )
+    if (labelIds) {
+      const filteredOnLabel = emailList.filter((threadList) =>
+        threadList.labels.includes(...labelIds)
       )
-      const removedEmptyArrays = filterOnLabel.filter(
-        (item) => item.length !== 0
-      )
-      return renderEmailList(removedEmptyArrays)
+      return renderEmailList(filteredOnLabel[0])
     }
   }
 
-  const renderEmailList = (filteredMailArray) => {
+  const renderEmailList = (filteredOnLabel) => {
+    const { threads } = filteredOnLabel && filteredOnLabel
     return (
       <>
         <div className="scroll">
           <div className="tlOuterContainer">
             <div className="thread-list">
-              {filteredMailArray.length > 0 && (
+              {threads.length > 0 && (
                 <div className="base">
-                  {filteredMailArray.map((email) => (
-                    <EmailListItem key={email.id} email={email} />
+                  {threads.map((email) => (
+                    <EmailListItem key={email.thread.id} email={email.thread} />
                   ))}
                 </div>
               )}
-              {filteredMailArray.length === 0 && <Emptystate />}
+              {threads.length === 0 && <Emptystate />}
             </div>
             {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
@@ -118,10 +113,11 @@ const EmailList = ({
   return (
     <>
       {!isLoading &&
-        loadedInbox.map((labels) => labels.includes(...labelIds)) &&
+        labelIds &&
+        !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
         emailList.length > 0 &&
-        filterList({ labelIds, emailList })}
-      {isLoading && emailList.length === 0 && (
+        labeledInbox({ labelIds, emailList })}
+      {isLoading && !labelIds && (
         <div className="mt-5 d-flex justify-content-center">
           <CircularProgress />
         </div>

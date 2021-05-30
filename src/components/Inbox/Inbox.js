@@ -3,7 +3,7 @@ import EmailList from '../EmailList'
 import { connect } from 'react-redux'
 import { setCurrentLabels } from '../../Store/actions'
 
-const LABEL = ['UNREAD', 'INBOX']
+const LABEL = ['INBOX']
 
 const mapStateToProps = (state) => {
   const { baseLoaded } = state
