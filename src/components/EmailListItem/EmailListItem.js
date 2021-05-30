@@ -18,7 +18,6 @@ const mapStateToProps = (state) => {
 }
 
 const EmailListItem = ({ email, labelIds }) => {
-  console.log(email)
   // const {
   //   thread,
   //   thread: { id, messages },
