@@ -2,6 +2,8 @@ import axios from 'axios'
 import { createApiClient } from '../data/api'
 const api = createApiClient()
 
+const BASE_MAX_RESULTS = 20
+
 export const ACTION_TYPE = {
   SET_BASE_LOADED: 'SET_BASE_LOADED',
   SET_SERVICE_UNAVAILABLE: 'SET_SERVICE_UNAVAILABLE',
@@ -118,7 +120,16 @@ export const listUpdateDetail = (emailList) => {
 }
 
 export const checkBase = () => {
-  const BASE_ARRAY = ['Juno', 'Juno/To Do', 'Juno/Keep', 'Juno/Reminder']
+  const BASE_ARRAY = [
+    'Juno',
+    'Juno/To Do',
+    'Juno/Keep',
+    'Juno/Reminder',
+    'INBOX',
+    'SPAM',
+    'DRAFT',
+    'SENT',
+  ]
   return async (dispatch) => {
     const labels = await api.fetchLabel()
     if (labels) {
@@ -153,7 +164,16 @@ export const checkBase = () => {
               )
             )
           )
-          dispatch(setBaseLoaded(true))
+          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+            labelArray.filter((item) => item.name === baseLabel)
+          )
+          prefetchedBoxes.forEach((label) => {
+            const params = {
+              labelIds: [label[0].id],
+              maxResults: BASE_MAX_RESULTS,
+            }
+            dispatch(loadEmails(params))
+          })
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))
@@ -165,24 +185,33 @@ export const checkBase = () => {
 }
 
 export const loadEmails = (params) => {
-  return async (dispatch) => {
-    dispatch(setIsLoading(true))
+  return async (dispatch, getState) => {
+    if (!getState().isLoading) {
+      dispatch(setIsLoading(true))
+    }
     const metaList = await api.getThreads(params)
     const { labelIds } = params
-    console.log(labelIds)
-    // console.log('metaList', metaList)
     if (metaList) {
       if (metaList.message.resultSizeEstimate > 0) {
         const { threads, nextPageToken } = metaList.message
-        const labeledThreads = threads.map((item) => ({ ...item, labelIds }))
-        dispatch(listUpdateMeta(labeledThreads))
-        dispatch(setNextPageToken(nextPageToken ?? null))
-        dispatch(loadEmailDetails(metaList))
-        dispatch(setLoadedInbox(labelIds))
+        const labeledThreads = {
+          labels: labelIds,
+          threads: threads,
+          nextPageToken: nextPageToken ?? null,
+        }
+        await dispatch(listAddMeta(labeledThreads))
+        dispatch(loadEmailDetails(labeledThreads))
       } else {
         dispatch(setServiceUnavailable('No feed found'))
-        console.log('Empty Label Inbox')
-        dispatch(setIsLoading(false))
+        dispatch(setLoadedInbox(labelIds))
+        console.log(`Empty Inbox for ${labelIds}`)
+        if (
+          !getState().baseLoaded &&
+          getState().storageLabels.length === getState().loadedInbox.length
+        ) {
+          dispatch(setIsLoading(false))
+          dispatch(setBaseLoaded(true))
+        }
       }
     } else {
       dispatch(setServiceUnavailable('No feed found'))
@@ -191,9 +220,9 @@ export const loadEmails = (params) => {
   }
 }
 
-export const loadEmailDetails = (metaList) => {
-  return async (dispatch) => {
-    const { threads } = metaList.message
+export const loadEmailDetails = (labeledThreads) => {
+  return async (dispatch, getState) => {
+    const { threads, labels, nextPageToken } = labeledThreads
     if (threads) {
       let buffer = []
       let loadCount = threads.length
@@ -202,12 +231,26 @@ export const loadEmailDetails = (metaList) => {
           const threadDetail = await api.getThreadDetail(item.id)
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {
-            dispatch(listAddDetail(buffer))
-            dispatch(setIsLoading(false))
+            dispatch(
+              listAddDetail({
+                labels: labels,
+                threads: buffer,
+                nextPageToken: nextPageToken ?? null,
+              })
+            )
+            dispatch(setLoadedInbox(labels))
+            if (
+              !getState().baseLoaded &&
+              getState().storageLabels.length === getState().loadedInbox.length
+            ) {
+              dispatch(setIsLoading(false))
+              dispatch(setBaseLoaded(true))
+            }
           }
         })
     } else {
-      console.log('Empty Label Inbox')
+      dispatch(setLoadedInbox(labels))
+      console.log(`Empty Inbox for ${labels}`)
       dispatch(setIsLoading(false))
     }
   }
