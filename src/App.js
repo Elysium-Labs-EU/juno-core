@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { checkBase } from './Store/actions'
 import './App.scss'
+import BaseLoader from './components/BaseLoader/BaseLoader'
 import ToDo from './components/ToDo/Todo'
 import EmailDetail from './components/EmailDetail/EmailDetail'
 import ComposeEmail from './components/Compose/ComposeEmail'
@@ -28,24 +29,26 @@ const App = ({ baseLoaded, dispatch }) => {
 
   return (
     <Router>
-      <div className="App">
-        <div className="tlOuterContainer">
-          <Header />
-        </div>
+      {!baseLoaded && <BaseLoader />}
+      {baseLoaded &&
+        <div className="App">
+          <div className="tlOuterContainer">
+            <Header />
+          </div>
 
-        {/* Fix the bug with the path of the email id detail not being accurate */}
-        <Switch>
-          <Route path="/" exact={true} component={ToDo} />
-          <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
-          <Route path="/compose" component={ComposeEmail} />
-          <Route path="/drafts" component={DraftEmail} />
-          <Route path="/spam" component={SpamEmail} />
-          <Route path="/settings" component={Settings} />
-          <Route path="/information-overview" component={InformationOverview} />
-          <Route path="/file-overview" component={FileOverview} />
-          <Route path="/inbox" component={Inbox} />
-        </Switch>
-      </div>
+          {/* Fix the bug with the path of the email id detail not being accurate */}
+          <Switch>
+            <Route path="/" exact={true} component={ToDo} />
+            <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
+            <Route path="/compose" component={ComposeEmail} />
+            <Route path="/drafts" component={DraftEmail} />
+            <Route path="/spam" component={SpamEmail} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/information-overview" component={InformationOverview} />
+            <Route path="/file-overview" component={FileOverview} />
+            <Route path="/inbox" component={Inbox} />
+          </Switch>
+        </div>}
     </Router>
   )
 }
