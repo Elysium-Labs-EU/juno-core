@@ -30,7 +30,7 @@ const App = ({ baseLoaded, dispatch }) => {
   return (
     <Router>
       {!baseLoaded && <BaseLoader />}
-      {baseLoaded &&
+      {baseLoaded && (
         <div className="App">
           <div className="tlOuterContainer">
             <Header />
@@ -44,11 +44,15 @@ const App = ({ baseLoaded, dispatch }) => {
             <Route path="/drafts" component={DraftEmail} />
             <Route path="/spam" component={SpamEmail} />
             <Route path="/settings" component={Settings} />
-            <Route path="/information-overview" component={InformationOverview} />
+            <Route
+              path="/information-overview"
+              component={InformationOverview}
+            />
             <Route path="/file-overview" component={FileOverview} />
             <Route path="/inbox" component={Inbox} />
           </Switch>
-        </div>}
+        </div>
+      )}
     </Router>
   )
 }

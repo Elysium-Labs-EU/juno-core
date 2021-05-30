@@ -39,7 +39,10 @@ const EmailList = ({
   loadedInbox,
 }) => {
   useEffect(() => {
-    if (labelIds && labelIds.some(val => loadedInbox.flat(1).indexOf(val) === -1)) {
+    if (
+      labelIds &&
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
+    ) {
       console.log('triggered')
       const params = {
         labelIds: labelIds,
@@ -110,15 +113,15 @@ const EmailList = ({
   return (
     <>
       {!isLoading &&
-        (labelIds && !labelIds.some(val => loadedInbox.flat(1).indexOf(val) === -1)) &&
+        labelIds &&
+        !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
         emailList.length > 0 &&
         labeledInbox({ labelIds, emailList })}
-      {isLoading &&
-        !labelIds && (
-          <div className="mt-5 d-flex justify-content-center">
-            <CircularProgress />
-          </div>
-        )}
+      {isLoading && !labelIds && (
+        <div className="mt-5 d-flex justify-content-center">
+          <CircularProgress />
+        </div>
+      )}
     </>
   )
 }

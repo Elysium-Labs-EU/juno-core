@@ -25,7 +25,6 @@ const mapStateToProps = (state) => {
 
 const DetailNavigation = ({
   labelIds,
-  emailList,
   currEmail,
   viewIndex,
   dispatch,
@@ -34,21 +33,18 @@ const DetailNavigation = ({
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
-
-  const isDisabledPrev = metaList[viewIndex - 1] === undefined ? true : false
-  const isDisabledNext = metaList[viewIndex + 1] === undefined ? true : false
-  // const isDisabledPrev = emailList[viewIndex - 1] === undefined ? true : false
-  // const isDisabledNext = emailList[viewIndex + 1] === undefined ? true : false
+  const filteredMetaList = metaList && metaList.filter((threadList) =>
+        threadList.labels.includes(...labelIds)
+  )
+  
+  const isDisabledPrev = filteredMetaList.length > 0 && filteredMetaList[0].threads[viewIndex - 1] === undefined ? true : false
+  const isDisabledNext = filteredMetaList.length > 0 && filteredMetaList[0].threads[viewIndex + 1] === undefined ? true : false
 
   useEffect(() => {
     if (currEmail !== currLocal) {
       setCurrLocal(currEmail)
-      // const requestBody = {
-      //   emailList: emailList,
-      //   currEmail: currEmail,
-      // }
       const requestBody = {
-        metaList: metaList,
+        metaList: filteredMetaList[0].threads,
         currEmail: currEmail,
       }
       dispatch(setViewingIndex(requestBody))
@@ -59,8 +55,7 @@ const DetailNavigation = ({
     <Wrapper>
       <NavButton
         onClick={
-          () => NavigatePreviousMail({ history, labelURL, metaList, viewIndex })
-          // NavigatePreviousMail(history, labelURL, emailList, viewIndex)
+          () => NavigatePreviousMail({ history, labelURL, filteredMetaList, viewIndex })
         }
         disabled={isDisabledPrev}
       >
@@ -68,8 +63,7 @@ const DetailNavigation = ({
       </NavButton>
       <NavButton
         onClick={
-          () => NavigateNextMail({ history, labelURL, metaList, viewIndex })
-          // NavigateNextMail(history, labelURL, emailList, viewIndex)
+          () => NavigateNextMail({ history, labelURL, filteredMetaList, viewIndex })
         }
         disabled={isDisabledNext}
       >

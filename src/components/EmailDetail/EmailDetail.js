@@ -1,48 +1,58 @@
 import './../../App.scss'
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
-import { setCurrentEmail } from '../../Store/actions'
+import { setCurrentEmail, setCurrentLabels, setServiceUnavailable } from '../../Store/actions'
 import { connect } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
-
-import { createApiClient } from './../../data/api'
 import EmailDetailBody from './EmailDetailBody'
 import EmailDetOptions from './EmailDetOptions'
 import EmailAvatar from '../EmailAvatar'
 import EmailAttachment from '../EmailAttachment'
 import TimeStamp from '../TimeStamp'
 
-const api = createApiClient()
+const ERROR_EMAIL = 'Error loading email'
 
 const mapStateToProps = (state) => {
-  const { emailList, isLoading, threadId } = state
-  return { emailList, isLoading, threadId }
+  const { emailList, isLoading, threadId, labelIds } = state
+  return { emailList, isLoading, threadId, labelIds }
 }
 
-const EmailDetail = ({ dispatch, emailList, isLoading }) => {
+const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
+  const location = useLocation()
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
 
   useEffect(() => {
-    const LoadEmail = async () => {
-      if (emailList.length > 0) {
-        const activeEmail = await emailList.filter(
-          (item) => item.thread.id === threadId
-        )
-        setThreadDetail(activeEmail[0].thread)
-      } else {
-        const threadDetailFeed = await api.getThreadDetail(`${threadId}`)
-        setThreadDetail(threadDetailFeed.thread || 'No email loaded')
-      }
-    }
-    LoadEmail()
     if (threadId !== undefined) {
       dispatch(setCurrentEmail(threadId))
+      if (labelIds) {
+        dispatch(setCurrentLabels(labelIds))
+        fetchEmailDetail({ threadId, labelIds })
+      } else {
+        let labelIds = [location.pathname.split('/')[2]]
+        dispatch(setCurrentLabels(labelIds))
+        fetchEmailDetail({ threadId, labelIds })
+      }
     }
   }, [threadId])
+
+  const fetchEmailDetail = (props) => {
+    const { labelIds, threadId } = props
+    if (labelIds && threadId) {
+      const activeList =
+        emailList &&
+        emailList.filter((list) => list.labels.includes(...labelIds))
+      const activeEmail =
+        activeList &&
+        activeList[0].threads.filter((item) => item.thread.id === threadId)
+      setThreadDetail(activeEmail[0].thread)
+    } else {
+      dispatch(setServiceUnavailable(ERROR_EMAIL))
+    }
+  }
 
   return (
     <div className="tlOuterContainer">
@@ -103,6 +113,7 @@ const EmailDetail = ({ dispatch, emailList, isLoading }) => {
                   </div>
                 ))}
               {!threadDetail && isLoading && <CircularProgress />}
+              {!threadDetail && !isLoading && <p>{ERROR_EMAIL}</p>}
             </div>
           </div>
         </div>
