@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { createApiClient } from '../data/api'
+import { FilteredMetaList, NavigateNextMail } from '../utils'
 const api = createApiClient()
 
 const BASE_MAX_RESULTS = 20
@@ -15,8 +16,8 @@ export const ACTION_TYPE = {
   SET_LABEL_IDS: 'SET_LABEL_IDS',
   SET_STORAGE_LABELS: 'SET_STORAGE_LABELS',
   LIST_ADD_META: 'LIST_ADD_META',
-  LIST_REMOVE_META: 'LIST_REMOVE_META',
-  LIST_UPDATE_META: 'LIST_UPDATE_META',
+  LIST_ADD_ITEM_META: 'LIST_ADD_ITEM_META',
+  LIST_REMOVE_ITEM_META: 'LIST_REMOVE_ITEM_META',
   LIST_ADD_DETAIL: 'LIST_ADD_DETAIL',
   LIST_REMOVE_DETAIL: 'LIST_REMOVE_DETAIL',
   LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
@@ -84,17 +85,17 @@ export const listAddMeta = (metaList) => {
   }
 }
 
-export const listUpdateMeta = (metaList) => {
+export const listAddItemMeta = (metaList) => {
   return {
-    type: ACTION_TYPE.LIST_UPDATE_META,
+    type: ACTION_TYPE.LIST_ADD_ITEM_META,
     payload: metaList,
   }
 }
 
-export const listRemoveMeta = (metaList) => {
+export const listRemoveItemMeta = (props) => {
   return {
-    type: ACTION_TYPE.LIST_REMOVE_META,
-    payload: metaList,
+    type: ACTION_TYPE.LIST_REMOVE_ITEM_META,
+    payload: props,
   }
 }
 
@@ -260,17 +261,18 @@ export const loadEmailDetails = (labeledThreads) => {
 // is newer than the metaList, cut off the items from the checkfeed which are older than the newest metaList item
 export const refreshEmailFeed = (params, metaList) => {
   return async (dispatch) => {
-    const checkFeed = await api.getThreads(params)
-    if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
-      const newThreads = checkFeed.message.threads.filter(
-        (thread) => thread.historyId > metaList[0].historyId
-      )
-      const newThreadsObject = { message: { threads: [...newThreads] } }
-      dispatch(listUpdateMeta(newThreads))
-      dispatch(loadEmailDetails(newThreadsObject))
-    } else {
-      console.log('No new messages')
-    }
+    console.log('WIP need to change listUpdateMeta function')
+    // const checkFeed = await api.getThreads(params)
+    // if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
+    //   const newThreads = checkFeed.message.threads.filter(
+    //     (thread) => thread.historyId > metaList[0].historyId
+    //   )
+    //   const newThreadsObject = { message: { threads: [...newThreads] } }
+    //   dispatch(listUpdateMeta(newThreads))
+    //   dispatch(loadEmailDetails(newThreadsObject))
+    // } else {
+    //   console.log('No new messages')
+    // }
   }
 }
 
@@ -310,6 +312,52 @@ export const createLabel = (label) => {
           dispatch(setStorageLabels(res.data.message))
         } else {
           dispatch(setServiceUnavailable('Error creating label.'))
+        }
+      })
+      .catch((err) => console.log(err))
+  }
+}
+
+export const UpdateMailLabel = (props) => {
+  console.log(props)
+  const {
+    messageId,
+    request,
+    request: { addLabelIds, removeLabelIds },
+    history,
+    labelURL,
+  } = props
+  // const { messageId, action, history, labelURL, metaList, labelIds, viewIndex } = props
+
+  return async (dispatch, getState) => {
+    const metaList = getState().metaList
+    const filteredCurrentMetaList =
+      metaList && FilteredMetaList({ metaList, labelIds: removeLabelIds })
+    const filteredTargetMetaList =
+      metaList && FilteredMetaList({ metaList, labelIds: addLabelIds })
+    return axios
+      .patch(`/api/message/${messageId}`, request)
+      .then((res) => {
+        if (res.status === 200) {
+          //Create function to adjust the item for the emailList arrays as well
+          const activeMessageObjArray = filteredCurrentMetaList[0].threads.filter(
+            (item) => item.id === messageId
+          )
+          dispatch(listRemoveItemMeta({ messageId, filteredCurrentMetaList }))
+          dispatch(
+            listAddItemMeta({ activeMessageObjArray, filteredTargetMetaList })
+          )
+          if (getState().currEmail) {
+            const viewIndex = getState().viewIndex
+            NavigateNextMail({
+              history,
+              labelURL,
+              filteredCurrentMetaList,
+              viewIndex,
+            })
+          }
+        } else {
+          dispatch(setServiceUnavailable('Error updating label.'))
         }
       })
       .catch((err) => console.log(err))

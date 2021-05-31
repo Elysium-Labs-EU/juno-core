@@ -4,7 +4,11 @@ import { useParams, useLocation } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
-import { setCurrentEmail, setCurrentLabels, setServiceUnavailable } from '../../Store/actions'
+import {
+  setCurrentEmail,
+  setCurrentLabels,
+  setServiceUnavailable,
+} from '../../Store/actions'
 import { connect } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailDetailBody from './EmailDetailBody'

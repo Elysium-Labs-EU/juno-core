@@ -93,41 +93,60 @@ const reducer = (state = initialState, action) => {
         viewIndex: viewingIndex,
       }
     case ACTION_TYPE.LIST_ADD_META:
+      // console.log(action.payload)
+      // let sortedMetaList = action.payload.sort((a, b) => {
+      //     return parseInt(b.historyId) - parseInt(a.historyId)
+      //   })
       return {
         ...state,
         metaList: [...state.metaList, action.payload],
       }
-    case ACTION_TYPE.LIST_REMOVE_META:
+    // case ACTION_TYPE.LIST_REMOVE_META:
+    //   return {
+    //     ...state,
+    //     metaList: [...state.metaList, action.payload],
+    //   }
+    case ACTION_TYPE.LIST_ADD_ITEM_META: {
+      let { filteredTargetMetaList, activeMessageObjArray } = action.payload
+      let addedNewItem = filteredTargetMetaList[0].threads.concat(
+        activeMessageObjArray
+      )
+      let new_metaListEntry = {
+        ...filteredTargetMetaList[0],
+        threads: addedNewItem,
+      }
+      let updatedMetaList = [
+        ...state.metaList.filter(
+          (threadList) =>
+            !threadList.labels.includes(...filteredTargetMetaList[0].labels)
+        ),
+        new_metaListEntry,
+      ]
       return {
         ...state,
-        metaList: action.payload,
+        metaList: updatedMetaList,
       }
-    case ACTION_TYPE.LIST_UPDATE_META:
-      if (Array.isArray(action.payload)) {
-        let newMetaList = [
-          ...new Set([
-            ...state.metaList,
-            ...(Array.isArray(action.payload)
-              ? action.payload
-              : [action.payload]),
-          ]),
-        ]
-        let sortedMetaList = newMetaList.sort((a, b) => {
-          return parseInt(b.historyId) - parseInt(a.historyId)
-        })
-        return {
-          ...state,
-          metaList: [...new Set([...sortedMetaList])],
-        }
-      } else {
-        let new_metaList = state.metaList.filter(
-          (item) => action.payload.id !== item.id
-        )
-        return {
-          ...state,
-          metaList: new_metaList,
-        }
+    }
+    case ACTION_TYPE.LIST_REMOVE_ITEM_META: {
+      let { filteredCurrentMetaList, messageId } = action.payload
+      let new_metaListEntry = {
+        ...filteredCurrentMetaList[0],
+        threads: filteredCurrentMetaList[0].threads.filter(
+          (item) => item.id !== messageId
+        ),
       }
+      let updatedMetaList = [
+        ...state.metaList.filter(
+          (threadList) =>
+            !threadList.labels.includes(...filteredCurrentMetaList[0].labels)
+        ),
+        new_metaListEntry,
+      ]
+      return {
+        ...state,
+        metaList: updatedMetaList,
+      }
+    }
     case ACTION_TYPE.LIST_UPDATE_DETAIL:
       return {
         ...state,

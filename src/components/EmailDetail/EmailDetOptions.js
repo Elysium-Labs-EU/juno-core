@@ -9,11 +9,11 @@ import {
   FiMoreHorizontal,
 } from 'react-icons/fi'
 import ArchiveMail from './../EmailOptions/ArchiveMail'
-import SetToDoMail from './../EmailOptions/SetToDoMail'
 import EmailMoreOptions from './../EmailMoreOptions'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { convertArrayToString } from '../../utils'
+import { convertArrayToString, FindLabel } from '../../utils'
+import { UpdateMailLabel } from './../../Store/actions'
 
 const EmailOptionsContainer = styled.div`
   position: relative;
@@ -35,8 +35,8 @@ const ARCHIVE_BUTTON = 'Archive'
 const MORE_BUTTON = 'More'
 
 const mapStateToProps = (state) => {
-  const { storageLabels, labelIds, emailList, viewIndex } = state
-  return { storageLabels, labelIds, emailList, viewIndex }
+  const { storageLabels, labelIds, emailList, metaList, viewIndex } = state
+  return { storageLabels, labelIds, emailList, metaList, viewIndex }
 }
 
 const EmailDetOptions = ({
@@ -44,11 +44,23 @@ const EmailDetOptions = ({
   storageLabels,
   labelIds,
   emailList,
+  metaList,
   viewIndex,
+  dispatch,
 }) => {
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
+
+  const ToDoAction = () => {
+    console.log('triggered')
+    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' })
+    const request = {
+      removeLabelIds: labelIds,
+      addLabelIds: [toDoLabel[0].id],
+    }
+    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+  }
 
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
@@ -68,19 +80,7 @@ const EmailDetOptions = ({
               <div className="icon">
                 <FiCheckCircle />
               </div>
-              <div
-                onClick={() =>
-                  SetToDoMail({
-                    storageLabels,
-                    messageId,
-                    history,
-                    labelURL,
-                    emailList,
-                    viewIndex,
-                  })
-                }
-                className="labelContainer"
-              >
+              <div onClick={ToDoAction} className="labelContainer">
                 {TODO_BUTTON}
               </div>
             </button>
