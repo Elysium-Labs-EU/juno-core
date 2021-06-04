@@ -337,7 +337,6 @@ export const createLabel = (label) => {
 }
 
 export const UpdateMailLabel = (props) => {
-  console.log(props)
   const {
     messageId,
     request,
@@ -345,41 +344,50 @@ export const UpdateMailLabel = (props) => {
     history,
     labelURL,
   } = props
-  // const { messageId, action, history, labelURL, metaList, labelIds, viewIndex } = props
 
   return async (dispatch, getState) => {
     const metaList = getState().metaList
     const emailList = getState().emailList
     const filteredCurrentMetaList =
-      metaList && FilteredMetaList({ metaList, labelIds: removeLabelIds })
+      metaList &&
+      removeLabelIds &&
+      FilteredMetaList({ metaList, labelIds: removeLabelIds })
     const filteredTargetMetaList =
-      metaList && FilteredMetaList({ metaList, labelIds: addLabelIds })
+      metaList &&
+      addLabelIds &&
+      FilteredMetaList({ metaList, labelIds: addLabelIds })
     const filteredCurrentEmailList =
-      emailList && FilteredEmailList({ emailList, labelIds: removeLabelIds })
+      emailList &&
+      removeLabelIds &&
+      FilteredEmailList({ emailList, labelIds: removeLabelIds })
     const filteredTargetEmailList =
-      emailList && FilteredEmailList({ emailList, labelIds: addLabelIds })
+      emailList &&
+      addLabelIds &&
+      FilteredEmailList({ emailList, labelIds: addLabelIds })
     return axios
       .patch(`/api/message/${messageId}`, request)
       .then((res) => {
         if (res.status === 200) {
-          //Create function to adjust the item for the emailList arrays as well
-          const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-            (item) => item.id === messageId
-          )
-          const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
-            (item) => item.id === messageId
-          )
-          dispatch(listRemoveItemMeta({ messageId, filteredCurrentMetaList }))
-          dispatch(
-            listAddItemMeta({ activeMetaObjArray, filteredTargetMetaList })
-          )
-          console.log(filteredTargetEmailList)
-          dispatch(
-            listRemoveItemDetail({ messageId, filteredCurrentEmailList })
-          )
-          dispatch(
-            listAddItemDetail({ activEmailObjArray, filteredTargetEmailList })
-          )
+          if (addLabelIds) {
+            const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
+              (item) => item.id === messageId
+            )
+            dispatch(
+              listAddItemMeta({ activeMetaObjArray, filteredTargetMetaList })
+            )
+            const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
+              (item) => item.id === messageId
+            )
+            dispatch(
+              listAddItemDetail({ activEmailObjArray, filteredTargetEmailList })
+            )
+          }
+          if (removeLabelIds) {
+            dispatch(listRemoveItemMeta({ messageId, filteredCurrentMetaList }))
+            dispatch(
+              listRemoveItemDetail({ messageId, filteredCurrentEmailList })
+            )
+          }
           if (getState().currEmail) {
             const viewIndex = getState().viewIndex
             NavigateNextMail({

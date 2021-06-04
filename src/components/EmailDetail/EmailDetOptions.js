@@ -30,6 +30,7 @@ const InnerOptionsContainer = styled.div`
 
 const REPLY_BUTTON = 'Reply'
 const TODO_BUTTON = 'To do'
+const MARK_AS_DONE_BUTTON = 'Completed'
 const REMIND_BUTTON = 'Remind'
 const ARCHIVE_BUTTON = 'Archive'
 const MORE_BUTTON = 'More'
@@ -53,13 +54,27 @@ const EmailDetOptions = ({
   const [showMenu, setShowMenu] = useState(false)
 
   const ToDoAction = () => {
-    console.log('triggered')
     const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' })
     const request = {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
     dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+  }
+
+  const CompletedAction = () => {
+    const request = {
+      removeLabelIds: labelIds,
+    }
+    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+  }
+
+  if (
+    labelIds.some(
+      (item) =>
+        item.id === FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
+    )
+  ) {
   }
 
   return (
@@ -76,14 +91,29 @@ const EmailDetOptions = ({
             </button>
           </div>
           <div>
-            <button type="button" className="btn option-link d-flex">
-              <div className="icon">
-                <FiCheckCircle />
-              </div>
-              <div onClick={ToDoAction} className="labelContainer">
-                {TODO_BUTTON}
-              </div>
-            </button>
+            {labelIds.some(
+              (item) =>
+                item.id ===
+                FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
+            ) ? (
+              <button type="button" className="btn option-link d-flex">
+                <div className="icon">
+                  <FiCheckCircle />
+                </div>
+                <div onClick={CompletedAction} className="labelContainer">
+                  {MARK_AS_DONE_BUTTON}
+                </div>
+              </button>
+            ) : (
+              <button type="button" className="btn option-link d-flex">
+                <div className="icon">
+                  <FiCheckCircle />
+                </div>
+                <div onClick={ToDoAction} className="labelContainer">
+                  {TODO_BUTTON}
+                </div>
+              </button>
+            )}
           </div>
           <div>
             <button type="button" className="btn option-link d-flex">

@@ -44,6 +44,7 @@ export const startSort = (props) => {
 }
 
 export const FilteredMetaList = (props) => {
+  console.log(props)
   const { metaList, labelIds } = props
   return metaList.filter((threadList) =>
     threadList.labels.includes(...labelIds)
