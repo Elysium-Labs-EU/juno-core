@@ -11,6 +11,7 @@ import InformationOverview from './components/InformationOverview'
 import FileOverview from './components/FileOverview'
 import Inbox from './components/Inbox/Inbox'
 import SpamEmail from './components/Spam/Spam'
+import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
 import DraftEmail from './components/Draft/DraftEmail'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
@@ -42,6 +43,7 @@ const App = ({ baseLoaded, dispatch }) => {
             <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
             <Route path="/compose" component={ComposeEmail} />
             <Route path="/drafts" component={DraftEmail} />
+            <Route path="/sent" component={SentEmail} />
             <Route path="/spam" component={SpamEmail} />
             <Route path="/settings" component={Settings} />
             <Route
