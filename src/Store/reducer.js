@@ -36,7 +36,6 @@ const reducer = (state = initialState, action) => {
         isLoading: action.payload,
       }
     case ACTION_TYPE.SET_LOADED_INBOX:
-      // console.log(action.payload)
       const labelArray = Array.isArray(action.payload)
         ? action.payload
         : [action.payload]
@@ -93,13 +92,15 @@ const reducer = (state = initialState, action) => {
         viewIndex: viewingIndex,
       }
     case ACTION_TYPE.LIST_ADD_META:
-      // console.log(action.payload)
-      // let sortedMetaList = action.payload.sort((a, b) => {
-      //     return parseInt(b.historyId) - parseInt(a.historyId)
-      //   })
+      let sortedMetaList = {
+        ...action.payload,
+        threads: action.payload.threads.sort((a, b) => {
+          return parseInt(b.historyId) - parseInt(a.historyId)
+        }),
+      }
       return {
         ...state,
-        metaList: [...state.metaList, action.payload],
+        metaList: [...state.metaList, sortedMetaList],
       }
     // case ACTION_TYPE.LIST_REMOVE_META:
     //   return {
@@ -110,7 +111,11 @@ const reducer = (state = initialState, action) => {
       let { filteredTargetMetaList, activeMetaObjArray } = action.payload
       let new_metaListEntry = {
         ...filteredTargetMetaList[0],
-        threads: filteredTargetMetaList[0].threads.concat(activeMetaObjArray),
+        threads: filteredTargetMetaList[0].threads
+          .concat(activeMetaObjArray)
+          .sort((a, b) => {
+            return parseInt(b.historyId) - parseInt(a.historyId)
+          }),
       }
       let updatedMetaList = [
         ...state.metaList.filter(
@@ -151,43 +156,25 @@ const reducer = (state = initialState, action) => {
         // }
       }
     case ACTION_TYPE.LIST_ADD_DETAIL:
-      console.log(action.payload)
-      // let newEmailList = [
-      //   ...new Set([
-      //     ...state.emailList,
-      //     ...(Array.isArray(action.payload)
-      //       ? action.payload
-      //       : [action.payload]),
-      //   ]),
-      // ]
-      // let sortedEmailList = newEmailList.sort((a, b) => {
-      //   return parseInt(b.thread.historyId) - parseInt(a.thread.historyId)
-      // })
+      let sortedEmailList = {
+        ...action.payload,
+        threads: action.payload.threads.sort((a, b) => {
+          return parseInt(b.historyId) - parseInt(a.historyId)
+        }),
+      }
       return {
         ...state,
-        emailList: [...state.emailList, action.payload],
-        // emailList: sortedEmailList,
-        // }
-        // } else {
-        //   let new_emailList = state.emailList.filter(
-        //     (item) => action.payload.id !== item.id
-        //   )
-        //   console.log(action.payload)
-        //   return {
-        //     ...state,
-        //     emailList: new_emailList,
-        //     // historyDiscoverKeywords: [
-        //     //   ...state.historyDiscoverKeywords,
-        //     //   action.payload,
-        //     // ],
-        //   }
+        emailList: [...state.emailList, sortedEmailList],
       }
     case ACTION_TYPE.LIST_ADD_ITEM_DETAIL: {
       let { filteredTargetEmailList, activEmailObjArray } = action.payload
-      console.log(filteredTargetEmailList)
       let new_emailListEntry = {
         ...filteredTargetEmailList[0],
-        threads: filteredTargetEmailList[0].threads.concat(activEmailObjArray),
+        threads: filteredTargetEmailList[0].threads
+          .concat(activEmailObjArray)
+          .sort((a, b) => {
+            return parseInt(b.historyId) - parseInt(a.historyId)
+          }),
       }
       let updatedEmailList = [
         ...state.emailList.filter(
@@ -203,7 +190,6 @@ const reducer = (state = initialState, action) => {
     }
     case ACTION_TYPE.LIST_REMOVE_ITEM_DETAIL: {
       let { filteredCurrentEmailList, messageId } = action.payload
-      console.log(filteredCurrentEmailList)
       let new_emailListEntry = {
         ...filteredCurrentEmailList[0],
         threads: filteredCurrentEmailList[0].threads.filter(

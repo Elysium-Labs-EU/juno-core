@@ -11,7 +11,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
     return base64url.decode(fetchedAttachment.messageAttachment.data)
   }
 
-  console.log(threadDetailBody)
+  // console.log(threadDetailBody)
 
   // console.log(threadDetailBody)
   // console.log(threadDetailBody.parts[1].body.attachmentId)

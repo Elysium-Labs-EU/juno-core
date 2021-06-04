@@ -69,14 +69,6 @@ const EmailDetOptions = ({
     dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
   }
 
-  if (
-    labelIds.some(
-      (item) =>
-        item.id === FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
-    )
-  ) {
-  }
-
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
     <EmailOptionsContainer>
@@ -93,8 +85,8 @@ const EmailDetOptions = ({
           <div>
             {labelIds.some(
               (item) =>
-                item.id ===
-                FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
+                item ===
+                FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' })[0].id
             ) ? (
               <button type="button" className="btn option-link d-flex">
                 <div className="icon">
