@@ -33,12 +33,20 @@ const DetailNavigation = ({
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
-  const filteredMetaList = metaList && metaList.filter((threadList) =>
-        threadList.labels.includes(...labelIds)
-  )
-  
-  const isDisabledPrev = filteredMetaList.length > 0 && filteredMetaList[0].threads[viewIndex - 1] === undefined ? true : false
-  const isDisabledNext = filteredMetaList.length > 0 && filteredMetaList[0].threads[viewIndex + 1] === undefined ? true : false
+  const filteredMetaList =
+    metaList &&
+    metaList.filter((threadList) => threadList.labels.includes(...labelIds))
+
+  const isDisabledPrev =
+    filteredMetaList.length > 0 &&
+    filteredMetaList[0].threads[viewIndex - 1] === undefined
+      ? true
+      : false
+  const isDisabledNext =
+    filteredMetaList.length > 0 &&
+    filteredMetaList[0].threads[viewIndex + 1] === undefined
+      ? true
+      : false
 
   useEffect(() => {
     if (currEmail !== currLocal) {
@@ -54,16 +62,21 @@ const DetailNavigation = ({
   return (
     <Wrapper>
       <NavButton
-        onClick={
-          () => NavigatePreviousMail({ history, labelURL, filteredMetaList, viewIndex })
+        onClick={() =>
+          NavigatePreviousMail({
+            history,
+            labelURL,
+            filteredMetaList,
+            viewIndex,
+          })
         }
         disabled={isDisabledPrev}
       >
         <FiChevronLeft size={20} />
       </NavButton>
       <NavButton
-        onClick={
-          () => NavigateNextMail({ history, labelURL, filteredMetaList, viewIndex })
+        onClick={() =>
+          NavigateNextMail({ history, labelURL, filteredMetaList, viewIndex })
         }
         disabled={isDisabledNext}
       >

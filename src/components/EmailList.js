@@ -84,7 +84,7 @@ const EmailList = ({
               {threads.length > 0 && (
                 <div className="base">
                   {threads.map((email) => (
-                    <EmailListItem key={email.thread.id} email={email.thread} />
+                    <EmailListItem key={email.id} email={email} />
                   ))}
                 </div>
               )}

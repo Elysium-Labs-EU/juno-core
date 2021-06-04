@@ -9,17 +9,25 @@ export const convertArrayToString = (data) => {
 export const NavigatePreviousMail = (props) => {
   const { history, labelURL, filteredMetaList, viewIndex } = props
   const prevID = filteredMetaList[0].threads[viewIndex - 1].id
-  // const prevID = emailList[viewIndex - 1].thread.id
   return history.push(`/mail/${labelURL}/${prevID}`)
 }
 
 export const NavigateNextMail = (props) => {
-  console.log(props)
-  const { history, labelURL, filteredMetaList, viewIndex } = props
-  const nextID = filteredMetaList[0].threads[viewIndex + 1].id
-  console.log(nextID)
-  // const nextID = emailList[viewIndex + 1].thread.id
-  return history.push(`/mail/${labelURL}/${nextID}`)
+  const {
+    history,
+    labelURL,
+    filteredMetaList,
+    filteredCurrentMetaList,
+    viewIndex,
+  } = props
+  if (filteredCurrentMetaList) {
+    const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
+    return history.push(`/mail/${labelURL}/${nextID}`)
+  }
+  if (filteredMetaList) {
+    const nextID = filteredMetaList[0].threads[viewIndex + 1].id
+    return history.push(`/mail/${labelURL}/${nextID}`)
+  }
 }
 
 export const CloseMail = (props) => {
@@ -33,4 +41,26 @@ export const startSort = (props) => {
   console.log(metaList)
   // return history.push(`/mail/${labelURL}/${emailList[0].thread.id}`)
   return history.push(`/mail/${labelURL}/${metaList[0].id}`)
+}
+
+export const FilteredMetaList = (props) => {
+  console.log(props)
+  const { metaList, labelIds } = props
+  return metaList.filter((threadList) =>
+    threadList.labels.includes(...labelIds)
+  )
+}
+
+export const FilteredEmailList = (props) => {
+  const { emailList, labelIds } = props
+  return emailList.filter((threadList) =>
+    threadList.labels.includes(...labelIds)
+  )
+}
+
+export const FindLabel = (props) => {
+  const { storageLabels, LABEL_NAME } = props
+  return (
+    storageLabels && storageLabels.filter((label) => label.name === LABEL_NAME)
+  )
 }

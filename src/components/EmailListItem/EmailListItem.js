@@ -18,42 +18,9 @@ const mapStateToProps = (state) => {
 }
 
 const EmailListItem = ({ email, labelIds }) => {
-  // const {
-  //   thread,
-  //   thread: { id, messages },
-  // } = email
   const { id } = email
   const history = useHistory()
 
-  // const LatestEmail =
-  //   thread !== undefined && messages !== undefined ? messages.slice(-1) : thread
-
-  // const emailLabels = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].labelIds[0]
-  //   : LatestEmail.labelIds[0]
-  // const fromEmail = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
-  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'From')
-  //         .value
-  //     : undefined
-  //   : LatestEmail.payload.headers.find((data) => data.name === 'From').value
-  // const toEmail = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'To')
-  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'To').value
-  //     : 'Draft'
-  //   : LatestEmail.payload.headers.find((data) => data.name === 'From').value
-  // const emailSubject = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
-  //     ? LatestEmail[0].payload.headers.find((data) => data.name === 'Subject')
-  //         .value
-  //     : '(no subject)'
-  //   : LatestEmail.payload.headers.find((data) => data.name === 'Subject').value
-  // const emailSnippet = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].snippet
-  //   : LatestEmail.snippet
-  // const timeStamp = Array.isArray(LatestEmail)
-  //   ? LatestEmail[0].internalDate
-  //   : LatestEmail.internalDate
   const emailLabels = email && email.messages[0].labelIds
   const fromEmail =
     email &&

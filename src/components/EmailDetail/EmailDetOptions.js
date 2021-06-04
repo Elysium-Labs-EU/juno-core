@@ -9,11 +9,11 @@ import {
   FiMoreHorizontal,
 } from 'react-icons/fi'
 import ArchiveMail from './../EmailOptions/ArchiveMail'
-import SetToDoMail from './../EmailOptions/SetToDoMail'
 import EmailMoreOptions from './../EmailMoreOptions'
 import { connect } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import { convertArrayToString } from '../../utils'
+import { convertArrayToString, FindLabel } from '../../utils'
+import { UpdateMailLabel } from './../../Store/actions'
 
 const EmailOptionsContainer = styled.div`
   position: relative;
@@ -30,13 +30,14 @@ const InnerOptionsContainer = styled.div`
 
 const REPLY_BUTTON = 'Reply'
 const TODO_BUTTON = 'To do'
+const MARK_AS_DONE_BUTTON = 'Completed'
 const REMIND_BUTTON = 'Remind'
 const ARCHIVE_BUTTON = 'Archive'
 const MORE_BUTTON = 'More'
 
 const mapStateToProps = (state) => {
-  const { storageLabels, labelIds, emailList, viewIndex } = state
-  return { storageLabels, labelIds, emailList, viewIndex }
+  const { storageLabels, labelIds, emailList, metaList, viewIndex } = state
+  return { storageLabels, labelIds, emailList, metaList, viewIndex }
 }
 
 const EmailDetOptions = ({
@@ -44,11 +45,37 @@ const EmailDetOptions = ({
   storageLabels,
   labelIds,
   emailList,
+  metaList,
   viewIndex,
+  dispatch,
 }) => {
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
+
+  const ToDoAction = () => {
+    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' })
+    const request = {
+      removeLabelIds: labelIds,
+      addLabelIds: [toDoLabel[0].id],
+    }
+    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+  }
+
+  const CompletedAction = () => {
+    const request = {
+      removeLabelIds: labelIds,
+    }
+    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+  }
+
+  if (
+    labelIds.some(
+      (item) =>
+        item.id === FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
+    )
+  ) {
+  }
 
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
@@ -64,26 +91,29 @@ const EmailDetOptions = ({
             </button>
           </div>
           <div>
-            <button type="button" className="btn option-link d-flex">
-              <div className="icon">
-                <FiCheckCircle />
-              </div>
-              <div
-                onClick={() =>
-                  SetToDoMail({
-                    storageLabels,
-                    messageId,
-                    history,
-                    labelURL,
-                    emailList,
-                    viewIndex,
-                  })
-                }
-                className="labelContainer"
-              >
-                {TODO_BUTTON}
-              </div>
-            </button>
+            {labelIds.some(
+              (item) =>
+                item.id ===
+                FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' }).id
+            ) ? (
+              <button type="button" className="btn option-link d-flex">
+                <div className="icon">
+                  <FiCheckCircle />
+                </div>
+                <div onClick={CompletedAction} className="labelContainer">
+                  {MARK_AS_DONE_BUTTON}
+                </div>
+              </button>
+            ) : (
+              <button type="button" className="btn option-link d-flex">
+                <div className="icon">
+                  <FiCheckCircle />
+                </div>
+                <div onClick={ToDoAction} className="labelContainer">
+                  {TODO_BUTTON}
+                </div>
+              </button>
+            )}
           </div>
           <div>
             <button type="button" className="btn option-link d-flex">
