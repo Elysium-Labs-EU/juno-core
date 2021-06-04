@@ -13,7 +13,13 @@ export const NavigatePreviousMail = (props) => {
 }
 
 export const NavigateNextMail = (props) => {
-  const { history, labelURL, filteredMetaList, filteredCurrentMetaList, viewIndex } = props
+  const {
+    history,
+    labelURL,
+    filteredMetaList,
+    filteredCurrentMetaList,
+    viewIndex,
+  } = props
   if (filteredCurrentMetaList) {
     const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}`)
@@ -40,6 +46,13 @@ export const startSort = (props) => {
 export const FilteredMetaList = (props) => {
   const { metaList, labelIds } = props
   return metaList.filter((threadList) =>
+    threadList.labels.includes(...labelIds)
+  )
+}
+
+export const FilteredEmailList = (props) => {
+  const { emailList, labelIds } = props
+  return emailList.filter((threadList) =>
     threadList.labels.includes(...labelIds)
   )
 }

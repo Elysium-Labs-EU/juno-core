@@ -107,13 +107,10 @@ const reducer = (state = initialState, action) => {
     //     metaList: [...state.metaList, action.payload],
     //   }
     case ACTION_TYPE.LIST_ADD_ITEM_META: {
-      let { filteredTargetMetaList, activeMessageObjArray } = action.payload
-      let addedNewItem = filteredTargetMetaList[0].threads.concat(
-        activeMessageObjArray
-      )
+      let { filteredTargetMetaList, activeMetaObjArray } = action.payload
       let new_metaListEntry = {
         ...filteredTargetMetaList[0],
-        threads: addedNewItem,
+        threads: filteredTargetMetaList[0].threads.concat(activeMetaObjArray),
       }
       let updatedMetaList = [
         ...state.metaList.filter(
@@ -154,6 +151,7 @@ const reducer = (state = initialState, action) => {
         // }
       }
     case ACTION_TYPE.LIST_ADD_DETAIL:
+      console.log(action.payload)
       // let newEmailList = [
       //   ...new Set([
       //     ...state.emailList,
@@ -184,11 +182,46 @@ const reducer = (state = initialState, action) => {
         //     // ],
         //   }
       }
-    case ACTION_TYPE.LIST_REMOVE_DETAIL:
+    case ACTION_TYPE.LIST_ADD_ITEM_DETAIL: {
+      let { filteredTargetEmailList, activEmailObjArray } = action.payload
+      console.log(filteredTargetEmailList)
+      let new_emailListEntry = {
+        ...filteredTargetEmailList[0],
+        threads: filteredTargetEmailList[0].threads.concat(activEmailObjArray),
+      }
+      let updatedEmailList = [
+        ...state.emailList.filter(
+          (threadList) =>
+            !threadList.labels.includes(...filteredTargetEmailList[0].labels)
+        ),
+        new_emailListEntry,
+      ]
       return {
         ...state,
-        emailList: action.payload,
+        emailList: updatedEmailList,
       }
+    }
+    case ACTION_TYPE.LIST_REMOVE_ITEM_DETAIL: {
+      let { filteredCurrentEmailList, messageId } = action.payload
+      console.log(filteredCurrentEmailList)
+      let new_emailListEntry = {
+        ...filteredCurrentEmailList[0],
+        threads: filteredCurrentEmailList[0].threads.filter(
+          (item) => item.id !== messageId
+        ),
+      }
+      let updatedEmailList = [
+        ...state.emailList.filter(
+          (threadList) =>
+            !threadList.labels.includes(...filteredCurrentEmailList[0].labels)
+        ),
+        new_emailListEntry,
+      ]
+      return {
+        ...state,
+        emailList: updatedEmailList,
+      }
+    }
     default:
       return {
         ...state,

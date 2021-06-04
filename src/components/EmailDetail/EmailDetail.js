@@ -51,8 +51,8 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
         emailList.filter((list) => list.labels.includes(...labelIds))
       const activeEmail =
         activeList &&
-        activeList[0].threads.filter((item) => item.thread.id === threadId)
-      setThreadDetail(activeEmail[0].thread)
+        activeList[0].threads.filter((item) => item.id === threadId)
+      setThreadDetail(activeEmail[0])
     } else {
       dispatch(setServiceUnavailable(ERROR_EMAIL))
     }

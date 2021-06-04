@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { createApiClient } from '../data/api'
-import { FilteredMetaList, NavigateNextMail } from '../utils'
+import { FilteredEmailList, FilteredMetaList, NavigateNextMail } from '../utils'
 const api = createApiClient()
 
 const BASE_MAX_RESULTS = 20
@@ -20,6 +20,8 @@ export const ACTION_TYPE = {
   LIST_REMOVE_ITEM_META: 'LIST_REMOVE_ITEM_META',
   LIST_ADD_DETAIL: 'LIST_ADD_DETAIL',
   LIST_REMOVE_DETAIL: 'LIST_REMOVE_DETAIL',
+  LIST_ADD_ITEM_DETAIL: 'LIST_ADD_ITEM_DETAIL',
+  LIST_REMOVE_ITEM_DETAIL: 'LIST_REMOVE_ITEM_DETAIL',
   LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
 }
 
@@ -109,6 +111,20 @@ export const listAddDetail = (emailList) => {
 export const listRemoveDetail = (emailList) => {
   return {
     type: ACTION_TYPE.LIST_REMOVE_DETAIL,
+    payload: emailList,
+  }
+}
+
+export const listAddItemDetail = (emailList) => {
+  return {
+    type: ACTION_TYPE.LIST_ADD_ITEM_DETAIL,
+    payload: emailList,
+  }
+}
+
+export const listRemoveItemDetail = (emailList) => {
+  return {
+    type: ACTION_TYPE.LIST_REMOVE_ITEM_DETAIL,
     payload: emailList,
   }
 }
@@ -203,7 +219,9 @@ export const loadEmails = (params) => {
         await dispatch(listAddMeta(labeledThreads))
         dispatch(loadEmailDetails(labeledThreads))
       } else {
-        dispatch(setServiceUnavailable('No feed found'))
+        if (getState().baseLoaded) {
+          dispatch(setServiceUnavailable('No feed found'))
+        }
         dispatch(setLoadedInbox(labelIds))
         console.log(`Empty Inbox for ${labelIds}`)
         if (
@@ -230,7 +248,7 @@ export const loadEmailDetails = (labeledThreads) => {
       threads.length > 0 &&
         threads.forEach(async (item) => {
           const threadDetail = await api.getThreadDetail(item.id)
-          buffer.push(threadDetail)
+          buffer.push(threadDetail.thread)
           if (buffer.length === loadCount) {
             dispatch(
               listAddDetail({
@@ -331,21 +349,36 @@ export const UpdateMailLabel = (props) => {
 
   return async (dispatch, getState) => {
     const metaList = getState().metaList
+    const emailList = getState().emailList
     const filteredCurrentMetaList =
       metaList && FilteredMetaList({ metaList, labelIds: removeLabelIds })
     const filteredTargetMetaList =
       metaList && FilteredMetaList({ metaList, labelIds: addLabelIds })
+    const filteredCurrentEmailList =
+      emailList && FilteredEmailList({ emailList, labelIds: removeLabelIds })
+    const filteredTargetEmailList =
+      emailList && FilteredEmailList({ emailList, labelIds: addLabelIds })
     return axios
       .patch(`/api/message/${messageId}`, request)
       .then((res) => {
         if (res.status === 200) {
           //Create function to adjust the item for the emailList arrays as well
-          const activeMessageObjArray = filteredCurrentMetaList[0].threads.filter(
+          const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
+            (item) => item.id === messageId
+          )
+          const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
             (item) => item.id === messageId
           )
           dispatch(listRemoveItemMeta({ messageId, filteredCurrentMetaList }))
           dispatch(
-            listAddItemMeta({ activeMessageObjArray, filteredTargetMetaList })
+            listAddItemMeta({ activeMetaObjArray, filteredTargetMetaList })
+          )
+          console.log(filteredTargetEmailList)
+          dispatch(
+            listRemoveItemDetail({ messageId, filteredCurrentEmailList })
+          )
+          dispatch(
+            listAddItemDetail({ activEmailObjArray, filteredTargetEmailList })
           )
           if (getState().currEmail) {
             const viewIndex = getState().viewIndex
