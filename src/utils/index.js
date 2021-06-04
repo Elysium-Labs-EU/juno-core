@@ -38,13 +38,11 @@ export const CloseMail = (props) => {
 export const startSort = (props) => {
   const { history, labelURL, metaList } = props
   // export const startSort = (history, labelURL, emailList, metaList) => {
-  console.log(metaList)
   // return history.push(`/mail/${labelURL}/${emailList[0].thread.id}`)
   return history.push(`/mail/${labelURL}/${metaList[0].id}`)
 }
 
 export const FilteredMetaList = (props) => {
-  console.log(props)
   const { metaList, labelIds } = props
   return metaList.filter((threadList) =>
     threadList.labels.includes(...labelIds)
