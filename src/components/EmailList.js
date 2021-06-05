@@ -2,14 +2,12 @@ import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
-import { loadEmails, setIsLoading } from '../Store/actions'
+import { loadEmails } from '../Store/actions'
 import './../App.scss'
 import Emptystate from './Elements/EmptyState'
-import { multipleIncludes } from '../utils'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
-const SET_LABELS = ['UNREAD', 'INBOX', 'SENT']
 
 const mapStateToProps = (state) => {
   const {
@@ -33,8 +31,6 @@ const mapStateToProps = (state) => {
 const EmailList = ({
   labelIds,
   dispatch,
-  metaList,
-  nextPageToken,
   emailList,
   isLoading,
   loadedInbox,
