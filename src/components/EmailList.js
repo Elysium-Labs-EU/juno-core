@@ -90,7 +90,7 @@ const EmailList = ({
               )}
               {threads.length === 0 && <Emptystate />}
             </div>
-            {nextPageToken && multipleIncludes(labelIds, SET_LABELS) && (
+            {nextPageToken && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button
@@ -112,16 +112,10 @@ const EmailList = ({
 
   return (
     <>
-      {!isLoading &&
-        labelIds &&
+      {labelIds &&
         !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
         emailList.length > 0 &&
         labeledInbox({ labelIds, emailList })}
-      {isLoading && !labelIds && (
-        <div className="mt-5 d-flex justify-content-center">
-          <CircularProgress />
-        </div>
-      )}
     </>
   )
 }

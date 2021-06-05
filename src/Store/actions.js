@@ -215,7 +215,6 @@ export const loadEmails = (params) => {
           threads: threads,
           nextPageToken: nextPageToken ?? null,
         }
-        console.log('here')
         await dispatch(listAddMeta(labeledThreads))
         dispatch(loadEmailDetails(labeledThreads))
       } else {
