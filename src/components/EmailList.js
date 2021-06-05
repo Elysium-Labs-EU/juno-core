@@ -5,10 +5,11 @@ import { connect } from 'react-redux'
 import { loadEmails, setIsLoading } from '../Store/actions'
 import './../App.scss'
 import Emptystate from './Elements/EmptyState'
+import { multipleIncludes } from '../utils'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
-const INBOX_LABELS = ['UNREAD', 'INBOX']
+const SET_LABELS = ['UNREAD', 'INBOX', 'SENT']
 
 const mapStateToProps = (state) => {
   const {
@@ -43,7 +44,6 @@ const EmailList = ({
       labelIds &&
       labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
     ) {
-      console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
@@ -75,7 +75,7 @@ const EmailList = ({
   }
 
   const renderEmailList = (filteredOnLabel) => {
-    const { threads } = filteredOnLabel && filteredOnLabel
+    const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
       <>
         <div className="scroll">
@@ -90,7 +90,7 @@ const EmailList = ({
               )}
               {threads.length === 0 && <Emptystate />}
             </div>
-            {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
+            {nextPageToken && multipleIncludes(labelIds, SET_LABELS) && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button

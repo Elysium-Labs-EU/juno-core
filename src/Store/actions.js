@@ -1,6 +1,11 @@
 import axios from 'axios'
 import { createApiClient } from '../data/api'
-import { FilteredEmailList, FilteredMetaList, NavigateNextMail } from '../utils'
+import {
+  FilteredEmailList,
+  FilteredMetaList,
+  NavigateNextMail,
+  multipleIncludes,
+} from '../utils'
 const api = createApiClient()
 
 const BASE_MAX_RESULTS = 20
@@ -152,12 +157,6 @@ export const checkBase = () => {
     if (labels) {
       if (labels.message.labels.length > 0) {
         let labelArray = labels.message.labels
-        const multipleIncludes = (first, second) => {
-          const indexArray = first.map((el) => {
-            return second.indexOf(el)
-          })
-          return indexArray.indexOf(-1) === -1
-        }
         if (
           !multipleIncludes(
             BASE_ARRAY,
@@ -216,6 +215,7 @@ export const loadEmails = (params) => {
           threads: threads,
           nextPageToken: nextPageToken ?? null,
         }
+        console.log('here')
         await dispatch(listAddMeta(labeledThreads))
         dispatch(loadEmailDetails(labeledThreads))
       } else {
@@ -257,7 +257,9 @@ export const loadEmailDetails = (labeledThreads) => {
                 nextPageToken: nextPageToken ?? null,
               })
             )
-            dispatch(setLoadedInbox(labels))
+            if (!getState().baseLoaded) {
+              dispatch(setLoadedInbox(labels))
+            }
             if (
               !getState().baseLoaded &&
               getState().storageLabels.length === getState().loadedInbox.length
@@ -265,12 +267,23 @@ export const loadEmailDetails = (labeledThreads) => {
               dispatch(setIsLoading(false))
               dispatch(setBaseLoaded(true))
             }
+            if (getState().baseLoaded) {
+              dispatch(setIsLoading(false))
+            }
           }
         })
     } else {
-      dispatch(setLoadedInbox(labels))
+      if (!getState().baseLoaded) {
+        dispatch(setLoadedInbox(labels))
+      }
       console.log(`Empty Inbox for ${labels}`)
-      dispatch(setIsLoading(false))
+      if (
+        !getState().baseLoaded &&
+        getState().storageLabels.length === getState().loadedInbox.length
+      ) {
+        dispatch(setIsLoading(false))
+        dispatch(setBaseLoaded(true))
+      }
     }
   }
 }
