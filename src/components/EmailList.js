@@ -2,13 +2,12 @@ import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailListItem from './EmailListItem/EmailListItem'
 import { connect } from 'react-redux'
-import { loadEmails, setIsLoading } from '../Store/actions'
+import { loadEmails } from '../Store/actions'
 import './../App.scss'
 import Emptystate from './Elements/EmptyState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
-const INBOX_LABELS = ['UNREAD', 'INBOX']
 
 const mapStateToProps = (state) => {
   const {
@@ -32,8 +31,6 @@ const mapStateToProps = (state) => {
 const EmailList = ({
   labelIds,
   dispatch,
-  metaList,
-  nextPageToken,
   emailList,
   isLoading,
   loadedInbox,
@@ -43,7 +40,6 @@ const EmailList = ({
       labelIds &&
       labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
     ) {
-      console.log('triggered')
       const params = {
         labelIds: labelIds,
         maxResults: MAX_RESULTS,
@@ -75,7 +71,7 @@ const EmailList = ({
   }
 
   const renderEmailList = (filteredOnLabel) => {
-    const { threads } = filteredOnLabel && filteredOnLabel
+    const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
       <>
         <div className="scroll">
@@ -90,7 +86,7 @@ const EmailList = ({
               )}
               {threads.length === 0 && <Emptystate />}
             </div>
-            {nextPageToken && labelIds.includes(...INBOX_LABELS) && (
+            {nextPageToken && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
                   <button
@@ -112,16 +108,10 @@ const EmailList = ({
 
   return (
     <>
-      {!isLoading &&
-        labelIds &&
+      {labelIds &&
         !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
         emailList.length > 0 &&
         labeledInbox({ labelIds, emailList })}
-      {isLoading && !labelIds && (
-        <div className="mt-5 d-flex justify-content-center">
-          <CircularProgress />
-        </div>
-      )}
     </>
   )
 }

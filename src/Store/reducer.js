@@ -1,4 +1,5 @@
 import { ACTION_TYPE } from './actions'
+import { multipleIncludes } from './../utils'
 
 export const initialState = {
   baseLoaded: false,
@@ -91,17 +92,37 @@ const reducer = (state = initialState, action) => {
         ...state,
         viewIndex: viewingIndex,
       }
-    case ACTION_TYPE.LIST_ADD_META:
+    case ACTION_TYPE.LIST_ADD_META: {
       let sortedMetaList = {
         ...action.payload,
         threads: action.payload.threads.sort((a, b) => {
           return parseInt(b.historyId) - parseInt(a.historyId)
         }),
       }
-      return {
-        ...state,
-        metaList: [...state.metaList, sortedMetaList],
+
+      let arrayIndex = state.metaList
+        .map((metaArray) => metaArray.labels)
+        .flat(1)
+        .findIndex((obj) => obj.includes(action.payload.labels))
+      if (arrayIndex > -1) {
+        let newArray = state.metaList[arrayIndex].threads
+          .concat(sortedMetaList.threads)
+          .sort((a, b) => {
+            return parseInt(b.historyId) - parseInt(a.historyId)
+          })
+        let newObject = { ...action.payload, threads: newArray }
+        state.metaList[arrayIndex] = newObject
+        return {
+          ...state,
+          metaList: [...state.metaList],
+        }
+      } else {
+        return {
+          ...state,
+          metaList: [...state.metaList, sortedMetaList],
+        }
       }
+    }
     // case ACTION_TYPE.LIST_REMOVE_META:
     //   return {
     //     ...state,
@@ -155,17 +176,42 @@ const reducer = (state = initialState, action) => {
         // emailList: sortedEmailList,
         // }
       }
-    case ACTION_TYPE.LIST_ADD_DETAIL:
+    case ACTION_TYPE.LIST_ADD_DETAIL: {
       let sortedEmailList = {
         ...action.payload,
         threads: action.payload.threads.sort((a, b) => {
           return parseInt(b.historyId) - parseInt(a.historyId)
         }),
       }
-      return {
-        ...state,
-        emailList: [...state.emailList, sortedEmailList],
+
+      let arrayIndex = state.emailList
+        .map((emailArray) => emailArray.labels)
+        .flat(1)
+        .findIndex((obj) => obj.includes(action.payload.labels))
+
+      if (arrayIndex > -1) {
+        let newArray = state.emailList[arrayIndex].threads
+          .concat(sortedEmailList.threads)
+          .sort((a, b) => {
+            return parseInt(b.historyId) - parseInt(a.historyId)
+          })
+        let newObject = { ...action.payload, threads: newArray }
+        state.emailList[arrayIndex] = newObject
+        return {
+          ...state,
+          emailList: [...state.emailList],
+        }
+      } else {
+        return {
+          ...state,
+          emailList: [...state.emailList, sortedEmailList],
+        }
       }
+    }
+    // return {
+    //   ...state,
+    //   emailList: [...state.emailList, sortedEmailList],
+    // }}
     case ACTION_TYPE.LIST_ADD_ITEM_DETAIL: {
       let { filteredTargetEmailList, activEmailObjArray } = action.payload
       let new_emailListEntry = {

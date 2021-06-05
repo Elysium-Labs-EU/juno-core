@@ -1,6 +1,3 @@
-import { createApiClient } from '../data/api'
-const api = createApiClient()
-
 export const convertArrayToString = (data) => {
   const converted = data.toString().replace(',', '-')
   return converted
@@ -61,4 +58,11 @@ export const FindLabel = (props) => {
   return (
     storageLabels && storageLabels.filter((label) => label.name === LABEL_NAME)
   )
+}
+
+export const multipleIncludes = (first, second) => {
+  const indexArray = first.map((el) => {
+    return second.indexOf(el)
+  })
+  return indexArray.indexOf(-1) === -1
 }
