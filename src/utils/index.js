@@ -47,6 +47,7 @@ export const FilteredMetaList = (props) => {
 }
 
 export const FilteredEmailList = (props) => {
+  console.log(props)
   const { emailList, labelIds } = props
   return emailList.filter((threadList) =>
     threadList.labels.includes(...labelIds)

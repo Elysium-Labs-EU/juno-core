@@ -1,33 +1,84 @@
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react'
+import isEmpty from 'lodash/isEmpty'
+import TextField from '@material-ui/core/TextField'
+import { connect } from 'react-redux'
 import './../../App.scss'
 import { createApiClient } from '../../data/api'
 import { useForm } from 'react-hook-form'
-
-const Wrapper = styled.div`
-  max-width: 850px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  position: static;
-`
-
-const ComposerContainer = styled.div`
-  padding-top: 120px;
-  padding-bottom: 121px;
-`
+import { ComposerContainer, Wrapper } from './ComposeStyles'
+import { SendComposedEmail, TrackComposeEmail } from './../../Store/actions'
+import useDebounce from './../../Hooks/use-debounce'
 
 const api = createApiClient()
 
-function ComposeEmail() {
+const TO_LABEL = 'To'
+const SUBJECT_LABEL = 'Subject'
+const BODY_LABEL = 'Body'
+const SEND_BUTTON = 'Send'
+
+const mapStateToProps = (state) => {
+  const { composeEmail } = state
+  return { composeEmail }
+}
+
+const ComposeEmail = ({ composeEmail, dispatch }) => {
+  const [toValue, setToValue] = useState('')
+  const [subjectValue, setSubjectValue] = useState('')
+  const [bodyValue, setBodyValue] = useState('')
+  const debouncedToValue = useDebounce(toValue, 500)
+  const debouncedSubjectValue = useDebounce(subjectValue, 500)
+  const debouncedBodyValue = useDebounce(bodyValue, 500)
+
+  const handleChange = (event) => {
+    event.target.id === 'to' && setToValue(event.target.value)
+    event.target.id === 'subject' && setSubjectValue(event.target.value)
+    event.target.id === 'body' && setBodyValue(event.target.value)
+  }
+
+  useEffect(() => {
+    if (debouncedToValue) {
+      let updateEventObject = { id: 'to', value: debouncedToValue }
+      if (!isEmpty(updateEventObject)) {
+        dispatch(TrackComposeEmail(updateEventObject))
+      }
+    }
+  }, [debouncedToValue])
+
+  useEffect(() => {
+    if (debouncedSubjectValue) {
+      let updateEventObject = { id: 'subject', value: debouncedSubjectValue }
+      if (!isEmpty(updateEventObject)) {
+        dispatch(TrackComposeEmail(updateEventObject))
+      }
+    }
+  }, [debouncedSubjectValue])
+
+  useEffect(() => {
+    if (debouncedBodyValue) {
+      let updateEventObject = { id: 'body', value: debouncedBodyValue }
+      if (!isEmpty(updateEventObject)) {
+        dispatch(TrackComposeEmail(updateEventObject))
+      }
+    }
+  }, [debouncedBodyValue])
+
   const { register, handleSubmit, errors } = useForm({
     defaultValues: {
       from: 'Robbert Tuerlings <robberttg@gmail.com>',
     },
   })
 
+  useEffect(() => {
+    if (composeEmail) {
+      console.log('triggered')
+      setToValue(composeEmail.to)
+      setSubjectValue(composeEmail.subject)
+      setBodyValue(composeEmail.body)
+    }
+  }, [])
+
   const onSubmit = (data) => {
-    console.log(data)
-    api.sendMessage(data)
+    dispatch(SendComposedEmail())
   }
 
   return (
@@ -35,13 +86,38 @@ function ComposeEmail() {
       <>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
               <div style={{ marginBottom: `7px` }}>
+                <div className="base">
+                  <TextField
+                    id="to"
+                    label={TO_LABEL}
+                    value={toValue}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    id="subject"
+                    label={SUBJECT_LABEL}
+                    value={subjectValue}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    id="body"
+                    label={BODY_LABEL}
+                    multiline
+                    // value={composeEmail.body}
+                    value={bodyValue}
+                    onChange={handleChange}
+                    rows={8}
+                  />
+                </div>
+              </div>
+              {/* <div style={{ marginBottom: `7px` }}>
                 <div className="base">
                   <div className="row-1">
                     <div className="label-1">
                       <label htmlFor="to" className="label-base">
-                        To
+                        {TO_LABEL}
                       </label>
                     </div>
                     <input
@@ -56,7 +132,7 @@ function ComposeEmail() {
               <div className="row-1">
                 <div className="label-1">
                   <label htmlFor="subjectTextarea" className="base">
-                    Subject
+                    {SUBJECT_LABEL}
                   </label>
                 </div>
                 <div className="inputContainer">
@@ -74,7 +150,7 @@ function ComposeEmail() {
               <div className="row-1">
                 <div className="label-1">
                   <label htmlFor="bodyTextarea" className="base">
-                    Body
+                    {BODY_LABEL}
                   </label>
                 </div>
                 <div className="inputContainer">
@@ -86,9 +162,9 @@ function ComposeEmail() {
                     className="jsx-3232806250 textareaReset textarea mousetrap"
                   />
                 </div>
-              </div>
+              </div> */}
               <button className="btn btn-sm btn-light" type="submit">
-                Send
+                {SEND_BUTTON}
               </button>
             </form>
           </div>
@@ -98,4 +174,4 @@ function ComposeEmail() {
   )
 }
 
-export default ComposeEmail
+export default connect(mapStateToProps)(ComposeEmail)
