@@ -9,6 +9,7 @@ import InlineThreadActions from './InlineThreadActions'
 import { connect } from 'react-redux'
 import { ThreadBase } from './EmailListItemStyles'
 import { convertArrayToString } from './../../utils'
+import { OpenDraftEmail } from './../../Store/actions'
 
 const DRAFT_LABEL = ['DRAFT']
 
@@ -17,7 +18,7 @@ const mapStateToProps = (state) => {
   return { labelIds }
 }
 
-const EmailListItem = ({ email, labelIds }) => {
+const EmailListItem = ({ email, labelIds, dispatch }) => {
   const { id } = email
   const history = useHistory()
 
@@ -45,12 +46,12 @@ const EmailListItem = ({ email, labelIds }) => {
   const timeStamp = email && email.messages[0].internalDate
 
   const handleClick = (id) => {
-    // if (!labelIds.includes(...DRAFT_LABEL)) {
-    const labelURL = convertArrayToString(labelIds)
-    history.push(`mail/${labelURL}/${id}`)
-    // } else {
-    //   console.log('Open compose')
-    // }
+    if (!labelIds.includes(...DRAFT_LABEL)) {
+      const labelURL = convertArrayToString(labelIds)
+      history.push(`mail/${labelURL}/${id}`)
+    } else {
+      dispatch(OpenDraftEmail({ history, id, DRAFT_LABEL }))
+    }
   }
 
   return (

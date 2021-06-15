@@ -66,3 +66,34 @@ export const multipleIncludes = (first, second) => {
   })
   return indexArray.indexOf(-1) === -1
 }
+
+export const getDetailBody = (props) => {
+  console.log(props)
+    //   if (threadDetailBody.mimeType === 'text/html') {
+    //   let str = base64url.decode(`${threadDetailBody.body.data}`)
+    //   // console.log('1')
+    //   return <div dangerouslySetInnerHTML={{ __html: str }} />
+    // } else if (threadDetailBody.mimeType === 'multipart/alternative') {
+    //   let str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
+    //   // console.log('2')
+    //   return <div dangerouslySetInnerHTML={{ __html: str }} />
+    // } else if (threadDetailBody.mimeType === 'multipart/mixed') {
+    //   let str = threadDetailBody.parts[0].parts
+    //     ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
+    //     : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
+    //   // console.log('3')
+    //   return <div dangerouslySetInnerHTML={{ __html: str }} />
+    // } else if (threadDetailBody.mimeType === 'multipart/related') {
+    //   let body = fetchAttachment(
+    //     messageId,
+    //     threadDetailBody.parts[1].body.attachmentId
+    //   )
+    //   // console.log('4')
+    //   // console.log(body)
+    //   return <div dangerouslySetInnerHTML={{ __html: body.value }} />
+    // } else {
+    //   let str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
+    //   // console.log('5')
+    //   return <div dangerouslySetInnerHTML={{ __html: str }} />
+    // }
+}

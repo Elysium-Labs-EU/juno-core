@@ -1,4 +1,6 @@
 import axios from 'axios'
+import isEmpty from 'lodash/isEmpty'
+import base64url from 'base64url'
 import { createApiClient } from '../data/api'
 import {
   FilteredEmailList,
@@ -28,6 +30,9 @@ export const ACTION_TYPE = {
   LIST_ADD_ITEM_DETAIL: 'LIST_ADD_ITEM_DETAIL',
   LIST_REMOVE_ITEM_DETAIL: 'LIST_REMOVE_ITEM_DETAIL',
   LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
+  SET_COMPOSE_EMAIL: 'SET_COMPOSE_EMAIL',
+  UPDATE_COMPOSE_EMAIL: 'UPDATE_COMPOSE_EMAIL',
+  RESET_COMPOSE_EMAIL: 'RESET_COMPOSE_EMAIL',
 }
 
 export const setBaseLoaded = (baseLoaded) => ({
@@ -138,6 +143,26 @@ export const listUpdateDetail = (emailList) => {
   return {
     type: ACTION_TYPE.LIST_UPDATE_DETAIL,
     payload: emailList,
+  }
+}
+
+export const setComposeEmail = (body) => {
+  return {
+    type: ACTION_TYPE.SET_COMPOSE_EMAIL,
+    payload: body,
+  }
+}
+
+export const updateComposeEmail = (body) => {
+  return {
+    type: ACTION_TYPE.UPDATE_COMPOSE_EMAIL,
+    payload: body,
+  }
+}
+
+export const resetComposeEmail = () => {
+  return {
+    type: ACTION_TYPE.RESET_COMPOSE_EMAIL,
   }
 }
 
@@ -414,5 +439,71 @@ export const UpdateMailLabel = (props) => {
         }
       })
       .catch((err) => console.log(err))
+  }
+}
+
+export const OpenDraftEmail = (props) => {
+  const { history, id, DRAFT_LABEL } = props
+  return async (dispatch, getState) => {
+    let emailList = getState().emailList
+    let draftBox = FilteredEmailList({ emailList, labelIds: DRAFT_LABEL })
+    let selectedEmail =
+      draftBox && draftBox[0].threads.filter((item) => item.id === id)
+    let filteredDraftEmail =
+      selectedEmail &&
+      selectedEmail[0].messages.filter((message) =>
+        message.labelIds.flat(1).some((label) => label.includes(...DRAFT_LABEL))
+      )
+    console.log(filteredDraftEmail[0].payload)
+    const loadEmail = {
+      to: filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')
+        ? filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')
+            .value
+        : '',
+      subject: filteredDraftEmail[0].payload.headers.find(
+        (e) => e.name === 'Subject'
+      )
+        ? filteredDraftEmail[0].payload.headers.find(
+            (e) => e.name === 'Subject'
+          ).value
+        : '',
+      body:
+        filteredDraftEmail[0].payload.body.size > 0
+          ? base64url
+              .decode(filteredDraftEmail[0].payload.body.data)
+              .replace(/<[^>]*>/g, '') ?? ''
+          : '',
+    }
+    dispatch(setComposeEmail(loadEmail))
+    history.push(`compose`)
+  }
+}
+
+export const TrackComposeEmail = (props) => {
+  return async (dispatch, getState) => {
+    if (isEmpty(getState().composeEmail)) {
+      dispatch(setComposeEmail(props))
+    }
+    if (!isEmpty(getState().composeEmail)) {
+      dispatch(updateComposeEmail(props))
+    }
+  }
+}
+
+export const SendComposedEmail = () => {
+  return async (dispatch, getState) => {
+    let composedEmail = getState().composeEmail
+    console.log(composedEmail)
+    if (Object.keys(composedEmail).length >= 3) {
+      return axios
+        .post('/api/send-message', composedEmail)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res)
+          }
+        })
+        .catch((err) => console.log(err))
+        .then(dispatch(setServiceUnavailable('Error sending email.')))
+    }
   }
 }

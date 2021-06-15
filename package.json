@@ -11,6 +11,7 @@
     "axios": "^0.21.0",
     "base64url": "^3.0.1",
     "bootstrap": "^4.5.3",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prettier": "^2.2.1",
     "pretty-bytes": "^5.6.0",
@@ -35,7 +36,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./",
+		"lint-fix": "eslint ./ --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -55,5 +58,12 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
 }

@@ -1,5 +1,4 @@
 import { ACTION_TYPE } from './actions'
-import { multipleIncludes } from './../utils'
 
 export const initialState = {
   baseLoaded: false,
@@ -13,6 +12,7 @@ export const initialState = {
   labelIds: '',
   metaList: [],
   emailList: [],
+  composeEmail: {},
 }
 
 const reducer = (state = initialState, action) => {
@@ -254,6 +254,35 @@ const reducer = (state = initialState, action) => {
         emailList: updatedEmailList,
       }
     }
+    case ACTION_TYPE.SET_COMPOSE_EMAIL:
+      if (JSON.stringify(Object.keys(action.payload)) === JSON.stringify(['to', 'subject', 'body'])) {
+        return { ...state, composeEmail: action.payload }
+      } else {
+        if (action.payload.id && action.payload.value) {
+          state.composeEmail[action.payload.id] = action.payload.value
+          return {
+            ...state,
+            composeEmail: state.composeEmail,
+          }
+        } else {
+          return { ...state }
+        }
+      }
+    case ACTION_TYPE.UPDATE_COMPOSE_EMAIL:
+      if (action.payload.id && action.payload.value) {
+        state.composeEmail[action.payload.id] = action.payload.value
+        return {
+          ...state,
+          composeEmail: state.composeEmail,
+        }
+      } else {
+        return { ...state }
+      }
+    case ACTION_TYPE.RESET_COMPOSE_EMAIL:
+      return {
+        ...state,
+        composeEmail: {},
+      }
     default:
       return {
         ...state,
