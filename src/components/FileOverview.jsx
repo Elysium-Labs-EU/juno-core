@@ -1,4 +1,6 @@
-function FileOverview() {
+import React from 'react'
+
+const FileOverview = () => {
   return (
     <div className="tlOuterContainer">
       <>FileOverview</>

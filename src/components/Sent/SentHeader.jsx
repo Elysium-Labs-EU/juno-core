@@ -15,7 +15,11 @@ const SentHeader = () => {
   return (
     <div className="tlOuterContainer">
       <div className="nav-container">
-        <button type="button" className="btn btn-sm btn-light" onClick={navigateBack}>
+        <button
+          type="button"
+          className="btn btn-sm btn-light"
+          onClick={navigateBack}
+        >
           {BACK_BUTTON}
         </button>
         <div className="header-center">
