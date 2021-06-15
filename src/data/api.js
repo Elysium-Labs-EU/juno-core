@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 
-export const createApiClient = () => {
+const createApiClient = () => {
   return {
     getMessageDetail: (messageId) => {
       return axios
@@ -100,7 +100,7 @@ export const createApiClient = () => {
     deleteLabel: (id) => {
       console.log('id', id)
       return axios
-        .delete(`/api/labels`, { data: { id: id } })
+        .delete(`/api/labels`, { data: { id } })
         .then((res) => res.data)
         .catch((err) => console.log(err))
     },
@@ -113,3 +113,5 @@ export const createApiClient = () => {
     },
   }
 }
+
+export default createApiClient
