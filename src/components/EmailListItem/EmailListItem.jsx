@@ -59,7 +59,11 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
       <div className="threadRow">
         <div className="cellGradientLeft" />
         <div className="cellCheckbox" />
-        <div className="cellName" onClick={() => handleClick(id)}>
+        <div
+          className="cellName"
+          onClick={() => handleClick(id)}
+          aria-hidden="true"
+        >
           <div className="avatars">
             {!labelIds.includes(...DRAFT_LABEL) && (
               <EmailAvatar avatarURL={fromEmail} />
@@ -76,7 +80,11 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
           )}
           <MessageCount countOfMessage={email} />
         </div>
-        <div className="cellMessage" onClick={() => handleClick(id)}>
+        <div
+          className="cellMessage"
+          onClick={() => handleClick(id)}
+          aria-hidden="true"
+        >
           <div className="subjectSnippet text-truncate">
             <span className="subject">{emailSubject}</span>
             <Snippet snippet={emailSnippet} />
