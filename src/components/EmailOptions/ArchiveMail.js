@@ -1,4 +1,4 @@
-import { createApiClient } from '../../data/api'
+import createApiClient from '../../data/api'
 import { NavigateNextMail } from '../../utils'
 
 const api = createApiClient()
@@ -8,7 +8,7 @@ const ArchiveMail = (messageId, history, labelURL, emailList, viewIndex) => {
 
   const MarkEmailArchived = async () => {
     await api.updateMessage(messageId, ARCHIVE_ACTION)
-    NavigateNextMail(history, labelURL, emailList, viewIndex)
+    NavigateNextMail({ history, labelURL, emailList, viewIndex })
   }
 
   return MarkEmailArchived()

@@ -1,4 +1,4 @@
-import { createApiClient } from '../../data/api'
+import createApiClient from '../../data/api'
 import { FilteredMetaList, NavigateNextMail } from '../../utils'
 
 const api = createApiClient()

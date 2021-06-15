@@ -1,4 +1,4 @@
-import { createApiClient } from '../../data/api'
+import createApiClient from '../../data/api'
 
 const api = createApiClient()
 

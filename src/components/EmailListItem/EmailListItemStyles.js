@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const ThreadBase = styled.div`
+const ThreadBase = styled.div`
   font-weight: ${(props) => (props.labelIds === 'UNREAD' ? '500' : 'regular')};
   position: relative;
   user-select: none;
@@ -17,3 +17,5 @@ export const ThreadBase = styled.div`
     cursor: pointer;
   }
 `
+
+export default ThreadBase

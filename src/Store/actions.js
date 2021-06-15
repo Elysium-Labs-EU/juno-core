@@ -1,13 +1,14 @@
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import base64url from 'base64url'
-import { createApiClient } from '../data/api'
+import createApiClient from '../data/api'
 import {
   FilteredEmailList,
   FilteredMetaList,
   NavigateNextMail,
   multipleIncludes,
 } from '../utils'
+
 const api = createApiClient()
 
 const BASE_MAX_RESULTS = 20
@@ -166,117 +167,21 @@ export const resetComposeEmail = () => {
   }
 }
 
-export const checkBase = () => {
-  const BASE_ARRAY = [
-    'Juno',
-    'Juno/To Do',
-    'Juno/Keep',
-    'Juno/Reminder',
-    'INBOX',
-    'SPAM',
-    'DRAFT',
-    'SENT',
-  ]
-  return async (dispatch) => {
-    const labels = await api.fetchLabel()
-    if (labels) {
-      if (labels.message.labels.length > 0) {
-        let labelArray = labels.message.labels
-        if (
-          !multipleIncludes(
-            BASE_ARRAY,
-            labelArray.map((item) => item.name)
-          )
-        ) {
-          console.log('You do not have all labels.')
-          BASE_ARRAY.map((item) =>
-            labelArray.map((label) => label.name).includes(item)
-          ).map(
-            (checkValue, index) =>
-              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-          )
-          dispatch(setBaseLoaded(true))
-        } else {
-          console.log('Gotcha! All minimal required labels.')
-          dispatch(
-            setStorageLabels(
-              BASE_ARRAY.map((baseLabel) =>
-                labelArray.filter((item) => item.name === baseLabel)
-              )
-            )
-          )
-          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labelArray.filter((item) => item.name === baseLabel)
-          )
-          prefetchedBoxes.forEach((label) => {
-            const params = {
-              labelIds: [label[0].id],
-              maxResults: BASE_MAX_RESULTS,
-            }
-            dispatch(loadEmails(params))
-          })
-        }
-      } else {
-        dispatch(setServiceUnavailable('Network Error. Please try again later'))
-      }
-    } else {
-      dispatch(setServiceUnavailable('Network Error. Please try again later'))
-    }
-  }
-}
-
-export const loadEmails = (params) => {
-  return async (dispatch, getState) => {
-    if (!getState().isLoading) {
-      dispatch(setIsLoading(true))
-    }
-    const metaList = await api.getThreads(params)
-    const { labelIds } = params
-    if (metaList) {
-      if (metaList.message.resultSizeEstimate > 0) {
-        const { threads, nextPageToken } = metaList.message
-        const labeledThreads = {
-          labels: labelIds,
-          threads: threads,
-          nextPageToken: nextPageToken ?? null,
-        }
-        await dispatch(listAddMeta(labeledThreads))
-        dispatch(loadEmailDetails(labeledThreads))
-      } else {
-        if (getState().baseLoaded) {
-          dispatch(setServiceUnavailable('No feed found'))
-        }
-        dispatch(setLoadedInbox(labelIds))
-        console.log(`Empty Inbox for ${labelIds}`)
-        if (
-          !getState().baseLoaded &&
-          getState().storageLabels.length === getState().loadedInbox.length
-        ) {
-          dispatch(setIsLoading(false))
-          dispatch(setBaseLoaded(true))
-        }
-      }
-    } else {
-      dispatch(setServiceUnavailable('No feed found'))
-      dispatch(setIsLoading(false))
-    }
-  }
-}
-
 export const loadEmailDetails = (labeledThreads) => {
   return async (dispatch, getState) => {
     const { threads, labels, nextPageToken } = labeledThreads
     if (threads) {
-      let buffer = []
-      let loadCount = threads.length
-      threads.length > 0 &&
+      const buffer = []
+      const loadCount = threads.length
+
+      if (threads.length > 0) {
         threads.forEach(async (item) => {
           const threadDetail = await api.getThreadDetail(item.id)
           buffer.push(threadDetail.thread)
           if (buffer.length === loadCount) {
             dispatch(
               listAddDetail({
-                labels: labels,
+                labels,
                 threads: buffer,
                 nextPageToken: nextPageToken ?? null,
               })
@@ -296,11 +201,12 @@ export const loadEmailDetails = (labeledThreads) => {
             }
           }
         })
+      }
     } else {
       if (!getState().baseLoaded) {
         dispatch(setLoadedInbox(labels))
       }
-      console.log(`Empty Inbox for ${labels}`)
+      // console.log(`Empty Inbox for ${labels}`);
       if (
         !getState().baseLoaded &&
         getState().storageLabels.length === getState().loadedInbox.length
@@ -312,11 +218,12 @@ export const loadEmailDetails = (labeledThreads) => {
   }
 }
 
-//Use a checkfeed of 100 items, compare this to the current MetaList, if the checkFeeds newest item
+// Use a checkfeed of 100 items, compare this to the current MetaList, if the checkFeeds newest item
 // is newer than the metaList, cut off the items from the checkfeed which are older than the newest metaList item
 export const refreshEmailFeed = (params, metaList) => {
   return async (dispatch) => {
     console.log('WIP need to change listUpdateMeta function')
+    console.log(params, metaList, dispatch)
     // const checkFeed = await api.getThreads(params)
     // if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
     //   const newThreads = checkFeed.message.threads.filter(
@@ -349,7 +256,7 @@ export const fetchLabelIds = (LABEL) => {
     } else {
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
-    //TO-DO: What if multiple labels are used
+    // TO-DO: What if multiple labels are used
   }
 }
 
@@ -383,8 +290,8 @@ export const UpdateMailLabel = (props) => {
   } = props
 
   return async (dispatch, getState) => {
-    const metaList = getState().metaList
-    const emailList = getState().emailList
+    const { metaList } = getState()
+    const { emailList } = getState()
     const filteredCurrentMetaList =
       metaList &&
       removeLabelIds &&
@@ -406,27 +313,43 @@ export const UpdateMailLabel = (props) => {
       .then((res) => {
         if (res.status === 200) {
           if (addLabelIds) {
-            const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-              (item) => item.id === messageId
-            )
+            const activeMetaObjArray =
+              filteredCurrentMetaList[0].threads.filter(
+                (item) => item.id === messageId
+              )
             dispatch(
-              listAddItemMeta({ activeMetaObjArray, filteredTargetMetaList })
+              listAddItemMeta({
+                activeMetaObjArray,
+                filteredTargetMetaList,
+              })
             )
-            const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
-              (item) => item.id === messageId
-            )
+            const activEmailObjArray =
+              filteredCurrentEmailList[0].threads.filter(
+                (item) => item.id === messageId
+              )
             dispatch(
-              listAddItemDetail({ activEmailObjArray, filteredTargetEmailList })
+              listAddItemDetail({
+                activEmailObjArray,
+                filteredTargetEmailList,
+              })
             )
           }
           if (removeLabelIds) {
-            dispatch(listRemoveItemMeta({ messageId, filteredCurrentMetaList }))
             dispatch(
-              listRemoveItemDetail({ messageId, filteredCurrentEmailList })
+              listRemoveItemMeta({
+                messageId,
+                filteredCurrentMetaList,
+              })
+            )
+            dispatch(
+              listRemoveItemDetail({
+                messageId,
+                filteredCurrentEmailList,
+              })
             )
           }
           if (getState().currEmail) {
-            const viewIndex = getState().viewIndex
+            const { viewIndex } = getState()
             NavigateNextMail({
               history,
               labelURL,
@@ -445,11 +368,11 @@ export const UpdateMailLabel = (props) => {
 export const OpenDraftEmail = (props) => {
   const { history, id, DRAFT_LABEL } = props
   return async (dispatch, getState) => {
-    let emailList = getState().emailList
-    let draftBox = FilteredEmailList({ emailList, labelIds: DRAFT_LABEL })
-    let selectedEmail =
+    const { emailList } = getState()
+    const draftBox = FilteredEmailList({ emailList, labelIds: DRAFT_LABEL })
+    const selectedEmail =
       draftBox && draftBox[0].threads.filter((item) => item.id === id)
-    let filteredDraftEmail =
+    const filteredDraftEmail =
       selectedEmail &&
       selectedEmail[0].messages.filter((message) =>
         message.labelIds.flat(1).some((label) => label.includes(...DRAFT_LABEL))
@@ -492,7 +415,7 @@ export const TrackComposeEmail = (props) => {
 
 export const SendComposedEmail = () => {
   return async (dispatch, getState) => {
-    let composedEmail = getState().composeEmail
+    const composedEmail = getState().composeEmail
     console.log(composedEmail)
     if (Object.keys(composedEmail).length >= 3) {
       return axios
@@ -504,6 +427,104 @@ export const SendComposedEmail = () => {
         })
         .catch((err) => console.log(err))
         .then(dispatch(setServiceUnavailable('Error sending email.')))
+    }
+    return null
+  }
+}
+
+export const loadEmails = (params) => {
+  return async (dispatch, getState) => {
+    if (!getState().isLoading) {
+      dispatch(setIsLoading(true))
+    }
+    const metaList = await api.getThreads(params)
+    const { labelIds } = params
+    if (metaList) {
+      if (metaList.message.resultSizeEstimate > 0) {
+        const { threads, nextPageToken } = metaList.message
+        const labeledThreads = {
+          labels: labelIds,
+          threads,
+          nextPageToken: nextPageToken ?? null,
+        }
+        await dispatch(listAddMeta(labeledThreads))
+        dispatch(loadEmailDetails(labeledThreads))
+      } else {
+        if (getState().baseLoaded) {
+          dispatch(setServiceUnavailable('No feed found'))
+        }
+        dispatch(setLoadedInbox(labelIds))
+        console.log(`Empty Inbox for ${labelIds}`)
+        if (
+          !getState().baseLoaded &&
+          getState().storageLabels.length === getState().loadedInbox.length
+        ) {
+          dispatch(setIsLoading(false))
+          dispatch(setBaseLoaded(true))
+        }
+      }
+    } else {
+      dispatch(setServiceUnavailable('No feed found'))
+      dispatch(setIsLoading(false))
+    }
+  }
+}
+
+export const checkBase = () => {
+  const BASE_ARRAY = [
+    'Juno',
+    'Juno/To Do',
+    'Juno/Keep',
+    'Juno/Reminder',
+    'INBOX',
+    'SPAM',
+    'DRAFT',
+    'SENT',
+  ]
+  return async (dispatch) => {
+    const labels = await api.fetchLabel()
+    if (labels) {
+      if (labels.message.labels.length > 0) {
+        const labelArray = labels.message.labels
+        if (
+          !multipleIncludes(
+            BASE_ARRAY,
+            labelArray.map((item) => item.name)
+          )
+        ) {
+          console.log('You do not have all labels.')
+          BASE_ARRAY.map((item) =>
+            labelArray.map((label) => label.name).includes(item)
+          ).map(
+            (checkValue, index) =>
+              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
+          )
+          dispatch(setBaseLoaded(true))
+        } else {
+          console.log('Gotcha! All minimal required labels.')
+          dispatch(
+            setStorageLabels(
+              BASE_ARRAY.map((baseLabel) =>
+                labelArray.filter((item) => item.name === baseLabel)
+              )
+            )
+          )
+          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+            labelArray.filter((item) => item.name === baseLabel)
+          )
+          prefetchedBoxes.forEach((label) => {
+            const params = {
+              labelIds: [label[0].id],
+              maxResults: BASE_MAX_RESULTS,
+            }
+            dispatch(loadEmails(params))
+          })
+        }
+      } else {
+        dispatch(setServiceUnavailable('Network Error. Please try again later'))
+      }
+    } else {
+      dispatch(setServiceUnavailable('Network Error. Please try again later'))
     }
   }
 }
