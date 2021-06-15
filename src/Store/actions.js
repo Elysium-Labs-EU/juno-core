@@ -454,6 +454,7 @@ export const OpenDraftEmail = (props) => {
       selectedEmail[0].messages.filter((message) =>
         message.labelIds.flat(1).some((label) => label.includes(...DRAFT_LABEL))
       )
+    console.log(filteredDraftEmail[0].payload)
     const loadEmail = {
       to: filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')
         ? filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')

@@ -70,7 +70,6 @@ const ComposeEmail = ({ composeEmail, dispatch }) => {
 
   useEffect(() => {
     if (composeEmail) {
-      console.log('triggered')
       setToValue(composeEmail.to)
       setSubjectValue(composeEmail.subject)
       setBodyValue(composeEmail.body)
@@ -105,10 +104,9 @@ const ComposeEmail = ({ composeEmail, dispatch }) => {
                     id="body"
                     label={BODY_LABEL}
                     multiline
-                    // value={composeEmail.body}
                     value={bodyValue}
                     onChange={handleChange}
-                    rows={8}
+                    rowsMax={25}
                   />
                 </div>
               </div>

@@ -50,7 +50,6 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
       const labelURL = convertArrayToString(labelIds)
       history.push(`mail/${labelURL}/${id}`)
     } else {
-      console.log('Open compose')
       dispatch(OpenDraftEmail({ history, id, DRAFT_LABEL }))
     }
   }

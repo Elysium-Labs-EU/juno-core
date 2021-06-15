@@ -255,15 +255,10 @@ const reducer = (state = initialState, action) => {
       }
     }
     case ACTION_TYPE.SET_COMPOSE_EMAIL:
-      console.log(action.payload)
-      //Create checker if object keys are there
-      console.log(Object.keys(action.payload) == ['to', 'subject', 'body'])
-      if (Object.keys(action.payload).length > 2) {
-        console.log('this is a preloaded email')
+      if (JSON.stringify(Object.keys(action.payload)) === JSON.stringify(['to', 'subject', 'body'])) {
         return { ...state, composeEmail: action.payload }
       } else {
         if (action.payload.id && action.payload.value) {
-          console.log(action.payload.id, action.payload.value)
           state.composeEmail[action.payload.id] = action.payload.value
           return {
             ...state,
