@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
+import { useHistory, useParams } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux'
 import '../../App.scss'
 import { useForm } from 'react-hook-form'
-// import { createApiClient } from '../../data/api'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
 import { SendComposedEmail, TrackComposeEmail } from '../../Store/actions'
 import useDebounce from '../../Hooks/use-debounce'
-
-// const api = createApiClient()
 
 const TO_LABEL = 'To'
 const SUBJECT_LABEL = 'Subject'
@@ -28,6 +26,10 @@ const ComposeEmail = ({ composeEmail, dispatch }) => {
   const debouncedToValue = useDebounce(toValue, 500)
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const debouncedBodyValue = useDebounce(bodyValue, 500)
+
+  const { messageId } = useParams()
+  const history = useHistory()
+  console.log(messageId)
 
   const handleChange = (event) => {
     if (event.target.id === 'to') {
@@ -90,7 +92,7 @@ const ComposeEmail = ({ composeEmail, dispatch }) => {
   }, [])
 
   const onSubmit = () => {
-    dispatch(SendComposedEmail())
+    dispatch(SendComposedEmail({ history, messageId }))
   }
 
   return (

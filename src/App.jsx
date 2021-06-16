@@ -42,7 +42,7 @@ const App = ({ baseLoaded, dispatch }) => {
           <Switch>
             <Route path="/" exact component={ToDo} />
             <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
-            <Route path="/compose" component={ComposeEmail} />
+            <Route path="/compose/:messageId?" component={ComposeEmail} />
             <Route path="/drafts" component={DraftEmail} />
             <Route path="/sent" component={SentEmail} />
             <Route path="/spam" component={SpamEmail} />
