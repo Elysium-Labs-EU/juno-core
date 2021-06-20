@@ -1,57 +1,63 @@
 import React from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import EmailAvatar from '../../EmailAvatar'
-import EmailAttachment from '../../EmailAttachment'
-import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../TimeStamp'
+import { OpenDraftEmail } from '../../../Store/actions'
 
-const DraftMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
-  console.log(message)
+const DRAFT_LABEL = ['DRAFT']
+const DRAFT = 'Draft - '
+
+const DraftMessage = ({ message, threadDetail }) => {
+  const dispatch = useDispatch()
+  const history = useHistory()
+  const id = useSelector((state) => state.currEmail)
+  const emailList = useSelector((state) => state.emailList)
+  const messageId = message && message.id
+
+  //   console.log(id)
+
+  const AvatarURL =
+    message && message.payload.headers.find((e) => e.name === 'From').value
+
+  const From =
+    message && message.payload.headers.find((e) => e.name === 'From').value
+
+  const EmailSnippet =
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}` + `...`
+
+  const handleClick = () => {
+    console.log(emailList)
+    console.log(id)
+    console.log(threadDetail)
+    // const selectIndex = threadDetail.messages.findIndex(
+    //   (element) => element.id === id
+    // )
+    dispatch(
+      OpenDraftEmail({ history, id, DRAFT_LABEL, threadDetail, messageId })
+    )
+  }
+
   return (
-    <>
-      <div className="d-flex align-items-center">
-        <EmailAvatar
-          avatarURL={
-            message.payload.headers.find((e) => e.name === 'From').value
-          }
-        />
-        <div className="headerFullWidth text-truncate d-flex">
-          <span className="email-detail-title">
-            {message.payload.headers.find((e) => e.name === 'Subject').value}
-          </span>
-          <div
-            className="ml-auto"
-            style={{ display: 'flex', flexFlow: 'column' }}
-          >
-            <TimeStamp threadTimeStamp={message.internalDate} />
-            {/* {message.labelIds.includes('DRAFT') && (
-                            <small>Draft</small>
-                          )} */}
-            {message.labelIds.includes('DRAFT') && <p>Draft message</p>}
+    <div
+      className="d-flex align-items-center closed-message"
+      onClick={handleClick}
+      aria-hidden="true"
+    >
+      <div className="d-flex align-content-center">
+        <EmailAvatar avatarURL={AvatarURL} />
+        <div className="d-flex align-items-center ml-2 mt-2">
+          <div className="text-truncate email-detail-from">
+            <span>{From}</span>
           </div>
         </div>
       </div>
-      <div className="d-flex align-items-center mt-2">
-        <div className="text-truncate email-detail-from">
-          {FROM}{' '}
-          <span>
-            {message.payload.headers.find((e) => e.name === 'From').value}
-          </span>
-        </div>
-      </div>
-      <div className="EmailBody mt-3 mb-3">
-        <EmailDetailBody
-          className="EmailDetailBody"
-          threadDetailBody={message.payload}
-          messageId={message.id}
-        />
-      </div>
-      <div className="mt-3 mb-3">
-        <p className="email-detail-from">
-          {MESSAGE_ID_LABEL} {message.id}
-        </p>
-      </div>
-      <EmailAttachment message={message} />
-    </>
+      <span style={{ fontStyle: 'italic' }}>
+        {DRAFT}
+        {EmailSnippet}
+      </span>
+      <TimeStamp threadTimeStamp={message.internalDate} />
+    </div>
   )
 }
 

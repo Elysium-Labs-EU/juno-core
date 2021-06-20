@@ -8,7 +8,7 @@ import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
 import ThreadBase from './EmailListItemStyles'
-import { convertArrayToString } from '../../utils'
+import { convertArrayToString, findPayloadHeadersData } from '../../utils'
 import { OpenDraftEmail } from '../../Store/actions'
 
 const DRAFT_LABEL = ['DRAFT']
@@ -22,28 +22,43 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
   const { id } = email
   const history = useHistory()
 
-  const emailLabels = email && email.messages[0].labelIds
-  const fromEmail =
-    email &&
-    email.messages[0].payload.headers.find((data) => data.name === 'From')
-      ? email.messages[0].payload.headers.find((data) => data.name === 'From')
-          .value
-      : undefined
-  const toEmail =
-    email &&
-    email.messages[0].payload.headers.find((data) => data.name === 'To')
-      ? email.messages[0].payload.headers.find((data) => data.name === 'To')
-          .value
-      : 'Draft'
-  const emailSubject =
-    email &&
-    email.messages[0].payload.headers.find((data) => data.name === 'Subject')
-      ? email.messages[0].payload.headers.find(
-          (data) => data.name === 'Subject'
-        ).value
-      : '(no subject)'
-  const emailSnippet = email && email.messages[0].snippet
-  const timeStamp = email && email.messages[0].internalDate
+  // console.log(email)
+
+  const emailLabels =
+    email && email.messages
+      ? email.messages[0].labelIds
+      : email.message.labelIds
+
+  const fromEmail = () => {
+    const query = 'From'
+    if (email) {
+      return findPayloadHeadersData({ email, query })
+    }
+    return null
+  }
+
+  const toEmail = () => {
+    const query = 'To'
+    if (email) {
+      return findPayloadHeadersData({ email, query })
+    }
+    return null
+  }
+
+  const emailSubject = () => {
+    const query = 'Subject'
+    if (email) {
+      return findPayloadHeadersData({ email, query })
+    }
+    return null
+  }
+
+  const emailSnippet =
+    email && email.messages ? email.messages[0].snippet : email.message.snippet
+  const timeStamp =
+    email && email.messages
+      ? email.messages[0].internalDate
+      : email.message.internalDate
 
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds)
@@ -68,17 +83,17 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
         >
           <div className="avatars">
             {!labelIds.includes(...DRAFT_LABEL) && (
-              <EmailAvatar avatarURL={fromEmail} />
+              <EmailAvatar avatarURL={fromEmail()} />
             )}
             {labelIds.includes(...DRAFT_LABEL) && (
-              <EmailAvatar avatarURL={toEmail} />
+              <EmailAvatar avatarURL={toEmail()} />
             )}
           </div>
           {!labelIds.includes(...DRAFT_LABEL) && (
-            <span className="text-truncate">{fromEmail}</span>
+            <span className="text-truncate">{fromEmail()}</span>
           )}
           {labelIds.includes(...DRAFT_LABEL) && (
-            <span className="text-truncate">{toEmail}</span>
+            <span className="text-truncate">{toEmail()}</span>
           )}
           <MessageCount countOfMessage={email} />
         </div>
@@ -88,7 +103,7 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
           aria-hidden="true"
         >
           <div className="subjectSnippet text-truncate">
-            <span className="subject">{emailSubject}</span>
+            <span className="subject">{emailSubject()}</span>
             <Snippet snippet={emailSnippet} />
           </div>
         </div>

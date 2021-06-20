@@ -12,6 +12,7 @@ export const initialState = {
   labelIds: '',
   metaList: [],
   emailList: [],
+  draftList: [],
   composeEmail: {},
 }
 
@@ -267,6 +268,24 @@ const reducer = (state = initialState, action) => {
         emailList: updatedEmailList,
       }
     }
+
+    case ACTION_TYPE.LIST_ADD_DRAFT: {
+      console.log(action.payload)
+      if (Array.isArray(action.payload)) {
+        return {
+          ...state,
+          draftList: action.payload,
+        }
+      }
+      return { ...state }
+    }
+    case ACTION_TYPE.LIST_UPDATE_DRAFT: {
+      return { ...state }
+    }
+    case ACTION_TYPE.LIST_REMOVE_DRAFT: {
+      return { ...state }
+    }
+
     case ACTION_TYPE.SET_COMPOSE_EMAIL: {
       if (
         JSON.stringify(Object.keys(action.payload)) ===

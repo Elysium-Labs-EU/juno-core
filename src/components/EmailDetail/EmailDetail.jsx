@@ -1,6 +1,6 @@
 import '../../App.scss'
 import React, { useEffect, useState } from 'react'
-import { useParams, useLocation, Link } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
@@ -14,6 +14,7 @@ import {
 import EmailDetOptions from './EmailDetOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
+import { EmailWrapper } from './EmailDetailStyles'
 
 const FROM = 'From'
 const MESSAGE_ID_LABEL = 'Message ID:'
@@ -59,12 +60,12 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
 
   const detailDisplaySelector = (message) => {
     if (message.labelIds.includes('DRAFT')) {
-      console.log('Draft message')
       return (
         <DraftMessage
           message={message}
           FROM={FROM}
           MESSAGE_ID_LABEL={MESSAGE_ID_LABEL}
+          threadDetail={threadDetail}
         />
       )
     }
@@ -89,9 +90,9 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
               {threadDetail &&
                 !isLoading &&
                 threadDetail.messages.map((message) => (
-                  <div className="p-4 mb-1 email" key={message.id}>
+                  <EmailWrapper key={message.id} labelIds={message.labelIds}>
                     {detailDisplaySelector(message)}
-                  </div>
+                  </EmailWrapper>
                 ))}
               {!threadDetail && isLoading && <CircularProgress />}
               {!threadDetail && !isLoading && <p>{ERROR_EMAIL}</p>}

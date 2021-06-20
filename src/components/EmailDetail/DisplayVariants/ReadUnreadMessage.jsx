@@ -8,10 +8,9 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
   const [open, setOpen] = useState(
     message && message.labelIds.includes('UNREAD')
   )
-  console.log(message)
+  // console.log(message)
 
   const handleClick = () => {
-    console.log('triggerd')
     setOpen((currState) => !currState)
   }
 

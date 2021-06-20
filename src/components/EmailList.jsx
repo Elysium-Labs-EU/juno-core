@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { connect } from 'react-redux'
 import EmailListItem from './EmailListItem/EmailListItem'
-import { loadEmails } from '../Store/actions'
+import { loadDraftList, loadEmails } from '../Store/actions'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
 
@@ -46,6 +46,11 @@ const EmailList = ({
       }
       console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
+      console.log(labelIds)
+      if (labelIds.includes('DRAFT')) {
+        console.log('here')
+        dispatch(loadDraftList())
+      }
     }
   }, [labelIds])
 

@@ -12,6 +12,7 @@ import {
 const api = createApiClient()
 
 const BASE_MAX_RESULTS = 20
+const DRAFT = 'DRAFT'
 
 export const ACTION_TYPE = {
   SET_BASE_LOADED: 'SET_BASE_LOADED',
@@ -31,6 +32,9 @@ export const ACTION_TYPE = {
   LIST_ADD_ITEM_DETAIL: 'LIST_ADD_ITEM_DETAIL',
   LIST_REMOVE_ITEM_DETAIL: 'LIST_REMOVE_ITEM_DETAIL',
   LIST_UPDATE_DETAIL: 'LIST_UPDATE_DETAIL',
+  LIST_ADD_DRAFT: 'LIST_ADD_DRAFT',
+  LIST_UPDATE_DRAFT: 'LIST_UPDATE_DRAFT',
+  LIST_REMOVE_DRAFT: 'LIST_REMOVE_DRAFT',
   SET_COMPOSE_EMAIL: 'SET_COMPOSE_EMAIL',
   UPDATE_COMPOSE_EMAIL: 'UPDATE_COMPOSE_EMAIL',
   RESET_COMPOSE_EMAIL: 'RESET_COMPOSE_EMAIL',
@@ -146,6 +150,24 @@ export const listUpdateDetail = (emailList) => {
     payload: emailList,
   }
 }
+export const listAddDraft = (draft) => {
+  return {
+    type: ACTION_TYPE.LIST_ADD_DRAFT,
+    payload: draft,
+  }
+}
+export const listUpdateDraft = (draft) => {
+  return {
+    type: ACTION_TYPE.LIST_UPDATE_DRAFT,
+    payload: draft,
+  }
+}
+export const listRemoveDraft = (draft) => {
+  return {
+    type: ACTION_TYPE.LIST_REMOVE_DRAFT,
+    payload: draft,
+  }
+}
 
 export const setComposeEmail = (body) => {
   return {
@@ -165,6 +187,24 @@ export const resetComposeEmail = () => {
   return {
     type: ACTION_TYPE.RESET_COMPOSE_EMAIL,
     composeEmail: {},
+  }
+}
+
+export const loadDraftList = () => {
+  return async (dispatch) => {
+    try {
+      const draftList = await api.getDrafts()
+      if (draftList.message.resultSizeEstimate > 0) {
+        dispatch(listAddDraft(draftList.message.drafts))
+      } else {
+        return null
+      }
+      return null
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Error getting Draft list.'))
+    }
+    return null
   }
 }
 
@@ -277,6 +317,70 @@ export const loadEmailDetails = (labeledThreads) => {
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error hydrating emails.'))
+    }
+  }
+}
+
+const pushDraftDetails = (enhancedDraftDetails) => {
+  const {
+    draft,
+    draft: { message },
+    history,
+  } = enhancedDraftDetails
+  return (dispatch) => {
+    try {
+      console.log(message)
+      const loadEmail = {
+        to: message.payload.headers.find((e) => e.name === 'To')
+          ? message.payload.headers.find((e) => e.name === 'To').value
+          : '',
+        subject: message.payload.headers.find((e) => e.name === 'Subject')
+          ? message.payload.headers.find((e) => e.name === 'Subject').value
+          : '',
+        body:
+          message.payload.body.size > 0
+            ? base64url
+                .decode(message.payload.body.data)
+                .replace(/<[^>]*>/g, '') ?? ''
+            : '',
+      }
+      if (draft.id) {
+        dispatch(setCurrentEmail(draft.id))
+        history.push(`/compose/${draft.id}`)
+      } else {
+        history.push(`/compose/`)
+      }
+      dispatch(setComposeEmail(loadEmail))
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Error setting up compose email.'))
+    }
+  }
+}
+
+const loadDraftDetails = (draftDetails) => {
+  const { draftId, history } = draftDetails
+  return async (dispatch) => {
+    try {
+      axios
+        .get(`/api/draft/${draftId[0].id}`)
+        .then((response) => {
+          if (response.status === 200) {
+            const { draft } = response.data
+            const enhancedDraftDetails = { history, draft }
+            pushDraftDetails(enhancedDraftDetails)
+          }
+        })
+        .catch((err) => console.log(err))
+        .then(
+          dispatch(setServiceUnavailable('Error setting up compose email.'))
+        )
+    } catch (err) {
+      console
+        .log(err)
+        .then(
+          dispatch(setServiceUnavailable('Error setting up compose email.'))
+        )
     }
   }
 }
@@ -423,10 +527,7 @@ export const UpdateMailLabel = (props) => {
                 })
               )
             }
-            if (
-              getState().currEmail &&
-              !getState().labelIds.includes('DRAFT')
-            ) {
+            if (getState().currEmail && !getState().labelIds.includes(DRAFT)) {
               const { viewIndex } = getState()
               NavigateNextMail({
                 history,
@@ -449,23 +550,67 @@ export const UpdateMailLabel = (props) => {
 }
 
 export const OpenDraftEmail = (props) => {
-  const { history, id, DRAFT_LABEL } = props
+  const { history, id, DRAFT_LABEL, messageId } = props
+  // console.log(typeof selectIndex, selectIndex)
   return async (dispatch, getState) => {
     try {
+      if (isEmpty(getState().draftList)) {
+        axios
+          .get('/api/drafts/')
+          .then((res) => {
+            if (res.status === 200) {
+              console.log(res)
+              if (res.data.message.resultSizeEstimate > 0) {
+                const {
+                  data: {
+                    message: { drafts },
+                  },
+                } = res
+                const draftId = drafts.filter(
+                  (draft) => draft.message.id === messageId
+                )
+                console.log(draftId)
+                if (!isEmpty(draftId)) {
+                  dispatch(loadDraftDetails({ draftId, history }))
+                }
+              } else {
+                dispatch(
+                  setServiceUnavailable('Error setting up compose email.')
+                )
+              }
+            }
+          })
+          .catch((err) => console.log(err))
+          .then(
+            dispatch(setServiceUnavailable('Error setting up compose email.'))
+          )
+      }
+      // console.log(response)
       const { emailList } = getState()
+      const { draftList } = getState()
       const draftBox = FilteredEmailList({ emailList, labelIds: DRAFT_LABEL })
+
+      console.log('id', id)
+      console.log('messageid', messageId)
       const selectedEmail =
         draftBox && draftBox[0].threads.filter((item) => item.id === id)
+      const selectIndex = messageId
+        ? draftList.findIndex((element) => element.message.id === messageId)
+        : 0
+
+      console.log(draftList[selectIndex].id)
+      console.log('selectIndex', selectIndex)
       const filteredDraftEmail =
         selectedEmail &&
-        selectedEmail[0].messages.filter((message) =>
-          message.labelIds
-            .flat(1)
-            .some((label) => label.includes(...DRAFT_LABEL))
-        )
+        selectedEmail[0].messages.filter((item) => item.id === messageId)
 
       // TODO: make selectedEmail into a variable selector, the user can select any message and continue from there.
       console.log(filteredDraftEmail[0].payload)
+      console.log(filteredDraftEmail)
+      // const enhancedDraftDetails = {
+      //   draft: filteredDraftEmail[0],
+      // }
+      // dispatch(pushDraftDetails())
       const loadEmail = {
         to: filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')
           ? filteredDraftEmail[0].payload.headers.find((e) => e.name === 'To')
@@ -483,13 +628,16 @@ export const OpenDraftEmail = (props) => {
             ? base64url
                 .decode(filteredDraftEmail[0].payload.body.data)
                 .replace(/<[^>]*>/g, '') ?? ''
-            : '',
+            : base64url
+                .decode(filteredDraftEmail[0].payload.parts[0].body.data)
+                .replace(/<[^>]*>/g, '') ?? '',
       }
-      if (id) {
-        dispatch(setCurrentEmail(id))
-        history.push(`compose/${id}`)
+      console.log(loadEmail)
+      if (draftList[selectIndex].id) {
+        dispatch(setCurrentEmail(draftList[selectIndex].id))
+        history.push(`/compose/${draftList[selectIndex].id}`)
       } else {
-        history.push(`compose/`)
+        history.push(`/compose/`)
       }
       dispatch(setComposeEmail(loadEmail))
     } catch (err) {
@@ -523,6 +671,26 @@ export const SendComposedEmail = (props) => {
       const composedEmail = getState().composeEmail
       console.log(composedEmail)
       if (Object.keys(composedEmail).length >= 3) {
+        if (messageId) {
+          const body = { composedEmail, messageId }
+          return axios
+            .post('/api/send-draft', body)
+            .then((res) => {
+              if (res.status === 200) {
+                console.log(res)
+                history.push(`/`)
+                dispatch(resetComposeEmail())
+                dispatch(setCurrentEmail(''))
+                // TODO: Update the redux states' to have the email in the correct boxes
+                // const request = {
+                //   removeLabelIds: [DRAFT],
+                // }
+                // dispatch(UpdateMailLabel({ request, messageId }))
+              }
+            })
+            .catch((err) => console.log(err))
+            .then(dispatch(setServiceUnavailable('Error sending email.')))
+        }
         return axios
           .post('/api/send-message', composedEmail)
           .then((res) => {
@@ -531,10 +699,6 @@ export const SendComposedEmail = (props) => {
               history.push(`/`)
               dispatch(resetComposeEmail())
               dispatch(setCurrentEmail(''))
-              const request = {
-                removeLabelIds: ['DRAFT'],
-              }
-              dispatch(UpdateMailLabel({ request, messageId }))
             }
           })
           .catch((err) => console.log(err))
@@ -556,10 +720,11 @@ export const loadEmails = (params) => {
       if (!getState().isLoading) {
         dispatch(setIsLoading(true))
       }
-      const metaList = await api.getThreads(params)
       const { labelIds } = params
+      const metaList = await api.getThreads(params)
       if (metaList) {
         if (metaList.message.resultSizeEstimate > 0) {
+          console.log(metaList.message)
           const { threads, nextPageToken } = metaList.message
           const labeledThreads = {
             labels: labelIds,
