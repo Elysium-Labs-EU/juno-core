@@ -3,16 +3,18 @@ import qs from 'qs'
 
 const createApiClient = () => {
   return {
-    getMessageDetail: (messageId) => {
-      return axios
-        .get(`/api/message/${messageId}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+    getMessageDetail: async (messageId) => {
+      try {
+        const res = await axios.get(`/api/message/${messageId}`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
 
-    getThreads: (query) => {
-      return axios
-        .get(`/api/threads/`, {
+    getThreads: async (query) => {
+      try {
+        const res = await axios.get(`/api/threads/`, {
           params: {
             labelIds: query.labelIds,
             maxResults: query.maxResults ?? 20,
@@ -22,42 +24,76 @@ const createApiClient = () => {
             return qs.stringify(params, { arrayFormat: 'repeat' })
           },
         })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
 
-    getThreadDetail: (messageId) => {
-      return axios
-        .get(`/api/thread/${messageId}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+    getDrafts: async () => {
+      try {
+        const res = await axios.get(`/api/drafts/`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    getAttachment: (messageId, attachmentId) => {
-      return axios
-        .get(`/api/message/attachment/${messageId}/${attachmentId}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+
+    getThreadDetail: async (messageId) => {
+      try {
+        const res = await axios.get(`/api/thread/${messageId}`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    sendMessage: (data) => {
+
+    getDraftDetail: async (draftId) => {
+      console.log(draftId)
+      try {
+        const res = await axios.get(`/api/draft/${draftId}`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
+    },
+
+    getAttachment: async (messageId, attachmentId) => {
+      try {
+        const res = await axios.get(
+          `/api/message/attachment/${messageId}/${attachmentId}`
+        )
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
+    },
+    sendMessage: async (data) => {
       console.log('data', data)
-      return axios
-        .post('/api/send-message', data)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.post('/api/send-message', data)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    updateMessage: (messageId, body) => {
+    updateMessage: async (messageId, body) => {
       console.log('body', body)
-      return axios
-        .patch(`/api/message/${messageId}`, body)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.patch(`/api/message/${messageId}`, body)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    thrashMessage: (messageId) => {
+    thrashMessage: async (messageId) => {
       console.log('trashed')
-      return axios
-        .post(`/api/message/thrash/${messageId}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.post(`/api/message/thrash/${messageId}`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
     // unThrashMessage: (messageId) => {
     //   console.log('trashed')
@@ -66,18 +102,24 @@ const createApiClient = () => {
     //     .then((res) => res.data)
     //     .catch((err) => console.log(err))
     // },
-    deleteMessage: (messageId) => {
+    deleteMessage: async (messageId) => {
       console.log('deleted')
-      return axios
-        .delete(`/api/message/`, { data: { id: messageId } })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.delete(`/api/message/`, {
+          data: { id: messageId },
+        })
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    fetchLabel: () => {
-      return axios
-        .get(`/api/labels`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+    fetchLabel: async () => {
+      try {
+        const res = await axios.get(`/api/labels`)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
     // createLabel: (body) => {
     //   console.log('body', body)
@@ -90,26 +132,32 @@ const createApiClient = () => {
     //       })
     //     .catch((err) => console.log(err))
     // },
-    updateLabel: (body) => {
+    updateLabel: async (body) => {
       console.log('body', body)
-      return axios
-        .patch(`/api/labels`, body)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.patch(`/api/labels`, body)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    deleteLabel: (id) => {
+    deleteLabel: async (id) => {
       console.log('id', id)
-      return axios
-        .delete(`/api/labels`, { data: { id } })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.delete(`/api/labels`, { data: { id } })
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
-    createDraft: (body) => {
+    createDraft: async (body) => {
       console.log('body', body)
-      return axios
-        .post(`/api/labels`, body)
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
+      try {
+        const res = await axios.post(`/api/labels`, body)
+        return res.data
+      } catch (err) {
+        return console.log(err)
+      }
     },
   }
 }

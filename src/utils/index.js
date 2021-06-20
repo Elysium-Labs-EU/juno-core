@@ -98,3 +98,19 @@ export const getDetailBody = (props) => {
   //   return <div dangerouslySetInnerHTML={{ __html: str }} />
   // }
 }
+
+export const findPayloadHeadersData = (props) => {
+  const { query, email } = props
+  if (email.messages) {
+    return email.messages[0].payload.headers.find((data) => data.name === query)
+      ? email.messages[0].payload.headers.find((data) => data.name === query)
+          .value
+      : undefined
+  }
+  if (email.message) {
+    return email.message.payload.headers.find((data) => data.name === query)
+      ? email.message.payload.headers.find((data) => data.name === query).value
+      : undefined
+  }
+  return null
+}
