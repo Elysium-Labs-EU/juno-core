@@ -46,11 +46,13 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
   const timeStamp = email && email.messages[0].internalDate
 
   const handleClick = () => {
+    const labelURL = convertArrayToString(labelIds)
     if (!labelIds.includes(...DRAFT_LABEL)) {
-      const labelURL = convertArrayToString(labelIds)
       history.push(`mail/${labelURL}/${id}`)
     } else {
-      dispatch(OpenDraftEmail({ history, id, DRAFT_LABEL }))
+      email.messages.length > 1 && history.push(`mail/${labelURL}/${id}`)
+      email.messages.length === 1 &&
+        dispatch(OpenDraftEmail({ history, id, DRAFT_LABEL }))
     }
   }
 

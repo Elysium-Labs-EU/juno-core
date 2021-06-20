@@ -31,7 +31,7 @@ const TimeStamp = ({ threadTimeStamp }) => {
   // console.log(day);
   // console.log(dateString);
 
-  return <span>{dateString}</span>
+  return <span className="date">{dateString}</span>
 
   // const timestamp = Date.now(); // This would be the timestamp you want to format
 

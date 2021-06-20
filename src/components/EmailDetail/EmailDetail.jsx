@@ -11,12 +11,12 @@ import {
   setCurrentLabels,
   setServiceUnavailable,
 } from '../../Store/actions'
-import EmailDetailBody from './EmailDetailBody'
 import EmailDetOptions from './EmailDetOptions'
-import EmailAvatar from '../EmailAvatar'
-import EmailAttachment from '../EmailAttachment'
-import TimeStamp from '../TimeStamp'
+import DraftMessage from './DisplayVariants/DraftMessage'
+import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 
+const FROM = 'From'
+const MESSAGE_ID_LABEL = 'Message ID:'
 const ERROR_EMAIL = 'Error loading email'
 
 const mapStateToProps = (state) => {
@@ -57,6 +57,29 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
     }
   }, [threadId])
 
+  const detailDisplaySelector = (message) => {
+    if (message.labelIds.includes('DRAFT')) {
+      console.log('Draft message')
+      return (
+        <DraftMessage
+          message={message}
+          FROM={FROM}
+          MESSAGE_ID_LABEL={MESSAGE_ID_LABEL}
+        />
+      )
+    }
+    if (!message.labelIds.includes('DRAFT')) {
+      return (
+        <ReadUnreadMessage
+          message={message}
+          FROM={FROM}
+          MESSAGE_ID_LABEL={MESSAGE_ID_LABEL}
+        />
+      )
+    }
+    return null
+  }
+
   return (
     <div className="tlOuterContainer">
       <div className="detail-row">
@@ -67,52 +90,7 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
                 !isLoading &&
                 threadDetail.messages.map((message) => (
                   <div className="p-4 mb-1 email" key={message.id}>
-                    <div className="d-flex align-items-center">
-                      <EmailAvatar
-                        avatarURL={
-                          message.payload.headers.find((e) => e.name === 'From')
-                            .value
-                        }
-                      />
-                      <div className="headerFullWidth text-truncate d-flex">
-                        <span className="email-detail-title">
-                          {
-                            message.payload.headers.find(
-                              (e) => e.name === 'Subject'
-                            ).value
-                          }
-                        </span>
-                        {/* <div className="text-truncate date">{message.payload.headers.find(e => e.name === 'Date').value}</div> */}
-                        <div className="ml-auto">
-                          <TimeStamp threadTimeStamp={message.internalDate} />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="d-flex align-items-center mt-2">
-                      <div className="text-truncate email-detail-from">
-                        From{' '}
-                        <span>
-                          {
-                            message.payload.headers.find(
-                              (e) => e.name === 'From'
-                            ).value
-                          }
-                        </span>
-                      </div>
-                    </div>
-                    <div className="EmailBody mt-3 mb-3">
-                      <EmailDetailBody
-                        className="EmailDetailBody"
-                        threadDetailBody={message.payload}
-                        messageId={message.id}
-                      />
-                    </div>
-                    <div className="mt-3 mb-3">
-                      <p className="email-detail-from">
-                        Message id: {message.id}
-                      </p>
-                    </div>
-                    <EmailAttachment message={message} />
+                    {detailDisplaySelector(message)}
                   </div>
                 ))}
               {!threadDetail && isLoading && <CircularProgress />}

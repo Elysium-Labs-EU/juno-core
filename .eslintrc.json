@@ -20,6 +20,8 @@
     "semi": ["error", "never"],
     "react/prop-types": "off",
     "no-unused-vars": "warn",
-    "no-console": "off"
+    "no-console": "off",
+    "no-unused-expressions": ["error", { "allowShortCircuit": true }],
+    "no-useless-concat": "off"
   }
 }

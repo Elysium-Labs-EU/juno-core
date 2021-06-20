@@ -204,7 +204,6 @@ export const loadEmailDetails = (labeledThreads) => {
               // If base is fully loaded, set loading to false, as a backup.
               if (getState().baseLoaded) {
                 dispatch(setIsLoading(false))
-                console.log('here')
                 // In case the base is already loaded, but an additional inbox is loaded.
                 if (
                   !multipleIncludes(
@@ -219,14 +218,12 @@ export const loadEmailDetails = (labeledThreads) => {
                       Object.prototype.hasOwnProperty.call(element, 'name') &&
                       Object.prototype.hasOwnProperty.call(element, 'id')
                     ) {
-                      console.log(element, 'here4')
                       return dispatch(setStorageLabels(element))
                     }
                     return api.fetchLabel().then((fetchedLabels) => {
                       if (fetchedLabels) {
                         if (fetchedLabels.message.labels.length > 0) {
                           const labelArray = fetchedLabels.message.labels
-                          console.log('here3')
                           dispatch(
                             setStorageLabels(
                               labels.map((baseLabel) =>

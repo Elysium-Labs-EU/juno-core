@@ -1,37 +1,10 @@
-@font-face {
-	font-family: 'Barlow-Regular';
-
-	src: url('./fonts/Barlow-Regular.woff') format('woff'),
-		url('./fonts/Barlow-Regular.woff2') format('woff2');
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'Barlow-Bold';
-
-	src: url('./fonts/Barlow-Bold.woff') format('woff'),
-		/* Modern Browsers */ url('./fonts/Barlow-Bold.woff2') format('woff2'); /* Modern Browsers */
-	font-weight: normal;
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'Barlow-SemiBold';
-
-	src: url('./fonts/Barlow-SemiBold.woff') format('woff'),
-		/* Modern Browsers */ url('./fonts/Barlow-SemiBold.woff2') format('woff2'); /* Modern Browsers */
-	font-weight: normal;
-	font-style: normal;
-}
-
 .avatar-xs {
-	width: 2.25rem;
-	height: auto;
+  width: 2.25rem;
+  height: auto;
 }
 
 .g-container {
-	max-width: 1200px;
+  max-width: 1200px;
 }
 
 // a:hover {
@@ -39,53 +12,44 @@
 // }
 
 body {
-	background-color: #f0f0f0 !important;
-	// font-family: 'Barlow-Regular' !important;
-	font-family: sans-serif;
+  background-color: #f0f0f0 !important;
+  // font-family: 'Barlow-Regular' !important;
+  //   font-family: sans-serif;
 }
 
 .g-email-list {
-	font-size: 1rem;
-	font-weight: normal;
-	font-stretch: normal;
-	font-style: normal;
-	letter-spacing: normal;
-	text-align: left;
-	color: #1c1c1c;
+  font-size: 1rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  text-align: left;
+  color: #1c1c1c;
 }
 
 .g-email-list:hover {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 .snippet {
-	color: #a5a5a5;
+  color: #a5a5a5;
 }
 
 .email-avatar {
-	background-color: #a5a5a5;
+  background-color: #a5a5a5;
 }
 
 .option-link {
-	font-size: 1rem;
-	font-weight: normal;
-	font-stretch: normal;
-	font-style: normal;
-	line-height: 1.13;
-	letter-spacing: normal;
-	text-align: left;
-	color: #a5a5a5;
-	display: flex;
-	align-items: center;
-}
-
-.option-link:hover {
-	color: #1c1c1c;
-	text-decoration: none;
-}
-
-.warning {
-	color: hsl(0, 23%, 68%);
+  font-size: 1rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: left;
+  color: #a5a5a5;
+  display: flex;
+  align-items: center;
 }
 
 // .card {
@@ -95,127 +59,123 @@ body {
 // }
 
 .label-container {
-	flex: 1 1 0%;
-	transition: transform 0.3s ease 0s;
-	white-space: nowrap;
-	user-select: none;
+  flex: 1 1 0%;
+  transition: transform 0.3s ease 0s;
+  white-space: nowrap;
+  user-select: none;
 }
 
 .icon {
-	margin-right: 13px;
-	line-height: 0;
-	text-align: center;
-	transition: opacity 0.3s ease 0s;
-}
-
-.subject {
-	color: var(--primary-text);
+  margin-right: 13px;
+  line-height: 0;
+  text-align: center;
+  transition: opacity 0.3s ease 0s;
 }
 
 .date {
-	color: #a5a5a5;
-	margin-left: 10px;
-	white-space: nowrap;
+  color: #a5a5a5;
+  margin-left: 10px;
+  white-space: nowrap;
 }
 
 .threadRow {
-	position: relative;
-	display: grid;
-	grid-template-columns: var(--padding-left) 20px 215px auto max-content 105px 20px var(
-			--padding-right
-		);
-	font-size: 13px;
-	height: 56px;
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--padding-left) 20px 215px auto max-content 105px 20px var(
+      --padding-right
+    );
+  font-size: 13px;
+  height: 56px;
 }
 
 .cellName {
-	display: flex;
-	flex-direction: row;
-	-webkit-box-align: center;
-	align-items: center;
-	cursor: default;
-	user-select: none;
-	color: var(--primary-text);
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: default;
+  user-select: none;
+  color: var(--primary-text);
 }
 
 .cellName > .avatars {
-	margin-right: 15px;
+  margin-right: 15px;
 }
 
 .cellMessage {
-	display: flex;
-	flex-direction: row;
-	-webkit-box-align: center;
-	align-items: center;
-	min-width: 0;
-	padding-left: 15px;
-	white-space: nowrap;
-	cursor: default;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0;
+  padding-left: 15px;
+  white-space: nowrap;
+  cursor: default;
 }
 
 .cellAttachment {
-	display: flex;
-	flex-direction: row;
-	-webkit-box-align: center;
-	align-items: center;
-	justify-self: end;
-	padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-self: end;
+  padding-left: 10px;
 }
 
 .cellDate {
-	text-align: right;
+  text-align: right;
 }
 
 .datePosition {
-	height: 100%;
-	display: flex;
-	flex-direction: row;
-	-webkit-box-align: center;
-	align-items: center;
-	-webkit-box-pack: end;
-	justify-content: flex-end;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
 }
 
 .inlineThreadActions {
-	position: absolute;
-	top: 18px;
-	right: 30px;
-	bottom: 0;
+  position: absolute;
+  top: 18px;
+  right: 30px;
+  bottom: 0;
 }
 
 .scroll {
-	position: relative;
-	width: 100%;
-	height: 100vh;
-	overflow-y: auto;
-	display: flex;
-	flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .tlOuterContainer {
-	max-width: 1480px;
-	width: 100%;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	flex: 1 1 0%;
+  max-width: 1480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  flex: 1 1 0%;
 }
 
 .threadList {
-	flex: 1 1 0%;
-	display: flex;
-	flex-direction: column;
-	padding-bottom: 127px;
-	padding-top: 44px;
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 127px;
+  padding-top: 44px;
 }
 
 .base {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .headerFullWidth {
-	width: 100%;
+  width: 100%;
 }
 
 // .threadBase {
@@ -230,128 +190,128 @@ body {
 // }
 
 .label-base {
-	cursor: default;
-	user-select: none;
-	transition: opacity 0.3s ease 0s, color 0.3s ease 0s;
+  cursor: default;
+  user-select: none;
+  transition: opacity 0.3s ease 0s, color 0.3s ease 0s;
 }
 
 .input-base {
-	position: relative;
-	display: flex;
-	flex-flow: row wrap;
-	cursor: text;
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  cursor: text;
 }
 
 .participants-input {
-	margin-left: 0;
+  margin-left: 0;
 }
 
 .wrapper-participants {
-	// margin-left: -10px;
-	margin-right: 20px;
+  // margin-left: -10px;
+  margin-right: 20px;
 }
 
 .ccBcc {
-	margin-left: auto;
+  margin-left: auto;
 }
 
 .ccBccButtons {
-	display: inline-flex;
-	flex-direction: row;
-	height: 35px;
+  display: inline-flex;
+  flex-direction: row;
+  height: 35px;
 }
 
 .ccBccButton {
-	border: 0;
-	box-shadow: none;
-	padding: 0;
-	background-color: transparent;
-	outline: 0;
-	color: rgba(20, 20, 21, 0.3);
-	cursor: pointer;
-	user-select: none;
-	transition: color 0.2s ease 0s;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  background-color: transparent;
+  outline: 0;
+  color: rgba(20, 20, 21, 0.3);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease 0s;
 }
 
 .dnd-base {
-	min-height: 140px;
-	border: 1px dashed rgb(221, 221, 231);
-	border-radius: 5px;
-	display: flex;
-	flex: 1 1 0%;
-	flex-direction: column;
-	-webkit-box-pack: center;
-	justify-content: center;
-	-webkit-box-align: center;
-	align-items: center;
+  min-height: 140px;
+  border: 1px dashed rgb(221, 221, 231);
+  border-radius: 5px;
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
 }
 
 .label {
-	color: rgb(83, 83, 88);
-	font-size: 13px;
-	opacity: 0.5;
-	user-select: none;
-	cursor: default;
+  color: rgb(83, 83, 88);
+  font-size: 13px;
+  opacity: 0.5;
+  user-select: none;
+  cursor: default;
 }
 
 .signatureLabel {
-	position: absolute;
-	left: -120px;
-	top: 0;
-	width: 100px;
-	text-align: right;
+  position: absolute;
+  left: -120px;
+  top: 0;
+  width: 100px;
+  text-align: right;
 }
 
 .inputContainer {
-	transition: opacity 0.2s ease 0s;
-	opacity: 1;
+  transition: opacity 0.2s ease 0s;
+  opacity: 1;
 }
 .inputContainerDimmed {
-	opacity: 0.3;
+  opacity: 0.3;
 }
 .inputContainerSignature {
-	padding-top: 2px;
+  padding-top: 2px;
 }
 
 .textarea {
-	padding-top: 1px;
-	caret-color: rgb(31, 36, 238);
-	line-height: 1.8;
-	font-size: 13px;
-	color: rgb(20, 20, 21);
+  padding-top: 1px;
+  caret-color: rgb(31, 36, 238);
+  line-height: 1.8;
+  font-size: 13px;
+  color: rgb(20, 20, 21);
 }
 
 .textareaReset {
-	display: block;
-	width: 100%;
-	max-width: 100%;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	border: 0;
-	outline: none;
-	resize: none;
-	background-color: transparent;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  outline: none;
+  resize: none;
+  background-color: transparent;
 }
 
 .select {
-	opacity: 0;
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 31px;
-	cursor: pointer;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 31px;
+  cursor: pointer;
 }
 
 .row-1 {
-	position: relative;
-	min-height: 35px;
+  position: relative;
+  min-height: 35px;
 }
 
 .label-1 {
-	position: absolute;
-	left: -120px;
-	width: 100px;
-	text-align: right;
+  position: absolute;
+  left: -120px;
+  width: 100px;
+  text-align: right;
 }
