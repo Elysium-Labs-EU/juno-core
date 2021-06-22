@@ -1,9 +1,9 @@
 import React from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import EmailAvatar from '../../EmailAvatar'
 import TimeStamp from '../../TimeStamp'
-import { OpenDraftEmail } from '../../../Store/actions'
+import { OpenDraftEmail } from '../../../Store/draftsSlice'
 
 const DRAFT_LABEL = ['DRAFT']
 const DRAFT = 'Draft - '

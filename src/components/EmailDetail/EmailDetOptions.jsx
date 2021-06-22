@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
-import { UpdateMailLabel } from '../../Store/actions'
+import { UpdateMailLabel } from '../../Store/emailListSlice'
 
 const EmailOptionsContainer = styled.div`
   position: relative;

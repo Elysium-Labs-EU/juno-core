@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import '../../App.scss'
 import { useForm } from 'react-hook-form'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
-import { SendComposedEmail, TrackComposeEmail } from '../../Store/actions'
+import { SendComposedEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/use-debounce'
 
 const TO_LABEL = 'To'

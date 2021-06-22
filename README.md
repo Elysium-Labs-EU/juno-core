@@ -1,6 +1,6 @@
 # react-gmail-minimal
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2217e01a094448e398f59f5036419040)](https://www.codacy.com/gh/sgnilreutr/react-gmail-minimal/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sgnilreutr/react-gmail-minimal&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2217e01a094448e398f59f5036419040)](https://www.codacy.com/gh/sgnilreutr/react-gmail-minimal/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sgnilreutr/react-gmail-minimal&utm_campaign=Badge_Grade)
 
 ## Available Scripts
 

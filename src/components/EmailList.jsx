@@ -2,7 +2,11 @@ import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { connect } from 'react-redux'
 import EmailListItem from './EmailListItem/EmailListItem'
-import { loadDraftList, loadEmails } from '../Store/actions'
+import {
+  // loadDraftList,
+  loadEmails,
+} from '../Store/metaListSlice'
+import { loadDraftList } from '../Store/draftsSlice'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
 

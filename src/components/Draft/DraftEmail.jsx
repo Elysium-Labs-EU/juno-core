@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import EmailList from '../EmailList'
-import { setCurrentLabels } from '../../Store/actions'
+import { setCurrentLabels } from '../../Store/labelsSlice'
 
 const LABEL = ['DRAFT']
 

@@ -6,11 +6,9 @@ import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
 import { connect } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {
-  setCurrentEmail,
-  setCurrentLabels,
-  setServiceUnavailable,
-} from '../../Store/actions'
+import { setCurrentEmail } from '../../Store/emailDetailSlice'
+import { setServiceUnavailable } from '../../Store/utilsSlice'
+import { setCurrentLabels } from '../../Store/labelsSlice'
 import EmailDetOptions from './EmailDetOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'

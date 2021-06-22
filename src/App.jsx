@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { checkBase } from './Store/actions'
+// import { checkBase } from './Store/actions'
+import { checkBase } from './Store/baseSlice'
 import './App.scss'
 import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
@@ -17,13 +18,9 @@ import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
 import DraftEmail from './components/Draft/DraftEmail'
 
-const mapStateToProps = (state) => {
-  const { baseLoaded } = state
-  return { baseLoaded }
-}
-
-const App = ({ baseLoaded, dispatch }) => {
-  console.log(baseLoaded)
+const App = () => {
+  const dispatch = useDispatch()
+  const baseLoaded = useSelector((state) => state.baseLoaded)
   useEffect(() => {
     if (!baseLoaded) {
       dispatch(checkBase())
@@ -61,4 +58,4 @@ const App = ({ baseLoaded, dispatch }) => {
   )
 }
 
-export default connect(mapStateToProps)(App)
+export default App

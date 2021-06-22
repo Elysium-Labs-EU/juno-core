@@ -5,7 +5,7 @@ import './TodoFocusOption.scss'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements'
 import { convertArrayToString, startSort } from '../../utils'
-import { refreshEmailFeed } from '../../Store/actions'
+import { refreshEmailFeed } from '../../Store/metaListSlice'
 
 const FOCUS_BUTTON = 'Focus mode'
 

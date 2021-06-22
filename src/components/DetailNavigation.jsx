@@ -9,7 +9,7 @@ import {
   NavigatePreviousMail,
   NavigateNextMail,
 } from '../utils'
-import { setViewingIndex } from '../Store/actions'
+import { setViewingIndex } from '../Store/emailDetailSlice'
 
 const mapStateToProps = (state) => {
   const { labelIds, currEmail, emailList, isLoading, viewIndex, metaList } =

@@ -9,7 +9,7 @@ import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
 import ThreadBase from './EmailListItemStyles'
 import { convertArrayToString, findPayloadHeadersData } from '../../utils'
-import { OpenDraftEmail } from '../../Store/actions'
+import { OpenDraftEmail } from '../../Store/draftsSlice'
 
 const DRAFT_LABEL = ['DRAFT']
 
