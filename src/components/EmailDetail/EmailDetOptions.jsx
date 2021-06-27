@@ -8,12 +8,15 @@ import {
   FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
-import { UpdateMailLabel } from '../../Store/actions'
+import { UpdateMetaListLabel } from '../../Store/metaListSlice'
+import { selectEmailList } from '../../Store/emailListSlice'
+import { selectViewIndex } from '../../Store/emailDetailSlice'
+import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 
 const EmailOptionsContainer = styled.div`
   position: relative;
@@ -35,20 +38,12 @@ const REMIND_BUTTON = 'Remind'
 const ARCHIVE_BUTTON = 'Archive'
 const MORE_BUTTON = 'More'
 
-const mapStateToProps = (state) => {
-  const { storageLabels, labelIds, emailList, metaList, viewIndex } = state
-  return { storageLabels, labelIds, emailList, metaList, viewIndex }
-}
-
-const EmailDetOptions = ({
-  messageId,
-  storageLabels,
-  labelIds,
-  emailList,
-  metaList,
-  viewIndex,
-  dispatch,
-}) => {
+const EmailDetOptions = ({ messageId }) => {
+  const emailList = useSelector(selectEmailList)
+  const labelIds = useSelector(selectLabelIds)
+  const storageLabels = useSelector(selectStorageLabels)
+  const viewIndex = useSelector(selectViewIndex)
+  const dispatch = useDispatch()
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
@@ -59,14 +54,14 @@ const EmailDetOptions = ({
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
   }
 
   const CompletedAction = () => {
     const request = {
       removeLabelIds: labelIds,
     }
-    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
   }
 
   return (
@@ -161,4 +156,4 @@ const EmailDetOptions = ({
   )
 }
 
-export default connect(mapStateToProps)(EmailDetOptions)
+export default EmailDetOptions

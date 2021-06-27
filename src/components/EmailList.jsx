@@ -1,40 +1,29 @@
 import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import EmailListItem from './EmailListItem/EmailListItem'
-import { loadDraftList, loadEmails } from '../Store/actions'
+import {
+  // loadDraftList,
+  loadEmails,
+} from '../Store/metaListSlice'
+import { loadDraftList } from '../Store/draftsSlice'
+import { selectEmailList } from '../Store/emailListSlice'
+import { selectLabelIds, selectLoadedInbox } from '../Store/labelsSlice'
+import { selectIsLoading } from '../Store/utilsSlice'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
+import LoadingState from './Elements/LoadingState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
 
-const mapStateToProps = (state) => {
-  const {
-    labelIds,
-    metaList,
-    nextPageToken,
-    emailList,
-    isLoading,
-    loadedInbox,
-  } = state
-  return {
-    labelIds,
-    metaList,
-    nextPageToken,
-    emailList,
-    isLoading,
-    loadedInbox,
-  }
-}
+const EmailList = () => {
+  const emailList = useSelector(selectEmailList)
+  const isLoading = useSelector(selectIsLoading)
+  const labelIds = useSelector(selectLabelIds)
+  const loadedInbox = useSelector(selectLoadedInbox)
+  const dispatch = useDispatch()
 
-const EmailList = ({
-  labelIds,
-  dispatch,
-  emailList,
-  isLoading,
-  loadedInbox,
-}) => {
   useEffect(() => {
     if (
       labelIds &&
@@ -44,11 +33,9 @@ const EmailList = ({
         labelIds,
         maxResults: MAX_RESULTS,
       }
-      console.log(`loading ${labelIds}`)
+      // console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
-      console.log(labelIds)
       if (labelIds.includes('DRAFT')) {
-        console.log('here')
         dispatch(loadDraftList())
       }
     }
@@ -87,7 +74,7 @@ const EmailList = ({
                   <button
                     className="btn btn-sm btn-light"
                     disabled={isLoading}
-                    onClick={() => loadNextPage(labelIds, nextPageToken)}
+                    onClick={() => loadNextPage(nextPageToken)}
                     type="button"
                   >
                     {LOAD_OLDER}
@@ -115,11 +102,15 @@ const EmailList = ({
   return (
     <>
       {labelIds &&
-        !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
-        emailList.length > 0 &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
         labeledInbox({ labelIds, emailList })}
+      {isLoading &&
+        labelIds &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+          <LoadingState />
+        )}
     </>
   )
 }
 
-export default connect(mapStateToProps)(EmailList)
+export default EmailList

@@ -1,22 +1,25 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import './InboxSortOption.scss'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements'
 import { convertArrayToString, startSort } from '../../utils'
-import { refreshEmailFeed } from '../../Store/actions'
+import { refreshEmailFeed, selectMetaList } from '../../Store/metaListSlice'
+import { selectLabelIds } from '../../Store/labelsSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
 
 const INBOX_BUTTON = 'Sort inbox'
 
-const mapStateToProps = (state) => {
-  const { metaList, emailList, labelIds, isLoading } = state
-  return { metaList, emailList, labelIds, isLoading }
-}
-
-const SortInbox = ({ metaList, emailList, labelIds, isLoading, dispatch }) => {
+const SortInbox = () => {
+  const metaList = useSelector(selectMetaList)
+  const labelIds = useSelector(selectLabelIds)
+  const isLoading = useSelector(selectIsLoading)
+  const dispatch = useDispatch()
   const history = useHistory()
-  const labelURL = convertArrayToString(labelIds)
+  const labelURL = () => {
+    return convertArrayToString(labelIds && labelIds)
+  }
 
   const refreshFeed = () => {
     const params = {
@@ -45,4 +48,4 @@ const SortInbox = ({ metaList, emailList, labelIds, isLoading, dispatch }) => {
   )
 }
 
-export default connect(mapStateToProps)(SortInbox)
+export default SortInbox

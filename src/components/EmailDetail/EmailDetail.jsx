@@ -1,31 +1,28 @@
 import '../../App.scss'
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-
 import { FiPaperclip } from 'react-icons/fi'
 import './EmailDetail.scss'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import {
-  setCurrentEmail,
-  setCurrentLabels,
-  setServiceUnavailable,
-} from '../../Store/actions'
+import { setCurrentEmail } from '../../Store/emailDetailSlice'
+import { selectIsLoading, setServiceUnavailable } from '../../Store/utilsSlice'
+import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
 import EmailDetOptions from './EmailDetOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import { EmailWrapper } from './EmailDetailStyles'
+import { selectEmailList } from '../../Store/emailListSlice'
 
 const FROM = 'From'
 const MESSAGE_ID_LABEL = 'Message ID:'
 const ERROR_EMAIL = 'Error loading email'
 
-const mapStateToProps = (state) => {
-  const { emailList, isLoading, threadId, labelIds } = state
-  return { emailList, isLoading, threadId, labelIds }
-}
-
-const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
+const EmailDetail = () => {
+  const emailList = useSelector(selectEmailList)
+  const isLoading = useSelector(selectIsLoading)
+  const labelIds = useSelector(selectLabelIds)
+  const dispatch = useDispatch()
   const location = useLocation()
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
@@ -105,4 +102,4 @@ const EmailDetail = ({ dispatch, emailList, isLoading, labelIds }) => {
   )
 }
 
-export default connect(mapStateToProps)(EmailDetail)
+export default EmailDetail

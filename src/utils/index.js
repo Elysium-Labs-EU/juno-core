@@ -1,4 +1,5 @@
 export const convertArrayToString = (data) => {
+  // console.trace(data)
   const converted = data.toString().replace(',', '-')
   return converted
 }

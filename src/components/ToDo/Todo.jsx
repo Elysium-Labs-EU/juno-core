@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import EmailList from '../EmailList'
-import { fetchLabelIds, setCurrentLabels } from '../../Store/actions'
-
-const mapStateToProps = (state) => {
-  const { baseLoaded, storageLabels } = state
-  return { baseLoaded, storageLabels }
-}
+import { selectBaseLoaded } from '../../Store/baseSlice'
+import {
+  fetchLabelIds,
+  setCurrentLabels,
+  selectStorageLabels,
+} from '../../Store/labelsSlice'
 
 const LABEL = 'Juno/To Do'
 
-const Todo = ({ baseLoaded, storageLabels, dispatch }) => {
+const Todo = () => {
+  const baseLoaded = useSelector(selectBaseLoaded)
+  const storageLabels = useSelector(selectStorageLabels)
+  const dispatch = useDispatch()
+
   useEffect(() => {
     if (baseLoaded && !storageLabels.some((label) => label.name === LABEL)) {
       dispatch(fetchLabelIds(LABEL))
@@ -26,4 +30,4 @@ const Todo = ({ baseLoaded, storageLabels, dispatch }) => {
   return <EmailList />
 }
 
-export default connect(mapStateToProps)(Todo)
+export default Todo
