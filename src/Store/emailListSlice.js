@@ -4,8 +4,8 @@ import axios from 'axios'
 import createApiClient from '../data/api'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 // import { setBaseLoaded } from './baseSlice'
-import { setLoadedInbox, setStorageLabels } from './labelsSlice'
-import { FilteredEmailList, multipleIncludes } from '../utils'
+import { setLoadedInbox } from './labelsSlice'
+import { FilteredEmailList } from '../utils'
 
 const DRAFT = 'DRAFT'
 
@@ -104,11 +104,6 @@ export const emailListSlice = createSlice({
 export const { listAddEmailList, listAddItemDetail, listRemoveItemDetail } =
   emailListSlice.actions
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-
 export const loadEmailDetails = (labeledThreads) => {
   return async (dispatch, getState) => {
     try {
@@ -116,8 +111,6 @@ export const loadEmailDetails = (labeledThreads) => {
       if (threads) {
         const buffer = []
         const loadCount = threads.length
-
-        console.log(getState().labels.storageLabels)
 
         if (threads.length > 0) {
           threads.forEach(async (item) => {
@@ -131,68 +124,8 @@ export const loadEmailDetails = (labeledThreads) => {
                   nextPageToken: nextPageToken ?? null,
                 })
               )
-              // If base isn't fully loaded yet, add the additional loadedInbox
-
               dispatch(setLoadedInbox(labels))
-
-              // if (!getState().base.baseLoaded) {
-              //   dispatch(setLoadedInbox(labels))
-              // }
-              // If base isn't fully loaded yet but all current inboxes are loaded, unveil the app.
-              if (
-                getState().labels.storageLabels.length ===
-                getState().labels.loadedInbox.length
-              ) {
-                dispatch(setIsLoading(false))
-                // dispatch(setBaseLoaded(true))
-              }
-              // if (
-              //   !getState().base.baseLoaded &&
-              //   getState().labels.storageLabels.length ===
-              //     getState().labels.loadedInbox.length
-              // ) {
-              //   dispatch(setIsLoading(false))
-              //   // dispatch(setBaseLoaded(true))
-              // }
-              // If base is fully loaded, set loading to false, as a backup.
-              // if (getState().base.baseLoaded) {
-              //   dispatch(setIsLoading(false))
-              //   // In case the base is already loaded, but an additional inbox is loaded.
-              //   if (
-              //     !multipleIncludes(
-              //       labels,
-              //       getState().labels.storageLabels.map((label) => label.id)
-              //     )
-              //   ) {
-              //     dispatch(setLoadedInbox(labels))
-              //     // Check if the label is complete object, if not filter out the object via an api listing.
-              //     labels.map((element) => {
-              //       if (
-              //         Object.prototype.hasOwnProperty.call(element, 'name') &&
-              //         Object.prototype.hasOwnProperty.call(element, 'id')
-              //       ) {
-              //         return dispatch(setStorageLabels(element))
-              //       }
-              //       return api.fetchLabel().then((fetchedLabels) => {
-              //         if (fetchedLabels) {
-              //           if (fetchedLabels.message.labels.length > 0) {
-              //             const labelArray = fetchedLabels.message.labels
-              //             dispatch(
-              //               setStorageLabels(
-              //                 labels.map((baseLabel) =>
-              //                   labelArray.filter(
-              //                     (singleLabel) =>
-              //                       singleLabel.name === baseLabel
-              //                   )
-              //                 )
-              //               )
-              //             )
-              //           }
-              //         }
-              //       })
-              //     })
-              //   }
-              // }
+              dispatch(setIsLoading(false))
             }
           })
         }

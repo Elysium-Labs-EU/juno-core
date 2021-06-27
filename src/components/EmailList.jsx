@@ -7,18 +7,18 @@ import {
   loadEmails,
 } from '../Store/metaListSlice'
 import { loadDraftList } from '../Store/draftsSlice'
-import { selectEmailList, selectNextPageToken } from '../Store/emailListSlice'
+import { selectEmailList } from '../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../Store/labelsSlice'
 import { selectIsLoading } from '../Store/utilsSlice'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
+import LoadingState from './Elements/LoadingState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
-  // const nextPageToken = useSelector(selectNextPageToken)
   const isLoading = useSelector(selectIsLoading)
   const labelIds = useSelector(selectLabelIds)
   const loadedInbox = useSelector(selectLoadedInbox)
@@ -35,9 +35,7 @@ const EmailList = () => {
       }
       console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
-      console.log(labelIds)
       if (labelIds.includes('DRAFT')) {
-        console.log('here')
         dispatch(loadDraftList())
       }
     }
@@ -56,6 +54,7 @@ const EmailList = () => {
 
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
+    console.log('here')
     return (
       <>
         <div className="scroll">
@@ -101,14 +100,14 @@ const EmailList = () => {
     return null
   }
 
-  console.log(labelIds)
-
   return (
     <>
-      {labelIds &&
-        !labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
+      {!isLoading &&
+        labelIds &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
         emailList.length > 0 &&
         labeledInbox({ labelIds, emailList })}
+      {isLoading && <LoadingState />}
     </>
   )
 }

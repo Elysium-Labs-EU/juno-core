@@ -22,7 +22,6 @@ export const labelsSlice = createSlice({
         ? action.payload
         : [action.payload]
       if (!state.loadedInbox.includes(labelArray)) {
-        console.log('here@#12')
         state.loadedInbox = [...new Set([...state.loadedInbox, labelArray])]
       }
     },

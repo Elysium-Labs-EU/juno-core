@@ -61,31 +61,26 @@ export const checkBase = () => {
             // is recreated. Does it still attempt to load the base?
           } else {
             console.log('Gotcha! All minimal required labels.')
-            dispatch(
-              setStorageLabels(
-                BASE_ARRAY.map((baseLabel) =>
-                  labelArray.filter((item) => item.name === baseLabel)
-                )
-              )
-            )
             const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
               labelArray.filter((item) => item.name === baseLabel)
             )
-            let count = 0
-            const loadCount = prefetchedBoxes.length
-            prefetchedBoxes.forEach(async (label) => {
-              const params = {
-                labelIds: [label[0].id],
-                maxResults: BASE_MAX_RESULTS,
-              }
-              await dispatch(loadEmails(params))
-              count += 1
-              if (count === loadCount) {
-                console.log(loadCount)
-                console.log(count)
-                dispatch(setBaseLoaded(true))
-              }
-            })
+            dispatch(setStorageLabels(prefetchedBoxes))
+            dispatch(setBaseLoaded(true))
+            // let count = 0
+            // const loadCount = prefetchedBoxes.length
+            // prefetchedBoxes.forEach(async (label) => {
+            //   const params = {
+            //     labelIds: [label[0].id],
+            //     maxResults: BASE_MAX_RESULTS,
+            //   }
+            //   await dispatch(loadEmails(params))
+            //   count += 1
+            //   if (count === loadCount) {
+            //     console.log(loadCount)
+            //     console.log(count)
+            //     dispatch(setBaseLoaded(true))
+            //   }
+            // })
           }
         } else {
           dispatch(

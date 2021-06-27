@@ -20,8 +20,6 @@ const EmailListItem = ({ email }) => {
   const history = useHistory()
   const dispatch = useDispatch()
 
-  console.log(email)
-
   const emailLabels =
     email && email.messages
       ? email.messages[0].labelIds

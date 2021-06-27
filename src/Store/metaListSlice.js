@@ -97,6 +97,7 @@ export const { listAddMeta, listAddItemMeta, listRemoveItemMeta } =
 export const loadEmails = (params) => {
   return async (dispatch, getState) => {
     try {
+      console.log('load emails')
       if (!getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
@@ -113,20 +114,9 @@ export const loadEmails = (params) => {
           dispatch(listAddMeta(labeledThreads))
           dispatch(loadEmailDetails(labeledThreads))
         } else {
-          // Why does it have a different feedback loop when the base is loaded?
-          if (getState().base.baseLoaded) {
-            dispatch(setServiceUnavailable('No feed found'))
-          }
           dispatch(setLoadedInbox(labelIds))
+          dispatch(setIsLoading(false))
           console.log(`Empty Inbox for ${labelIds}`)
-          if (
-            !getState().base.baseLoaded &&
-            getState().labels.storageLabels.length ===
-              getState().labels.loadedInbox.length
-          ) {
-            dispatch(setIsLoading(false))
-            // dispatch(setBaseLoaded(true))
-          }
         }
       } else {
         dispatch(setServiceUnavailable('No feed found'))
