@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import EmailList from '../EmailList'
 import { setCurrentLabels } from '../../Store/labelsSlice'
+import { selectBaseLoaded } from '../../Store/baseSlice'
 
 const LABEL = ['SENT']
 
-const mapStateToProps = (state) => {
-  const { baseLoaded } = state
-  return { baseLoaded }
-}
-
-const Spam = ({ baseLoaded, dispatch }) => {
+const Sent = () => {
+  const baseLoaded = useSelector(selectBaseLoaded)
+  const dispatch = useDispatch()
   useEffect(() => {
     if (baseLoaded) {
       dispatch(setCurrentLabels(LABEL))
@@ -20,4 +18,4 @@ const Spam = ({ baseLoaded, dispatch }) => {
   return <EmailList />
 }
 
-export default connect(mapStateToProps)(Spam)
+export default Sent

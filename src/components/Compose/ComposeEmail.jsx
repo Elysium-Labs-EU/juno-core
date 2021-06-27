@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { useHistory, useParams } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import '../../App.scss'
 import { useForm } from 'react-hook-form'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
-import { SendComposedEmail, TrackComposeEmail } from '../../Store/composeSlice'
+import {
+  selectComposeEmail,
+  SendComposedEmail,
+  TrackComposeEmail,
+} from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/use-debounce'
 
 const TO_LABEL = 'To'
@@ -14,12 +18,9 @@ const SUBJECT_LABEL = 'Subject'
 const BODY_LABEL = 'Body'
 const SEND_BUTTON = 'Send'
 
-const mapStateToProps = (state) => {
-  const { composeEmail } = state
-  return { composeEmail }
-}
-
-const ComposeEmail = ({ composeEmail, dispatch }) => {
+const ComposeEmail = () => {
+  const composeEmail = useSelector(selectComposeEmail)
+  const dispatch = useDispatch()
   const [toValue, setToValue] = useState('')
   const [subjectValue, setSubjectValue] = useState('')
   const [bodyValue, setBodyValue] = useState('')
@@ -187,4 +188,4 @@ const ComposeEmail = ({ composeEmail, dispatch }) => {
   )
 }
 
-export default connect(mapStateToProps)(ComposeEmail)
+export default ComposeEmail
