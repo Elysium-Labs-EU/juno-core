@@ -1,44 +1,29 @@
 import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import EmailListItem from './EmailListItem/EmailListItem'
 import {
   // loadDraftList,
   loadEmails,
 } from '../Store/metaListSlice'
 import { loadDraftList } from '../Store/draftsSlice'
+import { selectEmailList, selectNextPageToken } from '../Store/emailListSlice'
+import { selectLabelIds, selectLoadedInbox } from '../Store/labelsSlice'
+import { selectIsLoading } from '../Store/utilsSlice'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
 
 const LOAD_OLDER = 'Load older messages'
 const MAX_RESULTS = 20
 
-const mapStateToProps = (state) => {
-  const {
-    labelIds,
-    metaList,
-    nextPageToken,
-    emailList,
-    isLoading,
-    loadedInbox,
-  } = state
-  return {
-    labelIds,
-    metaList,
-    nextPageToken,
-    emailList,
-    isLoading,
-    loadedInbox,
-  }
-}
+const EmailList = () => {
+  const emailList = useSelector(selectEmailList)
+  // const nextPageToken = useSelector(selectNextPageToken)
+  const isLoading = useSelector(selectIsLoading)
+  const labelIds = useSelector(selectLabelIds)
+  const loadedInbox = useSelector(selectLoadedInbox)
+  const dispatch = useDispatch()
 
-const EmailList = ({
-  labelIds,
-  dispatch,
-  emailList,
-  isLoading,
-  loadedInbox,
-}) => {
   useEffect(() => {
     if (
       labelIds &&
@@ -116,6 +101,8 @@ const EmailList = ({
     return null
   }
 
+  console.log(labelIds)
+
   return (
     <>
       {labelIds &&
@@ -126,4 +113,4 @@ const EmailList = ({
   )
 }
 
-export default connect(mapStateToProps)(EmailList)
+export default EmailList

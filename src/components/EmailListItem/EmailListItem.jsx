@@ -1,6 +1,7 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../EmailAvatar'
 import EmailHasAttachment from '../EmailHasAttachment'
 import TimeStamp from '../TimeStamp'
@@ -13,16 +14,13 @@ import { OpenDraftEmail } from '../../Store/draftsSlice'
 
 const DRAFT_LABEL = ['DRAFT']
 
-const mapStateToProps = (state) => {
-  const { labelIds } = state
-  return { labelIds }
-}
-
-const EmailListItem = ({ email, labelIds, dispatch }) => {
+const EmailListItem = ({ email }) => {
+  const labelIds = useSelector(selectLabelIds)
   const { id } = email
   const history = useHistory()
+  const dispatch = useDispatch()
 
-  // console.log(email)
+  console.log(email)
 
   const emailLabels =
     email && email.messages
@@ -126,4 +124,4 @@ const EmailListItem = ({ email, labelIds, dispatch }) => {
   )
 }
 
-export default connect(mapStateToProps)(EmailListItem)
+export default EmailListItem

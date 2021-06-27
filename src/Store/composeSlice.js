@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 import axios from 'axios'
 import createApiClient from '../data/api'
 import { setServiceUnavailable } from './utilsSlice'
+import { setCurrentEmail } from './emailDetailSlice'
 
 const api = createApiClient()
 
@@ -50,10 +51,10 @@ export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
 export const TrackComposeEmail = (props) => {
   return async (dispatch, getState) => {
     try {
-      if (isEmpty(getState().composeEmail)) {
+      if (isEmpty(getState().compose.composeEmail)) {
         dispatch(setComposeEmail(props))
       }
-      if (!isEmpty(getState().composeEmail)) {
+      if (!isEmpty(getState().compose.composeEmail)) {
         dispatch(updateComposeEmail(props))
       }
     } catch (err) {

@@ -57,6 +57,8 @@ export const checkBase = () => {
                 !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
             )
             dispatch(setBaseLoaded(true))
+            // What happends if the label is removed from gmail, but the emails still exist. The label
+            // is recreated. Does it still attempt to load the base?
           } else {
             console.log('Gotcha! All minimal required labels.')
             dispatch(
@@ -69,12 +71,20 @@ export const checkBase = () => {
             const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
               labelArray.filter((item) => item.name === baseLabel)
             )
-            prefetchedBoxes.forEach((label) => {
+            let count = 0
+            const loadCount = prefetchedBoxes.length
+            prefetchedBoxes.forEach(async (label) => {
               const params = {
                 labelIds: [label[0].id],
                 maxResults: BASE_MAX_RESULTS,
               }
-              dispatch(loadEmails(params))
+              await dispatch(loadEmails(params))
+              count += 1
+              if (count === loadCount) {
+                console.log(loadCount)
+                console.log(count)
+                dispatch(setBaseLoaded(true))
+              }
             })
           }
         } else {
@@ -93,5 +103,7 @@ export const checkBase = () => {
     }
   }
 }
+
+export const selectBaseLoaded = (state) => state.base.baseLoaded
 
 export default baseSlice.reducer

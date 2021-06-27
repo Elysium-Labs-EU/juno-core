@@ -29,4 +29,7 @@ export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 // export const selectDraft = (state) => state.draftList
 
+export const selectCurrentEmail = (state) => state.emailDetail.currEmail
+export const selectViewIndex = (state) => state.emailDetail.viewIndex
+
 export default emailDetailSlice.reducer

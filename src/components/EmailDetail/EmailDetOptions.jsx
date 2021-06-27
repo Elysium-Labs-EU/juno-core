@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
-import { UpdateMailLabel } from '../../Store/emailListSlice'
+import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 
 const EmailOptionsContainer = styled.div`
   position: relative;
@@ -59,14 +59,14 @@ const EmailDetOptions = ({
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
   }
 
   const CompletedAction = () => {
     const request = {
       removeLabelIds: labelIds,
     }
-    dispatch(UpdateMailLabel({ messageId, request, history, labelURL }))
+    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
   }
 
   return (

@@ -20,7 +20,7 @@ import DraftEmail from './components/Draft/DraftEmail'
 
 const App = () => {
   const dispatch = useDispatch()
-  const baseLoaded = useSelector((state) => state.baseLoaded)
+  const baseLoaded = useSelector((state) => state.base.baseLoaded)
   useEffect(() => {
     if (!baseLoaded) {
       dispatch(checkBase())

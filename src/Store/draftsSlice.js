@@ -8,6 +8,7 @@ import { FilteredEmailList } from '../utils'
 import createApiClient from '../data/api'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
+import { setCurrentEmail } from './emailDetailSlice'
 
 const api = createApiClient()
 
@@ -36,17 +37,6 @@ export const draftsSlice = createSlice({
 
 export const { listAddDraft, listUpdateDraft, listRemoveDraft } =
   draftsSlice.actions
-
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-
-// export const incrementAsync = (amount) => (dispatch) => {
-//   setTimeout(() => {
-//     dispatch(incrementByAmount(amount))
-//   }, 1000)
-// }
 
 export const loadDraftList = () => {
   return async (dispatch) => {
@@ -135,7 +125,7 @@ export const OpenDraftEmail = (props) => {
   // console.log(typeof selectIndex, selectIndex)
   return async (dispatch, getState) => {
     try {
-      if (isEmpty(getState().draftList)) {
+      if (isEmpty(getState().drafts.draftList)) {
         axios
           .get('/api/drafts/')
           .then((res) => {
@@ -167,8 +157,8 @@ export const OpenDraftEmail = (props) => {
           )
       }
       // console.log(response)
-      const { emailList } = getState()
-      const { draftList } = getState()
+      const { emailList } = getState().email
+      const { draftList } = getState().drafts
       const draftBox = FilteredEmailList({ emailList, labelIds: DRAFT_LABEL })
 
       console.log('id', id)

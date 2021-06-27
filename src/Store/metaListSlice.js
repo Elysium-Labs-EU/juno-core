@@ -1,13 +1,15 @@
-/* eslint-disable */
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-// import axios from 'axios'
+import axios from 'axios'
 import createApiClient from '../data/api'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
-import { setBaseLoaded } from './baseSlice'
+// import { setBaseLoaded } from './baseSlice'
 import { setLoadedInbox } from './labelsSlice'
-import { loadEmailDetails } from './emailListSlice'
+import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
+import { FilteredMetaList, NavigateNextMail } from '../utils'
 
 const api = createApiClient()
+const DRAFT = 'DRAFT'
 
 export const metaListSlice = createSlice({
   name: 'meta',
@@ -27,6 +29,7 @@ export const metaListSlice = createSlice({
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
+      console.log(arrayIndex)
       if (arrayIndex > -1) {
         const newArray = state.metaList[arrayIndex].threads
           .concat(sortedMetaList.threads)
@@ -42,7 +45,7 @@ export const metaListSlice = createSlice({
         //   metaList: [...currentState],
         // }
       } else {
-        state.metaList = [...state.metaList, sortedMetaList]
+        state.metaList.push(sortedMetaList)
       }
       //   return {
       //     ...state,
@@ -91,43 +94,38 @@ export const metaListSlice = createSlice({
 export const { listAddMeta, listAddItemMeta, listRemoveItemMeta } =
   metaListSlice.actions
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-
 export const loadEmails = (params) => {
-  console.log(params)
   return async (dispatch, getState) => {
     try {
-      if (!getState().isLoading) {
+      if (!getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
       const { labelIds } = params
       const metaList = await api.getThreads(params)
       if (metaList) {
         if (metaList.message.resultSizeEstimate > 0) {
-          console.log(metaList.message)
           const { threads, nextPageToken } = metaList.message
           const labeledThreads = {
             labels: labelIds,
             threads,
             nextPageToken: nextPageToken ?? null,
           }
-          await dispatch(listAddMeta(labeledThreads))
+          dispatch(listAddMeta(labeledThreads))
           dispatch(loadEmailDetails(labeledThreads))
         } else {
-          if (getState().baseLoaded) {
+          // Why does it have a different feedback loop when the base is loaded?
+          if (getState().base.baseLoaded) {
             dispatch(setServiceUnavailable('No feed found'))
           }
           dispatch(setLoadedInbox(labelIds))
           console.log(`Empty Inbox for ${labelIds}`)
           if (
-            !getState().baseLoaded &&
-            getState().storageLabels.length === getState().loadedInbox.length
+            !getState().base.baseLoaded &&
+            getState().labels.storageLabels.length ===
+              getState().labels.loadedInbox.length
           ) {
             dispatch(setIsLoading(false))
-            dispatch(setBaseLoaded(true))
+            // dispatch(setBaseLoaded(true))
           }
         }
       } else {
@@ -145,6 +143,76 @@ export const loadEmails = (params) => {
         )
       )
     }
+  }
+}
+
+export const UpdateMetaListLabel = (props) => {
+  const {
+    messageId,
+    request,
+    request: { addLabelIds, removeLabelIds },
+    history,
+    labelURL,
+  } = props
+
+  return async (dispatch, getState) => {
+    try {
+      const { metaList } = getState().meta
+      const filteredCurrentMetaList =
+        metaList &&
+        removeLabelIds &&
+        FilteredMetaList({ metaList, labelIds: removeLabelIds })
+      const filteredTargetMetaList =
+        metaList &&
+        addLabelIds &&
+        FilteredMetaList({ metaList, labelIds: addLabelIds })
+      return axios
+        .patch(`/api/message/${messageId}`, request)
+        .then((res) => {
+          if (res.status === 200) {
+            if (addLabelIds) {
+              const activeMetaObjArray =
+                filteredCurrentMetaList[0].threads.filter(
+                  (item) => item.id === messageId
+                )
+              dispatch(
+                listAddItemMeta({
+                  activeMetaObjArray,
+                  filteredTargetMetaList,
+                })
+              )
+            }
+            if (removeLabelIds) {
+              dispatch(
+                listRemoveItemMeta({
+                  messageId,
+                  filteredCurrentMetaList,
+                })
+              )
+            }
+            dispatch(UpdateEmailListLabel(props))
+            if (
+              getState().emailDetail.currEmail &&
+              !getState().labels.labelIds.includes(DRAFT)
+            ) {
+              const { viewIndex } = getState().emailDetail
+              NavigateNextMail({
+                history,
+                labelURL,
+                filteredCurrentMetaList,
+                viewIndex,
+              })
+            }
+          } else {
+            dispatch(setServiceUnavailable('Error updating label.'))
+          }
+        })
+        .catch((err) => console.log(err))
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Error updating label.'))
+    }
+    return null
   }
 }
 
@@ -171,6 +239,6 @@ export const refreshEmailFeed = (params, metaList) => {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-// export const selectDraft = (state) => state.draftList
+export const selectMetaList = (state) => state.meta.metaList
 
 export default metaListSlice.reducer

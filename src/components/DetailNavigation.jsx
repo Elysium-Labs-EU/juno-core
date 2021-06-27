@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
+import { selectLabelIds } from '../Store/labelsSlice'
 import { NavButton, Wrapper } from './DetailNavigationStyles'
 import {
   convertArrayToString,
@@ -9,23 +10,22 @@ import {
   NavigatePreviousMail,
   NavigateNextMail,
 } from '../utils'
-import { setViewingIndex } from '../Store/emailDetailSlice'
+import {
+  selectCurrentEmail,
+  selectViewIndex,
+  setViewingIndex,
+} from '../Store/emailDetailSlice'
+import { selectMetaList } from '../Store/metaListSlice'
 
-const mapStateToProps = (state) => {
-  const { labelIds, currEmail, emailList, isLoading, viewIndex, metaList } =
-    state
-  return { labelIds, currEmail, emailList, isLoading, viewIndex, metaList }
-}
+const DetailNavigation = () => {
+  const metaList = useSelector(selectMetaList)
+  const labelIds = useSelector(selectLabelIds)
+  const currEmail = useSelector(selectCurrentEmail)
+  const viewIndex = useSelector(selectViewIndex)
 
-const DetailNavigation = ({
-  labelIds,
-  currEmail,
-  viewIndex,
-  dispatch,
-  metaList,
-}) => {
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
+  const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
   const filteredMetaList =
     metaList &&
@@ -86,4 +86,4 @@ const DetailNavigation = ({
   )
 }
 
-export default connect(mapStateToProps)(DetailNavigation)
+export default DetailNavigation

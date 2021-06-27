@@ -1,28 +1,33 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import './TodoFocusOption.scss'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements'
 import { convertArrayToString, startSort } from '../../utils'
-import { refreshEmailFeed } from '../../Store/metaListSlice'
+import { refreshEmailFeed, selectMetaList } from '../../Store/metaListSlice'
+import { selectLabelIds } from '../../Store/labelsSlice'
+import { selectEmailList } from '../../Store/emailListSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
 
 const FOCUS_BUTTON = 'Focus mode'
 
-const mapStateToProps = (state) => {
-  const { metaList, emailList, labelIds, isLoading } = state
-  return { metaList, emailList, labelIds, isLoading }
-}
+// const mapStateToProps = (state) => {
+//   const { metaList, emailList, labelIds, isLoading } = state
+//   return { metaList, emailList, labelIds, isLoading }
+// }
 
-const TodoFocusOption = ({
-  metaList,
-  emailList,
-  labelIds,
-  isLoading,
-  dispatch,
-}) => {
+const TodoFocusOption = () => {
+  const dispatch = useDispatch()
+  const labelIds = useSelector(selectLabelIds)
+  const isLoading = useSelector(selectIsLoading)
+  const metaList = useSelector(selectMetaList)
+  const emailList = useSelector(selectEmailList)
   const history = useHistory()
-  const labelURL = convertArrayToString(labelIds)
+  console.log(labelIds)
+  const labelURL = () => {
+    return convertArrayToString(labelIds && labelIds)
+  }
 
   const refreshFeed = () => {
     const params = {
@@ -50,4 +55,4 @@ const TodoFocusOption = ({
   )
 }
 
-export default connect(mapStateToProps)(TodoFocusOption)
+export default TodoFocusOption

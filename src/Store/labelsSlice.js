@@ -22,10 +22,8 @@ export const labelsSlice = createSlice({
         ? action.payload
         : [action.payload]
       if (!state.loadedInbox.includes(labelArray)) {
+        console.log('here@#12')
         state.loadedInbox = [...new Set([...state.loadedInbox, labelArray])]
-      }
-      return {
-        ...state,
       }
     },
     setStorageLabels: (state, action) => {
@@ -47,11 +45,6 @@ export const labelsSlice = createSlice({
 
 export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
-
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
 
 export const createLabel = (label) => {
   return async (dispatch) => {
@@ -109,6 +102,8 @@ export const fetchLabelIds = (LABEL) => {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-// export const selectDraft = (state) => state.draftList
+export const selectLabelIds = (state) => state.labels.labelIds
+export const selectLoadedInbox = (state) => state.labels.loadedInbox
+export const selectStorageLabels = (state) => state.labels.storageLabels
 
 export default labelsSlice.reducer

@@ -3,15 +3,9 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import createApiClient from '../data/api'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
-import { setBaseLoaded } from './baseSlice'
+// import { setBaseLoaded } from './baseSlice'
 import { setLoadedInbox, setStorageLabels } from './labelsSlice'
-import { listAddItemMeta, listRemoveItemMeta } from './metaListSlice'
-import {
-  FilteredEmailList,
-  FilteredMetaList,
-  NavigateNextMail,
-  multipleIncludes,
-} from '../utils'
+import { FilteredEmailList, multipleIncludes } from '../utils'
 
 const DRAFT = 'DRAFT'
 
@@ -123,6 +117,8 @@ export const loadEmailDetails = (labeledThreads) => {
         const buffer = []
         const loadCount = threads.length
 
+        console.log(getState().labels.storageLabels)
+
         if (threads.length > 0) {
           threads.forEach(async (item) => {
             const threadDetail = await api.getThreadDetail(item.id)
@@ -136,70 +132,80 @@ export const loadEmailDetails = (labeledThreads) => {
                 })
               )
               // If base isn't fully loaded yet, add the additional loadedInbox
-              if (!getState().baseLoaded) {
-                dispatch(setLoadedInbox(labels))
-              }
+
+              dispatch(setLoadedInbox(labels))
+
+              // if (!getState().base.baseLoaded) {
+              //   dispatch(setLoadedInbox(labels))
+              // }
               // If base isn't fully loaded yet but all current inboxes are loaded, unveil the app.
               if (
-                !getState().baseLoaded &&
-                getState().storageLabels.length ===
-                  getState().loadedInbox.length
+                getState().labels.storageLabels.length ===
+                getState().labels.loadedInbox.length
               ) {
                 dispatch(setIsLoading(false))
-                dispatch(setBaseLoaded(true))
+                // dispatch(setBaseLoaded(true))
               }
+              // if (
+              //   !getState().base.baseLoaded &&
+              //   getState().labels.storageLabels.length ===
+              //     getState().labels.loadedInbox.length
+              // ) {
+              //   dispatch(setIsLoading(false))
+              //   // dispatch(setBaseLoaded(true))
+              // }
               // If base is fully loaded, set loading to false, as a backup.
-              if (getState().baseLoaded) {
-                dispatch(setIsLoading(false))
-                // In case the base is already loaded, but an additional inbox is loaded.
-                if (
-                  !multipleIncludes(
-                    labels,
-                    getState().storageLabels.map((label) => label.id)
-                  )
-                ) {
-                  dispatch(setLoadedInbox(labels))
-                  // Check if the label is complete object, if not filter out the object via an api listing.
-                  labels.map((element) => {
-                    if (
-                      Object.prototype.hasOwnProperty.call(element, 'name') &&
-                      Object.prototype.hasOwnProperty.call(element, 'id')
-                    ) {
-                      return dispatch(setStorageLabels(element))
-                    }
-                    return api.fetchLabel().then((fetchedLabels) => {
-                      if (fetchedLabels) {
-                        if (fetchedLabels.message.labels.length > 0) {
-                          const labelArray = fetchedLabels.message.labels
-                          dispatch(
-                            setStorageLabels(
-                              labels.map((baseLabel) =>
-                                labelArray.filter(
-                                  (singleLabel) =>
-                                    singleLabel.name === baseLabel
-                                )
-                              )
-                            )
-                          )
-                        }
-                      }
-                    })
-                  })
-                }
-              }
+              // if (getState().base.baseLoaded) {
+              //   dispatch(setIsLoading(false))
+              //   // In case the base is already loaded, but an additional inbox is loaded.
+              //   if (
+              //     !multipleIncludes(
+              //       labels,
+              //       getState().labels.storageLabels.map((label) => label.id)
+              //     )
+              //   ) {
+              //     dispatch(setLoadedInbox(labels))
+              //     // Check if the label is complete object, if not filter out the object via an api listing.
+              //     labels.map((element) => {
+              //       if (
+              //         Object.prototype.hasOwnProperty.call(element, 'name') &&
+              //         Object.prototype.hasOwnProperty.call(element, 'id')
+              //       ) {
+              //         return dispatch(setStorageLabels(element))
+              //       }
+              //       return api.fetchLabel().then((fetchedLabels) => {
+              //         if (fetchedLabels) {
+              //           if (fetchedLabels.message.labels.length > 0) {
+              //             const labelArray = fetchedLabels.message.labels
+              //             dispatch(
+              //               setStorageLabels(
+              //                 labels.map((baseLabel) =>
+              //                   labelArray.filter(
+              //                     (singleLabel) =>
+              //                       singleLabel.name === baseLabel
+              //                   )
+              //                 )
+              //               )
+              //             )
+              //           }
+              //         }
+              //       })
+              //     })
+              //   }
+              // }
             }
           })
         }
       } else {
         if (
-          !getState().baseLoaded &&
+          !getState().base.baseLoaded &&
           labels.some(
-            (val) => getState().loadedInbox.flat(1).indexOf(val) === -1
+            (val) => getState().labels.loadedInbox.flat(1).indexOf(val) === -1
           )
         ) {
           console.log(
             labels.some(
-              (val) => getState().loadedInbox.flat(1).indexOf(val) === -1
+              (val) => getState().labels.loadedInbox.flat(1).indexOf(val) === -1
             )
           )
           console.log(labels)
@@ -207,11 +213,12 @@ export const loadEmailDetails = (labeledThreads) => {
         }
         // console.log(`Empty Inbox for ${labels}`);
         if (
-          !getState().baseLoaded &&
-          getState().storageLabels.length === getState().loadedInbox.length
+          !getState().base.baseLoaded &&
+          getState().labels.storageLabels.length ===
+            getState().labels.loadedInbox.length
         ) {
           dispatch(setIsLoading(false))
-          dispatch(setBaseLoaded(true))
+          // dispatch(setBaseLoaded(true))
         }
       }
     } catch (err) {
@@ -221,27 +228,16 @@ export const loadEmailDetails = (labeledThreads) => {
   }
 }
 
-export const UpdateMailLabel = (props) => {
+export const UpdateEmailListLabel = (props) => {
   const {
     messageId,
     request,
     request: { addLabelIds, removeLabelIds },
-    history,
-    labelURL,
   } = props
 
   return async (dispatch, getState) => {
     try {
-      const { metaList } = getState()
-      const { emailList } = getState()
-      const filteredCurrentMetaList =
-        metaList &&
-        removeLabelIds &&
-        FilteredMetaList({ metaList, labelIds: removeLabelIds })
-      const filteredTargetMetaList =
-        metaList &&
-        addLabelIds &&
-        FilteredMetaList({ metaList, labelIds: addLabelIds })
+      const { emailList } = getState().email
       const filteredCurrentEmailList =
         emailList &&
         removeLabelIds &&
@@ -255,16 +251,6 @@ export const UpdateMailLabel = (props) => {
         .then((res) => {
           if (res.status === 200) {
             if (addLabelIds) {
-              const activeMetaObjArray =
-                filteredCurrentMetaList[0].threads.filter(
-                  (item) => item.id === messageId
-                )
-              dispatch(
-                listAddItemMeta({
-                  activeMetaObjArray,
-                  filteredTargetMetaList,
-                })
-              )
               const activEmailObjArray =
                 filteredCurrentEmailList[0].threads.filter(
                   (item) => item.id === messageId
@@ -278,26 +264,11 @@ export const UpdateMailLabel = (props) => {
             }
             if (removeLabelIds) {
               dispatch(
-                listRemoveItemMeta({
-                  messageId,
-                  filteredCurrentMetaList,
-                })
-              )
-              dispatch(
                 listRemoveItemDetail({
                   messageId,
                   filteredCurrentEmailList,
                 })
               )
-            }
-            if (getState().currEmail && !getState().labelIds.includes(DRAFT)) {
-              const { viewIndex } = getState()
-              NavigateNextMail({
-                history,
-                labelURL,
-                filteredCurrentMetaList,
-                viewIndex,
-              })
             }
           } else {
             dispatch(setServiceUnavailable('Error updating label.'))
@@ -315,6 +286,8 @@ export const UpdateMailLabel = (props) => {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-// export const selectDraft = (state) => state.draftList
+export const selectEmailList = (state) => state.email.emailList
+export const selectNextPageToken = (state) =>
+  state.email.emailList.nextPageToken
 
 export default emailListSlice.reducer
