@@ -12,11 +12,6 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 
 const FOCUS_BUTTON = 'Focus mode'
 
-// const mapStateToProps = (state) => {
-//   const { metaList, emailList, labelIds, isLoading } = state
-//   return { metaList, emailList, labelIds, isLoading }
-// }
-
 const TodoFocusOption = () => {
   const dispatch = useDispatch()
   const labelIds = useSelector(selectLabelIds)
@@ -24,7 +19,6 @@ const TodoFocusOption = () => {
   const metaList = useSelector(selectMetaList)
   const emailList = useSelector(selectEmailList)
   const history = useHistory()
-  console.log(labelIds)
   const labelURL = () => {
     return convertArrayToString(labelIds && labelIds)
   }

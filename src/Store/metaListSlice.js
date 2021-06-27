@@ -3,7 +3,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import createApiClient from '../data/api'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
-// import { setBaseLoaded } from './baseSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList, NavigateNextMail } from '../utils'
@@ -29,7 +28,6 @@ export const metaListSlice = createSlice({
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
-      console.log(arrayIndex)
       if (arrayIndex > -1) {
         const newArray = state.metaList[arrayIndex].threads
           .concat(sortedMetaList.threads)
@@ -97,7 +95,6 @@ export const { listAddMeta, listAddItemMeta, listRemoveItemMeta } =
 export const loadEmails = (params) => {
   return async (dispatch, getState) => {
     try {
-      console.log('load emails')
       if (!getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }

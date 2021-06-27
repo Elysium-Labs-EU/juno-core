@@ -33,7 +33,7 @@ const EmailList = () => {
         labelIds,
         maxResults: MAX_RESULTS,
       }
-      console.log(`loading ${labelIds}`)
+      // console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
       if (labelIds.includes('DRAFT')) {
         dispatch(loadDraftList())
@@ -54,7 +54,6 @@ const EmailList = () => {
 
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
-    console.log('here')
     return (
       <>
         <div className="scroll">
@@ -75,7 +74,7 @@ const EmailList = () => {
                   <button
                     className="btn btn-sm btn-light"
                     disabled={isLoading}
-                    onClick={() => loadNextPage(labelIds, nextPageToken)}
+                    onClick={() => loadNextPage(nextPageToken)}
                     type="button"
                   >
                     {LOAD_OLDER}
@@ -102,12 +101,14 @@ const EmailList = () => {
 
   return (
     <>
-      {!isLoading &&
-        labelIds &&
+      {labelIds &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        emailList.length > 0 &&
         labeledInbox({ labelIds, emailList })}
-      {isLoading && <LoadingState />}
+      {isLoading &&
+        labelIds &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+          <LoadingState />
+        )}
     </>
   )
 }
