@@ -66,11 +66,9 @@ export const TrackComposeEmail = (props) => {
 
 export const SendComposedEmail = (props) => {
   const { history, messageId } = props
-  console.log(messageId)
   return async (dispatch, getState) => {
     try {
-      const composedEmail = getState().composeEmail
-      console.log(composedEmail)
+      const composedEmail = getState().compose.composeEmail
       if (Object.keys(composedEmail).length >= 3) {
         if (messageId) {
           const body = { composedEmail, messageId }
