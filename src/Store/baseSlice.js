@@ -63,10 +63,6 @@ export const checkBase = () => {
             dispatch(setStorageLabels(prefetchedBoxes))
             dispatch(setBaseLoaded(true))
           }
-        } else {
-          dispatch(
-            setServiceUnavailable('Network Error. Please try again later')
-          )
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))

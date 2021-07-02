@@ -8,7 +8,7 @@ import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
 
-function Header() {
+const Header = () => {
   const SetHeader = () => {
     const location = useLocation()
 
@@ -33,7 +33,7 @@ function Header() {
     return <EmailDetailHeader />
   }
 
-  return <SetHeader />
+  return <SetHeader data-testid="setheader" />
 }
 
 export default Header

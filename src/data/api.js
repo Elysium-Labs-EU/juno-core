@@ -1,11 +1,13 @@
 import axios from 'axios'
 import qs from 'qs'
 
+const BASE_API_URL = 'http://localhost:5000'
+
 const createApiClient = () => {
   return {
     getMessageDetail: async (messageId) => {
       try {
-        const res = await axios.get(`/api/message/${messageId}`)
+        const res = await axios.get(`${BASE_API_URL}/api/message/${messageId}`)
         return res.data
       } catch (err) {
         return console.log(err)
@@ -115,7 +117,7 @@ const createApiClient = () => {
     },
     fetchLabel: async () => {
       try {
-        const res = await axios.get(`/api/labels`)
+        const res = await axios.get(`${BASE_API_URL}/api/labels`)
         return res.data
       } catch (err) {
         return console.log(err)

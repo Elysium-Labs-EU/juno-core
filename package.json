@@ -2,7 +2,6 @@
   "name": "react-gmail-minimal",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:5000/",
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@reduxjs/toolkit": "^1.6.0",
@@ -68,6 +67,8 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "react-test-render": "^1.1.2",
+    "redux-mock-store": "^1.5.4"
   }
 }
