@@ -13,10 +13,8 @@ import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import { EmailWrapper } from './EmailDetailStyles'
 import { selectEmailList } from '../../Store/emailListSlice'
-
-const FROM = 'From'
-const MESSAGE_ID_LABEL = 'Message ID:'
-const ERROR_EMAIL = 'Error loading email'
+import * as local from '../../constants/emailDetailConstants'
+import * as draft from '../../constants/draftConstants'
 
 const EmailDetail = () => {
   const emailList = useSelector(selectEmailList)
@@ -37,7 +35,7 @@ const EmailDetail = () => {
         activeList[0].threads.filter((item) => item.id === threadId)
       setThreadDetail(activeEmail[0])
     } else {
-      dispatch(setServiceUnavailable(ERROR_EMAIL))
+      dispatch(setServiceUnavailable(local.ERROR_EMAIL))
     }
   }
 
@@ -56,22 +54,22 @@ const EmailDetail = () => {
   }, [threadId])
 
   const detailDisplaySelector = (message) => {
-    if (message.labelIds.includes('DRAFT')) {
+    if (message.labelIds.includes(draft.LABEL)) {
       return (
         <DraftMessage
           message={message}
-          FROM={FROM}
-          MESSAGE_ID_LABEL={MESSAGE_ID_LABEL}
+          FROM={local.FROM}
+          MESSAGE_ID_LABEL={local.MESSAGE_ID_LABEL}
           threadDetail={threadDetail}
         />
       )
     }
-    if (!message.labelIds.includes('DRAFT')) {
+    if (!message.labelIds.includes(draft.LABEL)) {
       return (
         <ReadUnreadMessage
           message={message}
-          FROM={FROM}
-          MESSAGE_ID_LABEL={MESSAGE_ID_LABEL}
+          FROM={local.FROM}
+          MESSAGE_ID_LABEL={local.MESSAGE_ID_LABEL}
         />
       )
     }
@@ -92,7 +90,7 @@ const EmailDetail = () => {
                   </EmailWrapper>
                 ))}
               {!threadDetail && isLoading && <CircularProgress />}
-              {!threadDetail && !isLoading && <p>{ERROR_EMAIL}</p>}
+              {!threadDetail && !isLoading && <p>{local.ERROR_EMAIL}</p>}
             </div>
           </div>
         </div>

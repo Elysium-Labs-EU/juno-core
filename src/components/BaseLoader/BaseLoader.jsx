@@ -1,8 +1,7 @@
 import React from 'react'
 import { CircularProgress } from '@material-ui/core'
 import { Inner, Wrapper } from './BaseLoaderStyles'
-
-const LOADING_TEXT = 'Loading'
+import { LOADING_TEXT } from '../../constants/globalConstants'
 
 const Baseloader = () => {
   return (

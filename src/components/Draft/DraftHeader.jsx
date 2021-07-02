@@ -2,9 +2,8 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import NavControls from '../MainHeader/Navigation/NavControls'
 import '../MainHeader/Navigation/NavControls.scss'
-
-const DRAFT_HEADER = 'Drafts'
-const BACK_BUTTON = 'Back'
+import * as local from '../../constants/draftConstants'
+import * as global from '../../constants/globalConstants'
 
 const InboxHeader = () => {
   const history = useHistory()
@@ -21,10 +20,10 @@ const InboxHeader = () => {
           onClick={navigateBack}
           type="button"
         >
-          {BACK_BUTTON}
+          {global.BUTTON_BACK}
         </button>
         <div className="header-center">
-          <h2>{DRAFT_HEADER}</h2>
+          <h2>{local.DRAFT_HEADER}</h2>
         </div>
         <NavControls />
       </div>

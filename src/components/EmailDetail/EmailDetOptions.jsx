@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import '../../App.scss'
-import styled from 'styled-components'
 import {
   FiArchive,
   FiCheckCircle,
@@ -17,26 +16,9 @@ import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { selectEmailList } from '../../Store/emailListSlice'
 import { selectViewIndex } from '../../Store/emailDetailSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
-
-const EmailOptionsContainer = styled.div`
-  position: relative;
-  padding: 30px;
-`
-const StickyOptions = styled.div`
-  position: sticky;
-  top: 122px;
-`
-
-const InnerOptionsContainer = styled.div`
-  width: 110px;
-`
-
-const REPLY_BUTTON = 'Reply'
-const TODO_BUTTON = 'To do'
-const MARK_AS_DONE_BUTTON = 'Completed'
-const REMIND_BUTTON = 'Remind'
-const ARCHIVE_BUTTON = 'Archive'
-const MORE_BUTTON = 'More'
+import * as local from '../../constants/emailDetailConstants'
+import * as todo from '../../constants/todoConstants'
+import * as S from './EmailDetailStyles'
 
 const EmailDetOptions = ({ messageId }) => {
   const emailList = useSelector(selectEmailList)
@@ -49,7 +31,7 @@ const EmailDetOptions = ({ messageId }) => {
   const [showMenu, setShowMenu] = useState(false)
 
   const ToDoAction = () => {
-    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: 'Juno/To Do' })
+    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
     const request = {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
@@ -65,16 +47,15 @@ const EmailDetOptions = ({ messageId }) => {
   }
 
   return (
-    // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
-    <EmailOptionsContainer>
-      <StickyOptions>
-        <InnerOptionsContainer>
+    <S.EmailOptionsContainer>
+      <S.StickyOptions>
+        <S.InnerOptionsContainer>
           <div>
             <button type="button" className="btn option-link d-flex">
               <div className="icon">
                 <FiCornerUpLeft />
               </div>
-              <div className="labelContainer">{REPLY_BUTTON}</div>
+              <div className="labelContainer">{local.BUTTON_REPLY}</div>
             </button>
           </div>
           <div>
@@ -83,7 +64,7 @@ const EmailDetOptions = ({ messageId }) => {
                 item ===
                 FindLabel({
                   storageLabels,
-                  LABEL_NAME: 'Juno/To Do',
+                  LABEL_NAME: todo.LABEL,
                 })[0].id
             ) ? (
               <button
@@ -94,7 +75,9 @@ const EmailDetOptions = ({ messageId }) => {
                 <div className="icon">
                   <FiCheckCircle />
                 </div>
-                <div className="labelContainer">{MARK_AS_DONE_BUTTON}</div>
+                <div className="labelContainer">
+                  {local.BUTTON_MARK_AS_DONE}
+                </div>
               </button>
             ) : (
               <button
@@ -105,7 +88,7 @@ const EmailDetOptions = ({ messageId }) => {
                 <div className="icon">
                   <FiCheckCircle />
                 </div>
-                <div className="labelContainer">{TODO_BUTTON}</div>
+                <div className="labelContainer">{local.BUTTON_TODO}</div>
               </button>
             )}
           </div>
@@ -114,7 +97,7 @@ const EmailDetOptions = ({ messageId }) => {
               <div className="icon">
                 <FiClock />
               </div>
-              <div className="labelContainer">{REMIND_BUTTON}</div>
+              <div className="labelContainer">{local.BUTTON_REMIND}</div>
             </button>
           </div>
           <div>
@@ -134,7 +117,7 @@ const EmailDetOptions = ({ messageId }) => {
               <div className="icon">
                 <FiArchive />
               </div>
-              <div className="labelContainer">{ARCHIVE_BUTTON}</div>
+              <div className="labelContainer">{local.BUTTON_ARCHIVE}</div>
             </button>
           </div>
           <div>
@@ -146,13 +129,13 @@ const EmailDetOptions = ({ messageId }) => {
               <div className="icon">
                 <FiMoreHorizontal />
               </div>
-              <div className="labelContainer">{MORE_BUTTON}</div>
+              <div className="labelContainer">{local.BUTTON_MORE}</div>
             </button>
           </div>
           {showMenu && <EmailMoreOptions messageId={messageId} />}
-        </InnerOptionsContainer>
-      </StickyOptions>
-    </EmailOptionsContainer>
+        </S.InnerOptionsContainer>
+      </S.StickyOptions>
+    </S.EmailOptionsContainer>
   )
 }
 

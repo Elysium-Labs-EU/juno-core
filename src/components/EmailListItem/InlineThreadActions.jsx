@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
 import {
   FiArchive,
   FiCornerUpLeft,
@@ -8,26 +7,13 @@ import {
 } from 'react-icons/fi'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
-
-const Wrapper = styled.div`
-  opacity: 0;
-  position: absolute;
-  top: 18px;
-  right: 30px;
-  bottom: 0;
-  z-index: 10;
-
-  :hover {
-    opacity: 1;
-    background-color: rgb(240, 240, 240);
-  }
-`
+import * as S from './InlineThreadActionsStyles'
 
 const InlineThreadActions = (messageId) => {
   const [showMenu, setShowMenu] = useState(false)
 
   return (
-    <Wrapper>
+    <S.Wrapper>
       <div className="d-flex flex-row">
         <button type="button" className="btn btn-sm text-muted option-link">
           <div className="icon">
@@ -59,7 +45,7 @@ const InlineThreadActions = (messageId) => {
         </button>
       </div>
       {showMenu && <EmailMoreOptions messageId={messageId} />}
-    </Wrapper>
+    </S.Wrapper>
   )
 }
 

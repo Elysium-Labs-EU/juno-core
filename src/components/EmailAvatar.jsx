@@ -1,17 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
-
-const EmailAvatarContainer = styled.div`
-  background-color: rgba(165, 165, 165, 0.68);
-  width: 2rem;
-  display: flex;
-  justify-content: center;
-  color: #f5f5f5;
-  font-weight: normal;
-  border-radius: 50%;
-  height: 2rem;
-  align-items: center;
-`
+import * as S from './EmailAvatarStyles'
 
 const EmailAvatar = ({ avatarURL }) => {
   const intialCreator = () => {
@@ -33,10 +21,10 @@ const EmailAvatar = ({ avatarURL }) => {
 
   return (
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
-    <EmailAvatarContainer>
+    <S.EmailAvatarContainer>
       {/* <>{finalIntials}</> */}
       {intialCreator(avatarURL)}
-    </EmailAvatarContainer>
+    </S.EmailAvatarContainer>
   )
 }
 

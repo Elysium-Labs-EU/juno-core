@@ -5,12 +5,12 @@ import base64url from 'base64url'
 import axios from 'axios'
 import isEmpty from 'lodash/isEmpty'
 import { FilteredEmailList } from '../utils'
-import createApiClient from '../data/api'
+import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 
-const api = createApiClient()
+const api = draftApi()
 
 export const draftsSlice = createSlice({
   name: 'drafts',

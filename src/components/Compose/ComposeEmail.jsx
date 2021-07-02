@@ -12,11 +12,7 @@ import {
   TrackComposeEmail,
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/use-debounce'
-
-const TO_LABEL = 'To'
-const SUBJECT_LABEL = 'Subject'
-const BODY_LABEL = 'Body'
-const SEND_BUTTON = 'Send'
+import * as local from '../../constants/composeEmailConstants'
 
 const ComposeEmail = () => {
   const composeEmail = useSelector(selectComposeEmail)
@@ -106,19 +102,19 @@ const ComposeEmail = () => {
                 <div className="base">
                   <TextField
                     id="to"
-                    label={TO_LABEL}
+                    label={local.TO_LABEL}
                     value={toValue}
                     onChange={handleChange}
                   />
                   <TextField
                     id="subject"
-                    label={SUBJECT_LABEL}
+                    label={local.SUBJECT_LABEL}
                     value={subjectValue}
                     onChange={handleChange}
                   />
                   <TextField
                     id="body"
-                    label={BODY_LABEL}
+                    label={local.BODY_LABEL}
                     multiline
                     value={bodyValue}
                     onChange={handleChange}

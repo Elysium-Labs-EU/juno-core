@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './NavControls.scss'
 import { FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
-import { CustomIconLink } from '../../Elements'
+import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 
 const Navigation = () => {

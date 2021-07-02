@@ -1,29 +1,18 @@
 import React from 'react'
-import styled from 'styled-components'
+import { CustomButtonText } from './Elements/Buttons'
 import ThrashMail from './EmailOptions/ThrashMail'
-
-const Wrapper = styled.div`
-  z-index: 10;
-  position: relative;
-  padding: 0.5rem;
-  box-shadow: 0 0 10px 0 hsla(0, 0%, 0%, 0.01);
-  background-color: hsl(0, 0%, 100%);
-  border-radius: 5px;
-`
-
-const DELETE_BUTTON = 'Delete'
+import * as local from '../constants/emailDetailConstants'
+import * as S from './EmailMoreOptionsStyles'
 
 const EmailMoreOptions = ({ messageId }) => {
   return (
-    <Wrapper>
-      <button
+    <S.Wrapper>
+      <CustomButtonText
         className="btn option-link text-danger"
         onClick={() => ThrashMail(messageId)}
-        type="button"
-      >
-        {DELETE_BUTTON}
-      </button>
-    </Wrapper>
+        label={local.BUTTON_DELETE}
+      />
+    </S.Wrapper>
   )
 }
 

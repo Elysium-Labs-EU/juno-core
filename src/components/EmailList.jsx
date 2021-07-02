@@ -13,9 +13,9 @@ import { selectIsLoading } from '../Store/utilsSlice'
 import '../App.scss'
 import Emptystate from './Elements/EmptyState'
 import LoadingState from './Elements/LoadingState'
-
-const LOAD_OLDER = 'Load older messages'
-const MAX_RESULTS = 20
+import * as local from '../constants/emailListConstants'
+import * as draft from '../constants/draftConstants'
+import { CustomButtonText } from './Elements/Buttons'
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
@@ -31,11 +31,11 @@ const EmailList = () => {
     ) {
       const params = {
         labelIds,
-        maxResults: MAX_RESULTS,
+        maxResults: local.MAX_RESULTS,
       }
       // console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
-      if (labelIds.includes('DRAFT')) {
+      if (labelIds.includes(draft.LABEL)) {
         dispatch(loadDraftList())
       }
     }
@@ -46,7 +46,7 @@ const EmailList = () => {
       const params = {
         labelIds,
         nextPageToken,
-        maxResults: MAX_RESULTS,
+        maxResults: local.MAX_RESULTS,
       }
       dispatch(loadEmails(params))
     }
@@ -71,14 +71,12 @@ const EmailList = () => {
             {nextPageToken && (
               <div className="d-flex justify-content-center mb-5">
                 {!isLoading && (
-                  <button
+                  <CustomButtonText
                     className="btn btn-sm btn-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage(nextPageToken)}
-                    type="button"
-                  >
-                    {LOAD_OLDER}
-                  </button>
+                    label={local.LOAD_OLDER}
+                  />
                 )}
                 {isLoading && <CircularProgress />}
               </div>

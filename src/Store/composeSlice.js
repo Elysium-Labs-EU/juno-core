@@ -2,11 +2,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import axios from 'axios'
-import createApiClient from '../data/api'
+import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 
-const api = createApiClient()
+const messagesApi = messageApi()
 
 export const composeSlice = createSlice({
   name: 'compose',

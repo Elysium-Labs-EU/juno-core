@@ -1,0 +1,5 @@
+export const TO_LABEL = 'To'
+export const SUBJECT_LABEL = 'Subject'
+export const BODY_LABEL = 'Body'
+export const SEND_BUTTON = 'Send'
+export const COMPOSE = 'Compose'
