@@ -3,10 +3,11 @@ import EmailAvatar from '../../EmailAvatar'
 import EmailAttachment from '../../EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../TimeStamp'
+import * as local from '../../../constants/unreadConstants'
 
 const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
   const [open, setOpen] = useState(
-    message && message.labelIds.includes('UNREAD')
+    message && message.labelIds.includes(local.UNREAD)
   )
   // console.log(message)
 

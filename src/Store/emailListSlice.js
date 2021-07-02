@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import createApiClient from '../data/api'
+import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 // import { setBaseLoaded } from './baseSlice'
 import { setLoadedInbox } from './labelsSlice'
@@ -9,7 +9,7 @@ import { FilteredEmailList } from '../utils'
 
 const DRAFT = 'DRAFT'
 
-const api = createApiClient()
+const threadsApi = threadApi()
 
 export const emailListSlice = createSlice({
   name: 'email',
@@ -114,7 +114,7 @@ export const loadEmailDetails = (labeledThreads) => {
 
         if (threads.length > 0) {
           threads.forEach(async (item) => {
-            const threadDetail = await api.getThreadDetail(item.id)
+            const threadDetail = await threadsApi.getThreadDetail(item.id)
             buffer.push(threadDetail.thread)
             if (buffer.length === loadCount) {
               dispatch(

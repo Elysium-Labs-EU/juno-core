@@ -1,4 +1,12 @@
 {
   "HOME": "/",
-  "COUNTER": "/counter"
+  "EMAIL_DETAIL": "/mail/:labelId/:threadId",
+  "COMPOSE_EMAIL": "/compose/:messageId?",
+  "DRAFTS": "/drafts",
+  "SENT": "/sent",
+  "SPAM": "/spam",
+  "SETTINGS": "/settings",
+  "INFORMATION_OVERVIEW": "/information-overview",
+  "FILE_OVERVIEW": "/file-overview",
+  "INBOX": "/inbox"
 }

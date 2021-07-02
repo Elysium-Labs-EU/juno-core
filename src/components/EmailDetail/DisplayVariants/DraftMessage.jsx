@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import EmailAvatar from '../../EmailAvatar'
 import TimeStamp from '../../TimeStamp'
 import { OpenDraftEmail } from '../../../Store/draftsSlice'
-
-const DRAFT_LABEL = ['DRAFT']
-const DRAFT = 'Draft - '
+import * as local from '../../../constants/draftConstants'
 
 const DraftMessage = ({ message, threadDetail }) => {
   const dispatch = useDispatch()
@@ -14,8 +12,7 @@ const DraftMessage = ({ message, threadDetail }) => {
   const id = useSelector((state) => state.currEmail)
   const emailList = useSelector((state) => state.emailList)
   const messageId = message && message.id
-
-  //   console.log(id)
+  const { DRAFT_LABEL } = local
 
   const AvatarURL =
     message && message.payload.headers.find((e) => e.name === 'From').value
@@ -53,7 +50,7 @@ const DraftMessage = ({ message, threadDetail }) => {
         </div>
       </div>
       <span style={{ fontStyle: 'italic' }}>
-        {DRAFT}
+        {local.DRAFT_SNIPPET_INDICATOR}
         {EmailSnippet}
       </span>
       <TimeStamp threadTimeStamp={message.internalDate} />

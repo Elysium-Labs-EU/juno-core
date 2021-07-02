@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-// import { checkBase } from './Store/actions'
 import { checkBase } from './Store/baseSlice'
 import './App.scss'
 import './styles/typography.scss'
@@ -17,6 +16,7 @@ import SpamEmail from './components/Spam/Spam'
 import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
 import DraftEmail from './components/Draft/DraftEmail'
+import Routes from './constants/routes.json'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -36,21 +36,20 @@ const App = () => {
             <Header />
           </div>
 
-          {/* Fix the bug with the path of the email id detail not being accurate */}
           <Switch>
-            <Route path="/" exact component={ToDo} />
-            <Route path="/mail/:labelId/:threadId" component={EmailDetail} />
-            <Route path="/compose/:messageId?" component={ComposeEmail} />
-            <Route path="/drafts" component={DraftEmail} />
-            <Route path="/sent" component={SentEmail} />
-            <Route path="/spam" component={SpamEmail} />
-            <Route path="/settings" component={Settings} />
+            <Route path={Routes.HOME} exact component={ToDo} />
+            <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
+            <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
+            <Route path={Routes.DRAFTS} component={DraftEmail} />
+            <Route path={Routes.SENT} component={SentEmail} />
+            <Route path={Routes.SPAM} component={SpamEmail} />
+            <Route path={Routes.SETTINGS} component={Settings} />
             <Route
-              path="/information-overview"
+              path={Routes.INFORMATION_OVERVIEW}
               component={InformationOverview}
             />
-            <Route path="/file-overview" component={FileOverview} />
-            <Route path="/inbox" component={Inbox} />
+            <Route path={Routes.FILE_OVERVIEW} component={FileOverview} />
+            <Route path={Routes.INBOX} component={Inbox} />
           </Switch>
         </div>
       )}

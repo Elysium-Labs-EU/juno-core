@@ -1,14 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import createApiClient from '../data/api'
+import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList, NavigateNextMail } from '../utils'
+import * as draft from '../constants/draftConstants'
 
-const api = createApiClient()
-const DRAFT = 'DRAFT'
+const api = threadApi()
 
 export const metaListSlice = createSlice({
   name: 'meta',
@@ -180,7 +180,7 @@ export const UpdateMetaListLabel = (props) => {
             dispatch(UpdateEmailListLabel(props))
             if (
               getState().emailDetail.currEmail &&
-              !getState().labels.labelIds.includes(DRAFT)
+              !getState().labels.labelIds.includes(draft.LABEL)
             ) {
               const { viewIndex } = getState().emailDetail
               NavigateNextMail({

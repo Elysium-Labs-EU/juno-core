@@ -1,6 +1,6 @@
-import createApiClient from '../../data/api'
+import messageApi from '../../data/messageApi'
 
-const api = createApiClient()
+const api = messageApi()
 
 const ThrashMail = async ({ messageId }) => {
   await api.thrashMessage(messageId)

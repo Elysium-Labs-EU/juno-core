@@ -15,3 +15,16 @@ export const EmailDetailContainer = styled.div`
   padding: 1rem; */
   /* background-color: #d971ff0f; */
 `
+
+export const EmailOptionsContainer = styled.div`
+  position: relative;
+  padding: 30px;
+`
+export const StickyOptions = styled.div`
+  position: sticky;
+  top: 122px;
+`
+
+export const InnerOptionsContainer = styled.div`
+  width: 110px;
+`

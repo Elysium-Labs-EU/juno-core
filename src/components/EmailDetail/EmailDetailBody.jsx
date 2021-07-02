@@ -1,8 +1,8 @@
 import base64url from 'base64url'
 import React from 'react'
-import createApiClient from '../../data/api'
+import messageApi from '../../data/messageApi'
 
-const api = createApiClient()
+const api = messageApi()
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   const fetchAttachment = async (attachmentId) => {
@@ -19,19 +19,16 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   const DetailBody = () => {
     if (threadDetailBody.mimeType === 'text/html') {
       const str = base64url.decode(`${threadDetailBody.body.data}`)
-      // console.log('1')
       return <div dangerouslySetInnerHTML={{ __html: str }} />
     }
     if (threadDetailBody.mimeType === 'multipart/alternative') {
       const str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
-      // console.log('2')
       return <div dangerouslySetInnerHTML={{ __html: str }} />
     }
     if (threadDetailBody.mimeType === 'multipart/mixed') {
       const str = threadDetailBody.parts[0].parts
         ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
         : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-      // console.log('3')
       return <div dangerouslySetInnerHTML={{ __html: str }} />
     }
     if (threadDetailBody.mimeType === 'multipart/related') {
@@ -39,12 +36,9 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
         messageId,
         threadDetailBody.parts[1].body.attachmentId
       )
-      // console.log('4')
-      // console.log(body)
       return <div dangerouslySetInnerHTML={{ __html: body.value }} />
     }
     const str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-    // console.log('5')
     return <div dangerouslySetInnerHTML={{ __html: str }} />
   }
 

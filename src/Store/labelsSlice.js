@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import createApiClient from '../data/api'
+import labelApi from '../data/labelApi'
 import { setServiceUnavailable } from './utilsSlice'
 
-const api = createApiClient()
+const api = labelApi()
 
 export const labelsSlice = createSlice({
   name: 'labels',

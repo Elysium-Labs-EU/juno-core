@@ -11,12 +11,12 @@ import InlineThreadActions from './InlineThreadActions'
 import ThreadBase from './EmailListItemStyles'
 import { convertArrayToString, findPayloadHeadersData } from '../../utils'
 import { OpenDraftEmail } from '../../Store/draftsSlice'
-
-const DRAFT_LABEL = ['DRAFT']
+import * as draft from '../../constants/draftConstants'
 
 const EmailListItem = ({ email }) => {
   const labelIds = useSelector(selectLabelIds)
   const { id } = email
+  const { LABEL } = draft
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -58,12 +58,12 @@ const EmailListItem = ({ email }) => {
 
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds)
-    if (!labelIds.includes(...DRAFT_LABEL)) {
+    if (!labelIds.includes(draft.LABEL)) {
       history.push(`mail/${labelURL}/${id}`)
     } else {
       email.messages.length > 1 && history.push(`mail/${labelURL}/${id}`)
       email.messages.length === 1 &&
-        dispatch(OpenDraftEmail({ history, id, DRAFT_LABEL }))
+        dispatch(OpenDraftEmail({ history, id, LABEL }))
     }
   }
 
@@ -78,17 +78,15 @@ const EmailListItem = ({ email }) => {
           aria-hidden="true"
         >
           <div className="avatars">
-            {!labelIds.includes(...DRAFT_LABEL) && (
+            {!labelIds.includes(draft.LABEL) ? (
               <EmailAvatar avatarURL={fromEmail()} />
-            )}
-            {labelIds.includes(...DRAFT_LABEL) && (
+            ) : (
               <EmailAvatar avatarURL={toEmail()} />
             )}
           </div>
-          {!labelIds.includes(...DRAFT_LABEL) && (
+          {!labelIds.includes(draft.LABEL) ? (
             <span className="text-truncate">{fromEmail()}</span>
-          )}
-          {labelIds.includes(...DRAFT_LABEL) && (
+          ) : (
             <span className="text-truncate">{toEmail()}</span>
           )}
           <MessageCount countOfMessage={email} />

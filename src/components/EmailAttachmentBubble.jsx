@@ -3,9 +3,9 @@ import { FiDownload, FiFile } from 'react-icons/fi'
 import './EmailAttachmentBubble.scss'
 import prettyBytes from 'pretty-bytes'
 // import base64url from 'base64url'
-import createApiClient from '../data/api'
+import messageApi from '../data/messageApi'
 
-const api = createApiClient()
+const api = messageApi()
 
 const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
   const fetchAttachment = async (attachmentId) => {

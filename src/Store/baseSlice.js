@@ -1,12 +1,13 @@
 /* eslint-disable no-param-reassign */
 
 import { createSlice } from '@reduxjs/toolkit'
-import createApiClient from '../data/api'
+import labelApi from '../data/labelApi'
 import { multipleIncludes } from '../utils'
 import { setServiceUnavailable } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
+import { BASE_ARRAY } from '../constants/baseConstants'
 
-const api = createApiClient()
+const api = labelApi()
 
 export const baseSlice = createSlice({
   name: 'base',
@@ -25,16 +26,6 @@ export const baseSlice = createSlice({
 export const { setBaseLoaded } = baseSlice.actions
 
 export const checkBase = () => {
-  const BASE_ARRAY = [
-    'Juno',
-    'Juno/To Do',
-    'Juno/Keep',
-    'Juno/Reminder',
-    'INBOX',
-    'SPAM',
-    'DRAFT',
-    'SENT',
-  ]
   return async (dispatch) => {
     try {
       const labels = await api.fetchLabel()
