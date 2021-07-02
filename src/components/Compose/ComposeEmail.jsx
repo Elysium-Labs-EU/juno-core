@@ -174,7 +174,7 @@ const ComposeEmail = () => {
                 </div>
               </div> */}
               <button className="btn btn-sm btn-light" type="submit">
-                {SEND_BUTTON}
+                {local.SEND_BUTTON}
               </button>
             </form>
           </div>
