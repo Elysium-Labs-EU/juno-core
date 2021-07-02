@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { BASE_API_URL } from './api'
 
 const labelApi = () => {
   return {
@@ -15,7 +16,7 @@ const labelApi = () => {
     // },
     fetchLabel: async () => {
       try {
-        const res = await axios.get(`/api/labels`)
+        const res = await axios.get(`${BASE_API_URL}/api/labels`)
         return res.data
       } catch (err) {
         return console.log(err)
@@ -24,7 +25,7 @@ const labelApi = () => {
     updateLabel: async (body) => {
       console.log('body', body)
       try {
-        const res = await axios.patch(`/api/labels`, body)
+        const res = await axios.patch(`${BASE_API_URL}/api/labels`, body)
         return res.data
       } catch (err) {
         return console.log(err)
@@ -33,7 +34,9 @@ const labelApi = () => {
     deleteLabel: async (id) => {
       console.log('id', id)
       try {
-        const res = await axios.delete(`/api/labels`, { data: { id } })
+        const res = await axios.delete(`${BASE_API_URL}/api/labels`, {
+          data: { id },
+        })
         return res.data
       } catch (err) {
         return console.log(err)
@@ -42,7 +45,7 @@ const labelApi = () => {
     createDraft: async (body) => {
       console.log('body', body)
       try {
-        const res = await axios.post(`/api/labels`, body)
+        const res = await axios.post(`${BASE_API_URL}/api/labels`, body)
         return res.data
       } catch (err) {
         return console.log(err)

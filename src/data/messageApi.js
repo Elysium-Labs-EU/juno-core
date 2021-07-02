@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { BASE_API_URL } from './api'
 
 const messageApi = () => {
   return {
     getMessageDetail: async (messageId) => {
       try {
-        const res = await axios.get(`/api/message/${messageId}`)
+        const res = await axios.get(`${BASE_API_URL}/api/message/${messageId}`)
         return res.data
       } catch (err) {
         return console.log(err)
@@ -14,7 +15,7 @@ const messageApi = () => {
     getAttachment: async (messageId, attachmentId) => {
       try {
         const res = await axios.get(
-          `/api/message/attachment/${messageId}/${attachmentId}`
+          `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
         )
         return res.data
       } catch (err) {
@@ -24,7 +25,7 @@ const messageApi = () => {
     sendMessage: async (data) => {
       console.log('data', data)
       try {
-        const res = await axios.post('/api/send-message', data)
+        const res = await axios.post(`${BASE_API_URL}/api/send-message`, data)
         return res
       } catch (err) {
         return console.log(err)
@@ -33,7 +34,10 @@ const messageApi = () => {
     updateMessage: async (messageId, body) => {
       console.log('body', body)
       try {
-        const res = await axios.patch(`/api/message/${messageId}`, body)
+        const res = await axios.patch(
+          `${BASE_API_URL}/api/message/${messageId}`,
+          body
+        )
         return res.data
       } catch (err) {
         return console.log(err)
@@ -42,7 +46,9 @@ const messageApi = () => {
     thrashMessage: async (messageId) => {
       console.log('trashed')
       try {
-        const res = await axios.post(`/api/message/thrash/${messageId}`)
+        const res = await axios.post(
+          `${BASE_API_URL}/api/message/thrash/${messageId}`
+        )
         return res.data
       } catch (err) {
         return console.log(err)
@@ -57,7 +63,7 @@ const messageApi = () => {
     // },
     deleteMessage: async (messageId) => {
       try {
-        const res = await axios.delete(`/api/message/`, {
+        const res = await axios.delete(`${BASE_API_URL}/api/message/`, {
           data: { id: messageId },
         })
         return res.data
