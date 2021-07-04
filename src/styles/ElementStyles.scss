@@ -1,0 +1,17 @@
+.nav-item-button {
+  border: none;
+  color: #a6a6a6;
+  outline: none;
+
+  &:hover {
+    color: #1c1c1c;
+  }
+}
+
+.nav-item-selected {
+  div {
+    span {
+      color: #1c1c1c;
+    }
+  }
+}

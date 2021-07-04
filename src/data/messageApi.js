@@ -13,11 +13,23 @@ const messageApi = () => {
     },
 
     getAttachment: async (messageId, attachmentId) => {
+      console.log(messageId, attachmentId)
       try {
         const res = await axios.get(
           `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
         )
-        return res.data
+        return res
+      } catch (err) {
+        return console.log(err)
+      }
+    },
+
+    downloadAttachment: async (messageId, attachmentId) => {
+      try {
+        const res = await axios.get(
+          `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
+        )
+        return res
       } catch (err) {
         return console.log(err)
       }

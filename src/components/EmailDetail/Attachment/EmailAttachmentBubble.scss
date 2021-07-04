@@ -1,0 +1,32 @@
+.attachment {
+  border-radius: 10px;
+  background-color: hsl(0, 0%, 94%);
+  cursor: pointer;
+  display: flex;
+  flex-flow: row;
+  max-width: max-content;
+  padding: 0.2rem 0.5rem;
+  align-items: center;
+}
+
+.attachment-inner {
+  display: flex;
+  flex-flow: column;
+  margin: 0.3rem;
+
+  span {
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.17;
+    letter-spacing: normal;
+    text-align: left;
+    color: hsl(0, 0%, 11%);
+  }
+}
+
+.attachment-details {
+  color: hsl(0, 0%, 65%);
+  font-size: 12px;
+}

@@ -111,11 +111,8 @@ const loadDraftDetails = (draftDetails) => {
           dispatch(setServiceUnavailable('Error setting up compose email.'))
         )
     } catch (err) {
-      console
-        .log(err)
-        .then(
-          dispatch(setServiceUnavailable('Error setting up compose email.'))
-        )
+      console.log(err)
+      dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
 }
