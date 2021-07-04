@@ -1,15 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
-// import { setBaseLoaded } from './baseSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { FilteredEmailList } from '../utils'
-
-const DRAFT = 'DRAFT'
-
-const threadsApi = threadApi()
+import messageApi from '../data/messageApi'
 
 export const emailListSlice = createSlice({
   name: 'email',
@@ -17,7 +12,6 @@ export const emailListSlice = createSlice({
     emailList: [],
   },
   reducers: {
-    // Before listAddDetail
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
         ...action.payload,
@@ -114,7 +108,7 @@ export const loadEmailDetails = (labeledThreads) => {
 
         if (threads.length > 0) {
           threads.forEach(async (item) => {
-            const threadDetail = await threadsApi.getThreadDetail(item.id)
+            const threadDetail = await threadApi().getThreadDetail(item.id)
             buffer.push(threadDetail.thread)
             if (buffer.length === loadCount) {
               dispatch(
@@ -144,14 +138,12 @@ export const loadEmailDetails = (labeledThreads) => {
           console.log(labels)
           dispatch(setLoadedInbox(labels))
         }
-        // console.log(`Empty Inbox for ${labels}`);
         if (
           !getState().base.baseLoaded &&
           getState().labels.storageLabels.length ===
             getState().labels.loadedInbox.length
         ) {
           dispatch(setIsLoading(false))
-          // dispatch(setBaseLoaded(true))
         }
       }
     } catch (err) {
@@ -179,35 +171,30 @@ export const UpdateEmailListLabel = (props) => {
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
-      return axios
-        .patch(`/api/message/${messageId}`, request)
-        .then((res) => {
-          if (res.status === 200) {
-            if (addLabelIds) {
-              const activEmailObjArray =
-                filteredCurrentEmailList[0].threads.filter(
-                  (item) => item.id === messageId
-                )
-              dispatch(
-                listAddItemDetail({
-                  activEmailObjArray,
-                  filteredTargetEmailList,
-                })
-              )
-            }
-            if (removeLabelIds) {
-              dispatch(
-                listRemoveItemDetail({
-                  messageId,
-                  filteredCurrentEmailList,
-                })
-              )
-            }
-          } else {
-            dispatch(setServiceUnavailable('Error updating label.'))
-          }
-        })
-        .catch((err) => console.log(err))
+      const response = await messageApi().updateMessage({ messageId, request })
+      if (response.status === 200) {
+        if (addLabelIds) {
+          const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
+            (item) => item.id === messageId
+          )
+          dispatch(
+            listAddItemDetail({
+              activEmailObjArray,
+              filteredTargetEmailList,
+            })
+          )
+        }
+        if (removeLabelIds) {
+          dispatch(
+            listRemoveItemDetail({
+              messageId,
+              filteredCurrentEmailList,
+            })
+          )
+        }
+      } else {
+        dispatch(setServiceUnavailable('Error updating label.'))
+      }
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error updating label.'))

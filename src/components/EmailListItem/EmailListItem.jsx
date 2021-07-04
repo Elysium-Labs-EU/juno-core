@@ -103,7 +103,7 @@ const EmailListItem = ({ email }) => {
         </div>
 
         <div className="cellAttachment">
-          {/* <EmailHasAttachment hasAttachment={messages} /> */}
+          <EmailHasAttachment messages={email?.messages} />
         </div>
         <div className="cellDate">
           <div className="datePosition">

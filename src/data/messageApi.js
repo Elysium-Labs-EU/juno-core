@@ -13,15 +13,17 @@ const messageApi = () => {
     },
 
     getAttachment: async (messageId, attachmentId) => {
+      console.log(messageId, attachmentId)
       try {
         const res = await axios.get(
           `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
         )
-        return res.data
+        return res
       } catch (err) {
         return console.log(err)
       }
     },
+
     sendMessage: async (data) => {
       console.log('data', data)
       try {
@@ -31,14 +33,14 @@ const messageApi = () => {
         return console.log(err)
       }
     },
-    updateMessage: async (messageId, body) => {
-      console.log('body', body)
+    updateMessage: async (props) => {
+      const { messageId, request } = props
       try {
         const res = await axios.patch(
           `${BASE_API_URL}/api/message/${messageId}`,
-          body
+          request
         )
-        return res.data
+        return res
       } catch (err) {
         return console.log(err)
       }

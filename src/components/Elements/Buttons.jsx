@@ -24,7 +24,7 @@ export const CustomIconLink = (props) => {
     <button
       onClick={onClick}
       className={className}
-      style={{ marginTop: '1rem' }}
+      // style={{ marginTop: '1rem' }}
       type="button"
       disabled={disabled}
     >

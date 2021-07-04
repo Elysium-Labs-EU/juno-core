@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import EmailAvatar from '../../EmailAvatar'
-import EmailAttachment from '../../EmailAttachment'
+import EmailAttachment from '../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../TimeStamp'
 import * as local from '../../../constants/unreadConstants'
@@ -9,7 +9,6 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
   const [open, setOpen] = useState(
     message && message.labelIds.includes(local.UNREAD)
   )
-  // console.log(message)
 
   const handleClick = () => {
     setOpen((currState) => !currState)
@@ -30,42 +29,44 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
   return (
     <>
       {open && (
-        <div onClick={handleClick} aria-hidden="true">
-          <div className="d-flex align-items-center">
-            <EmailAvatar avatarURL={AvatarURL} />
-            <div className="headerFullWidth text-truncate d-flex">
-              <span className="email-detail-title">{Subject}</span>
-              <div
-                className="ml-auto"
-                style={{ display: 'flex', flexFlow: 'column' }}
-              >
-                <TimeStamp threadTimeStamp={message.internalDate} />
-                {message.labelIds.includes('UNREAD') && <p>Unread message</p>}
-                {!message.labelIds.includes('DRAFT' || 'UNREAD') && (
-                  <p>Read message</p>
-                )}
+        <>
+          <div onClick={handleClick} aria-hidden="true">
+            <div className="d-flex align-items-center">
+              <EmailAvatar avatarURL={AvatarURL} />
+              <div className="headerFullWidth text-truncate d-flex">
+                <span className="email-detail-title">{Subject}</span>
+                <div
+                  className="ml-auto"
+                  style={{ display: 'flex', flexFlow: 'column' }}
+                >
+                  <TimeStamp threadTimeStamp={message.internalDate} />
+                  {message.labelIds.includes('UNREAD') && <p>Unread message</p>}
+                  {!message.labelIds.includes('DRAFT' || 'UNREAD') && (
+                    <p>Read message</p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="d-flex align-items-center mt-2">
-            <div className="text-truncate email-detail-from">
-              {FROM} <span>{From}</span>
+            <div className="d-flex align-items-center mt-2">
+              <div className="text-truncate email-detail-from">
+                {FROM} <span>{From}</span>
+              </div>
+            </div>
+            <div className="EmailBody mt-3 mb-3">
+              <EmailDetailBody
+                className="EmailDetailBody"
+                threadDetailBody={message.payload}
+                messageId={message.id}
+              />
+            </div>
+            <div className="mt-3 mb-3">
+              <p className="email-detail-from">
+                {MESSAGE_ID_LABEL} {message.id}
+              </p>
             </div>
           </div>
-          <div className="EmailBody mt-3 mb-3">
-            <EmailDetailBody
-              className="EmailDetailBody"
-              threadDetailBody={message.payload}
-              messageId={message.id}
-            />
-          </div>
-          <div className="mt-3 mb-3">
-            <p className="email-detail-from">
-              {MESSAGE_ID_LABEL} {message.id}
-            </p>
-          </div>
           <EmailAttachment message={message} />
-        </div>
+        </>
       )}
       {!open && (
         <div onClick={handleClick} aria-hidden="true">

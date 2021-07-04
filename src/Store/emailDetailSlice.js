@@ -1,5 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
+import messageApi from '../data/messageApi'
+import base64toBlob from '../utils/base64toBlob'
+import fileSaver from '../utils/fileSaver'
 
 export const emailDetailSlice = createSlice({
   name: 'emailDetail',
@@ -19,15 +22,53 @@ export const emailDetailSlice = createSlice({
         .indexOf(action.payload.currEmail)
       state.viewIndex = viewingIndex
     },
+    setIsDownloading: (state, action) => {},
   },
 })
 
 export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
-// export const selectDraft = (state) => state.draftList
+// export const fetchAttachment = ({ attachmentData, messageId }) => {
+//   const {
+//     body: { attachmentId },
+//     filename,
+//     mimeType,
+//   } = attachmentData
+
+//   return async (dispatch) => {
+//     try {
+//       const fetchedAttachment = await messageApi().getAttachment(
+//         messageId,
+//         attachmentId
+//       )
+//       console.log(fetchedAttachment)
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+// }
+
+export const downloadAttachment = ({ attachmentData, messageId }) => {
+  console.log(attachmentData)
+  const {
+    body: { attachmentId },
+    filename,
+    mimeType,
+  } = attachmentData
+  return async (dispatch) => {
+    try {
+      const fetchedAttachment = await messageApi().getAttachment(
+        messageId,
+        attachmentId
+      )
+      const base64Data = fetchedAttachment.data.messageAttachment.data
+      const test = base64toBlob({ base64Data, mimeType })
+      await fileSaver(test, filename)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
 
 export const selectCurrentEmail = (state) => state.emailDetail.currEmail
 export const selectViewIndex = (state) => state.emailDetail.viewIndex
