@@ -85,8 +85,12 @@ small,
   font-size: 0.8rem;
 }
 
-.text_muxed {
+.text_muted {
   color: $color-light-grey;
+}
+
+.text_normal {
+  color: $color-black;
 }
 
 .option-link:hover {
@@ -105,5 +109,11 @@ small,
 .date {
   color: $color-light-grey;
   //   margin-left: 10px;
+  white-space: nowrap;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }

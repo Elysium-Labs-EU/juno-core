@@ -4,6 +4,7 @@ import EmailAttachment from '../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../TimeStamp'
 import * as local from '../../../constants/unreadConstants'
+import * as S from '../EmailDetailStyles'
 
 const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
   const [open, setOpen] = useState(
@@ -31,9 +32,9 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
       {open && (
         <>
           <div onClick={handleClick} aria-hidden="true">
-            <div className="d-flex align-items-center">
+            <S.AvatarHeaderContainer>
               <EmailAvatar avatarURL={AvatarURL} />
-              <div className="headerFullWidth text-truncate d-flex">
+              <S.HeaderFullWidth>
                 <span className="email-detail-title">{Subject}</span>
                 <div
                   className="ml-auto"
@@ -45,21 +46,21 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
                     <p>Read message</p>
                   )}
                 </div>
-              </div>
-            </div>
-            <div className="d-flex align-items-center mt-2">
-              <div className="text-truncate email-detail-from">
-                {FROM} <span>{From}</span>
-              </div>
-            </div>
-            <div className="EmailBody mt-3 mb-3">
+              </S.HeaderFullWidth>
+            </S.AvatarHeaderContainer>
+            <S.FromContainer>
+              <p className="text-muted">
+                {FROM} <span className="text_normal">{From}</span>
+              </p>
+            </S.FromContainer>
+            <S.EmailBody>
               <EmailDetailBody
                 className="EmailDetailBody"
                 threadDetailBody={message.payload}
                 messageId={message.id}
               />
-            </div>
-            <div className="mt-3 mb-3">
+            </S.EmailBody>
+            <div>
               <p className="email-detail-from">
                 {MESSAGE_ID_LABEL} {message.id}
               </p>
@@ -70,18 +71,16 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
       )}
       {!open && (
         <div onClick={handleClick} aria-hidden="true">
-          <div className="d-flex align-items-center closed-message">
-            <div className="d-flex align-content-center">
+          <S.ClosedMessageWrapper>
+            <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={AvatarURL} />
-              <div className="d-flex align-items-center ml-2 mt-2">
-                <div className="text-truncate email-detail-from">
-                  <span>{From}</span>
-                </div>
-              </div>
-            </div>
-            {EmailSnippet}
+              <S.ClosedSender>
+                <span>{From}</span>
+              </S.ClosedSender>
+            </S.ClosedAvatarSender>
+            <S.ClosedSnippet>{EmailSnippet}</S.ClosedSnippet>
             <TimeStamp threadTimeStamp={message.internalDate} />
-          </div>
+          </S.ClosedMessageWrapper>
         </div>
       )}
     </>

@@ -4,14 +4,77 @@
   outline: none;
 
   &:hover {
-    color: #1c1c1c;
+    color: #212529;
   }
 }
 
 .nav-item-selected {
   div {
     span {
-      color: #1c1c1c;
+      color: #212529;
     }
+  }
+}
+
+.button {
+  display: inline-block;
+  font-weight: 400;
+  color: #212529;
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.button-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.button-light {
+  color: #212529;
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.button > .button-inner {
+  display: flex;
+  align-items: center;
+  .icon {
+    margin-right: 13px;
+    line-height: 0;
+    text-align: center;
+    transition: opacity 0.3s ease 0s;
+  }
+}
+
+.sort-button {
+  border-radius: 20px;
+  border: none;
+  background-color: #8e23d1;
+  div {
+    margin: 0.4rem 0.8rem;
+    span {
+      color: #fdfdfd;
+      font-size: 1rem;
+    }
+  }
+
+  &:hover {
+    border-radius: 20px;
+    background-color: #8e23d1;
   }
 }

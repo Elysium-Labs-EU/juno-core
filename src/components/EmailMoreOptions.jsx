@@ -8,7 +8,7 @@ const EmailMoreOptions = ({ messageId }) => {
   return (
     <S.Wrapper>
       <CustomButtonText
-        className="btn option-link text-danger"
+        className="button option-link text-danger"
         onClick={() => ThrashMail(messageId)}
         label={local.BUTTON_DELETE}
       />

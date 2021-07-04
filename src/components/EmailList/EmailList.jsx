@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
-import EmailListItem from './EmailListItem/EmailListItem'
+import EmailListItem from '../EmailListItem/EmailListItem'
 import {
   // loadDraftList,
   loadEmails,
-} from '../Store/metaListSlice'
-import { loadDraftList } from '../Store/draftsSlice'
-import { selectEmailList } from '../Store/emailListSlice'
-import { selectLabelIds, selectLoadedInbox } from '../Store/labelsSlice'
-import { selectIsLoading } from '../Store/utilsSlice'
-import '../App.scss'
-import Emptystate from './Elements/EmptyState'
-import LoadingState from './Elements/LoadingState'
-import * as local from '../constants/emailListConstants'
-import * as draft from '../constants/draftConstants'
-import { CustomButtonText } from './Elements/Buttons'
+} from '../../Store/metaListSlice'
+import { loadDraftList } from '../../Store/draftsSlice'
+import { selectEmailList } from '../../Store/emailListSlice'
+import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
+import Emptystate from '../Elements/EmptyState'
+import LoadingState from '../Elements/LoadingState'
+import * as local from '../../constants/emailListConstants'
+import * as draft from '../../constants/draftConstants'
+import { CustomButtonText } from '../Elements/Buttons'
+import * as S from './EmailListStyles'
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
@@ -33,7 +33,6 @@ const EmailList = () => {
         labelIds,
         maxResults: local.MAX_RESULTS,
       }
-      // console.log(`loading ${labelIds}`)
       dispatch(loadEmails(params))
       if (labelIds.includes(draft.LABEL)) {
         dispatch(loadDraftList())
@@ -56,9 +55,9 @@ const EmailList = () => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
       <>
-        <div className="scroll">
+        <S.Scroll>
           <div className="tlOuterContainer">
-            <div className="thread-list">
+            <S.ThreadList>
               {threads.length > 0 && (
                 <div className="base">
                   {threads.map((email) => (
@@ -67,22 +66,26 @@ const EmailList = () => {
                 </div>
               )}
               {threads.length === 0 && <Emptystate />}
-            </div>
-            {nextPageToken && (
-              <div className="d-flex justify-content-center mb-5">
+            </S.ThreadList>
+            {nextPageToken ? (
+              <S.LoadMoreContainer>
                 {!isLoading && (
                   <CustomButtonText
-                    className="btn btn-sm btn-light"
+                    className="button button-small button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage(nextPageToken)}
                     label={local.LOAD_OLDER}
                   />
                 )}
                 {isLoading && <CircularProgress />}
-              </div>
+              </S.LoadMoreContainer>
+            ) : (
+              <S.LoadMoreContainer>
+                <small className="text-muted">{local.NO_MORE_RESULTS}</small>
+              </S.LoadMoreContainer>
             )}
           </div>
-        </div>
+        </S.Scroll>
       </>
     )
   }

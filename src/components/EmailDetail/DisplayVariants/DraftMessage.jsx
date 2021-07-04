@@ -5,6 +5,7 @@ import EmailAvatar from '../../EmailAvatar'
 import TimeStamp from '../../TimeStamp'
 import { OpenDraftEmail } from '../../../Store/draftsSlice'
 import * as local from '../../../constants/draftConstants'
+import * as S from '../EmailDetailStyles'
 
 const DraftMessage = ({ message, threadDetail }) => {
   const dispatch = useDispatch()
@@ -36,25 +37,21 @@ const DraftMessage = ({ message, threadDetail }) => {
   }
 
   return (
-    <div
-      className="d-flex align-items-center closed-message"
-      onClick={handleClick}
-      aria-hidden="true"
-    >
-      <div className="d-flex align-content-center">
+    <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
+      <S.AvatarHeaderContainer>
         <EmailAvatar avatarURL={AvatarURL} />
         <div className="d-flex align-items-center ml-2 mt-2">
           <div className="text-truncate email-detail-from">
             <span>{From}</span>
           </div>
         </div>
-      </div>
+      </S.AvatarHeaderContainer>
       <span style={{ fontStyle: 'italic' }}>
         {local.DRAFT_SNIPPET_INDICATOR}
         {EmailSnippet}
       </span>
       <TimeStamp threadTimeStamp={message.internalDate} />
-    </div>
+    </S.ClosedMessageWrapper>
   )
 }
 

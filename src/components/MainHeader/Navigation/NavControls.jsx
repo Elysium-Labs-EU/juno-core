@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import './NavControls.scss'
 import { FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
+import * as S from './NavControlsStyles'
 
 const Navigation = () => {
   const [active, setActive] = useState('')
   const [showMenu, setShowMenu] = useState(false)
   const location = useLocation()
+  const history = useHistory()
 
   useEffect(() => {
     if (location) {
@@ -22,10 +24,14 @@ const Navigation = () => {
     }
   }, [location])
 
+  const navigateTo = (destination) => {
+    history.push(destination)
+  }
+
   return (
-    <div className="nav-controls">
-      <div className="nav-c-item">
-        <Link to="/inbox">
+    <S.NavControls>
+      <S.NavList>
+        <S.NavItem>
           <CustomIconLink
             className={
               active === 'inbox'
@@ -33,11 +39,10 @@ const Navigation = () => {
                 : 'nav-item-button'
             }
             icon={<FiInbox />}
+            onClick={() => navigateTo('/inbox')}
           />
-        </Link>
-      </div>
-      <div className="nav-c-item">
-        <Link to="/settings">
+        </S.NavItem>
+        <S.NavItem>
           <CustomIconLink
             className={
               active === 'settings'
@@ -45,11 +50,10 @@ const Navigation = () => {
                 : 'nav-item-button'
             }
             icon={<FiSettings />}
+            onClick={() => navigateTo('/settings')}
           />
-        </Link>
-      </div>
-      <div className="nav-c-item">
-        <Link to="/compose">
+        </S.NavItem>
+        <S.NavItem>
           <CustomIconLink
             className={
               active === 'compose'
@@ -57,22 +61,19 @@ const Navigation = () => {
                 : 'nav-item-button'
             }
             icon={<FiEdit />}
+            onClick={() => navigateTo('/compose')}
           />
-        </Link>
-      </div>
-      <div className="nav-c-item">
-        <button
-          onClick={() => setShowMenu(!showMenu)}
-          type="button"
-          className="nav-item-button"
-        >
-          <div className="icon">
-            <FiMoreHorizontal />
-          </div>
-        </button>
-      </div>
-      {showMenu && <SubMenuHeader />}
-    </div>
+        </S.NavItem>
+        <S.NavItem>
+          <CustomIconLink
+            onClick={() => setShowMenu(!showMenu)}
+            className="nav-item-button"
+            icon={<FiMoreHorizontal />}
+          />
+        </S.NavItem>
+        {showMenu && <SubMenuHeader />}
+      </S.NavList>
+    </S.NavControls>
   )
 }
 

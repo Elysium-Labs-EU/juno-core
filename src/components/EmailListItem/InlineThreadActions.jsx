@@ -15,12 +15,18 @@ const InlineThreadActions = (messageId) => {
   return (
     <S.Wrapper>
       <div className="d-flex flex-row">
-        <button type="button" className="btn btn-sm text-muted option-link">
+        <button
+          type="button"
+          className="button button-small text-muted option-link"
+        >
           <div className="icon">
             <FiCornerUpLeft />
           </div>
         </button>
-        <button type="button" className="btn btn-sm text-muted option-link">
+        <button
+          type="button"
+          className="button button-small text-muted option-link"
+        >
           <div className="icon">
             <FiClock />
           </div>
@@ -28,7 +34,7 @@ const InlineThreadActions = (messageId) => {
         <button
           onClick={() => ArchiveMail(messageId)}
           type="button"
-          className="btn btn-sm text-muted option-link"
+          className="button button-small text-muted option-link"
         >
           <div className="icon">
             <FiArchive />
@@ -37,7 +43,7 @@ const InlineThreadActions = (messageId) => {
         <button
           onClick={() => setShowMenu(!showMenu)}
           type="button"
-          className="btn btn-sm text-muted option-link"
+          className="button button-small text-muted option-link"
         >
           <div className="icon">
             <FiMoreHorizontal />
