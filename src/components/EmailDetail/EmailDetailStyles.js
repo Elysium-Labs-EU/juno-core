@@ -8,14 +8,6 @@ export const EmailWrapper = styled.div`
   padding: 1rem;
 `
 
-export const EmailDetailContainer = styled.div`
-  /* border-radius: 6px;
-  background-color: #ffff;
-  margin-bottom: 0.5rem;
-  padding: 1rem; */
-  /* background-color: #d971ff0f; */
-`
-
 export const EmailOptionsContainer = styled.div`
   position: relative;
   padding: 30px;
@@ -27,4 +19,90 @@ export const StickyOptions = styled.div`
 
 export const InnerOptionsContainer = styled.div`
   width: 110px;
+`
+
+export const OpenMessageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const ClosedMessageWrapper = styled.div`
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+`
+
+export const DetailBase = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+`
+
+export const DetailRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex: 1 1;
+`
+
+export const CardFullWidth = styled.div`
+  width: 100%;
+`
+
+export const EmailDetailContainer = styled.div`
+  min-width: 60%;
+  max-width: 1040px;
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  margin-bottom: 1rem;
+`
+
+export const AvatarHeaderContainer = styled.div`
+  align-items: center;
+  display: flex;
+`
+
+export const HeaderFullWidth = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+  display: flex;
+  place-items: center;
+`
+
+export const FromContainer = styled.div`
+  margin-top: 0.5rem;
+  align-items: center;
+  display: flex;
+  div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+`
+
+export const EmailBody = styled.div`
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+`
+
+export const ClosedAvatarSender = styled.div`
+  align-content: center;
+  display: flex;
+`
+
+export const ClosedSender = styled.div`
+  display: flex;
+  place-items: center;
+  padding: 0 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const ClosedSnippet = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

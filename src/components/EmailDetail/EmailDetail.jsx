@@ -14,6 +14,7 @@ import { EmailWrapper } from './EmailDetailStyles'
 import { selectEmailList } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as draft from '../../constants/draftConstants'
+import * as S from './EmailDetailStyles'
 
 const EmailDetail = () => {
   const emailList = useSelector(selectEmailList)
@@ -57,7 +58,6 @@ const EmailDetail = () => {
       return (
         <DraftMessage
           message={message}
-          FROM={local.FROM}
           MESSAGE_ID_LABEL={local.MESSAGE_ID_LABEL}
           threadDetail={threadDetail}
         />
@@ -77,10 +77,10 @@ const EmailDetail = () => {
 
   return (
     <div className="tlOuterContainer">
-      <div className="detail-row">
-        <div className="pb-4 pt-4 mb-3 email-detail-container">
-          <div className="detail-base">
-            <div className="cardFullWidth">
+      <S.DetailRow>
+        <S.EmailDetailContainer>
+          <S.DetailBase>
+            <S.CardFullWidth>
               {threadDetail &&
                 !isLoading &&
                 threadDetail.messages.map((message) => (
@@ -90,11 +90,11 @@ const EmailDetail = () => {
                 ))}
               {!threadDetail && isLoading && <CircularProgress />}
               {!threadDetail && !isLoading && <p>{local.ERROR_EMAIL}</p>}
-            </div>
-          </div>
-        </div>
+            </S.CardFullWidth>
+          </S.DetailBase>
+        </S.EmailDetailContainer>
         {threadDetail && <EmailDetOptions messageId={threadDetail.id} />}
-      </div>
+      </S.DetailRow>
     </div>
   )
 }

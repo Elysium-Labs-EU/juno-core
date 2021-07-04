@@ -1,13 +1,13 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import './InboxSortOption.scss'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements/Buttons'
 import { convertArrayToString, startSort } from '../../utils'
 import { refreshEmailFeed, selectMetaList } from '../../Store/metaListSlice'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
+import * as S from './InboxSortOptionStyles'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -30,9 +30,9 @@ const SortInbox = () => {
   }
 
   return (
-    <div className="sort-container">
+    <S.SortContainer>
       <CustomIconLink
-        className="btn btn-light"
+        className="button button-light"
         onClick={() => refreshFeed()}
         disabled={isLoading}
         icon={<MdRefresh />}
@@ -44,7 +44,7 @@ const SortInbox = () => {
         disabled={isLoading}
         label={INBOX_BUTTON}
       />
-    </div>
+    </S.SortContainer>
   )
 }
 

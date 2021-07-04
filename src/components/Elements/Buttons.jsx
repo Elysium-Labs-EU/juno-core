@@ -6,12 +6,11 @@ export const CustomButtonText = (props) => {
     <button
       onClick={onClick}
       className={className}
-      style={{ marginTop: '1rem' }}
       type="button"
       disabled={disabled}
     >
-      <div>
-        {icon && <span style={{ paddingRight: `8px` }}>{icon}</span>}
+      <div className="button-inner">
+        {icon && <div className="icon">{icon}</div>}
         <span>{label}</span>
       </div>
     </button>
@@ -24,7 +23,6 @@ export const CustomIconLink = (props) => {
     <button
       onClick={onClick}
       className={className}
-      // style={{ marginTop: '1rem' }}
       type="button"
       disabled={disabled}
     >

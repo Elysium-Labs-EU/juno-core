@@ -6,15 +6,15 @@ import * as global from '../constants/globalConstants'
 function BackButton() {
   const history = useHistory()
 
-  const navigateBack = (number = -1) => {
-    history.go(number)
+  const navigateBack = () => {
+    history.go(-1)
   }
 
   return (
     <CustomButtonText
       onClick={navigateBack}
       label={global.BUTTON_BACK}
-      className="btn btn-sm btn-light"
+      className="button button-small button-light"
     />
   )
 }

@@ -1,32 +1,20 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import NavControls from '../MainHeader/Navigation/NavControls'
+import * as S from '../MainHeader/HeaderStyles'
+import BackButton from '../BackButton'
 
 const SENT_HEADER = 'Sent'
-const BACK_BUTTON = 'Back'
 
 const SentHeader = () => {
-  const history = useHistory()
-
-  const navigateBack = () => {
-    history.push('/')
-  }
-
   return (
     <div className="tlOuterContainer">
-      <div className="nav-container">
-        <button
-          type="button"
-          className="btn btn-sm btn-light"
-          onClick={navigateBack}
-        >
-          {BACK_BUTTON}
-        </button>
+      <S.NavContainer>
+        <BackButton />
         <div className="header-center">
           <h2>{SENT_HEADER}</h2>
         </div>
         <NavControls />
-      </div>
+      </S.NavContainer>
     </div>
   )
 }

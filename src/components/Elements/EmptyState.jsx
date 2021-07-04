@@ -1,11 +1,18 @@
 import React from 'react'
+import styled from 'styled-components'
 import * as global from '../../constants/globalConstants'
+
+const Wrapper = styled.div`
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+`
 
 const Emptystate = () => {
   return (
-    <div className="mt-5 d-flex justify-content-center">
+    <Wrapper>
       <p>{global.NOTHING_TO_SEE}</p>
-    </div>
+    </Wrapper>
   )
 }
 

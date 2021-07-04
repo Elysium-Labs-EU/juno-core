@@ -19,6 +19,7 @@ import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as todo from '../../constants/todoConstants'
 import * as S from './EmailDetailStyles'
+import { CustomButtonText } from '../Elements/Buttons'
 
 const EmailDetOptions = ({ messageId }) => {
   const emailList = useSelector(selectEmailList)
@@ -51,12 +52,11 @@ const EmailDetOptions = ({ messageId }) => {
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           <div>
-            <button type="button" className="btn option-link d-flex">
-              <div className="icon">
-                <FiCornerUpLeft />
-              </div>
-              <div className="labelContainer">{local.BUTTON_REPLY}</div>
-            </button>
+            <CustomButtonText
+              className="button option-link"
+              icon={<FiCornerUpLeft />}
+              label={local.BUTTON_REPLY}
+            />
           </div>
           <div>
             {labelIds.some(
@@ -67,43 +67,33 @@ const EmailDetOptions = ({ messageId }) => {
                   LABEL_NAME: todo.LABEL,
                 })[0].id
             ) ? (
-              <button
-                type="button"
-                className="btn option-link d-flex"
+              <CustomButtonText
+                className="button option-link"
+                icon={<FiCheckCircle />}
                 onClick={CompletedAction}
-              >
-                <div className="icon">
-                  <FiCheckCircle />
-                </div>
-                <div className="labelContainer">
-                  {local.BUTTON_MARK_AS_DONE}
-                </div>
-              </button>
+                label={local.BUTTON_MARK_AS_DONE}
+              />
             ) : (
-              <button
-                type="button"
-                className="btn option-link d-flex"
+              <CustomButtonText
+                className="button option-link"
+                icon={<FiCheckCircle />}
                 onClick={ToDoAction}
-              >
-                <div className="icon">
-                  <FiCheckCircle />
-                </div>
-                <div className="labelContainer">{local.BUTTON_TODO}</div>
-              </button>
+                label={local.BUTTON_TODO}
+              />
             )}
           </div>
           <div>
-            <button type="button" className="btn option-link d-flex">
-              <div className="icon">
-                <FiClock />
-              </div>
-              <div className="labelContainer">{local.BUTTON_REMIND}</div>
-            </button>
+            <CustomButtonText
+              className="button option-link"
+              icon={<FiClock />}
+              // onClick={ToDoAction}
+              label={local.BUTTON_REMIND}
+            />
           </div>
           <div>
-            <button
-              type="button"
-              className="btn option-link d-flex"
+            <CustomButtonText
+              className="button option-link"
+              icon={<FiArchive />}
               onClick={() =>
                 ArchiveMail({
                   messageId,
@@ -113,24 +103,16 @@ const EmailDetOptions = ({ messageId }) => {
                   viewIndex,
                 })
               }
-            >
-              <div className="icon">
-                <FiArchive />
-              </div>
-              <div className="labelContainer">{local.BUTTON_ARCHIVE}</div>
-            </button>
+              label={local.BUTTON_ARCHIVE}
+            />
           </div>
           <div>
-            <button
+            <CustomButtonText
+              className="button option-link"
+              icon={<FiMoreHorizontal />}
               onClick={() => setShowMenu(!showMenu)}
-              type="button"
-              className="btn option-link d-flex"
-            >
-              <div className="icon">
-                <FiMoreHorizontal />
-              </div>
-              <div className="labelContainer">{local.BUTTON_MORE}</div>
-            </button>
+              label={local.BUTTON_MORE}
+            />
           </div>
           {showMenu && <EmailMoreOptions messageId={messageId} />}
         </S.InnerOptionsContainer>

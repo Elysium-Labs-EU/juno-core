@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import EmailList from '../EmailList'
+import EmailList from '../EmailList/EmailList'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import {
   fetchLabelIds,
