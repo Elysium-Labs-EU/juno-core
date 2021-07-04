@@ -1,14 +1,12 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList, NavigateNextMail } from '../utils'
 import * as draft from '../constants/draftConstants'
-
-const api = threadApi()
+import messageApi from '../data/messageApi'
 
 export const metaListSlice = createSlice({
   name: 'meta',
@@ -99,7 +97,7 @@ export const loadEmails = (params) => {
         dispatch(setIsLoading(true))
       }
       const { labelIds } = params
-      const metaList = await api.getThreads(params)
+      const metaList = await threadApi().getThreads(params)
       if (metaList) {
         if (metaList.message.resultSizeEstimate > 0) {
           const { threads, nextPageToken } = metaList.message
@@ -153,48 +151,43 @@ export const UpdateMetaListLabel = (props) => {
         metaList &&
         addLabelIds &&
         FilteredMetaList({ metaList, labelIds: addLabelIds })
-      return axios
-        .patch(`/api/message/${messageId}`, request)
-        .then((res) => {
-          if (res.status === 200) {
-            if (addLabelIds) {
-              const activeMetaObjArray =
-                filteredCurrentMetaList[0].threads.filter(
-                  (item) => item.id === messageId
-                )
-              dispatch(
-                listAddItemMeta({
-                  activeMetaObjArray,
-                  filteredTargetMetaList,
-                })
-              )
-            }
-            if (removeLabelIds) {
-              dispatch(
-                listRemoveItemMeta({
-                  messageId,
-                  filteredCurrentMetaList,
-                })
-              )
-            }
-            dispatch(UpdateEmailListLabel(props))
-            if (
-              getState().emailDetail.currEmail &&
-              !getState().labels.labelIds.includes(draft.LABEL)
-            ) {
-              const { viewIndex } = getState().emailDetail
-              NavigateNextMail({
-                history,
-                labelURL,
-                filteredCurrentMetaList,
-                viewIndex,
-              })
-            }
-          } else {
-            dispatch(setServiceUnavailable('Error updating label.'))
-          }
-        })
-        .catch((err) => console.log(err))
+      const response = await messageApi().updateMessage({ messageId, request })
+      if (response.status === 200) {
+        if (addLabelIds) {
+          const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
+            (item) => item.id === messageId
+          )
+          dispatch(
+            listAddItemMeta({
+              activeMetaObjArray,
+              filteredTargetMetaList,
+            })
+          )
+        }
+        if (removeLabelIds) {
+          dispatch(
+            listRemoveItemMeta({
+              messageId,
+              filteredCurrentMetaList,
+            })
+          )
+        }
+        dispatch(UpdateEmailListLabel(props))
+        if (
+          getState().emailDetail.currEmail &&
+          !getState().labels.labelIds.includes(draft.LABEL)
+        ) {
+          const { viewIndex } = getState().emailDetail
+          NavigateNextMail({
+            history,
+            labelURL,
+            filteredCurrentMetaList,
+            viewIndex,
+          })
+        }
+      } else {
+        dispatch(setServiceUnavailable('Error updating label.'))
+      }
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error updating label.'))
