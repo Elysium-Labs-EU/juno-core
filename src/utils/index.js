@@ -1,5 +1,4 @@
 export const convertArrayToString = (data) => {
-  // console.trace(data)
   const converted = data.toString().replace(',', '-')
   return converted
 }
@@ -32,13 +31,6 @@ export const NavigateNextMail = (props) => {
 export const CloseMail = (props) => {
   const { history } = props
   return history.push(`/inbox`)
-}
-
-export const startSort = (props) => {
-  const { history, labelURL, metaList } = props
-  // export const startSort = (history, labelURL, emailList, metaList) => {
-  // return history.push(`/mail/${labelURL}/${emailList[0].thread.id}`)
-  return history.push(`/mail/${labelURL}/${metaList[0].id}`)
 }
 
 export const FilteredMetaList = (props) => {

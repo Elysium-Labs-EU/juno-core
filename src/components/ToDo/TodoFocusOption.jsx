@@ -2,27 +2,29 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { CustomButtonText } from '../Elements/Buttons'
-import { convertArrayToString, startSort } from '../../utils'
+import { convertArrayToString } from '../../utils'
 import { selectLabelIds } from '../../Store/labelsSlice'
-import { selectEmailList } from '../../Store/emailListSlice'
+import { selectMetaList } from '../../Store/metaListSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
+import startSort from '../../utils/startSort'
 
 const TodoFocusOption = () => {
   const labelIds = useSelector(selectLabelIds)
   const isLoading = useSelector(selectIsLoading)
-  const emailList = useSelector(selectEmailList)
+  const metaList = useSelector(selectMetaList)
   const history = useHistory()
-  const labelURL = () => {
-    return convertArrayToString(labelIds && labelIds)
+  const handleClick = () => {
+    const labelURL = convertArrayToString(labelIds && labelIds)
+    startSort({ history, labelURL, metaList })
   }
 
   return (
     <S.SortContainer>
       <CustomButtonText
         className="sort-button"
-        onClick={() => startSort(history, labelURL, emailList)}
+        onClick={handleClick}
         disabled={isLoading}
         label={local.BUTTON_FOCUS}
       />
