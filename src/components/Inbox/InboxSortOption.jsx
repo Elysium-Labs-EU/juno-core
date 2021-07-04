@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements/Buttons'
-import { convertArrayToString, startSort } from '../../utils'
+import { convertArrayToString } from '../../utils'
 import { refreshEmailFeed, selectMetaList } from '../../Store/metaListSlice'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './InboxSortOptionStyles'
+import startSort from '../../utils/startSort'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -17,10 +18,10 @@ const SortInbox = () => {
   const isLoading = useSelector(selectIsLoading)
   const dispatch = useDispatch()
   const history = useHistory()
-  const labelURL = () => {
-    return convertArrayToString(labelIds && labelIds)
+  const handleClick = () => {
+    const labelURL = convertArrayToString(labelIds && labelIds)
+    startSort({ history, labelURL, metaList })
   }
-
   const refreshFeed = () => {
     const params = {
       labelIds,
@@ -39,8 +40,7 @@ const SortInbox = () => {
       />
       <CustomButtonText
         className="sort-button"
-        onClick={() => startSort({ history, labelURL, metaList })}
-        // onClick={() => startSort(history, labelURL, emailList)}
+        onClick={handleClick}
         disabled={isLoading}
         label={INBOX_BUTTON}
       />
