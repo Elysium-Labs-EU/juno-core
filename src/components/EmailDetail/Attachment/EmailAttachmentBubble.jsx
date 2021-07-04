@@ -30,7 +30,7 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
             // aria-hidden="true"
           >
             <span>{attachmentData.filename}</span>
-            <p className="small text_muxed" style={{ margin: 0 }}>
+            <p className="small text_muted" style={{ margin: 0 }}>
               {FILE}
               {prettyBytes(attachmentData.body.size)}
             </p>
