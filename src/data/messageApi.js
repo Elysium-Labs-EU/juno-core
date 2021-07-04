@@ -24,16 +24,6 @@ const messageApi = () => {
       }
     },
 
-    downloadAttachment: async (messageId, attachmentId) => {
-      try {
-        const res = await axios.get(
-          `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
-        )
-        return res
-      } catch (err) {
-        return console.log(err)
-      }
-    },
     sendMessage: async (data) => {
       console.log('data', data)
       try {

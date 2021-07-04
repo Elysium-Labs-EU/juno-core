@@ -7,7 +7,7 @@ import * as S from './EmailAttachmentBubbleStyles'
 import { CustomIconLink } from '../../Elements/Buttons'
 import {
   downloadAttachment,
-  fetchAttachment,
+  // fetchAttachment,
 } from '../../../Store/emailDetailSlice'
 import EmailAttachmentType from './EmailAttachmentType'
 
@@ -24,10 +24,10 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
           <EmailAttachmentType mimeType={attachmentData?.mimeType} />
           <S.AttachmentInner
             className="attachment-inner"
-            onClick={() =>
-              dispatch(fetchAttachment({ messageId, attachmentData }))
-            }
-            aria-hidden="true"
+            // onClick={() =>
+            //   dispatch(fetchAttachment({ messageId, attachmentData }))
+            // }
+            // aria-hidden="true"
           >
             <span>{attachmentData.filename}</span>
             <p className="small text_muxed" style={{ margin: 0 }}>

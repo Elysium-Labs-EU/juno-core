@@ -9,7 +9,6 @@ export const emailDetailSlice = createSlice({
   initialState: {
     currEmail: '',
     viewIndex: 0,
-    isDownloading: [],
   },
   reducers: {
     setCurrentEmail: (state, action) => {
@@ -29,20 +28,25 @@ export const emailDetailSlice = createSlice({
 
 export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
 
-export const fetchAttachment = ({ attachmentData, messageId }) => {
-  const { attachmentId } = attachmentData.body
-  return async (dispatch) => {
-    try {
-      const fetchedAttachment = await messageApi().getAttachment(
-        messageId,
-        attachmentId
-      )
-      console.log(fetchedAttachment)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
+// export const fetchAttachment = ({ attachmentData, messageId }) => {
+//   const {
+//     body: { attachmentId },
+//     filename,
+//     mimeType,
+//   } = attachmentData
+
+//   return async (dispatch) => {
+//     try {
+//       const fetchedAttachment = await messageApi().getAttachment(
+//         messageId,
+//         attachmentId
+//       )
+//       console.log(fetchedAttachment)
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+// }
 
 export const downloadAttachment = ({ attachmentData, messageId }) => {
   console.log(attachmentData)
@@ -53,7 +57,7 @@ export const downloadAttachment = ({ attachmentData, messageId }) => {
   } = attachmentData
   return async (dispatch) => {
     try {
-      const fetchedAttachment = await messageApi().downloadAttachment(
+      const fetchedAttachment = await messageApi().getAttachment(
         messageId,
         attachmentId
       )
