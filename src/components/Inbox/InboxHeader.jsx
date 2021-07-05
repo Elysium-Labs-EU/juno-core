@@ -11,9 +11,9 @@ const InboxHeader = () => {
   return (
     <div className="tlOuterContainer">
       <S.NavContainer>
-        <S.BackButtonContainer>
+        {/* <S.BackButtonContainer>
           <BackButton />
-        </S.BackButtonContainer>
+        </S.BackButtonContainer> */}
         <div className="header-center">
           <h2>{INBOX_HEADER}</h2>
         </div>

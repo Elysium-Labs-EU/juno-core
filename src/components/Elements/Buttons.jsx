@@ -18,16 +18,17 @@ export const CustomButtonText = (props) => {
 }
 
 export const CustomIconLink = (props) => {
-  const { onClick, className, disabled, icon } = props
+  const { onClick, className, disabled, icon, style } = props
   return (
     <button
       onClick={onClick}
       className={className}
       type="button"
       disabled={disabled}
+      style={style}
     >
-      <div>
-        <span>{icon}</span>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ lineHeight: 0 }}>{icon}</span>
       </div>
     </button>
   )

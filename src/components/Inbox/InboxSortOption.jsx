@@ -39,6 +39,7 @@ const SortInbox = () => {
         onClick={() => refreshFeed()}
         disabled={isLoading}
         icon={<MdRefresh />}
+        style={{ marginRight: '1rem' }}
       />
       <CustomButtonText
         className="sort-button"

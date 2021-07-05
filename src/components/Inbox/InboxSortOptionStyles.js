@@ -8,8 +8,4 @@ export const SortContainer = styled.div`
   margin: 2rem 0;
   padding: 0 1rem;
   place-content: center;
-
-  button {
-    margin-right: 1rem;
-  }
 `
