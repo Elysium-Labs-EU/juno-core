@@ -10,8 +10,16 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState: {
     emailList: [],
+    isFocused: false,
+    isSorting: false,
   },
   reducers: {
+    setIsFocused: (state, action) => {
+      state.isFocused = action.payload
+    },
+    setIsSorting: (state, action) => {
+      state.isSorting = action.payload
+    },
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
         ...action.payload,
@@ -95,8 +103,13 @@ export const emailListSlice = createSlice({
   },
 })
 
-export const { listAddEmailList, listAddItemDetail, listRemoveItemDetail } =
-  emailListSlice.actions
+export const {
+  setIsFocused,
+  setIsSorting,
+  listAddEmailList,
+  listAddItemDetail,
+  listRemoveItemDetail,
+} = emailListSlice.actions
 
 export const loadEmailDetails = (labeledThreads) => {
   return async (dispatch, getState) => {
@@ -203,9 +216,8 @@ export const UpdateEmailListLabel = (props) => {
   }
 }
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
+export const selectIsFocused = (state) => state.email.isFocused
+export const selectIsSorting = (state) => state.email.isSorting
 export const selectEmailList = (state) => state.email.emailList
 export const selectNextPageToken = (state) =>
   state.email.emailList.nextPageToken

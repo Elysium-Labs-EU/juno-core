@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import '../../App.scss'
 import {
   FiArchive,
   FiCheckCircle,
@@ -13,16 +12,25 @@ import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
-import { selectEmailList } from '../../Store/emailListSlice'
+import {
+  selectEmailList,
+  selectIsFocused,
+  selectIsSorting,
+} from '../../Store/emailListSlice'
 import { selectViewIndex } from '../../Store/emailDetailSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as todo from '../../constants/todoConstants'
 import * as S from './EmailDetailStyles'
 import { CustomButtonText } from '../Elements/Buttons'
+// import SetCompletedMail from '../EmailOptions/SetCompletedMail'
+// import SetToDoMail from '../EmailOptions/SetToDoMail'
+// import useEmailComplete from '../../Hooks/useEmailComplete'
 
 const EmailDetOptions = ({ messageId }) => {
   const emailList = useSelector(selectEmailList)
+  const isFocused = useSelector(selectIsFocused)
+  const isSorting = useSelector(selectIsSorting)
   const labelIds = useSelector(selectLabelIds)
   const storageLabels = useSelector(selectStorageLabels)
   const viewIndex = useSelector(selectViewIndex)
@@ -70,14 +78,16 @@ const EmailDetOptions = ({ messageId }) => {
               <CustomButtonText
                 className="button option-link"
                 icon={<FiCheckCircle />}
-                onClick={CompletedAction}
+                onClick={() =>
+                  CompletedAction({ history, messageId, labelURL, labelIds })
+                }
                 label={local.BUTTON_MARK_AS_DONE}
               />
             ) : (
               <CustomButtonText
                 className="button option-link"
                 icon={<FiCheckCircle />}
-                onClick={ToDoAction}
+                onClick={() => ToDoAction({ history, messageId, labelURL })}
                 label={local.BUTTON_TODO}
               />
             )}
