@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { CustomButtonText } from '../Elements/Buttons'
 import { convertArrayToString } from '../../utils'
@@ -9,15 +9,19 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import startSort from '../../utils/startSort'
+import { setIsFocused } from '../../Store/emailListSlice'
 
 const TodoFocusOption = () => {
   const labelIds = useSelector(selectLabelIds)
   const isLoading = useSelector(selectIsLoading)
   const metaList = useSelector(selectMetaList)
   const history = useHistory()
+  const dispatch = useDispatch()
+
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
     startSort({ history, labelURL, metaList })
+    dispatch(setIsFocused(true))
   }
 
   return (

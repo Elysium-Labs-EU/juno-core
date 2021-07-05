@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import './NavControls.scss'
-import { FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
+import {
+  FiCheckSquare,
+  FiMoreHorizontal,
+  FiEdit,
+  FiInbox,
+  FiSettings,
+} from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavControlsStyles'
@@ -20,6 +26,8 @@ const Navigation = () => {
         setActive('settings')
       } else if (location.pathname.includes('compose')) {
         setActive('compose')
+      } else if (location.pathname === '/') {
+        setActive('todo')
       }
     }
   }, [location])
@@ -31,6 +39,17 @@ const Navigation = () => {
   return (
     <S.NavControls>
       <S.NavList>
+        <S.NavItem>
+          <CustomIconLink
+            className={
+              active === 'todo'
+                ? 'nav-item-selected nav-item-button'
+                : 'nav-item-button'
+            }
+            icon={<FiCheckSquare />}
+            onClick={() => navigateTo('/')}
+          />
+        </S.NavItem>
         <S.NavItem>
           <CustomIconLink
             className={

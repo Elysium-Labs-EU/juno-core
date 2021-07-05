@@ -11,7 +11,7 @@ import {
   SendComposedEmail,
   TrackComposeEmail,
 } from '../../Store/composeSlice'
-import useDebounce from '../../Hooks/use-debounce'
+import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 
 const ComposeEmail = () => {

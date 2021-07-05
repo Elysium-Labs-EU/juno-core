@@ -9,6 +9,7 @@ import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './InboxSortOptionStyles'
 import startSort from '../../utils/startSort'
+import { setIsSorting } from '../../Store/emailListSlice'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -21,6 +22,7 @@ const SortInbox = () => {
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
     startSort({ history, labelURL, metaList })
+    dispatch(setIsSorting(true))
   }
   const refreshFeed = () => {
     const params = {
@@ -37,6 +39,7 @@ const SortInbox = () => {
         onClick={() => refreshFeed()}
         disabled={isLoading}
         icon={<MdRefresh />}
+        style={{ marginRight: '1rem' }}
       />
       <CustomButtonText
         className="sort-button"
