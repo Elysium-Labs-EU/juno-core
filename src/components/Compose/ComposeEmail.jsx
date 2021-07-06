@@ -89,7 +89,8 @@ const ComposeEmail = () => {
   }, [])
 
   const onSubmit = () => {
-    dispatch(SendComposedEmail({ history, messageId }))
+    dispatch(SendComposedEmail({ messageId }))
+    // dispatch(SendComposedEmail({ history, messageId }))
   }
 
   return (

@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { createBrowserHistory } from 'history'
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import emailReducer from './emailListSlice'
@@ -7,6 +8,8 @@ import draftsReducer from './draftsSlice'
 import labelsReducer from './labelsSlice'
 import metaReducer from './metaListSlice'
 import utilsReducer from './utilsSlice'
+
+const history = createBrowserHistory()
 
 export default configureStore({
   reducer: {
@@ -19,4 +22,9 @@ export default configureStore({
     meta: metaReducer,
     utils: utilsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: { extraArgument: history },
+      serializableCheck: false,
+    }),
 })

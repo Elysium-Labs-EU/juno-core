@@ -215,9 +215,6 @@ export const OpenDraftEmail = (props) => {
   }
 }
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectDraft = (state) => state.draftList
 
 export default draftsSlice.reducer

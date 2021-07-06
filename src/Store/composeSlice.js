@@ -6,8 +6,6 @@ import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 
-const messagesApi = messageApi()
-
 export const composeSlice = createSlice({
   name: 'compose',
   initialState: {
@@ -43,11 +41,6 @@ export const composeSlice = createSlice({
 export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
   composeSlice.actions
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-
 export const TrackComposeEmail = (props) => {
   return async (dispatch, getState) => {
     try {
@@ -65,8 +58,12 @@ export const TrackComposeEmail = (props) => {
 }
 
 export const SendComposedEmail = (props) => {
-  const { history, messageId } = props
-  return async (dispatch, getState) => {
+  const {
+    // history,
+    messageId,
+  } = props
+  return async (dispatch, getState, history) => {
+    console.log(history)
     try {
       const composedEmail = getState().compose.composeEmail
       if (Object.keys(composedEmail).length >= 3) {
@@ -90,18 +87,27 @@ export const SendComposedEmail = (props) => {
             .catch((err) => console.log(err))
             .then(dispatch(setServiceUnavailable('Error sending email.')))
         }
-        return axios
-          .post('/api/send-message', composedEmail)
-          .then((res) => {
-            if (res.status === 200) {
-              console.log(res)
-              history.push(`/`)
-              dispatch(resetComposeEmail())
-              dispatch(setCurrentEmail(''))
-            }
-          })
-          .catch((err) => console.log(err))
-          .then(dispatch(setServiceUnavailable('Error sending email.')))
+        const sendEmail = await messageApi().sendMessage(composedEmail)
+        if (sendEmail && sendEmail.status === 200) {
+          history.push(`/`)
+          dispatch(resetComposeEmail())
+          dispatch(setCurrentEmail(''))
+        } else {
+          console.log(sendEmail)
+          dispatch(setServiceUnavailable('Error sending email.'))
+        }
+        // return axios
+        //   .post('/api/send-message', composedEmail)
+        //   .then((res) => {
+        //     if (res.status === 200) {
+        //       console.log(res)
+        //       history.push(`/`)
+        //       dispatch(resetComposeEmail())
+        //       dispatch(setCurrentEmail(''))
+        //     }
+        //   })
+        //   .catch((err) => console.log(err))
+        //   .then(dispatch(setServiceUnavailable('Error sending email.')))
       }
       // return null
     } catch (err) {
@@ -111,10 +117,6 @@ export const SendComposedEmail = (props) => {
     return null
   }
 }
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 
 export const selectComposeEmail = (state) => state.compose.composeEmail
 
