@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
-import { selectLabelIds } from '../Store/labelsSlice'
+import { selectLabelIds } from '../../Store/labelsSlice'
 import { NavButton, Wrapper } from './DetailNavigationStyles'
 import {
   convertArrayToString,
   CloseMail,
   NavigatePreviousMail,
   NavigateNextMail,
-} from '../utils'
+} from '../../utils'
 import {
   selectCurrentEmail,
   selectViewIndex,
   setViewingIndex,
-} from '../Store/emailDetailSlice'
-import { selectMetaList } from '../Store/metaListSlice'
+} from '../../Store/emailDetailSlice'
+import { loadEmails, selectMetaList } from '../../Store/metaListSlice'
 
 const DetailNavigation = () => {
   const metaList = useSelector(selectMetaList)
@@ -24,12 +24,10 @@ const DetailNavigation = () => {
   const viewIndex = useSelector(selectViewIndex)
 
   const [currLocal, setCurrLocal] = useState('')
+  const [filteredMetaList, setFilteredMetaList] = useState([])
   const history = useHistory()
   const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
-  const filteredMetaList =
-    metaList &&
-    metaList.filter((threadList) => threadList.labels.includes(...labelIds))
 
   const isDisabledPrev = !!(
     filteredMetaList.length > 0 &&
@@ -40,16 +38,38 @@ const DetailNavigation = () => {
     filteredMetaList[0].threads[viewIndex + 1] === undefined
   )
 
+  const refetchMeta = () => {
+    const params = {
+      labelIds,
+      maxResults: 20,
+    }
+    dispatch(loadEmails(params))
+  }
+
+  const filteredMeta = useMemo(
+    () =>
+      metaList.filter((threadList) => threadList.labels.includes(...labelIds)),
+    [metaList, labelIds]
+  )
+
+  console.log(labelIds)
+
   useEffect(() => {
     if (currEmail !== currLocal) {
-      setCurrLocal(currEmail)
-      const requestBody = {
-        metaList: filteredMetaList[0].threads,
-        currEmail,
+      if (metaList.length > 0) {
+        console.log(filteredMeta)
+        setCurrLocal(currEmail)
+        setFilteredMetaList(filteredMeta)
+        const requestBody = {
+          metaList: filteredMeta[0].threads,
+          currEmail,
+        }
+        dispatch(setViewingIndex(requestBody))
+      } else {
+        refetchMeta()
       }
-      dispatch(setViewingIndex(requestBody))
     }
-  }, [currEmail])
+  }, [currEmail, metaList])
 
   return (
     <Wrapper>
