@@ -1,5 +1,5 @@
 import '../../App.scss'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import './EmailDetail.scss'
 import { useDispatch, useSelector } from 'react-redux'
@@ -29,7 +29,7 @@ const EmailDetail = () => {
   const location = useLocation()
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
-  const [localLabels, setLocalLabels] = useState([])
+  const localLabels = useRef([])
 
   const fetchEmailDetail = () => {
     if (labelIds && threadId) {
@@ -49,29 +49,24 @@ const EmailDetail = () => {
   }
 
   useEffect(() => {
-    if (labelIds && labelIds === localLabels) {
-      dispatch(setCurrentLabels(labelIds))
-      setLocalLabels(labelIds)
-      emailList.length > 0 && fetchEmailDetail({ threadId, labelIds })
-    } else {
-      const newLabelIds = [location.pathname.split('/')[2]]
-      dispatch(setCurrentLabels(newLabelIds))
-      setLocalLabels(newLabelIds)
-      emailList.length > 0 && fetchEmailDetail({ threadId, newLabelIds })
+    if (threadId) {
+      if (labelIds && labelIds === localLabels.current) {
+        emailList.length > 0 && fetchEmailDetail({ threadId, labelIds })
+      } else {
+        const newLabelIds = [location.pathname.split('/')[2]]
+        dispatch(setCurrentLabels(newLabelIds))
+        localLabels.current = newLabelIds
+        emailList.length > 0 && fetchEmailDetail({ threadId, newLabelIds })
+      }
     }
-  }, [labelIds, emailList])
+  }, [labelIds, emailList, threadId])
   // DetailNavigation will refetch metaList + emailList if empty.
-
-  console.log('threadId', threadId)
-  console.log('local', localLabels)
-  console.log('redux', labelIds)
 
   useEffect(() => {
     if (threadId !== undefined) {
       dispatch(setCurrentEmail(threadId))
     }
   }, [threadId])
-  // TODO: setCurrentLabels is triggered twice, since emailList is getting updated
 
   const detailDisplaySelector = (message) => {
     if (message.labelIds.includes(draft.LABEL)) {

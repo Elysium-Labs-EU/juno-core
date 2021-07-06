@@ -52,12 +52,9 @@ const DetailNavigation = () => {
     [metaList, labelIds]
   )
 
-  console.log(labelIds)
-
   useEffect(() => {
     if (currEmail !== currLocal) {
       if (metaList.length > 0) {
-        console.log(filteredMeta)
         setCurrLocal(currEmail)
         setFilteredMetaList(filteredMeta)
         const requestBody = {
