@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
 import EmailListItem from '../EmailListItem/EmailListItem'
@@ -90,11 +90,14 @@ const EmailList = () => {
     )
   }
 
+  const filteredOnLabel = useMemo(
+    () =>
+      emailList.filter((threadList) => threadList.labels.includes(...labelIds)),
+    [emailList, labelIds]
+  )
+
   const labeledInbox = () => {
     if (labelIds) {
-      const filteredOnLabel = emailList.filter((threadList) =>
-        threadList.labels.includes(...labelIds)
-      )
       return renderEmailList(filteredOnLabel[0])
     }
     return null
