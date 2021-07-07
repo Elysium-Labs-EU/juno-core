@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../App.scss'
-import { useForm } from 'react-hook-form'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
 import {
   selectComposeEmail,
@@ -17,7 +16,7 @@ import * as local from '../../constants/composeEmailConstants'
 const ComposeEmail = () => {
   const composeEmail = useSelector(selectComposeEmail)
   const dispatch = useDispatch()
-  const [toValue, setToValue] = useState('')
+  const [toValue, setToValue] = useState([])
   const [subjectValue, setSubjectValue] = useState('')
   const [bodyValue, setBodyValue] = useState('')
   const debouncedToValue = useDebounce(toValue, 500)
@@ -70,16 +69,6 @@ const ComposeEmail = () => {
     }
   }, [debouncedBodyValue])
 
-  const {
-    // register,
-    handleSubmit,
-    // errors,
-  } = useForm({
-    defaultValues: {
-      from: 'Robbert Tuerlings <robberttg@gmail.com>',
-    },
-  })
-
   useEffect(() => {
     if (composeEmail) {
       setToValue(composeEmail.to)
@@ -88,7 +77,8 @@ const ComposeEmail = () => {
     }
   }, [])
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault()
     dispatch(SendComposedEmail({ history, messageId }))
   }
 
@@ -97,7 +87,8 @@ const ComposeEmail = () => {
       <>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
-            <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <form onSubmit={onSubmit} autoComplete="off">
+              {/* <form onSubmit={handleSubmit(onSubmit)} autoComplete="off"> */}
               <div style={{ marginBottom: `7px` }}>
                 <div className="base">
                   <TextField

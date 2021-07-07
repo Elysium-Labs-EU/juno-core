@@ -1,12 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
-import axios from 'axios'
 import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
-
-const messagesApi = messageApi()
+import draftApi from '../data/draftApi'
 
 export const composeSlice = createSlice({
   name: 'compose',
@@ -43,11 +41,6 @@ export const composeSlice = createSlice({
 export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
   composeSlice.actions
 
-// The function below is called a thunk and allows us to perform async logic. It
-// can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
-// will call the thunk with the `dispatch` function as the first argument. Async
-// code can then be executed and other actions can be dispatched
-
 export const TrackComposeEmail = (props) => {
   return async (dispatch, getState) => {
     try {
@@ -69,41 +62,30 @@ export const SendComposedEmail = (props) => {
   return async (dispatch, getState) => {
     try {
       const composedEmail = getState().compose.composeEmail
-      if (Object.keys(composedEmail).length >= 3) {
+      const sender = getState().base.profile.emailAddress
+      const completeEmail = { ...composedEmail, sender }
+      if (Object.keys(completeEmail).length >= 4) {
         if (messageId) {
-          const body = { composedEmail, messageId }
-          return axios
-            .post('/api/send-draft', body)
-            .then((res) => {
-              if (res.status === 200) {
-                console.log(res)
-                history.push(`/`)
-                dispatch(resetComposeEmail())
-                dispatch(setCurrentEmail(''))
-                // TODO: Update the redux states' to have the email in the correct boxes
-                // const request = {
-                //   removeLabelIds: [DRAFT],
-                // }
-                // dispatch(UpdateMailLabel({ request, messageId }))
-              }
-            })
-            .catch((err) => console.log(err))
-            .then(dispatch(setServiceUnavailable('Error sending email.')))
+          const body = { completeEmail, messageId }
+          const response = await draftApi().sendDraft(body)
+          if (response.status === 200) {
+            history.push(`/`)
+            dispatch(resetComposeEmail())
+            dispatch(setCurrentEmail(''))
+            // TODO: Update the redux states' to have the email in the correct boxes
+          } else {
+            dispatch(setServiceUnavailable('Error sending email.'))
+          }
         }
-        return axios
-          .post('/api/send-message', composedEmail)
-          .then((res) => {
-            if (res.status === 200) {
-              console.log(res)
-              history.push(`/`)
-              dispatch(resetComposeEmail())
-              dispatch(setCurrentEmail(''))
-            }
-          })
-          .catch((err) => console.log(err))
-          .then(dispatch(setServiceUnavailable('Error sending email.')))
+        const response = await messageApi().sendMessage(completeEmail)
+        if (response.status === 200) {
+          history.push(`/`)
+          dispatch(resetComposeEmail())
+          dispatch(setCurrentEmail(''))
+        } else {
+          dispatch(setServiceUnavailable('Error sending email.'))
+        }
       }
-      // return null
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error sending email.'))
@@ -111,10 +93,6 @@ export const SendComposedEmail = (props) => {
     return null
   }
 }
-
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 
 export const selectComposeEmail = (state) => state.compose.composeEmail
 
