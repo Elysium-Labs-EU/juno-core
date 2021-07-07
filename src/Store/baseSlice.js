@@ -1,18 +1,17 @@
 /* eslint-disable no-param-reassign */
-
 import { createSlice } from '@reduxjs/toolkit'
 import labelApi from '../data/labelApi'
+import userApi from '../data/userApi'
 import { multipleIncludes } from '../utils'
 import { setServiceUnavailable } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 
-const api = labelApi()
-
 export const baseSlice = createSlice({
   name: 'base',
   initialState: {
     baseLoaded: false,
+    profile: {},
   },
   reducers: {
     setBaseLoaded: (state, action) => {
@@ -20,16 +19,21 @@ export const baseSlice = createSlice({
         state.baseLoaded = action.payload
       }
     },
+    setProfile: (state, action) => {
+      state.profile = action.payload
+    },
   },
 })
 
-export const { setBaseLoaded } = baseSlice.actions
+export const { setBaseLoaded, setProfile } = baseSlice.actions
 
 export const checkBase = () => {
   return async (dispatch) => {
     try {
-      const labels = await api.fetchLabel()
-      if (labels) {
+      const user = await userApi().fetchUser()
+      const labels = await labelApi().fetchLabel()
+      if (labels && user.status === 200) {
+        dispatch(setProfile(user.data.data))
         if (labels.message.labels.length > 0) {
           const labelArray = labels.message.labels
           if (
@@ -72,5 +76,6 @@ export const checkBase = () => {
 }
 
 export const selectBaseLoaded = (state) => state.base.baseLoaded
+export const selectProfile = (state) => state.base.profile
 
 export default baseSlice.reducer
