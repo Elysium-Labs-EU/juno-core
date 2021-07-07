@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
-import decodeBase64 from '../utils/decodeBase64'
+import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
 
 export const emailDetailSlice = createSlice({
@@ -32,6 +32,7 @@ export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
 export const fetchAttachment = ({ attachmentData, messageId }) => {
   const {
     body: { attachmentId },
+    filename,
     mimeType,
   } = attachmentData
   return async () => {
@@ -40,12 +41,13 @@ export const fetchAttachment = ({ attachmentData, messageId }) => {
         messageId,
         attachmentId,
       })
-      const decodedB64 = decodeBase64(
+      const decodedB64 = baseBase64(
         fetchedAttachment.data.messageAttachment.data
       )
       const attachment = {
         mimeType,
         decodedB64,
+        filename,
       }
       return attachment
     } catch (err) {

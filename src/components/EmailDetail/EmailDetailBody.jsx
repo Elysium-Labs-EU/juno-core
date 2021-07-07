@@ -1,39 +1,59 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import base64url from 'base64url'
 import isEmpty from 'lodash/isEmpty'
 import DOMPurify from 'dompurify'
 import { fetchAttachment } from '../../Store/emailDetailSlice'
+import { decodeBase64 } from '../../utils/decodeBase64'
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
-  const [bodyState, setBodyState] = useState()
+  const [bodyState, setBodyState] = useState([])
   const dispatch = useDispatch()
 
-  // Check if feed contains singular body or not, if not - use the html version.
+  const multipartMixed = () => {
+    const str = threadDetailBody.parts[0].parts
+      ? decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
+      : decodeBase64(`${threadDetailBody.parts[0].body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
+  const inlineImage = () => {
+    const attachmentData =
+      threadDetailBody.parts[threadDetailBody.parts.length - 1]
+    dispatch(fetchAttachment({ attachmentData, messageId })).then(
+      (response) => {
+        setBodyState((currState) => [...currState, response])
+      }
+    )
+  }
+
+  const additionalBody = () => {
+    const str = decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
+  const htmlBody = () => {
+    const str = decodeBase64(`${threadDetailBody.parts[1].body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
+  const simpleText = () => {
+    const str = decodeBase64(`${threadDetailBody.body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
   const DetailBody = () => {
-    console.log(threadDetailBody)
     if (threadDetailBody.mimeType === 'text/html') {
-      const str = base64url.decode(`${threadDetailBody.body.data}`)
-      setBodyState(str)
+      simpleText()
     }
     if (threadDetailBody.mimeType === 'multipart/alternative') {
-      const str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
-      setBodyState(str)
+      htmlBody()
     }
     if (threadDetailBody.mimeType === 'multipart/mixed') {
-      const str = threadDetailBody.parts[0].parts
-        ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
-        : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-      setBodyState(str)
+      multipartMixed()
     }
     if (threadDetailBody.mimeType === 'multipart/related') {
-      const attachmentData = threadDetailBody.parts[1]
-      console.log(threadDetailBody)
-      dispatch(fetchAttachment({ attachmentData, messageId })).then(
-        (response) => {
-          setBodyState(response)
-        }
-      )
+      inlineImage()
+      additionalBody()
     }
     // const str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
     // setBodyState(str)
@@ -48,23 +68,28 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   return (
     <>
       {!isEmpty(bodyState) &&
-      Object.prototype.hasOwnProperty.call(bodyState, 'mimeType') &&
-      Object.prototype.hasOwnProperty.call(bodyState, 'decodedB64') ? (
-        <img
-          src={`data:${bodyState.mimeType};base64,${bodyState.decodedB64}`}
-          alt="hey"
-          style={{ maxWidth: '100%', borderRadius: '5px' }}
-        />
-      ) : (
-        <div
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(bodyState, {
-              USE_PROFILES: { html: true },
-            }),
-          }}
-        />
-      )}
+        bodyState.map((item, itemIdx) =>
+          Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
+          Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
+            <img
+              key={`${item.filename + itemIdx}`}
+              src={`data:${item.mimeType};base64,${item.decodedB64}`}
+              alt={bodyState?.filename ?? 'embedded image'}
+              style={{ maxWidth: '100%', borderRadius: '5px' }}
+            />
+          ) : (
+            <div
+              // eslint-disable-next-line react/no-array-index-key
+              key={itemIdx}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(bodyState, {
+                  USE_PROFILES: { html: true },
+                }),
+              }}
+            />
+          )
+        )}
     </>
   )
 }
