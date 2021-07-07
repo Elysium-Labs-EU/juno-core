@@ -1,55 +1,97 @@
-import base64url from 'base64url'
-import React from 'react'
-import messageApi from '../../data/messageApi'
-
-const api = messageApi()
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import isEmpty from 'lodash/isEmpty'
+import DOMPurify from 'dompurify'
+import { fetchAttachment } from '../../Store/emailDetailSlice'
+import { decodeBase64 } from '../../utils/decodeBase64'
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
-  const fetchAttachment = async (attachmentId) => {
-    const fetchedAttachment = await api.getAttachment(messageId, attachmentId)
-    // console.log(fetchedAttachment.messageAttachment.data)
-    return base64url.decode(fetchedAttachment.messageAttachment.data)
+  const [bodyState, setBodyState] = useState([])
+  const dispatch = useDispatch()
+
+  const multipartMixed = () => {
+    const str = threadDetailBody.parts[0].parts
+      ? decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
+      : decodeBase64(`${threadDetailBody.parts[0].body.data}`)
+    setBodyState((currState) => [...currState, str])
   }
 
-  // console.log(threadDetailBody)
+  const inlineImage = () => {
+    const attachmentData =
+      threadDetailBody.parts[threadDetailBody.parts.length - 1]
+    dispatch(fetchAttachment({ attachmentData, messageId })).then(
+      (response) => {
+        setBodyState((currState) => [...currState, response])
+      }
+    )
+  }
 
-  // console.log(threadDetailBody)
-  // console.log(threadDetailBody.parts[1].body.attachmentId)
-  // Check if feed contains singular body or not, if not - use the html version.
+  const additionalBody = () => {
+    const str = decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
+  const htmlBody = () => {
+    const str = decodeBase64(`${threadDetailBody.parts[1].body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
+  const simpleText = () => {
+    const str = decodeBase64(`${threadDetailBody.body.data}`)
+    setBodyState((currState) => [...currState, str])
+  }
+
   const DetailBody = () => {
     if (threadDetailBody.mimeType === 'text/html') {
-      const str = base64url.decode(`${threadDetailBody.body.data}`)
-      return <div dangerouslySetInnerHTML={{ __html: str }} />
+      simpleText()
     }
     if (threadDetailBody.mimeType === 'multipart/alternative') {
-      const str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
-      return <div dangerouslySetInnerHTML={{ __html: str }} />
+      htmlBody()
     }
     if (threadDetailBody.mimeType === 'multipart/mixed') {
-      const str = threadDetailBody.parts[0].parts
-        ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
-        : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-      return <div dangerouslySetInnerHTML={{ __html: str }} />
+      multipartMixed()
     }
     if (threadDetailBody.mimeType === 'multipart/related') {
-      const body = fetchAttachment(
-        messageId,
-        threadDetailBody.parts[1].body.attachmentId
-      )
-      return <div dangerouslySetInnerHTML={{ __html: body.value }} />
+      inlineImage()
+      additionalBody()
     }
-    const str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-    return <div dangerouslySetInnerHTML={{ __html: str }} />
+    // const str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
+    // setBodyState(str)
   }
 
-  return DetailBody(messageId)
+  useEffect(() => {
+    if (messageId.length > 0) {
+      DetailBody()
+    }
+  }, [messageId])
+
+  return (
+    <>
+      {!isEmpty(bodyState) &&
+        bodyState.map((item, itemIdx) =>
+          Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
+          Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
+            <img
+              key={`${item.filename + itemIdx}`}
+              src={`data:${item.mimeType};base64,${item.decodedB64}`}
+              alt={bodyState?.filename ?? 'embedded image'}
+              style={{ maxWidth: '100%', borderRadius: '5px' }}
+            />
+          ) : (
+            <div
+              // eslint-disable-next-line react/no-array-index-key
+              key={itemIdx}
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(bodyState, {
+                  USE_PROFILES: { html: true },
+                }),
+              }}
+            />
+          )
+        )}
+    </>
+  )
 }
 
 export default EmailDetailBody
-
-// mimeType: "multipart/alternative" <= contains no partId , has two parts
-// mimeType: "text/html" <= contains no partId , has simple body
-
-// multipart/alternative // 1763d1d2e74d3b31
-
-// "mimeType": "multipart/mixed" 17665805823a3566

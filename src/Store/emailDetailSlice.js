@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
+import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
 
 export const emailDetailSlice = createSlice({
@@ -28,42 +29,49 @@ export const emailDetailSlice = createSlice({
 
 export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
 
-// export const fetchAttachment = ({ attachmentData, messageId }) => {
-//   const {
-//     body: { attachmentId },
-//     filename,
-//     mimeType,
-//   } = attachmentData
-
-//   return async (dispatch) => {
-//     try {
-//       const fetchedAttachment = await messageApi().getAttachment(
-//         messageId,
-//         attachmentId
-//       )
-//       console.log(fetchedAttachment)
-//     } catch (err) {
-//       console.log(err)
-//     }
-//   }
-// }
-
-export const downloadAttachment = ({ attachmentData, messageId }) => {
-  console.log(attachmentData)
+export const fetchAttachment = ({ attachmentData, messageId }) => {
   const {
     body: { attachmentId },
     filename,
     mimeType,
   } = attachmentData
-  return async (dispatch) => {
+  return async () => {
     try {
-      const fetchedAttachment = await messageApi().getAttachment(
+      const fetchedAttachment = await messageApi().getAttachment({
         messageId,
-        attachmentId
+        attachmentId,
+      })
+      const decodedB64 = baseBase64(
+        fetchedAttachment.data.messageAttachment.data
       )
+      const attachment = {
+        mimeType,
+        decodedB64,
+        filename,
+      }
+      return attachment
+    } catch (err) {
+      console.log(err)
+      return null
+    }
+  }
+}
+
+export const downloadAttachment = ({ attachmentData, messageId }) => {
+  const {
+    body: { attachmentId },
+    filename,
+    mimeType,
+  } = attachmentData
+  return async () => {
+    try {
+      const fetchedAttachment = await messageApi().getAttachment({
+        messageId,
+        attachmentId,
+      })
       const base64Data = fetchedAttachment.data.messageAttachment.data
-      const test = base64toBlob({ base64Data, mimeType })
-      await fileSaver(test, filename)
+      const blobData = base64toBlob({ base64Data, mimeType })
+      fileSaver(blobData, filename)
     } catch (err) {
       console.log(err)
     }

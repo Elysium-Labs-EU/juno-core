@@ -12,8 +12,8 @@ const messageApi = () => {
       }
     },
 
-    getAttachment: async (messageId, attachmentId) => {
-      console.log(messageId, attachmentId)
+    getAttachment: async (props) => {
+      const { messageId, attachmentId } = props
       try {
         const res = await axios.get(
           `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`

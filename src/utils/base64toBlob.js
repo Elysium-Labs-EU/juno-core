@@ -1,9 +1,9 @@
 /* eslint-disable no-plusplus */
-import base64url from 'base64url'
+import { baseBase64 } from './decodeBase64'
 
 function base64toBlob({ base64Data, mimeType }) {
   const sliceSize = 1024
-  const byteCharacters = atob(base64url.toBase64(base64Data))
+  const byteCharacters = atob(baseBase64(base64Data))
   const bytesLength = byteCharacters.length
   const slicesCount = Math.ceil(bytesLength / sliceSize)
   const byteArrays = new Array(slicesCount)
