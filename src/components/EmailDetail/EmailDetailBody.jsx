@@ -32,8 +32,17 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   }
 
   const htmlBody = () => {
-    const str = decodeBase64(`${threadDetailBody.parts[1].body.data}`)
-    setBodyState((currState) => [...currState, str])
+    if (
+      Object.prototype.hasOwnProperty.call(threadDetailBody.parts[1], 'parts')
+    ) {
+      const str = decodeBase64(
+        `${threadDetailBody.parts[1].parts[0].body.data}`
+      )
+      setBodyState((currState) => [...currState, str])
+    } else {
+      const str = decodeBase64(`${threadDetailBody.parts[1].body.data}`)
+      setBodyState((currState) => [...currState, str])
+    }
   }
 
   const simpleText = () => {
