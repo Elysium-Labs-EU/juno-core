@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 import React from 'react'
 
 export const CustomButtonText = (props) => {
@@ -6,7 +7,6 @@ export const CustomButtonText = (props) => {
     <button
       onClick={onClick}
       className={className}
-      // eslint-disable-next-line react/button-has-type
       type={type ?? 'button'}
       disabled={disabled}
     >
@@ -19,12 +19,12 @@ export const CustomButtonText = (props) => {
 }
 
 export const CustomIconLink = (props) => {
-  const { onClick, className, disabled, icon, style } = props
+  const { onClick, className, disabled, icon, style, type } = props
   return (
     <button
       onClick={onClick}
       className={className}
-      type="button"
+      type={type ?? 'button'}
       disabled={disabled}
       style={style}
     >
@@ -36,13 +36,13 @@ export const CustomIconLink = (props) => {
 }
 
 export const CustomButton = (props) => {
-  const { onClick, className, disabled, icon } = props
+  const { onClick, className, disabled, icon, type } = props
   return (
     <button
       onClick={onClick}
       className={className}
       style={{ marginTop: '1rem' }}
-      type="button"
+      type={type ?? 'button'}
       disabled={disabled}
     >
       <div>

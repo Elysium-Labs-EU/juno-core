@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -13,4 +12,9 @@ export const Wrapper = styled.div`
     opacity: 1;
     background-color: rgb(240, 240, 240);
   }
+`
+
+export const Inner = styled.div`
+  display: flex;
+  flex-flow: row;
 `

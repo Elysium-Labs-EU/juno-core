@@ -26,7 +26,6 @@ const ComposeEmail = ({
   id,
   threadId,
 }) => {
-  console.log(to, subject, id, threadId)
   const composeEmail = useSelector(selectComposeEmail)
   const [toError, setToError] = useState(false)
   const dispatch = useDispatch()
@@ -105,7 +104,6 @@ const ComposeEmail = ({
   }, [id])
 
   useEffect(() => {
-    console.log(threadId)
     if (threadId) {
       const updateEventObject = {
         id: 'threadId',

@@ -68,7 +68,8 @@ const EmailDetOptions = ({ messageId, setReply }) => {
             />
           </div>
           <div>
-            {labelIds.some(
+            {labelIds &&
+            labelIds.some(
               (item) =>
                 item ===
                 FindLabel({

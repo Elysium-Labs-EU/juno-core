@@ -9,14 +9,13 @@ import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
 import ThreadBase from './EmailListItemStyles'
-import { convertArrayToString, findPayloadHeadersData } from '../../utils'
-import { OpenDraftEmail } from '../../Store/draftsSlice'
+import { findPayloadHeadersData } from '../../utils'
 import * as draft from '../../constants/draftConstants'
+import openEmail from '../../utils/openEmail'
 
 const EmailListItem = ({ email }) => {
   const labelIds = useSelector(selectLabelIds)
   const { id } = email
-  const { LABEL } = draft
   const history = useHistory()
   const dispatch = useDispatch()
 
@@ -56,17 +55,6 @@ const EmailListItem = ({ email }) => {
       ? email.messages[0].internalDate
       : email.message.internalDate
 
-  const handleClick = () => {
-    const labelURL = convertArrayToString(labelIds)
-    if (!labelIds.includes(draft.LABEL)) {
-      history.push(`mail/${labelURL}/${id}`)
-    } else {
-      email.messages.length > 1 && history.push(`mail/${labelURL}/${id}`)
-      email.messages.length === 1 &&
-        dispatch(OpenDraftEmail({ history, id, LABEL }))
-    }
-  }
-
   return (
     <ThreadBase key={id} labelIds={emailLabels}>
       <div className="threadRow">
@@ -74,7 +62,7 @@ const EmailListItem = ({ email }) => {
         <div className="cellCheckbox" />
         <div
           className="cellName"
-          onClick={() => handleClick(id)}
+          onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
           aria-hidden="true"
         >
           <div className="avatars">
@@ -93,7 +81,7 @@ const EmailListItem = ({ email }) => {
         </div>
         <div
           className="cellMessage"
-          onClick={() => handleClick(id)}
+          onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
           aria-hidden="true"
         >
           <div className="subjectSnippet text-truncate">
@@ -114,7 +102,7 @@ const EmailListItem = ({ email }) => {
         </div>
         <div />
         <div className="cellGradientRight" />
-        <InlineThreadActions messageId={id} />
+        <InlineThreadActions id={id} history={history} labelIds={labelIds} />
       </div>
     </ThreadBase>
   )
