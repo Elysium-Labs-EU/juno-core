@@ -1,12 +1,13 @@
 import React from 'react'
 
 export const CustomButtonText = (props) => {
-  const { onClick, className, disabled, icon, label } = props
+  const { onClick, className, disabled, icon, label, type } = props
   return (
     <button
       onClick={onClick}
       className={className}
-      type="button"
+      // eslint-disable-next-line react/button-has-type
+      type={type ?? 'button'}
       disabled={disabled}
     >
       <div className="button-inner">

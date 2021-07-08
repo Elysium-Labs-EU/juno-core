@@ -18,6 +18,7 @@ import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
 import DraftEmail from './components/Draft/DraftEmail'
 import Routes from './constants/routes.json'
+import * as GS from './styles/globalStyles'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,10 +33,10 @@ const App = () => {
     <Router>
       {!baseLoaded && <BaseLoader />}
       {baseLoaded && (
-        <div className="App">
-          <div className="tlOuterContainer">
+        <GS.App>
+          <GS.OuterContainer>
             <Header />
-          </div>
+          </GS.OuterContainer>
 
           <Switch>
             <Route path={Routes.HOME} exact component={ToDo} />
@@ -52,7 +53,7 @@ const App = () => {
             <Route path={Routes.FILE_OVERVIEW} component={FileOverview} />
             <Route path={Routes.INBOX} component={Inbox} />
           </Switch>
-        </div>
+        </GS.App>
       )}
     </Router>
   )

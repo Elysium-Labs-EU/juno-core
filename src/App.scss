@@ -39,19 +39,6 @@ body {
   background-color: #a5a5a5;
 }
 
-.option-link {
-  font-size: 1rem;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.13;
-  letter-spacing: normal;
-  text-align: left;
-  color: #a5a5a5;
-  display: flex;
-  align-items: center;
-}
-
 // .card {
 // 	background-color: rgb(255, 255, 255);
 // 	border-radius: 5px;
@@ -141,15 +128,6 @@ body {
   top: 18px;
   right: 30px;
   bottom: 0;
-}
-
-.tlOuterContainer {
-  max-width: 1480px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  flex: 1 1 0%;
 }
 
 .threadList {

@@ -7,13 +7,14 @@ import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import BackButton from '../BackButton'
 import * as S from './EmailDetailHeaderStyles'
+import * as GS from '../../styles/globalStyles'
 
 const Emaildetailheader = () => {
   const isFocused = useSelector(selectIsFocused)
   const isSorting = useSelector(selectIsSorting)
 
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       {!(isFocused || isSorting) ? (
         <>
           <NavControls />
@@ -36,7 +37,7 @@ const Emaildetailheader = () => {
           </S.HeaderWrapper>
         </S.InnerMenu>
       )}
-    </div>
+    </GS.OuterContainer>
   )
 }
 

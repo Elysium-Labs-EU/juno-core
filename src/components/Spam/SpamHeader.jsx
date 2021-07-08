@@ -1,12 +1,13 @@
 import React from 'react'
 import NavControls from '../MainHeader/Navigation/NavControls'
 import SpamClearOption from './SpamClearOption'
+import * as GS from '../../styles/globalStyles'
 
 const SPAM_HEADER = 'Spam'
 
 const SpamHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <div className="nav-container">
         <div className="header-center">
           <h2>{SPAM_HEADER}</h2>
@@ -14,7 +15,7 @@ const SpamHeader = () => {
         <NavControls />
       </div>
       <SpamClearOption />
-    </div>
+    </GS.OuterContainer>
   )
 }
 

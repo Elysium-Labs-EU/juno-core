@@ -16,6 +16,7 @@ import * as local from '../../constants/emailListConstants'
 import * as draft from '../../constants/draftConstants'
 import { CustomButtonText } from '../Elements/Buttons'
 import * as S from './EmailListStyles'
+import * as GS from '../../styles/globalStyles'
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
@@ -56,7 +57,7 @@ const EmailList = () => {
     return (
       <>
         <S.Scroll>
-          <div className="tlOuterContainer">
+          <GS.OuterContainer>
             <S.ThreadList>
               {threads.length > 0 && (
                 <div className="base">
@@ -84,7 +85,7 @@ const EmailList = () => {
                 <small className="text-muted">{local.NO_MORE_RESULTS}</small>
               </S.LoadMoreContainer>
             )}
-          </div>
+          </GS.OuterContainer>
         </S.Scroll>
       </>
     )

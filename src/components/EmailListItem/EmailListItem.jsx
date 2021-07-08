@@ -67,6 +67,8 @@ const EmailListItem = ({ email }) => {
     }
   }
 
+  console.log(email)
+
   return (
     <ThreadBase key={id} labelIds={emailLabels}>
       <div className="threadRow">
@@ -89,7 +91,7 @@ const EmailListItem = ({ email }) => {
           ) : (
             <span className="text-truncate">{toEmail()}</span>
           )}
-          <MessageCount countOfMessage={email} />
+          <MessageCount countOfMessage={email?.messages} />
         </div>
         <div
           className="cellMessage"

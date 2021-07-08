@@ -3,10 +3,11 @@ import NavControls from '../MainHeader/Navigation/NavControls'
 import TodoFocusOption from './TodoFocusOption'
 import * as local from '../../constants/todoConstants'
 import * as S from '../MainHeader/HeaderStyles'
+import * as GS from '../../styles/globalStyles'
 
 const TodoHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <S.NavContainer>
         <div className="header-center">
           <h2>{local.HEADER_TODO}</h2>
@@ -14,7 +15,7 @@ const TodoHeader = () => {
         <NavControls />
       </S.NavContainer>
       <TodoFocusOption />
-    </div>
+    </GS.OuterContainer>
   )
 }
 

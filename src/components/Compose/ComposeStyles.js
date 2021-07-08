@@ -8,7 +8,7 @@ export const HeaderButton = styled.div`
 export const Wrapper = styled.div`
   max-width: 850px;
   width: 100%;
-  margin-left: auto;
+  margin-left: ${(props) => (props.isReplying ? '10%' : 'auto')};
   margin-right: auto;
   position: static;
 `

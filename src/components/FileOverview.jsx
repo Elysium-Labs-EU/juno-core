@@ -1,10 +1,11 @@
 import React from 'react'
+import * as GS from '../styles/globalStyles'
 
 const FileOverview = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <>FileOverview</>
-    </div>
+    </GS.OuterContainer>
   )
 }
 

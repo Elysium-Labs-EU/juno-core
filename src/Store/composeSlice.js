@@ -15,7 +15,7 @@ export const composeSlice = createSlice({
     setComposeEmail: (state, action) => {
       if (
         JSON.stringify(Object.keys(action.payload)) ===
-        JSON.stringify(['to', 'subject', 'body'])
+        JSON.stringify(['to', 'subject', 'body', 'id', 'threadId'])
       ) {
         state.composeEmail = action.payload
       }
