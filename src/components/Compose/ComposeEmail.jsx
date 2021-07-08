@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { useHistory, useParams } from 'react-router-dom'
-import TextField from '@material-ui/core/TextField'
 import { useDispatch, useSelector } from 'react-redux'
 import '../../App.scss'
+import InputBase from '@material-ui/core/InputBase'
+import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
 import {
   selectComposeEmail,
@@ -12,9 +14,12 @@ import {
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
+import emailValidation from '../../utils/emailValidation'
+import * as S from './ComposeStyles'
 
 const ComposeEmail = () => {
   const composeEmail = useSelector(selectComposeEmail)
+  const [toError, setToError] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
   const [subjectValue, setSubjectValue] = useState('')
@@ -25,7 +30,6 @@ const ComposeEmail = () => {
 
   const { messageId } = useParams()
   const history = useHistory()
-  console.log(messageId)
 
   const handleChange = (event) => {
     if (event.target.id === 'to') {
@@ -79,7 +83,13 @@ const ComposeEmail = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    dispatch(SendComposedEmail({ history, messageId }))
+    if (toValue.length > 0) {
+      if (emailValidation(toValue)) {
+        dispatch(SendComposedEmail({ history, messageId }))
+      } else {
+        setToError(true)
+      }
+    }
   }
 
   return (
@@ -88,82 +98,64 @@ const ComposeEmail = () => {
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={onSubmit} autoComplete="off">
-              {/* <form onSubmit={handleSubmit(onSubmit)} autoComplete="off"> */}
               <div style={{ marginBottom: `7px` }}>
                 <div className="base">
-                  <TextField
-                    id="to"
-                    label={local.TO_LABEL}
-                    value={toValue}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    id="subject"
-                    label={local.SUBJECT_LABEL}
-                    value={subjectValue}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    id="body"
-                    label={local.BODY_LABEL}
-                    multiline
-                    value={bodyValue}
-                    onChange={handleChange}
-                    rowsMax={25}
-                  />
-                </div>
-              </div>
-              {/* <div style={{ marginBottom: `7px` }}>
-                <div className="base">
-                  <div className="row-1">
-                    <div className="label-1">
+                  <S.Row>
+                    <S.Label>
                       <label htmlFor="to" className="label-base">
-                        {TO_LABEL}
+                        {local.TO_LABEL}
                       </label>
-                    </div>
-                    <input
-                      name="to"
-                      autoFocus
-                      ref={register({ required: true })}
-                      className="jsx-3232806250 textareaReset textarea mousetrap"
+                    </S.Label>
+                    <FormControl error={toError}>
+                      <InputBase
+                        id="to"
+                        label={local.TO_LABEL}
+                        value={toValue}
+                        onChange={handleChange}
+                        required
+                        fullWidth
+                        autoFocus
+                      />
+                      {toError && (
+                        <FormHelperText id="component-helper-text">
+                          Please enter a valid email
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                  </S.Row>
+                  <S.Row>
+                    <S.Label>
+                      <label htmlFor="subject" className="label-base">
+                        {local.SUBJECT_LABEL}
+                      </label>
+                    </S.Label>
+                    <InputBase
+                      id="subject"
+                      label={local.SUBJECT_LABEL}
+                      value={subjectValue}
+                      onChange={handleChange}
+                      fullWidth
                     />
-                  </div>
+                  </S.Row>
+                  <S.Row>
+                    <S.Label>
+                      <label htmlFor="body" className="label-base">
+                        {local.BODY_LABEL}
+                      </label>
+                    </S.Label>
+                    <InputBase
+                      id="body"
+                      label={local.BODY_LABEL}
+                      multiline
+                      value={bodyValue}
+                      onChange={handleChange}
+                      rows={12}
+                      rowsMax={25}
+                      fullWidth
+                    />
+                  </S.Row>
                 </div>
               </div>
-              <div className="row-1">
-                <div className="label-1">
-                  <label htmlFor="subjectTextarea" className="base">
-                    {SUBJECT_LABEL}
-                  </label>
-                </div>
-                <div className="inputContainer">
-                  <input
-                    // type="text"
-                    name="subject"
-                    ref={register({ required: true })}
-                    // id="subjectTextarea"
-                    // tabIndex="2"
-                    // spellCheck="true"
-                    className="jsx-3232806250 textareaReset textarea mousetrap"
-                  />
-                </div>
-              </div>
-              <div className="row-1">
-                <div className="label-1">
-                  <label htmlFor="bodyTextarea" className="base">
-                    {BODY_LABEL}
-                  </label>
-                </div>
-                <div className="inputContainer">
-                  <textarea
-                    data-provide="markdown"
-                    style={{ minHeight: '20rem' }}
-                    name="body"
-                    ref={register({ required: true })}
-                    className="jsx-3232806250 textareaReset textarea mousetrap"
-                  />
-                </div>
-              </div> */}
               <button
                 className="button button-small button-light"
                 type="submit"
