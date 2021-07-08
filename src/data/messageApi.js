@@ -25,7 +25,6 @@ const messageApi = () => {
     },
 
     sendMessage: async (data) => {
-      console.log('data', data)
       try {
         const res = await axios.post(`${BASE_API_URL}/api/send-message`, data)
         return res
