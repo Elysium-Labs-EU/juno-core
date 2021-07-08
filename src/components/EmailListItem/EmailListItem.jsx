@@ -67,8 +67,6 @@ const EmailListItem = ({ email }) => {
     }
   }
 
-  console.log(email)
-
   return (
     <ThreadBase key={id} labelIds={emailLabels}>
       <div className="threadRow">

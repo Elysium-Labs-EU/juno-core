@@ -7,6 +7,7 @@ import DraftHeader from '../Draft/DraftHeader'
 import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
+import NoMobileOverlay from '../NoMobileOverlay'
 
 function Header() {
   const SetHeader = () => {
@@ -33,7 +34,12 @@ function Header() {
     return <EmailDetailHeader />
   }
 
-  return <SetHeader />
+  return (
+    <>
+      <NoMobileOverlay />
+      <SetHeader />
+    </>
+  )
 }
 
 export default Header
