@@ -1,7 +1,6 @@
 import React from 'react'
 
 const MessageCount = ({ countOfMessage }) => {
-  console.log(countOfMessage)
   const LengthMessageCount = () => {
     const length = countOfMessage && countOfMessage.length
     if (length > 1) {
