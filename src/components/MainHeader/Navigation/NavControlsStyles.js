@@ -4,7 +4,7 @@ export const NavControls = styled.nav`
   margin-left: auto;
   display: flex;
   max-width: max-content;
-  position: absolute;
+  /* position: absolute; */
   right: 0;
   top: 35%;
 `

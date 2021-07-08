@@ -4,10 +4,11 @@ import '../MainHeader/Navigation/NavControls.scss'
 import * as local from '../../constants/draftConstants'
 import * as S from '../MainHeader/HeaderStyles'
 import BackButton from '../BackButton'
+import * as GS from '../../styles/globalStyles'
 
 const InboxHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <S.NavContainer>
         <BackButton />
         <div className="header-center">
@@ -15,7 +16,7 @@ const InboxHeader = () => {
         </div>
         <NavControls />
       </S.NavContainer>
-    </div>
+    </GS.OuterContainer>
   )
 }
 

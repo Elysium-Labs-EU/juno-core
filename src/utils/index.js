@@ -61,48 +61,32 @@ export const multipleIncludes = (first, second) => {
   return indexArray.indexOf(-1) === -1
 }
 
-export const getDetailBody = (props) => {
-  console.log(props)
-  //   if (threadDetailBody.mimeType === 'text/html') {
-  //   let str = base64url.decode(`${threadDetailBody.body.data}`)
-  //   // console.log('1')
-  //   return <div dangerouslySetInnerHTML={{ __html: str }} />
-  // } else if (threadDetailBody.mimeType === 'multipart/alternative') {
-  //   let str = base64url.decode(`${threadDetailBody.parts[1].body.data}`)
-  //   // console.log('2')
-  //   return <div dangerouslySetInnerHTML={{ __html: str }} />
-  // } else if (threadDetailBody.mimeType === 'multipart/mixed') {
-  //   let str = threadDetailBody.parts[0].parts
-  //     ? base64url.decode(`${threadDetailBody.parts[0].parts[1].body.data}`)
-  //     : base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-  //   // console.log('3')
-  //   return <div dangerouslySetInnerHTML={{ __html: str }} />
-  // } else if (threadDetailBody.mimeType === 'multipart/related') {
-  //   let body = fetchAttachment(
-  //     messageId,
-  //     threadDetailBody.parts[1].body.attachmentId
-  //   )
-  //   // console.log('4')
-  //   // console.log(body)
-  //   return <div dangerouslySetInnerHTML={{ __html: body.value }} />
-  // } else {
-  //   let str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-  //   // console.log('5')
-  //   return <div dangerouslySetInnerHTML={{ __html: str }} />
-  // }
-}
-
 export const findPayloadHeadersData = (props) => {
-  const { query, email } = props
-  if (email.messages) {
-    return email.messages[0].payload.headers.find((data) => data.name === query)
-      ? email.messages[0].payload.headers.find((data) => data.name === query)
-          .value
-      : undefined
+  const { query, email, threadDetail } = props
+  if (email) {
+    if (email.messages) {
+      return email.messages[0].payload.headers.find(
+        (data) => data.name === query
+      )
+        ? email.messages[0].payload.headers.find((data) => data.name === query)
+            .value
+        : undefined
+    }
+    if (email.message) {
+      return email.message.payload.headers.find((data) => data.name === query)
+        ? email.message.payload.headers.find((data) => data.name === query)
+            .value
+        : undefined
+    }
   }
-  if (email.message) {
-    return email.message.payload.headers.find((data) => data.name === query)
-      ? email.message.payload.headers.find((data) => data.name === query).value
+
+  if (threadDetail.messages) {
+    return threadDetail.messages[0].payload.headers.find(
+      (data) => data.name === query
+    )
+      ? threadDetail.messages[0].payload.headers.find(
+          (data) => data.name === query
+        ).value
       : undefined
   }
   return null

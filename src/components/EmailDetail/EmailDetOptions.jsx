@@ -27,7 +27,7 @@ import { CustomButtonText } from '../Elements/Buttons'
 // import SetToDoMail from '../EmailOptions/SetToDoMail'
 // import useEmailComplete from '../../Hooks/useEmailComplete'
 
-const EmailDetOptions = ({ messageId }) => {
+const EmailDetOptions = ({ messageId, setReply }) => {
   const emailList = useSelector(selectEmailList)
   const isFocused = useSelector(selectIsFocused)
   const isSorting = useSelector(selectIsSorting)
@@ -64,6 +64,7 @@ const EmailDetOptions = ({ messageId }) => {
               className="button option-link"
               icon={<FiCornerUpLeft />}
               label={local.BUTTON_REPLY}
+              onClick={setReply}
             />
           </div>
           <div>

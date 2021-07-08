@@ -44,6 +44,7 @@ export const DetailBase = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
+  min-width: 50%;
 `
 
 export const DetailRow = styled.div`
@@ -51,6 +52,7 @@ export const DetailRow = styled.div`
   flex-direction: row;
   justify-content: center;
   flex: 1 1;
+  min-width: 50%;
 `
 
 export const CardFullWidth = styled.div`
@@ -59,10 +61,11 @@ export const CardFullWidth = styled.div`
 
 export const EmailDetailContainer = styled.div`
   min-width: 60%;
-  max-width: 1040px;
+  max-width: ${(props) => (props.isReplying ? '40vw' : '60%')};
   padding-bottom: 1.5rem;
   padding-top: 1.5rem;
   margin-bottom: 1rem;
+  width: 100%;
 `
 
 export const AvatarHeaderContainer = styled.div`

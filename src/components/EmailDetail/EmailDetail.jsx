@@ -1,6 +1,6 @@
-import '../../App.scss'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
+import '../../App.scss'
 import './EmailDetail.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -19,6 +19,10 @@ import { selectEmailList } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as draft from '../../constants/draftConstants'
 import * as S from './EmailDetailStyles'
+import * as GS from '../../styles/globalStyles'
+import ComposeEmail from '../Compose/ComposeEmail'
+import { findPayloadHeadersData } from '../../utils'
+import { CustomButton } from '../Elements/Buttons'
 
 const EmailDetail = () => {
   const emailList = useSelector(selectEmailList)
@@ -29,7 +33,28 @@ const EmailDetail = () => {
   const location = useLocation()
   const { threadId } = useParams()
   const [threadDetail, setThreadDetail] = useState(null)
+  const [isReplying, setIsReplying] = useState(false)
   const localLabels = useRef([])
+
+  const isReplyingListener = () => {
+    setIsReplying((prevState) => !prevState)
+  }
+
+  const fromEmail = () => {
+    const query = 'From'
+    if (threadDetail) {
+      return findPayloadHeadersData({ threadDetail, query })
+    }
+    return null
+  }
+
+  const emailSubject = () => {
+    const query = 'Subject'
+    if (threadDetail) {
+      return findPayloadHeadersData({ threadDetail, query })
+    }
+    return null
+  }
 
   const fetchEmailDetail = () => {
     if (labelIds && threadId) {
@@ -91,18 +116,21 @@ const EmailDetail = () => {
   }
 
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer isReplying={isReplying}>
       <S.DetailRow>
-        <S.EmailDetailContainer>
+        <S.EmailDetailContainer isReplying={isReplying}>
           <S.DetailBase>
             <S.CardFullWidth>
               {threadDetail &&
                 !isLoading &&
-                threadDetail.messages.map((message) => (
-                  <EmailWrapper key={message.id} labelIds={message.labelIds}>
-                    {detailDisplaySelector(message)}
-                  </EmailWrapper>
-                ))}
+                threadDetail.messages
+                  .slice(0)
+                  .reverse()
+                  .map((message) => (
+                    <EmailWrapper key={message.id} labelIds={message.labelIds}>
+                      {detailDisplaySelector(message)}
+                    </EmailWrapper>
+                  ))}
               {!threadDetail && (
                 <S.LoadingErrorWrapper>
                   {isLoading && <CircularProgress />}
@@ -112,9 +140,28 @@ const EmailDetail = () => {
             </S.CardFullWidth>
           </S.DetailBase>
         </S.EmailDetailContainer>
-        {threadDetail && <EmailDetOptions messageId={threadDetail.id} />}
+        {threadDetail && !isReplying && (
+          <EmailDetOptions
+            messageId={threadDetail.id}
+            setReply={isReplyingListener}
+          />
+        )}
       </S.DetailRow>
-    </div>
+      {isReplying && (
+        <>
+          <ComposeEmail
+            isReplying={isReplying}
+            isReplyingListener={isReplyingListener}
+            to={fromEmail()}
+            subject={emailSubject()}
+            id={threadDetail.id}
+            threadId={
+              threadDetail.messages[threadDetail.messages.length - 1].threadId
+            }
+          />
+        </>
+      )}
+    </GS.OuterContainer>
   )
 }
 

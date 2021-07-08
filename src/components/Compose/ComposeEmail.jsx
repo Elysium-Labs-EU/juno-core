@@ -16,8 +16,17 @@ import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
+import { CustomButtonText } from '../Elements/Buttons'
 
-const ComposeEmail = () => {
+const ComposeEmail = ({
+  isReplying,
+  isReplyingListener,
+  to,
+  subject,
+  id,
+  threadId,
+}) => {
+  console.log(to, subject, id, threadId)
   const composeEmail = useSelector(selectComposeEmail)
   const [toError, setToError] = useState(false)
   const dispatch = useDispatch()
@@ -79,7 +88,32 @@ const ComposeEmail = () => {
       setSubjectValue(composeEmail.subject)
       setBodyValue(composeEmail.body)
     }
+    if (to || subject) {
+      to && setToValue(to)
+      subject && setSubjectValue(subject)
+    }
   }, [])
+
+  useEffect(() => {
+    if (id) {
+      const updateEventObject = {
+        id: 'id',
+        value: id,
+      }
+      dispatch(TrackComposeEmail(updateEventObject))
+    }
+  }, [id])
+
+  useEffect(() => {
+    console.log(threadId)
+    if (threadId) {
+      const updateEventObject = {
+        id: 'threadId',
+        value: threadId,
+      }
+      dispatch(TrackComposeEmail(updateEventObject))
+    }
+  }, [threadId])
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -93,7 +127,7 @@ const ComposeEmail = () => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper isReplying={isReplying}>
       <>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
@@ -106,7 +140,7 @@ const ComposeEmail = () => {
                         {local.TO_LABEL}
                       </label>
                     </S.Label>
-                    <FormControl error={toError}>
+                    <FormControl error={toError} fullWidth>
                       <InputBase
                         id="to"
                         label={local.TO_LABEL}
@@ -114,11 +148,11 @@ const ComposeEmail = () => {
                         onChange={handleChange}
                         required
                         fullWidth
-                        autoFocus
+                        autoFocus={!isReplying}
                       />
                       {toError && (
                         <FormHelperText id="component-helper-text">
-                          Please enter a valid email
+                          {local.EMAIL_WARNING}
                         </FormHelperText>
                       )}
                     </FormControl>
@@ -152,16 +186,21 @@ const ComposeEmail = () => {
                       rows={12}
                       rowsMax={25}
                       fullWidth
+                      autoFocus={isReplying}
                     />
                   </S.Row>
                 </div>
               </div>
-              <button
-                className="button button-small button-light"
+              <CustomButtonText
                 type="submit"
-              >
-                {local.SEND_BUTTON}
-              </button>
+                className="button button-small button-light"
+                label={local.SEND_BUTTON}
+              />
+              <CustomButtonText
+                className="button button-small"
+                label={local.CANCEL_BUTTON}
+                onClick={isReplyingListener}
+              />
             </form>
           </div>
         </ComposerContainer>

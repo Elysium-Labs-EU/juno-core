@@ -4,10 +4,11 @@ import NavControls from '../MainHeader/Navigation/NavControls'
 import '../MainHeader/Navigation/NavControls.scss'
 import * as local from '../../constants/composeEmailConstants'
 import * as S from './ComposeStyles'
+import * as GS from '../../styles/globalStyles'
 
 const ComposeHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <div className="nav-container">
         <S.HeaderButton>
           <BackButton />
@@ -17,7 +18,7 @@ const ComposeHeader = () => {
         </div>
         <NavControls />
       </div>
-    </div>
+    </GS.OuterContainer>
   )
 }
 

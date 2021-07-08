@@ -1,13 +1,14 @@
 import React from 'react'
 import NavControls from '../MainHeader/Navigation/NavControls'
 import * as S from '../MainHeader/HeaderStyles'
+import * as GS from '../../styles/globalStyles'
 import BackButton from '../BackButton'
 
 const SENT_HEADER = 'Sent'
 
 const SentHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <S.NavContainer>
         <BackButton />
         <div className="header-center">
@@ -15,7 +16,7 @@ const SentHeader = () => {
         </div>
         <NavControls />
       </S.NavContainer>
-    </div>
+    </GS.OuterContainer>
   )
 }
 

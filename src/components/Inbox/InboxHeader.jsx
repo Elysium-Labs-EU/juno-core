@@ -3,13 +3,14 @@ import NavControls from '../MainHeader/Navigation/NavControls'
 import InboxSortOption from './InboxSortOption'
 import '../MainHeader/Navigation/NavControls.scss'
 import * as S from '../MainHeader/HeaderStyles'
+import * as GS from '../../styles/globalStyles'
 import BackButton from '../BackButton'
 
 const INBOX_HEADER = 'Inbox'
 
 const InboxHeader = () => {
   return (
-    <div className="tlOuterContainer">
+    <GS.OuterContainer>
       <S.NavContainer>
         {/* <S.BackButtonContainer>
           <BackButton />
@@ -20,7 +21,7 @@ const InboxHeader = () => {
         <NavControls />
       </S.NavContainer>
       <InboxSortOption />
-    </div>
+    </GS.OuterContainer>
   )
 }
 
