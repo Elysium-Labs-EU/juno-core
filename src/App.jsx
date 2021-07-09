@@ -13,6 +13,7 @@ import Settings from './components/Settings'
 import InformationOverview from './components/InformationOverview'
 import FileOverview from './components/FileOverview'
 import Inbox from './components/Inbox/Inbox'
+import Archive from './components/Archive/Archive'
 import SpamEmail from './components/Spam/Spam'
 import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
@@ -52,6 +53,7 @@ const App = () => {
             />
             <Route path={Routes.FILE_OVERVIEW} component={FileOverview} />
             <Route path={Routes.INBOX} component={Inbox} />
+            <Route path={Routes.ARCHIVE} component={Archive} />
           </Switch>
         </GS.App>
       )}

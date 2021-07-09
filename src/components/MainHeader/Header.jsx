@@ -10,34 +10,22 @@ import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
 
 function Header() {
-  const SetHeader = () => {
-    const location = useLocation()
+  const location = useLocation()
 
-    if (location.pathname === '/inbox') {
-      return <InboxHeader />
-    }
-    if (location.pathname === '/') {
-      return <TodoHeader />
-    }
-    if (location.pathname === '/compose') {
-      return <ComposeHeader />
-    }
-    if (location.pathname === '/drafts') {
-      return <DraftHeader />
-    }
-    if (location.pathname === '/sent') {
-      return <SentHeader />
-    }
-    if (location.pathname === '/spam') {
-      return <SpamHeader />
-    }
-    return <EmailDetailHeader />
+  const headerMap = {
+    '/': <TodoHeader />,
+    '/compose': <ComposeHeader />,
+    '/drafts': <DraftHeader />,
+    '/inbox': <InboxHeader />,
+    '/sent': <SentHeader />,
+    '/spam': <SpamHeader />,
+    default: <EmailDetailHeader />,
   }
 
   return (
     <>
       <NoMobileOverlay />
-      <SetHeader />
+      {headerMap[location.pathname]}
     </>
   )
 }
