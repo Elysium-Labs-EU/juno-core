@@ -30,7 +30,9 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
           icon={<FiClock />}
         /> */}
         <CustomIconLink
-          onClick={() => ArchiveMail({ messageId, location })}
+          onClick={() =>
+            ArchiveMail({ messageId, location, dispatch, labelIds })
+          }
           className="button button-small text-muted option-link"
           icon={<FiArchive />}
         />

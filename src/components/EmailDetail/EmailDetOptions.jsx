@@ -113,9 +113,9 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                   history,
                   labelURL,
                   emailList,
-                  viewIndex,
                   labelIds,
                   location,
+                  dispatch,
                 })
               }
               label={local.BUTTON_ARCHIVE}

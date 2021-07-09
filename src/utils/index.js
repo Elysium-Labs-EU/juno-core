@@ -5,16 +5,22 @@ export const convertArrayToString = (data) => {
 
 export const FilteredMetaList = (props) => {
   const { metaList, labelIds } = props
-  return metaList.filter((threadList) =>
-    threadList.labels.includes(...labelIds)
-  )
+  if (metaList.length > 0 && labelIds.length > 0) {
+    return metaList.filter((threadList) =>
+      threadList.labels.includes(...labelIds.flat(1))
+    )
+  }
+  return null
 }
 
 export const FilteredEmailList = (props) => {
   const { emailList, labelIds } = props
-  return emailList.filter((threadList) =>
-    threadList.labels.includes(...labelIds)
-  )
+  if (emailList.length > 0 && labelIds.length > 0) {
+    return emailList.filter((threadList) =>
+      threadList.labels.includes(...labelIds.flat(1))
+    )
+  }
+  return null
 }
 
 export const FindLabel = (props) => {

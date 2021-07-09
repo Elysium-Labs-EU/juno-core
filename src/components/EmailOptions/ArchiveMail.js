@@ -1,29 +1,19 @@
-import * as inbox from '../../constants/inboxConstants'
-import messageApi from '../../data/messageApi'
-import NavigateNextMail from '../../utils/navigateNextEmail'
+import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 
 const ArchiveMail = ({
   messageId,
   history,
   labelURL,
-  filteredMetaList,
-  viewIndex,
   labelIds,
   location,
+  dispatch,
 }) => {
-  const request = { removeLabelIds: [inbox.LABEL] }
+  const request = { removeLabelIds: [labelIds] }
 
-  // console.log(labelIds)
-  console.log(messageId)
-  console.log(location)
-  console.log(filteredMetaList)
-
-  const MarkEmailArchived = async () => {
-    // await messageApi().updateMessage({ messageId, request })
-    if (location.pathname.includes('/mail/')) {
-      console.log('here')
-      NavigateNextMail({ history, labelURL, filteredMetaList, viewIndex })
-    }
+  const MarkEmailArchived = () => {
+    dispatch(
+      UpdateMetaListLabel({ messageId, request, history, location, labelURL })
+    )
   }
 
   return MarkEmailArchived()

@@ -138,6 +138,7 @@ export const UpdateMetaListLabel = (props) => {
     request,
     request: { addLabelIds, removeLabelIds },
     history,
+    location,
     labelURL,
   } = props
 
@@ -152,43 +153,44 @@ export const UpdateMetaListLabel = (props) => {
         metaList &&
         addLabelIds &&
         FilteredMetaList({ metaList, labelIds: addLabelIds })
-      const response = await messageApi().updateMessage({ messageId, request })
-      if (response.status === 200) {
-        if (addLabelIds) {
-          const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-            (item) => item.id === messageId
-          )
-          dispatch(
-            listAddItemMeta({
-              activeMetaObjArray,
-              filteredTargetMetaList,
-            })
-          )
-        }
-        if (removeLabelIds) {
-          dispatch(
-            listRemoveItemMeta({
-              messageId,
-              filteredCurrentMetaList,
-            })
-          )
-        }
-        dispatch(UpdateEmailListLabel(props))
-        if (
-          getState().emailDetail.currEmail &&
-          !getState().labels.labelIds.includes(draft.LABEL)
-        ) {
-          const { viewIndex } = getState().emailDetail
-          NavigateNextMail({
-            history,
-            labelURL,
-            filteredCurrentMetaList,
-            viewIndex,
+      // const response = await messageApi().updateMessage({ messageId, request })
+      // if (response.status === 200) {
+      if (addLabelIds) {
+        const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
+          (item) => item.id === messageId
+        )
+        dispatch(
+          listAddItemMeta({
+            activeMetaObjArray,
+            filteredTargetMetaList,
           })
-        }
-      } else {
-        dispatch(setServiceUnavailable('Error updating label.'))
+        )
       }
+      if (removeLabelIds) {
+        dispatch(
+          listRemoveItemMeta({
+            messageId,
+            filteredCurrentMetaList,
+          })
+        )
+      }
+      dispatch(UpdateEmailListLabel({ request, messageId }))
+      if (
+        location.pathname.includes('/mail/') &&
+        !getState().labels.labelIds.includes(draft.LABEL)
+      ) {
+        const { viewIndex } = getState().emailDetail
+        NavigateNextMail({
+          history,
+          labelURL,
+          filteredCurrentMetaList,
+          viewIndex,
+        })
+      }
+      // }
+      // else {
+      //   dispatch(setServiceUnavailable('Error updating label.'))
+      // }
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error updating label.'))
