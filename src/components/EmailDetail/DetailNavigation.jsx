@@ -4,18 +4,16 @@ import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { NavButton, Wrapper } from './DetailNavigationStyles'
-import {
-  convertArrayToString,
-  CloseMail,
-  NavigatePreviousMail,
-  NavigateNextMail,
-} from '../../utils'
+import { convertArrayToString } from '../../utils'
 import {
   selectCurrentEmail,
   selectViewIndex,
   setViewingIndex,
 } from '../../Store/emailDetailSlice'
 import { loadEmails, selectMetaList } from '../../Store/metaListSlice'
+import CloseMail from '../../utils/closeEmail'
+import NavigateNextMail from '../../utils/navigateNextEmail'
+import NavigatePreviousMail from '../../utils/navigatePreviousEmail'
 
 const DetailNavigation = () => {
   const metaList = useSelector(selectMetaList)

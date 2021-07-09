@@ -1,11 +1,7 @@
 import React, { useState } from 'react'
-import {
-  FiArchive,
-  FiCornerUpLeft,
-  FiClock,
-  FiMoreHorizontal,
-} from 'react-icons/fi'
+import { FiArchive, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
 import { useDispatch } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -16,18 +12,12 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
   const [showMenu, setShowMenu] = useState(false)
   const isReplying = true
   const dispatch = useDispatch()
+  const location = useLocation()
+  const messageId = id && id
 
   return (
     <S.Wrapper>
       <S.Inner>
-        {/* <button
-          type="button"
-          className="button button-small text-muted option-link"
-        >
-          <div className="icon">
-            <FiCornerUpLeft />
-          </div>
-        </button> */}
         <CustomIconLink
           className="button button-small text-muted option-link"
           icon={<FiCornerUpLeft />}
@@ -35,12 +25,12 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
             ReplyOverview({ history, labelIds, id, isReplying, dispatch })
           }
         />
-        <CustomIconLink
+        {/* <CustomIconLink
           className="button button-small text-muted option-link"
           icon={<FiClock />}
-        />
+        /> */}
         <CustomIconLink
-          onClick={() => ArchiveMail(id)}
+          onClick={() => ArchiveMail({ messageId, location })}
           className="button button-small text-muted option-link"
           icon={<FiArchive />}
         />

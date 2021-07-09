@@ -7,7 +7,7 @@ import {
   FiMoreHorizontal,
 } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
@@ -38,6 +38,7 @@ const EmailDetOptions = ({ messageId, setReply }) => {
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
+  const location = useLocation()
 
   const ToDoAction = () => {
     const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
@@ -95,12 +96,12 @@ const EmailDetOptions = ({ messageId, setReply }) => {
             )}
           </div>
           <div>
-            <CustomButtonText
+            {/* <CustomButtonText
               className="button option-link"
               icon={<FiClock />}
               // onClick={ToDoAction}
               label={local.BUTTON_REMIND}
-            />
+            /> */}
           </div>
           <div>
             <CustomButtonText
@@ -113,6 +114,8 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                   labelURL,
                   emailList,
                   viewIndex,
+                  labelIds,
+                  location,
                 })
               }
               label={local.BUTTON_ARCHIVE}

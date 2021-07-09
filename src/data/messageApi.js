@@ -33,6 +33,7 @@ const messageApi = () => {
       }
     },
     updateMessage: async (props) => {
+      console.log(props)
       const { messageId, request } = props
       try {
         const res = await axios.patch(

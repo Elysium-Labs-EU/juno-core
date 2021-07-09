@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { isEmpty } from 'lodash'
 import {
+  selectCurrentEmail,
   selectIsReplying,
   setCurrentEmail,
   setIsReplying,
@@ -29,6 +30,7 @@ import ComposeEmail from '../Compose/ComposeEmail'
 import { findPayloadHeadersData } from '../../utils'
 
 const EmailDetail = () => {
+  const currentEmail = useSelector(selectCurrentEmail)
   const emailList = useSelector(selectEmailList)
   const isLoading = useSelector(selectIsLoading)
   const labelIds = useSelector(selectLabelIds)
@@ -41,7 +43,6 @@ const EmailDetail = () => {
   const localLabels = useRef([])
 
   const isReplyingListener = () => {
-    // setIsReplying((prevState) => !prevState)
     dispatch(setIsReplying(!isReplying))
   }
 
@@ -93,8 +94,14 @@ const EmailDetail = () => {
   // DetailNavigation will refetch metaList + emailList if empty.
 
   useEffect(() => {
-    if (threadId !== undefined) {
+    if (threadId !== undefined && currentEmail !== threadId) {
       dispatch(setCurrentEmail(threadId))
+    }
+  }, [threadId])
+
+  useEffect(() => {
+    if (currentEmail !== threadId) {
+      dispatch(setIsReplying(false))
     }
   }, [threadId])
 

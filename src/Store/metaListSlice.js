@@ -4,9 +4,10 @@ import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
-import { FilteredMetaList, NavigateNextMail } from '../utils'
+import { FilteredMetaList } from '../utils'
 import * as draft from '../constants/draftConstants'
 import messageApi from '../data/messageApi'
+import NavigateNextMail from '../utils/navigateNextEmail'
 
 export const metaListSlice = createSlice({
   name: 'meta',

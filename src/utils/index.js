@@ -3,36 +3,6 @@ export const convertArrayToString = (data) => {
   return converted
 }
 
-export const NavigatePreviousMail = (props) => {
-  const { history, labelURL, filteredMetaList, viewIndex } = props
-  const prevID = filteredMetaList[0].threads[viewIndex - 1].id
-  return history.push(`/mail/${labelURL}/${prevID}`)
-}
-
-export const NavigateNextMail = (props) => {
-  const {
-    history,
-    labelURL,
-    filteredMetaList,
-    filteredCurrentMetaList,
-    viewIndex,
-  } = props
-  if (filteredCurrentMetaList) {
-    const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
-    return history.push(`/mail/${labelURL}/${nextID}`)
-  }
-  if (filteredMetaList) {
-    const nextID = filteredMetaList[0].threads[viewIndex + 1].id
-    return history.push(`/mail/${labelURL}/${nextID}`)
-  }
-  return null
-}
-
-export const CloseMail = (props) => {
-  const { history } = props
-  return history.push(`/inbox`)
-}
-
 export const FilteredMetaList = (props) => {
   const { metaList, labelIds } = props
   return metaList.filter((threadList) =>

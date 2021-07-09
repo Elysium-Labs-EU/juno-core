@@ -1,15 +1,29 @@
-import { NavigateNextMail } from '../../utils'
 import * as inbox from '../../constants/inboxConstants'
 import messageApi from '../../data/messageApi'
+import NavigateNextMail from '../../utils/navigateNextEmail'
 
-const api = messageApi()
+const ArchiveMail = ({
+  messageId,
+  history,
+  labelURL,
+  filteredMetaList,
+  viewIndex,
+  labelIds,
+  location,
+}) => {
+  const request = { removeLabelIds: [inbox.LABEL] }
 
-const ArchiveMail = (messageId, history, labelURL, emailList, viewIndex) => {
-  const ARCHIVE_ACTION = { removeLabelIds: [inbox.LABEL] }
+  // console.log(labelIds)
+  console.log(messageId)
+  console.log(location)
+  console.log(filteredMetaList)
 
   const MarkEmailArchived = async () => {
-    await api.updateMessage(messageId, ARCHIVE_ACTION)
-    NavigateNextMail({ history, labelURL, emailList, viewIndex })
+    // await messageApi().updateMessage({ messageId, request })
+    if (location.pathname.includes('/mail/')) {
+      console.log('here')
+      NavigateNextMail({ history, labelURL, filteredMetaList, viewIndex })
+    }
   }
 
   return MarkEmailArchived()
