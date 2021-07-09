@@ -6,6 +6,7 @@ const NavigateNextMail = (props) => {
     filteredCurrentMetaList,
     viewIndex,
   } = props
+
   if (filteredCurrentMetaList) {
     const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}`)

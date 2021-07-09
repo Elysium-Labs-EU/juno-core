@@ -43,16 +43,8 @@ export const emailListSlice = createSlice({
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
         state.emailList = [...currentState]
-        //   return {
-        //   ...state,
-        //   emailList: [...currentState],
-        // }
       }
       state.emailList = [...state.emailList, sortedEmailList]
-      //   return {
-      //     ...state,
-      //     emailList: [...state.emailList, sortedEmailList],
-      //   }
     },
     listRemoveDetail: (state, action) => {},
     listAddItemDetail: (state, action) => {
@@ -171,20 +163,23 @@ export const UpdateEmailListLabel = (props) => {
     messageId,
     request,
     request: { addLabelIds, removeLabelIds },
+    labelIds,
   } = props
 
   return async (dispatch, getState) => {
     try {
       const { emailList } = getState().email
       const filteredCurrentEmailList =
-        emailList &&
-        removeLabelIds &&
-        FilteredEmailList({ emailList, labelIds: removeLabelIds })
+        emailList && (removeLabelIds || request.delete) && removeLabelIds
+          ? FilteredEmailList({ emailList, labelIds: removeLabelIds })
+          : FilteredEmailList({ emailList, labelIds })
       const filteredTargetEmailList =
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
-      const response = await messageApi().updateMessage({ messageId, request })
+      const response = !request.delete
+        ? await messageApi().updateMessage({ messageId, request })
+        : await messageApi().thrashMessage({ messageId })
       if (response.status === 200) {
         if (addLabelIds) {
           const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
@@ -197,7 +192,7 @@ export const UpdateEmailListLabel = (props) => {
             })
           )
         }
-        if (removeLabelIds) {
+        if (removeLabelIds || request.delete) {
           dispatch(
             listRemoveItemDetail({
               messageId,
@@ -206,11 +201,11 @@ export const UpdateEmailListLabel = (props) => {
           )
         }
       } else {
-        dispatch(setServiceUnavailable('Error updating label.'))
+        dispatch(setServiceUnavailable('Error updating label2.'))
       }
     } catch (err) {
       console.log(err)
-      dispatch(setServiceUnavailable('Error updating label.'))
+      dispatch(setServiceUnavailable('Error updating label3.'))
     }
     return null
   }

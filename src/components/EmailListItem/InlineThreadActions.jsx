@@ -42,7 +42,7 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
           icon={<FiMoreHorizontal />}
         />
       </S.Inner>
-      {showMenu && <EmailMoreOptions messageId={id} />}
+      {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} />}
     </S.Wrapper>
   )
 }

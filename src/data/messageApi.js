@@ -44,13 +44,12 @@ const messageApi = () => {
         return console.log(err)
       }
     },
-    thrashMessage: async (messageId) => {
-      console.log('trashed')
+    thrashMessage: async ({ messageId }) => {
       try {
         const res = await axios.post(
           `${BASE_API_URL}/api/message/thrash/${messageId}`
         )
-        return res.data
+        return res
       } catch (err) {
         return console.log(err)
       }
