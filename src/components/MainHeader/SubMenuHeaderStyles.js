@@ -10,6 +10,7 @@ export const Wrapper = styled.nav`
   border-radius: 5px;
   z-index: 20;
   top: 18px;
+  /* top: 175px; */
   right: 30px;
 `
 
