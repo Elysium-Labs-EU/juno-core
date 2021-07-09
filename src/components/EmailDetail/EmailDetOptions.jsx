@@ -1,23 +1,22 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   FiArchive,
   FiCheckCircle,
   FiCornerUpLeft,
-  FiClock,
+  // FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../utils'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import {
   selectEmailList,
-  selectIsFocused,
-  selectIsSorting,
+  // selectIsFocused,
+  // selectIsSorting,
 } from '../../Store/emailListSlice'
-import { selectViewIndex } from '../../Store/emailDetailSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as todo from '../../constants/todoConstants'
@@ -29,15 +28,15 @@ import { CustomButtonText } from '../Elements/Buttons'
 
 const EmailDetOptions = ({ messageId, setReply }) => {
   const emailList = useSelector(selectEmailList)
-  const isFocused = useSelector(selectIsFocused)
-  const isSorting = useSelector(selectIsSorting)
+  // const isFocused = useSelector(selectIsFocused)
+  // const isSorting = useSelector(selectIsSorting)
   const labelIds = useSelector(selectLabelIds)
   const storageLabels = useSelector(selectStorageLabels)
-  const viewIndex = useSelector(selectViewIndex)
   const dispatch = useDispatch()
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
+  const location = useLocation()
 
   const ToDoAction = () => {
     const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
@@ -55,6 +54,10 @@ const EmailDetOptions = ({ messageId, setReply }) => {
     dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
   }
 
+  useEffect(() => {
+    setShowMenu(false)
+  }, [location])
+
   return (
     <S.EmailOptionsContainer>
       <S.StickyOptions>
@@ -68,7 +71,8 @@ const EmailDetOptions = ({ messageId, setReply }) => {
             />
           </div>
           <div>
-            {labelIds.some(
+            {labelIds &&
+            labelIds.some(
               (item) =>
                 item ===
                 FindLabel({
@@ -94,12 +98,12 @@ const EmailDetOptions = ({ messageId, setReply }) => {
             )}
           </div>
           <div>
-            <CustomButtonText
+            {/* <CustomButtonText
               className="button option-link"
               icon={<FiClock />}
               // onClick={ToDoAction}
               label={local.BUTTON_REMIND}
-            />
+            /> */}
           </div>
           <div>
             <CustomButtonText
@@ -111,7 +115,9 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                   history,
                   labelURL,
                   emailList,
-                  viewIndex,
+                  labelIds,
+                  location,
+                  dispatch,
                 })
               }
               label={local.BUTTON_ARCHIVE}
@@ -125,7 +131,13 @@ const EmailDetOptions = ({ messageId, setReply }) => {
               label={local.BUTTON_MORE}
             />
           </div>
-          {showMenu && <EmailMoreOptions messageId={messageId} />}
+          {showMenu && (
+            <EmailMoreOptions
+              messageId={messageId}
+              labelURL={labelURL}
+              labelIds={labelIds}
+            />
+          )}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
     </S.EmailOptionsContainer>

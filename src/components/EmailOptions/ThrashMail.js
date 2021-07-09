@@ -1,9 +1,29 @@
-import messageApi from '../../data/messageApi'
+import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 
-const api = messageApi()
+const ThrashMail = ({
+  messageId,
+  history,
+  labelURL,
+  labelIds,
+  location,
+  dispatch,
+}) => {
+  const request = { delete: true }
 
-const ThrashMail = async ({ messageId }) => {
-  await api.thrashMessage(messageId)
+  const MarkEmailThrashed = () => {
+    dispatch(
+      UpdateMetaListLabel({
+        messageId,
+        request,
+        history,
+        location,
+        labelURL,
+        labelIds,
+      })
+    )
+  }
+
+  return MarkEmailThrashed()
 }
 
 export default ThrashMail

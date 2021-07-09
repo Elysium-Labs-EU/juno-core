@@ -10,6 +10,7 @@ export const emailDetailSlice = createSlice({
   initialState: {
     currEmail: '',
     viewIndex: 0,
+    isReplying: false,
   },
   reducers: {
     setCurrentEmail: (state, action) => {
@@ -23,11 +24,14 @@ export const emailDetailSlice = createSlice({
         .indexOf(action.payload.currEmail)
       state.viewIndex = viewingIndex
     },
-    setIsDownloading: (state, action) => {},
+    setIsReplying: (state, action) => {
+      state.isReplying = action.payload
+    },
   },
 })
 
-export const { setCurrentEmail, setViewingIndex } = emailDetailSlice.actions
+export const { setCurrentEmail, setViewingIndex, setIsReplying } =
+  emailDetailSlice.actions
 
 export const fetchAttachment = ({ attachmentData, messageId }) => {
   const {
@@ -80,5 +84,6 @@ export const downloadAttachment = ({ attachmentData, messageId }) => {
 
 export const selectCurrentEmail = (state) => state.emailDetail.currEmail
 export const selectViewIndex = (state) => state.emailDetail.viewIndex
+export const selectIsReplying = (state) => state.emailDetail.isReplying
 
 export default emailDetailSlice.reducer

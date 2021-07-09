@@ -4,7 +4,13 @@ import '../../App.scss'
 import './EmailDetail.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { setCurrentEmail } from '../../Store/emailDetailSlice'
+import { isEmpty } from 'lodash'
+import {
+  selectCurrentEmail,
+  selectIsReplying,
+  setCurrentEmail,
+  setIsReplying,
+} from '../../Store/emailDetailSlice'
 import {
   selectIsLoading,
   selectServiceUnavailable,
@@ -22,22 +28,22 @@ import * as S from './EmailDetailStyles'
 import * as GS from '../../styles/globalStyles'
 import ComposeEmail from '../Compose/ComposeEmail'
 import { findPayloadHeadersData } from '../../utils'
-import { CustomButton } from '../Elements/Buttons'
 
 const EmailDetail = () => {
+  const currentEmail = useSelector(selectCurrentEmail)
   const emailList = useSelector(selectEmailList)
   const isLoading = useSelector(selectIsLoading)
   const labelIds = useSelector(selectLabelIds)
   const serviceUnavailable = useSelector(selectServiceUnavailable)
+  const isReplying = useSelector(selectIsReplying)
   const dispatch = useDispatch()
   const location = useLocation()
   const { threadId } = useParams()
-  const [threadDetail, setThreadDetail] = useState(null)
-  const [isReplying, setIsReplying] = useState(false)
+  const [threadDetail, setThreadDetail] = useState({})
   const localLabels = useRef([])
 
   const isReplyingListener = () => {
-    setIsReplying((prevState) => !prevState)
+    dispatch(setIsReplying(!isReplying))
   }
 
   const fromEmail = () => {
@@ -88,8 +94,14 @@ const EmailDetail = () => {
   // DetailNavigation will refetch metaList + emailList if empty.
 
   useEffect(() => {
-    if (threadId !== undefined) {
+    if (threadId !== undefined && currentEmail !== threadId) {
       dispatch(setCurrentEmail(threadId))
+    }
+  }, [threadId])
+
+  useEffect(() => {
+    if (currentEmail !== threadId) {
+      dispatch(setIsReplying(false))
     }
   }, [threadId])
 
@@ -122,6 +134,7 @@ const EmailDetail = () => {
           <S.DetailBase>
             <S.CardFullWidth>
               {threadDetail &&
+                !isEmpty(threadDetail) &&
                 !isLoading &&
                 threadDetail.messages
                   .slice(0)
@@ -147,7 +160,7 @@ const EmailDetail = () => {
           />
         )}
       </S.DetailRow>
-      {isReplying && (
+      {isReplying && !isEmpty(threadDetail) && (
         <>
           <ComposeEmail
             isReplying={isReplying}

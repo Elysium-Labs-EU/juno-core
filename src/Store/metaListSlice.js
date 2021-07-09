@@ -4,9 +4,9 @@ import threadApi from '../data/threadApi'
 import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
-import { FilteredMetaList, NavigateNextMail } from '../utils'
+import { FilteredMetaList } from '../utils'
 import * as draft from '../constants/draftConstants'
-import messageApi from '../data/messageApi'
+import NavigateNextMail from '../utils/navigateNextEmail'
 
 export const metaListSlice = createSlice({
   name: 'meta',
@@ -36,17 +36,9 @@ export const metaListSlice = createSlice({
         const currentState = state.metaList
         currentState[arrayIndex] = newObject
         state.metaList = currentState
-        // return {
-        //   ...state,
-        //   metaList: [...currentState],
-        // }
       } else {
         state.metaList.push(sortedMetaList)
       }
-      //   return {
-      //     ...state,
-      //     metaList: [...state.metaList, sortedMetaList],
-      //   }
     },
     listAddItemMeta: (state, action) => {
       const { filteredTargetMetaList, activeMetaObjArray } = action.payload
@@ -137,56 +129,53 @@ export const UpdateMetaListLabel = (props) => {
     request,
     request: { addLabelIds, removeLabelIds },
     history,
+    location,
     labelURL,
+    labelIds,
   } = props
 
   return async (dispatch, getState) => {
     try {
       const { metaList } = getState().meta
       const filteredCurrentMetaList =
-        metaList &&
-        removeLabelIds &&
-        FilteredMetaList({ metaList, labelIds: removeLabelIds })
+        metaList && (removeLabelIds || request.delete) && removeLabelIds
+          ? FilteredMetaList({ metaList, labelIds: removeLabelIds })
+          : FilteredMetaList({ metaList, labelIds })
       const filteredTargetMetaList =
         metaList &&
         addLabelIds &&
         FilteredMetaList({ metaList, labelIds: addLabelIds })
-      const response = await messageApi().updateMessage({ messageId, request })
-      if (response.status === 200) {
-        if (addLabelIds) {
-          const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-            (item) => item.id === messageId
-          )
-          dispatch(
-            listAddItemMeta({
-              activeMetaObjArray,
-              filteredTargetMetaList,
-            })
-          )
-        }
-        if (removeLabelIds) {
-          dispatch(
-            listRemoveItemMeta({
-              messageId,
-              filteredCurrentMetaList,
-            })
-          )
-        }
-        dispatch(UpdateEmailListLabel(props))
-        if (
-          getState().emailDetail.currEmail &&
-          !getState().labels.labelIds.includes(draft.LABEL)
-        ) {
-          const { viewIndex } = getState().emailDetail
-          NavigateNextMail({
-            history,
-            labelURL,
-            filteredCurrentMetaList,
-            viewIndex,
+      if (addLabelIds) {
+        const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
+          (item) => item.id === messageId
+        )
+        dispatch(
+          listAddItemMeta({
+            activeMetaObjArray,
+            filteredTargetMetaList,
           })
-        }
-      } else {
-        dispatch(setServiceUnavailable('Error updating label.'))
+        )
+      }
+      if (removeLabelIds || request.delete) {
+        dispatch(
+          listRemoveItemMeta({
+            messageId,
+            filteredCurrentMetaList,
+          })
+        )
+      }
+      dispatch(UpdateEmailListLabel({ request, messageId, labelIds }))
+      if (
+        location.pathname.includes('/mail/') &&
+        !getState().labels.labelIds.includes(draft.LABEL)
+      ) {
+        const { viewIndex } = getState().emailDetail
+        NavigateNextMail({
+          history,
+          labelURL,
+          filteredCurrentMetaList,
+          viewIndex,
+        })
       }
     } catch (err) {
       console.log(err)
@@ -216,9 +205,6 @@ export const refreshEmailFeed = (params, metaList) => {
   }
 }
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectMetaList = (state) => state.meta.metaList
 
 export default metaListSlice.reducer

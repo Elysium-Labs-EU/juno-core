@@ -5,6 +5,7 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import {
   // loadDraftList,
   loadEmails,
+  selectMetaList,
 } from '../../Store/metaListSlice'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { selectEmailList } from '../../Store/emailListSlice'
@@ -19,6 +20,7 @@ import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 
 const EmailList = () => {
+  const metaList = useSelector(selectMetaList)
   const emailList = useSelector(selectEmailList)
   const isLoading = useSelector(selectIsLoading)
   const labelIds = useSelector(selectLabelIds)
@@ -52,6 +54,12 @@ const EmailList = () => {
     }
   }
 
+  // const filteredMetaList = useMemo(
+  //   () =>
+  //     metaList.filter((threadList) => threadList.labels.includes(...labelIds)),
+  //   [metaList, labelIds]
+  // )
+
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
@@ -62,7 +70,11 @@ const EmailList = () => {
               {threads.length > 0 && (
                 <div className="base">
                   {threads.map((email) => (
-                    <EmailListItem key={email.id} email={email} />
+                    <EmailListItem
+                      key={email.id}
+                      email={email}
+                      // filteredMetaList={filteredMetaList}
+                    />
                   ))}
                 </div>
               )}
