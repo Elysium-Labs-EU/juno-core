@@ -7,11 +7,14 @@ import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList } from '../utils'
 import * as draft from '../constants/draftConstants'
 import NavigateNextMail from '../utils/navigateNextEmail'
+import userApi from '../data/userApi'
+import { setProfile } from './baseSlice'
 
 export const metaListSlice = createSlice({
   name: 'meta',
   initialState: {
     metaList: [],
+    isFetching: false,
   },
   reducers: {
     listAddMeta: (state, action) => {
@@ -26,6 +29,7 @@ export const metaListSlice = createSlice({
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
+
       if (arrayIndex > -1) {
         const newArray = state.metaList[arrayIndex].threads
           .concat(sortedMetaList.threads)
@@ -76,11 +80,18 @@ export const metaListSlice = createSlice({
       ]
       state.metaList = updatedMetaList
     },
+    setIsFetching: (state, action) => {
+      state.isFetching = action.payload
+    },
   },
 })
 
-export const { listAddMeta, listAddItemMeta, listRemoveItemMeta } =
-  metaListSlice.actions
+export const {
+  listAddMeta,
+  listAddItemMeta,
+  listRemoveItemMeta,
+  setIsFetching,
+} = metaListSlice.actions
 
 export const loadEmails = (params) => {
   return async (dispatch, getState) => {
@@ -185,26 +196,41 @@ export const UpdateMetaListLabel = (props) => {
   }
 }
 
-// Use a checkfeed of 100 items, compare this to the current MetaList, if the checkFeeds newest item
-// is newer than the metaList, cut off the items from the checkfeed which are older than the newest metaList item
-export const refreshEmailFeed = (params, metaList) => {
-  return async (dispatch) => {
-    console.log('WIP need to change listUpdateMeta function')
-    console.log(params, metaList, dispatch)
-    // const checkFeed = await api.getThreads(params)
-    // if (checkFeed.message.threads[0].historyId > metaList[0].historyId) {
-    //   const newThreads = checkFeed.message.threads.filter(
-    //     (thread) => thread.historyId > metaList[0].historyId
-    //   )
-    //   const newThreadsObject = { message: { threads: [...newThreads] } }
-    //   dispatch(listUpdateMeta(newThreads))
-    //   dispatch(loadEmailDetails(newThreadsObject))
-    // } else {
-    //   console.log('No new messages')
-    // }
+// Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the meta list for inbox only first.
+export const refreshEmailFeed = (params) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setIsFetching(true))
+      const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+      const checkFeed = await threadApi().getThreads(params)
+      const newEmailsIdx = checkFeed.message.threads.findIndex(
+        (thread) => parseInt(thread.historyId, 10) < savedHistoryId
+      )
+      if (newEmailsIdx > -1) {
+        const newSlice = checkFeed.message.threads.slice(0, newEmailsIdx)
+        if (newSlice.length > 0) {
+          console.log(newSlice)
+          const user = await userApi().fetchUser()
+          dispatch(setProfile(user.data.data))
+          const labeledThreads = {
+            labels: params.labelIds,
+            threads: newSlice,
+            nextPageToken: checkFeed.message.nextPageToken ?? null,
+          }
+          dispatch(listAddMeta(labeledThreads))
+          dispatch(loadEmailDetails(labeledThreads))
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Cannot refresh feed'))
+    } finally {
+      dispatch(setIsFetching(false))
+    }
   }
 }
 
 export const selectMetaList = (state) => state.meta.metaList
+export const selectIsFetching = (state) => state.meta.isFetching
 
 export default metaListSlice.reducer

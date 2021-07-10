@@ -49,6 +49,19 @@
   color: #212529;
   background-color: #f8f9fa;
   border-color: #f8f9fa;
+
+  &:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+  }
+
+  &:disabled {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+    cursor: not-allowed;
+  }
 }
 
 .button > .button-inner {

@@ -1,10 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements/Buttons'
 import { convertArrayToString } from '../../utils'
-import { refreshEmailFeed, selectMetaList } from '../../Store/metaListSlice'
+import {
+  refreshEmailFeed,
+  selectIsFetching,
+  selectMetaList,
+} from '../../Store/metaListSlice'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './InboxSortOptionStyles'
@@ -17,8 +21,10 @@ const SortInbox = () => {
   const metaList = useSelector(selectMetaList)
   const labelIds = useSelector(selectLabelIds)
   const isLoading = useSelector(selectIsLoading)
+  const isFetching = useSelector(selectIsFetching)
   const dispatch = useDispatch()
   const history = useHistory()
+  const [disableRefresh, setDisableRefresh] = useState(false)
 
   const metaListIndex = useMemo(
     () =>
@@ -37,17 +43,28 @@ const SortInbox = () => {
   const refreshFeed = () => {
     const params = {
       labelIds,
-      maxResults: 100,
+      maxResults: 500,
     }
-    dispatch(refreshEmailFeed(params, metaList))
+    dispatch(refreshEmailFeed(params))
   }
+
+  useEffect(() => {
+    if (isFetching) {
+      setDisableRefresh(true)
+    }
+    if (!isFetching) {
+      setTimeout(() => {
+        setDisableRefresh(false)
+      }, 3000)
+    }
+  }, [isFetching])
 
   return (
     <S.SortContainer>
       <CustomIconLink
         className="button button-light"
         onClick={() => refreshFeed()}
-        disabled={isLoading}
+        disabled={isLoading || disableRefresh}
         icon={<MdRefresh />}
         style={{ marginRight: '1rem' }}
       />
