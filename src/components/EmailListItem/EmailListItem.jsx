@@ -73,9 +73,9 @@ const EmailListItem = ({ email }) => {
             )}
           </div>
           {!labelIds.includes(draft.LABEL) ? (
-            <span className="text-truncate">{fromEmail()}</span>
+            <span className="text_truncate">{fromEmail()}</span>
           ) : (
-            <span className="text-truncate">{toEmail()}</span>
+            <span className="text_truncate">{toEmail()}</span>
           )}
           <MessageCount countOfMessage={email?.messages} />
         </div>
@@ -84,7 +84,7 @@ const EmailListItem = ({ email }) => {
           onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
           aria-hidden="true"
         >
-          <div className="subjectSnippet text-truncate">
+          <div className="subjectSnippet text_truncate">
             <span className="subject">{emailSubject()}</span>
             <Snippet snippet={emailSnippet} />
           </div>

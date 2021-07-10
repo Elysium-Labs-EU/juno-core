@@ -1,7 +1,8 @@
 import React from 'react'
 import { FiPaperclip } from 'react-icons/fi'
 
-const EmailAttachment = ({ messages }) => {
+const EmailHasAttachment = (props) => {
+  const { messages } = props
   const CheckAttachment = () => {
     if (
       messages &&
@@ -21,10 +22,21 @@ const EmailAttachment = ({ messages }) => {
       }
       return null
     }
+    if (
+      messages &&
+      Object.prototype.hasOwnProperty.call(messages, 'threadId')
+    ) {
+      if (
+        messages.payload.parts[messages.payload.parts.length - 1].filename
+          .length > 0
+      ) {
+        return <FiPaperclip />
+      }
+    }
     return null
   }
 
   return <CheckAttachment />
 }
 
-export default EmailAttachment
+export default EmailHasAttachment

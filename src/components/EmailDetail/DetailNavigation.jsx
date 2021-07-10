@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
 import { selectLabelIds } from '../../Store/labelsSlice'
-import { NavButton, Wrapper } from './DetailNavigationStyles'
+import * as S from './DetailNavigationStyles'
 import { convertArrayToString } from '../../utils'
 import {
   selectCurrentEmail,
@@ -14,6 +14,7 @@ import { loadEmails, selectMetaList } from '../../Store/metaListSlice'
 import CloseMail from '../../utils/closeEmail'
 import NavigateNextMail from '../../utils/navigateNextEmail'
 import NavigatePreviousMail from '../../utils/navigatePreviousEmail'
+import { CustomIconLink } from '../Elements/Buttons'
 
 const DetailNavigation = () => {
   const metaList = useSelector(selectMetaList)
@@ -67,8 +68,9 @@ const DetailNavigation = () => {
   }, [currEmail, metaList])
 
   return (
-    <Wrapper>
-      <NavButton
+    <S.Wrapper>
+      <CustomIconLink
+        className="button option-link"
         onClick={() =>
           NavigatePreviousMail({
             history,
@@ -79,10 +81,10 @@ const DetailNavigation = () => {
           })
         }
         disabled={isDisabledPrev}
-      >
-        <FiChevronLeft size={20} />
-      </NavButton>
-      <NavButton
+        icon={<FiChevronLeft size={20} />}
+      />
+      <CustomIconLink
+        className="button option-link"
         onClick={() =>
           NavigateNextMail({
             history,
@@ -93,13 +95,14 @@ const DetailNavigation = () => {
           })
         }
         disabled={isDisabledNext}
-      >
-        <FiChevronRight size={20} />
-      </NavButton>
-      <NavButton onClick={() => CloseMail({ history })}>
-        <FiX size={20} />
-      </NavButton>
-    </Wrapper>
+        icon={<FiChevronRight size={20} />}
+      />
+      <CustomIconLink
+        className="button option-link"
+        onClick={() => CloseMail({ history })}
+        icon={<FiX size={20} />}
+      />
+    </S.Wrapper>
   )
 }
 

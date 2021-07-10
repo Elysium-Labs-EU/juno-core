@@ -5,8 +5,9 @@ import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../../TimeStamp'
 import * as local from '../../../../constants/unreadConstants'
 import * as S from '../../EmailDetailStyles'
+import EmailHasAttachment from '../../../EmailHasAttachment'
 
-const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
+const ReadMessage = ({ message, FROM }) => {
   const [open, setOpen] = useState(
     message && message.labelIds.includes(local.UNREAD)
   )
@@ -35,23 +36,26 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
             <S.AvatarHeaderContainer>
               <EmailAvatar avatarURL={AvatarURL} />
               <S.HeaderFullWidth>
-                <span className="email-detail-title">{Subject}</span>
-                <div
-                  className="ml-auto"
-                  style={{ display: 'flex', flexFlow: 'column' }}
+                <span
+                  title={Subject}
+                  className="email-detail-title text_truncate"
                 >
+                  {Subject}
+                </span>
+                <S.TimeAttachmentContainer>
+                  <EmailHasAttachment messages={message} />
                   <TimeStamp threadTimeStamp={message.internalDate} />
-                  {message.labelIds.includes('UNREAD') && <p>Unread message</p>}
-                  {!message.labelIds.includes('DRAFT' || 'UNREAD') && (
-                    <p>Read message</p>
-                  )}
-                </div>
+                </S.TimeAttachmentContainer>
               </S.HeaderFullWidth>
             </S.AvatarHeaderContainer>
             <S.FromContainer>
-              <p className="text-muted">
-                {FROM} <span className="text_normal">{From}</span>
-              </p>
+              <span
+                className="text_muted text_small"
+                style={{ marginRight: '4px' }}
+              >
+                {FROM}
+              </span>
+              <span className="text_small">{From}</span>
             </S.FromContainer>
             <S.EmailBody>
               <EmailDetailBody
@@ -60,11 +64,6 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
                 messageId={message.id}
               />
             </S.EmailBody>
-            <div>
-              <p className="email-detail-from">
-                {MESSAGE_ID_LABEL} {message.id}
-              </p>
-            </div>
           </div>
           <EmailAttachment message={message} />
         </>
@@ -79,7 +78,10 @@ const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{EmailSnippet}</S.ClosedSnippet>
-            <TimeStamp threadTimeStamp={message.internalDate} />
+            <S.TimeAttachmentContainer>
+              <EmailHasAttachment messages={message} />
+              <TimeStamp threadTimeStamp={message.internalDate} />
+            </S.TimeAttachmentContainer>
           </S.ClosedMessageWrapper>
         </div>
       )}

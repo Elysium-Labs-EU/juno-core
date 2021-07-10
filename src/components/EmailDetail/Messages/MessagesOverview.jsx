@@ -37,13 +37,7 @@ const detailDisplaySelector = ({ message, threadDetail }) => {
     )
   }
   if (!message.labelIds.includes(draft.LABEL)) {
-    return (
-      <ReadUnreadMessage
-        message={message}
-        FROM={local.FROM}
-        MESSAGE_ID_LABEL={local.MESSAGE_ID_LABEL}
-      />
-    )
+    return <ReadUnreadMessage message={message} FROM={local.FROM} />
   }
   return null
 }
