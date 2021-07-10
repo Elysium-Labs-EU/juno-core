@@ -20,7 +20,7 @@ import * as local from '../../constants/emailDetailConstants'
 import * as GS from '../../styles/globalStyles'
 import MessagesOverview from './Messages/MessagesOverview'
 import FilesOverview from './Files/FilesOverview'
-import InformationOverview from './Information/InformationOverview'
+// import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
   const currentEmail = useSelector(selectCurrentEmail)
@@ -95,7 +95,12 @@ const EmailDetail = () => {
       {overviewId === local.FILES && (
         <FilesOverview threadDetail={threadDetail} isLoading={isLoading} />
       )}
-      {overviewId === local.INFORMATION && <InformationOverview />}
+      {/* {overviewId === local.INFORMATION && (
+        <InformationOverview
+          threadDetail={threadDetail}
+          isLoading={isLoading}
+        />
+      )} */}
     </GS.OuterContainer>
   )
 }

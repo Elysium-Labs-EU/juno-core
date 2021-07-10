@@ -22,24 +22,26 @@ const Menu = () => {
     }
   }, [location, currentEmail])
 
-  const mappedMenu =
-    local.MENU_OPTIONS &&
-    local.MENU_OPTIONS.map((item, index) => {
-      return (
-        <p
-          key={`${item.name + index}`}
-          className={
-            activeLink === item.name
-              ? 'option-link:active menu'
-              : 'option-link menu'
-          }
-          onClick={() => navigateTo(item)}
-          aria-hidden="true"
-        >
-          {item.name}
-        </p>
-      )
-    })
+  const mappedMenu = local.MENU_OPTIONS && (
+    <ul className="no-bullet-ul flex-flow-row">
+      {local.MENU_OPTIONS.map((item, index) => {
+        return (
+          <li
+            key={`${item.name + index}`}
+            className={
+              activeLink === item.name
+                ? 'option-link:active menu'
+                : 'option-link menu'
+            }
+            onClick={() => navigateTo(item)}
+            aria-hidden="true"
+          >
+            {item.name}
+          </li>
+        )
+      })}{' '}
+    </ul>
+  )
 
   return <MenuContainer>{mappedMenu}</MenuContainer>
 }

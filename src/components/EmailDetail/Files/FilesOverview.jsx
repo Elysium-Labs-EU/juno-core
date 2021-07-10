@@ -1,5 +1,6 @@
 import React from 'react'
 import isEmpty from 'lodash/isEmpty'
+import { CircularProgress } from '@material-ui/core'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import * as local from '../../../constants/filesOverviewConstants'
@@ -22,15 +23,18 @@ const FilesOverview = (props) => {
     })
 
   return (
-    <>
-      <ES.DetailRow>
-        <ES.EmailDetailContainer>
-          <S.FilesWrapper>
-            {files && files.length > 0 ? files : <p>{local.NO_FILES}</p>}
-          </S.FilesWrapper>
-        </ES.EmailDetailContainer>
-      </ES.DetailRow>
-    </>
+    <ES.DetailRow>
+      <ES.EmailDetailContainer>
+        <S.FilesWrapper>
+          {files && !isLoading && files.length > 0 ? (
+            files
+          ) : (
+            <p>{local.NO_FILES}</p>
+          )}
+          {isLoading && <CircularProgress />}
+        </S.FilesWrapper>
+      </ES.EmailDetailContainer>
+    </ES.DetailRow>
   )
 }
 
