@@ -19,26 +19,26 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
     <S.Wrapper>
       <S.Inner>
         <CustomIconLink
-          className="button button-small text-muted option-link"
+          className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() =>
             ReplyOverview({ history, labelIds, id, isReplying, dispatch })
           }
         />
         {/* <CustomIconLink
-          className="button button-small text-muted option-link"
+          className="button button-small text_muted option-link"
           icon={<FiClock />}
         /> */}
         <CustomIconLink
           onClick={() =>
             ArchiveMail({ messageId, location, dispatch, labelIds })
           }
-          className="button button-small text-muted option-link"
+          className="button button-small text_muted option-link"
           icon={<FiArchive />}
         />
         <CustomIconLink
           onClick={() => setShowMenu(!showMenu)}
-          className="button button-small text-muted option-link"
+          className="button button-small text_muted option-link"
           icon={<FiMoreHorizontal />}
         />
       </S.Inner>

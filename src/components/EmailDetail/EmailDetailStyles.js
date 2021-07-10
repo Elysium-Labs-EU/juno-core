@@ -66,11 +66,19 @@ export const EmailDetailContainer = styled.div`
   padding-top: 1.5rem;
   margin-bottom: 1rem;
   width: 100%;
+  overflow: hidden;
 `
 
 export const AvatarHeaderContainer = styled.div`
   align-items: center;
   display: flex;
+`
+
+export const TimeAttachmentContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
 `
 
 export const HeaderFullWidth = styled.div`
