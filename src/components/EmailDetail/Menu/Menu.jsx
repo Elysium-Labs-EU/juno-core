@@ -7,7 +7,7 @@ import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
 
 const Menu = () => {
   const currentEmail = useSelector(selectCurrentEmail)
-  const [activeLink, setActiveLink] = useState('Messages')
+  const [activeLink, setActiveLink] = useState('')
   const history = useHistory()
   const location = useLocation()
 
