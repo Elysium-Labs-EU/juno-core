@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import DOMPurify from 'dompurify'
-import { fetchAttachment } from '../../Store/emailDetailSlice'
-import { decodeBase64 } from '../../utils/decodeBase64'
+import { fetchAttachment } from '../../../Store/emailDetailSlice'
+import { decodeBase64 } from '../../../utils/decodeBase64'
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   const [bodyState, setBodyState] = useState([])

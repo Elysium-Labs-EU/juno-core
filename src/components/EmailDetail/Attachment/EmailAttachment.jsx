@@ -1,9 +1,10 @@
 import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import EmailAttachmentBubble from './EmailAttachmentBubble'
+import * as fileOverview from '../../../constants/filesOverviewConstants'
 import * as S from './EmailAttachmentStyles'
 
-const EmailAttachment = ({ message }) => {
+const EmailAttachment = ({ message, overview }) => {
   const CheckAttachment = () => {
     if (
       message &&
@@ -22,7 +23,7 @@ const EmailAttachment = ({ message }) => {
           ) : null
         )
       }
-      return null
+      return overview ? fileOverview.NO_FILES : null
     }
     return null
   }

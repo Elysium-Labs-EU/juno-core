@@ -92,4 +92,24 @@
   display: flex;
   align-items: center;
   text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    color: #1c1c1c;
+    text-decoration: none;
+  }
+
+  &:active {
+    color: #1c1c1c;
+    text-decoration: none;
+  }
+}
+
+.no-bullet-ul {
+  list-style-type: none;
+}
+
+.flex-flow-row {
+  display: flex;
+  flex-flow: row;
 }

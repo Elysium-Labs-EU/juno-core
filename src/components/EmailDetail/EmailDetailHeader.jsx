@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import NavControls from '../MainHeader/Navigation/NavControls'
-import Menu from '../Menu'
+import Menu from './Menu/Menu'
 import DetailNavigation from './DetailNavigation'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'

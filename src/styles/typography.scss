@@ -92,11 +92,6 @@ small,
   color: $color-black;
 }
 
-.option-link:hover {
-  color: #1c1c1c;
-  text-decoration: none;
-}
-
 .warning {
   color: hsl(0, 23%, 68%);
 }
@@ -120,4 +115,9 @@ small,
 .messageCount {
   margin-left: 4px;
   color: $color-light-grey;
+}
+
+.menu {
+  font-size: 1.125rem;
+  margin-left: 3rem;
 }

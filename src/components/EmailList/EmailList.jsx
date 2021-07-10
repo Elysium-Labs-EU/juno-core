@@ -5,7 +5,6 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import {
   // loadDraftList,
   loadEmails,
-  selectMetaList,
 } from '../../Store/metaListSlice'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { selectEmailList } from '../../Store/emailListSlice'
@@ -20,7 +19,6 @@ import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 
 const EmailList = () => {
-  const metaList = useSelector(selectMetaList)
   const emailList = useSelector(selectEmailList)
   const isLoading = useSelector(selectIsLoading)
   const labelIds = useSelector(selectLabelIds)
