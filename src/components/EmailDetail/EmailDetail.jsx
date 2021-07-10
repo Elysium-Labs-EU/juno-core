@@ -19,6 +19,8 @@ import { selectEmailList } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as GS from '../../styles/globalStyles'
 import MessagesOverview from './Messages/MessagesOverview'
+import FilesOverview from './Files/FilesOverview'
+import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
   const currentEmail = useSelector(selectCurrentEmail)
@@ -29,7 +31,7 @@ const EmailDetail = () => {
   const isReplying = useSelector(selectIsReplying)
   const dispatch = useDispatch()
   const location = useLocation()
-  const { threadId } = useParams()
+  const { threadId, overviewId } = useParams()
   const [threadDetail, setThreadDetail] = useState({})
   const localLabels = useRef([])
 
@@ -82,12 +84,18 @@ const EmailDetail = () => {
 
   return (
     <GS.OuterContainer isReplying={isReplying}>
-      <MessagesOverview
-        threadDetail={threadDetail}
-        isLoading={isLoading}
-        isReplying={isReplying}
-        isReplyingListener={isReplyingListener}
-      />
+      {overviewId === local.MESSAGES && (
+        <MessagesOverview
+          threadDetail={threadDetail}
+          isLoading={isLoading}
+          isReplying={isReplying}
+          isReplyingListener={isReplyingListener}
+        />
+      )}
+      {overviewId === local.FILES && (
+        <FilesOverview threadDetail={threadDetail} isLoading={isLoading} />
+      )}
+      {overviewId === local.INFORMATION && <InformationOverview />}
     </GS.OuterContainer>
   )
 }

@@ -5,7 +5,7 @@ import EmailAvatar from '../../../EmailAvatar'
 import TimeStamp from '../../../TimeStamp'
 import { OpenDraftEmail } from '../../../../Store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
-import * as S from '../EmailDetailStyles'
+import * as S from '../../EmailDetailStyles'
 
 const DraftMessage = ({ message, threadDetail }) => {
   const dispatch = useDispatch()

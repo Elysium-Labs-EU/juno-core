@@ -7,7 +7,7 @@ import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as draft from '../../../constants/draftConstants'
-import * as S from './EmailDetailStyles'
+import * as ES from '../EmailDetailStyles'
 import { findPayloadHeadersData } from '../../../utils'
 
 const fromEmail = (threadDetail) => {
@@ -53,10 +53,10 @@ const MessagesOverview = (props) => {
 
   return (
     <>
-      <S.DetailRow>
-        <S.EmailDetailContainer isReplying={isReplying}>
-          <S.DetailBase>
-            <S.CardFullWidth>
+      <ES.DetailRow>
+        <ES.EmailDetailContainer isReplying={isReplying}>
+          <ES.DetailBase>
+            <ES.CardFullWidth>
               {threadDetail &&
                 !isEmpty(threadDetail) &&
                 !isLoading &&
@@ -64,7 +64,7 @@ const MessagesOverview = (props) => {
                   .slice(0)
                   .reverse()
                   .map((message) => (
-                    <S.EmailWrapper
+                    <ES.EmailWrapper
                       key={message.id}
                       labelIds={message.labelIds}
                     >
@@ -72,24 +72,24 @@ const MessagesOverview = (props) => {
                         message,
                         threadDetail,
                       })}
-                    </S.EmailWrapper>
+                    </ES.EmailWrapper>
                   ))}
               {!threadDetail && (
-                <S.LoadingErrorWrapper>
+                <ES.LoadingErrorWrapper>
                   {isLoading && <CircularProgress />}
                   {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                </S.LoadingErrorWrapper>
+                </ES.LoadingErrorWrapper>
               )}
-            </S.CardFullWidth>
-          </S.DetailBase>
-        </S.EmailDetailContainer>
+            </ES.CardFullWidth>
+          </ES.DetailBase>
+        </ES.EmailDetailContainer>
         {threadDetail && !isReplying && (
           <EmailDetOptions
             messageId={threadDetail.id}
             setReply={isReplyingListener}
           />
         )}
-      </S.DetailRow>
+      </ES.DetailRow>
       {isReplying && !isEmpty(threadDetail) && (
         <>
           <ComposeEmail

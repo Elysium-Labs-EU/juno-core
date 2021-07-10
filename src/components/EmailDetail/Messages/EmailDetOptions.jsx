@@ -20,7 +20,7 @@ import {
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
-import * as S from './EmailDetailStyles'
+import * as S from '../EmailDetailStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
 // import SetCompletedMail from '../EmailOptions/SetCompletedMail'
 // import SetToDoMail from '../EmailOptions/SetToDoMail'
