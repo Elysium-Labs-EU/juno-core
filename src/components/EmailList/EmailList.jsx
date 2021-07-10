@@ -52,12 +52,6 @@ const EmailList = () => {
     }
   }
 
-  // const filteredMetaList = useMemo(
-  //   () =>
-  //     metaList.filter((threadList) => threadList.labels.includes(...labelIds)),
-  //   [metaList, labelIds]
-  // )
-
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
@@ -68,11 +62,7 @@ const EmailList = () => {
               {threads.length > 0 && (
                 <div className="base">
                   {threads.map((email) => (
-                    <EmailListItem
-                      key={email.id}
-                      email={email}
-                      // filteredMetaList={filteredMetaList}
-                    />
+                    <EmailListItem key={email.id} email={email} />
                   ))}
                 </div>
               )}
