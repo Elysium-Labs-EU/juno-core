@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { CustomButtonText } from '../Elements/Buttons'
@@ -18,9 +18,17 @@ const TodoFocusOption = () => {
   const history = useHistory()
   const dispatch = useDispatch()
 
+  const metaListIndex = useMemo(
+    () =>
+      metaList.findIndex((threadList) =>
+        threadList.labels.includes(...labelIds)
+      ),
+    [metaList, labelIds]
+  )
+
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
-    startSort({ history, labelURL, metaList })
+    startSort({ history, labelURL, metaList, metaListIndex })
     dispatch(setIsFocused(true))
   }
 

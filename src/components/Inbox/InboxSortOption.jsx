@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MdRefresh } from 'react-icons/md'
@@ -19,11 +19,21 @@ const SortInbox = () => {
   const isLoading = useSelector(selectIsLoading)
   const dispatch = useDispatch()
   const history = useHistory()
+
+  const metaListIndex = useMemo(
+    () =>
+      metaList.findIndex((threadList) =>
+        threadList.labels.includes(...labelIds)
+      ),
+    [metaList, labelIds]
+  )
+
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
-    startSort({ history, labelURL, metaList })
+    startSort({ history, labelURL, metaList, metaListIndex })
     dispatch(setIsSorting(true))
   }
+
   const refreshFeed = () => {
     const params = {
       labelIds,
