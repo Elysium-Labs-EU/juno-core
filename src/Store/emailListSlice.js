@@ -42,9 +42,11 @@ export const emailListSlice = createSlice({
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
-        state.emailList = [...currentState]
+        state.emailList = currentState
+      } else {
+        state.emailList.push(sortedEmailList)
       }
-      state.emailList = [...state.emailList, sortedEmailList]
+      // state.emailList = [...state.emailList, sortedEmailList]
     },
     // listRemoveDetail: (state, action) => {},
     listAddItemDetail: (state, action) => {
