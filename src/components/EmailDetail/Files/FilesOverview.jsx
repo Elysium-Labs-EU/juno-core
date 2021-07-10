@@ -3,7 +3,6 @@ import isEmpty from 'lodash/isEmpty'
 import { CircularProgress } from '@material-ui/core'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
-import * as local from '../../../constants/filesOverviewConstants'
 import EmailAttachment from '../Attachment/EmailAttachment'
 
 const FilesOverview = (props) => {
@@ -26,11 +25,7 @@ const FilesOverview = (props) => {
     <ES.DetailRow>
       <ES.EmailDetailContainer>
         <S.FilesWrapper>
-          {files && !isLoading && files.length > 0 ? (
-            files
-          ) : (
-            <p>{local.NO_FILES}</p>
-          )}
+          {files && !isLoading && files.length > 0 && files}
           {isLoading && <CircularProgress />}
         </S.FilesWrapper>
       </ES.EmailDetailContainer>

@@ -17,8 +17,11 @@ const Menu = () => {
   }
 
   useEffect(() => {
-    if (!location.pathname.includes(currentEmail)) {
+    if (location.pathname.includes('messages')) {
       setActiveLink('Messages')
+    }
+    if (location.pathname.includes('files')) {
+      setActiveLink('Files')
     }
   }, [location, currentEmail])
 
@@ -39,7 +42,7 @@ const Menu = () => {
             {item.name}
           </li>
         )
-      })}{' '}
+      })}
     </ul>
   )
 
