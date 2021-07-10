@@ -1,8 +1,7 @@
 import React from 'react'
 import { FiPaperclip } from 'react-icons/fi'
 
-const EmailHasAttachment = (props) => {
-  const { messages } = props
+const EmailHasAttachment = ({ messages }) => {
   const CheckAttachment = () => {
     if (
       messages &&
@@ -26,11 +25,17 @@ const EmailHasAttachment = (props) => {
       messages &&
       Object.prototype.hasOwnProperty.call(messages, 'threadId')
     ) {
-      if (
-        messages.payload.parts[messages.payload.parts.length - 1].filename
-          .length > 0
-      ) {
+      if (Object.prototype.hasOwnProperty.call(messages.payload, 'parts')) {
+        if (
+          messages.payload.parts[messages.payload.parts.length - 1].filename
+            .length > 0
+        ) {
+          return <FiPaperclip />
+        }
+      } else if (messages.payload.filename.length > 0) {
         return <FiPaperclip />
+      } else {
+        return null
       }
     }
     return null
