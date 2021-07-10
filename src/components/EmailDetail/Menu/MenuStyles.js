@@ -7,7 +7,5 @@ export const MenuContainer = styled.nav`
   display: flex;
   align-content: flex-start;
   justify-content: space-between;
-  /* width: 24rem; */
   margin-left: 67px;
-  // margin-top: 4rem;
 `

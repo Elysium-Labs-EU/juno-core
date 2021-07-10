@@ -103,13 +103,15 @@ const EmailList = () => {
 
   const filteredOnLabel = useMemo(
     () =>
-      emailList.filter((threadList) => threadList.labels.includes(...labelIds)),
+      emailList.findIndex((threadList) =>
+        threadList.labels.includes(...labelIds)
+      ),
     [emailList, labelIds]
   )
 
   const labeledInbox = () => {
     if (labelIds) {
-      return renderEmailList(filteredOnLabel[0])
+      return renderEmailList(emailList[filteredOnLabel])
     }
     return null
   }

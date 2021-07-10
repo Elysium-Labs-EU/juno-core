@@ -1,7 +1,10 @@
 const NavigatePreviousMail = (props) => {
-  const { history, labelURL, filteredMetaList, viewIndex } = props
-  const prevID = filteredMetaList[0].threads[viewIndex - 1].id
-  return history.push(`/mail/${labelURL}/${prevID}/messages`)
+  const { history, labelURL, metaList, metaListIndex, viewIndex } = props
+  if (metaList && metaListIndex > -1) {
+    const prevID = metaList[metaListIndex].threads[viewIndex - 1].id
+    return history.push(`/mail/${labelURL}/${prevID}/messages`)
+  }
+  return null
 }
 
 export default NavigatePreviousMail

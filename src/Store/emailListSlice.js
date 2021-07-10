@@ -46,7 +46,7 @@ export const emailListSlice = createSlice({
       }
       state.emailList = [...state.emailList, sortedEmailList]
     },
-    listRemoveDetail: (state, action) => {},
+    // listRemoveDetail: (state, action) => {},
     listAddItemDetail: (state, action) => {
       const { filteredTargetEmailList, activEmailObjArray } = action.payload
       const newEmailListEntry = {
@@ -91,7 +91,7 @@ export const emailListSlice = createSlice({
       //     emailList: updatedEmailList,
       //   }
     },
-    listUpdateDetail: (state, action) => {},
+    // listUpdateDetail: (state, action) => {},
   },
 })
 
