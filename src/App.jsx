@@ -10,10 +10,9 @@ import ToDo from './components/ToDo/Todo'
 import EmailDetail from './components/EmailDetail/EmailDetail'
 import ComposeEmail from './components/Compose/ComposeEmail'
 import Settings from './components/Settings'
-import InformationOverview from './components/InformationOverview'
-import FileOverview from './components/FileOverview'
+import InformationOverview from './components/EmailDetail/Information/InformationOverview'
+import FileOverview from './components/EmailDetail/Files/FileOverview'
 import Inbox from './components/Inbox/Inbox'
-import Archive from './components/Archive/Archive'
 import SpamEmail from './components/Spam/Spam'
 import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
@@ -47,13 +46,12 @@ const App = () => {
             <Route path={Routes.SENT} component={SentEmail} />
             <Route path={Routes.SPAM} component={SpamEmail} />
             <Route path={Routes.SETTINGS} component={Settings} />
-            <Route
+            {/* <Route
               path={Routes.INFORMATION_OVERVIEW}
               component={InformationOverview}
             />
-            <Route path={Routes.FILE_OVERVIEW} component={FileOverview} />
+            <Route path={Routes.FILE_OVERVIEW} component={FileOverview} /> */}
             <Route path={Routes.INBOX} component={Inbox} />
-            <Route path={Routes.ARCHIVE} component={Archive} />
           </Switch>
         </GS.App>
       )}

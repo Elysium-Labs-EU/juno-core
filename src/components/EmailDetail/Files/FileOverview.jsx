@@ -1,5 +1,5 @@
 import React from 'react'
-import * as GS from '../styles/globalStyles'
+import * as GS from '../../../styles/globalStyles'
 
 const FileOverview = () => {
   return (

@@ -1,6 +1,6 @@
 {
   "HOME": "/",
-  "EMAIL_DETAIL": "/mail/:labelId/:threadId",
+  "EMAIL_DETAIL": "/mail/:labelId/:threadId/:overviewId?",
   "COMPOSE_EMAIL": "/compose/:messageId?",
   "DRAFTS": "/drafts",
   "SENT": "/sent",

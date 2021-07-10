@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import EmailAvatar from '../../EmailAvatar'
-import EmailAttachment from '../Attachment/EmailAttachment'
+import EmailAvatar from '../../../EmailAvatar'
+import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
-import TimeStamp from '../../TimeStamp'
-import * as local from '../../../constants/unreadConstants'
+import TimeStamp from '../../../TimeStamp'
+import * as local from '../../../../constants/unreadConstants'
 import * as S from '../EmailDetailStyles'
 
 const ReadMessage = ({ message, FROM, MESSAGE_ID_LABEL }) => {
