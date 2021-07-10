@@ -22,18 +22,25 @@ const DetailNavigation = () => {
   const viewIndex = useSelector(selectViewIndex)
 
   const [currLocal, setCurrLocal] = useState('')
-  const [filteredMetaList, setFilteredMetaList] = useState([])
   const history = useHistory()
   const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
 
+  const metaListIndex = useMemo(
+    () =>
+      metaList.findIndex((threadList) =>
+        threadList.labels.includes(...labelIds)
+      ),
+    [metaList, labelIds]
+  )
+
   const isDisabledPrev = !!(
-    filteredMetaList.length > 0 &&
-    filteredMetaList[0].threads[viewIndex - 1] === undefined
+    metaList.length > 0 &&
+    metaList[metaListIndex].threads[viewIndex - 1] === undefined
   )
   const isDisabledNext = !!(
-    filteredMetaList.length > 0 &&
-    filteredMetaList[0].threads[viewIndex + 1] === undefined
+    metaList.length > 0 &&
+    metaList[metaListIndex].threads[viewIndex + 1] === undefined
   )
 
   const refetchMeta = () => {
@@ -44,19 +51,12 @@ const DetailNavigation = () => {
     dispatch(loadEmails(params))
   }
 
-  const filteredMeta = useMemo(
-    () =>
-      metaList.filter((threadList) => threadList.labels.includes(...labelIds)),
-    [metaList, labelIds]
-  )
-
   useEffect(() => {
     if (currEmail !== currLocal) {
       if (metaList.length > 0) {
         setCurrLocal(currEmail)
-        setFilteredMetaList(filteredMeta)
         const requestBody = {
-          metaList: filteredMeta[0].threads,
+          metaList: metaList[metaListIndex].threads,
           currEmail,
         }
         dispatch(setViewingIndex(requestBody))
@@ -73,7 +73,8 @@ const DetailNavigation = () => {
           NavigatePreviousMail({
             history,
             labelURL,
-            filteredMetaList,
+            metaListIndex,
+            metaList,
             viewIndex,
           })
         }
@@ -86,7 +87,8 @@ const DetailNavigation = () => {
           NavigateNextMail({
             history,
             labelURL,
-            filteredMetaList,
+            metaListIndex,
+            metaList,
             viewIndex,
           })
         }

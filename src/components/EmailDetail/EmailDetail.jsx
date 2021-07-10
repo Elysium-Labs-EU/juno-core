@@ -43,11 +43,11 @@ const EmailDetail = () => {
     if (labelIds && threadId) {
       const activeList =
         emailList &&
-        emailList.filter((list) => list.labels.includes(...labelIds))
+        emailList.findIndex((list) => list.labels.includes(...labelIds))
       const activeEmail =
-        activeList &&
-        activeList[0].threads.filter((item) => item.id === threadId)
-      setThreadDetail(activeEmail[0])
+        emailList &&
+        emailList[activeList].threads.findIndex((item) => item.id === threadId)
+      setThreadDetail(emailList[activeList].threads[activeEmail])
       if (serviceUnavailable && serviceUnavailable.length > 0) {
         dispatch(setServiceUnavailable(null))
       }

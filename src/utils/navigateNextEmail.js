@@ -2,7 +2,8 @@ const NavigateNextMail = (props) => {
   const {
     history,
     labelURL,
-    filteredMetaList,
+    metaList,
+    metaListIndex,
     filteredCurrentMetaList,
     viewIndex,
   } = props
@@ -11,8 +12,8 @@ const NavigateNextMail = (props) => {
     const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }
-  if (filteredMetaList) {
-    const nextID = filteredMetaList[0].threads[viewIndex + 1].id
+  if (metaList && metaListIndex > -1) {
+    const nextID = metaList[metaListIndex].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }
   return null
