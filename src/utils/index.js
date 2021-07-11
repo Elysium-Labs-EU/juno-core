@@ -23,10 +23,17 @@ export const FilteredEmailList = (props) => {
   return null
 }
 
-export const FindLabel = (props) => {
+export const FindLabelByName = (props) => {
   const { storageLabels, LABEL_NAME } = props
   return (
     storageLabels && storageLabels.filter((label) => label.name === LABEL_NAME)
+  )
+}
+
+export const FindLabelById = (props) => {
+  const { storageLabels, labelIds } = props
+  return (
+    storageLabels && storageLabels.filter((label) => label.id === labelIds[0])
   )
 }
 

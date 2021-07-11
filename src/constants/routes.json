@@ -6,7 +6,5 @@
   "SENT": "/sent",
   "SPAM": "/spam",
   "SETTINGS": "/settings",
-  "INFORMATION_OVERVIEW": "/information-overview",
-  "FILE_OVERVIEW": "/file-overview",
   "INBOX": "/inbox"
 }

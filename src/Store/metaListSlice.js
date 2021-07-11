@@ -5,8 +5,6 @@ import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList } from '../utils'
-import * as draft from '../constants/draftConstants'
-import NavigateNextMail from '../utils/navigateNextEmail'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 
@@ -185,19 +183,16 @@ export const UpdateMetaListLabel = (props) => {
           })
         )
       }
-      dispatch(UpdateEmailListLabel({ request, messageId, labelIds }))
-      if (
-        location.pathname.includes('/mail/') &&
-        !getState().labels.labelIds.includes(draft.LABEL)
-      ) {
-        const { viewIndex } = getState().emailDetail
-        NavigateNextMail({
+      dispatch(
+        UpdateEmailListLabel({
+          request,
+          messageId,
+          labelIds,
           history,
+          location,
           labelURL,
-          filteredCurrentMetaList,
-          viewIndex,
         })
-      }
+      )
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error updating label.'))

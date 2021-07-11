@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
-import { convertArrayToString, FindLabel } from '../../../utils'
+import { convertArrayToString, FindLabelByName } from '../../../utils'
 import {
   selectEmailList,
   // selectIsFocused,
@@ -57,7 +57,7 @@ const EmailDetOptions = ({ messageId, setReply }) => {
             labelIds.some(
               (item) =>
                 item ===
-                FindLabel({
+                FindLabelByName({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
                 })[0].id

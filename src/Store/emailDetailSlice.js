@@ -17,7 +17,7 @@ export const emailDetailSlice = createSlice({
       state.currEmail = action.payload
     },
     setViewingIndex: (state, action) => {
-      const viewingIndex = action.payload.metaList
+      const viewingIndex = action.payload.emailList
         .map(function getIndex(e) {
           return e.id
         })

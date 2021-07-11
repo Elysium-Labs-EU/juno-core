@@ -17,6 +17,7 @@ import * as draft from '../../constants/draftConstants'
 import { CustomButtonText } from '../Elements/Buttons'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
+import loadNextPage from '../../utils/loadNextPage'
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
@@ -41,17 +42,6 @@ const EmailList = () => {
     }
   }, [labelIds])
 
-  const loadNextPage = (nextPageToken) => {
-    if (labelIds && nextPageToken) {
-      const params = {
-        labelIds,
-        nextPageToken,
-        maxResults: local.MAX_RESULTS,
-      }
-      dispatch(loadEmails(params))
-    }
-  }
-
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
@@ -74,7 +64,9 @@ const EmailList = () => {
                   <CustomButtonText
                     className="button button-small button-light"
                     disabled={isLoading}
-                    onClick={() => loadNextPage(nextPageToken)}
+                    onClick={() =>
+                      loadNextPage({ nextPageToken, labelIds, dispatch })
+                    }
                     label={local.LOAD_OLDER}
                   />
                 )}
