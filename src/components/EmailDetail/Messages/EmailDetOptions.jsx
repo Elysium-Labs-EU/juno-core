@@ -11,7 +11,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../../utils'
-import { UpdateMetaListLabel } from '../../../Store/metaListSlice'
 import {
   selectEmailList,
   // selectIsFocused,
@@ -22,9 +21,8 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
-// import SetCompletedMail from '../EmailOptions/SetCompletedMail'
-// import SetToDoMail from '../EmailOptions/SetToDoMail'
-// import useEmailComplete from '../../Hooks/useEmailComplete'
+import SetCompletedMail from '../../EmailOptions/SetCompletedMail'
+import SetToDoMail from '../../EmailOptions/SetToDoMail'
 
 const EmailDetOptions = ({ messageId, setReply }) => {
   const emailList = useSelector(selectEmailList)
@@ -37,22 +35,6 @@ const EmailDetOptions = ({ messageId, setReply }) => {
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
   const location = useLocation()
-
-  const ToDoAction = () => {
-    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
-    const request = {
-      removeLabelIds: labelIds,
-      addLabelIds: [toDoLabel[0].id],
-    }
-    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
-  }
-
-  const CompletedAction = () => {
-    const request = {
-      removeLabelIds: labelIds,
-    }
-    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
-  }
 
   useEffect(() => {
     setShowMenu(false)
@@ -84,7 +66,14 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                 className="button option-link"
                 icon={<FiCheckCircle />}
                 onClick={() =>
-                  CompletedAction({ history, messageId, labelURL, labelIds })
+                  SetCompletedMail({
+                    messageId,
+                    history,
+                    labelURL,
+                    labelIds,
+                    dispatch,
+                    location,
+                  })
                 }
                 label={local.BUTTON_MARK_AS_DONE}
               />
@@ -92,7 +81,17 @@ const EmailDetOptions = ({ messageId, setReply }) => {
               <CustomButtonText
                 className="button option-link"
                 icon={<FiCheckCircle />}
-                onClick={() => ToDoAction({ history, messageId, labelURL })}
+                onClick={() =>
+                  SetToDoMail({
+                    history,
+                    messageId,
+                    labelURL,
+                    labelIds,
+                    dispatch,
+                    location,
+                    storageLabels,
+                  })
+                }
                 label={local.BUTTON_TODO}
               />
             )}
