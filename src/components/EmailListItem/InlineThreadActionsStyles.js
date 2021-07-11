@@ -7,10 +7,11 @@ export const Wrapper = styled.div`
   right: 30px;
   bottom: 0;
   z-index: 10;
+  transition: opacity 0.2s ease-in-out;
 
   :hover {
     opacity: 1;
-    background-color: rgb(240, 240, 240);
+    background-color: #f7f7f7;
   }
 `
 
