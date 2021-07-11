@@ -17,6 +17,7 @@ import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import { CustomButtonText } from '../Elements/Buttons'
+import { CreateDraft } from '../../Store/draftsSlice'
 
 const ComposeEmail = ({
   isReplying,
@@ -27,6 +28,7 @@ const ComposeEmail = ({
   threadId,
 }) => {
   const composeEmail = useSelector(selectComposeEmail)
+  const [composeTrack, setComposeTrack] = useState('')
   const [toError, setToError] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
@@ -38,6 +40,16 @@ const ComposeEmail = ({
 
   const { messageId } = useParams()
   const history = useHistory()
+
+  useEffect(() => {
+    console.log(JSON.stringify(composeTrack))
+    // if(JSON.stringify(composeTrack))
+    if (JSON.stringify(composeEmail) !== JSON.stringify(composeTrack)) {
+      setComposeTrack(composeEmail)
+      console.log('update')
+      // dispatch(CreateDraft(composeEmail))
+    }
+  }, [composeEmail])
 
   const handleChange = (event) => {
     if (event.target.id === 'to') {
@@ -193,12 +205,15 @@ const ComposeEmail = ({
                 type="submit"
                 className="button button-small button-light"
                 label={local.SEND_BUTTON}
+                disabled={!toValue}
               />
-              <CustomButtonText
-                className="button button-small"
-                label={local.CANCEL_BUTTON}
-                onClick={isReplyingListener}
-              />
+              {isReplying && (
+                <CustomButtonText
+                  className="button button-small"
+                  label={local.CANCEL_BUTTON}
+                  onClick={isReplyingListener}
+                />
+              )}
             </form>
           </div>
         </ComposerContainer>

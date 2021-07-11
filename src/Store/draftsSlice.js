@@ -56,6 +56,26 @@ export const loadDraftList = () => {
   }
 }
 
+export const CreateDraft = (props) => {
+  // const {}
+  return async (dispatch, getState) => {
+    try {
+      const composedEmail = getState().compose.composeEmail
+      await draftApi().createDrafts(composedEmail)
+      // const response = await draftApi().createDrafts(composedEmail)
+      // console.log(response)
+      // if (response && response.status === 200) {
+
+      // } else {
+      //   dispatch(setServiceUnavailable('Cannot create draft.'))
+      // }
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Cannot create draft.'))
+    }
+  }
+}
+
 const pushDraftDetails = (enhancedDraftDetails) => {
   const {
     draft,
@@ -215,9 +235,6 @@ export const OpenDraftEmail = (props) => {
   }
 }
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectDraft = (state) => state.draftList
 
 export default draftsSlice.reducer

@@ -23,7 +23,6 @@ export const emailListSlice = createSlice({
       state.isSorting = action.payload
     },
     listAddEmailList: (state, action) => {
-      console.log(action.payload.threads)
       const sortedEmailList = {
         ...action.payload,
         threads: action.payload.threads.sort((a, b) => {

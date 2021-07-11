@@ -24,8 +24,6 @@ const EmailListItem = ({ email }) => {
       ? email.messages[email.messages.length - 1].labelIds
       : email.message.labelIds
 
-  console.log(emailLabels.includes('UNREAD'))
-
   const fromEmail = () => {
     const query = 'From'
     if (email) {
