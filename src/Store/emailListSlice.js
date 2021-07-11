@@ -5,6 +5,8 @@ import { setIsLoading, setServiceUnavailable } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { FilteredEmailList } from '../utils'
 import messageApi from '../data/messageApi'
+import * as draft from '../constants/draftConstants'
+import NavigateNextMail from '../utils/navigateNextEmail'
 
 export const emailListSlice = createSlice({
   name: 'email',
@@ -21,10 +23,14 @@ export const emailListSlice = createSlice({
       state.isSorting = action.payload
     },
     listAddEmailList: (state, action) => {
+      console.log(action.payload.threads)
       const sortedEmailList = {
         ...action.payload,
         threads: action.payload.threads.sort((a, b) => {
-          return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+          return (
+            parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
+            parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+          )
         }),
       }
 
@@ -37,7 +43,10 @@ export const emailListSlice = createSlice({
         const newArray = state.emailList[arrayIndex].threads
           .concat(sortedEmailList.threads)
           .sort((a, b) => {
-            return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+            return (
+              parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
+              parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+            )
           })
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
@@ -56,7 +65,10 @@ export const emailListSlice = createSlice({
         threads: filteredTargetEmailList[0].threads
           .concat(activEmailObjArray)
           .sort((a, b) => {
-            return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+            return (
+              parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
+              parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+            )
           }),
       }
       const updatedEmailList = [
@@ -166,6 +178,9 @@ export const UpdateEmailListLabel = (props) => {
     request,
     request: { addLabelIds, removeLabelIds },
     labelIds,
+    history,
+    location,
+    labelURL,
   } = props
 
   return async (dispatch, getState) => {
@@ -180,6 +195,18 @@ export const UpdateEmailListLabel = (props) => {
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
       if (filteredCurrentEmailList.length > 0) {
+        if (
+          location.pathname.includes('/mail/') &&
+          !getState().labels.labelIds.includes(draft.LABEL)
+        ) {
+          const { viewIndex } = getState().emailDetail
+          NavigateNextMail({
+            history,
+            labelURL,
+            filteredCurrentEmailList,
+            viewIndex,
+          })
+        }
         const response = !request.delete
           ? await messageApi().updateMessage({ messageId, request })
           : await messageApi().thrashMessage({ messageId })

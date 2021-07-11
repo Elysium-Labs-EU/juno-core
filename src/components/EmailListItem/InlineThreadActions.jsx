@@ -15,7 +15,7 @@ import { CustomIconLink } from '../Elements/Buttons'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetCompletedMail from '../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
-import { convertArrayToString, FindLabel } from '../../utils'
+import { convertArrayToString, FindLabelByName } from '../../utils'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 
 const InlineThreadActions = ({ id, history, labelIds }) => {
@@ -45,7 +45,7 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
         labelIds.some(
           (item) =>
             item ===
-            FindLabel({
+            FindLabelByName({
               storageLabels,
               LABEL_NAME: todo.LABEL,
             })[0].id

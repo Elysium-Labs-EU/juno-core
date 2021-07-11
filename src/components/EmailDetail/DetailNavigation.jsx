@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
-import { selectLabelIds } from '../../Store/labelsSlice'
+import { CircularProgress } from '@material-ui/core'
+import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
 import { convertArrayToString } from '../../utils'
 import {
@@ -10,39 +11,77 @@ import {
   selectViewIndex,
   setViewingIndex,
 } from '../../Store/emailDetailSlice'
-import { loadEmails, selectMetaList } from '../../Store/metaListSlice'
+import { loadEmails } from '../../Store/metaListSlice'
 import CloseMail from '../../utils/closeEmail'
 import NavigateNextMail from '../../utils/navigateNextEmail'
 import NavigatePreviousMail from '../../utils/navigatePreviousEmail'
 import { CustomIconLink } from '../Elements/Buttons'
+import loadNextPage from '../../utils/loadNextPage'
+import { selectEmailList } from '../../Store/emailListSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
 
 const DetailNavigation = () => {
-  const metaList = useSelector(selectMetaList)
+  const emailList = useSelector(selectEmailList)
   const labelIds = useSelector(selectLabelIds)
+  const isLoading = useSelector(selectIsLoading)
   const currEmail = useSelector(selectCurrentEmail)
+  const storageLabels = useSelector(selectStorageLabels)
   const viewIndex = useSelector(selectViewIndex)
-
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
   const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
 
-  const metaListIndex = useMemo(
+  const emailListIndex = useMemo(
     () =>
-      metaList.findIndex((threadList) =>
+      emailList.findIndex((threadList) =>
         threadList.labels.includes(...labelIds)
       ),
-    [metaList, labelIds]
+    [emailList, labelIds]
   )
 
   const isDisabledPrev = !!(
-    metaList.length > 0 &&
-    metaList[metaListIndex].threads[viewIndex - 1] === undefined
+    emailList.length > 0 &&
+    emailList[emailListIndex].threads[viewIndex - 1] === undefined
   )
-  const isDisabledNext = !!(
-    metaList.length > 0 &&
-    metaList[metaListIndex].threads[viewIndex + 1] === undefined
-  )
+
+  const isDisabledNext =
+    emailList.length > 0 &&
+    emailList[emailListIndex].nextPageToken === null &&
+    emailList[emailListIndex].threads[viewIndex + 1] === undefined
+
+  const nextButtonSelector = () => {
+    if (
+      emailList.length > 0 &&
+      emailList[emailListIndex].threads[viewIndex + 1] !== undefined
+    ) {
+      return NavigateNextMail({
+        history,
+        labelURL,
+        emailListIndex,
+        emailList,
+        viewIndex,
+      })
+    }
+    if (
+      emailList.length > 0 &&
+      emailList[emailListIndex].nextPageToken !== null &&
+      emailList[emailListIndex].threads[viewIndex + 1] === undefined
+    ) {
+      const { nextPageToken } = emailList[emailListIndex]
+      return loadNextPage({ nextPageToken, labelIds, dispatch })
+      // if (emailList[emailListIndex].threads[viewIndex + 1] === undefined) {
+      //   NavigateNextMail({
+      //     history,
+      //     labelURL,
+      //     emailListIndex,
+      //     emailList,
+      //     viewIndex,
+      //   })
+      // }
+    }
+    return null
+  }
 
   const refetchMeta = () => {
     const params = {
@@ -54,10 +93,10 @@ const DetailNavigation = () => {
 
   useEffect(() => {
     if (currEmail !== currLocal) {
-      if (metaList.length > 0) {
+      if (emailList.length > 0) {
         setCurrLocal(currEmail)
         const requestBody = {
-          metaList: metaList[metaListIndex].threads,
+          emailList: emailList[emailListIndex].threads,
           currEmail,
         }
         dispatch(setViewingIndex(requestBody))
@@ -65,7 +104,7 @@ const DetailNavigation = () => {
         refetchMeta()
       }
     }
-  }, [currEmail, metaList])
+  }, [currEmail, emailList])
 
   return (
     <S.Wrapper>
@@ -75,8 +114,8 @@ const DetailNavigation = () => {
           NavigatePreviousMail({
             history,
             labelURL,
-            metaListIndex,
-            metaList,
+            emailListIndex,
+            emailList,
             viewIndex,
           })
         }
@@ -85,21 +124,19 @@ const DetailNavigation = () => {
       />
       <CustomIconLink
         className="button option-link"
-        onClick={() =>
-          NavigateNextMail({
-            history,
-            labelURL,
-            metaListIndex,
-            metaList,
-            viewIndex,
-          })
+        onClick={() => nextButtonSelector()}
+        disabled={isDisabledNext || isLoading}
+        icon={
+          !isLoading ? (
+            <FiChevronRight size={20} />
+          ) : (
+            <CircularProgress size={10} />
+          )
         }
-        disabled={isDisabledNext}
-        icon={<FiChevronRight size={20} />}
       />
       <CustomIconLink
         className="button option-link"
-        onClick={() => CloseMail({ history })}
+        onClick={() => CloseMail({ history, labelIds, storageLabels })}
         icon={<FiX size={20} />}
       />
     </S.Wrapper>

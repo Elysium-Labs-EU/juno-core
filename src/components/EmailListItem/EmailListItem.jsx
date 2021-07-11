@@ -49,11 +49,13 @@ const EmailListItem = ({ email }) => {
   }
 
   const emailSnippet =
-    email && email.messages ? email.messages[0].snippet : email.message.snippet
+    email && email.messages
+      ? email.messages[email.messages.length - 1].snippet
+      : email.message.snippet
 
   const timeStamp =
     email && email.messages
-      ? email.messages[0].internalDate
+      ? email.messages[email.messages.length - 1].internalDate
       : email.message.internalDate
 
   return (

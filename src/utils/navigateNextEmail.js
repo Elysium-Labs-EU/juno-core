@@ -2,18 +2,18 @@ const NavigateNextMail = (props) => {
   const {
     history,
     labelURL,
-    metaList,
-    metaListIndex,
-    filteredCurrentMetaList,
+    emailList,
+    emailListIndex,
+    filteredCurrentEmailList,
     viewIndex,
   } = props
 
-  if (filteredCurrentMetaList) {
-    const nextID = filteredCurrentMetaList[0].threads[viewIndex + 1].id
+  if (filteredCurrentEmailList) {
+    const nextID = filteredCurrentEmailList[0].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }
-  if (metaList && metaListIndex > -1) {
-    const nextID = metaList[metaListIndex].threads[viewIndex + 1].id
+  if (emailList && emailListIndex > -1) {
+    const nextID = emailList[emailListIndex].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }
   return null

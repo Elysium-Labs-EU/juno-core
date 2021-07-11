@@ -51,9 +51,7 @@ const MessagesOverview = (props) => {
         <ES.EmailDetailContainer isReplying={isReplying}>
           <ES.DetailBase>
             <ES.CardFullWidth>
-              {threadDetail &&
-                !isEmpty(threadDetail) &&
-                !isLoading &&
+              {threadDetail && !isEmpty(threadDetail) && !isLoading ? (
                 threadDetail.messages
                   .slice(0)
                   .reverse()
@@ -67,7 +65,12 @@ const MessagesOverview = (props) => {
                         threadDetail,
                       })}
                     </ES.EmailWrapper>
-                  ))}
+                  ))
+              ) : (
+                <ES.LoadingErrorWrapper>
+                  <CircularProgress />
+                </ES.LoadingErrorWrapper>
+              )}
               {!threadDetail && (
                 <ES.LoadingErrorWrapper>
                   {isLoading && <CircularProgress />}
