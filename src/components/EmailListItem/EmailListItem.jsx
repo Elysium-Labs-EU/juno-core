@@ -8,7 +8,7 @@ import TimeStamp from '../TimeStamp'
 import MessageCount from '../MessageCount'
 import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
-import ThreadBase from './EmailListItemStyles'
+import * as S from './EmailListItemStyles'
 import { findPayloadHeadersData } from '../../utils'
 import * as draft from '../../constants/draftConstants'
 import openEmail from '../../utils/openEmail'
@@ -21,8 +21,10 @@ const EmailListItem = ({ email }) => {
 
   const emailLabels =
     email && email.messages
-      ? email.messages[0].labelIds
+      ? email.messages[email.messages.length - 1].labelIds
       : email.message.labelIds
+
+  console.log(emailLabels.includes('UNREAD'))
 
   const fromEmail = () => {
     const query = 'From'
@@ -59,31 +61,29 @@ const EmailListItem = ({ email }) => {
       : email.message.internalDate
 
   return (
-    <ThreadBase key={id} labelIds={emailLabels}>
-      <div className="threadRow">
+    <S.ThreadBase key={id} emailLabels={emailLabels}>
+      <S.ThreadRow>
         <div className="cellGradientLeft" />
         <div className="cellCheckbox" />
-        <div
-          className="cellName"
+        <S.CellName
           onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
           aria-hidden="true"
         >
-          <div className="avatars">
+          <S.Avatars>
             {!labelIds.includes(draft.LABEL) ? (
               <EmailAvatar avatarURL={fromEmail()} />
             ) : (
               <EmailAvatar avatarURL={toEmail()} />
             )}
-          </div>
+          </S.Avatars>
           {!labelIds.includes(draft.LABEL) ? (
             <span className="text_truncate">{fromEmail()}</span>
           ) : (
             <span className="text_truncate">{toEmail()}</span>
           )}
           <MessageCount countOfMessage={email?.messages} />
-        </div>
-        <div
-          className="cellMessage"
+        </S.CellName>
+        <S.CellMessage
           onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
           aria-hidden="true"
         >
@@ -91,23 +91,23 @@ const EmailListItem = ({ email }) => {
             <span className="subject">{emailSubject()}</span>
             <Snippet snippet={emailSnippet} />
           </div>
-        </div>
+        </S.CellMessage>
 
-        <div className="cellAttachment">
+        <S.CellAttachment>
           <EmailHasAttachment messages={email?.messages} />
-        </div>
-        <div className="cellDate">
-          <div className="datePosition">
+        </S.CellAttachment>
+        <S.CellDate>
+          <S.DatePosition>
             <span className="date">
               <TimeStamp threadTimeStamp={timeStamp} />
             </span>
-          </div>
-        </div>
+          </S.DatePosition>
+        </S.CellDate>
         <div />
         <div className="cellGradientRight" />
         <InlineThreadActions id={id} history={history} labelIds={labelIds} />
-      </div>
-    </ThreadBase>
+      </S.ThreadRow>
+    </S.ThreadBase>
   )
 }
 
