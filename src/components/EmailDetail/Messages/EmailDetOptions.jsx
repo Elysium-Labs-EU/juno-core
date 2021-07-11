@@ -11,7 +11,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
 import { convertArrayToString, FindLabel } from '../../../utils'
-import { UpdateMetaListLabel } from '../../../Store/metaListSlice'
 import {
   selectEmailList,
   // selectIsFocused,
@@ -24,9 +23,6 @@ import * as S from '../EmailDetailStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
 import SetCompletedMail from '../../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
-// import SetCompletedMail from '../EmailOptions/SetCompletedMail'
-// import SetToDoMail from '../EmailOptions/SetToDoMail'
-// import useEmailComplete from '../../Hooks/useEmailComplete'
 
 const EmailDetOptions = ({ messageId, setReply }) => {
   const emailList = useSelector(selectEmailList)
@@ -39,15 +35,6 @@ const EmailDetOptions = ({ messageId, setReply }) => {
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
   const location = useLocation()
-
-  const ToDoAction = () => {
-    const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
-    const request = {
-      removeLabelIds: labelIds,
-      addLabelIds: [toDoLabel[0].id],
-    }
-    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
-  }
 
   useEffect(() => {
     setShowMenu(false)

@@ -179,16 +179,16 @@ export const UpdateEmailListLabel = (props) => {
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
-      if (
-        filteredTargetEmailList &&
-        filteredTargetEmailList.length > 0 &&
-        filteredCurrentEmailList.length > 0
-      ) {
+      if (filteredCurrentEmailList.length > 0) {
         const response = !request.delete
           ? await messageApi().updateMessage({ messageId, request })
           : await messageApi().thrashMessage({ messageId })
         if (response.status === 200) {
-          if (addLabelIds) {
+          if (
+            addLabelIds &&
+            filteredTargetEmailList &&
+            filteredTargetEmailList.length > 0
+          ) {
             const activEmailObjArray =
               filteredCurrentEmailList[0].threads.filter(
                 (item) => item.id === messageId

@@ -50,6 +50,7 @@ const EmailListItem = ({ email }) => {
 
   const emailSnippet =
     email && email.messages ? email.messages[0].snippet : email.message.snippet
+
   const timeStamp =
     email && email.messages
       ? email.messages[0].internalDate

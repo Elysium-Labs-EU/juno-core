@@ -77,7 +77,7 @@ const EmailDetail = () => {
   }, [threadId])
 
   useEffect(() => {
-    if (currentEmail !== threadId) {
+    if (currentEmail !== threadId && isReplying) {
       dispatch(setIsReplying(false))
     }
   }, [threadId])
