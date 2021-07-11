@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory } from 'react-router-dom'
+import { CircularProgress } from '@material-ui/core'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
 import { convertArrayToString } from '../../utils'
@@ -10,18 +11,19 @@ import {
   selectViewIndex,
   setViewingIndex,
 } from '../../Store/emailDetailSlice'
-import { loadEmails, selectMetaList } from '../../Store/metaListSlice'
+import { loadEmails } from '../../Store/metaListSlice'
 import CloseMail from '../../utils/closeEmail'
 import NavigateNextMail from '../../utils/navigateNextEmail'
 import NavigatePreviousMail from '../../utils/navigatePreviousEmail'
 import { CustomIconLink } from '../Elements/Buttons'
 import loadNextPage from '../../utils/loadNextPage'
 import { selectEmailList } from '../../Store/emailListSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
 
 const DetailNavigation = () => {
   const emailList = useSelector(selectEmailList)
-  const metaList = useSelector(selectMetaList)
   const labelIds = useSelector(selectLabelIds)
+  const isLoading = useSelector(selectIsLoading)
   const currEmail = useSelector(selectCurrentEmail)
   const storageLabels = useSelector(selectStorageLabels)
   const viewIndex = useSelector(selectViewIndex)
@@ -30,13 +32,6 @@ const DetailNavigation = () => {
   const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
 
-  const metaListIndex = useMemo(
-    () =>
-      metaList.findIndex((threadList) =>
-        threadList.labels.includes(...labelIds)
-      ),
-    [metaList, labelIds]
-  )
   const emailListIndex = useMemo(
     () =>
       emailList.findIndex((threadList) =>
@@ -75,6 +70,15 @@ const DetailNavigation = () => {
     ) {
       const { nextPageToken } = emailList[emailListIndex]
       return loadNextPage({ nextPageToken, labelIds, dispatch })
+      // if (emailList[emailListIndex].threads[viewIndex + 1] === undefined) {
+      //   NavigateNextMail({
+      //     history,
+      //     labelURL,
+      //     emailListIndex,
+      //     emailList,
+      //     viewIndex,
+      //   })
+      // }
     }
     return null
   }
@@ -121,8 +125,14 @@ const DetailNavigation = () => {
       <CustomIconLink
         className="button option-link"
         onClick={() => nextButtonSelector()}
-        disabled={isDisabledNext}
-        icon={<FiChevronRight size={20} />}
+        disabled={isDisabledNext || isLoading}
+        icon={
+          !isLoading ? (
+            <FiChevronRight size={20} />
+          ) : (
+            <CircularProgress size={10} />
+          )
+        }
       />
       <CustomIconLink
         className="button option-link"

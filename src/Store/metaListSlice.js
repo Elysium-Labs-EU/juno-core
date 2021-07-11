@@ -122,11 +122,7 @@ export const loadEmails = (params) => {
       console.log(err)
       dispatch(setIsLoading(false))
       dispatch(
-        dispatch(
-          setServiceUnavailable(
-            'Something went wrong whilst loading Meta data.'
-          )
-        )
+        setServiceUnavailable('Something went wrong whilst loading Meta data.')
       )
     }
   }
