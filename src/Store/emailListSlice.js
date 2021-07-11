@@ -179,31 +179,38 @@ export const UpdateEmailListLabel = (props) => {
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
-      const response = !request.delete
-        ? await messageApi().updateMessage({ messageId, request })
-        : await messageApi().thrashMessage({ messageId })
-      if (response.status === 200) {
-        if (addLabelIds) {
-          const activEmailObjArray = filteredCurrentEmailList[0].threads.filter(
-            (item) => item.id === messageId
-          )
-          dispatch(
-            listAddItemDetail({
-              activEmailObjArray,
-              filteredTargetEmailList,
-            })
-          )
+      if (
+        filteredTargetEmailList &&
+        filteredTargetEmailList.length > 0 &&
+        filteredCurrentEmailList.length > 0
+      ) {
+        const response = !request.delete
+          ? await messageApi().updateMessage({ messageId, request })
+          : await messageApi().thrashMessage({ messageId })
+        if (response.status === 200) {
+          if (addLabelIds) {
+            const activEmailObjArray =
+              filteredCurrentEmailList[0].threads.filter(
+                (item) => item.id === messageId
+              )
+            dispatch(
+              listAddItemDetail({
+                activEmailObjArray,
+                filteredTargetEmailList,
+              })
+            )
+          }
+          if (removeLabelIds || request.delete) {
+            dispatch(
+              listRemoveItemDetail({
+                messageId,
+                filteredCurrentEmailList,
+              })
+            )
+          }
+        } else {
+          dispatch(setServiceUnavailable('Error updating label2.'))
         }
-        if (removeLabelIds || request.delete) {
-          dispatch(
-            listRemoveItemDetail({
-              messageId,
-              filteredCurrentEmailList,
-            })
-          )
-        }
-      } else {
-        dispatch(setServiceUnavailable('Error updating label2.'))
       }
     } catch (err) {
       console.log(err)

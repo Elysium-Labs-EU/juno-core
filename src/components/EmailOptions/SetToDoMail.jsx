@@ -1,14 +1,17 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { FindLabel } from '../../utils'
 import * as todo from '../../constants/todoConstants'
 
 const SetToDoMail = (props) => {
-  const { history, messageId, labelURL } = props
-  const storageLabels = useSelector(selectStorageLabels)
-  const labelIds = useSelector(selectLabelIds)
-  const dispatch = useDispatch()
+  const {
+    history,
+    messageId,
+    labelURL,
+    labelIds,
+    dispatch,
+    location,
+    storageLabels,
+  } = props
 
   const ToDoAction = () => {
     const toDoLabel = FindLabel({ storageLabels, LABEL_NAME: todo.LABEL })
@@ -16,7 +19,9 @@ const SetToDoMail = (props) => {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateMetaListLabel({ messageId, request, history, labelURL }))
+    dispatch(
+      UpdateMetaListLabel({ messageId, request, history, labelURL, location })
+    )
   }
 
   return ToDoAction()

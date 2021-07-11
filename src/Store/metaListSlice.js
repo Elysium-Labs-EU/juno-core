@@ -152,11 +152,21 @@ export const UpdateMetaListLabel = (props) => {
         metaList && (removeLabelIds || request.delete) && removeLabelIds
           ? FilteredMetaList({ metaList, labelIds: removeLabelIds })
           : FilteredMetaList({ metaList, labelIds })
+
       const filteredTargetMetaList =
         metaList &&
         addLabelIds &&
         FilteredMetaList({ metaList, labelIds: addLabelIds })
-      if (addLabelIds) {
+
+      // Fetches the target meta list if it doesn't exist yet.
+      if (filteredTargetMetaList && filteredTargetMetaList.length < 1) {
+        const params = {
+          labelIds: addLabelIds,
+          maxResults: 20,
+        }
+        dispatch(loadEmails(params))
+      }
+      if (addLabelIds && filteredTargetMetaList.length > 0) {
         const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
           (item) => item.id === messageId
         )
@@ -209,7 +219,6 @@ export const refreshEmailFeed = (params) => {
       if (newEmailsIdx > -1) {
         const newSlice = checkFeed.message.threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
-          console.log(newSlice)
           const user = await userApi().fetchUser()
           dispatch(setProfile(user.data.data))
           const labeledThreads = {

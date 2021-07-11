@@ -4,7 +4,7 @@ import InboxSortOption from './InboxSortOption'
 import '../MainHeader/Navigation/NavControls.scss'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
-import BackButton from '../BackButton'
+// import BackButton from '../BackButton'
 
 const INBOX_HEADER = 'Inbox'
 
