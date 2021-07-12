@@ -10,8 +10,11 @@ const openEmail = (props) => {
   if (!labelIds.includes(LABEL)) {
     history.push(`mail/${labelURL}/${id}/messages`)
   } else {
-    email.messages.length > 1 && history.push(`mail/${labelURL}/${id}/messages`)
-    email.messages.length === 1 &&
+    email &&
+      email.messages.length > 1 &&
+      history.push(`mail/${labelURL}/${id}/messages`)
+    email &&
+      email.messages.length === 1 &&
       dispatch(OpenDraftEmail({ history, id, messageId }))
   }
 }
