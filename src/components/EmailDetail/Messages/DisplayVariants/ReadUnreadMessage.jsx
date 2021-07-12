@@ -38,7 +38,7 @@ const ReadMessage = ({ message, FROM }) => {
               <S.HeaderFullWidth>
                 <span
                   title={Subject}
-                  className="email-detail-title text_truncate"
+                  className="email_detail_title text_truncate"
                 >
                   {Subject}
                 </span>
