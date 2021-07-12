@@ -5,6 +5,7 @@ import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 import draftApi from '../data/draftApi'
+import CloseMail from '../utils/closeEmail'
 
 export const composeSlice = createSlice({
   name: 'compose',
@@ -66,18 +67,19 @@ export const SendComposedEmail = (props) => {
     try {
       const { composeEmail } = getState().compose
       const sender = getState().base.profile.emailAddress
+      const { labelIds } = getState().labels
+      const { storageLabels } = getState().labels
       const completeEmail = { ...composeEmail, sender }
-      console.log(messageId)
-      console.log(completeEmail)
       if (Object.keys(completeEmail).length >= 4) {
         // If the messsage has a messageId, it is a draft.
         if (messageId.length > 0) {
           const { draftDetails } = getState().drafts
-          console.log(draftDetails)
           const body = { completeEmail, draftDetails }
           const response = await draftApi().sendDraft(body)
           if (response && response.status === 200) {
-            history.push(`/`)
+            // TODO: navigate back to folder or email when sending is complete.
+            CloseMail({ history, labelIds, storageLabels })
+            // history.push(`/`)
             dispatch(resetComposeEmail())
             dispatch(setCurrentEmail(''))
             // TODO: Update the redux states' to have the email in the correct boxes
