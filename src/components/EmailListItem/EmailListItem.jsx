@@ -86,6 +86,11 @@ const EmailListItem = ({ email }) => {
           aria-hidden="true"
         >
           <div className="subjectSnippet text_truncate">
+            {labelIds.includes(draft.LABEL) && (
+              <span style={{ fontWeight: 'bold' }}>
+                {draft.DRAFT_SNIPPET_INDICATOR}
+              </span>
+            )}
             <span className="subject">{emailSubject()}</span>
             <Snippet snippet={emailSnippet} />
           </div>

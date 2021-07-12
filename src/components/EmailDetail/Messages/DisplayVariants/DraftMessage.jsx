@@ -30,17 +30,19 @@ const DraftMessage = ({ message, threadDetail }) => {
   return (
     <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
       <S.AvatarHeaderContainer>
-        <EmailAvatar avatarURL={AvatarURL} />
-        <div className="d-flex align-items-center ml-2 mt-2">
-          <div className="text-truncate email-detail-from">
-            <span>{From}</span>
-          </div>
-        </div>
+        <S.ClosedAvatarSender>
+          <EmailAvatar avatarURL={AvatarURL} />
+          <S.ClosedSender>
+            <span style={{ fontStyle: 'italic' }}>{From}</span>
+          </S.ClosedSender>
+        </S.ClosedAvatarSender>
       </S.AvatarHeaderContainer>
-      <span style={{ fontStyle: 'italic' }}>
-        {local.DRAFT_SNIPPET_INDICATOR}
-        {EmailSnippet}
-      </span>
+      <S.ClosedSnippet>
+        <span style={{ fontWeight: 'bold' }}>
+          {local.DRAFT_SNIPPET_INDICATOR}
+        </span>
+        <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
+      </S.ClosedSnippet>
       <TimeStamp threadTimeStamp={message.internalDate} />
     </S.ClosedMessageWrapper>
   )

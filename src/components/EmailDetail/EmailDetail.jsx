@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import '../../App.scss'
-import './Messages/EmailDetail.scss'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentEmail,
