@@ -23,11 +23,13 @@ export const metaListSlice = createSlice({
         }),
       }
 
+      // Find metaList sub-array index
       const arrayIndex = state.metaList
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
 
+      // If metaList sub-array index exists, add to the existing array
       if (arrayIndex > -1) {
         const newArray = state.metaList[arrayIndex].threads
           .concat(sortedMetaList.threads)
@@ -138,8 +140,6 @@ export const UpdateMetaListLabel = (props) => {
     labelURL,
     labelIds,
   } = props
-
-  console.log(props)
 
   return async (dispatch, getState) => {
     try {

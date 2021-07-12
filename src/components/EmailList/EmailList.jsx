@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import {
   // loadDraftList,
   loadEmails,
+  refreshEmailFeed,
 } from '../../Store/metaListSlice'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { selectEmailList } from '../../Store/emailListSlice'
@@ -25,6 +27,7 @@ const EmailList = () => {
   const labelIds = useSelector(selectLabelIds)
   const loadedInbox = useSelector(selectLoadedInbox)
   const dispatch = useDispatch()
+  const location = useLocation()
 
   useEffect(() => {
     if (
@@ -41,6 +44,20 @@ const EmailList = () => {
       }
     }
   }, [labelIds])
+
+  useEffect(() => {
+    if (
+      !location.pathname.includes('/inbox') &&
+      labelIds &&
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
+    ) {
+      const params = {
+        labelIds,
+        maxResults: 500,
+      }
+      dispatch(refreshEmailFeed(params))
+    }
+  }, [location])
 
   const renderEmailList = (filteredOnLabel) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
