@@ -16,6 +16,7 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState: {
     draftList: [],
+    draftDetails: {},
   },
   reducers: {
     listAddDraft: (state, action) => {
@@ -24,14 +25,11 @@ export const draftsSlice = createSlice({
         state.draftList = action.payload
       }
     },
-    listUpdateDraft: (state, action) => {},
     listRemoveDraft: (state, action) => {},
-    // listUpdateDraft: (state) => {
-    //   state.draftList
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload
-    // },
+    listUpdateDraft: (state, action) => {
+      console.log(action.payload)
+      state.draftDetails = action.payload
+    },
   },
 })
 
@@ -53,6 +51,72 @@ export const loadDraftList = () => {
       dispatch(setServiceUnavailable('Error getting Draft list.'))
     }
     return null
+  }
+}
+
+export const CreateDraft = () => {
+  return async (dispatch, getState) => {
+    try {
+      const { composeEmail } = getState().compose
+      const { id, message } =
+        getState().drafts.draftDetails && getState().drafts.draftDetails
+      const baseComposedEmail = {
+        draftId: id && id,
+        threadId: message?.threadId && message.threadId,
+        messageId: message?.id && message.id,
+        labelIds: message?.labelIds && message.labelIds,
+        to: composeEmail.to ?? [],
+        subject: composeEmail.subject ?? '',
+        body: composeEmail.body ?? '',
+      }
+      const response = await draftApi().createDrafts(baseComposedEmail)
+      if (response && response.status === 200) {
+        const {
+          data: {
+            message: { data },
+          },
+        } = response
+        dispatch(listUpdateDraft(data))
+      } else {
+        dispatch(setServiceUnavailable('Cannot create draft.'))
+      }
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Cannot create draft.'))
+    }
+  }
+}
+
+export const UpdateDraft = () => {
+  return async (dispatch, getState) => {
+    try {
+      const { composeEmail } = getState().compose
+      const { id, message } =
+        getState().drafts.draftDetails && getState().drafts.draftDetails
+      const baseComposedEmail = {
+        draftId: id && id,
+        threadId: message?.threadId && message.threadId,
+        messageId: message?.id && message.id,
+        labelIds: message?.labelIds && message.labelIds,
+        to: composeEmail.to ?? [],
+        subject: composeEmail.subject ?? '',
+        body: composeEmail.body ?? '',
+      }
+      const response = await draftApi().updateDrafts(baseComposedEmail)
+      if (response && response.status === 200) {
+        const {
+          data: {
+            message: { data },
+          },
+        } = response
+        dispatch(listUpdateDraft(data))
+      } else {
+        dispatch(setServiceUnavailable('Cannot update draft.'))
+      }
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Cannot update draft.'))
+    }
   }
 }
 
@@ -215,9 +279,7 @@ export const OpenDraftEmail = (props) => {
   }
 }
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectDraft = (state) => state.draftList
+export const selectDraft = (state) => state.drafts.draftList
+export const selectDraftDetails = (state) => state.drafts.draftDetails
 
 export default draftsSlice.reducer

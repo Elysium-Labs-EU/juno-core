@@ -3,6 +3,30 @@ import { BASE_API_URL } from './api'
 
 const draftApi = () => {
   return {
+    createDrafts: async (data) => {
+      console.log(data)
+      try {
+        const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
+        return res
+      } catch (err) {
+        return console.log(err)
+      }
+    },
+
+    updateDrafts: async (data) => {
+      console.log(data)
+      const { draftId } = data
+      try {
+        const res = await axios.put(
+          `${BASE_API_URL}/api/update-draft/${draftId}`,
+          data
+        )
+        return res
+      } catch (err) {
+        return console.log(err)
+      }
+    },
+
     getDrafts: async () => {
       try {
         const res = await axios.get(`${BASE_API_URL}/api/drafts/`)

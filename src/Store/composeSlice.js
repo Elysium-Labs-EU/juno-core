@@ -43,11 +43,12 @@ export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
 
 export const TrackComposeEmail = (props) => {
   return async (dispatch, getState) => {
+    const composedEmail = getState().compose.composeEmail
     try {
-      if (isEmpty(getState().compose.composeEmail)) {
+      if (isEmpty(composedEmail)) {
         dispatch(setComposeEmail(props))
       }
-      if (!isEmpty(getState().compose.composeEmail)) {
+      if (!isEmpty(composedEmail)) {
         dispatch(updateComposeEmail(props))
       }
     } catch (err) {

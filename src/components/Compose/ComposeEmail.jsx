@@ -17,6 +17,11 @@ import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import { CustomButtonText } from '../Elements/Buttons'
+import {
+  CreateDraft,
+  selectDraftDetails,
+  UpdateDraft,
+} from '../../Store/draftsSlice'
 
 const ComposeEmail = ({
   isReplying,
@@ -27,7 +32,9 @@ const ComposeEmail = ({
   threadId,
 }) => {
   const composeEmail = useSelector(selectComposeEmail)
+  const draftDetails = useSelector(selectDraftDetails)
   const [toError, setToError] = useState(false)
+  const [saveSucces, setSaveSucces] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
   const [subjectValue, setSubjectValue] = useState('')
@@ -38,6 +45,23 @@ const ComposeEmail = ({
 
   const { messageId } = useParams()
   const history = useHistory()
+
+  useEffect(() => {
+    if (Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
+      dispatch(CreateDraft())
+    } else if (!isEmpty(draftDetails)) {
+      dispatch(UpdateDraft())
+    }
+  }, [composeEmail])
+
+  useEffect(() => {
+    if (!isEmpty(draftDetails)) {
+      setSaveSucces(true)
+      setTimeout(() => {
+        setSaveSucces(false)
+      }, 2500)
+    }
+  }, [draftDetails])
 
   const handleChange = (event) => {
     if (event.target.id === 'to') {
@@ -52,11 +76,9 @@ const ComposeEmail = ({
   }
 
   useEffect(() => {
-    if (debouncedToValue) {
+    if (debouncedToValue && debouncedToValue.length > 0) {
       const updateEventObject = { id: 'to', value: debouncedToValue }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedToValue])
 
@@ -66,18 +88,14 @@ const ComposeEmail = ({
         id: 'subject',
         value: debouncedSubjectValue,
       }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedSubjectValue])
 
   useEffect(() => {
     if (debouncedBodyValue) {
       const updateEventObject = { id: 'body', value: debouncedBodyValue }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedBodyValue])
 
@@ -127,6 +145,11 @@ const ComposeEmail = ({
   return (
     <Wrapper isReplying={isReplying}>
       <>
+        <S.UpdateContainer>
+          {saveSucces && (
+            <span className="text_muted">{local.DRAFT_SAVED}</span>
+          )}
+        </S.UpdateContainer>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={onSubmit} autoComplete="off">
@@ -193,12 +216,15 @@ const ComposeEmail = ({
                 type="submit"
                 className="button button-small button-light"
                 label={local.SEND_BUTTON}
+                disabled={!toValue}
               />
-              <CustomButtonText
-                className="button button-small"
-                label={local.CANCEL_BUTTON}
-                onClick={isReplyingListener}
-              />
+              {isReplying && (
+                <CustomButtonText
+                  className="button button-small"
+                  label={local.CANCEL_BUTTON}
+                  onClick={isReplyingListener}
+                />
+              )}
             </form>
           </div>
         </ComposerContainer>
