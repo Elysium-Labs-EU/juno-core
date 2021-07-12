@@ -19,7 +19,7 @@ function Header() {
     if (location.pathname === '/') {
       return <TodoHeader />
     }
-    if (location.pathname === '/compose') {
+    if (location.pathname.includes('/compose')) {
       return <ComposeHeader />
     }
     if (location.pathname === '/drafts') {

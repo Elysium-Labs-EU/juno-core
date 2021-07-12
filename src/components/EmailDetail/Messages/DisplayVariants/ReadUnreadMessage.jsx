@@ -66,6 +66,7 @@ const ReadMessage = ({ message, FROM }) => {
             </S.EmailBody>
           </div>
           <EmailAttachment message={message} />
+          <small>{message?.id}</small>
         </>
       )}
       {!open && (

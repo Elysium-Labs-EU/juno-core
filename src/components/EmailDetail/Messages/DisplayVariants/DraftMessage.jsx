@@ -6,14 +6,13 @@ import TimeStamp from '../../../TimeStamp'
 import { OpenDraftEmail } from '../../../../Store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
+import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 
 const DraftMessage = ({ message, threadDetail }) => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const id = useSelector((state) => state.currEmail)
-  const emailList = useSelector((state) => state.emailList)
+  const id = useSelector(selectCurrentEmail)
   const messageId = message && message.id
-  const { DRAFT_LABEL } = local
 
   const AvatarURL =
     message && message.payload.headers.find((e) => e.name === 'From').value
@@ -25,15 +24,7 @@ const DraftMessage = ({ message, threadDetail }) => {
     message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}` + `...`
 
   const handleClick = () => {
-    console.log(emailList)
-    console.log(id)
-    console.log(threadDetail)
-    // const selectIndex = threadDetail.messages.findIndex(
-    //   (element) => element.id === id
-    // )
-    dispatch(
-      OpenDraftEmail({ history, id, DRAFT_LABEL, threadDetail, messageId })
-    )
+    dispatch(OpenDraftEmail({ history, id, messageId, threadDetail }))
   }
 
   return (

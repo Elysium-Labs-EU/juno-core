@@ -14,8 +14,8 @@ import {
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
-import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
+import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
 import {
   CreateDraft,
@@ -42,17 +42,20 @@ const ComposeEmail = ({
   const debouncedToValue = useDebounce(toValue, 500)
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const debouncedBodyValue = useDebounce(bodyValue, 500)
-
   const { messageId } = useParams()
   const history = useHistory()
 
   useEffect(() => {
-    if (Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
+    if (
+      !messageId &&
+      Object.values(composeEmail).length > 0 &&
+      isEmpty(draftDetails)
+    ) {
       dispatch(CreateDraft())
-    } else if (!isEmpty(draftDetails)) {
+    } else if (!isEmpty(draftDetails) && messageId) {
       dispatch(UpdateDraft())
     }
-  }, [composeEmail])
+  }, [composeEmail, messageId])
 
   useEffect(() => {
     if (!isEmpty(draftDetails)) {
@@ -77,8 +80,10 @@ const ComposeEmail = ({
 
   useEffect(() => {
     if (debouncedToValue && debouncedToValue.length > 0) {
-      const updateEventObject = { id: 'to', value: debouncedToValue }
-      dispatch(TrackComposeEmail(updateEventObject))
+      if (emailValidation(debouncedToValue)) {
+        const updateEventObject = { id: 'to', value: debouncedToValue }
+        dispatch(TrackComposeEmail(updateEventObject))
+      }
     }
   }, [debouncedToValue])
 

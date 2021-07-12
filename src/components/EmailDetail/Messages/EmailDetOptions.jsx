@@ -69,7 +69,6 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                   SetCompletedMail({
                     messageId,
                     history,
-                    labelURL,
                     labelIds,
                     dispatch,
                     location,
@@ -85,7 +84,6 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                   SetToDoMail({
                     history,
                     messageId,
-                    labelURL,
                     labelIds,
                     dispatch,
                     location,

@@ -5,6 +5,7 @@ import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 import draftApi from '../data/draftApi'
+import CloseMail from '../utils/closeEmail'
 
 export const composeSlice = createSlice({
   name: 'compose',
@@ -13,10 +14,12 @@ export const composeSlice = createSlice({
   },
   reducers: {
     setComposeEmail: (state, action) => {
-      if (
-        JSON.stringify(Object.keys(action.payload)) ===
-        JSON.stringify(['to', 'subject', 'body', 'id', 'threadId'])
-      ) {
+      console.log(Object.keys(action.payload))
+      if (Object.keys(action.payload).length > 1) {
+        // if (
+        //   JSON.stringify(Object.keys(action.payload)) ===
+        //   JSON.stringify(['to', 'subject', 'body', 'id', 'threadId'])
+        // ) {
         state.composeEmail = action.payload
       }
       if (action.payload.id && action.payload.value) {
@@ -62,29 +65,34 @@ export const SendComposedEmail = (props) => {
   const { history, messageId } = props
   return async (dispatch, getState) => {
     try {
-      const composedEmail = getState().compose.composeEmail
+      const { composeEmail } = getState().compose
       const sender = getState().base.profile.emailAddress
-      const completeEmail = { ...composedEmail, sender }
+      const { labelIds } = getState().labels
+      const { storageLabels } = getState().labels
+      const completeEmail = { ...composeEmail, sender }
+
       if (Object.keys(completeEmail).length >= 4) {
-        if (messageId) {
-          const body = { completeEmail, messageId }
+        // If the messsage has a messageId, it is a draft.
+        if (messageId.length > 0) {
+          const { draftDetails } = getState().drafts
+          const body = { completeEmail, draftDetails }
           const response = await draftApi().sendDraft(body)
-          if (response.status === 200) {
-            history.push(`/`)
+          if (response && response.status === 200) {
+            CloseMail({ history, labelIds, storageLabels })
             dispatch(resetComposeEmail())
             dispatch(setCurrentEmail(''))
-            // TODO: Update the redux states' to have the email in the correct boxes
           } else {
             dispatch(setServiceUnavailable('Error sending email.'))
           }
-        }
-        const response = await messageApi().sendMessage(completeEmail)
-        if (response.status === 200) {
-          history.push(`/`)
-          dispatch(resetComposeEmail())
-          dispatch(setCurrentEmail(''))
-        } else {
-          dispatch(setServiceUnavailable('Error sending email.'))
+        } else if (messageId === undefined) {
+          const response = await messageApi().sendMessage(completeEmail)
+          if (response && response.status === 200) {
+            history.push(`/`)
+            dispatch(resetComposeEmail())
+            dispatch(setCurrentEmail(''))
+          } else {
+            dispatch(setServiceUnavailable('Error sending email.'))
+          }
         }
       }
     } catch (err) {
