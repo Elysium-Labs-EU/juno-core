@@ -19,12 +19,12 @@ import { CustomIconLink } from '../Elements/Buttons'
 import loadNextPage from '../../utils/loadNextPage'
 import { selectEmailList } from '../../Store/emailListSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import { loadDraftList, selectDraft } from '../../Store/draftsSlice'
+import { loadDraftList, selectDraftListLoaded } from '../../Store/draftsSlice'
 import * as draft from '../../constants/draftConstants'
 
 const DetailNavigation = () => {
   const emailList = useSelector(selectEmailList)
-  const draftList = useSelector(selectDraft)
+  const draftListLoaded = useSelector(selectDraftListLoaded)
   const labelIds = useSelector(selectLabelIds)
   const isLoading = useSelector(selectIsLoading)
   const currEmail = useSelector(selectCurrentEmail)
@@ -93,7 +93,7 @@ const DetailNavigation = () => {
       maxResults: 20,
     }
     dispatch(loadEmails(params))
-    if (location.pathname.includes(draft.LABEL) && draftList.length < 1) {
+    if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
       dispatch(loadDraftList())
     }
   }
