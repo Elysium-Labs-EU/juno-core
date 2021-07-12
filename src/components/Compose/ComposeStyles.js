@@ -13,6 +13,10 @@ export const Wrapper = styled.div`
   position: static;
 `
 
+export const UpdateContainer = styled.div`
+  min-height: 2rem;
+`
+
 export const ComposerContainer = styled.div`
   padding-top: 120px;
   padding-bottom: 121px;

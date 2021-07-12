@@ -55,9 +55,6 @@ export const TrackComposeEmail = (props) => {
       console.log(err)
       dispatch(setServiceUnavailable('Error updating compose email.'))
     }
-    // finally {
-    //   dispatch(CreateDraft(composedEmail))
-    // }
   }
 }
 

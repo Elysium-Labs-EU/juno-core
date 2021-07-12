@@ -34,6 +34,7 @@ const ComposeEmail = ({
   const composeEmail = useSelector(selectComposeEmail)
   const draftDetails = useSelector(selectDraftDetails)
   const [toError, setToError] = useState(false)
+  const [saveSucces, setSaveSucces] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
   const [subjectValue, setSubjectValue] = useState('')
@@ -48,15 +49,21 @@ const ComposeEmail = ({
   useEffect(() => {
     if (Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
       dispatch(CreateDraft())
-      console.log('create')
     } else if (!isEmpty(draftDetails)) {
       dispatch(UpdateDraft())
-      console.log('update')
     }
   }, [composeEmail])
 
+  useEffect(() => {
+    if (!isEmpty(draftDetails)) {
+      setSaveSucces(true)
+      setTimeout(() => {
+        setSaveSucces(false)
+      }, 2500)
+    }
+  }, [draftDetails])
+
   const handleChange = (event) => {
-    console.log(event.target.id)
     if (event.target.id === 'to') {
       setToValue(event.target.value)
     }
@@ -69,7 +76,6 @@ const ComposeEmail = ({
   }
 
   useEffect(() => {
-    console.log(debouncedToValue)
     if (debouncedToValue && debouncedToValue.length > 0) {
       const updateEventObject = { id: 'to', value: debouncedToValue }
       dispatch(TrackComposeEmail(updateEventObject))
@@ -139,6 +145,11 @@ const ComposeEmail = ({
   return (
     <Wrapper isReplying={isReplying}>
       <>
+        <S.UpdateContainer>
+          {saveSucces && (
+            <span className="text_muted">{local.DRAFT_SAVED}</span>
+          )}
+        </S.UpdateContainer>
         <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={onSubmit} autoComplete="off">
