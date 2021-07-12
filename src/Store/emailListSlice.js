@@ -195,6 +195,7 @@ export const UpdateEmailListLabel = (props) => {
         FilteredEmailList({ emailList, labelIds: addLabelIds })
       if (filteredCurrentEmailList.length > 0) {
         if (
+          location &&
           location.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(draft.LABEL)
         ) {

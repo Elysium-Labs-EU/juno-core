@@ -55,7 +55,6 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
               SetCompletedMail({
                 messageId,
                 history,
-                labelURL,
                 labelIds,
                 dispatch,
                 location,
@@ -70,7 +69,6 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
               SetToDoMail({
                 history,
                 messageId,
-                labelURL,
                 labelIds,
                 dispatch,
                 location,

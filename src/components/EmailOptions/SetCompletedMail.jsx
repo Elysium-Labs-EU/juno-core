@@ -1,7 +1,9 @@
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
+import { convertArrayToString } from '../../utils'
 
 const SetCompletedMail = (props) => {
-  const { messageId, history, labelURL, labelIds, dispatch, location } = props
+  const { messageId, history, labelIds, dispatch, location } = props
+  const labelURL = labelIds && convertArrayToString(labelIds)
 
   const CompletedAction = () => {
     const request = {

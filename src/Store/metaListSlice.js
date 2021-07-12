@@ -139,6 +139,8 @@ export const UpdateMetaListLabel = (props) => {
     labelIds,
   } = props
 
+  console.log(props)
+
   return async (dispatch, getState) => {
     try {
       const { metaList } = getState().meta

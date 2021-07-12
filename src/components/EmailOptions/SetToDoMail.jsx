@@ -1,17 +1,11 @@
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
-import { FindLabelByName } from '../../utils'
+import { convertArrayToString, FindLabelByName } from '../../utils'
 import * as todo from '../../constants/todoConstants'
 
 const SetToDoMail = (props) => {
-  const {
-    history,
-    messageId,
-    labelURL,
-    labelIds,
-    dispatch,
-    location,
-    storageLabels,
-  } = props
+  const { history, messageId, labelIds, dispatch, location, storageLabels } =
+    props
+  const labelURL = labelIds && convertArrayToString(labelIds)
 
   const ToDoAction = () => {
     const toDoLabel = FindLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })

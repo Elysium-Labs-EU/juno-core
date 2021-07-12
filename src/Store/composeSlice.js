@@ -70,6 +70,7 @@ export const SendComposedEmail = (props) => {
       const { labelIds } = getState().labels
       const { storageLabels } = getState().labels
       const completeEmail = { ...composeEmail, sender }
+
       if (Object.keys(completeEmail).length >= 4) {
         // If the messsage has a messageId, it is a draft.
         if (messageId.length > 0) {
@@ -77,12 +78,9 @@ export const SendComposedEmail = (props) => {
           const body = { completeEmail, draftDetails }
           const response = await draftApi().sendDraft(body)
           if (response && response.status === 200) {
-            // TODO: navigate back to folder or email when sending is complete.
             CloseMail({ history, labelIds, storageLabels })
-            // history.push(`/`)
             dispatch(resetComposeEmail())
             dispatch(setCurrentEmail(''))
-            // TODO: Update the redux states' to have the email in the correct boxes
           } else {
             dispatch(setServiceUnavailable('Error sending email.'))
           }
