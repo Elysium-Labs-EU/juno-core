@@ -11,6 +11,7 @@ import { setCurrentEmail } from './emailDetailSlice'
 export const draftsSlice = createSlice({
   name: 'drafts',
   initialState: {
+    draftListLoaded: false,
     draftList: [],
     draftDetails: {},
   },
@@ -24,11 +25,18 @@ export const draftsSlice = createSlice({
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
     },
+    setDraftListLoaded: (state, action) => {
+      state.draftListLoaded = action.payload
+    },
   },
 })
 
-export const { listAddDraft, listUpdateDraft, listRemoveDraft } =
-  draftsSlice.actions
+export const {
+  listAddDraft,
+  listUpdateDraft,
+  listRemoveDraft,
+  setDraftListLoaded,
+} = draftsSlice.actions
 
 export const loadDraftList = () => {
   return async (dispatch) => {
@@ -43,6 +51,8 @@ export const loadDraftList = () => {
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error getting Draft list.'))
+    } finally {
+      dispatch(setDraftListLoaded(true))
     }
     return null
   }
@@ -222,6 +232,7 @@ export const OpenDraftEmail = (props) => {
 }
 
 export const selectDraft = (state) => state.drafts.draftList
+export const selectDraftListLoaded = (state) => state.drafts.draftListLoaded
 export const selectDraftDetails = (state) => state.drafts.draftDetails
 
 export default draftsSlice.reducer

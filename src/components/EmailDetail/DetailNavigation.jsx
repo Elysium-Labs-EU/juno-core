@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
@@ -19,9 +19,12 @@ import { CustomIconLink } from '../Elements/Buttons'
 import loadNextPage from '../../utils/loadNextPage'
 import { selectEmailList } from '../../Store/emailListSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
+import { loadDraftList, selectDraftListLoaded } from '../../Store/draftsSlice'
+import * as draft from '../../constants/draftConstants'
 
 const DetailNavigation = () => {
   const emailList = useSelector(selectEmailList)
+  const draftListLoaded = useSelector(selectDraftListLoaded)
   const labelIds = useSelector(selectLabelIds)
   const isLoading = useSelector(selectIsLoading)
   const currEmail = useSelector(selectCurrentEmail)
@@ -31,6 +34,7 @@ const DetailNavigation = () => {
   const history = useHistory()
   const dispatch = useDispatch()
   const labelURL = convertArrayToString(labelIds)
+  const location = useLocation()
 
   const emailListIndex = useMemo(
     () =>
@@ -89,6 +93,9 @@ const DetailNavigation = () => {
       maxResults: 20,
     }
     dispatch(loadEmails(params))
+    if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
+      dispatch(loadDraftList())
+    }
   }
 
   useEffect(() => {
