@@ -17,7 +17,11 @@ import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import { CustomButtonText } from '../Elements/Buttons'
-import { CreateDraft } from '../../Store/draftsSlice'
+import {
+  CreateDraft,
+  selectDraftDetails,
+  UpdateDraft,
+} from '../../Store/draftsSlice'
 
 const ComposeEmail = ({
   isReplying,
@@ -28,7 +32,7 @@ const ComposeEmail = ({
   threadId,
 }) => {
   const composeEmail = useSelector(selectComposeEmail)
-  const [composeTrack, setComposeTrack] = useState('')
+  const draftDetails = useSelector(selectDraftDetails)
   const [toError, setToError] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
@@ -42,16 +46,17 @@ const ComposeEmail = ({
   const history = useHistory()
 
   useEffect(() => {
-    console.log(JSON.stringify(composeTrack))
-    // if(JSON.stringify(composeTrack))
-    if (JSON.stringify(composeEmail) !== JSON.stringify(composeTrack)) {
-      setComposeTrack(composeEmail)
+    if (Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
+      dispatch(CreateDraft())
+      console.log('create')
+    } else if (!isEmpty(draftDetails)) {
+      dispatch(UpdateDraft())
       console.log('update')
-      // dispatch(CreateDraft(composeEmail))
     }
   }, [composeEmail])
 
   const handleChange = (event) => {
+    console.log(event.target.id)
     if (event.target.id === 'to') {
       setToValue(event.target.value)
     }
@@ -64,11 +69,10 @@ const ComposeEmail = ({
   }
 
   useEffect(() => {
-    if (debouncedToValue) {
+    console.log(debouncedToValue)
+    if (debouncedToValue && debouncedToValue.length > 0) {
       const updateEventObject = { id: 'to', value: debouncedToValue }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedToValue])
 
@@ -78,18 +82,14 @@ const ComposeEmail = ({
         id: 'subject',
         value: debouncedSubjectValue,
       }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedSubjectValue])
 
   useEffect(() => {
     if (debouncedBodyValue) {
       const updateEventObject = { id: 'body', value: debouncedBodyValue }
-      if (!isEmpty(updateEventObject)) {
-        dispatch(TrackComposeEmail(updateEventObject))
-      }
+      dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedBodyValue])
 
