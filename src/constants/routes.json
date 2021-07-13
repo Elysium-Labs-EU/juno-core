@@ -6,5 +6,6 @@
   "SENT": "/sent",
   "SPAM": "/spam",
   "SETTINGS": "/settings",
-  "INBOX": "/inbox"
+  "INBOX": "/inbox",
+  "LOGIN": "/login"
 }

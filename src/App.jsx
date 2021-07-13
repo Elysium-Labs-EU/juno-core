@@ -1,6 +1,12 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 import { checkBase } from './Store/baseSlice'
 import './App.scss'
 import './styles/ElementStyles.scss'
@@ -17,6 +23,27 @@ import Header from './components/MainHeader/Header'
 import DraftEmail from './components/Draft/DraftEmail'
 import Routes from './constants/routes.json'
 import * as GS from './styles/globalStyles'
+import Login from './components/Login/Login'
+
+function PrivateRoute({ children, ...rest }) {
+  const userToken = localStorage.getItem('sessionToken')
+  return (
+    <Route
+      {...rest}
+      render={() => {
+        return userToken ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: Routes.LOGIN,
+            }}
+          />
+        )
+      }}
+    />
+  )
+}
 
 const App = () => {
   const dispatch = useDispatch()
@@ -45,6 +72,7 @@ const App = () => {
             <Route path={Routes.SPAM} component={SpamEmail} />
             <Route path={Routes.SETTINGS} component={Settings} />
             <Route path={Routes.INBOX} component={Inbox} />
+            <Route path={Routes.LOGIN} component={Login} />
           </Switch>
         </GS.App>
       )}
