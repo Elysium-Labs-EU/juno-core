@@ -34,7 +34,7 @@ const ComposeEmail = ({
   const composeEmail = useSelector(selectComposeEmail)
   const draftDetails = useSelector(selectDraftDetails)
   const [toError, setToError] = useState(false)
-  const [saveSucces, setSaveSucces] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
   const dispatch = useDispatch()
   const [toValue, setToValue] = useState([])
   const [subjectValue, setSubjectValue] = useState('')
@@ -59,9 +59,9 @@ const ComposeEmail = ({
 
   useEffect(() => {
     if (!isEmpty(draftDetails)) {
-      setSaveSucces(true)
+      setSaveSuccess(true)
       setTimeout(() => {
-        setSaveSucces(false)
+        setSaveSuccess(false)
       }, 2500)
     }
   }, [draftDetails])
@@ -151,7 +151,7 @@ const ComposeEmail = ({
     <Wrapper isReplying={isReplying}>
       <>
         <S.UpdateContainer>
-          {saveSucces && (
+          {saveSuccess && (
             <span className="text_muted">{local.DRAFT_SAVED}</span>
           )}
         </S.UpdateContainer>

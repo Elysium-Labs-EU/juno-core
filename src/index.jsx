@@ -1,10 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import * as Sentry from '@sentry/react'
+import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import store from './Store/store'
 import './App.scss'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+
+Sentry.init({
+  dsn: 'https://493389e033b54228a97252c427fdebe6@o917516.ingest.sentry.io/5859846',
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+})
 
 ReactDOM.render(
   <Provider store={store}>
