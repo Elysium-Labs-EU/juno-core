@@ -14,14 +14,6 @@ export const composeSlice = createSlice({
   },
   reducers: {
     setComposeEmail: (state, action) => {
-      console.log(Object.keys(action.payload))
-      if (Object.keys(action.payload).length > 1) {
-        // if (
-        //   JSON.stringify(Object.keys(action.payload)) ===
-        //   JSON.stringify(['to', 'subject', 'body', 'id', 'threadId'])
-        // ) {
-        state.composeEmail = action.payload
-      }
       if (action.payload.id && action.payload.value) {
         const currentState = state.composeEmail
         currentState[action.payload.id] = action.payload.value
@@ -55,7 +47,7 @@ export const TrackComposeEmail = (props) => {
         dispatch(updateComposeEmail(props))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error updating compose email.'))
     }
   }
@@ -96,7 +88,7 @@ export const SendComposedEmail = (props) => {
         }
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error sending email.'))
     }
     return null
