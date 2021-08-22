@@ -1,9 +1,9 @@
 const startSort = (props) => {
-  const { history, labelURL, metaList, metaListIndex } = props
+  const { history, labelURL, emailList, emailListIndex } = props
 
-  if (history && labelURL && metaList && metaListIndex > -1) {
+  if (history && labelURL && emailList && emailListIndex > -1) {
     return history.push(
-      `/mail/${labelURL}/${metaList[metaListIndex].threads[0].id}/messages`
+      `/mail/${labelURL}/${emailList[emailListIndex].threads[0].id}/messages`
     )
   }
   return null
