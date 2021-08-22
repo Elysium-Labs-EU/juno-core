@@ -7,9 +7,11 @@ import * as local from '../../../../constants/unreadConstants'
 import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../EmailHasAttachment'
 
-const ReadMessage = ({ message, FROM }) => {
+const ReadMessage = ({ message, threadDetail, FROM }) => {
   const [open, setOpen] = useState(
-    message && message.labelIds.includes(local.UNREAD)
+    threadDetail.messages.length > 1
+      ? message && message.labelIds.includes(local.UNREAD)
+      : true
   )
 
   const handleClick = () => {
