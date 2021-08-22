@@ -7,7 +7,7 @@ export const EmailAvatarContainer = styled.div`
   display: flex;
   justify-content: center;
   color: #f5f5f5;
-  font-weight: normal;
+  font-weight: 750;
   border-radius: 50%;
   height: 2rem;
   align-items: center;

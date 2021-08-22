@@ -91,7 +91,7 @@ const EmailListItem = ({ email }) => {
                 {draft.DRAFT_SNIPPET_INDICATOR}
               </span>
             )}
-            <span className="subject">{emailSubject()}</span>
+            <span>{emailSubject()}</span>
             <Snippet snippet={emailSnippet} />
           </div>
         </S.CellMessage>
