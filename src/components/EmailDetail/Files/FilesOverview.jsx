@@ -7,25 +7,24 @@ import EmailAttachment from '../Attachment/EmailAttachment'
 
 const FilesOverview = (props) => {
   const { threadDetail, isLoading } = props
-  const files =
-    threadDetail &&
-    !isEmpty(threadDetail) &&
-    !isLoading &&
-    threadDetail.messages.map((message, index) => {
+
+  const files = () => {
+    if (threadDetail && !isEmpty(threadDetail) && !isLoading) {
       return (
         <EmailAttachment
-          key={`${message.id + index}`}
-          message={message}
+          message={threadDetail.messages[threadDetail.messages.length - 1]}
           overview
         />
       )
-    })
+    }
+    return null
+  }
 
   return (
     <ES.DetailRow>
       <ES.EmailDetailContainer>
         <S.FilesWrapper>
-          {files && !isLoading && files.length > 0 && files}
+          {files() && !isLoading && files()}
           {isLoading && <CircularProgress />}
         </S.FilesWrapper>
       </ES.EmailDetailContainer>
