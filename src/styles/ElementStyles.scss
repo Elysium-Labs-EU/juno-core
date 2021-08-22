@@ -18,7 +18,7 @@
 
 .button {
   display: inline-block;
-  font-weight: 400;
+  font-weight: 600;
   color: #212529;
   text-align: center;
   vertical-align: middle;
@@ -36,6 +36,7 @@
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
+  font-family: 'Raleway Variable', sans-serif;
 }
 
 .button-small {
@@ -76,6 +77,8 @@
 }
 
 .sort-button {
+  font-weight: 600;
+  font-family: 'Raleway Variable', sans-serif;
   border-radius: 20px;
   border: none;
   background-color: #8e23d1;
@@ -109,15 +112,18 @@
   align-items: center;
   text-decoration: none;
   cursor: pointer;
+  font-family: 'Urbanist Variable', sans-serif;
 
   &:hover {
     color: #1c1c1c;
     text-decoration: none;
+    font-weight: 500;
   }
 
   &:active {
     color: #1c1c1c;
     text-decoration: none;
+    font-weight: 500;
   }
 
   &:disabled {

@@ -7,13 +7,6 @@ export const ThreadBase = styled.div`
       : 'regular'};
   position: relative;
   user-select: none;
-  --line-margin: 30px;
-  --padding-left: 30px;
-  --padding-right: 30px;
-  --primary-text: #535358;
-  --mindful-text: #8e8e99;
-  --discreet-text: #aeaeb4;
-  color: #535358;
   &:hover {
     text-decoration: none;
     cursor: pointer;
@@ -23,11 +16,11 @@ export const ThreadBase = styled.div`
 export const ThreadRow = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: var(--padding-left) 20px 215px auto max-content 105px 20px var(
-      --padding-right
-    );
+  grid-template-columns: 30px 20px 215px auto max-content 105px 20px 30px;
   font-size: 13px;
   height: 56px;
+  background-color: transparent;
+  transition: background-color ease-in 0.3s;
 
   &:hover {
     background-color: #f7f7f7;
@@ -45,7 +38,6 @@ export const CellName = styled.div`
   -webkit-box-align: center;
   align-items: center;
   user-select: none;
-  color: var(--primary-text);
 `
 
 export const CellMessage = styled.div`
