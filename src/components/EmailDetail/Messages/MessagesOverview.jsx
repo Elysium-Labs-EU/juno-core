@@ -98,8 +98,8 @@ const MessagesOverview = (props) => {
           <ComposeEmail
             isReplying={isReplying}
             isReplyingListener={isReplyingListener}
-            to={fromEmail()}
-            subject={emailSubject()}
+            to={fromEmail(threadDetail)}
+            subject={emailSubject(threadDetail)}
             id={threadDetail.id}
             threadId={
               threadDetail.messages[threadDetail.messages.length - 1].threadId

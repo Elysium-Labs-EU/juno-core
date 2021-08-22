@@ -65,7 +65,7 @@ export const SendComposedEmail = (props) => {
 
       if (Object.keys(completeEmail).length >= 4) {
         // If the messsage has a messageId, it is a draft.
-        if (messageId.length > 0) {
+        if (messageId && messageId.length > 0) {
           const { draftDetails } = getState().drafts
           const body = { completeEmail, draftDetails }
           const response = await draftApi().sendDraft(body)
