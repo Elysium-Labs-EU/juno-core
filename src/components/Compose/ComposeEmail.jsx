@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { useHistory, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import '../../App.scss'
 import InputBase from '@material-ui/core/InputBase'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -14,6 +13,7 @@ import {
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
+import * as global from '../../constants/globalConstants'
 import * as S from './ComposeStyles'
 import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
@@ -33,15 +33,15 @@ const ComposeEmail = ({
 }) => {
   const composeEmail = useSelector(selectComposeEmail)
   const draftDetails = useSelector(selectDraftDetails)
+  const [toValue, setToValue] = useState([])
+  const debouncedToValue = useDebounce(toValue, 500)
+  const [subjectValue, setSubjectValue] = useState('')
+  const debouncedSubjectValue = useDebounce(subjectValue, 500)
+  const [bodyValue, setBodyValue] = useState('')
+  const debouncedBodyValue = useDebounce(bodyValue, 500)
   const [toError, setToError] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const dispatch = useDispatch()
-  const [toValue, setToValue] = useState([])
-  const [subjectValue, setSubjectValue] = useState('')
-  const [bodyValue, setBodyValue] = useState('')
-  const debouncedToValue = useDebounce(toValue, 500)
-  const debouncedSubjectValue = useDebounce(subjectValue, 500)
-  const debouncedBodyValue = useDebounce(bodyValue, 500)
   const { messageId } = useParams()
   const history = useHistory()
 
@@ -53,6 +53,8 @@ const ComposeEmail = ({
     ) {
       dispatch(CreateDraft())
     } else if (!isEmpty(draftDetails) && messageId) {
+      dispatch(UpdateDraft())
+    } else if (!isEmpty(draftDetails)) {
       dispatch(UpdateDraft())
     }
   }, [composeEmail, messageId])
@@ -67,13 +69,13 @@ const ComposeEmail = ({
   }, [draftDetails])
 
   const handleChange = (event) => {
-    if (event.target.id === 'to') {
+    if (event.target.id === global.TO) {
       setToValue(event.target.value)
     }
-    if (event.target.id === 'subject') {
+    if (event.target.id === global.SUBJECT) {
       setSubjectValue(event.target.value)
     }
-    if (event.target.id === 'body') {
+    if (event.target.id === global.BODY) {
       setBodyValue(event.target.value)
     }
   }
@@ -81,7 +83,7 @@ const ComposeEmail = ({
   useEffect(() => {
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
-        const updateEventObject = { id: 'to', value: debouncedToValue }
+        const updateEventObject = { id: global.TO, value: debouncedToValue }
         dispatch(TrackComposeEmail(updateEventObject))
       }
     }
@@ -90,7 +92,7 @@ const ComposeEmail = ({
   useEffect(() => {
     if (debouncedSubjectValue) {
       const updateEventObject = {
-        id: 'subject',
+        id: global.SUBJECT,
         value: debouncedSubjectValue,
       }
       dispatch(TrackComposeEmail(updateEventObject))
@@ -99,7 +101,7 @@ const ComposeEmail = ({
 
   useEffect(() => {
     if (debouncedBodyValue) {
-      const updateEventObject = { id: 'body', value: debouncedBodyValue }
+      const updateEventObject = { id: global.BODY, value: debouncedBodyValue }
       dispatch(TrackComposeEmail(updateEventObject))
     }
   }, [debouncedBodyValue])
@@ -170,7 +172,7 @@ const ComposeEmail = ({
                       <InputBase
                         id="to"
                         label={local.TO_LABEL}
-                        value={toValue}
+                        value={toValue ?? []}
                         onChange={handleChange}
                         required
                         fullWidth
@@ -192,7 +194,7 @@ const ComposeEmail = ({
                     <InputBase
                       id="subject"
                       label={local.SUBJECT_LABEL}
-                      value={subjectValue}
+                      value={subjectValue ?? ''}
                       onChange={handleChange}
                       fullWidth
                     />
@@ -207,7 +209,7 @@ const ComposeEmail = ({
                       id="body"
                       label={local.BODY_LABEL}
                       multiline
-                      value={bodyValue}
+                      value={bodyValue ?? ''}
                       onChange={handleChange}
                       rows={12}
                       rowsMax={25}

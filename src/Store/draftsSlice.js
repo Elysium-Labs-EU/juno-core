@@ -21,7 +21,7 @@ export const draftsSlice = createSlice({
         state.draftList = action.payload
       }
     },
-    listRemoveDraft: (state, action) => {},
+    // listRemoveDraft: (state, action) => {},
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
     },
@@ -34,7 +34,7 @@ export const draftsSlice = createSlice({
 export const {
   listAddDraft,
   listUpdateDraft,
-  listRemoveDraft,
+  // listRemoveDraft,
   setDraftListLoaded,
 } = draftsSlice.actions
 
@@ -49,7 +49,7 @@ export const loadDraftList = () => {
       }
       return null
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error getting Draft list.'))
     } finally {
       dispatch(setDraftListLoaded(true))
@@ -85,7 +85,7 @@ export const CreateDraft = () => {
         dispatch(setServiceUnavailable('Cannot create draft.'))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Cannot create draft.'))
     }
   }
@@ -119,7 +119,7 @@ export const UpdateDraft = () => {
         dispatch(setServiceUnavailable('Cannot update draft.'))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Cannot update draft.'))
     }
   }
@@ -164,7 +164,7 @@ const pushDraftDetails = (enhancedDraftDetails) => {
         history.push(`/compose/`)
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
@@ -181,7 +181,7 @@ const loadDraftDetails = (draftDetails) => {
         dispatch(pushDraftDetails(enhancedDraftDetails))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
@@ -225,7 +225,7 @@ export const OpenDraftEmail = (props) => {
         dispatch(loadDraftDetails({ draftId, history }))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
