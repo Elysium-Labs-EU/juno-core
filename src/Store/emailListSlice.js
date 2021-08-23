@@ -8,19 +8,24 @@ import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import NavigateNextMail from '../utils/navigateNextEmail'
 
+const initialState = Object.freeze({
+  emailList: [],
+  isFocused: false,
+  isSorting: false,
+})
+
 export const emailListSlice = createSlice({
   name: 'email',
-  initialState: {
-    emailList: [],
-    isFocused: false,
-    isSorting: false,
-  },
+  initialState,
   reducers: {
     setIsFocused: (state, action) => {
       state.isFocused = action.payload
     },
     setIsSorting: (state, action) => {
       state.isSorting = action.payload
+    },
+    resetEmailList: () => {
+      return initialState
     },
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
@@ -111,6 +116,7 @@ export const emailListSlice = createSlice({
 export const {
   setIsFocused,
   setIsSorting,
+  resetEmailList,
   listAddEmailList,
   listAddItemDetail,
   listRemoveItemDetail,
@@ -171,6 +177,7 @@ export const loadEmailDetails = (labeledThreads) => {
   }
 }
 
+// TODO: Does this also update the MetaList?
 export const UpdateEmailListLabel = (props) => {
   const {
     messageId,

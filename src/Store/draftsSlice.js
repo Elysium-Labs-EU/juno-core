@@ -8,25 +8,30 @@ import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 
+const initialState = Object.freeze({
+  draftListLoaded: false,
+  draftList: [],
+  draftDetails: {},
+})
+
 export const draftsSlice = createSlice({
   name: 'drafts',
-  initialState: {
-    draftListLoaded: false,
-    draftList: [],
-    draftDetails: {},
-  },
+  initialState,
   reducers: {
     listAddDraft: (state, action) => {
       if (Array.isArray(action.payload)) {
         state.draftList = action.payload
       }
     },
-    listRemoveDraft: (state, action) => {},
+    // listRemoveDraft: (state, action) => {},
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
     },
     setDraftListLoaded: (state, action) => {
       state.draftListLoaded = action.payload
+    },
+    resetDraft: () => {
+      return initialState
     },
   },
 })
@@ -36,6 +41,7 @@ export const {
   listUpdateDraft,
   listRemoveDraft,
   setDraftListLoaded,
+  resetDraft,
 } = draftsSlice.actions
 
 export const loadDraftList = () => {

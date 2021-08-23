@@ -1,13 +1,18 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
+const initialState = Object.freeze({
+  isLoading: false,
+  serviceUnavailable: null,
+})
+
 export const utilsSlice = createSlice({
   name: 'utils',
-  initialState: {
-    isLoading: false,
-    serviceUnavailable: null,
-  },
+  initialState,
   reducers: {
+    resetUtils: () => {
+      return initialState
+    },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload
     },
@@ -17,7 +22,8 @@ export const utilsSlice = createSlice({
   },
 })
 
-export const { setIsLoading, setServiceUnavailable } = utilsSlice.actions
+export const { resetUtils, setIsLoading, setServiceUnavailable } =
+  utilsSlice.actions
 
 export const selectIsLoading = (state) => state.utils.isLoading
 export const selectServiceUnavailable = (state) =>

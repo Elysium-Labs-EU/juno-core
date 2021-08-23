@@ -5,14 +5,19 @@ import base64toBlob from '../utils/base64toBlob'
 import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
 
+const initialState = Object.freeze({
+  currEmail: '',
+  viewIndex: 0,
+  isReplying: false,
+})
+
 export const emailDetailSlice = createSlice({
   name: 'emailDetail',
-  initialState: {
-    currEmail: '',
-    viewIndex: 0,
-    isReplying: false,
-  },
+  initialState,
   reducers: {
+    resetEmailDetail: () => {
+      return initialState
+    },
     setCurrentEmail: (state, action) => {
       state.currEmail = action.payload
     },
@@ -30,8 +35,12 @@ export const emailDetailSlice = createSlice({
   },
 })
 
-export const { setCurrentEmail, setViewingIndex, setIsReplying } =
-  emailDetailSlice.actions
+export const {
+  resetEmailDetail,
+  setCurrentEmail,
+  setViewingIndex,
+  setIsReplying,
+} = emailDetailSlice.actions
 
 export const fetchAttachment = ({ attachmentData, messageId }) => {
   const {

@@ -13,11 +13,11 @@ function Header() {
   const SetHeader = () => {
     const location = useLocation()
 
-    if (location.pathname === '/inbox') {
-      return <InboxHeader />
-    }
     if (location.pathname === '/') {
       return <TodoHeader />
+    }
+    if (location.pathname === '/inbox') {
+      return <InboxHeader />
     }
     if (location.pathname.includes('/compose')) {
       return <ComposeHeader />
@@ -30,6 +30,9 @@ function Header() {
     }
     if (location.pathname === '/spam') {
       return <SpamHeader />
+    }
+    if (location.pathname === '/login') {
+      return null
     }
     return <EmailDetailHeader />
   }

@@ -8,12 +8,14 @@ import { FilteredMetaList } from '../utils'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 
+const initialState = Object.freeze({
+  metaList: [],
+  isFetching: false,
+})
+
 export const metaListSlice = createSlice({
   name: 'meta',
-  initialState: {
-    metaList: [],
-    isFetching: false,
-  },
+  initialState,
   reducers: {
     listAddMeta: (state, action) => {
       const sortedMetaList = {
@@ -80,6 +82,9 @@ export const metaListSlice = createSlice({
       ]
       state.metaList = updatedMetaList
     },
+    resetMetaList: () => {
+      return initialState
+    },
     setIsFetching: (state, action) => {
       state.isFetching = action.payload
     },
@@ -90,6 +95,7 @@ export const {
   listAddMeta,
   listAddItemMeta,
   listRemoveItemMeta,
+  resetMetaList,
   setIsFetching,
 } = metaListSlice.actions
 

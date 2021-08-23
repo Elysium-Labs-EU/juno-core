@@ -36,6 +36,11 @@ const Navigation = () => {
     history.push(destination)
   }
 
+  const openSettingsWindows = async () => {
+    const SETTINGS_URL = '/settings'
+    window.open(SETTINGS_URL, '_blank', 'width=500', 'height=400')
+  }
+
   return (
     <S.NavControls>
       <S.NavList>
@@ -69,7 +74,8 @@ const Navigation = () => {
                 : 'nav-item-button'
             }
             icon={<FiSettings />}
-            onClick={() => navigateTo('/settings')}
+            onClick={openSettingsWindows}
+            // onClick={() => navigateTo('/settings')}
           />
         </S.NavItem>
         <S.NavItem>

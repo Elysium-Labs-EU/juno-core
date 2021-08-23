@@ -6,14 +6,21 @@ import { multipleIncludes } from '../utils'
 import { setServiceUnavailable } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
+import { NETWORK_ERROR } from '../constants/globalConstants'
+
+const initialState = Object.freeze({
+  baseLoaded: false,
+  profile: {},
+  isAuthenticated: false,
+})
 
 export const baseSlice = createSlice({
   name: 'base',
-  initialState: {
-    baseLoaded: false,
-    profile: {},
-  },
+  initialState,
   reducers: {
+    resetBase: () => {
+      return initialState
+    },
     setBaseLoaded: (state, action) => {
       if (!state.baseLoaded) {
         state.baseLoaded = action.payload
@@ -22,10 +29,18 @@ export const baseSlice = createSlice({
     setProfile: (state, action) => {
       state.profile = action.payload
     },
+    setIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload
+    },
   },
 })
 
-export const { setBaseLoaded, setProfile } = baseSlice.actions
+export const { resetBase, setBaseLoaded, setProfile, setIsAuthenticated } =
+  baseSlice.actions
+
+// export const userSignin = () => {
+
+// }
 
 export const checkBase = () => {
   return async (dispatch) => {
@@ -59,23 +74,20 @@ export const checkBase = () => {
             dispatch(setBaseLoaded(true))
           }
         } else {
-          dispatch(
-            setServiceUnavailable('Network Error. Please try again later')
-          )
+          dispatch(setServiceUnavailable(NETWORK_ERROR))
         }
       } else {
-        dispatch(setServiceUnavailable('Network Error. Please try again later'))
+        dispatch(setServiceUnavailable(NETWORK_ERROR))
       }
     } catch (err) {
-      console.log(err)
-      dispatch(
-        setServiceUnavailable('An error occured during loading the base.')
-      )
+      process.env.NODE_ENV === 'development' && console.error(err)
+      dispatch(setServiceUnavailable(NETWORK_ERROR))
     }
   }
 }
 
 export const selectBaseLoaded = (state) => state.base.baseLoaded
 export const selectProfile = (state) => state.base.profile
+export const selectIsAuthenticated = (state) => state.base.isAuthenticated
 
 export default baseSlice.reducer

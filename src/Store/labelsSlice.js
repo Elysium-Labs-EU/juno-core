@@ -4,16 +4,19 @@ import axios from 'axios'
 import labelApi from '../data/labelApi'
 import { setServiceUnavailable } from './utilsSlice'
 
-const api = labelApi()
+const initialState = Object.freeze({
+  labelIds: '',
+  loadedInbox: [],
+  storageLabels: [],
+})
 
 export const labelsSlice = createSlice({
   name: 'labels',
-  initialState: {
-    labelIds: '',
-    loadedInbox: [],
-    storageLabels: [],
-  },
+  initialState,
   reducers: {
+    resetLabels: () => {
+      return initialState
+    },
     setCurrentLabels: (state, action) => {
       state.labelIds = action.payload
     },
@@ -42,8 +45,12 @@ export const labelsSlice = createSlice({
   },
 })
 
-export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
-  labelsSlice.actions
+export const {
+  resetLabels,
+  setCurrentLabels,
+  setLoadedInbox,
+  setStorageLabels,
+} = labelsSlice.actions
 
 export const createLabel = (label) => {
   return async (dispatch) => {
@@ -74,7 +81,7 @@ export const createLabel = (label) => {
 export const fetchLabelIds = (LABEL) => {
   return async (dispatch) => {
     try {
-      const listAllLabels = await api.fetchLabel()
+      const listAllLabels = await labelApi().fetchLabel()
       const {
         message: { labels },
       } = listAllLabels

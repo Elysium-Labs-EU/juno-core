@@ -1,14 +1,23 @@
 import axios from 'axios'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 const userApi = () => {
   return {
-    fetchUser: async () => {
+    authGoogle: async (accessToken) => {
       try {
-        const res = await axios.get(`${BASE_API_URL}/api/user`)
+        const res = await axios.post(`${BASE_API_URL}/auth/google`, accessToken)
         return res
       } catch (err) {
-        return console.log(err)
+        return errorHandeling(err)
+      }
+    },
+
+    fetchUser: async () => {
+      try {
+        const res = await axios.get(`${BASE_API_URL}/api/v1/user`)
+        return res
+      } catch (err) {
+        return errorHandeling(err)
       }
     },
   }

@@ -7,6 +7,10 @@ import { setCurrentEmail } from './emailDetailSlice'
 import draftApi from '../data/draftApi'
 import CloseMail from '../utils/closeEmail'
 
+const initialState = Object.freeze({
+  composeEmail: {},
+})
+
 export const composeSlice = createSlice({
   name: 'compose',
   initialState: {
@@ -35,8 +39,8 @@ export const composeSlice = createSlice({
         state.composeEmail = currentState
       }
     },
-    resetComposeEmail: (state) => {
-      state.composeEmail = {}
+    resetComposeEmail: () => {
+      return initialState
     },
   },
 })
