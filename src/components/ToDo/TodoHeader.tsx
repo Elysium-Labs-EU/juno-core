@@ -1,23 +1,20 @@
 import React from 'react'
 import NavControls from '../MainHeader/Navigation/NavControls'
+import TodoFocusOption from './TodoFocusOption'
+import * as local from '../../constants/todoConstants'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
-import BackButton from '../BackButton'
 
-const SENT_HEADER = 'Sent'
-
-const SentHeader = () => {
-  return (
+const TodoHeader = () => (
     <GS.OuterContainer>
       <S.NavContainer>
-        <BackButton />
         <div className="header-center">
-          <h2>{SENT_HEADER}</h2>
+          <h2>{local.HEADER_TODO}</h2>
         </div>
         <NavControls />
       </S.NavContainer>
+      <TodoFocusOption />
     </GS.OuterContainer>
   )
-}
 
-export default SentHeader
+export default TodoHeader

@@ -18,9 +18,7 @@ export const metaListSlice = createSlice({
     listAddMeta: (state, action) => {
       const sortedMetaList = {
         ...action.payload,
-        threads: action.payload.threads.sort((a, b) => {
-          return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-        }),
+        threads: action.payload.threads.sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)),
       }
 
       // Find metaList sub-array index
@@ -33,9 +31,7 @@ export const metaListSlice = createSlice({
       if (arrayIndex > -1) {
         const newArray = state.metaList[arrayIndex].threads
           .concat(sortedMetaList.threads)
-          .sort((a, b) => {
-            return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-          })
+          .sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10))
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.metaList
         currentState[arrayIndex] = newObject
@@ -50,9 +46,7 @@ export const metaListSlice = createSlice({
         ...filteredTargetMetaList[0],
         threads: filteredTargetMetaList[0].threads
           .concat(activeMetaObjArray)
-          .sort((a, b) => {
-            return parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-          }),
+          .sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)),
       }
       const updatedMetaList = [
         ...state.metaList.filter(
@@ -93,8 +87,7 @@ export const {
   setIsFetching,
 } = metaListSlice.actions
 
-export const loadEmails = (params) => {
-  return async (dispatch, getState) => {
+export const loadEmails = (params) => async (dispatch, getState) => {
     try {
       if (!getState().utils.isLoading) {
         dispatch(setIsLoading(true))
@@ -128,7 +121,6 @@ export const loadEmails = (params) => {
       )
     }
   }
-}
 
 export const UpdateMetaListLabel = (props) => {
   const {
@@ -200,8 +192,7 @@ export const UpdateMetaListLabel = (props) => {
 }
 
 // Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the meta list for inbox only first.
-export const refreshEmailFeed = (params) => {
-  return async (dispatch, getState) => {
+export const refreshEmailFeed = (params) => async (dispatch, getState) => {
     try {
       dispatch(setIsFetching(true))
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
@@ -230,7 +221,6 @@ export const refreshEmailFeed = (params) => {
       dispatch(setIsFetching(false))
     }
   }
-}
 
 export const selectMetaList = (state) => state.meta.metaList
 export const selectIsFetching = (state) => state.meta.isFetching

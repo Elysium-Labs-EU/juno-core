@@ -8,10 +8,10 @@ export const utilsSlice = createSlice({
     serviceUnavailable: null,
   },
   reducers: {
-    setIsLoading: (state, action) => {
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload
     },
-    setServiceUnavailable: (state, action) => {
+    setServiceUnavailable: (state, action: PayloadAction<string>) => {
       state.serviceUnavailable = action.payload
     },
   },

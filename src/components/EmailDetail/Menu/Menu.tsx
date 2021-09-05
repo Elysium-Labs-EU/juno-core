@@ -27,8 +27,7 @@ const Menu = () => {
 
   const mappedMenu = local.MENU_OPTIONS && (
     <ul className="no-bullet-ul flex-flow-row">
-      {local.MENU_OPTIONS.map((item, index) => {
-        return (
+      {local.MENU_OPTIONS.map((item, index) => (
           <li
             key={`${item.name + index}`}
             className={
@@ -41,8 +40,7 @@ const Menu = () => {
           >
             {item.name}
           </li>
-        )
-      })}
+        ))}
     </ul>
   )
 

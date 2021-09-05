@@ -2,8 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import { BASE_API_URL } from './api'
 
-const threadApi = () => {
-  return {
+const threadApi = () => ({
     getThreads: async (query) => {
       try {
         const res = await axios.get(`${BASE_API_URL}/api/threads/`, {
@@ -12,9 +11,7 @@ const threadApi = () => {
             maxResults: query.maxResults ?? 20,
             pageToken: query.nextPageToken ?? undefined,
           },
-          paramsSerializer: (params) => {
-            return qs.stringify(params, { arrayFormat: 'repeat' })
-          },
+          paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'repeat' }),
         })
         return res.data
       } catch (err) {
@@ -30,7 +27,6 @@ const threadApi = () => {
         return console.log(err)
       }
     },
-  }
-}
+  })
 
 export default threadApi

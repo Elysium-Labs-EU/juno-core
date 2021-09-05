@@ -1,4 +1,4 @@
-export const convertArrayToString = (data) => {
+export const convertArrayToString = (data: string) => {
   const converted = data.toString().replace(',', '-')
   return converted
 }
@@ -38,9 +38,7 @@ export const FindLabelById = (props) => {
 }
 
 export const multipleIncludes = (first, second) => {
-  const indexArray = first.map((el) => {
-    return second.indexOf(el)
-  })
+  const indexArray = first.map((el) => second.indexOf(el))
   return indexArray.indexOf(-1) === -1
 }
 

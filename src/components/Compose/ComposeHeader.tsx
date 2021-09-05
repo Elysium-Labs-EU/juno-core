@@ -6,8 +6,7 @@ import * as local from '../../constants/composeEmailConstants'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 
-const ComposeHeader = () => {
-  return (
+const ComposeHeader = () => (
     <GS.OuterContainer>
       <div className="nav-container">
         <S.HeaderButton>
@@ -20,6 +19,5 @@ const ComposeHeader = () => {
       </div>
     </GS.OuterContainer>
   )
-}
 
 export default ComposeHeader

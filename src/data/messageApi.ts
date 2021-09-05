@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { BASE_API_URL } from './api'
 
-const messageApi = () => {
-  return {
+const messageApi = () => ({
     getMessageDetail: async (messageId) => {
       try {
         const res = await axios.get(`${BASE_API_URL}/api/message/${messageId}`)
@@ -71,7 +70,6 @@ const messageApi = () => {
         return console.log(err)
       }
     },
-  }
-}
+  })
 
 export default messageApi

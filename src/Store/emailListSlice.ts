@@ -25,12 +25,10 @@ export const emailListSlice = createSlice({
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
         ...action.payload,
-        threads: action.payload.threads.sort((a, b) => {
-          return (
+        threads: action.payload.threads.sort((a, b) => (
             parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
             parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-          )
-        }),
+          )),
       }
 
       const arrayIndex = state.emailList
@@ -41,12 +39,10 @@ export const emailListSlice = createSlice({
       if (arrayIndex > -1) {
         const newArray = state.emailList[arrayIndex].threads
           .concat(sortedEmailList.threads)
-          .sort((a, b) => {
-            return (
+          .sort((a, b) => (
               parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
               parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-            )
-          })
+            ))
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
@@ -63,12 +59,10 @@ export const emailListSlice = createSlice({
         ...filteredTargetEmailList[0],
         threads: filteredTargetEmailList[0].threads
           .concat(activEmailObjArray)
-          .sort((a, b) => {
-            return (
+          .sort((a, b) => (
               parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
               parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-            )
-          }),
+            )),
       }
       const updatedEmailList = [
         ...state.emailList.filter(
@@ -116,8 +110,7 @@ export const {
   listRemoveItemDetail,
 } = emailListSlice.actions
 
-export const loadEmailDetails = (labeledThreads) => {
-  return async (dispatch, getState) => {
+export const loadEmailDetails = (labeledThreads) => async (dispatch, getState) => {
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
@@ -169,7 +162,6 @@ export const loadEmailDetails = (labeledThreads) => {
       dispatch(setServiceUnavailable('Error hydrating emails.'))
     }
   }
-}
 
 export const UpdateEmailListLabel = (props) => {
   const {

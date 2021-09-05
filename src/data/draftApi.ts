@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { BASE_API_URL } from './api'
 
-const draftApi = () => {
-  return {
+const draftApi = () => ({
     createDrafts: async (data) => {
       try {
         const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
@@ -53,7 +52,6 @@ const draftApi = () => {
         return console.log(err)
       }
     },
-  }
-}
+  })
 
 export default draftApi

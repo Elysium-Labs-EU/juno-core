@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import {
+  BrowserRouter as Router, Switch, Route,
+  // RouteComponentProps
+} from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { checkBase } from './Store/baseSlice'
 import './App.scss'
@@ -12,9 +15,7 @@ import Routes from './constants/routes.json'
 import * as GS from './styles/globalStyles'
 
 const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
-const EmailDetail = React.lazy(() =>
-  import('./components/EmailDetail/EmailDetail')
-)
+const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetail'))
 const ComposeEmail = React.lazy(() =>
   import('./components/Compose/ComposeEmail')
 )

@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { BASE_API_URL } from './api'
 
-const labelApi = () => {
-  return {
+const labelApi = () => ({
     // createLabel: (body) => {
     //   console.log('body', body)
     //   return axios
@@ -51,7 +50,6 @@ const labelApi = () => {
         return console.log(err)
       }
     },
-  }
-}
+  })
 
 export default labelApi

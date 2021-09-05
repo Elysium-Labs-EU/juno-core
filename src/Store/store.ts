@@ -8,7 +8,7 @@ import labelsReducer from './labelsSlice'
 import metaReducer from './metaListSlice'
 import utilsReducer from './utilsSlice'
 
-export default configureStore({
+const store = configureStore({
   reducer: {
     base: baseReducer,
     compose: composeReducer,
@@ -20,3 +20,7 @@ export default configureStore({
     utils: utilsReducer,
   },
 })
+
+export type RootState = ReturnType<typeof store.getState>
+
+export default store

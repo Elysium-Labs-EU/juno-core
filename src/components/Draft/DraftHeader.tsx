@@ -1,28 +1,21 @@
 import React from 'react'
 import NavControls from '../MainHeader/Navigation/NavControls'
-import InboxSortOption from './InboxSortOption'
 import '../MainHeader/Navigation/NavControls.scss'
+import * as local from '../../constants/draftConstants'
 import * as S from '../MainHeader/HeaderStyles'
+import BackButton from '../BackButton'
 import * as GS from '../../styles/globalStyles'
-// import BackButton from '../BackButton'
 
-const INBOX_HEADER = 'Inbox'
-
-const InboxHeader = () => {
-  return (
+const InboxHeader = () => (
     <GS.OuterContainer>
       <S.NavContainer>
-        {/* <S.BackButtonContainer>
-          <BackButton />
-        </S.BackButtonContainer> */}
+        <BackButton />
         <div className="header-center">
-          <h2>{INBOX_HEADER}</h2>
+          <h2>{local.DRAFT_HEADER}</h2>
         </div>
         <NavControls />
       </S.NavContainer>
-      <InboxSortOption />
     </GS.OuterContainer>
   )
-}
 
 export default InboxHeader

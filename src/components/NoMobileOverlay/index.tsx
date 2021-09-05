@@ -2,8 +2,7 @@ import React from 'react'
 import { Inner, Wrapper } from './noMobileOverlayStyles'
 import * as local from '../../constants/noMobileOverlayConstants'
 
-const NoMobileOverlay = () => {
-  return (
+const NoMobileOverlay = () => (
     <Wrapper>
       <Inner>
         <h1>{local.HEADER}</h1>
@@ -11,6 +10,5 @@ const NoMobileOverlay = () => {
       </Inner>
     </Wrapper>
   )
-}
 
 export default NoMobileOverlay

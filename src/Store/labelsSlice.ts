@@ -45,15 +45,14 @@ export const labelsSlice = createSlice({
 export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
-export const createLabel = (label) => {
-  return async (dispatch) => {
+export const createLabel = (label) => async (dispatch) => {
     try {
       const body = {
         labelVisibility: label.labelVisibility ?? 'labelShow',
         messageListVisibility: label.messageListVisibility ?? 'show',
         name: label.name ?? label,
       }
-      return axios
+      return await axios
         .post(`/api/labels`, body)
         .then((res) => {
           if (res.status === 200) {
@@ -69,10 +68,8 @@ export const createLabel = (label) => {
     }
     return null
   }
-}
 
-export const fetchLabelIds = (LABEL) => {
-  return async (dispatch) => {
+export const fetchLabelIds = (LABEL) => async (dispatch) => {
     try {
       const listAllLabels = await api.fetchLabel()
       const {
@@ -96,7 +93,6 @@ export const fetchLabelIds = (LABEL) => {
     }
     // TO-DO: What if multiple labels are used
   }
-}
 
 export const selectLabelIds = (state) => state.labels.labelIds
 export const selectLoadedInbox = (state) => state.labels.loadedInbox

@@ -1,4 +1,11 @@
-const startSort = (props) => {
+interface Props {
+  history: object
+  labelURL: string
+  emailList: any
+  emailListIndex: number
+}
+
+const startSort = (props: Props) => {
   const { history, labelURL, emailList, emailListIndex } = props
 
   if (history && labelURL && emailList && emailListIndex > -1) {

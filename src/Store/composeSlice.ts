@@ -36,8 +36,7 @@ export const composeSlice = createSlice({
 export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
   composeSlice.actions
 
-export const TrackComposeEmail = (props) => {
-  return async (dispatch, getState) => {
+export const TrackComposeEmail = (props) => async (dispatch, getState) => {
     const composedEmail = getState().compose.composeEmail
     try {
       if (isEmpty(composedEmail)) {
@@ -51,7 +50,6 @@ export const TrackComposeEmail = (props) => {
       dispatch(setServiceUnavailable('Error updating compose email.'))
     }
   }
-}
 
 export const SendComposedEmail = (props) => {
   const { history, messageId } = props

@@ -27,8 +27,7 @@ export const baseSlice = createSlice({
 
 export const { setBaseLoaded, setProfile } = baseSlice.actions
 
-export const checkBase = () => {
-  return async (dispatch) => {
+export const checkBase = () => async (dispatch) => {
     try {
       const user = await userApi().fetchUser()
       const labels = await labelApi().fetchLabel()
@@ -73,7 +72,6 @@ export const checkBase = () => {
       )
     }
   }
-}
 
 export const selectBaseLoaded = (state) => state.base.baseLoaded
 export const selectProfile = (state) => state.base.profile

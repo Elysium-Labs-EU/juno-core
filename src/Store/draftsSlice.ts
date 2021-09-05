@@ -38,8 +38,7 @@ export const {
   setDraftListLoaded,
 } = draftsSlice.actions
 
-export const loadDraftList = () => {
-  return async (dispatch) => {
+export const loadDraftList = () => async (dispatch) => {
     try {
       const draftList = await draftApi().getDrafts()
       if (draftList.message.resultSizeEstimate > 0) {
@@ -56,10 +55,8 @@ export const loadDraftList = () => {
     }
     return null
   }
-}
 
-export const CreateDraft = () => {
-  return async (dispatch, getState) => {
+export const CreateDraft = () => async (dispatch, getState) => {
     try {
       const { composeEmail } = getState().compose
       const { id, message } =
@@ -89,10 +86,8 @@ export const CreateDraft = () => {
       dispatch(setServiceUnavailable('Cannot create draft.'))
     }
   }
-}
 
-export const UpdateDraft = () => {
-  return async (dispatch, getState) => {
+export const UpdateDraft = () => async (dispatch, getState) => {
     try {
       const { composeEmail } = getState().compose
       const { id, message } =
@@ -123,7 +118,6 @@ export const UpdateDraft = () => {
       dispatch(setServiceUnavailable('Cannot update draft.'))
     }
   }
-}
 
 const pushDraftDetails = (enhancedDraftDetails) => {
   const {

@@ -18,9 +18,7 @@ export const emailDetailSlice = createSlice({
     },
     setViewingIndex: (state, action) => {
       const viewingIndex = action.payload.emailList
-        .map(function getIndex(e) {
-          return e.id
-        })
+        .map((e) => e.id)
         .indexOf(action.payload.currEmail)
       state.viewIndex = viewingIndex
     },
