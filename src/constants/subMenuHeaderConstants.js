@@ -1,6 +1,8 @@
 /* eslint-disable import/prefer-default-export */
+import Routes from './routes.json'
+
 export const MENU_OPTIONS = [
-  { link: '/drafts', name: 'Drafts' },
-  { link: '/sent', name: 'Sent' },
-  { link: '/spam', name: 'Spam' },
+  { link: Routes.DRAFTS, name: 'Drafts' },
+  { link: Routes.SENT, name: 'Sent' },
+  { link: Routes.SPAM, name: 'Spam' },
 ]

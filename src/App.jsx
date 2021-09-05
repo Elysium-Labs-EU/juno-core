@@ -1,22 +1,28 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { checkBase } from './Store/baseSlice'
 import './App.scss'
 import './styles/ElementStyles.scss'
 import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
-import ToDo from './components/ToDo/Todo'
-import EmailDetail from './components/EmailDetail/EmailDetail'
-import ComposeEmail from './components/Compose/ComposeEmail'
-import Settings from './components/Settings'
-import Inbox from './components/Inbox/Inbox'
-import SpamEmail from './components/Spam/Spam'
-import SentEmail from './components/Sent/Sent'
 import Header from './components/MainHeader/Header'
-import DraftEmail from './components/Draft/DraftEmail'
 import Routes from './constants/routes.json'
 import * as GS from './styles/globalStyles'
+
+const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
+const EmailDetail = React.lazy(() =>
+  import('./components/EmailDetail/EmailDetail')
+)
+const ComposeEmail = React.lazy(() =>
+  import('./components/Compose/ComposeEmail')
+)
+const Settings = React.lazy(() => import('./components/Settings'))
+const Inbox = React.lazy(() => import('./components/Inbox/Inbox'))
+const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))
+const SentEmail = React.lazy(() => import('./components/Sent/Sent'))
+const DraftEmail = React.lazy(() => import('./components/Draft/DraftEmail'))
 
 const App = () => {
   const dispatch = useDispatch()
@@ -36,16 +42,18 @@ const App = () => {
             <Header />
           </GS.OuterContainer>
 
-          <Switch>
-            <Route path={Routes.HOME} exact component={ToDo} />
-            <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
-            <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
-            <Route path={Routes.DRAFTS} component={DraftEmail} />
-            <Route path={Routes.SENT} component={SentEmail} />
-            <Route path={Routes.SPAM} component={SpamEmail} />
-            <Route path={Routes.SETTINGS} component={Settings} />
-            <Route path={Routes.INBOX} component={Inbox} />
-          </Switch>
+          <React.Suspense fallback={<CircularProgress />}>
+            <Switch>
+              <Route path={Routes.HOME} exact component={ToDo} />
+              <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
+              <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
+              <Route path={Routes.DRAFTS} component={DraftEmail} />
+              <Route path={Routes.SENT} component={SentEmail} />
+              <Route path={Routes.SPAM} component={SpamEmail} />
+              <Route path={Routes.SETTINGS} component={Settings} />
+              <Route path={Routes.INBOX} component={Inbox} />
+            </Switch>
+          </React.Suspense>
         </GS.App>
       )}
     </Router>
