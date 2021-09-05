@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 export const Scroll = styled.div`
@@ -8,6 +7,11 @@ export const Scroll = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
 `
 
 export const LoadMoreContainer = styled.div`

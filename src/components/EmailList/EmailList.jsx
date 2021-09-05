@@ -3,11 +3,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
-import {
-  // loadDraftList,
-  loadEmails,
-  refreshEmailFeed,
-} from '../../Store/metaListSlice'
+import { loadEmails, refreshEmailFeed } from '../../Store/metaListSlice'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { selectEmailList } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
@@ -20,6 +16,7 @@ import { CustomButtonText } from '../Elements/Buttons'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
+import Routes from '../../constants/routes.json'
 
 const EmailList = () => {
   const emailList = useSelector(selectEmailList)
@@ -47,7 +44,7 @@ const EmailList = () => {
 
   useEffect(() => {
     if (
-      !location.pathname.includes('/inbox') &&
+      !location.pathname.includes(Routes.INBOX) &&
       labelIds &&
       labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
     ) {
