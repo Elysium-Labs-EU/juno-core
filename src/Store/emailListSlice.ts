@@ -7,14 +7,23 @@ import { FilteredEmailList } from '../utils'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import NavigateNextMail from '../utils/navigateNextEmail'
+import type { AppThunk, RootState } from './store'
+import {
+  EmailListThreadItem,
+  EmailListObject,
+  EmailListState,
+} from './emailListSliceTypes'
+import { UpdateRequestParams } from './metaEmailListSliceTypes'
+
+const initialState: EmailListState = Object.freeze({
+  emailList: [],
+  isFocused: false,
+  isSorting: false,
+})
 
 export const emailListSlice = createSlice({
   name: 'email',
-  initialState: {
-    emailList: [],
-    isFocused: false,
-    isSorting: false,
-  },
+  initialState,
   reducers: {
     setIsFocused: (state, action) => {
       state.isFocused = action.payload
@@ -25,10 +34,11 @@ export const emailListSlice = createSlice({
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
         ...action.payload,
-        threads: action.payload.threads.sort((a, b) => (
+        threads: action.payload.threads.sort(
+          (a: EmailListThreadItem, b: EmailListThreadItem) =>
             parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
             parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-          )),
+        ),
       }
 
       const arrayIndex = state.emailList
@@ -39,10 +49,11 @@ export const emailListSlice = createSlice({
       if (arrayIndex > -1) {
         const newArray = state.emailList[arrayIndex].threads
           .concat(sortedEmailList.threads)
-          .sort((a, b) => (
+          .sort(
+            (a, b) =>
               parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
               parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-            ))
+          )
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
@@ -59,15 +70,16 @@ export const emailListSlice = createSlice({
         ...filteredTargetEmailList[0],
         threads: filteredTargetEmailList[0].threads
           .concat(activEmailObjArray)
-          .sort((a, b) => (
+          .sort(
+            (a: EmailListThreadItem, b: EmailListThreadItem) =>
               parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
               parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-            )),
+          ),
       }
       const updatedEmailList = [
         ...state.emailList.filter(
           (threadList) =>
-            !threadList.labels.includes(...filteredTargetEmailList[0].labels)
+            !threadList.labels.includes(filteredTargetEmailList[0].labels[0])
         ),
         newEmailListEntry,
       ]
@@ -82,13 +94,13 @@ export const emailListSlice = createSlice({
       const newEmailListEntry = {
         ...filteredCurrentEmailList[0],
         threads: filteredCurrentEmailList[0].threads.filter(
-          (item) => item.id !== messageId
+          (item: EmailListThreadItem) => item.id !== messageId
         ),
       }
       const updatedEmailList = [
         ...state.emailList.filter(
           (threadList) =>
-            !threadList.labels.includes(...filteredCurrentEmailList[0].labels)
+            !threadList.labels.includes(filteredCurrentEmailList[0].labels[0])
         ),
         newEmailListEntry,
       ]
@@ -110,11 +122,13 @@ export const {
   listRemoveItemDetail,
 } = emailListSlice.actions
 
-export const loadEmailDetails = (labeledThreads) => async (dispatch, getState) => {
+export const loadEmailDetails =
+  (labeledThreads: EmailListObject): AppThunk =>
+  async (dispatch, getState) => {
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
-        const buffer = []
+        const buffer: EmailListThreadItem[] = []
         const loadCount = threads.length
 
         if (threads.length > 0) {
@@ -163,7 +177,7 @@ export const loadEmailDetails = (labeledThreads) => async (dispatch, getState) =
     }
   }
 
-export const UpdateEmailListLabel = (props) => {
+export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
   const {
     messageId,
     request,
@@ -199,7 +213,7 @@ export const UpdateEmailListLabel = (props) => {
             viewIndex,
           })
         }
-        const response = !request.delete
+        const response: any = !request.delete
           ? await messageApi().updateMessage({ messageId, request })
           : await messageApi().thrashMessage({ messageId })
         if (response.status === 200) {
@@ -210,7 +224,7 @@ export const UpdateEmailListLabel = (props) => {
           ) {
             const activEmailObjArray =
               filteredCurrentEmailList[0].threads.filter(
-                (item) => item.id === messageId
+                (item: EmailListThreadItem) => item.id === messageId
               )
             dispatch(
               listAddItemDetail({
@@ -239,10 +253,10 @@ export const UpdateEmailListLabel = (props) => {
   }
 }
 
-export const selectIsFocused = (state) => state.email.isFocused
-export const selectIsSorting = (state) => state.email.isSorting
-export const selectEmailList = (state) => state.email.emailList
-export const selectNextPageToken = (state) =>
+export const selectIsFocused = (state: RootState) => state.email.isFocused
+export const selectIsSorting = (state: RootState) => state.email.isSorting
+export const selectEmailList = (state: RootState) => state.email.emailList
+export const selectNextPageToken = (state: RootState) =>
   state.email.emailList.nextPageToken
 
 export default emailListSlice.reducer

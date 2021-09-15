@@ -8,43 +8,13 @@ import { FilteredMetaList } from '../utils'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 import type { AppThunk, RootState } from './store'
-
-interface UpdateRequest {
-  addLabelIds?: string[]
-  removeLabelIds?: string[]
-  delete?: boolean
-}
-
-interface UpdateRequestParams {
-  history?: any
-  location?: any
-  messageId: string
-  request: UpdateRequest
-  labelURL: string
-  labelIds: string[]
-}
-
-interface LoadEmailObject {
-  labelIds: string[]
-  maxResults: number
-}
-
-interface MetaListThreadItem {
-  id: string
-  snippet: string
-  historyId: string
-}
-
-interface MetaListObject {
-  labels: string[]
-  threads: MetaListThreadItem[]
-  nextPageToken: string
-}
-
-interface MetaListState {
-  metaList: MetaListObject[]
-  isFetching: boolean
-}
+import { UpdateRequestParams } from './metaEmailListSliceTypes'
+import {
+  LoadEmailObject,
+  MetaListObject,
+  MetaListThreadItem,
+  MetaListState,
+} from './metaListTypes'
 
 const initialState: MetaListState = Object.freeze({
   metaList: [],
