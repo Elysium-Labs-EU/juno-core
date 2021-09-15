@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory, useLocation } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
@@ -21,18 +20,19 @@ import { selectEmailList } from '../../Store/emailListSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import { loadDraftList, selectDraftListLoaded } from '../../Store/draftsSlice'
 import * as draft from '../../constants/draftConstants'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const DetailNavigation = () => {
-  const emailList = useSelector(selectEmailList)
-  const draftListLoaded = useSelector(selectDraftListLoaded)
-  const labelIds = useSelector(selectLabelIds)
-  const isLoading = useSelector(selectIsLoading)
-  const currEmail = useSelector(selectCurrentEmail)
-  const storageLabels = useSelector(selectStorageLabels)
-  const viewIndex = useSelector(selectViewIndex)
+  const emailList = useAppSelector(selectEmailList)
+  const draftListLoaded = useAppSelector(selectDraftListLoaded)
+  const labelIds = useAppSelector(selectLabelIds)
+  const isLoading = useAppSelector(selectIsLoading)
+  const currEmail = useAppSelector(selectCurrentEmail)
+  const storageLabels = useAppSelector(selectStorageLabels)
+  const viewIndex = useAppSelector(selectViewIndex)
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const labelURL = convertArrayToString(labelIds)
   const location = useLocation()
 

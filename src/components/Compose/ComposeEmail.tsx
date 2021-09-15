@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { useHistory, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import InputBase from '@material-ui/core/InputBase'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
@@ -22,6 +21,7 @@ import {
   selectDraftDetails,
   UpdateDraft,
 } from '../../Store/draftsSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const ComposeEmail = ({
   isReplying,
@@ -31,8 +31,8 @@ const ComposeEmail = ({
   id,
   threadId,
 }) => {
-  const composeEmail = useSelector(selectComposeEmail)
-  const draftDetails = useSelector(selectDraftDetails)
+  const composeEmail = useAppSelector(selectComposeEmail)
+  const draftDetails = useAppSelector(selectDraftDetails)
   const [toValue, setToValue] = useState([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [subjectValue, setSubjectValue] = useState('')
@@ -41,7 +41,7 @@ const ComposeEmail = ({
   const debouncedBodyValue = useDebounce(bodyValue, 500)
   const [toError, setToError] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const { messageId } = useParams()
   const history = useHistory()
 

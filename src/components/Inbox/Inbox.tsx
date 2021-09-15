@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import EmailList from '../EmailList/EmailList'
 import { setCurrentLabels } from '../../Store/labelsSlice'
 import { selectBaseLoaded } from '../../Store/baseSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const LABEL = ['INBOX']
 
 const Inbox = () => {
-  const baseLoaded = useSelector(selectBaseLoaded)
-  const dispatch = useDispatch()
+  const baseLoaded = useAppSelector(selectBaseLoaded)
+  const dispatch = useAppDispatch()
   useEffect(() => {
     if (baseLoaded) {
       dispatch(setCurrentLabels(LABEL))

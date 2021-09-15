@@ -5,7 +5,6 @@ import {
   FiCornerUpLeft,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
@@ -17,13 +16,14 @@ import SetCompletedMail from '../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { convertArrayToString, FindLabelByName } from '../../utils'
 import { selectStorageLabels } from '../../Store/labelsSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const InlineThreadActions = ({ id, history, labelIds }) => {
   const [showMenu, setShowMenu] = useState(false)
-  const storageLabels = useSelector(selectStorageLabels)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const labelURL = convertArrayToString(labelIds)
   const isReplying = true
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const location = useLocation()
   const messageId = id && id
 
@@ -42,14 +42,14 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
           icon={<FiClock />}
         /> */}
         {labelIds &&
-        labelIds.some(
-          (item) =>
-            item ===
-            FindLabelByName({
-              storageLabels,
-              LABEL_NAME: todo.LABEL,
-            })[0].id
-        ) ? (
+          labelIds.some(
+            (item) =>
+              item ===
+              FindLabelByName({
+                storageLabels,
+                LABEL_NAME: todo.LABEL,
+              })[0].id
+          ) ? (
           <CustomIconLink
             onClick={() =>
               SetCompletedMail({

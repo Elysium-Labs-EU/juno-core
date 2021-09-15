@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadEmails, refreshEmailFeed } from '../../Store/metaListSlice'
@@ -17,13 +16,14 @@ import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const EmailList = () => {
-  const emailList = useSelector(selectEmailList)
-  const isLoading = useSelector(selectIsLoading)
-  const labelIds = useSelector(selectLabelIds)
-  const loadedInbox = useSelector(selectLoadedInbox)
-  const dispatch = useDispatch()
+  const emailList = useAppSelector(selectEmailList)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const loadedInbox = useAppSelector(selectLoadedInbox)
+  const dispatch = useAppDispatch()
   const location = useLocation()
 
   useEffect(() => {

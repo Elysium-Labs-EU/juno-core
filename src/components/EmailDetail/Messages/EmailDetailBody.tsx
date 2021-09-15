@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import DOMPurify from 'dompurify'
 import { fetchAttachment } from '../../../Store/emailDetailSlice'
 import { decodeBase64 } from '../../../utils/decodeBase64'
+import { useAppDispatch } from '../../../Store/hooks'
 
 const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   const [bodyState, setBodyState] = useState([])
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const multipartMixed = () => {
     const str = threadDetailBody.parts[0].parts
-      ? decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
-      : decodeBase64(`${threadDetailBody.parts[0].body.data}`)
+      ? decodeBase64(`${ threadDetailBody.parts[0].parts[1].body.data }`)
+      : decodeBase64(`${ threadDetailBody.parts[0].body.data }`)
     setBodyState((currState) => [...currState, str])
   }
 
@@ -27,7 +27,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
   }
 
   const additionalBody = () => {
-    const str = decodeBase64(`${threadDetailBody.parts[0].parts[1].body.data}`)
+    const str = decodeBase64(`${ threadDetailBody.parts[0].parts[1].body.data }`)
     setBodyState((currState) => [...currState, str])
   }
 
@@ -36,17 +36,17 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
       Object.prototype.hasOwnProperty.call(threadDetailBody.parts[1], 'parts')
     ) {
       const str = decodeBase64(
-        `${threadDetailBody.parts[1].parts[0].body.data}`
+        `${ threadDetailBody.parts[1].parts[0].body.data }`
       )
       setBodyState((currState) => [...currState, str])
     } else {
-      const str = decodeBase64(`${threadDetailBody.parts[1].body.data}`)
+      const str = decodeBase64(`${ threadDetailBody.parts[1].body.data }`)
       setBodyState((currState) => [...currState, str])
     }
   }
 
   const simpleText = () => {
-    const str = decodeBase64(`${threadDetailBody.body.data}`)
+    const str = decodeBase64(`${ threadDetailBody.body.data }`)
     setBodyState((currState) => [...currState, str])
   }
 
@@ -79,10 +79,10 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
       {!isEmpty(bodyState) &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
-          Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
+            Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
             <img
-              key={`${item.filename + itemIdx}`}
-              src={`data:${item.mimeType};base64,${item.decodedB64}`}
+              key={`${ item.filename + itemIdx }`}
+              src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
               alt={bodyState?.filename ?? 'embedded image'}
               style={{ maxWidth: '100%', borderRadius: '5px' }}
             />

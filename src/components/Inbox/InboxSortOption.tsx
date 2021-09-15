@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements/Buttons'
@@ -10,15 +9,16 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './InboxSortOptionStyles'
 import startSort from '../../utils/startSort'
 import { selectEmailList, setIsSorting } from '../../Store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const INBOX_BUTTON = 'Sort inbox'
 
 const SortInbox = () => {
-  const emailList = useSelector(selectEmailList)
-  const labelIds = useSelector(selectLabelIds)
-  const isLoading = useSelector(selectIsLoading)
-  const isFetching = useSelector(selectIsFetching)
-  const dispatch = useDispatch()
+  const emailList = useAppSelector(selectEmailList)
+  const labelIds = useAppSelector(selectLabelIds)
+  const isLoading = useAppSelector(selectIsLoading)
+  const isFetching = useAppSelector(selectIsFetching)
+  const dispatch = useAppDispatch()
   const history = useHistory()
   const [disableRefresh, setDisableRefresh] = useState(false)
 

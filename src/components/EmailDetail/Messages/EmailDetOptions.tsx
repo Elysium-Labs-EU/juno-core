@@ -6,7 +6,6 @@ import {
   // FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import { useDispatch, useSelector } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
@@ -23,14 +22,15 @@ import * as S from '../EmailDetailStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
 import SetCompletedMail from '../../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 
 const EmailDetOptions = ({ messageId, setReply }) => {
-  const emailList = useSelector(selectEmailList)
-  // const isFocused = useSelector(selectIsFocused)
-  // const isSorting = useSelector(selectIsSorting)
-  const labelIds = useSelector(selectLabelIds)
-  const storageLabels = useSelector(selectStorageLabels)
-  const dispatch = useDispatch()
+  const emailList = useAppSelector(selectEmailList)
+  // const isFocused = useAppSelector(selectIsFocused)
+  // const isSorting = useAppSelector(selectIsSorting)
+  const labelIds = useAppSelector(selectLabelIds)
+  const storageLabels = useAppSelector(selectStorageLabels)
+  const dispatch = useAppDispatch()
   const history = useHistory()
   const labelURL = convertArrayToString(labelIds)
   const [showMenu, setShowMenu] = useState(false)
@@ -54,14 +54,14 @@ const EmailDetOptions = ({ messageId, setReply }) => {
           </div>
           <div>
             {labelIds &&
-            labelIds.some(
-              (item) =>
-                item ===
-                FindLabelByName({
-                  storageLabels,
-                  LABEL_NAME: todo.LABEL,
-                })[0].id
-            ) ? (
+              labelIds.some(
+                (item) =>
+                  item ===
+                  FindLabelByName({
+                    storageLabels,
+                    LABEL_NAME: todo.LABEL,
+                  })[0].id
+              ) ? (
               <CustomButtonText
                 className="button option-link"
                 icon={<FiCheckCircle />}

@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { CustomButtonText } from '../Elements/Buttons'
 import { convertArrayToString } from '../../utils'
@@ -9,13 +8,14 @@ import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import startSort from '../../utils/startSort'
 import { selectEmailList, setIsFocused } from '../../Store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const TodoFocusOption = () => {
-  const labelIds = useSelector(selectLabelIds)
-  const isLoading = useSelector(selectIsLoading)
-  const emailList = useSelector(selectEmailList)
+  const labelIds = useAppSelector(selectLabelIds)
+  const isLoading = useAppSelector(selectIsLoading)
+  const emailList = useAppSelector(selectEmailList)
   const history = useHistory()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
     () =>

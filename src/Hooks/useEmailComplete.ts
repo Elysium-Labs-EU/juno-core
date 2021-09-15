@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../Store/hooks'
 import { selectLabelIds } from '../Store/labelsSlice'
 import { UpdateMetaListLabel } from '../Store/metaListSlice'
 
 const useEmailComplete = (props) => {
   const { messageId, history, labelURL } = props
-  const labelIds = useSelector(selectLabelIds)
-  const dispatch = useDispatch()
+  const labelIds = useAppSelector(selectLabelIds)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     const CompletedAction = () => {

@@ -1,6 +1,5 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../EmailAvatar'
 import EmailHasAttachment from '../EmailHasAttachment'
@@ -12,12 +11,13 @@ import * as S from './EmailListItemStyles'
 import { findPayloadHeadersData } from '../../utils'
 import * as draft from '../../constants/draftConstants'
 import openEmail from '../../utils/openEmail'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const EmailListItem = ({ email }) => {
-  const labelIds = useSelector(selectLabelIds)
+  const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const history = useHistory()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const emailLabels =
     email && email.messages

@@ -1,18 +1,27 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
+import type { RootState } from './store'
 import labelApi from '../data/labelApi'
 import { setServiceUnavailable } from './utilsSlice'
+
+interface LabelState {
+  labelIds: string
+  loadedInbox: []
+  storageLabels: []
+}
+
+const initialState: LabelState = Object.freeze({
+  labelIds: '',
+  loadedInbox: [],
+  storageLabels: [],
+})
 
 const api = labelApi()
 
 export const labelsSlice = createSlice({
   name: 'labels',
-  initialState: {
-    labelIds: '',
-    loadedInbox: [],
-    storageLabels: [],
-  },
+  initialState,
   reducers: {
     setCurrentLabels: (state, action) => {
       state.labelIds = action.payload
@@ -46,56 +55,57 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
 export const createLabel = (label) => async (dispatch) => {
-    try {
-      const body = {
-        labelVisibility: label.labelVisibility ?? 'labelShow',
-        messageListVisibility: label.messageListVisibility ?? 'show',
-        name: label.name ?? label,
-      }
-      return await axios
-        .post(`/api/labels`, body)
-        .then((res) => {
-          if (res.status === 200) {
-            dispatch(setStorageLabels(res.data.message))
-          } else {
-            dispatch(setServiceUnavailable('Error creating label.'))
-          }
-        })
-        .catch((err) => console.log(err))
-    } catch (err) {
-      console.log(err)
-      dispatch(setServiceUnavailable('Error creating label.'))
+  try {
+    const body = {
+      labelVisibility: label.labelVisibility ?? 'labelShow',
+      messageListVisibility: label.messageListVisibility ?? 'show',
+      name: label.name ?? label,
     }
-    return null
+    return await axios
+      .post(`/api/labels`, body)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch(setStorageLabels(res.data.message))
+        } else {
+          dispatch(setServiceUnavailable('Error creating label.'))
+        }
+      })
+      .catch((err) => console.log(err))
+  } catch (err) {
+    console.log(err)
+    dispatch(setServiceUnavailable('Error creating label.'))
   }
+  return null
+}
 
 export const fetchLabelIds = (LABEL) => async (dispatch) => {
-    try {
-      const listAllLabels = await api.fetchLabel()
-      const {
-        message: { labels },
-      } = listAllLabels
-      if (labels) {
-        const labelObject = labels.filter((label) => label.name === LABEL)
-        if (labelObject.length > 0) {
-          // console.log(labelObject)
-          dispatch(setCurrentLabels([labelObject[0].id]))
-          dispatch(setStorageLabels([labelObject[0].id]))
-        } else {
-          dispatch(setServiceUnavailable('Error fetching label.'))
-        }
+  try {
+    const listAllLabels = await api.fetchLabel()
+    const {
+      message: { labels },
+    } = listAllLabels
+    if (labels) {
+      const labelObject = labels.filter((label) => label.name === LABEL)
+      if (labelObject.length > 0) {
+        // console.log(labelObject)
+        dispatch(setCurrentLabels([labelObject[0].id]))
+        dispatch(setStorageLabels([labelObject[0].id]))
       } else {
         dispatch(setServiceUnavailable('Error fetching label.'))
       }
-    } catch (err) {
-      console.log(err)
+    } else {
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
-    // TO-DO: What if multiple labels are used
+  } catch (err) {
+    console.log(err)
+    dispatch(setServiceUnavailable('Error fetching label.'))
   }
+  // TO-DO: What if multiple labels are used
+}
 
-export const selectLabelIds = (state) => state.labels.labelIds
-export const selectLoadedInbox = (state) => state.labels.loadedInbox
-export const selectStorageLabels = (state) => state.labels.storageLabels
+export const selectLabelIds = (state: RootState) => state.labels.labelIds
+export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox
+export const selectStorageLabels = (state: RootState) =>
+  state.labels.storageLabels
 
 export default labelsSlice.reducer

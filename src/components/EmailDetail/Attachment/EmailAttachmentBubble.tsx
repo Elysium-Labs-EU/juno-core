@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { FiCheck, FiDownload } from 'react-icons/fi'
 import './EmailAttachmentBubble.scss'
 import prettyBytes from 'pretty-bytes'
-import { useDispatch } from 'react-redux'
 import * as S from './EmailAttachmentBubbleStyles'
 import { CustomIconLink } from '../../Elements/Buttons'
 import {
@@ -10,12 +9,13 @@ import {
   // fetchAttachment,
 } from '../../../Store/emailDetailSlice'
 import EmailAttachmentType from './EmailAttachmentType'
+import { useAppDispatch } from '../../../Store/hooks'
 
 const FILE = 'File - '
 
 const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
   const [downloaded, setDownloaded] = useState(false)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   return (
     <>
@@ -24,10 +24,10 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
           <EmailAttachmentType mimeType={attachmentData?.mimeType} />
           <S.AttachmentInner
             className="attachment-inner"
-            // onClick={() =>
-            //   dispatch(fetchAttachment({ messageId, attachmentData }))
-            // }
-            // aria-hidden="true"
+          // onClick={() =>
+          //   dispatch(fetchAttachment({ messageId, attachmentData }))
+          // }
+          // aria-hidden="true"
           >
             <span>{attachmentData.filename}</span>
             <p className="text_small text_muted" style={{ margin: 0 }}>

@@ -1,13 +1,13 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
 import { useHistory, useLocation } from 'react-router-dom'
 import { CustomButtonText } from './Elements/Buttons'
 import ThrashMail from './EmailOptions/ThrashMail'
 import * as local from '../constants/emailDetailConstants'
 import * as S from './EmailMoreOptionsStyles'
+import { useAppDispatch } from '../Store/hooks'
 
 const EmailMoreOptions = ({ messageId, labelURL, labelIds }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const location = useLocation()
   const history = useHistory()
 

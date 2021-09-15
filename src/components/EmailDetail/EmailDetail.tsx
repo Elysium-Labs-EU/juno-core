@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import '../../App.scss'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   selectCurrentEmail,
   selectIsReplying,
@@ -19,16 +18,17 @@ import * as local from '../../constants/emailDetailConstants'
 import * as GS from '../../styles/globalStyles'
 import MessagesOverview from './Messages/MessagesOverview'
 import FilesOverview from './Files/FilesOverview'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 // import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
-  const currentEmail = useSelector(selectCurrentEmail)
-  const emailList = useSelector(selectEmailList)
-  const isLoading = useSelector(selectIsLoading)
-  const labelIds = useSelector(selectLabelIds)
-  const serviceUnavailable = useSelector(selectServiceUnavailable)
-  const isReplying = useSelector(selectIsReplying)
-  const dispatch = useDispatch()
+  const currentEmail = useAppSelector(selectCurrentEmail)
+  const emailList = useAppSelector(selectEmailList)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const isReplying = useAppSelector(selectIsReplying)
+  const dispatch = useAppDispatch()
   const location = useLocation()
   const { threadId, overviewId } = useParams()
   const [threadDetail, setThreadDetail] = useState({})

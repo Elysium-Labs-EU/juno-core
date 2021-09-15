@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import EmailList from '../EmailList/EmailList'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import {
@@ -7,13 +6,14 @@ import {
   setCurrentLabels,
   selectStorageLabels,
 } from '../../Store/labelsSlice'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 const LABEL = 'Juno/To Do'
 
 const Todo = () => {
-  const baseLoaded = useSelector(selectBaseLoaded)
-  const storageLabels = useSelector(selectStorageLabels)
-  const dispatch = useDispatch()
+  const baseLoaded = useAppSelector(selectBaseLoaded)
+  const storageLabels = useAppSelector(selectStorageLabels)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (baseLoaded && !storageLabels.some((label) => label.name === LABEL)) {

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import {
   BrowserRouter as Router, Switch, Route,
   // RouteComponentProps
@@ -13,6 +12,7 @@ import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import Routes from './constants/routes.json'
 import * as GS from './styles/globalStyles'
+import { useAppDispatch, useAppSelector } from './Store/hooks'
 
 const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetail'))
@@ -26,8 +26,8 @@ const SentEmail = React.lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = React.lazy(() => import('./components/Draft/DraftEmail'))
 
 const App = () => {
-  const dispatch = useDispatch()
-  const baseLoaded = useSelector((state) => state.base.baseLoaded)
+  const dispatch = useAppDispatch()
+  const baseLoaded = useAppSelector((state) => state.base.baseLoaded)
   useEffect(() => {
     if (!baseLoaded) {
       dispatch(checkBase())
