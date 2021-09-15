@@ -7,18 +7,61 @@ import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList } from '../utils'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
+import type { AppThunk, RootState } from './store'
+
+interface UpdateRequest {
+  addLabelIds?: string[]
+  removeLabelIds?: string[]
+  delete?: boolean
+}
+
+interface UpdateRequestParams {
+  history?: any
+  location?: any
+  messageId: string
+  request: UpdateRequest
+  labelURL: string
+  labelIds: string[]
+}
+
+interface LoadEmailObject {
+  labelIds: string[]
+  maxResults: number
+}
+
+interface MetaListThreadItem {
+  id: string
+  snippet: string
+  historyId: string
+}
+
+interface MetaListObject {
+  labels: string[]
+  threads: MetaListThreadItem[]
+  nextPageToken: string
+}
+
+interface MetaListState {
+  metaList: MetaListObject[]
+  isFetching: boolean
+}
+
+const initialState: MetaListState = Object.freeze({
+  metaList: [],
+  isFetching: false,
+})
 
 export const metaListSlice = createSlice({
   name: 'meta',
-  initialState: {
-    metaList: [],
-    isFetching: false,
-  },
+  initialState,
   reducers: {
     listAddMeta: (state, action) => {
       const sortedMetaList = {
         ...action.payload,
-        threads: action.payload.threads.sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)),
+        threads: action.payload.threads.sort(
+          (a: MetaListThreadItem, b: MetaListThreadItem) =>
+            parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+        ),
       }
 
       // Find metaList sub-array index
@@ -41,17 +84,26 @@ export const metaListSlice = createSlice({
       }
     },
     listAddItemMeta: (state, action) => {
-      const { filteredTargetMetaList, activeMetaObjArray } = action.payload
+      const {
+        filteredTargetMetaList,
+        activeMetaObjArray,
+      }: {
+        filteredTargetMetaList: MetaListObject[]
+        activeMetaObjArray: MetaListThreadItem
+      } = action.payload
       const newMetaListEntry = {
         ...filteredTargetMetaList[0],
         threads: filteredTargetMetaList[0].threads
           .concat(activeMetaObjArray)
-          .sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)),
+          .sort(
+            (a: MetaListThreadItem, b: MetaListThreadItem) =>
+              parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+          ),
       }
       const updatedMetaList = [
         ...state.metaList.filter(
           (threadList) =>
-            !threadList.labels.includes(...filteredTargetMetaList[0].labels)
+            !threadList.labels.includes(filteredTargetMetaList[0].labels[0])
         ),
         newMetaListEntry,
       ]
@@ -62,13 +114,13 @@ export const metaListSlice = createSlice({
       const newMetaListEntry = {
         ...filteredCurrentMetaList[0],
         threads: filteredCurrentMetaList[0].threads.filter(
-          (item) => item.id !== messageId
+          (item: MetaListThreadItem) => item.id !== messageId
         ),
       }
       const updatedMetaList = [
         ...state.metaList.filter(
           (threadList) =>
-            !threadList.labels.includes(...filteredCurrentMetaList[0].labels)
+            !threadList.labels.includes(filteredCurrentMetaList[0].labels[0])
         ),
         newMetaListEntry,
       ]
@@ -87,7 +139,9 @@ export const {
   setIsFetching,
 } = metaListSlice.actions
 
-export const loadEmails = (params) => async (dispatch, getState) => {
+export const loadEmails =
+  (params: LoadEmailObject): AppThunk =>
+  async (dispatch, getState) => {
     try {
       if (!getState().utils.isLoading) {
         dispatch(setIsLoading(true))
@@ -122,7 +176,7 @@ export const loadEmails = (params) => async (dispatch, getState) => {
     }
   }
 
-export const UpdateMetaListLabel = (props) => {
+export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
   const {
     messageId,
     request,
@@ -156,7 +210,7 @@ export const UpdateMetaListLabel = (props) => {
       }
       if (addLabelIds && filteredTargetMetaList.length > 0) {
         const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-          (item) => item.id === messageId
+          (item: MetaListThreadItem) => item.id === messageId
         )
         dispatch(
           listAddItemMeta({
@@ -192,19 +246,22 @@ export const UpdateMetaListLabel = (props) => {
 }
 
 // Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the meta list for inbox only first.
-export const refreshEmailFeed = (params) => async (dispatch, getState) => {
+export const refreshEmailFeed =
+  (params: LoadEmailObject): AppThunk =>
+  async (dispatch, getState) => {
     try {
       dispatch(setIsFetching(true))
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
       const checkFeed = await threadApi().getThreads(params)
       const newEmailsIdx = checkFeed.message.threads.findIndex(
-        (thread) => parseInt(thread.historyId, 10) < savedHistoryId
+        (thread: MetaListThreadItem) =>
+          parseInt(thread.historyId, 10) < savedHistoryId
       )
       if (newEmailsIdx > -1) {
         const newSlice = checkFeed.message.threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
           const user = await userApi().fetchUser()
-          dispatch(setProfile(user.data.data))
+          dispatch(setProfile(user?.data.data))
           const labeledThreads = {
             labels: params.labelIds,
             threads: newSlice,
@@ -222,7 +279,7 @@ export const refreshEmailFeed = (params) => async (dispatch, getState) => {
     }
   }
 
-export const selectMetaList = (state) => state.meta.metaList
-export const selectIsFetching = (state) => state.meta.isFetching
+export const selectMetaList = (state: RootState) => state.meta.metaList
+export const selectIsFetching = (state: RootState) => state.meta.isFetching
 
 export default metaListSlice.reducer
