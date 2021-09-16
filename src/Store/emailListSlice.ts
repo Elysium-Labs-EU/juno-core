@@ -12,8 +12,8 @@ import {
   EmailListThreadItem,
   EmailListObject,
   EmailListState,
-} from './emailListSliceTypes'
-import { UpdateRequestParams } from './metaEmailListSliceTypes'
+} from './emailListTypes'
+import { UpdateRequestParams } from './metaEmailListTypes'
 
 const initialState: EmailListState = Object.freeze({
   emailList: [],
@@ -256,7 +256,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
 export const selectIsFocused = (state: RootState) => state.email.isFocused
 export const selectIsSorting = (state: RootState) => state.email.isSorting
 export const selectEmailList = (state: RootState) => state.email.emailList
-export const selectNextPageToken = (state: RootState) =>
+export const selectNextPageToken = (state: any) =>
   state.email.emailList.nextPageToken
 
 export default emailListSlice.reducer

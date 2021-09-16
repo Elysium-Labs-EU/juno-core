@@ -8,7 +8,7 @@ import { FilteredMetaList } from '../utils'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 import type { AppThunk, RootState } from './store'
-import { UpdateRequestParams } from './metaEmailListSliceTypes'
+import { UpdateRequestParams } from './metaEmailListTypes'
 import {
   LoadEmailObject,
   MetaListObject,
