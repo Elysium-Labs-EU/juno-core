@@ -4,23 +4,7 @@ import axios from 'axios'
 import type { AppThunk, RootState } from './store'
 import labelApi from '../data/labelApi'
 import { setServiceUnavailable } from './utilsSlice'
-
-interface GoogleLabel {
-  id: string
-  labelListVisibility: string
-  messageListVisibility: string
-  name: string
-  type: string
-}
-interface LabelIdName {
-  id: string
-  name: string
-}
-interface LabelState {
-  labelIds: string
-  loadedInbox: string[][]
-  storageLabels: LabelIdName[]
-}
+import { GoogleLabel, LabelIdName, LabelState } from './labelsTypes'
 
 const initialState: LabelState = Object.freeze({
   labelIds: '',

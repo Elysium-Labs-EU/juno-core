@@ -30,6 +30,6 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   unknown,
   Action<string>
 >
-export const useAppDispatch = () => useDispatch<AppDispatch>() // Export a hook that can be reused to resolve types
+export const useAppDispatch = () => useDispatch<AppDispatch>()
 
 export default store

@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-
 import { createSlice } from '@reduxjs/toolkit'
 import base64url from 'base64url'
 import isEmpty from 'lodash/isEmpty'
@@ -7,14 +6,24 @@ import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail } from './emailDetailSlice'
+import type { AppThunk, RootState } from './store'
+import {
+  DraftListObject,
+  DraftDetailObject,
+  DraftsState,
+  ComposedEmail,
+} from './draftsTypes'
+import { ComposeEmail } from './composeTypes'
+
+const initialState: DraftsState = Object.freeze({
+  draftListLoaded: false,
+  draftList: [],
+  draftDetails: {},
+})
 
 export const draftsSlice = createSlice({
   name: 'drafts',
-  initialState: {
-    draftListLoaded: false,
-    draftList: [],
-    draftDetails: {},
-  },
+  initialState,
   reducers: {
     listAddDraft: (state, action) => {
       if (Array.isArray(action.payload)) {
@@ -38,88 +47,88 @@ export const {
   setDraftListLoaded,
 } = draftsSlice.actions
 
-export const loadDraftList = () => async (dispatch) => {
-    try {
-      const draftList = await draftApi().getDrafts()
-      if (draftList.message.resultSizeEstimate > 0) {
-        dispatch(listAddDraft(draftList.message.drafts))
-      } else {
-        return null
-      }
+export const loadDraftList = (): AppThunk => async (dispatch) => {
+  try {
+    const draftList = await draftApi().getDrafts()
+    if (draftList.message.resultSizeEstimate > 0) {
+      dispatch(listAddDraft(draftList.message.drafts))
+    } else {
       return null
-    } catch (err) {
-      console.error(err)
-      dispatch(setServiceUnavailable('Error getting Draft list.'))
-    } finally {
-      dispatch(setDraftListLoaded(true))
     }
     return null
+  } catch (err) {
+    console.error(err)
+    dispatch(setServiceUnavailable('Error getting Draft list.'))
+  } finally {
+    dispatch(setDraftListLoaded(true))
   }
+  return null
+}
 
-export const CreateDraft = () => async (dispatch, getState) => {
-    try {
-      const { composeEmail } = getState().compose
-      const { id, message } =
-        getState().drafts.draftDetails && getState().drafts.draftDetails
-      const baseComposedEmail = {
-        draftId: id && id,
-        threadId: message?.threadId && message.threadId,
-        messageId: message?.id && message.id,
-        labelIds: message?.labelIds && message.labelIds,
-        to: composeEmail.to ?? [],
-        subject: composeEmail.subject ?? '',
-        body: composeEmail.body ?? '',
-      }
-      const response = await draftApi().createDrafts(baseComposedEmail)
-      if (response && response.status === 200) {
-        const {
-          data: {
-            message: { data },
-          },
-        } = response
-        dispatch(listUpdateDraft(data))
-      } else {
-        dispatch(setServiceUnavailable('Cannot create draft.'))
-      }
-    } catch (err) {
-      console.error(err)
+export const CreateDraft = (): AppThunk => async (dispatch, getState) => {
+  try {
+    const { composeEmail }: any = getState().compose
+    const { id, message } =
+      getState().drafts.draftDetails && getState().drafts.draftDetails
+    const baseComposedEmail: ComposedEmail = {
+      draftId: id && id,
+      threadId: message?.threadId && message.threadId,
+      messageId: message?.id && message.id,
+      labelIds: message?.labelIds && message.labelIds,
+      to: composeEmail.to ?? [],
+      subject: composeEmail.subject ?? '',
+      body: composeEmail.body ?? '',
+    }
+    const response = await draftApi().createDrafts(baseComposedEmail)
+    if (response && response.status === 200) {
+      const {
+        data: {
+          message: { data },
+        },
+      } = response
+      dispatch(listUpdateDraft(data))
+    } else {
       dispatch(setServiceUnavailable('Cannot create draft.'))
     }
+  } catch (err) {
+    console.error(err)
+    dispatch(setServiceUnavailable('Cannot create draft.'))
   }
+}
 
-export const UpdateDraft = () => async (dispatch, getState) => {
-    try {
-      const { composeEmail } = getState().compose
-      const { id, message } =
-        getState().drafts.draftDetails && getState().drafts.draftDetails
-      const baseComposedEmail = {
-        draftId: id && id,
-        threadId: message?.threadId && message.threadId,
-        messageId: message?.id && message.id,
-        labelIds: message?.labelIds && message.labelIds,
-        to: composeEmail.to ?? [],
-        subject: composeEmail.subject ?? '',
-        body: composeEmail.body ?? '',
-      }
+export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
+  try {
+    const { composeEmail } = getState().compose
+    const { id, message } =
+      getState().drafts.draftDetails && getState().drafts.draftDetails
+    const baseComposedEmail = {
+      draftId: id && id,
+      threadId: message?.threadId && message.threadId,
+      messageId: message?.id && message.id,
+      labelIds: message?.labelIds && message.labelIds,
+      to: composeEmail.to ?? [],
+      subject: composeEmail.subject ?? '',
+      body: composeEmail.body ?? '',
+    }
 
-      const response = await draftApi().updateDrafts(baseComposedEmail)
-      if (response && response.status === 200) {
-        const {
-          data: {
-            message: { data },
-          },
-        } = response
-        dispatch(listUpdateDraft(data))
-      } else {
-        dispatch(setServiceUnavailable('Cannot update draft.'))
-      }
-    } catch (err) {
-      console.error(err)
+    const response = await draftApi().updateDrafts(baseComposedEmail)
+    if (response && response.status === 200) {
+      const {
+        data: {
+          message: { data },
+        },
+      } = response
+      dispatch(listUpdateDraft(data))
+    } else {
       dispatch(setServiceUnavailable('Cannot update draft.'))
     }
+  } catch (err) {
+    console.error(err)
+    dispatch(setServiceUnavailable('Cannot update draft.'))
   }
+}
 
-const pushDraftDetails = (enhancedDraftDetails) => {
+const pushDraftDetails = (enhancedDraftDetails): AppThunk => {
   const {
     draft,
     draft: { message },
@@ -164,7 +173,7 @@ const pushDraftDetails = (enhancedDraftDetails) => {
   }
 }
 
-const loadDraftDetails = (draftDetails) => {
+const loadDraftDetails = (draftDetails): AppThunk => {
   const { draftId, history } = draftDetails
   return async (dispatch) => {
     try {
@@ -181,7 +190,7 @@ const loadDraftDetails = (draftDetails) => {
   }
 }
 
-export const OpenDraftEmail = (props) => {
+export const OpenDraftEmail = (props): AppThunk => {
   const { history, messageId, id } = props
   return async (dispatch, getState) => {
     try {
@@ -225,8 +234,10 @@ export const OpenDraftEmail = (props) => {
   }
 }
 
-export const selectDraft = (state) => state.drafts.draftList
-export const selectDraftListLoaded = (state) => state.drafts.draftListLoaded
-export const selectDraftDetails = (state) => state.drafts.draftDetails
+export const selectDraft = (state: RootState) => state.drafts.draftList
+export const selectDraftListLoaded = (state: RootState) =>
+  state.drafts.draftListLoaded
+export const selectDraftDetails = (state: RootState) =>
+  state.drafts.draftDetails
 
 export default draftsSlice.reducer
