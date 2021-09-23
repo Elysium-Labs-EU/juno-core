@@ -12,6 +12,7 @@ import {
   DraftDetailObject,
   DraftsState,
   ComposedEmail,
+  MessagePayload,
 } from './draftsTypes'
 import { ComposeEmail } from './composeTypes'
 
@@ -137,11 +138,16 @@ const pushDraftDetails = (enhancedDraftDetails): AppThunk => {
   return (dispatch) => {
     try {
       const loadEmail = {
-        to: message.payload.headers.find((e) => e.name === 'To')
-          ? message.payload.headers.find((e) => e.name === 'To').value
+        to: message.payload.headers.find((e: MessagePayload) => e.name === 'To')
+          ? message.payload.headers.find((e: MessagePayload) => e.name === 'To')
+              .value
           : '',
-        subject: message.payload.headers.find((e) => e.name === 'Subject')
-          ? message.payload.headers.find((e) => e.name === 'Subject').value
+        subject: message.payload.headers.find(
+          (e: MessagePayload) => e.name === 'Subject'
+        )
+          ? message.payload.headers.find(
+              (e: MessagePayload) => e.name === 'Subject'
+            ).value
           : '',
         body:
           message.payload.body.size > 0

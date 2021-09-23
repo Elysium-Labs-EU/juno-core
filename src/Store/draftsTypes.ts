@@ -1,3 +1,8 @@
+export interface MessagePayload {
+  name: string
+  value?: string
+}
+
 export interface ComposedEmail {
   draftId: string
   threadId: string
