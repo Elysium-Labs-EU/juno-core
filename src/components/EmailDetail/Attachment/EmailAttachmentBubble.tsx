@@ -8,20 +8,21 @@ import {
   downloadAttachment,
   // fetchAttachment,
 } from '../../../Store/emailDetailSlice'
-import EmailAttachmentType from './EmailAttachmentType'
+import EmailAttachmentIcon from './EmailAttachmentIcon'
 import { useAppDispatch } from '../../../Store/hooks'
+import { EmailAttachmentType } from './EmailAttachmentTypes'
 
 const FILE = 'File - '
 
-const EmailAttachmentBubble = ({ attachmentData, messageId }) => {
+const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: EmailAttachmentType, messageId: string }) => {
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
   return (
     <>
       {attachmentData.filename.length > 0 && (
-        <S.Attachment div key={attachmentData.partId}>
-          <EmailAttachmentType mimeType={attachmentData?.mimeType} />
+        <S.Attachment key={attachmentData.partId}>
+          <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
           <S.AttachmentInner
             className="attachment-inner"
           // onClick={() =>

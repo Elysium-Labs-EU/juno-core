@@ -8,13 +8,13 @@ import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
-  DraftListObject,
-  DraftDetailObject,
+  DraftDetails,
   DraftsState,
   ComposedEmail,
+  EnhancedDraftDetails,
   MessagePayload,
+  OpenDraftEmailType,
 } from './draftsTypes'
-import { ComposeEmail } from './composeTypes'
 
 const initialState: DraftsState = Object.freeze({
   draftListLoaded: false,
@@ -129,7 +129,9 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
   }
 }
 
-const pushDraftDetails = (enhancedDraftDetails): AppThunk => {
+const pushDraftDetails = (
+  enhancedDraftDetails: EnhancedDraftDetails
+): AppThunk => {
   const {
     draft,
     draft: { message },
@@ -179,12 +181,12 @@ const pushDraftDetails = (enhancedDraftDetails): AppThunk => {
   }
 }
 
-const loadDraftDetails = (draftDetails): AppThunk => {
+const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   const { draftId, history } = draftDetails
   return async (dispatch) => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
-      if (response.status === 200) {
+      if (response?.status && response.status === 200) {
         const { draft } = response.data
         const enhancedDraftDetails = { history, draft }
         dispatch(pushDraftDetails(enhancedDraftDetails))
@@ -196,7 +198,7 @@ const loadDraftDetails = (draftDetails): AppThunk => {
   }
 }
 
-export const OpenDraftEmail = (props): AppThunk => {
+export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
   const { history, messageId, id } = props
   return async (dispatch, getState) => {
     try {
@@ -211,7 +213,7 @@ export const OpenDraftEmail = (props): AppThunk => {
               },
             } = res
             const draftId = drafts.filter(
-              (draft) => draft.message.id === messageId
+              (draft: any) => draft.message.id === messageId
             )
             if (!isEmpty(draftId)) {
               dispatch(loadDraftDetails({ draftId, history }))

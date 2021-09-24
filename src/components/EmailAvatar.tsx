@@ -1,7 +1,7 @@
 import React from 'react'
 import * as S from './EmailAvatarStyles'
 
-const EmailAvatar = ({ avatarURL }) => {
+const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
   const intialCreator = () => {
     const splittedURL = avatarURL && avatarURL.split('<')
     if (splittedURL) {
@@ -23,7 +23,7 @@ const EmailAvatar = ({ avatarURL }) => {
     // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
     <S.EmailAvatarContainer>
       {/* <>{finalIntials}</> */}
-      {intialCreator(avatarURL)}
+      {intialCreator()}
     </S.EmailAvatarContainer>
   )
 }

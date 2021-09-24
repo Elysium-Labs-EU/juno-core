@@ -5,7 +5,13 @@ import * as global from '../constants/globalConstants'
 import { setIsFocused, setIsSorting } from '../Store/emailListSlice'
 import { useAppDispatch } from '../Store/hooks'
 
-const BackButton = (props) => {
+interface BackButtonType {
+  isFocused?: boolean
+  isSorting?: boolean
+}
+
+
+const BackButton = (props: BackButtonType) => {
   const { isFocused, isSorting } = props
   const dispatch = useAppDispatch()
   const history = useHistory()
@@ -26,3 +32,9 @@ const BackButton = (props) => {
 }
 
 export default BackButton
+
+
+BackButton.defaultProps = {
+  isFocused: false,
+  isSorting: false,
+}

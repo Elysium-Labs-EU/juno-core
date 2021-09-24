@@ -4,8 +4,11 @@ export interface SendComposeEmail {
 }
 
 export interface ComposePayload {
-  id: string
-  value: string
+  id?: string
+  value?: string
+  body?: string
+  subject?: string
+  to?: string
 }
 
 export interface ComposeEmail {

@@ -1,11 +1,20 @@
 /* eslint-disable react/button-has-type */
 import React from 'react'
 
-export const CustomButtonText = (props) => {
+interface CustomButtonTextProps {
+  onClick?: {},
+  className: string,
+  type?: 'submit' | 'reset' | 'button',
+  disabled?: boolean,
+  icon?: {},
+  label: string,
+}
+
+export const CustomButtonText = (props: CustomButtonTextProps) => {
   const { onClick, className, disabled, icon, label, type } = props
   return (
     <button
-      onClick={onClick}
+      onClick={() => onClick}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
@@ -18,15 +27,30 @@ export const CustomButtonText = (props) => {
   )
 }
 
-export const CustomIconLink = (props) => {
-  const { onClick, className, disabled, icon, style, type } = props
+CustomButtonText.defaultProps = {
+  onClick: null,
+  type: 'button',
+  disabled: false,
+  icon: null,
+}
+
+interface CustomIconLinkTypes {
+  onClick: {}
+  className: string
+  disabled?: boolean
+  icon: {}
+  type?: 'submit' | 'reset' | 'button'
+}
+
+export const CustomIconLink = (props: CustomIconLinkTypes) => {
+  const { onClick, className, disabled, icon, type } = props
   return (
     <button
-      onClick={onClick}
+      onClick={() => onClick}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
-      style={style}
+    // style={style}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <span style={{ lineHeight: 0 }}>{icon}</span>
@@ -35,11 +59,24 @@ export const CustomIconLink = (props) => {
   )
 }
 
-export const CustomButton = (props) => {
+CustomIconLink.defaultProps = {
+  disabled: false,
+  type: 'button',
+}
+
+interface CustomButtonProps {
+  onClick: {},
+  className: string,
+  type: 'submit' | 'reset' | 'button',
+  disabled: boolean,
+  icon?: {},
+}
+
+export const CustomButton = (props: CustomButtonProps) => {
   const { onClick, className, disabled, icon, type } = props
   return (
     <button
-      onClick={onClick}
+      onClick={() => onClick}
       className={className}
       style={{ marginTop: '1rem' }}
       type={type ?? 'button'}
@@ -50,4 +87,9 @@ export const CustomButton = (props) => {
       </div>
     </button>
   )
+}
+
+
+CustomButton.defaultProps = {
+  icon: null,
 }

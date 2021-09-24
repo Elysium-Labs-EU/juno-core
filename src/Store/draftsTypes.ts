@@ -1,3 +1,36 @@
+export interface OpenDraftEmailType {
+  history: any
+  messageId: string
+  id: string
+}
+
+export interface DraftDetails {
+  draftId: string
+  history: any
+}
+
+export interface FullEmailType {
+  historyId: string
+  id: string
+  internalDate: string
+  labelIds: string[]
+  payload: {
+    body: any
+    headers: any
+  }
+  mimeType: string
+  threadId: string
+  snippet: string
+}
+
+export interface EnhancedDraftDetails {
+  draft: {
+    id: string
+    message: FullEmailType
+  }
+  history: any
+}
+
 export interface MessagePayload {
   name: string
   value?: string

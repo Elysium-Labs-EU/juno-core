@@ -1,11 +1,15 @@
 import styled from 'styled-components'
 
+interface WrapperType {
+  isReplying: boolean
+}
+
 export const HeaderButton = styled.div`
   display: flex;
   align-items: center;
 `
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<WrapperType>`
   max-width: 850px;
   width: 100%;
   margin-left: ${(props) => (props.isReplying ? '10%' : 'auto')};

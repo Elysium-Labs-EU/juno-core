@@ -4,7 +4,6 @@ import { useHistory, useParams } from 'react-router-dom'
 import InputBase from '@material-ui/core/InputBase'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import { ComposerContainer, Wrapper } from './ComposeStyles'
 import {
   selectComposeEmail,
   SendComposedEmail,
@@ -23,6 +22,15 @@ import {
 } from '../../Store/draftsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
+interface ComposeEmailProps {
+  isReplying: boolean
+  isReplyingListener: {}
+  to: string
+  subject: string
+  id: string
+  threadId: string
+}
+
 const ComposeEmail = ({
   isReplying,
   isReplyingListener,
@@ -30,10 +38,10 @@ const ComposeEmail = ({
   subject,
   id,
   threadId,
-}) => {
+}: ComposeEmailProps) => {
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [toValue, setToValue] = useState([])
+  const [toValue, setToValue] = useState<string>('')
   const debouncedToValue = useDebounce(toValue, 500)
   const [subjectValue, setSubjectValue] = useState('')
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
@@ -42,7 +50,7 @@ const ComposeEmail = ({
   const [toError, setToError] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const dispatch = useAppDispatch()
-  const { messageId } = useParams()
+  const { messageId } = useParams<{ messageId: string }>()
   const history = useHistory()
 
   useEffect(() => {
@@ -68,15 +76,15 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  const handleChange = (event) => {
-    if (event.target.id === global.TO) {
-      setToValue(event.target.value)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.id === global.TO) {
+      setToValue(e.target.value)
     }
-    if (event.target.id === global.SUBJECT) {
-      setSubjectValue(event.target.value)
+    if (e.target.id === global.SUBJECT) {
+      setSubjectValue(e.target.value)
     }
-    if (event.target.id === global.BODY) {
-      setBodyValue(event.target.value)
+    if (e.target.id === global.BODY) {
+      setBodyValue(e.target.value)
     }
   }
 
@@ -138,7 +146,7 @@ const ComposeEmail = ({
     }
   }, [threadId])
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (toValue.length > 0) {
       if (emailValidation(toValue)) {
@@ -150,14 +158,14 @@ const ComposeEmail = ({
   }
 
   return (
-    <Wrapper isReplying={isReplying}>
+    <S.Wrapper isReplying={isReplying}>
       <>
         <S.UpdateContainer>
           {saveSuccess && (
             <span className="text_muted">{local.DRAFT_SAVED}</span>
           )}
         </S.UpdateContainer>
-        <ComposerContainer className="composer composerIsVisible">
+        <S.ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={onSubmit} autoComplete="off">
               <div style={{ marginBottom: `7px` }}>
@@ -171,7 +179,7 @@ const ComposeEmail = ({
                     <FormControl error={toError} fullWidth>
                       <InputBase
                         id="to"
-                        label={local.TO_LABEL}
+                        // label={local.TO_LABEL}
                         value={toValue ?? []}
                         onChange={handleChange}
                         required
@@ -193,7 +201,7 @@ const ComposeEmail = ({
                     </S.Label>
                     <InputBase
                       id="subject"
-                      label={local.SUBJECT_LABEL}
+                      // label={local.SUBJECT_LABEL}
                       value={subjectValue ?? ''}
                       onChange={handleChange}
                       fullWidth
@@ -207,7 +215,7 @@ const ComposeEmail = ({
                     </S.Label>
                     <InputBase
                       id="body"
-                      label={local.BODY_LABEL}
+                      // label={local.BODY_LABEL}
                       multiline
                       value={bodyValue ?? ''}
                       onChange={handleChange}
@@ -234,9 +242,9 @@ const ComposeEmail = ({
               )}
             </form>
           </div>
-        </ComposerContainer>
+        </S.ComposerContainer>
       </>
-    </Wrapper>
+    </S.Wrapper>
   )
 }
 

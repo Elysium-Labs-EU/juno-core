@@ -1,5 +1,4 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
-import { useDispatch } from 'react-redux'
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import emailReducer from './emailListSlice'
@@ -23,13 +22,12 @@ const store = configureStore({
 })
 
 export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type AppDispatch = typeof store.dispatch | any
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
   unknown,
   Action<string>
 >
-export const useAppDispatch = () => useDispatch<AppDispatch>()
 
 export default store

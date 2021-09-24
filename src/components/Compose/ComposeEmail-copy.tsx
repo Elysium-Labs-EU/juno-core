@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import '../../App.scss'
 import { useForm } from 'react-hook-form'
-import createApiClient from '../../data/api'
+// import createApiClient from '../../data/api'
 import { ComposerContainer, Wrapper } from './ComposeStyles'
 
-const api = createApiClient()
+// const api = createApiClient()
 
 const TO_LABEL = 'To'
 const SUBJECT_LABEL = 'Subject'
@@ -19,15 +19,15 @@ const ComposeEmail = () => {
     },
   })
 
-  const onSubmit = (data) => {
-    console.log(data)
-    api.sendMessage(data)
-  }
+  // const onSubmit = (data) => {
+  //   console.log(data)
+  //   api.sendMessage(data)
+  // }
 
   return (
-    <Wrapper>
-      <>
-        {/* <ComposerContainer className="composer composerIsVisible">
+    // <Wrapper>
+    <>
+      {/* <ComposerContainer className="composer composerIsVisible">
           <div className="base">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div style={{ marginBottom: `7px` }}>
@@ -87,8 +87,8 @@ const ComposeEmail = () => {
             </form>
           </div>
         </ComposerContainer> */}
-      </>
-    </Wrapper>
+    </>
+    // </Wrapper>
   )
 }
 

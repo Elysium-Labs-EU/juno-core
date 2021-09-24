@@ -7,17 +7,17 @@ import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 
 const ComposeHeader = () => (
-    <GS.OuterContainer>
-      <div className="nav-container">
-        <S.HeaderButton>
-          <BackButton />
-        </S.HeaderButton>
-        <div className="header-center">
-          <h2>{local.COMPOSE}</h2>
-        </div>
-        <NavControls />
+  <GS.OuterContainer>
+    <div className="nav-container">
+      <S.HeaderButton>
+        <BackButton />
+      </S.HeaderButton>
+      <div className="header-center">
+        <h2>{local.COMPOSE}</h2>
       </div>
-    </GS.OuterContainer>
-  )
+      <NavControls />
+    </div>
+  </GS.OuterContainer>
+)
 
 export default ComposeHeader
