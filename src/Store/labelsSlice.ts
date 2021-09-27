@@ -7,7 +7,7 @@ import { setServiceUnavailable } from './utilsSlice'
 import { GoogleLabel, LabelIdName, LabelState } from './labelsTypes'
 
 const initialState: LabelState = Object.freeze({
-  labelIds: '',
+  labelIds: [],
   loadedInbox: [],
   storageLabels: [],
 })
@@ -22,11 +22,11 @@ export const labelsSlice = createSlice({
       state.labelIds = action.payload
     },
     setLoadedInbox: (state, action) => {
-      const labelArray: string[] = Array.isArray(action.payload)
-        ? action.payload
-        : [action.payload]
-      if (!state.loadedInbox.includes(labelArray)) {
-        state.loadedInbox = [...new Set([...state.loadedInbox, labelArray])]
+      // const labelArray: string[] = Array.isArray(action.payload)
+      //   ? action.payload
+      //   : [action.payload]
+      if (!state.loadedInbox.includes(action.payload)) {
+        state.loadedInbox = [...new Set([...state.loadedInbox, action.payload])]
       }
     },
     setStorageLabels: (state, action) => {

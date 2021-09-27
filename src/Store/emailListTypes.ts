@@ -3,19 +3,22 @@ export interface EmailMessage {
   threadId: string
   labelIds: string[]
   snippet: string
-  payload: {
-    partId: string
-    mimeType: string
-    fileName: string
-    headers: any
-    body: {
-      size: number
-    }
-    parts: any
-  }
+  payload: EmailMessagePayload
   sizeEstimate: number
   historyId: string
   internalDate: string
+}
+
+export interface EmailMessagePayload {
+  partId: string
+  mimeType: string
+  fileName: string
+  headers: any
+  body: {
+    data?: string
+    size: number
+  }
+  parts: any
 }
 
 export interface EmailListThreadItem {

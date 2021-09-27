@@ -7,24 +7,26 @@ import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
 import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { MessagePayload } from '../../../../Store/draftsTypes'
+import { EmailMessage } from '../../../../Store/emailListTypes'
 
-const DraftMessage = ({ message, threadDetail }) => {
+const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const id = useAppSelector(selectCurrentEmail)
   const messageId = message && message.id
 
   const AvatarURL =
-    message && message.payload.headers.find((e) => e.name === 'From').value
+    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
 
   const From =
-    message && message.payload.headers.find((e) => e.name === 'From').value
+    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
 
   const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }` + `...`
+    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   const handleClick = () => {
-    dispatch(OpenDraftEmail({ history, id, messageId, threadDetail }))
+    dispatch(OpenDraftEmail({ history, id, messageId }))
   }
 
   return (

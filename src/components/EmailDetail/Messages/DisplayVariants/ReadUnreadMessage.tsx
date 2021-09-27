@@ -6,8 +6,10 @@ import TimeStamp from '../../../TimeStamp'
 import * as local from '../../../../constants/unreadConstants'
 import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../EmailHasAttachment'
+import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
+import { MessagePayload } from '../../../../Store/draftsTypes'
 
-const ReadMessage = ({ message, threadDetail, FROM }) => {
+const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, threadDetail: EmailListThreadItem, FROM: string }) => {
   const [open, setOpen] = useState(
     threadDetail.messages.length > 1
       ? message && message.labelIds.includes(local.UNREAD)
@@ -19,16 +21,16 @@ const ReadMessage = ({ message, threadDetail, FROM }) => {
   }
 
   const AvatarURL =
-    message && message.payload.headers.find((e) => e.name === 'From').value
+    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
 
   const Subject =
-    message && message.payload.headers.find((e) => e.name === 'Subject').value
+    message && message.payload.headers.find((e: MessagePayload) => e.name === 'Subject').value
 
   const From =
-    message && message.payload.headers.find((e) => e.name === 'From').value
+    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
 
   const EmailSnippet =
-    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}` + `...`
+    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   return (
     <>
@@ -61,13 +63,13 @@ const ReadMessage = ({ message, threadDetail, FROM }) => {
             </S.FromContainer>
             <S.EmailBody>
               <EmailDetailBody
-                className="EmailDetailBody"
+                // className="EmailDetailBody"
                 threadDetailBody={message.payload}
                 messageId={message.id}
               />
             </S.EmailBody>
           </div>
-          <EmailAttachment message={message} />
+          <EmailAttachment message={message} overview={false} />
           <small>{message?.id}</small>
         </>
       )}

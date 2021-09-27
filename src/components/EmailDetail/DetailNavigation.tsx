@@ -33,13 +33,13 @@ const DetailNavigation = () => {
   const [currLocal, setCurrLocal] = useState('')
   const history = useHistory()
   const dispatch = useAppDispatch()
-  const labelURL = convertArrayToString(labelIds)
+  const labelURL = convertArrayToString(labelIds[0])
   const location = useLocation()
 
   const emailListIndex = useMemo(
     () =>
       emailList.findIndex((threadList) =>
-        threadList.labels.includes(...labelIds)
+        threadList.labels.includes(labelIds[0])
       ),
     [emailList, labelIds]
   )
@@ -88,8 +88,9 @@ const DetailNavigation = () => {
   }
 
   const refetchMeta = () => {
+    const labels = labelIds
     const params = {
-      labelIds,
+      labelIds: labels,
       maxResults: 20,
     }
     dispatch(loadEmails(params))

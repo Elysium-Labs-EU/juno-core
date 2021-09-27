@@ -10,7 +10,7 @@ export interface LabelIdName {
   name: string
 }
 export interface LabelState {
-  labelIds: string
-  loadedInbox: string[][]
+  labelIds: string[]
+  loadedInbox: string[]
   storageLabels: LabelIdName[]
 }

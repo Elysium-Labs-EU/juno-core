@@ -4,8 +4,14 @@ import { CircularProgress } from '@material-ui/core'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import EmailAttachment from '../Attachment/EmailAttachment'
+import { EmailListThreadItem } from '../../../Store/emailListTypes'
 
-const FilesOverview = (props) => {
+interface Props {
+  threadDetail: EmailListThreadItem | null,
+  isLoading: boolean
+}
+
+const FilesOverview = (props: Props) => {
   const { threadDetail, isLoading } = props
 
   const files = () => {

@@ -5,13 +5,18 @@ import { MenuContainer } from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
 
+interface MenuItemType {
+  name: string,
+  link: string,
+}
+
 const Menu = () => {
   const currentEmail = useSelector(selectCurrentEmail)
   const [activeLink, setActiveLink] = useState('')
   const history = useHistory()
   const location = useLocation()
 
-  const navigateTo = (item) => {
+  const navigateTo = (item: MenuItemType) => {
     setActiveLink(item.name)
     history.push(item.link)
   }
@@ -28,19 +33,19 @@ const Menu = () => {
   const mappedMenu = local.MENU_OPTIONS && (
     <ul className="no-bullet-ul flex-flow-row">
       {local.MENU_OPTIONS.map((item, index) => (
-          <li
-            key={`${item.name + index}`}
-            className={
-              activeLink === item.name
-                ? 'option-link:active menu'
-                : 'option-link menu'
-            }
-            onClick={() => navigateTo(item)}
-            aria-hidden="true"
-          >
-            {item.name}
-          </li>
-        ))}
+        <li
+          key={`${ item.name + index }`}
+          className={
+            activeLink === item.name
+              ? 'option-link:active menu'
+              : 'option-link menu'
+          }
+          onClick={() => navigateTo(item)}
+          aria-hidden="true"
+        >
+          {item.name}
+        </li>
+      ))}
     </ul>
   )
 

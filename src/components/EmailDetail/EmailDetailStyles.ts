@@ -1,9 +1,14 @@
 import styled from 'styled-components'
 
-export const EmailWrapper = styled.div`
+interface Props {
+  labelIds?: string[]
+  isReplying?: boolean
+}
+
+export const EmailWrapper = styled.div<Props>`
   border-radius: 6px;
   background-color: ${(props) =>
-    props.labelIds.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
+    props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
   margin-bottom: 0.5rem;
   padding: 1rem;
 `
@@ -59,7 +64,7 @@ export const CardFullWidth = styled.div`
   width: 100%;
 `
 
-export const EmailDetailContainer = styled.div`
+export const EmailDetailContainer = styled.div<Props>`
   min-width: 60%;
   max-width: ${(props) => (props.isReplying ? '40vw' : '60%')};
   padding-bottom: 1.5rem;

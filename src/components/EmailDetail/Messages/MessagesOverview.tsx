@@ -9,8 +9,9 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import { findPayloadHeadersData } from '../../../utils'
+import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
 
-const fromEmail = (threadDetail) => {
+const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
   if (threadDetail) {
     return findPayloadHeadersData({ threadDetail, query })
@@ -18,7 +19,7 @@ const fromEmail = (threadDetail) => {
   return null
 }
 
-const emailSubject = (threadDetail) => {
+const emailSubject = (threadDetail: EmailListThreadItem) => {
   const query = 'Subject'
   if (threadDetail) {
     return findPayloadHeadersData({ threadDetail, query })
@@ -26,13 +27,11 @@ const emailSubject = (threadDetail) => {
   return null
 }
 
-const detailDisplaySelector = ({ message, threadDetail }) => {
+const detailDisplaySelector = ({ message, threadDetail }: { message: EmailMessage, threadDetail: EmailListThreadItem }) => {
   if (message.labelIds.includes(draft.LABEL)) {
     return (
       <DraftMessage
         message={message}
-        MESSAGE_ID_LABEL={local.MESSAGE_ID_LABEL}
-        threadDetail={threadDetail}
       />
     )
   }
@@ -48,67 +47,62 @@ const detailDisplaySelector = ({ message, threadDetail }) => {
   return null
 }
 
-const MessagesOverview = (props) => {
-  const { threadDetail, isLoading, isReplying, isReplyingListener } = props
-
-  return (
-    <>
-      <ES.DetailRow>
-        <ES.EmailDetailContainer isReplying={isReplying}>
-          <ES.DetailBase>
-            <ES.CardFullWidth>
-              {threadDetail && !isEmpty(threadDetail) && !isLoading ? (
-                threadDetail.messages
-                  .slice(0)
-                  .reverse()
-                  .map((message) => (
-                    <ES.EmailWrapper
-                      key={message.id}
-                      labelIds={message.labelIds}
-                    >
-                      {detailDisplaySelector({
-                        message,
-                        threadDetail,
-                      })}
-                    </ES.EmailWrapper>
-                  ))
-              ) : (
-                <ES.LoadingErrorWrapper>
-                  <CircularProgress />
-                </ES.LoadingErrorWrapper>
-              )}
-              {!threadDetail && (
-                <ES.LoadingErrorWrapper>
-                  {isLoading && <CircularProgress />}
-                  {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                </ES.LoadingErrorWrapper>
-              )}
-            </ES.CardFullWidth>
-          </ES.DetailBase>
-        </ES.EmailDetailContainer>
-        {threadDetail && !isReplying && (
-          <EmailDetOptions
-            messageId={threadDetail.id}
-            setReply={isReplyingListener}
-          />
-        )}
-      </ES.DetailRow>
-      {isReplying && !isEmpty(threadDetail) && (
-        <>
-          <ComposeEmail
-            isReplying={isReplying}
-            isReplyingListener={isReplyingListener}
-            to={fromEmail(threadDetail)}
-            subject={emailSubject(threadDetail)}
-            id={threadDetail.id}
-            threadId={
-              threadDetail.messages[threadDetail.messages.length - 1].threadId
-            }
-          />
-        </>
+const MessagesOverview = ({ threadDetail, isLoading, isReplying, isReplyingListener }: { threadDetail: EmailListThreadItem, isLoading: boolean, isReplying: boolean, isReplyingListener: any }) =>
+  <>
+    <ES.DetailRow>
+      <ES.EmailDetailContainer isReplying={isReplying}>
+        <ES.DetailBase>
+          <ES.CardFullWidth>
+            {threadDetail && !isEmpty(threadDetail) && !isLoading ? (
+              threadDetail.messages
+                .slice(0)
+                .reverse()
+                .map((message) => (
+                  <ES.EmailWrapper
+                    key={message.id}
+                    labelIds={message.labelIds}
+                  >
+                    {detailDisplaySelector({
+                      message,
+                      threadDetail,
+                    })}
+                  </ES.EmailWrapper>
+                ))
+            ) : (
+              <ES.LoadingErrorWrapper>
+                <CircularProgress />
+              </ES.LoadingErrorWrapper>
+            )}
+            {!threadDetail && (
+              <ES.LoadingErrorWrapper>
+                {isLoading && <CircularProgress />}
+                {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+              </ES.LoadingErrorWrapper>
+            )}
+          </ES.CardFullWidth>
+        </ES.DetailBase>
+      </ES.EmailDetailContainer>
+      {threadDetail && !isReplying && (
+        <EmailDetOptions
+          messageId={threadDetail.id}
+          setReply={isReplyingListener}
+        />
       )}
-    </>
-  )
-}
+    </ES.DetailRow>
+    {isReplying && !isEmpty(threadDetail) && (
+      <>
+        <ComposeEmail
+          isReplying={isReplying}
+          isReplyingListener={isReplyingListener}
+          to={fromEmail(threadDetail)}
+          subject={emailSubject(threadDetail)}
+          id={threadDetail.id}
+          threadId={
+            threadDetail.messages[threadDetail.messages.length - 1].threadId
+          }
+        />
+      </>
+    )}
+  </>
 
 export default MessagesOverview

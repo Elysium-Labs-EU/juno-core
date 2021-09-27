@@ -11,7 +11,7 @@ import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
 import { convertArrayToString, FindLabelByName } from '../../../utils'
 import {
-  selectEmailList,
+  // selectEmailList,
   // selectIsFocused,
   // selectIsSorting,
 } from '../../../Store/emailListSlice'
@@ -23,18 +23,19 @@ import { CustomButtonText } from '../../Elements/Buttons'
 import SetCompletedMail from '../../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { LocationObjectType } from '../../types/globalTypes'
 
-const EmailDetOptions = ({ messageId, setReply }) => {
-  const emailList = useAppSelector(selectEmailList)
+const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply: boolean }) => {
+  // const emailList = useAppSelector(selectEmailList)
   // const isFocused = useAppSelector(selectIsFocused)
   // const isSorting = useAppSelector(selectIsSorting)
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const history = useHistory()
-  const labelURL = convertArrayToString(labelIds)
-  const [showMenu, setShowMenu] = useState(false)
-  const location = useLocation()
+  const labelURL = convertArrayToString(labelIds[0])
+  const [showMenu, setShowMenu] = useState<Boolean>(false)
+  const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
     setShowMenu(false)
@@ -110,8 +111,6 @@ const EmailDetOptions = ({ messageId, setReply }) => {
                 ArchiveMail({
                   messageId,
                   history,
-                  labelURL,
-                  emailList,
                   labelIds,
                   location,
                   dispatch,

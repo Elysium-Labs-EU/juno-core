@@ -5,7 +5,11 @@ export const App = styled.div`
   flex-flow: column;
 `
 
-export const OuterContainer = styled.div`
+interface Props {
+  isReplying?: boolean
+}
+
+export const OuterContainer = styled.div<Props>`
   max-width: 1480px;
   width: 100%;
   margin-left: auto;

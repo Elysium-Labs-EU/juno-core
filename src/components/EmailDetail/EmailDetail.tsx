@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import '../../App.scss'
+import isEmpty from 'lodash/isEmpty'
 import {
   selectCurrentEmail,
   selectIsReplying,
@@ -19,6 +19,7 @@ import * as GS from '../../styles/globalStyles'
 import MessagesOverview from './Messages/MessagesOverview'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { EmailListThreadItem } from '../../Store/emailListTypes'
 // import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
@@ -30,9 +31,9 @@ const EmailDetail = () => {
   const isReplying = useAppSelector(selectIsReplying)
   const dispatch = useAppDispatch()
   const location = useLocation()
-  const { threadId, overviewId } = useParams()
-  const [threadDetail, setThreadDetail] = useState({})
-  const localLabels = useRef([])
+  const { threadId, overviewId } = useParams<{ threadId: string, overviewId: string }>()
+  const [threadDetail, setThreadDetail] = useState<EmailListThreadItem>()
+  const localLabels = useRef<string[] | string>([])
 
   const isReplyingListener = () => {
     dispatch(setIsReplying(!isReplying))
@@ -42,13 +43,13 @@ const EmailDetail = () => {
     if (labelIds && threadId) {
       const activeList =
         emailList &&
-        emailList.findIndex((list) => list.labels.includes(...labelIds))
+        emailList.findIndex((list) => list.labels.includes(labelIds[0]))
       const activeEmail =
         emailList &&
         emailList[activeList].threads.findIndex((item) => item.id === threadId)
       setThreadDetail(emailList[activeList].threads[activeEmail])
       if (serviceUnavailable && serviceUnavailable.length > 0) {
-        dispatch(setServiceUnavailable(null))
+        dispatch(setServiceUnavailable(''))
       }
     } else {
       dispatch(setServiceUnavailable(local.ERROR_EMAIL))
@@ -58,12 +59,14 @@ const EmailDetail = () => {
   useEffect(() => {
     if (threadId) {
       if (labelIds && labelIds === localLabels.current) {
-        emailList.length > 0 && fetchEmailDetail({ threadId, labelIds })
+        emailList.length > 0 && fetchEmailDetail()
+        // emailList.length > 0 && fetchEmailDetail({ threadId, labelIds })
       } else {
         const newLabelIds = [location.pathname.split('/')[2]]
         dispatch(setCurrentLabels(newLabelIds))
         localLabels.current = newLabelIds
-        emailList.length > 0 && fetchEmailDetail({ threadId, newLabelIds })
+        emailList.length > 0 && fetchEmailDetail()
+        // emailList.length > 0 && fetchEmailDetail({ threadId, newLabelIds })
       }
     }
   }, [labelIds, emailList, threadId])
@@ -83,7 +86,7 @@ const EmailDetail = () => {
 
   return (
     <GS.OuterContainer isReplying={isReplying}>
-      {overviewId === local.MESSAGES && (
+      {overviewId === local.MESSAGES && !isEmpty(threadDetail) && (
         <MessagesOverview
           threadDetail={threadDetail}
           isLoading={isLoading}
@@ -91,7 +94,7 @@ const EmailDetail = () => {
           isReplyingListener={isReplyingListener}
         />
       )}
-      {overviewId === local.FILES && (
+      {overviewId === local.FILES && !isEmpty(threadDetail) && (
         <FilesOverview threadDetail={threadDetail} isLoading={isLoading} />
       )}
       {/* {overviewId === local.INFORMATION && (

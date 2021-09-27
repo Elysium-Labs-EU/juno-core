@@ -4,9 +4,16 @@ import DOMPurify from 'dompurify'
 import { fetchAttachment } from '../../../Store/emailDetailSlice'
 import { decodeBase64 } from '../../../utils/decodeBase64'
 import { useAppDispatch } from '../../../Store/hooks'
+import { EmailMessagePayload } from '../../../Store/emailListTypes'
 
-const EmailDetailBody = ({ threadDetailBody, messageId }) => {
-  const [bodyState, setBodyState] = useState([])
+interface InlineImageType {
+  mimeType: string
+  decodeB64: string
+  filename: string
+}
+
+const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: EmailMessagePayload, messageId: string }) => {
+  const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
   const multipartMixed = () => {
@@ -20,7 +27,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
     const attachmentData =
       threadDetailBody.parts[threadDetailBody.parts.length - 1]
     dispatch(fetchAttachment({ attachmentData, messageId })).then(
-      (response) => {
+      (response: InlineImageType) => {
         setBodyState((currState) => [...currState, response])
       }
     )
@@ -83,7 +90,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
             <img
               key={`${ item.filename + itemIdx }`}
               src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
-              alt={bodyState?.filename ?? 'embedded image'}
+              alt={item?.filename ?? 'embedded image'}
               style={{ maxWidth: '100%', borderRadius: '5px' }}
             />
           ) : (
@@ -92,7 +99,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }) => {
               key={itemIdx}
               // eslint-disable-next-line react/no-danger
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(bodyState, {
+                __html: DOMPurify.sanitize(item, {
                   USE_PROFILES: { html: true },
                 }),
               }}
