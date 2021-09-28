@@ -7,7 +7,7 @@ import * as S from './EmailMoreOptionsStyles'
 import { useAppDispatch } from '../Store/hooks'
 import { LocationObjectType } from './types/globalTypes'
 
-const EmailMoreOptions = ({ messageId, labelURL, labelIds }: { messageId: string, labelURL?: string, labelIds: string[] }) => {
+const EmailMoreOptions = ({ messageId, labelIds }: { messageId: string, labelIds: string[] }) => {
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const history = useHistory()
@@ -20,7 +20,6 @@ const EmailMoreOptions = ({ messageId, labelURL, labelIds }: { messageId: string
           ThrashMail({
             messageId,
             history,
-            labelURL,
             labelIds,
             location,
             dispatch,
@@ -30,10 +29,6 @@ const EmailMoreOptions = ({ messageId, labelURL, labelIds }: { messageId: string
       />
     </S.Wrapper>
   )
-}
-
-EmailMoreOptions.defaultProps = {
-  labelURL: null
 }
 
 export default EmailMoreOptions

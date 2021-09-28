@@ -35,9 +35,15 @@ export const emailListSlice = createSlice({
       const sortedEmailList = {
         ...action.payload,
         threads: action.payload.threads.sort(
-          (a: EmailListThreadItem, b: EmailListThreadItem) =>
-            parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-            parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+          (a: EmailListThreadItem, b: EmailListThreadItem) => {
+            if (a.messages && b.messages) {
+              return (
+                parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
+                parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+              )
+            }
+            return null
+          }
         ),
       }
 
@@ -49,11 +55,15 @@ export const emailListSlice = createSlice({
       if (arrayIndex > -1) {
         const newArray = state.emailList[arrayIndex].threads
           .concat(sortedEmailList.threads)
-          .sort(
-            (a, b) =>
-              parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-              parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-          )
+          .sort((a: EmailListThreadItem, b: EmailListThreadItem) => {
+            if (a.messages && b.messages) {
+              return (
+                parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
+                parseInt(a.messages[a.messages.length - 1].internalDate, 10)
+              )
+            }
+            return null
+          })
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject

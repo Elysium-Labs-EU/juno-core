@@ -20,7 +20,7 @@ const TodoFocusOption = () => {
   const emailListIndex = useMemo(
     () =>
       emailList.findIndex((threadList) =>
-        threadList.labels.includes(...labelIds)
+        threadList.labels.includes(labelIds[0])
       ),
     [emailList, labelIds]
   )

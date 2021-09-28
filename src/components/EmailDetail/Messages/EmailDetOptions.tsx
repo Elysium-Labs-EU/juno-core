@@ -9,7 +9,7 @@ import {
 import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
-import { convertArrayToString, FindLabelByName } from '../../../utils'
+import { FindLabelByName } from '../../../utils'
 import {
   // selectEmailList,
   // selectIsFocused,
@@ -33,7 +33,6 @@ const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply:
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const history = useHistory()
-  const labelURL = convertArrayToString(labelIds[0])
   const [showMenu, setShowMenu] = useState<Boolean>(false)
   const location = useLocation<LocationObjectType>()
 
@@ -130,7 +129,6 @@ const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply:
           {showMenu && (
             <EmailMoreOptions
               messageId={messageId}
-              labelURL={labelURL}
               labelIds={labelIds}
             />
           )}

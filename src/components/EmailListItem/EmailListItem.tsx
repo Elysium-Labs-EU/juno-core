@@ -83,7 +83,7 @@ const EmailListItem = ({ email }: { email: EmailListThreadItem }) => {
           ) : (
             <span className="text_truncate">{toEmail()}</span>
           )}
-          <MessageCount countOfMessage={email?.messages} />
+          {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
         <S.CellMessage
           onClick={() => openEmail({ labelIds, history, id, email, dispatch })}

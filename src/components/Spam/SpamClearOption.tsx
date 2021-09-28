@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -7,6 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { CustomButtonText } from '../Elements/Buttons'
+import { useAppSelector } from '../../Store/hooks'
+// import { selectMetaList } from '../../Store/metaListSlice'
+// import { selectEmailList } from '../../Store/emailListSlice'
+// import { selectLabelIds } from '../../Store/labelsSlice'
+import { selectIsLoading } from '../../Store/utilsSlice'
 
 const SPAM_BUTTON = 'Clear spam'
 const DIALOG_HEADER = 'Confirm deleting messages'
@@ -15,13 +19,12 @@ const DIALOG_CONTENT =
 const CANCEL_BUTTON = 'Cancel'
 const OK_BUTTON = 'OK'
 
-const mapStateToProps = (state) => {
-  const { metaList, emailList, labelIds, isLoading } = state
-  return { metaList, emailList, labelIds, isLoading }
-}
-
-const Spamclearoption = ({ isLoading }) => {
+const Spamclearoption = () => {
   const [open, setOpen] = useState(false)
+  // const metaList = useAppSelector(selectMetaList)
+  // const emailList = useAppSelector(selectEmailList)
+  // const labelIds = useAppSelector(selectLabelIds)
+  const isLoading = useAppSelector(selectIsLoading)
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -74,4 +77,4 @@ const Spamclearoption = ({ isLoading }) => {
   )
 }
 
-export default connect(mapStateToProps)(Spamclearoption)
+export default Spamclearoption

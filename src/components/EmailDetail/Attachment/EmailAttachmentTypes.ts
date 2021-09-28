@@ -2,6 +2,7 @@ export interface EmailAttachmentType {
   body: {
     size: number
     data: string
+    attachmentId: string
   }
   filename: string
   headers: any

@@ -1,6 +1,7 @@
 import React from 'react'
+import { EmailMessage } from '../Store/emailListTypes'
 
-const MessageCount = ({ countOfMessage }) => {
+const MessageCount = ({ countOfMessage }: { countOfMessage: EmailMessage[] }) => {
   const LengthMessageCount = () => {
     const length = countOfMessage && countOfMessage.length
     if (length > 1) {

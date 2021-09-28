@@ -6,7 +6,8 @@ import { multipleIncludes } from '../utils'
 import { setServiceUnavailable } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
-import type { RootState } from './store'
+import type { AppThunk, RootState } from './store'
+import { GoogleLabel } from './labelsTypes'
 
 // interface Profile {
 //   n
@@ -40,22 +41,22 @@ export const baseSlice = createSlice({
 
 export const { setBaseLoaded, setProfile } = baseSlice.actions
 
-export const checkBase = () => async (dispatch) => {
+export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const user = await userApi().fetchUser()
     const labels = await labelApi().fetchLabel()
-    if (labels && user.status === 200) {
+    if (labels && user && user.status === 200) {
       dispatch(setProfile(user.data.data))
       if (labels.message.labels.length > 0) {
         const labelArray = labels.message.labels
         if (
           !multipleIncludes(
             BASE_ARRAY,
-            labelArray.map((item) => item.name)
+            labelArray.map((item: GoogleLabel) => item.name)
           )
         ) {
           BASE_ARRAY.map((item) =>
-            labelArray.map((label) => label.name).includes(item)
+            labelArray.map((label: any) => label.name).includes(item)
           ).map(
             (checkValue, index) =>
               !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
@@ -65,7 +66,7 @@ export const checkBase = () => async (dispatch) => {
           // is recreated. Does it still attempt to load the base?
         } else {
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labelArray.filter((item) => item.name === baseLabel)
+            labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
           )
           dispatch(setStorageLabels(prefetchedBoxes))
           dispatch(setBaseLoaded(true))

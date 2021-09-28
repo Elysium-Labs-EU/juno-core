@@ -50,14 +50,17 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
 export const createLabel =
-  (label: GoogleLabel): AppThunk =>
+  (label: GoogleLabel | string): AppThunk =>
   async (dispatch) => {
     try {
-      const body = {
-        labelVisibility: label.labelListVisibility ?? 'labelShow',
-        messageListVisibility: label.messageListVisibility ?? 'show',
-        name: label.name ?? label,
-      }
+      const body =
+        typeof label === 'string'
+          ? {
+              name: label,
+              labelVisibility: 'labelShow',
+              messageListVisibility: 'show',
+            }
+          : label
       return await axios
         .post(`/api/labels`, body)
         .then((res) => {

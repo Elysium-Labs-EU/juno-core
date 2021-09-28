@@ -38,19 +38,20 @@ interface CustomIconLinkTypes {
   onClick: {}
   className: string
   disabled?: boolean
+  style?: React.CSSProperties
   icon: {}
   type?: 'submit' | 'reset' | 'button'
 }
 
 export const CustomIconLink = (props: CustomIconLinkTypes) => {
-  const { onClick, className, disabled, icon, type } = props
+  const { onClick, className, disabled, icon, type, style } = props
   return (
     <button
       onClick={() => onClick}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
-    // style={style}
+      style={style}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <span style={{ lineHeight: 0 }}>{icon}</span>
@@ -61,6 +62,7 @@ export const CustomIconLink = (props: CustomIconLinkTypes) => {
 
 CustomIconLink.defaultProps = {
   disabled: false,
+  style: null,
   type: 'button',
 }
 
