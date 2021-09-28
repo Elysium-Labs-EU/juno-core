@@ -1,6 +1,10 @@
 import styled from 'styled-components'
 
-export const ThreadBase = styled.div`
+interface ThreadBaseProps {
+  emailLabels: string[] | null
+}
+
+export const ThreadBase = styled.div<ThreadBaseProps>`
   font-weight: ${(props) =>
     props.emailLabels && props.emailLabels.includes('UNREAD')
       ? '600'

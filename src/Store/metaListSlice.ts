@@ -178,10 +178,16 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
         }
         dispatch(loadEmails(params))
       }
-      if (addLabelIds && filteredTargetMetaList.length > 0) {
-        const activeMetaObjArray = filteredCurrentMetaList[0].threads.filter(
-          (item: MetaListThreadItem) => item.id === messageId
-        )
+      if (
+        addLabelIds &&
+        filteredTargetMetaList &&
+        filteredTargetMetaList.length > 0
+      ) {
+        const activeMetaObjArray =
+          filteredCurrentMetaList &&
+          filteredCurrentMetaList[0].threads.filter(
+            (item: MetaListThreadItem) => item.id === messageId
+          )
         dispatch(
           listAddItemMeta({
             activeMetaObjArray,

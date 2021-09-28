@@ -11,7 +11,7 @@ import { MessagePayload } from '../../../../Store/draftsTypes'
 
 const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, threadDetail: EmailListThreadItem, FROM: string }) => {
   const [open, setOpen] = useState(
-    threadDetail.messages.length > 1
+    threadDetail && threadDetail.messages && threadDetail.messages.length > 1
       ? message && message.labelIds.includes(local.UNREAD)
       : true
   )

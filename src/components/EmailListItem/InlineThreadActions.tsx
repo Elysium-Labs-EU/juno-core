@@ -14,17 +14,17 @@ import { CustomIconLink } from '../Elements/Buttons'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetCompletedMail from '../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
-import { convertArrayToString, FindLabelByName } from '../../utils'
+import { FindLabelByName } from '../../utils'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { LocationObjectType } from '../types/globalTypes'
 
-const InlineThreadActions = ({ id, history, labelIds }) => {
-  const [showMenu, setShowMenu] = useState(false)
+const InlineThreadActions = ({ id, history, labelIds }: { id: string, history: any, labelIds: string[] }) => {
+  const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
-  const labelURL = convertArrayToString(labelIds)
-  const isReplying = true
+  // const labelURL = convertArrayToString(labelIds)
   const dispatch = useAppDispatch()
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
   const messageId = id && id
 
   return (
@@ -34,7 +34,7 @@ const InlineThreadActions = ({ id, history, labelIds }) => {
           className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() =>
-            ReplyOverview({ history, labelIds, id, isReplying, dispatch })
+            ReplyOverview({ history, labelIds, id, dispatch })
           }
         />
         {/* <CustomIconLink

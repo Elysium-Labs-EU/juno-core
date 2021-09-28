@@ -12,7 +12,7 @@ export interface EmailMessage {
 export interface EmailMessagePayload {
   partId: string
   mimeType: string
-  fileName: string
+  filename: string
   headers: any
   body: {
     data?: string
@@ -24,7 +24,8 @@ export interface EmailMessagePayload {
 export interface EmailListThreadItem {
   id: string
   historyId: string
-  messages: EmailMessage[]
+  messages?: EmailMessage[]
+  message?: EmailMessage
 }
 
 export interface EmailListObject {

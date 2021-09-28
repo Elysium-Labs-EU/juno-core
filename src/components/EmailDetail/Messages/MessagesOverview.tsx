@@ -1,5 +1,4 @@
 import React from 'react'
-import isEmpty from 'lodash/isEmpty'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailDetOptions from './EmailDetOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -53,7 +52,7 @@ const MessagesOverview = ({ threadDetail, isLoading, isReplying, isReplyingListe
       <ES.EmailDetailContainer isReplying={isReplying}>
         <ES.DetailBase>
           <ES.CardFullWidth>
-            {threadDetail && !isEmpty(threadDetail) && !isLoading ? (
+            {threadDetail && threadDetail.messages && !isLoading ? (
               threadDetail.messages
                 .slice(0)
                 .reverse()
@@ -89,7 +88,7 @@ const MessagesOverview = ({ threadDetail, isLoading, isReplying, isReplyingListe
         />
       )}
     </ES.DetailRow>
-    {isReplying && !isEmpty(threadDetail) && (
+    {isReplying && threadDetail && threadDetail.messages && (
       <>
         <ComposeEmail
           isReplying={isReplying}

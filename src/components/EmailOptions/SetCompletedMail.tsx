@@ -1,7 +1,16 @@
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { convertArrayToString } from '../../utils'
+import { LocationObjectType } from '../types/globalTypes'
 
-const SetCompletedMail = (props) => {
+interface SetCompletedMailProps {
+  messageId: string
+  history: any
+  labelIds: string[]
+  dispatch: any
+  location: LocationObjectType
+}
+
+const SetCompletedMail = (props: SetCompletedMailProps) => {
   const { messageId, history, labelIds, dispatch, location } = props
   const labelURL = labelIds && convertArrayToString(labelIds)
 

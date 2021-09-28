@@ -11,11 +11,12 @@ import {
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavControlsStyles'
+import { LocationObjectType } from '../../types/globalTypes'
 
 const Navigation = () => {
   const [active, setActive] = useState('')
   const [showMenu, setShowMenu] = useState(false)
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
   const history = useHistory()
 
   useEffect(() => {
@@ -32,7 +33,7 @@ const Navigation = () => {
     }
   }, [location])
 
-  const navigateTo = (destination) => {
+  const navigateTo = (destination: string) => {
     history.push(destination)
   }
 

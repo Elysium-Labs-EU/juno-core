@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import isEmpty from 'lodash/isEmpty'
 import {
   selectCurrentEmail,
   selectIsReplying,
@@ -19,8 +18,12 @@ import * as GS from '../../styles/globalStyles'
 import MessagesOverview from './Messages/MessagesOverview'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListThreadItem } from '../../Store/emailListTypes'
+import {
+  EmailListThreadItem
+} from '../../Store/emailListTypes'
+import { LocationObjectType } from '../types/globalTypes'
 // import InformationOverview from './Information/InformationOverview'
+
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -30,7 +33,7 @@ const EmailDetail = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const isReplying = useAppSelector(selectIsReplying)
   const dispatch = useAppDispatch()
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
   const { threadId, overviewId } = useParams<{ threadId: string, overviewId: string }>()
   const [threadDetail, setThreadDetail] = useState<EmailListThreadItem>()
   const localLabels = useRef<string[] | string>([])
@@ -86,7 +89,7 @@ const EmailDetail = () => {
 
   return (
     <GS.OuterContainer isReplying={isReplying}>
-      {overviewId === local.MESSAGES && !isEmpty(threadDetail) && (
+      {overviewId === local.MESSAGES && threadDetail && (
         <MessagesOverview
           threadDetail={threadDetail}
           isLoading={isLoading}
@@ -94,7 +97,7 @@ const EmailDetail = () => {
           isReplyingListener={isReplyingListener}
         />
       )}
-      {overviewId === local.FILES && !isEmpty(threadDetail) && (
+      {overviewId === local.FILES && threadDetail && (
         <FilesOverview threadDetail={threadDetail} isLoading={isLoading} />
       )}
       {/* {overviewId === local.INFORMATION && (

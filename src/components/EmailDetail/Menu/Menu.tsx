@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { MenuContainer } from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
+import { LocationObjectType } from '../../types/globalTypes'
 
 interface MenuItemType {
   name: string,
@@ -14,7 +15,7 @@ const Menu = () => {
   const currentEmail = useSelector(selectCurrentEmail)
   const [activeLink, setActiveLink] = useState('')
   const history = useHistory()
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
 
   const navigateTo = (item: MenuItemType) => {
     setActiveLink(item.name)

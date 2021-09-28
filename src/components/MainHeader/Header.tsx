@@ -8,10 +8,11 @@ import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
+import { LocationObjectType } from '../types/globalTypes'
 
 function Header() {
   const SetHeader = () => {
-    const location = useLocation()
+    const location = useLocation<LocationObjectType>()
 
     if (location.pathname === '/inbox') {
       return <InboxHeader />

@@ -17,6 +17,8 @@ import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { EmailListObject } from '../../Store/emailListTypes'
+import { LocationObjectType } from '../types/globalTypes'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -24,7 +26,7 @@ const EmailList = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const dispatch = useAppDispatch()
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
     if (
@@ -56,7 +58,7 @@ const EmailList = () => {
     }
   }, [location])
 
-  const renderEmailList = (filteredOnLabel) => {
+  const renderEmailList = (filteredOnLabel: EmailListObject) => {
     const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
     return (
       <>
@@ -100,7 +102,7 @@ const EmailList = () => {
   const filteredOnLabel = useMemo(
     () =>
       emailList.findIndex((threadList) =>
-        threadList.labels.includes(...labelIds)
+        threadList.labels.includes(labelIds[0])
       ),
     [emailList, labelIds]
   )
@@ -116,7 +118,7 @@ const EmailList = () => {
     <>
       {labelIds &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        labeledInbox({ labelIds, emailList })}
+        labeledInbox()}
       {isLoading &&
         labelIds &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (

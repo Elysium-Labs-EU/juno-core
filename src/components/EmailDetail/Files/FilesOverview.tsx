@@ -1,5 +1,4 @@
 import React from 'react'
-import isEmpty from 'lodash/isEmpty'
 import { CircularProgress } from '@material-ui/core'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
@@ -15,7 +14,7 @@ const FilesOverview = (props: Props) => {
   const { threadDetail, isLoading } = props
 
   const files = () => {
-    if (threadDetail && !isEmpty(threadDetail) && !isLoading) {
+    if (threadDetail && threadDetail.messages && !isLoading) {
       return (
         <EmailAttachment
           message={threadDetail.messages[threadDetail.messages.length - 1]}

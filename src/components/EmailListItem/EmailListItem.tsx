@@ -12,17 +12,19 @@ import { findPayloadHeadersData } from '../../utils'
 import * as draft from '../../constants/draftConstants'
 import openEmail from '../../utils/openEmail'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { EmailListThreadItem } from '../../Store/emailListTypes'
 
-const EmailListItem = ({ email }) => {
+const EmailListItem = ({ email }: { email: EmailListThreadItem }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const history = useHistory()
   const dispatch = useAppDispatch()
 
-  const emailLabels =
-    email && email.messages
-      ? email.messages[email.messages.length - 1].labelIds
-      : email.message.labelIds
+  const emailLabels = () => {
+    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds
+    if (email && email.message) return email.message.labelIds
+    return null
+  }
 
   const fromEmail = () => {
     const query = 'From'
@@ -48,18 +50,20 @@ const EmailListItem = ({ email }) => {
     return null
   }
 
-  const emailSnippet =
-    email && email.messages
-      ? email.messages[email.messages.length - 1].snippet
-      : email.message.snippet
+  const emailSnippet = () => {
+    if (email && email.messages) return email.messages[email.messages.length - 1].snippet
+    if (email && email.message) return email.message.snippet
+    return ''
+  }
 
-  const timeStamp =
-    email && email.messages
-      ? email.messages[email.messages.length - 1].internalDate
-      : email.message.internalDate
+  const timeStamp = () => {
+    if (email && email.messages) return email.messages[email.messages.length - 1].internalDate
+    if (email && email.message) return email.message.internalDate
+    return ''
+  }
 
   return (
-    <S.ThreadBase key={id} emailLabels={emailLabels}>
+    <S.ThreadBase key={id} emailLabels={emailLabels()}>
       <S.ThreadRow>
         <div className="cellGradientLeft" />
         <div className="cellCheckbox" />
@@ -92,17 +96,17 @@ const EmailListItem = ({ email }) => {
               </span>
             )}
             <span>{emailSubject()}</span>
-            <Snippet snippet={emailSnippet} />
+            <Snippet snippet={emailSnippet()} />
           </div>
         </S.CellMessage>
 
         <S.CellAttachment>
-          <EmailHasAttachment messages={email?.messages} />
+          {email.messages && <EmailHasAttachment messages={email.messages} />}
         </S.CellAttachment>
         <S.CellDate>
           <S.DatePosition>
             <span className="date">
-              <TimeStamp threadTimeStamp={timeStamp} />
+              <TimeStamp threadTimeStamp={timeStamp()} />
             </span>
           </S.DatePosition>
         </S.CellDate>

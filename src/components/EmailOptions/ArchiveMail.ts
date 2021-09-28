@@ -10,7 +10,7 @@ const ArchiveMail = ({
   dispatch,
 }: {
   messageId: string
-  history: any
+  history?: any
   labelIds: string[]
   location: LocationObjectType
   dispatch: any

@@ -21,6 +21,7 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 import { loadDraftList, selectDraftListLoaded } from '../../Store/draftsSlice'
 import * as draft from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { LocationObjectType } from '../types/globalTypes'
 
 const DetailNavigation = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -30,11 +31,11 @@ const DetailNavigation = () => {
   const currEmail = useAppSelector(selectCurrentEmail)
   const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
-  const [currLocal, setCurrLocal] = useState('')
+  const [currLocal, setCurrLocal] = useState<string>('')
   const history = useHistory()
   const dispatch = useAppDispatch()
   const labelURL = convertArrayToString(labelIds[0])
-  const location = useLocation()
+  const location = useLocation<LocationObjectType>()
 
   const emailListIndex = useMemo(
     () =>

@@ -1,10 +1,11 @@
 import React from 'react'
 import { FiPaperclip } from 'react-icons/fi'
+import { EmailMessage } from '../Store/emailListTypes'
 
-const EmailHasAttachment = ({ messages }) => {
+const EmailHasAttachment = ({ messages }: { messages: EmailMessage | EmailMessage[] }) => {
   const CheckAttachment = () => {
     if (
-      messages &&
+      messages && Array.isArray(messages) &&
       messages.length > 0 &&
       messages.filter((thread) =>
         Object.prototype.hasOwnProperty.call(thread.payload, 'parts')
@@ -22,7 +23,7 @@ const EmailHasAttachment = ({ messages }) => {
       return null
     }
     if (
-      messages &&
+      messages && !Array.isArray(messages) &&
       Object.prototype.hasOwnProperty.call(messages, 'threadId')
     ) {
       if (Object.prototype.hasOwnProperty.call(messages.payload, 'parts')) {
