@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../EmailAvatar'
@@ -14,7 +14,7 @@ import openEmail from '../../utils/openEmail'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListThreadItem } from '../../Store/emailListTypes'
 
-const EmailListItem = ({ email }: { email: EmailListThreadItem }) => {
+const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const history = useHistory()
@@ -116,6 +116,6 @@ const EmailListItem = ({ email }: { email: EmailListThreadItem }) => {
       </S.ThreadRow>
     </S.ThreadBase>
   )
-}
+})
 
 export default EmailListItem

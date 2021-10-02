@@ -4,7 +4,6 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { CircularProgress } from '@material-ui/core'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
-import { convertArrayToString } from '../../utils'
 import {
   selectCurrentEmail,
   selectViewIndex,
@@ -34,7 +33,6 @@ const DetailNavigation = () => {
   const [currLocal, setCurrLocal] = useState<string>('')
   const history = useHistory()
   const dispatch = useAppDispatch()
-  // const labelURL = convertArrayToString(labelIds && labelIds.length > 0 && labelIds)
   const location = useLocation<LocationObjectType>()
 
   const emailListIndex = useMemo(
