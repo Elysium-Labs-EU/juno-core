@@ -1,16 +1,27 @@
+import { convertArrayToString } from '.'
+import { EmailListObject } from '../Store/emailListTypes'
+
 interface NavigatePreviousMailProps {
   history: any
-  labelURL: string
-  emailList?: any
+  labelIds: string[]
+  emailList?: EmailListObject[]
   emailListIndex?: number
   viewIndex: number
 }
 
 const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
-  const { history, labelURL, emailList, emailListIndex, viewIndex } = props
-  if (emailList && emailListIndex && emailListIndex > -1) {
+  const { history, labelIds, emailList, emailListIndex, viewIndex } = props
+
+  const labelURL = () => {
+    if (labelIds && labelIds.length > 0) {
+      return convertArrayToString(labelIds)
+    }
+    return null
+  }
+
+  if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
     const prevID = emailList[emailListIndex].threads[viewIndex - 1].id
-    return history.push(`/mail/${labelURL}/${prevID}/messages`)
+    return history.push(`/mail/${labelURL()}/${prevID}/messages`)
   }
   return null
 }

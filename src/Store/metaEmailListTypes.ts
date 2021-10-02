@@ -9,6 +9,5 @@ export interface UpdateRequestParams {
   location?: any
   messageId: string
   request: UpdateRequest
-  labelURL: string
   labelIds: string[]
 }

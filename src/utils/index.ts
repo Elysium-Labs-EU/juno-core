@@ -4,8 +4,16 @@ import { LabelIdName } from '../Store/labelsTypes'
 import { MetaListObject } from '../Store/metaListTypes'
 
 export const convertArrayToString = (data: string | string[]) => {
-  const converted = data.toString().replace(',', '-')
-  return converted
+  if (data && typeof data === 'string') {
+    const converted = data.toString().replace(',', '-')
+    return converted
+  }
+  if (data && Array.isArray(data)) {
+    const converted = data[0].toString().replace(',', '-')
+    return converted
+    // return data.map((item) => item.toString().replace(',', '-'))
+  }
+  return ''
 }
 
 interface FilteredMetaListProps {

@@ -25,7 +25,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       addLabelIds: [toDoLabel[0].id],
     }
     dispatch(
-      UpdateMetaListLabel({ messageId, request, history, labelURL, location, labelIds })
+      UpdateMetaListLabel({ messageId, request, history, location, labelIds })
     )
   }
 

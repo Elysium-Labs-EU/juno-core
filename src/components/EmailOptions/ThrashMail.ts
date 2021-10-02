@@ -22,7 +22,6 @@ const ThrashMail = (props: ThrashMailProps) => {
         request,
         history,
         location,
-        labelURL,
         labelIds,
       })
     )

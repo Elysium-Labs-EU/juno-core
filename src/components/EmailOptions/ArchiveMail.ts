@@ -25,7 +25,6 @@ const ArchiveMail = ({
         request,
         history,
         location,
-        labelURL,
         labelIds,
       })
     )

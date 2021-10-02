@@ -2,7 +2,7 @@
 import React from 'react'
 
 interface CustomButtonTextProps {
-  onClick?: {},
+  onClick?: any,
   className: string,
   type?: 'submit' | 'reset' | 'button',
   disabled?: boolean,
@@ -35,7 +35,7 @@ CustomButtonText.defaultProps = {
 }
 
 interface CustomIconLinkTypes {
-  onClick: {}
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
   className: string
   disabled?: boolean
   style?: React.CSSProperties
@@ -45,9 +45,10 @@ interface CustomIconLinkTypes {
 
 export const CustomIconLink = (props: CustomIconLinkTypes) => {
   const { onClick, className, disabled, icon, type, style } = props
+
   return (
     <button
-      onClick={() => onClick}
+      onClick={(event) => onClick(event)}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
@@ -67,7 +68,7 @@ CustomIconLink.defaultProps = {
 }
 
 interface CustomButtonProps {
-  onClick: {},
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void,
   className: string,
   type: 'submit' | 'reset' | 'button',
   disabled: boolean,
@@ -78,7 +79,7 @@ export const CustomButton = (props: CustomButtonProps) => {
   const { onClick, className, disabled, icon, type } = props
   return (
     <button
-      onClick={() => onClick}
+      onClick={(event) => onClick(event)}
       className={className}
       style={{ marginTop: '1rem' }}
       type={type ?? 'button'}

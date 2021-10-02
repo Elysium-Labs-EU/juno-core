@@ -34,7 +34,7 @@ const DetailNavigation = () => {
   const [currLocal, setCurrLocal] = useState<string>('')
   const history = useHistory()
   const dispatch = useAppDispatch()
-  const labelURL = convertArrayToString(labelIds[0])
+  // const labelURL = convertArrayToString(labelIds && labelIds.length > 0 && labelIds)
   const location = useLocation<LocationObjectType>()
 
   const emailListIndex = useMemo(
@@ -58,11 +58,11 @@ const DetailNavigation = () => {
   const nextButtonSelector = () => {
     if (
       emailList.length > 0 &&
-      emailList[emailListIndex].threads[viewIndex + 1] !== undefined
+      emailList[emailListIndex].threads[viewIndex + 1] !== undefined && labelIds
     ) {
       return NavigateNextMail({
         history,
-        labelURL,
+        labelIds,
         emailListIndex,
         emailList,
         viewIndex,
@@ -122,7 +122,7 @@ const DetailNavigation = () => {
         onClick={() =>
           NavigatePreviousMail({
             history,
-            labelURL,
+            labelIds,
             emailListIndex,
             emailList,
             viewIndex,

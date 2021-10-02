@@ -153,7 +153,6 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
     request: { addLabelIds, removeLabelIds },
     history,
     location,
-    labelURL,
     labelIds,
   } = props
 
@@ -210,7 +209,6 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
           labelIds,
           history,
           location,
-          labelURL,
         })
       )
     } catch (err) {

@@ -172,7 +172,6 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
     labelIds,
     history,
     location,
-    labelURL,
   } = props
 
   return async (dispatch, getState) => {
@@ -195,7 +194,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           const { viewIndex } = getState().emailDetail
           NavigateNextMail({
             history,
-            labelURL,
+            labelIds,
             filteredCurrentEmailList,
             viewIndex,
           })
