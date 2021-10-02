@@ -24,7 +24,6 @@ const labelApi = () => ({
     }
   },
   updateLabel: async (body: any) => {
-    console.log('body', body)
     try {
       const res: AxiosResponse<any> = await axios.patch(
         `${BASE_API_URL}/api/labels`,
@@ -36,7 +35,6 @@ const labelApi = () => ({
     }
   },
   deleteLabel: async (id: string) => {
-    console.log('id', id)
     try {
       const res: AxiosResponse<any> = await axios.delete(
         `${BASE_API_URL}/api/labels`,
@@ -50,7 +48,6 @@ const labelApi = () => ({
     }
   },
   createLabel: async (body: any) => {
-    console.log('body', body)
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/labels`,

@@ -11,7 +11,7 @@ export const emailDetailSlice = createSlice({
   name: 'emailDetail',
   initialState: {
     currEmail: '',
-    viewIndex: 0,
+    viewIndex: -1,
     isReplying: false,
   },
   reducers: {
@@ -19,10 +19,15 @@ export const emailDetailSlice = createSlice({
       state.currEmail = action.payload
     },
     setViewingIndex: (state, action) => {
-      const viewingIndex = action.payload.emailList
-        .map((e: any) => e.id)
-        .indexOf(action.payload.currEmail)
-      state.viewIndex = viewingIndex
+      if (typeof action.payload !== 'number') {
+        const viewingIndex = action.payload.emailList
+          .map((e: any) => e.id)
+          .indexOf(action.payload.currEmail)
+        state.viewIndex = viewingIndex
+      }
+      if (typeof action.payload === 'number') {
+        state.viewIndex = action.payload
+      }
     },
     setIsReplying: (state, action) => {
       state.isReplying = action.payload

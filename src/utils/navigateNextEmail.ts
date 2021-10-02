@@ -8,6 +8,7 @@ interface NavigateNextMailProps {
   emailListIndex?: number
   filteredCurrentEmailList?: any
   viewIndex: number
+  currentViewListener?: any
 }
 
 const NavigateNextMail = (props: NavigateNextMailProps) => {
@@ -18,7 +19,10 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     emailListIndex,
     filteredCurrentEmailList,
     viewIndex,
+    currentViewListener,
   } = props
+
+  currentViewListener(1)
 
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {

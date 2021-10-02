@@ -22,7 +22,7 @@ import * as draft from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const DetailNavigation = () => {
+const DetailNavigation = ({ currentViewListener }: { currentViewListener: any }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
@@ -58,12 +58,13 @@ const DetailNavigation = () => {
       emailList.length > 0 &&
       emailList[emailListIndex].threads[viewIndex + 1] !== undefined && labelIds
     ) {
-      return NavigateNextMail({
+      NavigateNextMail({
         history,
         labelIds,
         emailListIndex,
         emailList,
         viewIndex,
+        currentViewListener
       })
     }
     if (
@@ -124,6 +125,7 @@ const DetailNavigation = () => {
             emailListIndex,
             emailList,
             viewIndex,
+            currentViewListener
           })
         }
         disabled={isDisabledPrev}

@@ -142,12 +142,6 @@ export const loadEmailDetails =
             (val) => getState().labels.loadedInbox.flat(1).indexOf(val) === -1
           )
         ) {
-          console.log(
-            labels.some(
-              (val) => getState().labels.loadedInbox.flat(1).indexOf(val) === -1
-            )
-          )
-          console.log(labels)
           dispatch(setLoadedInbox(labels))
         }
         if (
