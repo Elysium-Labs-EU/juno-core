@@ -2,7 +2,7 @@
 import React from 'react'
 
 interface CustomButtonTextProps {
-  onClick?: any,
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void,
   className: string,
   type?: 'submit' | 'reset' | 'button',
   disabled?: boolean,
@@ -14,7 +14,7 @@ export const CustomButtonText = (props: CustomButtonTextProps) => {
   const { onClick, className, disabled, icon, label, type } = props
   return (
     <button
-      onClick={() => onClick}
+      onClick={onClick ? (event) => onClick(event) : undefined}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
@@ -28,7 +28,7 @@ export const CustomButtonText = (props: CustomButtonTextProps) => {
 }
 
 CustomButtonText.defaultProps = {
-  onClick: null,
+  onClick: undefined,
   type: 'button',
   disabled: false,
   icon: null,

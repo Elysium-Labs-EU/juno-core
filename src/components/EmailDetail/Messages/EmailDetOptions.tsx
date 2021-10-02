@@ -25,7 +25,7 @@ import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 
-const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply: boolean }) => {
+const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply: any }) => {
   // const emailList = useAppSelector(selectEmailList)
   // const isFocused = useAppSelector(selectIsFocused)
   // const isSorting = useAppSelector(selectIsSorting)

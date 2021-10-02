@@ -55,7 +55,7 @@ export const emailListSlice = createSlice({
         }
         const newObject: EmailListObject = {
           ...action.payload,
-          threads: newArray,
+          threads: newArray(),
         }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject

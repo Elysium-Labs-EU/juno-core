@@ -24,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 interface ComposeEmailProps {
   isReplying: boolean
-  isReplyingListener: {}
+  isReplyingListener: any
   to: string
   subject: string
   id: string
