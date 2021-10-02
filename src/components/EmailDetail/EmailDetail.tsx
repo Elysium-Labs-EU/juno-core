@@ -24,10 +24,8 @@ import {
   EmailListThreadItem
 } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
+import Emaildetailheader from './EmailDetailHeader'
 // import InformationOverview from './Information/InformationOverview'
-
-
-
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -39,10 +37,20 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const { threadId, overviewId } = useParams<{ threadId: string, overviewId: string }>()
-  // const [threadDetail, setThreadDetail] = useState<EmailListThreadItem>()
   const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>()
   const localLabels = useRef<string[] | string>([])
   const viewIndex = useAppSelector(selectViewIndex)
+  const [viewIndexState, setViewIndexState] = useState(-1)
+
+  useEffect(() => {
+    if (viewIndexState === -1) {
+      setViewIndexState(viewIndex)
+    }
+  }, [viewIndex])
+
+  const currentViewListener = (number: number) => {
+    setViewIndexState((prevState) => prevState + number)
+  }
 
   const isReplyingListener = () => {
     dispatch(setIsReplying(!isReplying))
@@ -78,12 +86,6 @@ const EmailDetail = () => {
   }, [labelIds, emailList, threadId])
   // DetailNavigation will refetch metaList + emailList if empty.
 
-  // useEffect(() => {
-  //   if (threadDetailList && threadDetailList.length > 0 && viewIndex > -1) {
-  //     setThreadDetail(threadDetailList[viewIndex])
-  //   }
-  // }, [threadDetailList, viewIndex])
-
   useEffect(() => {
     if (threadId !== undefined && currentEmail !== threadId) {
       dispatch(setCurrentEmail(threadId))
@@ -96,13 +98,14 @@ const EmailDetail = () => {
     }
   }, [threadId])
 
+
   // TODO: Replace viewIndex with local value to speed up process
   const MessagesFeed = () => {
-    if (overviewId === local.MESSAGES && threadDetailList && viewIndex > -1) {
+    if (overviewId === local.MESSAGES && threadDetailList && viewIndexState > -1) {
       return (
         <>
           {threadDetailList.length > 0 && threadDetailList.map((item, index) =>
-            <S.MessageFeedViewContainer key={item.id} show={index === viewIndex}>
+            <S.MessageFeedViewContainer key={item.id} show={index === viewIndexState}>
               <MessagesOverview
                 threadDetail={item}
                 isLoading={isLoading}
@@ -118,20 +121,23 @@ const EmailDetail = () => {
   }
 
   return (
-    <GS.OuterContainer isReplying={isReplying}>
-      {overviewId === local.MESSAGES && threadDetailList && viewIndex > -1 && (
-        MessagesFeed()
-      )}
-      {overviewId === local.FILES && threadDetailList && viewIndex > -1 && (
-        <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
-      )}
-      {/* {overviewId === local.INFORMATION && (
+    <>
+      <Emaildetailheader currentViewListener={currentViewListener} />
+      <GS.OuterContainer isReplying={isReplying}>
+        {overviewId === local.MESSAGES && threadDetailList && viewIndex > -1 && (
+          MessagesFeed()
+        )}
+        {overviewId === local.FILES && threadDetailList && viewIndex > -1 && (
+          <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
+        )}
+        {/* {overviewId === local.INFORMATION && (
         <InformationOverview
           threadDetail={threadDetail}
           isLoading={isLoading}
         />
       )} */}
-    </GS.OuterContainer>
+      </GS.OuterContainer>
+    </>
   )
 }
 

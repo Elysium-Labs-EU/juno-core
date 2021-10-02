@@ -6,7 +6,7 @@ import TodoHeader from '../ToDo/TodoHeader'
 import DraftHeader from '../Draft/DraftHeader'
 import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
-import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
+// import EmailDetailHeader from '../EmailDetail/EmailDetailHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
 import { LocationObjectType } from '../types/globalTypes'
 
@@ -31,7 +31,8 @@ const SetHeader = memo(() => {
   if (location.pathname === '/spam') {
     return <SpamHeader />
   }
-  return <EmailDetailHeader />
+  return null
+  // return <EmailDetailHeader />
 })
 
 const Header = () => (

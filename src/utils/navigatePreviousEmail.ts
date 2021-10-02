@@ -7,10 +7,20 @@ interface NavigatePreviousMailProps {
   emailList?: EmailListObject[]
   emailListIndex?: number
   viewIndex: number
+  currentViewListener?: any
 }
 
 const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
-  const { history, labelIds, emailList, emailListIndex, viewIndex } = props
+  const {
+    history,
+    labelIds,
+    emailList,
+    emailListIndex,
+    viewIndex,
+    currentViewListener,
+  } = props
+
+  currentViewListener(-1)
 
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {
