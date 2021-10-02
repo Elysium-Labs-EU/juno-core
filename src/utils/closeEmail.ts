@@ -1,11 +1,18 @@
 import { FindLabelById } from '.'
 import Routes from '../constants/routes.json'
+import { LabelIdName } from '../Store/labelsTypes'
 
-const CloseMail = (props) => {
+interface CloseMailProps {
+  history: any
+  labelIds: string[]
+  storageLabels: LabelIdName[]
+}
+
+const CloseMail = (props: CloseMailProps) => {
   const { history, labelIds, storageLabels } = props
   FindLabelById({ storageLabels, labelIds })
 
-  const labelMap = {
+  const labelMap: { [key: string]: string } = {
     INBOX: `${Routes.INBOX}`,
     'Juno/To Do': `${Routes.HOME}`,
     SPAM: `${Routes.SPAM}`,

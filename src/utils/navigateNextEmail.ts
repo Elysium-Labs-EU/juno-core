@@ -1,4 +1,13 @@
-const NavigateNextMail = (props) => {
+interface NavigateNextMailProps {
+  history: any
+  labelURL: string
+  emailList?: any
+  emailListIndex?: number
+  filteredCurrentEmailList?: any
+  viewIndex: number
+}
+
+const NavigateNextMail = (props: NavigateNextMailProps) => {
   const {
     history,
     labelURL,
@@ -12,7 +21,7 @@ const NavigateNextMail = (props) => {
     const nextID = filteredCurrentEmailList[0].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }
-  if (emailList && emailListIndex > -1) {
+  if (emailList && emailListIndex && emailListIndex > -1) {
     const nextID = emailList[emailListIndex].threads[viewIndex + 1].id
     return history.push(`/mail/${labelURL}/${nextID}/messages`)
   }

@@ -1,5 +1,5 @@
 interface Props {
-  history: object
+  history: any
   labelURL: string
   emailList: any
   emailListIndex: number
