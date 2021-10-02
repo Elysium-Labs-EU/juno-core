@@ -33,7 +33,7 @@ export const emailListSlice = createSlice({
       state.isSorting = action.payload
     },
     listAddEmailList: (state, action) => {
-      const sortedEmailList = {
+      const sortedEmailList: EmailListObject = {
         ...action.payload,
         threads: sortThreads(action.payload.threads),
       }
@@ -53,25 +53,26 @@ export const emailListSlice = createSlice({
           }
           return null
         }
-        const newObject = { ...action.payload, threads: newArray }
+        const newObject: EmailListObject = {
+          ...action.payload,
+          threads: newArray,
+        }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
         state.emailList = currentState
       } else {
         state.emailList.push(sortedEmailList)
       }
-      // state.emailList = [...state.emailList, sortedEmailList]
     },
-    // listRemoveDetail: (state, action) => {},
     listAddItemDetail: (state, action) => {
       const { filteredTargetEmailList, activEmailObjArray } = action.payload
-      const newEmailListEntry = {
+      const newEmailListEntry: EmailListObject = {
         ...filteredTargetEmailList[0],
         threads: sortThreads(
           filteredTargetEmailList[0].threads.concat(activEmailObjArray)
         ),
       }
-      const updatedEmailList = [
+      const updatedEmailList: EmailListObject[] = [
         ...state.emailList.filter(
           (threadList) =>
             !threadList.labels.includes(filteredTargetEmailList[0].labels[0])
@@ -79,20 +80,16 @@ export const emailListSlice = createSlice({
         newEmailListEntry,
       ]
       state.emailList = updatedEmailList
-      //   return {
-      //     ...state,
-      //     emailList: updatedEmailList,
-      //   }
     },
     listRemoveItemDetail: (state, action) => {
       const { filteredCurrentEmailList, messageId } = action.payload
-      const newEmailListEntry = {
+      const newEmailListEntry: EmailListObject = {
         ...filteredCurrentEmailList[0],
         threads: filteredCurrentEmailList[0].threads.filter(
           (item: EmailListThreadItem) => item.id !== messageId
         ),
       }
-      const updatedEmailList = [
+      const updatedEmailList: EmailListObject[] = [
         ...state.emailList.filter(
           (threadList) =>
             !threadList.labels.includes(filteredCurrentEmailList[0].labels[0])
@@ -100,12 +97,7 @@ export const emailListSlice = createSlice({
         newEmailListEntry,
       ]
       state.emailList = updatedEmailList
-      //   return {
-      //     ...state,
-      //     emailList: updatedEmailList,
-      //   }
     },
-    // listUpdateDetail: (state, action) => {},
   },
 })
 
