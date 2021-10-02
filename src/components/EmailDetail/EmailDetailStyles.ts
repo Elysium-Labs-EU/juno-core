@@ -1,11 +1,21 @@
 import styled from 'styled-components'
 
-interface Props {
+interface ViewContainerProps {
+  show: boolean
+}
+interface EmailWrapperProps {
   labelIds?: string[]
+}
+
+interface EmailContainerProps {
   isReplying?: boolean
 }
 
-export const EmailWrapper = styled.div<Props>`
+export const MessageFeedViewContainer = styled.div<ViewContainerProps>`
+  display: ${(props) => (props.show ? 'flex' : 'none')};
+`
+
+export const EmailWrapper = styled.div<EmailWrapperProps>`
   border-radius: 6px;
   background-color: ${(props) =>
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
@@ -52,7 +62,7 @@ export const DetailBase = styled.div`
   min-width: 50%;
 `
 
-export const DetailRow = styled.div`
+export const DetailRow = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -64,7 +74,7 @@ export const CardFullWidth = styled.div`
   width: 100%;
 `
 
-export const EmailDetailContainer = styled.div<Props>`
+export const EmailDetailContainer = styled.div<EmailContainerProps>`
   min-width: 60%;
   max-width: ${(props) => (props.isReplying ? '40vw' : '60%')};
   padding-bottom: 1.5rem;
