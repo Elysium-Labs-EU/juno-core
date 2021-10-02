@@ -14,6 +14,7 @@ import {
   EmailListState,
 } from './emailListTypes'
 import { UpdateRequestParams } from './metaEmailListTypes'
+import sortThreads from '../utils/sortThreads'
 
 const initialState: EmailListState = Object.freeze({
   emailList: [],
@@ -34,36 +35,24 @@ export const emailListSlice = createSlice({
     listAddEmailList: (state, action) => {
       const sortedEmailList = {
         ...action.payload,
-        threads: action.payload.threads.sort(
-          (a: EmailListThreadItem, b: EmailListThreadItem) => {
-            if (a.messages && b.messages) {
-              return (
-                parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-                parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-              )
-            }
-            return null
-          }
-        ),
+        threads: sortThreads(action.payload.threads),
       }
 
-      const arrayIndex = state.emailList
+      const arrayIndex: number = state.emailList
         .map((emailArray) => emailArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
 
       if (arrayIndex > -1) {
-        const newArray = state.emailList[arrayIndex].threads
-          .concat(sortedEmailList.threads)
-          .sort((a: EmailListThreadItem, b: EmailListThreadItem) => {
-            if (a.messages && b.messages) {
-              return (
-                parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-                parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-              )
-            }
-            return null
-          })
+        const newArray = () => {
+          const concatArray = state.emailList[arrayIndex].threads.concat(
+            sortedEmailList.threads
+          )
+          if (concatArray) {
+            return sortThreads(concatArray)
+          }
+          return null
+        }
         const newObject = { ...action.payload, threads: newArray }
         const currentState = state.emailList
         currentState[arrayIndex] = newObject
@@ -78,13 +67,9 @@ export const emailListSlice = createSlice({
       const { filteredTargetEmailList, activEmailObjArray } = action.payload
       const newEmailListEntry = {
         ...filteredTargetEmailList[0],
-        threads: filteredTargetEmailList[0].threads
-          .concat(activEmailObjArray)
-          .sort(
-            (a: EmailListThreadItem, b: EmailListThreadItem) =>
-              parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-              parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-          ),
+        threads: sortThreads(
+          filteredTargetEmailList[0].threads.concat(activEmailObjArray)
+        ),
       }
       const updatedEmailList = [
         ...state.emailList.filter(
@@ -209,7 +194,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
-      if (filteredCurrentEmailList.length > 0) {
+      if (filteredCurrentEmailList && filteredCurrentEmailList.length > 0) {
         if (
           location &&
           location.pathname.includes('/mail/') &&
