@@ -19,7 +19,7 @@ import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
-import { setCurrentEmail, setViewingIndex } from '../../Store/emailDetailSlice'
+import { setCurrentEmail } from '../../Store/emailDetailSlice'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -46,7 +46,6 @@ const EmailList = () => {
   }, [labelIds])
 
   useEffect(() => {
-    dispatch(setViewingIndex(-1))
     dispatch(setCurrentEmail(''))
   }, [])
 

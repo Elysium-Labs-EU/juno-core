@@ -6,8 +6,8 @@ import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
 import {
   selectCurrentEmail,
-  selectViewIndex,
-  setViewingIndex,
+  // selectViewIndex,
+  // setViewingIndex,
 } from '../../Store/emailDetailSlice'
 import { loadEmails } from '../../Store/metaListSlice'
 import CloseMail from '../../utils/closeEmail'
@@ -22,14 +22,14 @@ import * as draft from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const DetailNavigation = ({ currentViewListener }: { currentViewListener: any }) => {
+const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentViewListener: any, viewIndexState: number }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
   const currEmail = useAppSelector(selectCurrentEmail)
   const storageLabels = useAppSelector(selectStorageLabels)
-  const viewIndex = useAppSelector(selectViewIndex)
+  // const viewIndex = useAppSelector(selectViewIndex)
   const [currLocal, setCurrLocal] = useState<string>('')
   const history = useHistory()
   const dispatch = useAppDispatch()
@@ -45,32 +45,32 @@ const DetailNavigation = ({ currentViewListener }: { currentViewListener: any })
 
   const isDisabledPrev = !!(
     emailList.length > 0 &&
-    emailList[emailListIndex].threads[viewIndex - 1] === undefined
+    emailList[emailListIndex].threads[viewIndexState - 1] === undefined
   )
 
   const isDisabledNext =
     emailList.length > 0 &&
     emailList[emailListIndex].nextPageToken === null &&
-    emailList[emailListIndex].threads[viewIndex + 1] === undefined
+    emailList[emailListIndex].threads[viewIndexState + 1] === undefined
 
   const nextButtonSelector = () => {
     if (
       emailList.length > 0 &&
-      emailList[emailListIndex].threads[viewIndex + 1] !== undefined && labelIds
+      emailList[emailListIndex].threads[viewIndexState + 1] !== undefined && labelIds
     ) {
       NavigateNextMail({
         history,
         labelIds,
         emailListIndex,
         emailList,
-        viewIndex,
+        viewIndexState,
         currentViewListener
       })
     }
     if (
       emailList.length > 0 &&
       emailList[emailListIndex].nextPageToken !== null &&
-      emailList[emailListIndex].threads[viewIndex + 1] === undefined
+      emailList[emailListIndex].threads[viewIndexState + 1] === undefined
     ) {
       const { nextPageToken } = emailList[emailListIndex]
       return loadNextPage({ nextPageToken, labelIds, dispatch })
@@ -103,11 +103,11 @@ const DetailNavigation = ({ currentViewListener }: { currentViewListener: any })
     if (currEmail !== currLocal) {
       if (emailList.length > 0) {
         setCurrLocal(currEmail)
-        const requestBody = {
-          emailList: emailList[emailListIndex].threads,
-          currEmail,
-        }
-        dispatch(setViewingIndex(requestBody))
+        // const requestBody = {
+        //   emailList: emailList[emailListIndex].threads,
+        //   currEmail,
+        // }
+        // dispatch(setViewingIndex(requestBody))
       } else {
         refetchMeta()
       }
@@ -124,7 +124,7 @@ const DetailNavigation = ({ currentViewListener }: { currentViewListener: any })
             labelIds,
             emailListIndex,
             emailList,
-            viewIndex,
+            viewIndexState,
             currentViewListener
           })
         }

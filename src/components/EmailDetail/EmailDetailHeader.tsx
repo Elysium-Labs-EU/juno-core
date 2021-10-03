@@ -9,7 +9,7 @@ import BackButton from '../BackButton'
 import * as S from './EmailDetailHeaderStyles'
 import * as GS from '../../styles/globalStyles'
 
-const Emaildetailheader = ({ currentViewListener }: { currentViewListener: any }) => {
+const Emaildetailheader = ({ currentViewListener, viewIndexState }: { currentViewListener: any, viewIndexState: number }) => {
   const isFocused = useSelector(selectIsFocused)
   const isSorting = useSelector(selectIsSorting)
 
@@ -20,7 +20,7 @@ const Emaildetailheader = ({ currentViewListener }: { currentViewListener: any }
           <NavControls />
           <S.InnerMenu>
             <Menu />
-            <DetailNavigation currentViewListener={currentViewListener} />
+            <DetailNavigation currentViewListener={currentViewListener} viewIndexState={viewIndexState} />
           </S.InnerMenu>
         </>
       ) : (

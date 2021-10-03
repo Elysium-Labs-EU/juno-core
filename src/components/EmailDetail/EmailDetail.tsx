@@ -3,7 +3,7 @@ import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
   selectIsReplying,
-  selectViewIndex,
+  // selectViewIndex,
   setCurrentEmail,
   setIsReplying,
 } from '../../Store/emailDetailSlice'
@@ -25,6 +25,7 @@ import {
 } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import Emaildetailheader from './EmailDetailHeader'
+import loadNextPage from '../../utils/loadNextPage'
 // import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
@@ -39,14 +40,17 @@ const EmailDetail = () => {
   const { threadId, overviewId } = useParams<{ threadId: string, overviewId: string }>()
   const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>()
   const localLabels = useRef<string[] | string>([])
-  const viewIndex = useAppSelector(selectViewIndex)
   const [viewIndexState, setViewIndexState] = useState(-1)
+
+  // console.log(currentEmail)
 
   useEffect(() => {
     if (viewIndexState === -1) {
-      setViewIndexState(viewIndex)
+      if (threadDetailList && threadDetailList.length > 0) {
+        setViewIndexState(threadDetailList.findIndex((item) => item.id === currentEmail))
+      }
     }
-  }, [viewIndex])
+  }, [viewIndexState, threadDetailList])
 
   const currentViewListener = (number: number) => {
     setViewIndexState((prevState) => prevState + number)
@@ -98,8 +102,15 @@ const EmailDetail = () => {
     }
   }, [threadId])
 
+  useEffect(() => {
+    // console.log('emailList', emailList)
+    // if (currentEmail && threadDetailList && threadDetailList.length > 0) {
+    //   const {} = threadDetailList
+    //   loadNextPage({nex})
+    // }
+  }, [currentEmail, threadDetailList, emailList])
 
-  // TODO: Replace viewIndex with local value to speed up process
+
   const MessagesFeed = () => {
     if (overviewId === local.MESSAGES && threadDetailList && viewIndexState > -1) {
       return (
@@ -122,13 +133,13 @@ const EmailDetail = () => {
 
   return (
     <>
-      <Emaildetailheader currentViewListener={currentViewListener} />
+      <Emaildetailheader currentViewListener={currentViewListener} viewIndexState={viewIndexState} />
       <GS.OuterContainer isReplying={isReplying}>
-        {overviewId === local.MESSAGES && threadDetailList && viewIndex > -1 && (
+        {overviewId === local.MESSAGES && threadDetailList && viewIndexState > -1 && (
           MessagesFeed()
         )}
-        {overviewId === local.FILES && threadDetailList && viewIndex > -1 && (
-          <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
+        {overviewId === local.FILES && threadDetailList && viewIndexState > -1 && (
+          <FilesOverview threadDetail={threadDetailList[viewIndexState]} isLoading={isLoading} />
         )}
         {/* {overviewId === local.INFORMATION && (
         <InformationOverview

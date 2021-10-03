@@ -16,13 +16,6 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: Em
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
-  const multipartMixed = () => {
-    const str = threadDetailBody.parts[0].parts
-      ? decodeBase64(`${ threadDetailBody.parts[0].parts[1].body.data }`)
-      : decodeBase64(`${ threadDetailBody.parts[0].body.data }`)
-    setBodyState((currState) => [...currState, str])
-  }
-
   const inlineImage = () => {
     const attachmentData =
       threadDetailBody.parts[threadDetailBody.parts.length - 1]
@@ -33,51 +26,35 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: Em
     )
   }
 
-  const additionalBody = () => {
-    const str = decodeBase64(`${ threadDetailBody.parts[0].parts[1].body.data }`)
-    setBodyState((currState) => [...currState, str])
-  }
-
-  const htmlBody = () => {
-    if (
-      Object.prototype.hasOwnProperty.call(threadDetailBody.parts[1], 'parts')
-    ) {
-      const str = decodeBase64(
-        `${ threadDetailBody.parts[1].parts[0].body.data }`
-      )
-      setBodyState((currState) => [...currState, str])
-    } else {
-      const str = decodeBase64(`${ threadDetailBody.parts[1].body.data }`)
-      setBodyState((currState) => [...currState, str])
-    }
-  }
-
-  const simpleText = () => {
-    const str = decodeBase64(`${ threadDetailBody.body.data }`)
-    setBodyState((currState) => [...currState, str])
-  }
-
-  const DetailBody = () => {
-    if (threadDetailBody.mimeType === 'text/html') {
-      simpleText()
-    }
-    if (threadDetailBody.mimeType === 'multipart/alternative') {
-      htmlBody()
-    }
-    if (threadDetailBody.mimeType === 'multipart/mixed') {
-      multipartMixed()
-    }
-    if (threadDetailBody.mimeType === 'multipart/related') {
-      inlineImage()
-      additionalBody()
-    }
-    // const str = base64url.decode(`${threadDetailBody.parts[0].body.data}`)
-    // setBodyState(str)
+  // This function recursively loops in the emailbody to find a body to decode.
+  const bodyDecoder = (inputObject: any) => {
+    Object.keys(inputObject).forEach(key => {
+      if (inputObject.body.size > 0) {
+        if (key === 'body') {
+          const str = decodeBase64(`${ inputObject.body.data }`)
+          setBodyState((currState) => [...currState, str])
+        }
+      }
+      if (inputObject.body.size === 0) {
+        if (key === 'parts') {
+          if (inputObject.parts[inputObject.parts.length - 1].body.size === 0) {
+            bodyDecoder(inputObject.parts[inputObject.parts.length - 1])
+          }
+          if (inputObject.parts[inputObject.parts.length - 1].body.size > 0) {
+            if (inputObject.parts[inputObject.parts.length - 1].filename.length === 0) {
+              const str = decodeBase64(`${ inputObject.parts[inputObject.parts.length - 1].body.data }`)
+              setBodyState((currState) => [...currState, str])
+            }
+            if (inputObject.parts[inputObject.parts.length - 1].filename.length > 0) inlineImage()
+          }
+        }
+      }
+    })
   }
 
   useEffect(() => {
     if (messageId.length > 0) {
-      DetailBody()
+      bodyDecoder(threadDetailBody)
     }
   }, [messageId])
 
