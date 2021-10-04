@@ -30,10 +30,7 @@ const EmailList = () => {
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
-    if (
-      labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
-    ) {
+    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
       const params = {
         labelIds,
         maxResults: local.MAX_RESULTS,
@@ -85,9 +82,7 @@ const EmailList = () => {
                   <CustomButtonText
                     className="button button-small button-light"
                     disabled={isLoading}
-                    onClick={() =>
-                      loadNextPage({ nextPageToken, labelIds, dispatch })
-                    }
+                    onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
                     label={local.LOAD_OLDER}
                   />
                 )}
@@ -105,10 +100,7 @@ const EmailList = () => {
   }
 
   const filteredOnLabel = useMemo(
-    () =>
-      emailList.findIndex((threadList) =>
-        threadList.labels.includes(labelIds[0])
-      ),
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
@@ -121,14 +113,10 @@ const EmailList = () => {
 
   return (
     <>
-      {labelIds &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        labeledInbox()}
-      {isLoading &&
-        labelIds &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
-          <LoadingState />
-        )}
+      {labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
+      {isLoading && labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+        <LoadingState />
+      )}
     </>
   )
 }

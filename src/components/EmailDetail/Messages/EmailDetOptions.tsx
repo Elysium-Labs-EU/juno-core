@@ -10,11 +10,10 @@ import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
 import { FindLabelByName } from '../../../utils'
-import {
-  // selectEmailList,
-  // selectIsFocused,
-  // selectIsSorting,
-} from '../../../Store/emailListSlice'
+import // selectEmailList,
+// selectIsFocused,
+// selectIsSorting,
+'../../../Store/emailListSlice'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
@@ -25,7 +24,7 @@ import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 
-const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply: any }) => {
+const EmailDetOptions = ({ messageId, setReply }: { messageId: string; setReply: any }) => {
   // const emailList = useAppSelector(selectEmailList)
   // const isFocused = useAppSelector(selectIsFocused)
   // const isSorting = useAppSelector(selectIsSorting)
@@ -54,14 +53,14 @@ const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply:
           </div>
           <div>
             {labelIds &&
-              labelIds.some(
-                (item) =>
-                  item ===
-                  FindLabelByName({
-                    storageLabels,
-                    LABEL_NAME: todo.LABEL,
-                  })[0].id
-              ) ? (
+            labelIds.some(
+              (item) =>
+                item ===
+                FindLabelByName({
+                  storageLabels,
+                  LABEL_NAME: todo.LABEL,
+                })[0].id
+            ) ? (
               <CustomButtonText
                 className="button option-link"
                 icon={<FiCheckCircle />}
@@ -126,12 +125,7 @@ const EmailDetOptions = ({ messageId, setReply }: { messageId: string, setReply:
               label={local.BUTTON_MORE}
             />
           </div>
-          {showMenu && (
-            <EmailMoreOptions
-              messageId={messageId}
-              labelIds={labelIds}
-            />
-          )}
+          {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} />}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
     </S.EmailOptionsContainer>

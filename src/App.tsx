@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import {
-  BrowserRouter as Router, Switch, Route,
+  BrowserRouter as Router,
+  Switch,
+  Route,
   // RouteComponentProps
 } from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -16,9 +18,7 @@ import { useAppDispatch, useAppSelector } from './Store/hooks'
 
 const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetail'))
-const ComposeEmail = React.lazy(() =>
-  import('./components/Compose/ComposeEmail')
-)
+const ComposeEmail = React.lazy(() => import('./components/Compose/ComposeEmail'))
 const Settings = React.lazy(() => import('./components/Settings'))
 const Inbox = React.lazy(() => import('./components/Inbox/Inbox'))
 const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))

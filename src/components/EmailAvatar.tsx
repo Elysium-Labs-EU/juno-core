@@ -7,9 +7,7 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
     if (splittedURL) {
       const name = splittedURL[0]
       const initials = name.match(/\b\w/g) || []
-      const finalIntials = (
-        (initials.shift() || '') + (initials.pop() || '')
-      ).toUpperCase()
+      const finalIntials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
       return finalIntials
     }
     return null

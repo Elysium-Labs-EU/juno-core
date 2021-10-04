@@ -7,15 +7,15 @@ import BackButton from '../BackButton'
 import * as GS from '../../styles/globalStyles'
 
 const InboxHeader = () => (
-    <GS.OuterContainer>
-      <S.NavContainer>
-        <BackButton />
-        <div className="header-center">
-          <h2>{local.DRAFT_HEADER}</h2>
-        </div>
-        <NavControls />
-      </S.NavContainer>
-    </GS.OuterContainer>
-  )
+  <GS.OuterContainer>
+    <S.NavContainer>
+      <BackButton />
+      <div className="header-center">
+        <h2>{local.DRAFT_HEADER}</h2>
+      </div>
+      <NavControls />
+    </S.NavContainer>
+  </GS.OuterContainer>
+)
 
 export default InboxHeader

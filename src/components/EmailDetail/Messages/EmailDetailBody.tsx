@@ -12,26 +12,29 @@ interface InlineImageType {
   filename: string
 }
 
-const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: EmailMessagePayload, messageId: string }) => {
+const EmailDetailBody = ({
+  threadDetailBody,
+  messageId,
+}: {
+  threadDetailBody: EmailMessagePayload
+  messageId: string
+}) => {
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
   const inlineImage = () => {
-    const attachmentData =
-      threadDetailBody.parts[threadDetailBody.parts.length - 1]
-    dispatch(fetchAttachment({ attachmentData, messageId })).then(
-      (response: InlineImageType) => {
-        setBodyState((currState) => [...currState, response])
-      }
-    )
+    const attachmentData = threadDetailBody.parts[threadDetailBody.parts.length - 1]
+    dispatch(fetchAttachment({ attachmentData, messageId })).then((response: InlineImageType) => {
+      setBodyState((currState) => [...currState, response])
+    })
   }
 
   // This function recursively loops in the emailbody to find a body to decode.
   const bodyDecoder = (inputObject: any) => {
-    Object.keys(inputObject).forEach(key => {
+    Object.keys(inputObject).forEach((key) => {
       if (inputObject.body.size > 0) {
         if (key === 'body') {
-          const str = decodeBase64(`${ inputObject.body.data }`)
+          const str = decodeBase64(`${inputObject.body.data}`)
           setBodyState((currState) => [...currState, str])
         }
       }
@@ -42,7 +45,9 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: Em
           }
           if (inputObject.parts[inputObject.parts.length - 1].body.size > 0) {
             if (inputObject.parts[inputObject.parts.length - 1].filename.length === 0) {
-              const str = decodeBase64(`${ inputObject.parts[inputObject.parts.length - 1].body.data }`)
+              const str = decodeBase64(
+                `${inputObject.parts[inputObject.parts.length - 1].body.data}`
+              )
               setBodyState((currState) => [...currState, str])
             }
             if (inputObject.parts[inputObject.parts.length - 1].filename.length > 0) inlineImage()
@@ -63,10 +68,10 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: { threadDetailBody: Em
       {!isEmpty(bodyState) &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
-            Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
+          Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
             <img
-              key={`${ item.filename + itemIdx }`}
-              src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
+              key={`${item.filename + itemIdx}`}
+              src={`data:${item.mimeType};base64,${item.decodedB64}`}
               alt={item?.filename ?? 'embedded image'}
               style={{ maxWidth: '100%', borderRadius: '5px' }}
             />

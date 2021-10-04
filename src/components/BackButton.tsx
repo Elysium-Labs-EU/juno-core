@@ -10,7 +10,6 @@ interface BackButtonType {
   isSorting?: boolean
 }
 
-
 const BackButton = (props: BackButtonType) => {
   const { isFocused, isSorting } = props
   const dispatch = useAppDispatch()
@@ -32,7 +31,6 @@ const BackButton = (props: BackButtonType) => {
 }
 
 export default BackButton
-
 
 BackButton.defaultProps = {
   isFocused: false,

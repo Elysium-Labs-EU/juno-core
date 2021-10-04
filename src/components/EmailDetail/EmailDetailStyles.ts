@@ -1,8 +1,5 @@
 import styled from 'styled-components'
 
-interface ViewContainerProps {
-  show: boolean
-}
 interface EmailWrapperProps {
   labelIds?: string[]
 }
@@ -11,9 +8,11 @@ interface EmailContainerProps {
   isReplying?: boolean
 }
 
-export const MessageFeedViewContainer = styled.div<ViewContainerProps>`
-  display: ${(props) => (props.show ? 'flex' : 'none')};
+export const HiddenMessagesFeed = styled.div`
+  display: none;
 `
+
+export const MessageFeedViewContainer = styled.div``
 
 export const EmailWrapper = styled.div<EmailWrapperProps>`
   border-radius: 6px;

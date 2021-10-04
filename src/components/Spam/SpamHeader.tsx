@@ -6,15 +6,15 @@ import * as GS from '../../styles/globalStyles'
 const SPAM_HEADER = 'Spam'
 
 const SpamHeader = () => (
-    <GS.OuterContainer>
-      <div className="nav-container">
-        <div className="header-center">
-          <h2>{SPAM_HEADER}</h2>
-        </div>
-        <NavControls />
+  <GS.OuterContainer>
+    <div className="nav-container">
+      <div className="header-center">
+        <h2>{SPAM_HEADER}</h2>
       </div>
-      <SpamClearOption />
-    </GS.OuterContainer>
-  )
+      <NavControls />
+    </div>
+    <SpamClearOption />
+  </GS.OuterContainer>
+)
 
 export default SpamHeader

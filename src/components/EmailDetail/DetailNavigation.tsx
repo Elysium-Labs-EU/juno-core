@@ -22,7 +22,13 @@ import * as draft from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentViewListener: any, viewIndexState: number }) => {
+const DetailNavigation = ({
+  currentViewListener,
+  viewIndexState,
+}: {
+  currentViewListener: any
+  viewIndexState: number
+}) => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
@@ -36,16 +42,12 @@ const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentView
   const location = useLocation<LocationObjectType>()
 
   const emailListIndex = useMemo(
-    () =>
-      emailList.findIndex((threadList) =>
-        threadList.labels.includes(labelIds[0])
-      ),
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
   const isDisabledPrev = !!(
-    emailList.length > 0 &&
-    emailList[emailListIndex].threads[viewIndexState - 1] === undefined
+    emailList.length > 0 && emailList[emailListIndex].threads[viewIndexState - 1] === undefined
   )
 
   const isDisabledNext =
@@ -56,7 +58,8 @@ const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentView
   const nextButtonSelector = () => {
     if (
       emailList.length > 0 &&
-      emailList[emailListIndex].threads[viewIndexState + 1] !== undefined && labelIds
+      emailList[emailListIndex].threads[viewIndexState + 1] !== undefined &&
+      labelIds
     ) {
       NavigateNextMail({
         history,
@@ -64,7 +67,7 @@ const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentView
         emailListIndex,
         emailList,
         viewIndexState,
-        currentViewListener
+        currentViewListener,
       })
     }
     if (
@@ -125,7 +128,7 @@ const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentView
             emailListIndex,
             emailList,
             viewIndexState,
-            currentViewListener
+            currentViewListener,
           })
         }
         disabled={isDisabledPrev}
@@ -135,13 +138,7 @@ const DetailNavigation = ({ currentViewListener, viewIndexState }: { currentView
         className="button option-link"
         onClick={() => nextButtonSelector()}
         disabled={isDisabledNext || isLoading}
-        icon={
-          !isLoading ? (
-            <FiChevronRight size={20} />
-          ) : (
-            <CircularProgress size={10} />
-          )
-        }
+        icon={!isLoading ? <FiChevronRight size={20} /> : <CircularProgress size={10} />}
       />
       <CustomIconLink
         className="button option-link"

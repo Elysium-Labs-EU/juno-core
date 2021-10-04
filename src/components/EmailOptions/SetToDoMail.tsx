@@ -14,8 +14,7 @@ interface SetToDoMailProps {
 }
 
 const SetToDoMail = (props: SetToDoMailProps) => {
-  const { history, messageId, labelIds, dispatch, location, storageLabels } =
-    props
+  const { history, messageId, labelIds, dispatch, location, storageLabels } = props
   const labelURL = labelIds && convertArrayToString(labelIds)
 
   const ToDoAction = () => {
@@ -24,9 +23,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(
-      UpdateMetaListLabel({ messageId, request, history, location, labelIds })
-    )
+    dispatch(UpdateMetaListLabel({ messageId, request, history, location, labelIds }))
   }
 
   return ToDoAction()

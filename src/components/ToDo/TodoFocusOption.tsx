@@ -18,10 +18,7 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
-    () =>
-      emailList.findIndex((threadList) =>
-        threadList.labels.includes(labelIds[0])
-      ),
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
