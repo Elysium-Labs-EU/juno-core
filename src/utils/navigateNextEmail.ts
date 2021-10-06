@@ -21,9 +21,6 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     viewIndexState,
     currentViewListener,
   } = props
-
-  console.log(props)
-
   currentViewListener && currentViewListener(1)
 
   const activeEmailList = () => {
@@ -36,24 +33,15 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     return null
   }
 
-  console.log(activeEmailList())
-
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {
-      // if (labelIds[0] !== emailList[0].labels[0])
       return convertArrayToString(labelIds)
     }
     return null
   }
 
-  // TODO: Unify call based on new activeEmaiList function
-
-  if (filteredCurrentEmailList) {
-    const nextID = filteredCurrentEmailList[0].threads[viewIndexState + 1].id
-    return history.push(`/mail/${labelURL()}/${nextID}/messages`)
-  }
-  if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
-    const nextID = emailList[emailListIndex].threads[viewIndexState + 1].id
+  if (activeEmailList() !== null && labelURL() !== null) {
+    const nextID = activeEmailList().threads[viewIndexState + 1].id
     return history.push(`/mail/${labelURL()}/${nextID}/messages`)
   }
   return null

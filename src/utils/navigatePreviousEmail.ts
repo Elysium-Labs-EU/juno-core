@@ -29,7 +29,12 @@ const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
     return null
   }
 
-  if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
+  if (
+    emailList &&
+    emailListIndex !== undefined &&
+    emailListIndex > -1 &&
+    labelURL() !== null
+  ) {
     const prevID = emailList[emailListIndex].threads[viewIndexState - 1].id
     return history.push(`/mail/${labelURL()}/${prevID}/messages`)
   }

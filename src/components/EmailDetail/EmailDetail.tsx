@@ -3,7 +3,6 @@ import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
   selectIsReplying,
-  // selectViewIndex,
   setCurrentEmail,
   setIsReplying,
 } from '../../Store/emailDetailSlice'
