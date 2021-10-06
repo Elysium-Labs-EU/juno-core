@@ -6,7 +6,7 @@ import EmailAttachment from '../Attachment/EmailAttachment'
 import { EmailListThreadItem } from '../../../Store/emailListTypes'
 
 interface Props {
-  threadDetail: EmailListThreadItem | null,
+  threadDetail: EmailListThreadItem | null
   isLoading: boolean
 }
 

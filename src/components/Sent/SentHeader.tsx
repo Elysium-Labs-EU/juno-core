@@ -7,15 +7,15 @@ import BackButton from '../BackButton'
 const SENT_HEADER = 'Sent'
 
 const SentHeader = () => (
-    <GS.OuterContainer>
-      <S.NavContainer>
-        <BackButton />
-        <div className="header-center">
-          <h2>{SENT_HEADER}</h2>
-        </div>
-        <NavControls />
-      </S.NavContainer>
-    </GS.OuterContainer>
-  )
+  <GS.OuterContainer>
+    <S.NavContainer>
+      <BackButton />
+      <div className="header-center">
+        <h2>{SENT_HEADER}</h2>
+      </div>
+      <NavControls />
+    </S.NavContainer>
+  </GS.OuterContainer>
+)
 
 export default SentHeader

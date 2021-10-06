@@ -3,7 +3,6 @@ import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
   selectIsReplying,
-  selectViewIndex,
   setCurrentEmail,
   setIsReplying,
 } from '../../Store/emailDetailSlice'
@@ -17,15 +16,19 @@ import { selectEmailList } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
-import MessagesOverview from './Messages/MessagesOverview'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import {
-  EmailListThreadItem
-} from '../../Store/emailListTypes'
+import { EmailListThreadItem } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import Emaildetailheader from './EmailDetailHeader'
+import loadNextPage from '../../utils/loadNextPage'
+import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
+import MessagesOverview from './Messages/MessagesOverview'
 // import InformationOverview from './Information/InformationOverview'
+
+const isReplyingListener = ({ dispatch, isReplying }: { dispatch: any; isReplying: boolean }) => {
+  dispatch(setIsReplying(!isReplying))
+}
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -36,32 +39,33 @@ const EmailDetail = () => {
   const isReplying = useAppSelector(selectIsReplying)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
-  const { threadId, overviewId } = useParams<{ threadId: string, overviewId: string }>()
-  const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>()
+  const { threadId, overviewId } = useParams<{ threadId: string; overviewId: string }>()
+  const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>([])
   const localLabels = useRef<string[] | string>([])
-  const viewIndex = useAppSelector(selectViewIndex)
   const [viewIndexState, setViewIndexState] = useState(-1)
+  const activePageTokenRef = useRef('')
 
   useEffect(() => {
     if (viewIndexState === -1) {
-      setViewIndexState(viewIndex)
+      if (threadDetailList && threadDetailList.length > 0) {
+        setViewIndexState(threadDetailList.findIndex((item) => item.id === currentEmail))
+      }
     }
-  }, [viewIndex])
+  }, [viewIndexState, threadDetailList])
 
   const currentViewListener = (number: number) => {
     setViewIndexState((prevState) => prevState + number)
   }
 
-  const isReplyingListener = () => {
-    dispatch(setIsReplying(!isReplying))
-  }
-
   const fetchEmailDetails = () => {
-    if (labelIds && threadId) {
+    if (labelIds) {
       const activeList =
-        emailList &&
-        emailList.findIndex((list) => list.labels.includes(labelIds[0]))
-      setThreadDetailList(emailList[activeList].threads)
+        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
+      const currentActivePageToken = emailList[activeList].nextPageToken
+      if (activeList > -1 && activePageTokenRef.current !== currentActivePageToken) {
+        activePageTokenRef.current = currentActivePageToken
+        setThreadDetailList(emailList[activeList].threads)
+      }
       if (serviceUnavailable && serviceUnavailable.length > 0) {
         dispatch(setServiceUnavailable(''))
       }
@@ -71,19 +75,15 @@ const EmailDetail = () => {
   }
 
   useEffect(() => {
-    if (threadId) {
-      if (labelIds && labelIds === localLabels.current) {
-        emailList.length > 0 && fetchEmailDetails()
-        // emailList.length > 0 && fetchEmailDetail({ threadId, labelIds })
-      } else {
-        const newLabelIds = [location.pathname.split('/')[2]]
-        dispatch(setCurrentLabels(newLabelIds))
-        localLabels.current = newLabelIds
-        emailList.length > 0 && fetchEmailDetails()
-        // emailList.length > 0 && fetchEmailDetail({ threadId, newLabelIds })
-      }
+    if (labelIds && labelIds === localLabels.current && emailList.length > 0) {
+      fetchEmailDetails()
+    } else {
+      const newLabelIds = [location.pathname.split('/')[2]]
+      dispatch(setCurrentLabels(newLabelIds))
+      localLabels.current = newLabelIds
+      emailList.length > 0 && fetchEmailDetails()
     }
-  }, [labelIds, emailList, threadId])
+  }, [labelIds, emailList])
   // DetailNavigation will refetch metaList + emailList if empty.
 
   useEffect(() => {
@@ -98,37 +98,45 @@ const EmailDetail = () => {
     }
   }, [threadId])
 
-
-  // TODO: Replace viewIndex with local value to speed up process
-  const MessagesFeed = () => {
-    if (overviewId === local.MESSAGES && threadDetailList && viewIndexState > -1) {
-      return (
-        <>
-          {threadDetailList.length > 0 && threadDetailList.map((item, index) =>
-            <S.MessageFeedViewContainer key={item.id} show={index === viewIndexState}>
-              <MessagesOverview
-                threadDetail={item}
-                isLoading={isLoading}
-                isReplying={isReplying}
-                isReplyingListener={isReplyingListener}
-              />
-            </S.MessageFeedViewContainer>
-          )}
-        </>
-      )
-    }
-    return "Cannot load details"
-  }
+  // useEffect(() => {
+  //   // console.log('emailList', emailList)
+  //   // if (currentEmail && threadDetailList && threadDetailList.length > 0) {
+  //   //   const {} = threadDetailList
+  //   //   loadNextPage({nex})
+  //   // }
+  // }, [currentEmail, threadDetailList, emailList])
 
   return (
     <>
-      <Emaildetailheader currentViewListener={currentViewListener} />
+      <Emaildetailheader
+        currentViewListener={currentViewListener}
+        viewIndexState={viewIndexState}
+      />
       <GS.OuterContainer isReplying={isReplying}>
-        {overviewId === local.MESSAGES && threadDetailList && viewIndex > -1 && (
-          MessagesFeed()
-        )}
-        {overviewId === local.FILES && threadDetailList && viewIndex > -1 && (
-          <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
+        {overviewId &&
+          overviewId.length &&
+          overviewId === local.MESSAGES &&
+          threadDetailList.length > 0 && (
+            <MessagesOverview
+              threadDetail={threadDetailList[viewIndexState]}
+              isLoading={isLoading}
+              isReplying={isReplying}
+              isReplyingListener={isReplyingListener}
+            />
+          )}
+        {overviewId &&
+          overviewId.length &&
+          overviewId === local.MESSAGES &&
+          threadDetailList.length > 0 && viewIndexState > -1 && (
+            <S.HiddenMessagesFeed>
+              <PreLoadMessages
+                threadDetailList={threadDetailList}
+                viewIndexState={viewIndexState}
+              />
+            </S.HiddenMessagesFeed>
+          )}
+        {overviewId === local.FILES && threadDetailList.length > 0 && (
+          <FilesOverview threadDetail={threadDetailList[viewIndexState]} isLoading={isLoading} />
         )}
         {/* {overviewId === local.INFORMATION && (
         <InformationOverview

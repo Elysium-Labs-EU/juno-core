@@ -185,12 +185,14 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           location.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(draft.LABEL)
         ) {
-          const { viewIndex } = getState().emailDetail
+          const viewIndexState = filteredCurrentEmailList[0].threads.findIndex(
+            (item) => item.id === messageId
+          )
           NavigateNextMail({
             history,
             labelIds,
             filteredCurrentEmailList,
-            viewIndex,
+            viewIndexState,
           })
         }
         const response: any = !request.delete

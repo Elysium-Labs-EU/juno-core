@@ -1,10 +1,5 @@
 import React, { useState } from 'react'
-import {
-  FiArchive,
-  FiCheckCircle,
-  FiCornerUpLeft,
-  FiMoreHorizontal,
-} from 'react-icons/fi'
+import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
@@ -19,7 +14,15 @@ import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const InlineThreadActions = ({ id, history, labelIds }: { id: string, history: any, labelIds: string[] }) => {
+const InlineThreadActions = ({
+  id,
+  history,
+  labelIds,
+}: {
+  id: string
+  history: any
+  labelIds: string[]
+}) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
   // const labelURL = convertArrayToString(labelIds)
@@ -33,23 +36,21 @@ const InlineThreadActions = ({ id, history, labelIds }: { id: string, history: a
         <CustomIconLink
           className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
-          onClick={() =>
-            ReplyOverview({ history, labelIds, id, dispatch })
-          }
+          onClick={() => ReplyOverview({ history, labelIds, id, dispatch })}
         />
         {/* <CustomIconLink
           className="button button-small text_muted option-link"
           icon={<FiClock />}
         /> */}
         {labelIds &&
-          labelIds.some(
-            (item) =>
-              item ===
-              FindLabelByName({
-                storageLabels,
-                LABEL_NAME: todo.LABEL,
-              })[0].id
-          ) ? (
+        labelIds.some(
+          (item) =>
+            item ===
+            FindLabelByName({
+              storageLabels,
+              LABEL_NAME: todo.LABEL,
+            })[0].id
+        ) ? (
           <CustomIconLink
             onClick={() =>
               SetCompletedMail({
@@ -80,9 +81,7 @@ const InlineThreadActions = ({ id, history, labelIds }: { id: string, history: a
           />
         )}
         <CustomIconLink
-          onClick={() =>
-            ArchiveMail({ messageId, location, dispatch, labelIds })
-          }
+          onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
           className="button button-small text_muted option-link"
           icon={<FiArchive />}
         />

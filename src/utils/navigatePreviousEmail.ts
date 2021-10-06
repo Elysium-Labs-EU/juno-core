@@ -6,7 +6,7 @@ interface NavigatePreviousMailProps {
   labelIds: string[]
   emailList?: EmailListObject[]
   emailListIndex?: number
-  viewIndex: number
+  viewIndexState: number
   currentViewListener?: any
 }
 
@@ -16,11 +16,11 @@ const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
     labelIds,
     emailList,
     emailListIndex,
-    viewIndex,
+    viewIndexState,
     currentViewListener,
   } = props
 
-  currentViewListener(-1)
+  currentViewListener && currentViewListener(-1)
 
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {
@@ -29,8 +29,13 @@ const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
     return null
   }
 
-  if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
-    const prevID = emailList[emailListIndex].threads[viewIndex - 1].id
+  if (
+    emailList &&
+    emailListIndex !== undefined &&
+    emailListIndex > -1 &&
+    labelURL() !== null
+  ) {
+    const prevID = emailList[emailListIndex].threads[viewIndexState - 1].id
     return history.push(`/mail/${labelURL()}/${prevID}/messages`)
   }
   return null

@@ -9,18 +9,18 @@ import * as GS from '../../styles/globalStyles'
 const INBOX_HEADER = 'Inbox'
 
 const InboxHeader = () => (
-    <GS.OuterContainer>
-      <S.NavContainer>
-        {/* <S.BackButtonContainer>
+  <GS.OuterContainer>
+    <S.NavContainer>
+      {/* <S.BackButtonContainer>
           <BackButton />
         </S.BackButtonContainer> */}
-        <div className="header-center">
-          <h2>{INBOX_HEADER}</h2>
-        </div>
-        <NavControls />
-      </S.NavContainer>
-      <InboxSortOption />
-    </GS.OuterContainer>
-  )
+      <div className="header-center">
+        <h2>{INBOX_HEADER}</h2>
+      </div>
+      <NavControls />
+    </S.NavContainer>
+    <InboxSortOption />
+  </GS.OuterContainer>
+)
 
 export default InboxHeader

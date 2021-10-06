@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import './NavControls.scss'
-import {
-  FiCheckSquare,
-  FiMoreHorizontal,
-  FiEdit,
-  FiInbox,
-  FiSettings,
-} from 'react-icons/fi'
+import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavControlsStyles'
@@ -42,22 +36,14 @@ const Navigation = () => {
       <S.NavList>
         <S.NavItem>
           <CustomIconLink
-            className={
-              active === 'todo'
-                ? 'nav-item-selected nav-item-button'
-                : 'nav-item-button'
-            }
+            className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
             icon={<FiCheckSquare />}
             onClick={() => navigateTo('/')}
           />
         </S.NavItem>
         <S.NavItem>
           <CustomIconLink
-            className={
-              active === 'inbox'
-                ? 'nav-item-selected nav-item-button'
-                : 'nav-item-button'
-            }
+            className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
             icon={<FiInbox />}
             onClick={() => navigateTo('/inbox')}
           />
@@ -65,9 +51,7 @@ const Navigation = () => {
         <S.NavItem>
           <CustomIconLink
             className={
-              active === 'settings'
-                ? 'nav-item-selected nav-item-button'
-                : 'nav-item-button'
+              active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
             }
             icon={<FiSettings />}
             onClick={() => navigateTo('/settings')}
@@ -76,9 +60,7 @@ const Navigation = () => {
         <S.NavItem>
           <CustomIconLink
             className={
-              active === 'compose'
-                ? 'nav-item-selected nav-item-button'
-                : 'nav-item-button'
+              active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
             }
             icon={<FiEdit />}
             onClick={() => navigateTo('/compose')}

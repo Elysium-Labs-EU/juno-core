@@ -7,8 +7,8 @@ import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
 import { LocationObjectType } from '../../types/globalTypes'
 
 interface MenuItemType {
-  name: string,
-  link: string,
+  name: string
+  link: string
 }
 
 const Menu = () => {
@@ -35,12 +35,8 @@ const Menu = () => {
     <ul className="no-bullet-ul flex-flow-row">
       {local.MENU_OPTIONS.map((item, index) => (
         <li
-          key={`${ item.name + index }`}
-          className={
-            activeLink === item.name
-              ? 'option-link:active menu'
-              : 'option-link menu'
-          }
+          key={`${item.name + index}`}
+          className={activeLink === item.name ? 'option-link:active menu' : 'option-link menu'}
           onClick={() => navigateTo(item)}
           aria-hidden="true"
         >

@@ -6,7 +6,7 @@ import * as S from './EmailAttachmentStyles'
 import { EmailMessage } from '../../../Store/emailListTypes'
 import { EmailAttachmentType } from './EmailAttachmentTypes'
 
-const EmailAttachment = ({ message, overview }: { message: EmailMessage, overview: boolean }) => {
+const EmailAttachment = ({ message, overview }: { message: EmailMessage; overview: boolean }) => {
   const CheckAttachment = () => {
     if (
       message &&

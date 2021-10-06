@@ -9,7 +9,16 @@ import EmailHasAttachment from '../../../EmailHasAttachment'
 import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
 import { MessagePayload } from '../../../../Store/draftsTypes'
 
-const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, threadDetail: EmailListThreadItem, FROM: string }) => {
+const ReadMessage = ({
+  message,
+  threadDetail,
+  FROM,
+}: {
+  message: EmailMessage
+  threadDetail: EmailListThreadItem
+  FROM: string
+}) => {
+  // console.log(message)
   const [open, setOpen] = useState(
     threadDetail && threadDetail.messages && threadDetail.messages.length > 1
       ? message && message.labelIds.includes(local.UNREAD)
@@ -20,17 +29,39 @@ const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, t
     setOpen((currState) => !currState)
   }
 
-  const AvatarURL =
-    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
+  const From = (): string => {
+    if (message) {
+      if (message.payload.headers) {
+        return message.payload.headers.find((e: MessagePayload) => e.name === 'From')
+          ? message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
+          : message.payload.headers.find((e: MessagePayload) => e.name === 'from').value
+      }
+      return ''
+    }
+    return ''
+  }
 
-  const Subject =
-    message && message.payload.headers.find((e: MessagePayload) => e.name === 'Subject').value
+  const Subject = (): string => {
+    if (message) {
+      if (message.payload.headers) {
+        return message.payload.headers.find((e: MessagePayload) => e.name === 'Subject')
+          ? message.payload.headers.find((e: MessagePayload) => e.name === 'Subject').value
+          : message.payload.headers.find((e: MessagePayload) => e.name === 'subject').value
+      }
+      return ''
+    }
+    return ''
+  }
 
-  const From =
-    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
-
-  const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+  const EmailSnippet = (): string => {
+    if (message) {
+      if (message.snippet) {
+        return `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
+      }
+      return ''
+    }
+    return ''
+  }
 
   return (
     <>
@@ -38,13 +69,10 @@ const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, t
         <>
           <div onClick={handleClick} aria-hidden="true">
             <S.AvatarHeaderContainer>
-              <EmailAvatar avatarURL={AvatarURL} />
+              <EmailAvatar avatarURL={From()} />
               <S.HeaderFullWidth>
-                <span
-                  title={Subject}
-                  className="email_detail_title text_truncate"
-                >
-                  {Subject}
+                <span title={Subject()} className="email_detail_title text_truncate">
+                  {Subject()}
                 </span>
                 <S.TimeAttachmentContainer>
                   <EmailHasAttachment messages={message} />
@@ -53,20 +81,19 @@ const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, t
               </S.HeaderFullWidth>
             </S.AvatarHeaderContainer>
             <S.FromContainer>
-              <span
-                className="text_muted text_small"
-                style={{ marginRight: '4px' }}
-              >
+              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
                 {FROM}
               </span>
-              <span className="text_small">{From}</span>
+              <span className="text_small">{From()}</span>
             </S.FromContainer>
             <S.EmailBody>
-              <EmailDetailBody
-                // className="EmailDetailBody"
-                threadDetailBody={message.payload}
-                messageId={message.id}
-              />
+              {message && message.payload && message.id && (
+                <EmailDetailBody
+                  // className="EmailDetailBody"
+                  threadDetailBody={message.payload}
+                  messageId={message.id}
+                />
+              )}
             </S.EmailBody>
           </div>
           <EmailAttachment message={message} overview={false} />
@@ -77,12 +104,12 @@ const ReadMessage = ({ message, threadDetail, FROM }: { message: EmailMessage, t
         <div onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>
             <S.ClosedAvatarSender>
-              <EmailAvatar avatarURL={AvatarURL} />
+              <EmailAvatar avatarURL={From()} />
               <S.ClosedSender>
-                <span>{From}</span>
+                <span>{From()}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
-            <S.ClosedSnippet>{EmailSnippet}</S.ClosedSnippet>
+            <S.ClosedSnippet>{EmailSnippet()}</S.ClosedSnippet>
             <S.TimeAttachmentContainer>
               <EmailHasAttachment messages={message} />
               <TimeStamp threadTimeStamp={message.internalDate} />

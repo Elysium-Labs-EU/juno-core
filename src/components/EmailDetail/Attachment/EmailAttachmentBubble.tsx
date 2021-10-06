@@ -14,7 +14,13 @@ import { EmailAttachmentType } from './EmailAttachmentTypes'
 
 const FILE = 'File - '
 
-const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: EmailAttachmentType, messageId: string }) => {
+const EmailAttachmentBubble = ({
+  attachmentData,
+  messageId,
+}: {
+  attachmentData: EmailAttachmentType
+  messageId: string
+}) => {
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -25,10 +31,10 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: 
           <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
           <S.AttachmentInner
             className="attachment-inner"
-          // onClick={() =>
-          //   dispatch(fetchAttachment({ messageId, attachmentData }))
-          // }
-          // aria-hidden="true"
+            // onClick={() =>
+            //   dispatch(fetchAttachment({ messageId, attachmentData }))
+            // }
+            // aria-hidden="true"
           >
             <span>{attachmentData.filename}</span>
             <p className="text_small text_muted" style={{ margin: 0 }}>
@@ -38,13 +44,9 @@ const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: 
           </S.AttachmentInner>
           <CustomIconLink
             onClick={() =>
-              dispatch(downloadAttachment({ messageId, attachmentData })).then(
-                setDownloaded(true)
-              )
+              dispatch(downloadAttachment({ messageId, attachmentData })).then(setDownloaded(true))
             }
-            icon={
-              !downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />
-            }
+            icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
             className="nav-item-button"
           />
         </S.Attachment>

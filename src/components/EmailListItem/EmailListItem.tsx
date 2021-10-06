@@ -91,9 +91,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         >
           <div className="subjectSnippet text_truncate">
             {labelIds.includes(draft.LABEL) && (
-              <span style={{ fontWeight: 'bold' }}>
-                {draft.DRAFT_SNIPPET_INDICATOR}
-              </span>
+              <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{emailSubject()}</span>
             <Snippet snippet={emailSnippet()} />

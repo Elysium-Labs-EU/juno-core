@@ -9,9 +9,9 @@ const Wrapper = styled.div`
 `
 
 const Emptystate = () => (
-    <Wrapper>
-      <p>{global.NOTHING_TO_SEE}</p>
-    </Wrapper>
-  )
+  <Wrapper>
+    <p>{global.NOTHING_TO_SEE}</p>
+  </Wrapper>
+)
 
 export default Emptystate

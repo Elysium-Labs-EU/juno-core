@@ -20,5 +20,4 @@ const InformationOverview = () => test
 // </ES.DetailRow>
 // )
 
-
 export default InformationOverview

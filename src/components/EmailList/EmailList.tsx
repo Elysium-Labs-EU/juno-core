@@ -19,7 +19,7 @@ import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
-import { setCurrentEmail, setViewingIndex } from '../../Store/emailDetailSlice'
+import { setCurrentEmail } from '../../Store/emailDetailSlice'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -30,10 +30,7 @@ const EmailList = () => {
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
-    if (
-      labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)
-    ) {
+    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
       const params = {
         labelIds,
         maxResults: local.MAX_RESULTS,
@@ -46,7 +43,6 @@ const EmailList = () => {
   }, [labelIds])
 
   useEffect(() => {
-    dispatch(setViewingIndex(-1))
     dispatch(setCurrentEmail(''))
   }, [])
 
@@ -86,9 +82,7 @@ const EmailList = () => {
                   <CustomButtonText
                     className="button button-small button-light"
                     disabled={isLoading}
-                    onClick={() =>
-                      loadNextPage({ nextPageToken, labelIds, dispatch })
-                    }
+                    onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
                     label={local.LOAD_OLDER}
                   />
                 )}
@@ -106,10 +100,7 @@ const EmailList = () => {
   }
 
   const filteredOnLabel = useMemo(
-    () =>
-      emailList.findIndex((threadList) =>
-        threadList.labels.includes(labelIds[0])
-      ),
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
@@ -122,14 +113,10 @@ const EmailList = () => {
 
   return (
     <>
-      {labelIds &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        labeledInbox()}
-      {isLoading &&
-        labelIds &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
-          <LoadingState />
-        )}
+      {labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
+      {isLoading && labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+        <LoadingState />
+      )}
     </>
   )
 }

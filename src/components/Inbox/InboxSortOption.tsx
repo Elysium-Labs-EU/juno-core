@@ -23,10 +23,7 @@ const SortInbox = () => {
   const [disableRefresh, setDisableRefresh] = useState(false)
 
   const emailListIndex = useMemo(
-    () =>
-      emailList.findIndex((threadList) =>
-        threadList.labels.includes(labelIds[0])
-      ),
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 

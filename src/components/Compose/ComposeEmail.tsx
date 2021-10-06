@@ -4,22 +4,14 @@ import { useHistory, useParams } from 'react-router-dom'
 import InputBase from '@material-ui/core/InputBase'
 import FormControl from '@material-ui/core/FormControl'
 import FormHelperText from '@material-ui/core/FormHelperText'
-import {
-  selectComposeEmail,
-  SendComposedEmail,
-  TrackComposeEmail,
-} from '../../Store/composeSlice'
+import { selectComposeEmail, SendComposedEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import * as global from '../../constants/globalConstants'
 import * as S from './ComposeStyles'
 import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
-import {
-  CreateDraft,
-  selectDraftDetails,
-  UpdateDraft,
-} from '../../Store/draftsSlice'
+import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 interface ComposeEmailProps {
@@ -54,11 +46,7 @@ const ComposeEmail = ({
   const history = useHistory()
 
   useEffect(() => {
-    if (
-      !messageId &&
-      Object.values(composeEmail).length > 0 &&
-      isEmpty(draftDetails)
-    ) {
+    if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
       dispatch(CreateDraft())
     } else if (!isEmpty(draftDetails) && messageId) {
       dispatch(UpdateDraft())
@@ -161,9 +149,7 @@ const ComposeEmail = ({
     <S.Wrapper isReplying={isReplying}>
       <>
         <S.UpdateContainer>
-          {saveSuccess && (
-            <span className="text_muted">{local.DRAFT_SAVED}</span>
-          )}
+          {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
         </S.UpdateContainer>
         <S.ComposerContainer className="composer composerIsVisible">
           <div className="base">

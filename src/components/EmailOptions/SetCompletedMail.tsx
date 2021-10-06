@@ -18,9 +18,7 @@ const SetCompletedMail = (props: SetCompletedMailProps) => {
     const request = {
       removeLabelIds: labelIds,
     }
-    dispatch(
-      UpdateMetaListLabel({ messageId, request, history, location, labelIds })
-    )
+    dispatch(UpdateMetaListLabel({ messageId, request, history, location, labelIds }))
   }
 
   return CompletedAction()

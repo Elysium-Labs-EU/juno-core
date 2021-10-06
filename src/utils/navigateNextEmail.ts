@@ -7,7 +7,7 @@ interface NavigateNextMailProps {
   emailList?: EmailListObject[]
   emailListIndex?: number
   filteredCurrentEmailList?: any
-  viewIndex: number
+  viewIndexState: number
   currentViewListener?: any
 }
 
@@ -18,11 +18,20 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     emailList,
     emailListIndex,
     filteredCurrentEmailList,
-    viewIndex,
+    viewIndexState,
     currentViewListener,
   } = props
+  currentViewListener && currentViewListener(1)
 
-  currentViewListener(1)
+  const activeEmailList = () => {
+    if (filteredCurrentEmailList) {
+      return filteredCurrentEmailList
+    }
+    if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
+      return emailList[emailListIndex]
+    }
+    return null
+  }
 
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {
@@ -31,12 +40,8 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     return null
   }
 
-  if (filteredCurrentEmailList) {
-    const nextID = filteredCurrentEmailList[0].threads[viewIndex + 1].id
-    return history.push(`/mail/${labelURL()}/${nextID}/messages`)
-  }
-  if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
-    const nextID = emailList[emailListIndex].threads[viewIndex + 1].id
+  if (activeEmailList() !== null && labelURL() !== null) {
+    const nextID = activeEmailList().threads[viewIndexState + 1].id
     return history.push(`/mail/${labelURL()}/${nextID}/messages`)
   }
   return null

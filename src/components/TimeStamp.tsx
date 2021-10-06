@@ -2,7 +2,7 @@ import React from 'react'
 import moment from 'moment'
 
 type TimeStampType = {
-  threadTimeStamp: string;
+  threadTimeStamp: string
 }
 
 const TimeStamp = ({ threadTimeStamp }: TimeStampType) => {
