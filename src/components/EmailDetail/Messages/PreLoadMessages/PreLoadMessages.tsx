@@ -36,8 +36,6 @@ const PreLoadMessages = memo(
             return []
         }
 
-        console.log(preLoadMargins())
-
         if (preLoadMargins().length > 0) {
             return (
                 <>
