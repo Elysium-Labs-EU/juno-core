@@ -128,10 +128,11 @@ const EmailDetail = () => {
         {overviewId &&
           overviewId.length &&
           overviewId === local.MESSAGES &&
-          threadDetailList.length > 0 && (
+          threadDetailList.length > 0 && viewIndexState > -1 && (
             <S.HiddenMessagesFeed>
               <PreLoadMessages
                 threadDetailList={threadDetailList}
+                viewIndexState={viewIndexState}
               />
             </S.HiddenMessagesFeed>
           )}
