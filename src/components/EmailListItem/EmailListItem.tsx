@@ -29,7 +29,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const fromEmail = () => {
     const query = 'From'
     if (email) {
-      return findPayloadHeadersData({ email, query })
+      const from = findPayloadHeadersData({ email, query })
+      return from.length > 0 ? from : '(No sender)'
     }
     return null
   }
@@ -37,7 +38,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const toEmail = () => {
     const query = 'To'
     if (email) {
-      return findPayloadHeadersData({ email, query })
+      const to = findPayloadHeadersData({ email, query })
+      return to.length > 0 ? to : '(No recipient)'
     }
     return null
   }
@@ -45,7 +47,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const emailSubject = () => {
     const query = 'Subject'
     if (email) {
-      return findPayloadHeadersData({ email, query })
+      const subject = findPayloadHeadersData({ email, query })
+      return subject.length > 0 ? subject : '(No subject)'
     }
     return null
   }
