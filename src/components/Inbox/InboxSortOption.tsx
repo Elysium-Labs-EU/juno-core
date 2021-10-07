@@ -50,6 +50,7 @@ const SortInbox = () => {
         setDisableRefresh(false)
       }, 3000)
     }
+    return () => setDisableRefresh(false)
   }, [isFetching])
 
   return (
