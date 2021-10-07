@@ -5,14 +5,17 @@ import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
 import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
+import { EmailDetailState } from './emailDetailTypes'
 import type { AppThunk, RootState } from './store'
+
+const initialState: EmailDetailState = Object.freeze({
+  currEmail: '',
+  isReplying: false,
+})
 
 export const emailDetailSlice = createSlice({
   name: 'emailDetail',
-  initialState: {
-    currEmail: '',
-    isReplying: false,
-  },
+  initialState,
   reducers: {
     setCurrentEmail: (state, action) => {
       state.currEmail = action.payload
