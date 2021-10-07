@@ -1,7 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import threadApi from '../data/threadApi'
-import { setIsLoading, setServiceUnavailable } from './utilsSlice'
+import {
+  setIsLoading,
+  setIsSilentLoading,
+  setServiceUnavailable,
+} from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { loadEmailDetails, UpdateEmailListLabel } from './emailListSlice'
 import { FilteredMetaList } from '../utils'
@@ -113,10 +117,13 @@ export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
     try {
-      if (!getState().utils.isLoading) {
+      const { labelIds, silentLoading } = params
+      if (!silentLoading && !getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
-      const { labelIds } = params
+      if (silentLoading) {
+        dispatch(setIsSilentLoading(true))
+      }
       const metaList = await threadApi().getThreads(params)
       if (metaList) {
         if (metaList.message.resultSizeEstimate > 0) {
@@ -131,15 +138,18 @@ export const loadEmails =
         } else {
           dispatch(setLoadedInbox(labelIds))
           dispatch(setIsLoading(false))
-          console.log(`Empty Inbox for ${labelIds}`)
+          getState().utils.isSilentLoading &&
+            dispatch(setIsSilentLoading(false))
         }
       } else {
         dispatch(setServiceUnavailable('No feed found'))
         dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       }
     } catch (err) {
       console.log(err)
       dispatch(setIsLoading(false))
+      getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       dispatch(
         setServiceUnavailable('Something went wrong whilst loading Meta data.')
       )

@@ -1,6 +1,8 @@
 export interface LoadEmailObject {
   labelIds: string[]
   maxResults: number
+  nextPageToken?: string
+  silentLoading?: boolean
 }
 
 export interface MetaListThreadItem {

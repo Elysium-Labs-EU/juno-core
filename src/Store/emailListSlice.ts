@@ -1,7 +1,11 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import threadApi from '../data/threadApi'
-import { setIsLoading, setServiceUnavailable } from './utilsSlice'
+import {
+  setIsLoading,
+  setIsSilentLoading,
+  setServiceUnavailable,
+} from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
 import { FilteredEmailList } from '../utils'
 import messageApi from '../data/messageApi'
@@ -132,6 +136,8 @@ export const loadEmailDetails =
               )
               dispatch(setLoadedInbox(labels))
               dispatch(setIsLoading(false))
+              getState().utils.isSilentLoading &&
+                dispatch(setIsSilentLoading(false))
             }
           })
         }
@@ -150,6 +156,8 @@ export const loadEmailDetails =
             getState().labels.loadedInbox.length
         ) {
           dispatch(setIsLoading(false))
+          getState().utils.isSilentLoading &&
+            dispatch(setIsSilentLoading(false))
         }
       }
     } catch (err) {

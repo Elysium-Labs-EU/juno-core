@@ -5,11 +5,13 @@ import type { RootState } from './store'
 interface UtilsState {
   isLoading: boolean
   serviceUnavailable: string
+  isSilentLoading: boolean
 }
 
 const initialState: UtilsState = Object.freeze({
   isLoading: false,
   serviceUnavailable: '',
+  isSilentLoading: false,
 })
 
 export const utilsSlice = createSlice({
@@ -22,13 +24,19 @@ export const utilsSlice = createSlice({
     setServiceUnavailable: (state, action: PayloadAction<string>) => {
       state.serviceUnavailable = action.payload
     },
+    setIsSilentLoading: (state, action: PayloadAction<boolean>) => {
+      state.isSilentLoading = action.payload
+    },
   },
 })
 
-export const { setIsLoading, setServiceUnavailable } = utilsSlice.actions
+export const { setIsLoading, setServiceUnavailable, setIsSilentLoading } =
+  utilsSlice.actions
 
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable
+export const selectIsSilentLoading = (state: RootState) =>
+  state.utils.isSilentLoading
 
 export default utilsSlice.reducer
