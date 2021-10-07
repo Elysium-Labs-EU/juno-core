@@ -155,8 +155,8 @@ const pushDraftDetails = (
           message.payload.body.size > 0
             ? base64url
                 .decode(message.payload.body.data)
-                .replace(/<[^>]*>/g, '')
-                .replace(/<script.*?>.*?<\/script>/gim, '') ?? ''
+                .replace(/<script.*?>.*?<\/script>/gim, '')
+                .replace(/<[^>]*>/g, '') ?? ''
             : '',
       }
       const draftDetails = {
