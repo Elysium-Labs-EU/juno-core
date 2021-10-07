@@ -1,8 +1,8 @@
-import React, { memo, useRef } from 'react'
+import React from 'react'
 import { EmailListThreadItem } from '../../../../Store/emailListTypes'
 import PreLoadMessage from './PreLoadMessage'
 
-const PreLoadMessages = memo(
+const PreLoadMessages =
     ({
         threadDetailList,
         viewIndexState,
@@ -10,7 +10,7 @@ const PreLoadMessages = memo(
         threadDetailList: EmailListThreadItem[]
         viewIndexState: number
     }) => {
-        const preLoadedMessagesRef = useRef<any>(null)
+        // const preLoadedMessagesRef = useRef<any>(null)
         // Only preload the messages 3 before and 3 after the current message.
         // If a message has been preloaded before, and the user is still on the detail view, do not remove this message from the feed. So extend the range of the view.
         // Only preload a new batch, apart from the initial batch, once the cursor reaches a point of within 1 distance of the edge.
@@ -22,7 +22,7 @@ const PreLoadMessages = memo(
             const leftCursor = viewIndexState - 3 < 0 ? 0 : viewIndexState - 3
             const rightCursor = viewIndexState + 4
             if (viewIndexState > -1 && threadDetailList.length > 0) {
-                preLoadedMessagesRef.current = threadDetailList.slice(leftCursor, rightCursor).map((item) => item.id)
+                // preLoadedMessagesRef.current = threadDetailList.slice(leftCursor, rightCursor).map((item) => item.id)
                 return threadDetailList.slice(leftCursor, rightCursor)
             }
             // if (viewIndexState > -1 && threadDetailList.length > 0 && preLoadedMessagesRef.current !== null && preLoadedMessagesRef.current.length > 0) {
@@ -51,6 +51,6 @@ const PreLoadMessages = memo(
         }
         return <div>Cannot load hidden details</div>
     }
-)
+
 
 export default PreLoadMessages

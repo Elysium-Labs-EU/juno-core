@@ -75,8 +75,8 @@ const EmailDetail = () => {
   }
 
   useEffect(() => {
-    if (labelIds && labelIds === localLabels.current && emailList.length > 0) {
-      fetchEmailDetails()
+    if (labelIds && labelIds === localLabels.current) {
+      emailList.length > 0 && fetchEmailDetails()
     } else {
       const newLabelIds = [location.pathname.split('/')[2]]
       dispatch(setCurrentLabels(newLabelIds))
@@ -117,7 +117,7 @@ const EmailDetail = () => {
           overviewId.length &&
           overviewId === local.MESSAGES &&
           threadDetailList.length > 0 && (
-            <MessagesOverview
+            viewIndexState > -1 && <MessagesOverview
               threadDetail={threadDetailList[viewIndexState]}
               isLoading={isLoading}
               isReplying={isReplying}
