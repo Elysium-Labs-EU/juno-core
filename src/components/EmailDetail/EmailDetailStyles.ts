@@ -12,6 +12,20 @@ export const HiddenMessagesFeed = styled.div`
   display: none;
 `
 
+export const Scroll = styled.div`
+  position: relative;
+  width: 100%;
+  height: 85.5vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+`
+
 export const MessageFeedViewContainer = styled.div``
 
 export const EmailWrapper = styled.div<EmailWrapperProps>`
@@ -28,7 +42,7 @@ export const EmailOptionsContainer = styled.div`
 `
 export const StickyOptions = styled.div`
   position: sticky;
-  top: 122px;
+  top: 50px;
 `
 
 export const InnerOptionsContainer = styled.div`

@@ -26,10 +26,6 @@ import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 // import InformationOverview from './Information/InformationOverview'
 
-const isReplyingListener = ({ dispatch, isReplying }: { dispatch: any; isReplying: boolean }) => {
-  dispatch(setIsReplying(!isReplying))
-}
-
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
@@ -44,6 +40,10 @@ const EmailDetail = () => {
   const localLabels = useRef<string[] | string>([])
   const [viewIndexState, setViewIndexState] = useState(-1)
   const activePageTokenRef = useRef('')
+
+  const isReplyingListener = () => {
+    dispatch(setIsReplying(!isReplying))
+  }
 
   useEffect(() => {
     if (viewIndexState === -1) {
@@ -112,39 +112,41 @@ const EmailDetail = () => {
         currentViewListener={currentViewListener}
         viewIndexState={viewIndexState}
       />
-      <GS.OuterContainer isReplying={isReplying}>
-        {overviewId &&
-          overviewId.length &&
-          overviewId === local.MESSAGES &&
-          threadDetailList.length > 0 && (
-            viewIndexState > -1 && <MessagesOverview
-              threadDetail={threadDetailList[viewIndexState]}
-              isLoading={isLoading}
-              isReplying={isReplying}
-              isReplyingListener={isReplyingListener}
-            />
-          )}
-        {overviewId &&
-          overviewId.length &&
-          overviewId === local.MESSAGES &&
-          threadDetailList.length > 0 && viewIndexState > -1 && (
-            <S.HiddenMessagesFeed>
-              <PreLoadMessages
-                threadDetailList={threadDetailList}
-                viewIndexState={viewIndexState}
+      <S.Scroll>
+        <GS.OuterContainer isReplying={isReplying}>
+          {overviewId &&
+            overviewId.length &&
+            overviewId === local.MESSAGES &&
+            threadDetailList.length > 0 && (
+              viewIndexState > -1 && <MessagesOverview
+                threadDetail={threadDetailList[viewIndexState]}
+                isLoading={isLoading}
+                isReplying={isReplying}
+                isReplyingListener={isReplyingListener}
               />
-            </S.HiddenMessagesFeed>
+            )}
+          {overviewId &&
+            overviewId.length &&
+            overviewId === local.MESSAGES &&
+            threadDetailList.length > 0 && viewIndexState > -1 && (
+              <S.HiddenMessagesFeed>
+                <PreLoadMessages
+                  threadDetailList={threadDetailList}
+                  viewIndexState={viewIndexState}
+                />
+              </S.HiddenMessagesFeed>
+            )}
+          {overviewId === local.FILES && threadDetailList.length > 0 && (
+            <FilesOverview threadDetail={threadDetailList[viewIndexState]} isLoading={isLoading} />
           )}
-        {overviewId === local.FILES && threadDetailList.length > 0 && (
-          <FilesOverview threadDetail={threadDetailList[viewIndexState]} isLoading={isLoading} />
-        )}
-        {/* {overviewId === local.INFORMATION && (
+          {/* {overviewId === local.INFORMATION && (
         <InformationOverview
           threadDetail={threadDetail}
           isLoading={isLoading}
         />
       )} */}
-      </GS.OuterContainer>
+        </GS.OuterContainer>
+      </S.Scroll>
     </>
   )
 }
