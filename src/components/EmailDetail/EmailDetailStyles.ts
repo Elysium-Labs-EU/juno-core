@@ -97,9 +97,21 @@ export const EmailDetailContainer = styled.div<EmailContainerProps>`
   overflow: hidden;
 `
 
-export const AvatarHeaderContainer = styled.div`
+export const TopContainer = styled.div`
   align-items: center;
   display: flex;
+`
+
+export const ClickHeader = styled.div`
+  align-items: center;
+  display: flex;
+`
+
+export const SpecificMenuContainer = styled.div`
+  position: absolute;
+  top: 50px;
+  right: 40px;
+  z-index: 10;
 `
 
 export const TimeAttachmentContainer = styled.div`

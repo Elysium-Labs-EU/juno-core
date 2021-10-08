@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { FiChevronDown } from 'react-icons/fi'
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
 import EmailAvatar from '../../../EmailAvatar'
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
@@ -8,26 +10,56 @@ import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../EmailHasAttachment'
 import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
 import { MessagePayload } from '../../../../Store/draftsTypes'
+import SpecificEmailOptions from '../SpecificEmailOptions'
+import { CustomIconLink } from '../../../Elements/Buttons'
+import { useAppSelector } from '../../../../Store/hooks'
+import { selectIsReplying } from '../../../../Store/emailDetailSlice'
 
 const ReadMessage = ({
   message,
   threadDetail,
   FROM,
+  isReplyingListener,
 }: {
   message: EmailMessage
   threadDetail: EmailListThreadItem
   FROM: string
+  isReplyingListener?: any
 }) => {
-  // console.log(message)
-  const [open, setOpen] = useState(
+  const [open, setOpen] = useState<boolean>(
     threadDetail && threadDetail.messages && threadDetail.messages.length > 1
       ? message && message.labelIds.includes(local.UNREAD)
       : true
   )
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [placement, setPlacement] = useState<PopperPlacementType>()
+  const [showMenu, setShowMenu] = useState<boolean>(false)
+  const isReplying = useAppSelector(selectIsReplying)
+
+  const handleSpecificMenu =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
+  const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   const handleClick = () => {
     setOpen((currState) => !currState)
+    if (anchorEl) {
+      setAnchorEl(null)
+      setShowMenu(false)
+    }
   }
+
+  useEffect(() => {
+    if (isReplying) {
+      setAnchorEl(null)
+      setShowMenu(false)
+    }
+  }, [isReplying])
+
 
   const From = (): string => {
     if (message) {
@@ -36,9 +68,9 @@ const ReadMessage = ({
           ? message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
           : message.payload.headers.find((e: MessagePayload) => e.name === 'from').value
       }
-      return ''
+      return '(No sender)'
     }
-    return ''
+    return '(No sender)'
   }
 
   const Subject = (): string => {
@@ -48,9 +80,9 @@ const ReadMessage = ({
           ? message.payload.headers.find((e: MessagePayload) => e.name === 'Subject').value
           : message.payload.headers.find((e: MessagePayload) => e.name === 'subject').value
       }
-      return ''
+      return '(No subject)'
     }
-    return ''
+    return '(No subject)'
   }
 
   const EmailSnippet = (): string => {
@@ -67,35 +99,40 @@ const ReadMessage = ({
     <>
       {open && (
         <>
-          <div onClick={handleClick} aria-hidden="true">
-            <S.AvatarHeaderContainer>
-              <EmailAvatar avatarURL={From()} />
-              <S.HeaderFullWidth>
+          <S.TopContainer>
+            <S.HeaderFullWidth>
+              <S.ClickHeader onClick={handleClick} aria-hidden="true">
+                <EmailAvatar avatarURL={From()} />
                 <span title={Subject()} className="email_detail_title text_truncate">
                   {Subject()}
                 </span>
-                <S.TimeAttachmentContainer>
-                  <EmailHasAttachment messages={message} />
-                  <TimeStamp threadTimeStamp={message.internalDate} />
-                </S.TimeAttachmentContainer>
-              </S.HeaderFullWidth>
-            </S.AvatarHeaderContainer>
-            <S.FromContainer>
-              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
-                {FROM}
-              </span>
-              <span className="text_small">{From()}</span>
-            </S.FromContainer>
-            <S.EmailBody>
-              {message && message.payload && message.id && (
-                <EmailDetailBody
-                  // className="EmailDetailBody"
-                  threadDetailBody={message.payload}
-                  messageId={message.id}
-                />
-              )}
-            </S.EmailBody>
-          </div>
+              </S.ClickHeader>
+              <S.TimeAttachmentContainer>
+                <EmailHasAttachment messages={message} />
+                <TimeStamp threadTimeStamp={message.internalDate} />
+
+                <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="button" aria-describedby={popperId} />
+                <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
+                  <SpecificEmailOptions messageId={message?.id} setReply={isReplyingListener} />
+                </Popper>
+
+              </S.TimeAttachmentContainer>
+            </S.HeaderFullWidth>
+          </S.TopContainer>
+          <S.FromContainer>
+            <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+              {FROM}
+            </span>
+            <span className="text_small">{From()}</span>
+          </S.FromContainer>
+          <S.EmailBody>
+            {message && message.payload && message.id && (
+              <EmailDetailBody
+                threadDetailBody={message.payload}
+                messageId={message.id}
+              />
+            )}
+          </S.EmailBody>
           <EmailAttachment message={message} overview={false} />
           <small>{message?.id}</small>
         </>
@@ -119,6 +156,10 @@ const ReadMessage = ({
       )}
     </>
   )
+}
+
+ReadMessage.defaultProps = {
+  isReplyingListener: {}
 }
 
 export default ReadMessage

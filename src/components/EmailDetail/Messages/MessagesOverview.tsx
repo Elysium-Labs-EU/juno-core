@@ -29,15 +29,17 @@ const emailSubject = (threadDetail: EmailListThreadItem) => {
 const detailDisplaySelector = ({
   message,
   threadDetail,
+  isReplyingListener,
 }: {
   message: EmailMessage
   threadDetail: EmailListThreadItem
+  isReplyingListener: any
 }) => {
   if (message.labelIds.includes(draft.LABEL)) {
     return <DraftMessage message={message} />
   }
   if (!message.labelIds.includes(draft.LABEL)) {
-    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} />
+    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} />
   }
   return null
 }
@@ -67,6 +69,7 @@ const MessagesOverview = React.memo(
             {detailDisplaySelector({
               message,
               threadDetail,
+              isReplyingListener,
             })}
           </ES.EmailWrapper>
         ))
@@ -94,21 +97,22 @@ const MessagesOverview = React.memo(
             </ES.DetailBase>
           </ES.EmailDetailContainer>
           {threadDetail && !isReplying && (
-            <EmailDetOptions messageId={threadDetail.id} setReply={isReplyingListener} />
+            threadDetail.messages &&
+            <EmailDetOptions messageId={threadDetail.id} setReply={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (
-          <>
-            <ComposeEmail
-              isReplying={isReplying}
-              isReplyingListener={isReplyingListener}
-              to={fromEmail(threadDetail)}
-              subject={emailSubject(threadDetail)}
-              id={threadDetail.id}
-              threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId}
-            />
-          </>
+          <ComposeEmail
+            isReplying={isReplying}
+            isReplyingListener={isReplyingListener}
+            to={fromEmail(threadDetail)}
+            subject={emailSubject(threadDetail)}
+            id={threadDetail.id}
+            threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId}
+          // messageId={}
+          />
         )}
+        {console.log('threadDetail', threadDetail)}
       </>
     )
   }

@@ -22,7 +22,7 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const From =
     message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
 
-  const EmailSnippet = message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
+  const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   const handleClick = () => {
     dispatch(OpenDraftEmail({ history, id, messageId }))
@@ -30,14 +30,14 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
 
   return (
     <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
-      <S.AvatarHeaderContainer>
+      <S.TopContainer>
         <S.ClosedAvatarSender>
           <EmailAvatar avatarURL={AvatarURL} />
           <S.ClosedSender>
             <span style={{ fontStyle: 'italic' }}>{From}</span>
           </S.ClosedSender>
         </S.ClosedAvatarSender>
-      </S.AvatarHeaderContainer>
+      </S.TopContainer>
       <S.ClosedSnippet>
         <span style={{ fontWeight: 'bold' }}>{local.DRAFT_SNIPPET_INDICATOR}</span>
         <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>

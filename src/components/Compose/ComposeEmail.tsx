@@ -31,6 +31,9 @@ const ComposeEmail = ({
   id,
   threadId,
 }: ComposeEmailProps) => {
+  console.log('id', id)
+  console.log('threadId', threadId)
+
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
   const [toValue, setToValue] = useState<string>('')
@@ -39,8 +42,8 @@ const ComposeEmail = ({
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const [bodyValue, setBodyValue] = useState('')
   const debouncedBodyValue = useDebounce(bodyValue, 500)
-  const [toError, setToError] = useState(false)
-  const [saveSuccess, setSaveSuccess] = useState(false)
+  const [toError, setToError] = useState<boolean>(false)
+  const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const { messageId } = useParams<{ messageId: string }>()
   const history = useHistory()
@@ -114,6 +117,7 @@ const ComposeEmail = ({
     }
   }, [])
 
+  // TODO: Replace ID with Message ID, and check if useParams can be removed.
   useEffect(() => {
     if (id) {
       const updateEventObject = {
@@ -223,7 +227,7 @@ const ComposeEmail = ({
                 <CustomButtonText
                   className="button button-small"
                   label={local.CANCEL_BUTTON}
-                  onClick={isReplyingListener}
+                  onClick={() => isReplyingListener()}
                 />
               )}
             </form>
