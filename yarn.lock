@@ -2816,10 +2816,10 @@
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.173.tgz#9d3b674c67a26cf673756f6aca7b429f237f91ed"
   integrity sha512-vv0CAYoaEjCw/mLy96GBTnRoZrSxkGE0BKzKimdR8P3OzrNYNvBgtW7p055A+E8C31vXNUhWKoFCbhq7gbyhFg==
 
-"@types/material-ui@^0.21.9":
-  version "0.21.9"
-  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.21.9.tgz#156a7e78274b8d0c55e19a6b5483b105aa53c0f3"
-  integrity sha512-YhZzW7rRqT2VpNTDYdXAB4Qgy1oBK2YDL1QSeL8t2ALmFTv141a5KW1buTobkc840QN+GGvon/u814jOxsvZLw==
+"@types/material-ui@^0.21.11":
+  version "0.21.11"
+  resolved "https://registry.yarnpkg.com/@types/material-ui/-/material-ui-0.21.11.tgz#809deb93b118090f36e2b7aa58fb3122a0540a74"
+  integrity sha512-VjmlntSR0xyMCC9nM/7MwThOGZLbLRItVANrNtWqPgItTgzT91odd2tYLXPogeQX2Fy4VcHGZe5ciz3hgznu0Q==
   dependencies:
     "@types/react" "*"
     "@types/react-addons-linked-state-mixin" "*"
