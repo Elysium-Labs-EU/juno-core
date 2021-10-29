@@ -38,7 +38,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
-    "redux": "^4.0.5",
+    "redux": "^4.1.2",
     "redux-thunk": "^2.3.0",
     "sass": "^1.43.3",
     "styled-components": "^5.3.3",
