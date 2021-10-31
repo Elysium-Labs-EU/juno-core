@@ -20,11 +20,13 @@ const ReadMessage = ({
   threadDetail,
   FROM,
   isReplyingListener,
+  messageIndex
 }: {
   message: EmailMessage
   threadDetail: EmailListThreadItem
   FROM: string
   isReplyingListener?: any
+  messageIndex: number
 }) => {
   const [open, setOpen] = useState<boolean>(
     threadDetail && threadDetail.messages && threadDetail.messages.length > 1
@@ -113,7 +115,7 @@ const ReadMessage = ({
 
                 <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="button" aria-describedby={popperId} />
                 <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
-                  <SpecificEmailOptions messageId={message?.id} setReply={isReplyingListener} />
+                  <SpecificEmailOptions messageId={message?.id} setReply={isReplyingListener} messageIndex={messageIndex} />
                 </Popper>
 
               </S.TimeAttachmentContainer>

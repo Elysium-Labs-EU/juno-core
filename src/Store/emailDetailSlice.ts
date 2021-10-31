@@ -10,6 +10,7 @@ import type { AppThunk, RootState } from './store'
 
 const initialState: EmailDetailState = Object.freeze({
   currEmail: '',
+  currMessage: '',
   isReplying: false,
 })
 
@@ -20,13 +21,17 @@ export const emailDetailSlice = createSlice({
     setCurrentEmail: (state, action) => {
       state.currEmail = action.payload
     },
+    setCurrentMessage: (state, action) => {
+      state.currMessage = action.payload
+    },
     setIsReplying: (state, action) => {
       state.isReplying = action.payload
     },
   },
 })
 
-export const { setCurrentEmail, setIsReplying } = emailDetailSlice.actions
+export const { setCurrentEmail, setCurrentMessage, setIsReplying } =
+  emailDetailSlice.actions
 
 export const fetchAttachment = ({
   attachmentData,
@@ -96,6 +101,8 @@ export const downloadAttachment = ({
 
 export const selectCurrentEmail = (state: RootState) =>
   state.emailDetail.currEmail
+export const selectCurrentMessage = (state: RootState) =>
+  state.emailDetail.currMessage
 export const selectIsReplying = (state: RootState) =>
   state.emailDetail.isReplying
 

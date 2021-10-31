@@ -2,7 +2,7 @@ import React from 'react'
 import * as GS from '../../../styles/globalStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
 
-const SpecificEmailOptions = ({ messageId, setReply }: { messageId?: string, setReply: any }) => {
+const SpecificEmailOptions = ({ messageId, setReply, messageIndex }: { messageId?: string, setReply: any, messageIndex: number }) => {
     console.log(messageId)
 
     return (
@@ -10,7 +10,7 @@ const SpecificEmailOptions = ({ messageId, setReply }: { messageId?: string, set
             <CustomButtonText
                 className="button option-link"
                 label="Reply to this message"
-                onClick={() => setReply(messageId)}
+                onClick={() => setReply({ messageId, messageIndex })}
             />
         </GS.MenuPopper>
     )

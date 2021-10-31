@@ -30,7 +30,7 @@ export const metaListSlice = createSlice({
   initialState,
   reducers: {
     listAddMeta: (state, action) => {
-      const sortedMetaList = {
+      const sortedMetaList: MetaListObject = {
         ...action.payload,
         threads: action.payload.threads.sort(
           (a: MetaListThreadItem, b: MetaListThreadItem) =>
@@ -39,17 +39,43 @@ export const metaListSlice = createSlice({
       }
 
       // Find metaList sub-array index
-      const arrayIndex = state.metaList
+      const arrayIndex: number = state.metaList
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
 
-      // If metaList sub-array index exists, add to the existing array
+      // If metaList sub-array index exists, add to or update the existing array
       if (arrayIndex > -1) {
-        const newArray = state.metaList[arrayIndex].threads
-          .concat(sortedMetaList.threads)
-          .sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10))
-        const newObject = { ...action.payload, threads: newArray }
+        const newArray = () => {
+          // TODO: Need to run objectIndex on every item in the action.payload thread objects
+          const objectIndex = state.metaList[arrayIndex].threads.findIndex(
+            (item) => item.id === action.payload.threads[0].id
+          )
+
+          console.log(action.payload.threads)
+
+          if (objectIndex === -1) {
+            return state.metaList[arrayIndex].threads
+              .concat(sortedMetaList.threads)
+              .sort(
+                (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+              )
+          }
+          if (objectIndex > -1) {
+            // Remove the earlier found object based on the objectIndex, and just add the newly fetched one.
+            state.metaList[arrayIndex].threads.splice(objectIndex, 1)
+            return state.metaList[arrayIndex].threads
+              .concat(sortedMetaList.threads)
+              .sort(
+                (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+              )
+          }
+          return null
+        }
+        const newObject: MetaListObject = {
+          ...action.payload,
+          threads: newArray(),
+        }
         const currentState = state.metaList
         currentState[arrayIndex] = newObject
         state.metaList = currentState

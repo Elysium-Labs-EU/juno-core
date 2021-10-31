@@ -12,6 +12,7 @@ import * as S from './ComposeStyles'
 import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
 import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
+import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 interface ComposeEmailProps {
@@ -19,7 +20,6 @@ interface ComposeEmailProps {
   isReplyingListener: any
   to: string
   subject: string
-  id: string
   threadId: string
 }
 
@@ -28,12 +28,10 @@ const ComposeEmail = ({
   isReplyingListener,
   to,
   subject,
-  id,
   threadId,
 }: ComposeEmailProps) => {
-  console.log('id', id)
-  console.log('threadId', threadId)
-
+  // console.log('threadId', threadId)
+  const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
   const [toValue, setToValue] = useState<string>('')
@@ -47,6 +45,8 @@ const ComposeEmail = ({
   const dispatch = useAppDispatch()
   const { messageId } = useParams<{ messageId: string }>()
   const history = useHistory()
+
+  // console.log(currentMessage)
 
   useEffect(() => {
     if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
@@ -105,6 +105,7 @@ const ComposeEmail = ({
     }
   }, [debouncedBodyValue])
 
+  // Set the form values
   useEffect(() => {
     if (composeEmail) {
       setToValue(composeEmail.to)
@@ -117,16 +118,15 @@ const ComposeEmail = ({
     }
   }, [])
 
-  // TODO: Replace ID with Message ID, and check if useParams can be removed.
   useEffect(() => {
-    if (id) {
+    if (currentMessage && currentMessage.id) {
       const updateEventObject = {
         id: 'id',
-        value: id,
+        value: currentMessage.id,
       }
       dispatch(TrackComposeEmail(updateEventObject))
     }
-  }, [id])
+  }, [currentMessage])
 
   useEffect(() => {
     if (threadId) {
@@ -209,8 +209,8 @@ const ComposeEmail = ({
                       multiline
                       value={bodyValue ?? ''}
                       onChange={handleChange}
-                      rows={12}
-                      rowsMax={25}
+                      minRows={12}
+                      maxRows={25}
                       fullWidth
                       autoFocus={isReplying}
                     />
@@ -227,7 +227,7 @@ const ComposeEmail = ({
                 <CustomButtonText
                   className="button button-small"
                   label={local.CANCEL_BUTTON}
-                  onClick={() => isReplyingListener()}
+                  onClick={() => isReplyingListener(-1)}
                 />
               )}
             </form>

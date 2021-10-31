@@ -26,6 +26,16 @@ const initialState: EmailListState = Object.freeze({
   isSorting: false,
 })
 
+// TODO: Ensure no double emails
+// const uniqueCandidates = [
+//   ...new Set(
+//     [...state.candidates, ...action.payload].map((candidate) =>
+//       JSON.stringify(candidate)
+//     )
+//   ),
+// ].map((string) => JSON.parse(string))
+// state.candidates = uniqueCandidates
+
 export const emailListSlice = createSlice({
   name: 'email',
   initialState,
@@ -49,11 +59,31 @@ export const emailListSlice = createSlice({
 
       if (arrayIndex > -1) {
         const newArray = () => {
-          const concatArray = state.emailList[arrayIndex].threads.concat(
-            sortedEmailList.threads
+          // TODO: Need to run objectIndex on every item in the action.payload thread objects
+          const objectIndex = state.emailList[arrayIndex].threads.findIndex(
+            (item) => item.id === action.payload.threads[0].id
           )
-          if (concatArray) {
-            return sortThreads(concatArray)
+
+          console.log('objectIndex', objectIndex)
+
+          if (objectIndex === -1) {
+            const concatArray = state.emailList[arrayIndex].threads.concat(
+              sortedEmailList.threads
+            )
+            console.log('concatArray', concatArray)
+            if (concatArray) {
+              return sortThreads(concatArray)
+            }
+          }
+
+          if (objectIndex > -1) {
+            state.emailList[arrayIndex].threads.splice(objectIndex, 1)
+            const concatArray = state.emailList[arrayIndex].threads.concat(
+              sortedEmailList.threads
+            )
+            if (concatArray) {
+              return sortThreads(concatArray)
+            }
           }
           return null
         }

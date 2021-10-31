@@ -8,15 +8,17 @@ import * as local from '../../../../constants/emailDetailConstants'
 const detailDisplaySelector = ({
     message,
     threadDetail,
+    index,
 }: {
     message: EmailMessage
     threadDetail: EmailListThreadItem
+    index: number,
 }) => {
     if (message.labelIds.includes(draft.LABEL)) {
-        return <DraftMessage message={message} />
+        return <DraftMessage message={message} messageIndex={index} />
     }
     if (!message.labelIds.includes(draft.LABEL)) {
-        return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} />
+        return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} messageIndex={index} />
     }
     return null
 }
@@ -28,11 +30,12 @@ const PreLoadMessage = ({ threadDetail }: { threadDetail: EmailListThreadItem })
         threadDetail.messages
             .slice(0)
             .reverse()
-            .map((message) => (
+            .map((message, index) => (
                 <div key={message.id}>
                     {detailDisplaySelector({
                         message,
                         threadDetail,
+                        index,
                     })}
                 </div>
             ))

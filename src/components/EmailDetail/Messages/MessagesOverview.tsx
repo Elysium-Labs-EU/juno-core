@@ -30,16 +30,18 @@ const detailDisplaySelector = ({
   message,
   threadDetail,
   isReplyingListener,
+  index
 }: {
   message: EmailMessage
   threadDetail: EmailListThreadItem
   isReplyingListener: any
+  index: number
 }) => {
   if (message.labelIds.includes(draft.LABEL)) {
-    return <DraftMessage message={message} />
+    return <DraftMessage message={message} messageIndex={index} />
   }
   if (!message.labelIds.includes(draft.LABEL)) {
-    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} />
+    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
   }
   return null
 }
@@ -64,12 +66,13 @@ const MessagesOverview = React.memo(
       threadDetail.messages
         .slice(0)
         .reverse()
-        .map((message) => (
+        .map((message, index) => (
           <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
             {detailDisplaySelector({
               message,
               threadDetail,
               isReplyingListener,
+              index
             })}
           </ES.EmailWrapper>
         ))
@@ -107,12 +110,9 @@ const MessagesOverview = React.memo(
             isReplyingListener={isReplyingListener}
             to={fromEmail(threadDetail)}
             subject={emailSubject(threadDetail)}
-            id={threadDetail.id}
-            threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId}
-          // messageId={}
+            threadId={threadDetail.id}
           />
         )}
-        {console.log('threadDetail', threadDetail)}
       </>
     )
   }

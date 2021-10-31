@@ -4,6 +4,7 @@ import {
   selectCurrentEmail,
   selectIsReplying,
   setCurrentEmail,
+  setCurrentMessage,
   setIsReplying,
 } from '../../Store/emailDetailSlice'
 import {
@@ -40,14 +41,17 @@ const EmailDetail = () => {
   const [viewIndexState, setViewIndexState] = useState(-1)
   const activePageTokenRef = useRef('')
 
-  const isReplyingListener = (receivedMessageId: string) => {
-    console.log('receivedMessageId', receivedMessageId)
-    dispatch(setIsReplying(!isReplying))
-
-    // TODO: Do we set the selected reply messageID to Redux?
-    // if (receivedMessageId) {
-    //   receivedMessageId
-    // }
+  const isReplyingListener = ({ messageIndex }: { messageIndex: number }) => {
+    if (messageIndex > -1) {
+      dispatch(setIsReplying(true))
+    }
+    if (messageIndex === undefined) {
+      dispatch(setIsReplying(false))
+    }
+    const activeThreadListMessages = threadDetailList[threadDetailList.findIndex((item) => item.id === messageId)].messages
+    if (activeThreadListMessages) {
+      dispatch(setCurrentMessage(activeThreadListMessages[(activeThreadListMessages.length - 1) - messageIndex]))
+    }
   }
 
   useEffect(() => {
