@@ -68,7 +68,6 @@ export const emailListSlice = createSlice({
               if (objectIndex === -1) {
                 const concatArray =
                   state.emailList[arrayIndex].threads.concat(thread)
-                console.log('concatArray', concatArray)
                 if (concatArray) {
                   return sortThreads(concatArray)
                 }
