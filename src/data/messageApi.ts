@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 const messageApi = () => ({
   getMessageDetail: async (messageId: string) => {
@@ -9,7 +9,7 @@ const messageApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -26,7 +26,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -38,7 +38,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   updateMessage: async (props: any) => {
@@ -50,7 +50,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   thrashMessage: async ({ messageId }: { messageId: string }) => {
@@ -60,7 +60,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   // unThrashMessage: (messageId) => {
@@ -80,7 +80,7 @@ const messageApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 })

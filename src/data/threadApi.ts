@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 interface QueryObject {
   labelIds: string[]
@@ -25,7 +25,7 @@ const threadApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -36,7 +36,7 @@ const threadApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 })
