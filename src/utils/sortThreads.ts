@@ -13,7 +13,7 @@ const sortThreads = (sortObject: EmailListThreadItem[]) => {
       return sortObject
     })
   }
-  return null
+  return []
 }
 
 export default sortThreads

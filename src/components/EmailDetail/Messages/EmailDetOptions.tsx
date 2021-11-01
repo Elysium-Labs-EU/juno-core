@@ -24,7 +24,9 @@ import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 
-const EmailDetOptions = ({ messageId, setReply, threadId }: { messageId: string; setReply: any, threadId: string }) => {
+const messageIndex = 0
+
+const EmailDetOptions = ({ messageId, isReplyingListener, threadId }: { messageId: string; isReplyingListener: any, threadId: string }) => {
   // const emailList = useAppSelector(selectEmailList)
   // const isFocused = useAppSelector(selectIsFocused)
   // const isSorting = useAppSelector(selectIsSorting)
@@ -39,6 +41,7 @@ const EmailDetOptions = ({ messageId, setReply, threadId }: { messageId: string;
     setShowMenu(false)
   }, [location])
 
+
   return (
     <S.EmailOptionsContainer>
       <S.StickyOptions>
@@ -48,7 +51,7 @@ const EmailDetOptions = ({ messageId, setReply, threadId }: { messageId: string;
               className="button option-link"
               icon={<FiCornerUpLeft />}
               label={local.BUTTON_REPLY}
-              onClick={() => setReply(threadId)}
+              onClick={() => isReplyingListener({ threadId, messageIndex })}
             />
           </div>
           <div>

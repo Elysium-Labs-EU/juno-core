@@ -58,35 +58,33 @@ export const emailListSlice = createSlice({
         .findIndex((obj) => obj.includes(action.payload.labels))
 
       if (arrayIndex > -1) {
-        const newArray = () => {
-          // TODO: Need to run objectIndex on every item in the action.payload thread objects
-          const objectIndex = state.emailList[arrayIndex].threads.findIndex(
-            (item) => item.id === action.payload.threads[0].id
-          )
+        const newArray = () =>
+          action.payload.threads
+            .map((thread: any) => {
+              const objectIndex = state.emailList[arrayIndex].threads.findIndex(
+                (item) => item.id === action.payload.threads[0].id
+              )
 
-          console.log('objectIndex', objectIndex)
+              if (objectIndex === -1) {
+                const concatArray =
+                  state.emailList[arrayIndex].threads.concat(thread)
+                console.log('concatArray', concatArray)
+                if (concatArray) {
+                  return sortThreads(concatArray)
+                }
+              }
 
-          if (objectIndex === -1) {
-            const concatArray = state.emailList[arrayIndex].threads.concat(
-              sortedEmailList.threads
-            )
-            console.log('concatArray', concatArray)
-            if (concatArray) {
-              return sortThreads(concatArray)
-            }
-          }
+              if (objectIndex > -1) {
+                state.emailList[arrayIndex].threads[objectIndex] = thread
+                const concatArray = state.emailList[arrayIndex].threads
+                if (concatArray) {
+                  return sortThreads(concatArray)
+                }
+              }
+              return state.emailList[arrayIndex].threads
+            })
+            .flat(1)
 
-          if (objectIndex > -1) {
-            state.emailList[arrayIndex].threads.splice(objectIndex, 1)
-            const concatArray = state.emailList[arrayIndex].threads.concat(
-              sortedEmailList.threads
-            )
-            if (concatArray) {
-              return sortThreads(concatArray)
-            }
-          }
-          return null
-        }
         const newObject: EmailListObject = {
           ...action.payload,
           threads: newArray(),
@@ -99,21 +97,33 @@ export const emailListSlice = createSlice({
       }
     },
     listAddItemDetail: (state, action) => {
-      const { filteredTargetEmailList, activEmailObjArray } = action.payload
-      const newEmailListEntry: EmailListObject = {
-        ...filteredTargetEmailList[0],
-        threads: sortThreads(
-          filteredTargetEmailList[0].threads.concat(activEmailObjArray)
-        ),
+      const {
+        filteredTargetEmailList,
+        activEmailObjArray,
+      }: {
+        filteredTargetEmailList: EmailListObject[]
+        activEmailObjArray: EmailListThreadItem[]
+      } = action.payload
+      const objectIndex: number = filteredTargetEmailList[0].threads.findIndex(
+        (item) => item.id === activEmailObjArray[0].id
+      )
+      // If the object doesn't exist yet on the array, add it - otherwise do nothing since the item already exists.
+      if (objectIndex === -1) {
+        const newEmailListEntry: EmailListObject = {
+          ...filteredTargetEmailList[0],
+          threads: sortThreads(
+            filteredTargetEmailList[0].threads.concat(activEmailObjArray)
+          ),
+        }
+        const updatedEmailList: EmailListObject[] = [
+          ...state.emailList.filter(
+            (threadList) =>
+              !threadList.labels.includes(filteredTargetEmailList[0].labels[0])
+          ),
+          newEmailListEntry,
+        ]
+        state.emailList = updatedEmailList
       }
-      const updatedEmailList: EmailListObject[] = [
-        ...state.emailList.filter(
-          (threadList) =>
-            !threadList.labels.includes(filteredTargetEmailList[0].labels[0])
-        ),
-        newEmailListEntry,
-      ]
-      state.emailList = updatedEmailList
     },
     listRemoveItemDetail: (state, action) => {
       const { filteredCurrentEmailList, messageId } = action.payload

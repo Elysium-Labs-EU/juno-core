@@ -101,7 +101,7 @@ const MessagesOverview = React.memo(
           </ES.EmailDetailContainer>
           {threadDetail && !isReplying && (
             threadDetail.messages &&
-            <EmailDetOptions messageId={threadDetail.id} setReply={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
+            <EmailDetOptions messageId={threadDetail.id} isReplyingListener={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (
