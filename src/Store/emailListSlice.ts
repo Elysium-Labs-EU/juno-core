@@ -47,51 +47,60 @@ export const emailListSlice = createSlice({
       state.isSorting = action.payload
     },
     listAddEmailList: (state, action) => {
-      const sortedEmailList: EmailListObject = {
-        ...action.payload,
-        threads: sortThreads(action.payload.threads),
-      }
-
+      // Find emailList sub-array index
       const arrayIndex: number = state.emailList
         .map((emailArray) => emailArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
 
+      // If emailList sub-array index exists, add to or update the existing array
       if (arrayIndex > -1) {
-        const newArray = () =>
-          action.payload.threads
-            .map((thread: any) => {
-              const objectIndex = state.emailList[arrayIndex].threads.findIndex(
-                (item) => item.id === action.payload.threads[0].id
+        // It loops through all the newly fetched threads, and if check what to do with this. Either push it to the tempArray, or update the entry in the emailList state.
+        const tempArray: any = []
+        let activeCount: number = 0
+        const completeCount: number = action.payload.threads.length - 1
+
+        action.payload.threads.map((thread: any) => {
+          const objectIndex = state.emailList[arrayIndex].threads.findIndex(
+            (item) => item.id === action.payload.threads[0].id
+          )
+
+          if (objectIndex === -1) {
+            activeCount += 1
+            tempArray.push(thread)
+          }
+
+          if (objectIndex > -1) {
+            activeCount += 1
+            const currentState = state.emailList
+            currentState[arrayIndex].threads[objectIndex] = thread
+            sortThreads(currentState[arrayIndex].threads)
+            state.emailList = currentState
+          }
+
+          if (activeCount === completeCount) {
+            const currentState = state.emailList
+            const concatNewEmailThreads = currentState[arrayIndex].threads
+              .concat(tempArray)
+              .sort(
+                (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
               )
+            console.log(concatNewEmailThreads)
+            const newObject: EmailListObject = {
+              ...action.payload,
+              threads: concatNewEmailThreads,
+            }
+            currentState[arrayIndex] = newObject
+            state.emailList = currentState
+          }
 
-              if (objectIndex === -1) {
-                const concatArray =
-                  state.emailList[arrayIndex].threads.concat(thread)
-                if (concatArray) {
-                  return sortThreads(concatArray)
-                }
-              }
-
-              if (objectIndex > -1) {
-                state.emailList[arrayIndex].threads[objectIndex] = thread
-                const concatArray = state.emailList[arrayIndex].threads
-                if (concatArray) {
-                  return sortThreads(concatArray)
-                }
-              }
-              return state.emailList[arrayIndex].threads
-            })
-            .flat(1)
-
-        const newObject: EmailListObject = {
-          ...action.payload,
-          threads: newArray(),
-        }
-        const currentState = state.emailList
-        currentState[arrayIndex] = newObject
-        state.emailList = currentState
+          return null
+        })
       } else {
+        const sortedEmailList: EmailListObject = {
+          ...action.payload,
+          threads: sortThreads(action.payload.threads),
+        }
         state.emailList.push(sortedEmailList)
       }
     },

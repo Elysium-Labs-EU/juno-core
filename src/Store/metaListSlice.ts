@@ -30,14 +30,6 @@ export const metaListSlice = createSlice({
   initialState,
   reducers: {
     listAddMeta: (state, action) => {
-      const sortedMetaList: MetaListObject = {
-        ...action.payload,
-        threads: action.payload.threads.sort(
-          (a: MetaListThreadItem, b: MetaListThreadItem) =>
-            parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-        ),
-      }
-
       // Find metaList sub-array index
       const arrayIndex: number = state.metaList
         .map((metaArray) => metaArray.labels)
@@ -46,40 +38,57 @@ export const metaListSlice = createSlice({
 
       // If metaList sub-array index exists, add to or update the existing array
       if (arrayIndex > -1) {
-        const newArray = () =>
-          action.payload.threads
-            .map((thread: MetaListThreadItem) => {
-              const objectIndex: number = state.metaList[
-                arrayIndex
-              ].threads.findIndex((item) => item.id === thread.id)
+        // It loops through all the newly fetched threads, and if check what to do with this. Either push it to the tempArray, or update the entry in the metaList state.
+        const tempArray: any = []
+        let activeCount: number = 0
+        const completeCount: number = action.payload.threads.length - 1
 
-              if (objectIndex === -1) {
-                return state.metaList[arrayIndex].threads
-                  .concat(thread)
-                  .sort(
-                    (a, b) =>
-                      parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-                  )
-              }
-              if (objectIndex > -1) {
-                state.metaList[arrayIndex].threads[objectIndex] = thread
-                return state.metaList[arrayIndex].threads.sort(
-                  (a, b) =>
-                    parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-                )
-              }
-              return state.metaList[arrayIndex].threads
-            })
-            .flat(1)
+        action.payload.threads.forEach((thread: MetaListThreadItem) => {
+          const objectIndex: number = state.metaList[
+            arrayIndex
+          ].threads.findIndex((item) => item.id === thread.id)
 
-        const newObject: MetaListObject = {
-          ...action.payload,
-          threads: newArray(),
-        }
-        const currentState = state.metaList
-        currentState[arrayIndex] = newObject
-        state.metaList = currentState
+          if (objectIndex === -1) {
+            activeCount += 1
+            tempArray.push(thread)
+          }
+
+          if (objectIndex > -1) {
+            activeCount += 1
+            const currentState = state.metaList
+            currentState[arrayIndex].threads[objectIndex] = thread
+            currentState[arrayIndex].threads.sort(
+              (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+            )
+            state.metaList = currentState
+          }
+
+          if (activeCount === completeCount) {
+            const currentState = state.metaList
+            const concatNewMetaThreads = currentState[arrayIndex].threads
+              .concat(tempArray)
+              .sort(
+                (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+              )
+            console.log(concatNewMetaThreads)
+            const newObject: MetaListObject = {
+              ...action.payload,
+              threads: concatNewMetaThreads,
+            }
+            currentState[arrayIndex] = newObject
+            state.metaList = currentState
+          }
+
+          return null
+        })
       } else {
+        const sortedMetaList: MetaListObject = {
+          ...action.payload,
+          threads: action.payload.threads.sort(
+            (a: MetaListThreadItem, b: MetaListThreadItem) =>
+              parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+          ),
+        }
         state.metaList.push(sortedMetaList)
       }
     },
