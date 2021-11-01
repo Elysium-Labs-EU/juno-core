@@ -158,20 +158,24 @@ export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { labelIds, silentLoading } = params
+      const { labelIds, silentLoading, activeMetaObjArray } = params
       if (!silentLoading && !getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
-      if (silentLoading) {
+      if (silentLoading && !getState().utils.isSilentLoading) {
         dispatch(setIsSilentLoading(true))
       }
       const metaList = await threadApi().getThreads(params)
       if (metaList) {
         if (metaList.message.resultSizeEstimate > 0) {
           const { threads, nextPageToken } = metaList.message
+
+          // If there is a specific email array being sent as parameter, append that to the list of threads.
           const labeledThreads = {
             labels: labelIds,
-            threads,
+            threads: activeMetaObjArray
+              ? threads.concat(activeMetaObjArray)
+              : threads,
             nextPageToken: nextPageToken ?? null,
           }
           dispatch(listAddMeta(labeledThreads))
@@ -220,24 +224,34 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
         addLabelIds &&
         FilteredMetaList({ metaList, labelIds: addLabelIds })
 
-      // Fetches the target meta list if it doesn't exist yet.
-      if (filteredTargetMetaList && filteredTargetMetaList.length < 1) {
+      const activeMetaObjArray =
+        filteredCurrentMetaList &&
+        filteredCurrentMetaList[0].threads.filter(
+          (item: MetaListThreadItem) => item.id === messageId
+        )
+
+      // Fetches the target meta list if it doesn't exist yet. And injects the activeMetaObjArray
+      if (
+        filteredTargetMetaList &&
+        filteredTargetMetaList.length < 1 &&
+        activeMetaObjArray &&
+        activeMetaObjArray.length > 0
+      ) {
+        const silentLoading = true
         const params = {
           labelIds: addLabelIds,
           maxResults: 20,
+          silentLoading,
+          activeMetaObjArray,
         }
         dispatch(loadEmails(params))
       }
+
       if (
         addLabelIds &&
         filteredTargetMetaList &&
         filteredTargetMetaList.length > 0
       ) {
-        const activeMetaObjArray =
-          filteredCurrentMetaList &&
-          filteredCurrentMetaList[0].threads.filter(
-            (item: MetaListThreadItem) => item.id === messageId
-          )
         dispatch(
           listAddItemMeta({
             activeMetaObjArray,

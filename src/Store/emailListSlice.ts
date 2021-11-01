@@ -183,7 +183,7 @@ export const loadEmailDetails =
                 })
               )
               dispatch(setLoadedInbox(labels))
-              dispatch(setIsLoading(false))
+              getState().utils.isLoading && dispatch(setIsLoading(false))
               getState().utils.isSilentLoading &&
                 dispatch(setIsSilentLoading(false))
             }

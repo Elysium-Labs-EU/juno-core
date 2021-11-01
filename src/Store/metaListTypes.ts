@@ -3,6 +3,7 @@ export interface LoadEmailObject {
   maxResults: number
   nextPageToken?: string
   silentLoading?: boolean
+  activeMetaObjArray?: MetaListThreadItem[]
 }
 
 export interface MetaListThreadItem {
