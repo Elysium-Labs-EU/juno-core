@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
 import './NavControls.scss'
-import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSettings } from 'react-icons/fi'
+import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox } from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavControlsStyles'
+import * as Routes from '../../../constants/routes.json'
 import { LocationObjectType } from '../../types/globalTypes'
+
+const SIZE = 16
 
 const Navigation = () => {
   const [active, setActive] = useState('')
-  const [showMenu, setShowMenu] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [placement, setPlacement] = useState<PopperPlacementType>()
+  const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation<LocationObjectType>()
   const history = useHistory()
 
@@ -31,49 +37,61 @@ const Navigation = () => {
     history.push(destination)
   }
 
+  const handleSpecificMenu =
+    (newPlacement: PopperPlacementType) =>
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
+  const popperId = showMenu ? 'specifc-email-popper' : undefined
+
   return (
     <S.NavControls>
       <S.NavList>
         <S.NavItem>
           <CustomIconLink
             className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
-            icon={<FiCheckSquare />}
-            onClick={() => navigateTo('/')}
+            icon={<FiCheckSquare size={SIZE} />}
+            onClick={() => navigateTo(Routes.HOME)}
           />
         </S.NavItem>
         <S.NavItem>
           <CustomIconLink
             className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
-            icon={<FiInbox />}
-            onClick={() => navigateTo('/inbox')}
+            icon={<FiInbox size={SIZE} />}
+            onClick={() => navigateTo(Routes.INBOX)}
           />
         </S.NavItem>
-        <S.NavItem>
+        {/* <S.NavItem>
           <CustomIconLink
             className={
               active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
             }
             icon={<FiSettings />}
-            onClick={() => navigateTo('/settings')}
+            onClick={() => navigateTo(Routes.SETTINGS)}
           />
-        </S.NavItem>
+        </S.NavItem> */}
         <S.NavItem>
           <CustomIconLink
             className={
               active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
             }
-            icon={<FiEdit />}
+            icon={<FiEdit size={SIZE} />}
             onClick={() => navigateTo('/compose')}
           />
         </S.NavItem>
         <S.NavItem>
           <CustomIconLink
-            onClick={() => setShowMenu(!showMenu)}
+            onClick={handleSpecificMenu('bottom-start')}
+            aria-describedby={popperId}
             className="nav-item-button"
-            icon={<FiMoreHorizontal />}
+            icon={<FiMoreHorizontal size={SIZE} />}
           />
         </S.NavItem>
-        {showMenu && <SubMenuHeader />}
+        <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
+          <SubMenuHeader />
+        </Popper>
       </S.NavList>
     </S.NavControls>
   )

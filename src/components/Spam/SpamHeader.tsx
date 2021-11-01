@@ -9,7 +9,7 @@ const SpamHeader = () => (
   <GS.OuterContainer>
     <div className="nav-container">
       <div className="header-center">
-        <h2>{SPAM_HEADER}</h2>
+        <h2 className="page_title">{SPAM_HEADER}</h2>
       </div>
       <NavControls />
     </div>

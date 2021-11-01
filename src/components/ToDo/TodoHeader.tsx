@@ -9,7 +9,7 @@ const TodoHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
       <div className="header-center">
-        <h2>{local.HEADER_TODO}</h2>
+        <h2 className="page_title">{local.HEADER_TODO}</h2>
       </div>
       <NavControls />
     </S.NavContainer>

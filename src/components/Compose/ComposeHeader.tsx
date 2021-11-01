@@ -13,7 +13,7 @@ const ComposeHeader = () => (
         <BackButton />
       </S.HeaderButton>
       <div className="header-center">
-        <h2>{local.COMPOSE}</h2>
+        <h2 className="page_title">{local.COMPOSE}</h2>
       </div>
       <NavControls />
     </div>

@@ -11,7 +11,7 @@ const SentHeader = () => (
     <S.NavContainer>
       <BackButton />
       <div className="header-center">
-        <h2>{SENT_HEADER}</h2>
+        <h2 className="page_title">{SENT_HEADER}</h2>
       </div>
       <NavControls />
     </S.NavContainer>

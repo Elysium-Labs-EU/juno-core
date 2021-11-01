@@ -15,7 +15,7 @@ const InboxHeader = () => (
           <BackButton />
         </S.BackButtonContainer> */}
       <div className="header-center">
-        <h2>{INBOX_HEADER}</h2>
+        <h2 className="page_title">{INBOX_HEADER}</h2>
       </div>
       <NavControls />
     </S.NavContainer>

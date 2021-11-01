@@ -87,13 +87,19 @@ small,
   color: $color-black;
 }
 
+.page_title {
+  margin: 3rem 0 0;
+  font-weight: 200;
+  user-select: none;
+}
+
 .warning {
   color: hsl(0, 23%, 68%);
 }
 
 .snippet {
   color: $color-light-grey;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .date {

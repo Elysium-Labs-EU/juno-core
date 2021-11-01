@@ -55,7 +55,7 @@ export const CustomIconLink = (props: CustomIconLinkTypes) => {
       style={style}
     >
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ lineHeight: 0 }}>{icon}</span>
+        <span style={{ lineHeight: '1rem' }}>{icon}</span>
       </div>
     </button>
   )

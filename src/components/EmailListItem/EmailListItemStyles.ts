@@ -6,9 +6,7 @@ interface ThreadBaseProps {
 
 export const ThreadBase = styled.div<ThreadBaseProps>`
   font-weight: ${(props) =>
-    props.emailLabels && props.emailLabels.includes('UNREAD')
-      ? '600'
-      : 'regular'};
+    props.emailLabels && props.emailLabels.includes('UNREAD') ? '520' : '300'};
   position: relative;
   user-select: none;
   &:hover {

@@ -2,9 +2,12 @@
   border: none;
   color: #a6a6a6;
   outline: none;
+  background-color: transparent;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
     color: #212529;
+    cursor: pointer;
   }
 }
 
