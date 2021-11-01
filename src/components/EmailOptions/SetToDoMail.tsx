@@ -1,3 +1,4 @@
+import { History } from 'history'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { convertArrayToString, FindLabelByName } from '../../utils'
 import * as todo from '../../constants/todoConstants'
@@ -6,7 +7,7 @@ import { LabelIdName } from '../../Store/labelsTypes'
 
 interface SetToDoMailProps {
   messageId: string
-  history: any
+  history: History
   labelIds: string[]
   dispatch: any
   location: LocationObjectType

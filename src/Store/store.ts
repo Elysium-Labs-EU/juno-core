@@ -7,6 +7,7 @@ import draftsReducer from './draftsSlice'
 import labelsReducer from './labelsSlice'
 import metaReducer from './metaListSlice'
 import utilsReducer from './utilsSlice'
+import history from '../utils/history'
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,12 @@ const store = configureStore({
     meta: metaReducer,
     utils: utilsReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: history,
+      },
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>
@@ -26,7 +33,7 @@ export type AppDispatch = typeof store.dispatch | any
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
-  unknown,
+  typeof history,
   Action<string>
 >
 

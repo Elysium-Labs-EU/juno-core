@@ -1,5 +1,7 @@
+import { History } from 'history'
+
 interface Props {
-  history: any
+  history: History
   labelURL: string
   emailList: any
   emailListIndex: number

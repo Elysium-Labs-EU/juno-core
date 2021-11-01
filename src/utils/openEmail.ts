@@ -1,10 +1,11 @@
+import { History } from 'history'
 import { convertArrayToString } from '.'
 import { OpenDraftEmail } from '../Store/draftsSlice'
 import * as draft from '../constants/draftConstants'
 
 interface OpenEmailProps {
   labelIds: string[]
-  history: any
+  history: History
   id: string
   messageId?: string
   email?: any

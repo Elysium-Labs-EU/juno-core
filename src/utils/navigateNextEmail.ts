@@ -1,8 +1,9 @@
+import { History } from 'history'
 import { convertArrayToString } from '.'
 import { EmailListObject } from '../Store/emailListTypes'
 
 interface NavigateNextMailProps {
-  history: any
+  history: History
   labelIds: string[]
   emailList?: EmailListObject[]
   emailListIndex?: number

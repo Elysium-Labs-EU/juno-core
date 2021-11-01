@@ -1,3 +1,4 @@
+import { History } from 'history'
 import { setCurrentEmail, setIsReplying } from '../../Store/emailDetailSlice'
 import openEmail from '../../utils/openEmail'
 
@@ -8,7 +9,7 @@ const ReplyOverview = ({
   dispatch,
 }: {
   labelIds: string[]
-  history: any
+  history: History
   id: string
   dispatch: any
 }) => {
