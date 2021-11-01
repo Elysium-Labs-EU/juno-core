@@ -1,9 +1,10 @@
+import { History } from 'history'
 import { FindLabelById } from '.'
 import Routes from '../constants/routes.json'
 import { LabelIdName } from '../Store/labelsTypes'
 
 interface CloseMailProps {
-  history: any
+  history: History
   labelIds: string[]
   storageLabels: LabelIdName[]
 }

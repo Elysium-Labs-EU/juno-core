@@ -135,9 +135,8 @@ const pushDraftDetails = (
   const {
     draft,
     draft: { message },
-    history,
   } = enhancedDraftDetails
-  return (dispatch) => {
+  return (dispatch, getState, history) => {
     try {
       const loadEmail = {
         to: message.payload.headers.find((e: MessagePayload) => e.name === 'To')
@@ -184,8 +183,8 @@ const pushDraftDetails = (
 }
 
 const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
-  const { draftId, history } = draftDetails
-  return async (dispatch) => {
+  const { draftId } = draftDetails
+  return async (dispatch, getState, history) => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
       console.log('response', response)
@@ -204,8 +203,8 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
 }
 
 export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
-  const { history, messageId, id } = props
-  return async (dispatch, getState) => {
+  const { messageId, id } = props
+  return async (dispatch, getState, history) => {
     try {
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
+import { History } from 'history'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -20,7 +21,7 @@ const InlineThreadActions = ({
   labelIds,
 }: {
   id: string
-  history: any
+  history: History
   labelIds: string[]
 }) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -43,14 +44,14 @@ const InlineThreadActions = ({
           icon={<FiClock />}
         /> */}
         {labelIds &&
-        labelIds.some(
-          (item) =>
-            item ===
-            FindLabelByName({
-              storageLabels,
-              LABEL_NAME: todo.LABEL,
-            })[0].id
-        ) ? (
+          labelIds.some(
+            (item) =>
+              item ===
+              FindLabelByName({
+                storageLabels,
+                LABEL_NAME: todo.LABEL,
+              })[0].id
+          ) ? (
           <CustomIconLink
             onClick={() =>
               SetCompletedMail({

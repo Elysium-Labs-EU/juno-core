@@ -1,10 +1,11 @@
+import { History } from 'history'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { convertArrayToString } from '../../utils'
 import { LocationObjectType } from '../types/globalTypes'
 
 interface SetCompletedMailProps {
   messageId: string
-  history: any
+  history: History
   labelIds: string[]
   dispatch: any
   location: LocationObjectType

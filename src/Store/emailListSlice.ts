@@ -220,11 +220,10 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
     request,
     request: { addLabelIds, removeLabelIds },
     labelIds,
-    history,
     location,
   } = props
 
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, history) => {
     try {
       const { emailList } = getState().email
       const filteredCurrentEmailList =

@@ -61,8 +61,8 @@ export const TrackComposeEmail =
   }
 
 export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
-  const { history, messageId } = props
-  return async (dispatch, getState) => {
+  const { messageId } = props
+  return async (dispatch, getState, history) => {
     try {
       const { composeEmail } = getState().compose
       const sender = getState().base.profile.emailAddress
