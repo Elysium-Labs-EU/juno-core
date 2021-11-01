@@ -115,7 +115,7 @@ const ReadMessage = ({
 
                 <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="button" aria-describedby={popperId} />
                 <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
-                  <SpecificEmailOptions messageId={message?.id} setReply={isReplyingListener} messageIndex={messageIndex} />
+                  <SpecificEmailOptions messageId={message?.id} isReplyingListener={isReplyingListener} messageIndex={messageIndex} />
                 </Popper>
 
               </S.TimeAttachmentContainer>
