@@ -70,7 +70,6 @@ export const metaListSlice = createSlice({
               .sort(
                 (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
               )
-            console.log(concatNewMetaThreads)
             const newObject: MetaListObject = {
               ...action.payload,
               threads: concatNewMetaThreads,
@@ -318,7 +317,6 @@ export const refreshEmailFeed =
     }
   }
 
-export const selectMetaList = (state: RootState) => state.meta.metaList
 export const selectIsFetching = (state: RootState) => state.meta.isFetching
 
 export default metaListSlice.reducer

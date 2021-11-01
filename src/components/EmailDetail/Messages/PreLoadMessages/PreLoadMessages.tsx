@@ -5,10 +5,10 @@ import PreLoadMessage from './PreLoadMessage'
 const PreLoadMessages =
     ({
         threadDetailList,
-        viewIndexState,
+        viewIndex,
     }: {
         threadDetailList: EmailListThreadItem[]
-        viewIndexState: number
+        viewIndex: number
     }) => {
         // const preLoadedMessagesRef = useRef<any>(null)
         // Only preload the messages 3 before and 3 after the current message.
@@ -19,9 +19,9 @@ const PreLoadMessages =
         // I need to know how many mails there are in total, and where the active index is, to see how far I can reach back and forth
 
         const preLoadMargins = () => {
-            const leftCursor = viewIndexState - 3 < 0 ? 0 : viewIndexState - 3
-            const rightCursor = viewIndexState + 4
-            if (viewIndexState > -1 && threadDetailList.length > 0) {
+            const leftCursor = viewIndex - 3 < 0 ? 0 : viewIndex - 3
+            const rightCursor = viewIndex + 4
+            if (viewIndex > -1 && threadDetailList.length > 0) {
                 // preLoadedMessagesRef.current = threadDetailList.slice(leftCursor, rightCursor).map((item) => item.id)
                 return threadDetailList.slice(leftCursor, rightCursor)
             }

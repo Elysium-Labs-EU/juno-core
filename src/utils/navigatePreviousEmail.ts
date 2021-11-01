@@ -1,5 +1,6 @@
 import { History } from 'history'
 import { convertArrayToString } from '.'
+import { setViewIndex } from '../Store/emailDetailSlice'
 import { EmailListObject } from '../Store/emailListTypes'
 
 interface NavigatePreviousMailProps {
@@ -7,21 +8,13 @@ interface NavigatePreviousMailProps {
   labelIds: string[]
   emailList?: EmailListObject[]
   emailListIndex?: number
-  viewIndexState: number
-  currentViewListener?: any
+  viewIndex: number
+  dispatch: any
 }
 
 const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
-  const {
-    history,
-    labelIds,
-    emailList,
-    emailListIndex,
-    viewIndexState,
-    currentViewListener,
-  } = props
-
-  currentViewListener && currentViewListener(-1)
+  const { history, labelIds, emailList, emailListIndex, viewIndex, dispatch } =
+    props
 
   const labelURL = () => {
     if (labelIds && labelIds.length > 0) {
@@ -30,13 +23,15 @@ const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
     return null
   }
 
+  dispatch(setViewIndex(viewIndex - 1))
+
   if (
     emailList &&
     emailListIndex !== undefined &&
     emailListIndex > -1 &&
     labelURL() !== null
   ) {
-    const prevID = emailList[emailListIndex].threads[viewIndexState - 1].id
+    const prevID = emailList[emailListIndex].threads[viewIndex - 1].id
     return history.push(`/mail/${labelURL()}/${prevID}/messages`)
   }
   return null

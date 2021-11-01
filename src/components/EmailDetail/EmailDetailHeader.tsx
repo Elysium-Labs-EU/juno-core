@@ -1,6 +1,6 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import NavControls from '../MainHeader/Navigation/NavControls'
+import { useAppSelector } from '../../Store/hooks'
 import Menu from './Menu/Menu'
 import DetailNavigation from './DetailNavigation'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
@@ -9,15 +9,9 @@ import BackButton from '../BackButton'
 import * as S from './EmailDetailHeaderStyles'
 import * as GS from '../../styles/globalStyles'
 
-const Emaildetailheader = ({
-  currentViewListener,
-  viewIndexState,
-}: {
-  currentViewListener: any
-  viewIndexState: number
-}) => {
-  const isFocused = useSelector(selectIsFocused)
-  const isSorting = useSelector(selectIsSorting)
+const Emaildetailheader = () => {
+  const isFocused = useAppSelector(selectIsFocused)
+  const isSorting = useAppSelector(selectIsSorting)
 
   return (
     <GS.OuterContainer>
@@ -27,8 +21,6 @@ const Emaildetailheader = ({
           <S.InnerMenu>
             <Menu />
             <DetailNavigation
-              currentViewListener={currentViewListener}
-              viewIndexState={viewIndexState}
             />
           </S.InnerMenu>
         </>
