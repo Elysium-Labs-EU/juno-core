@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 const labelApi = () => ({
   // createLabel: (body) => {
@@ -20,7 +20,7 @@ const labelApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   updateLabel: async (body: any) => {
@@ -31,7 +31,7 @@ const labelApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   deleteLabel: async (id: string) => {
@@ -44,7 +44,7 @@ const labelApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
   createLabel: async (body: any) => {
@@ -55,7 +55,7 @@ const labelApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 })

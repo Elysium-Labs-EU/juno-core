@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 interface UserType {
   emailAddress: string
@@ -28,7 +28,7 @@ const userApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 })

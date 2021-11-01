@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL } from './api'
+import { BASE_API_URL, errorHandeling } from './api'
 
 const draftApi = () => ({
   createDrafts: async (data: any) => {
@@ -7,7 +7,7 @@ const draftApi = () => ({
       const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -20,7 +20,7 @@ const draftApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -31,7 +31,7 @@ const draftApi = () => ({
       )
       return res.data
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -43,7 +43,7 @@ const draftApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 
@@ -56,7 +56,7 @@ const draftApi = () => ({
       )
       return res
     } catch (err) {
-      return console.log(err)
+      return errorHandeling(err)
     }
   },
 })
