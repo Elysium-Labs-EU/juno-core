@@ -7,7 +7,7 @@ import {
   setServiceUnavailable,
 } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
-import { FilteredEmailList } from '../utils'
+import { convertArrayToString, FilteredEmailList } from '../utils'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import NavigateNextMail from '../utils/navigateNextEmail'
@@ -19,6 +19,7 @@ import {
 } from './emailListTypes'
 import { UpdateRequestParams } from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
+import { setCurrentEmail } from './emailDetailSlice'
 
 const initialState: EmailListState = Object.freeze({
   emailList: [],
@@ -85,7 +86,6 @@ export const emailListSlice = createSlice({
               .sort(
                 (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
               )
-            console.log(concatNewEmailThreads)
             const newObject: EmailListObject = {
               ...action.payload,
               threads: concatNewEmailThreads,
@@ -230,29 +230,40 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
         emailList && (removeLabelIds || request.delete) && removeLabelIds
           ? FilteredEmailList({ emailList, labelIds: removeLabelIds })
           : FilteredEmailList({ emailList, labelIds })
+
       const filteredTargetEmailList =
         emailList &&
         addLabelIds &&
         FilteredEmailList({ emailList, labelIds: addLabelIds })
+
       if (filteredCurrentEmailList && filteredCurrentEmailList.length > 0) {
         if (
           location &&
           location.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(draft.LABEL)
         ) {
-          const viewIndexState = filteredCurrentEmailList[0].threads.findIndex(
-            (item) => item.id === messageId
-          )
-          NavigateNextMail({
-            history,
-            labelIds,
-            filteredCurrentEmailList,
-            viewIndexState,
-          })
+          const { viewIndex } = getState().emailDetail
+          const labelURL = () => {
+            if (labelIds && labelIds.length > 0) {
+              return convertArrayToString(labelIds)
+            }
+            return null
+          }
+
+          const nextID =
+            filteredCurrentEmailList[0].threads[viewIndex + 1] !== undefined
+              ? filteredCurrentEmailList[0].threads[viewIndex + 1].id
+              : null
+          if (nextID !== null) {
+            dispatch(setCurrentEmail(nextID))
+            history.push(`/mail/${labelURL()}/${nextID}/messages`)
+          }
         }
+
         const response: any = !request.delete
           ? await messageApi().updateMessage({ messageId, request })
           : await messageApi().thrashMessage({ messageId })
+
         if (response.status === 200) {
           if (
             addLabelIds &&
@@ -279,12 +290,12 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             )
           }
         } else {
-          dispatch(setServiceUnavailable('Error updating label2.'))
+          dispatch(setServiceUnavailable('Error updating label.'))
         }
       }
     } catch (err) {
       console.log(err)
-      dispatch(setServiceUnavailable('Error updating label3.'))
+      dispatch(setServiceUnavailable('Error updating label.'))
     }
     return null
   }

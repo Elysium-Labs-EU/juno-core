@@ -3,9 +3,11 @@ import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
   selectIsReplying,
+  selectViewIndex,
   setCurrentEmail,
   setCurrentMessage,
   setIsReplying,
+  setViewIndex,
 } from '../../Store/emailDetailSlice'
 import {
   selectIsLoading,
@@ -21,7 +23,7 @@ import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListThreadItem } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
-import Emaildetailheader from './EmailDetailHeader'
+import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 // import InformationOverview from './Information/InformationOverview'
@@ -33,12 +35,12 @@ const EmailDetail = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const isReplying = useAppSelector(selectIsReplying)
+  const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
   const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>([])
   const localLabels = useRef<string[] | string>([])
-  const [viewIndexState, setViewIndexState] = useState(-1)
   const activePageTokenRef = useRef('')
 
   const isReplyingListener = ({ messageIndex }: { messageIndex: number }) => {
@@ -52,18 +54,6 @@ const EmailDetail = () => {
     if (activeThreadListMessages) {
       dispatch(setCurrentMessage(activeThreadListMessages[(activeThreadListMessages.length - 1) - messageIndex]))
     }
-  }
-
-  useEffect(() => {
-    if (viewIndexState === -1) {
-      if (threadDetailList && threadDetailList.length > 0) {
-        setViewIndexState(threadDetailList.findIndex((item) => item.id === currentEmail))
-      }
-    }
-  }, [viewIndexState, threadDetailList])
-
-  const currentViewListener = (number: number) => {
-    setViewIndexState((prevState) => prevState + number)
   }
 
   const fetchEmailDetails = () => {
@@ -82,6 +72,18 @@ const EmailDetail = () => {
       dispatch(setServiceUnavailable(local.ERROR_EMAIL))
     }
   }
+
+
+  // Need to update the threadDetailList whenever an email is archived or removed.
+  useEffect(() => {
+    if (threadDetailList.length > 0 && emailList) {
+      const activeList =
+        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
+      if (emailList[activeList].threads.length !== threadDetailList.length) {
+        setThreadDetailList(emailList[activeList].threads)
+      }
+    }
+  }, [emailList, threadDetailList])
 
   useEffect(() => {
     if (labelIds && labelIds === localLabels.current) {
@@ -107,38 +109,44 @@ const EmailDetail = () => {
     }
   }, [messageId])
 
+  useEffect(() => {
+    if (viewIndex === -1) {
+      if (threadDetailList && threadDetailList.length > 0) {
+        dispatch(setViewIndex(threadDetailList.findIndex((item) => item.id === currentEmail)))
+      }
+    }
+  }, [viewIndex, threadDetailList])
+
   return (
     <>
-      <Emaildetailheader
-        currentViewListener={currentViewListener}
-        viewIndexState={viewIndexState}
-      />
+      <EmailDetailHeader />
       <S.Scroll>
         <GS.OuterContainer isReplying={isReplying}>
           {overviewId &&
             overviewId.length &&
             overviewId === local.MESSAGES &&
             threadDetailList.length > 0 && (
-              viewIndexState > -1 && <MessagesOverview
-                threadDetail={threadDetailList[viewIndexState]}
-                isLoading={isLoading}
-                isReplying={isReplying}
-                isReplyingListener={isReplyingListener}
-              />
+              viewIndex > -1 && (
+                <MessagesOverview
+                  threadDetail={threadDetailList[viewIndex]}
+                  isLoading={isLoading}
+                  isReplying={isReplying}
+                  isReplyingListener={isReplyingListener}
+                />)
             )}
           {overviewId &&
             overviewId.length &&
             overviewId === local.MESSAGES &&
-            threadDetailList.length > 0 && viewIndexState > -1 && (
+            threadDetailList.length > 0 && viewIndex > -1 && (
               <S.HiddenMessagesFeed>
                 <PreLoadMessages
                   threadDetailList={threadDetailList}
-                  viewIndexState={viewIndexState}
+                  viewIndex={viewIndex}
                 />
               </S.HiddenMessagesFeed>
             )}
           {overviewId === local.FILES && threadDetailList.length > 0 && (
-            <FilesOverview threadDetail={threadDetailList[viewIndexState]} isLoading={isLoading} />
+            <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
           )}
           {/* {overviewId === local.INFORMATION && (
         <InformationOverview

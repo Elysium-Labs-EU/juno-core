@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  // RouteComponentProps
 } from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { checkBase } from './Store/baseSlice'
