@@ -29,15 +29,19 @@ const emailSubject = (threadDetail: EmailListThreadItem) => {
 const detailDisplaySelector = ({
   message,
   threadDetail,
+  isReplyingListener,
+  index
 }: {
   message: EmailMessage
   threadDetail: EmailListThreadItem
+  isReplyingListener: any
+  index: number
 }) => {
   if (message.labelIds.includes(draft.LABEL)) {
-    return <DraftMessage message={message} />
+    return <DraftMessage message={message} messageIndex={index} />
   }
   if (!message.labelIds.includes(draft.LABEL)) {
-    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} />
+    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
   }
   return null
 }
@@ -62,11 +66,13 @@ const MessagesOverview = React.memo(
       threadDetail.messages
         .slice(0)
         .reverse()
-        .map((message) => (
+        .map((message, index) => (
           <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
             {detailDisplaySelector({
               message,
               threadDetail,
+              isReplyingListener,
+              index
             })}
           </ES.EmailWrapper>
         ))
@@ -94,20 +100,18 @@ const MessagesOverview = React.memo(
             </ES.DetailBase>
           </ES.EmailDetailContainer>
           {threadDetail && !isReplying && (
-            <EmailDetOptions messageId={threadDetail.id} setReply={isReplyingListener} />
+            threadDetail.messages &&
+            <EmailDetOptions messageId={threadDetail.id} isReplyingListener={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (
-          <>
-            <ComposeEmail
-              isReplying={isReplying}
-              isReplyingListener={isReplyingListener}
-              to={fromEmail(threadDetail)}
-              subject={emailSubject(threadDetail)}
-              id={threadDetail.id}
-              threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId}
-            />
-          </>
+          <ComposeEmail
+            isReplying={isReplying}
+            isReplyingListener={isReplyingListener}
+            to={fromEmail(threadDetail)}
+            subject={emailSubject(threadDetail)}
+            threadId={threadDetail.id}
+          />
         )}
       </>
     )

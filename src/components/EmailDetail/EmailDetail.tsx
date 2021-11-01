@@ -4,6 +4,7 @@ import {
   selectCurrentEmail,
   selectIsReplying,
   setCurrentEmail,
+  setCurrentMessage,
   setIsReplying,
 } from '../../Store/emailDetailSlice'
 import {
@@ -21,7 +22,6 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListThreadItem } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import Emaildetailheader from './EmailDetailHeader'
-import loadNextPage from '../../utils/loadNextPage'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 // import InformationOverview from './Information/InformationOverview'
@@ -35,14 +35,23 @@ const EmailDetail = () => {
   const isReplying = useAppSelector(selectIsReplying)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
-  const { threadId, overviewId } = useParams<{ threadId: string; overviewId: string }>()
+  const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
   const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>([])
   const localLabels = useRef<string[] | string>([])
   const [viewIndexState, setViewIndexState] = useState(-1)
   const activePageTokenRef = useRef('')
 
-  const isReplyingListener = () => {
-    dispatch(setIsReplying(!isReplying))
+  const isReplyingListener = ({ messageIndex }: { messageIndex: number }) => {
+    if (messageIndex > -1) {
+      dispatch(setIsReplying(true))
+    }
+    if (messageIndex === undefined) {
+      dispatch(setIsReplying(false))
+    }
+    const activeThreadListMessages = threadDetailList[threadDetailList.findIndex((item) => item.id === messageId)].messages
+    if (activeThreadListMessages) {
+      dispatch(setCurrentMessage(activeThreadListMessages[(activeThreadListMessages.length - 1) - messageIndex]))
+    }
   }
 
   useEffect(() => {
@@ -87,24 +96,16 @@ const EmailDetail = () => {
   // DetailNavigation will refetch metaList + emailList if empty.
 
   useEffect(() => {
-    if (threadId !== undefined && currentEmail !== threadId) {
-      dispatch(setCurrentEmail(threadId))
+    if (messageId !== undefined && currentEmail !== messageId) {
+      dispatch(setCurrentEmail(messageId))
     }
-  }, [threadId])
+  }, [messageId])
 
   useEffect(() => {
-    if (currentEmail !== threadId && isReplying) {
+    if (currentEmail !== messageId && isReplying) {
       dispatch(setIsReplying(false))
     }
-  }, [threadId])
-
-  // useEffect(() => {
-  //   // console.log('emailList', emailList)
-  //   // if (currentEmail && threadDetailList && threadDetailList.length > 0) {
-  //   //   const {} = threadDetailList
-  //   //   loadNextPage({nex})
-  //   // }
-  // }, [currentEmail, threadDetailList, emailList])
+  }, [messageId])
 
   return (
     <>

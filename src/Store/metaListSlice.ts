@@ -30,7 +30,7 @@ export const metaListSlice = createSlice({
   initialState,
   reducers: {
     listAddMeta: (state, action) => {
-      const sortedMetaList = {
+      const sortedMetaList: MetaListObject = {
         ...action.payload,
         threads: action.payload.threads.sort(
           (a: MetaListThreadItem, b: MetaListThreadItem) =>
@@ -39,17 +39,43 @@ export const metaListSlice = createSlice({
       }
 
       // Find metaList sub-array index
-      const arrayIndex = state.metaList
+      const arrayIndex: number = state.metaList
         .map((metaArray) => metaArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
 
-      // If metaList sub-array index exists, add to the existing array
+      // If metaList sub-array index exists, add to or update the existing array
       if (arrayIndex > -1) {
-        const newArray = state.metaList[arrayIndex].threads
-          .concat(sortedMetaList.threads)
-          .sort((a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10))
-        const newObject = { ...action.payload, threads: newArray }
+        const newArray = () =>
+          action.payload.threads
+            .map((thread: MetaListThreadItem) => {
+              const objectIndex: number = state.metaList[
+                arrayIndex
+              ].threads.findIndex((item) => item.id === thread.id)
+
+              if (objectIndex === -1) {
+                return state.metaList[arrayIndex].threads
+                  .concat(thread)
+                  .sort(
+                    (a, b) =>
+                      parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+                  )
+              }
+              if (objectIndex > -1) {
+                state.metaList[arrayIndex].threads[objectIndex] = thread
+                return state.metaList[arrayIndex].threads.sort(
+                  (a, b) =>
+                    parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+                )
+              }
+              return state.metaList[arrayIndex].threads
+            })
+            .flat(1)
+
+        const newObject: MetaListObject = {
+          ...action.payload,
+          threads: newArray(),
+        }
         const currentState = state.metaList
         currentState[arrayIndex] = newObject
         state.metaList = currentState
@@ -63,25 +89,31 @@ export const metaListSlice = createSlice({
         activeMetaObjArray,
       }: {
         filteredTargetMetaList: MetaListObject[]
-        activeMetaObjArray: MetaListThreadItem
+        activeMetaObjArray: MetaListThreadItem[]
       } = action.payload
-      const newMetaListEntry = {
-        ...filteredTargetMetaList[0],
-        threads: filteredTargetMetaList[0].threads
-          .concat(activeMetaObjArray)
-          .sort(
-            (a: MetaListThreadItem, b: MetaListThreadItem) =>
-              parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+      const objectIndex: number = filteredTargetMetaList[0].threads.findIndex(
+        (item) => item.id === activeMetaObjArray[0].id
+      )
+      // If the object doesn't exist yet on the array, add it - otherwise do nothing since the item already exists.
+      if (objectIndex === -1) {
+        const newMetaListEntry = {
+          ...filteredTargetMetaList[0],
+          threads: filteredTargetMetaList[0].threads
+            .concat(activeMetaObjArray)
+            .sort(
+              (a: MetaListThreadItem, b: MetaListThreadItem) =>
+                parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
+            ),
+        }
+        const updatedMetaList = [
+          ...state.metaList.filter(
+            (threadList) =>
+              !threadList.labels.includes(filteredTargetMetaList[0].labels[0])
           ),
+          newMetaListEntry,
+        ]
+        state.metaList = updatedMetaList
       }
-      const updatedMetaList = [
-        ...state.metaList.filter(
-          (threadList) =>
-            !threadList.labels.includes(filteredTargetMetaList[0].labels[0])
-        ),
-        newMetaListEntry,
-      ]
-      state.metaList = updatedMetaList
     },
     listRemoveItemMeta: (state, action) => {
       const { filteredCurrentMetaList, messageId } = action.payload

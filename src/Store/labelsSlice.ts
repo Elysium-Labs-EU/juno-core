@@ -50,7 +50,8 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
 export const createLabel =
-  (label: GoogleLabel | string): AppThunk =>
+  (label: any): AppThunk =>
+  // (label: GoogleLabel | string): AppThunk =>
   async (dispatch) => {
     try {
       const body =

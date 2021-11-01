@@ -165,6 +165,8 @@ const pushDraftDetails = (
           threadId: message.threadId && message.threadId,
         },
       }
+      console.log('loadEmail', loadEmail)
+      console.log('draftDetails', draftDetails)
       if (draft.id) {
         // Or need to push threadId?
         dispatch(listUpdateDraft(draftDetails))
@@ -186,9 +188,12 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   return async (dispatch) => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
+      console.log('response', response)
       if (response?.status && response.status === 200) {
+        console.log('here y-ellow')
         const { draft } = response.data
         const enhancedDraftDetails = { history, draft }
+        console.log('enhancedDraftDetails', enhancedDraftDetails)
         dispatch(pushDraftDetails(enhancedDraftDetails))
       }
     } catch (err) {
