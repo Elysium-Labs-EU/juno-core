@@ -10,6 +10,7 @@ import BackButton from '../BackButton'
 import * as S from './EmailDetailHeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
+import { FindLabelById } from '../../utils'
 
 const Emaildetailheader = () => {
   const isFocused = useAppSelector(selectIsFocused)
@@ -22,7 +23,7 @@ const Emaildetailheader = () => {
   useEffect(() => {
     if (storageLabels.length > 0 && labelIds.length > 0) {
       if (location.pathname.includes(labelIds[0])) {
-        const matchedLabel = storageLabels.filter((item) => item.id === labelIds[0])
+        const matchedLabel = FindLabelById({ storageLabels, labelIds })
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
           setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())

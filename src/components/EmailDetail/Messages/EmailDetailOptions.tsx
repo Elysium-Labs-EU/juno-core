@@ -19,14 +19,13 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
 import { CustomButtonText } from '../../Elements/Buttons'
-import SetCompletedMail from '../../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 
 const messageIndex = 0
 
-const EmailDetOptions = ({ messageId, isReplyingListener, threadId }: { messageId: string; isReplyingListener: any, threadId: string }) => {
+const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messageId: string; isReplyingListener: any, threadId: string }) => {
   // const emailList = useAppSelector(selectEmailList)
   // const isFocused = useAppSelector(selectIsFocused)
   // const isSorting = useAppSelector(selectIsSorting)
@@ -56,45 +55,30 @@ const EmailDetOptions = ({ messageId, isReplyingListener, threadId }: { messageI
           </div>
           <div>
             {labelIds &&
-              labelIds.some(
+              !labelIds.some(
                 (item) =>
                   item ===
                   FindLabelByName({
                     storageLabels,
                     LABEL_NAME: todo.LABEL,
                   })[0].id
-              ) ? (
-              <CustomButtonText
-                className="button option-link"
-                icon={<FiCheckCircle />}
-                onClick={() =>
-                  SetCompletedMail({
-                    messageId,
-                    history,
-                    labelIds,
-                    dispatch,
-                    location,
-                  })
-                }
-                label={local.BUTTON_MARK_AS_DONE}
-              />
-            ) : (
-              <CustomButtonText
-                className="button option-link"
-                icon={<FiCheckCircle />}
-                onClick={() =>
-                  SetToDoMail({
-                    history,
-                    messageId,
-                    labelIds,
-                    dispatch,
-                    location,
-                    storageLabels,
-                  })
-                }
-                label={local.BUTTON_TODO}
-              />
-            )}
+              ) && (
+                <CustomButtonText
+                  className="button option-link"
+                  icon={<FiCheckCircle />}
+                  onClick={() =>
+                    SetToDoMail({
+                      history,
+                      messageId,
+                      labelIds,
+                      dispatch,
+                      location,
+                      storageLabels,
+                    })
+                  }
+                  label={local.BUTTON_TODO}
+                />
+              )}
           </div>
           <div>
             {/* <CustomButtonText
@@ -135,4 +119,4 @@ const EmailDetOptions = ({ messageId, isReplyingListener, threadId }: { messageI
   )
 }
 
-export default EmailDetOptions
+export default EmailDetailOptions
