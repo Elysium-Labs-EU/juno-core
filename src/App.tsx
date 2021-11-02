@@ -20,7 +20,7 @@ const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetai
 const ComposeEmail = React.lazy(() => import('./components/Compose/ComposeEmail'))
 const Settings = React.lazy(() => import('./components/Settings'))
 const Inbox = React.lazy(() => import('./components/Inbox/Inbox'))
-const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))
+// const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))
 const SentEmail = React.lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = React.lazy(() => import('./components/Draft/DraftEmail'))
 
@@ -49,7 +49,7 @@ const App = () => {
               <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
               <Route path={Routes.DRAFTS} component={DraftEmail} />
               <Route path={Routes.SENT} component={SentEmail} />
-              <Route path={Routes.SPAM} component={SpamEmail} />
+              {/* <Route path={Routes.SPAM} component={SpamEmail} /> */}
               <Route path={Routes.SETTINGS} component={Settings} />
               <Route path={Routes.INBOX} component={Inbox} />
             </Switch>
