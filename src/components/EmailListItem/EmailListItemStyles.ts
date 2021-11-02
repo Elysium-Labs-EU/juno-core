@@ -6,9 +6,7 @@ interface ThreadBaseProps {
 
 export const ThreadBase = styled.div<ThreadBaseProps>`
   font-weight: ${(props) =>
-    props.emailLabels && props.emailLabels.includes('UNREAD')
-      ? '600'
-      : 'regular'};
+    props.emailLabels && props.emailLabels.includes('UNREAD') ? '550' : '400'};
   position: relative;
   user-select: none;
   &:hover {
@@ -29,6 +27,7 @@ export const ThreadRow = styled.div`
   &:hover {
     background-color: #f7f7f7;
     z-index: 2;
+    border-radius: 5px;
   }
 `
 

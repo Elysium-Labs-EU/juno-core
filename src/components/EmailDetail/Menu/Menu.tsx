@@ -35,8 +35,9 @@ const Menu = () => {
     <ul className="no-bullet-ul flex-flow-row">
       {local.MENU_OPTIONS.map((item, index) => (
         <li
-          key={`${item.name + index}`}
+          key={`${ item.name + index }`}
           className={activeLink === item.name ? 'option-link:active menu' : 'option-link menu'}
+          style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"
         >

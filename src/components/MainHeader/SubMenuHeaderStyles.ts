@@ -9,9 +9,6 @@ export const Wrapper = styled.nav`
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
   z-index: 20;
-  top: 18px;
-  /* top: 175px; */
-  right: 30px;
 `
 
 export const InnerMenu = styled.div`

@@ -1,5 +1,5 @@
 import React from 'react'
-import NavControls from '../MainHeader/Navigation/NavControls'
+import Navigation from '../MainHeader/Navigation/Navigation'
 import TodoFocusOption from './TodoFocusOption'
 import * as local from '../../constants/todoConstants'
 import * as S from '../MainHeader/HeaderStyles'
@@ -9,9 +9,9 @@ const TodoHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
       <div className="header-center">
-        <h2>{local.HEADER_TODO}</h2>
+        <h2 className="page_title">{local.HEADER_TODO}</h2>
       </div>
-      <NavControls />
+      <Navigation />
     </S.NavContainer>
     <TodoFocusOption />
   </GS.OuterContainer>

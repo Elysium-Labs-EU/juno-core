@@ -1,19 +1,19 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { InnerMenu, MenuItem, Wrapper } from './SubMenuHeaderStyles'
+import * as S from './SubMenuHeaderStyles'
 import * as local from '../../constants/subMenuHeaderConstants'
 
 const Submenuheader = () => (
-  <Wrapper>
+  <S.Wrapper>
     {local.MENU_OPTIONS &&
       local.MENU_OPTIONS.map((item, index) => (
-        <InnerMenu key={`${item.name + index}`}>
-          <Link className="option-link" to={item.link}>
+        <S.InnerMenu key={`${ item.name + index }`}>
+          <Link className="option-link" to={item.link} style={{ padding: '0.2rem 0' }}>
             {item.name}
           </Link>
-        </InnerMenu>
+        </S.InnerMenu>
       ))}
-  </Wrapper>
+  </S.Wrapper>
 )
 
 export default Submenuheader

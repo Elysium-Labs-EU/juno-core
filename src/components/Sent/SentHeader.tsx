@@ -1,5 +1,5 @@
 import React from 'react'
-import NavControls from '../MainHeader/Navigation/NavControls'
+import Navigation from '../MainHeader/Navigation/Navigation'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import BackButton from '../BackButton'
@@ -11,9 +11,9 @@ const SentHeader = () => (
     <S.NavContainer>
       <BackButton />
       <div className="header-center">
-        <h2>{SENT_HEADER}</h2>
+        <h2 className="page_title">{SENT_HEADER}</h2>
       </div>
-      <NavControls />
+      <Navigation />
     </S.NavContainer>
   </GS.OuterContainer>
 )

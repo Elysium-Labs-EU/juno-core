@@ -8,7 +8,6 @@ import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
 import { CustomIconLink } from '../Elements/Buttons'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
-import SetCompletedMail from '../EmailOptions/SetCompletedMail'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils'
 import { selectStorageLabels } from '../../Store/labelsSlice'
@@ -26,7 +25,6 @@ const InlineThreadActions = ({
 }) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
-  // const labelURL = convertArrayToString(labelIds)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const messageId = id && id
@@ -38,53 +36,42 @@ const InlineThreadActions = ({
           className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() => ReplyOverview({ history, labelIds, id, dispatch })}
+          title="Reply"
         />
         {/* <CustomIconLink
           className="button button-small text_muted option-link"
           icon={<FiClock />}
         /> */}
         {labelIds &&
-          labelIds.some(
+          !labelIds.some(
             (item) =>
               item ===
               FindLabelByName({
                 storageLabels,
                 LABEL_NAME: todo.LABEL,
               })[0].id
-          ) ? (
-          <CustomIconLink
-            onClick={() =>
-              SetCompletedMail({
-                messageId,
-                history,
-                labelIds,
-                dispatch,
-                location,
-              })
-            }
-            className="button button-small text_muted option-link"
-            icon={<FiCheckCircle />}
-          />
-        ) : (
-          <CustomIconLink
-            onClick={() =>
-              SetToDoMail({
-                history,
-                messageId,
-                labelIds,
-                dispatch,
-                location,
-                storageLabels,
-              })
-            }
-            className="button button-small text_muted option-link"
-            icon={<FiCheckCircle />}
-          />
-        )}
+          ) && (
+            <CustomIconLink
+              onClick={() =>
+                SetToDoMail({
+                  history,
+                  messageId,
+                  labelIds,
+                  dispatch,
+                  location,
+                  storageLabels,
+                })
+              }
+              className="button button-small text_muted option-link"
+              icon={<FiCheckCircle />}
+              title="Mark as To Do"
+            />
+          )}
         <CustomIconLink
           onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
           className="button button-small text_muted option-link"
           icon={<FiArchive />}
+          title="Archive"
         />
         <CustomIconLink
           onClick={() => setShowMenu(!showMenu)}

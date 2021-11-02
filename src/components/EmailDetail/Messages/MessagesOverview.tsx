@@ -1,6 +1,6 @@
 import React from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import EmailDetOptions from './EmailDetOptions'
+import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import ComposeEmail from '../../Compose/ComposeEmail'
@@ -101,7 +101,7 @@ const MessagesOverview = React.memo(
           </ES.EmailDetailContainer>
           {threadDetail && !isReplying && (
             threadDetail.messages &&
-            <EmailDetOptions messageId={threadDetail.id} isReplyingListener={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
+            <EmailDetailOptions messageId={threadDetail.id} isReplyingListener={isReplyingListener} threadId={threadDetail.messages[threadDetail.messages.length - 1].threadId} />
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (

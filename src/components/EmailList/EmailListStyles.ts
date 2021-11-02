@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Scroll = styled.div`
   position: relative;
   width: 100%;
-  height: 76vh;
+  height: 79vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
