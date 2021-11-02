@@ -8,7 +8,7 @@ const Submenuheader = () => (
     {local.MENU_OPTIONS &&
       local.MENU_OPTIONS.map((item, index) => (
         <S.InnerMenu key={`${ item.name + index }`}>
-          <Link className="option-link" to={item.link}>
+          <Link className="option-link" to={item.link} style={{ padding: '0.2rem 0' }}>
             {item.name}
           </Link>
         </S.InnerMenu>

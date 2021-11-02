@@ -38,6 +38,7 @@ const InlineThreadActions = ({
           className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() => ReplyOverview({ history, labelIds, id, dispatch })}
+          title="Reply"
         />
         {/* <CustomIconLink
           className="button button-small text_muted option-link"
@@ -64,6 +65,7 @@ const InlineThreadActions = ({
             }
             className="button button-small text_muted option-link"
             icon={<FiCheckCircle />}
+            title="Mark as Complete"
           />
         ) : (
           <CustomIconLink
@@ -79,12 +81,14 @@ const InlineThreadActions = ({
             }
             className="button button-small text_muted option-link"
             icon={<FiCheckCircle />}
+            title="Mark as To Do"
           />
         )}
         <CustomIconLink
           onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
           className="button button-small text_muted option-link"
           icon={<FiArchive />}
+          title="Archive"
         />
         <CustomIconLink
           onClick={() => setShowMenu(!showMenu)}

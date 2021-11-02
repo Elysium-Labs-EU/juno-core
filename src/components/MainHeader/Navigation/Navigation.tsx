@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
-import './NavControls.scss'
+import Tooltip from '@material-ui/core/Tooltip'
+import './Navigation.scss'
 import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox } from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
-import * as S from './NavControlsStyles'
+import * as S from './NavigationStyles'
 import * as Routes from '../../../constants/routes.json'
 import { LocationObjectType } from '../../types/globalTypes'
 
@@ -49,20 +50,26 @@ const Navigation = () => {
   return (
     <S.NavControls>
       <S.NavList>
-        <S.NavItem>
-          <CustomIconLink
-            className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
-            icon={<FiCheckSquare size={SIZE} />}
-            onClick={() => navigateTo(Routes.HOME)}
-          />
-        </S.NavItem>
-        <S.NavItem>
-          <CustomIconLink
-            className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
-            icon={<FiInbox size={SIZE} />}
-            onClick={() => navigateTo(Routes.INBOX)}
-          />
-        </S.NavItem>
+        <Tooltip title="To Do">
+          <S.NavItem>
+            <CustomIconLink
+              className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
+              icon={<FiCheckSquare size={SIZE} />}
+              onClick={() => navigateTo(Routes.HOME)}
+            />
+          </S.NavItem>
+        </Tooltip>
+
+        <Tooltip title="Inbox">
+          <S.NavItem>
+            <CustomIconLink
+              className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
+              icon={<FiInbox size={SIZE} />}
+              onClick={() => navigateTo(Routes.INBOX)}
+            />
+          </S.NavItem>
+        </Tooltip>
+
         {/* <S.NavItem>
           <CustomIconLink
             className={
@@ -72,15 +79,18 @@ const Navigation = () => {
             onClick={() => navigateTo(Routes.SETTINGS)}
           />
         </S.NavItem> */}
-        <S.NavItem>
-          <CustomIconLink
-            className={
-              active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
-            }
-            icon={<FiEdit size={SIZE} />}
-            onClick={() => navigateTo('/compose')}
-          />
-        </S.NavItem>
+        <Tooltip title="Compose">
+          <S.NavItem>
+            <CustomIconLink
+              className={
+                active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
+              }
+              icon={<FiEdit size={SIZE} />}
+              onClick={() => navigateTo('/compose')}
+            />
+          </S.NavItem>
+        </Tooltip>
+
         <S.NavItem>
           <CustomIconLink
             onClick={handleSpecificMenu('bottom-start')}

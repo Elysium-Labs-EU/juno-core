@@ -1,7 +1,7 @@
 import React from 'react'
-import NavControls from '../MainHeader/Navigation/NavControls'
+import Navigation from '../MainHeader/Navigation/Navigation'
 import InboxSortOption from './InboxSortOption'
-import '../MainHeader/Navigation/NavControls.scss'
+import '../MainHeader/Navigation/Navigation.scss'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 // import BackButton from '../BackButton'
@@ -17,7 +17,7 @@ const InboxHeader = () => (
       <div className="header-center">
         <h2 className="page_title">{INBOX_HEADER}</h2>
       </div>
-      <NavControls />
+      <Navigation />
     </S.NavContainer>
     <InboxSortOption />
   </GS.OuterContainer>

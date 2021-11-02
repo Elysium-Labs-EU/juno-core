@@ -1,6 +1,6 @@
 import React from 'react'
-import NavControls from '../MainHeader/Navigation/NavControls'
-import '../MainHeader/Navigation/NavControls.scss'
+import Navigation from '../MainHeader/Navigation/Navigation'
+import '../MainHeader/Navigation/Navigation.scss'
 import * as local from '../../constants/draftConstants'
 import * as S from '../MainHeader/HeaderStyles'
 import BackButton from '../BackButton'
@@ -13,7 +13,7 @@ const InboxHeader = () => (
       <div className="header-center">
         <h2 className="page_title">{local.DRAFT_HEADER}</h2>
       </div>
-      <NavControls />
+      <Navigation />
     </S.NavContainer>
   </GS.OuterContainer>
 )
