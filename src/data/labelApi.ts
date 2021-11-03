@@ -2,17 +2,6 @@ import axios, { AxiosResponse } from 'axios'
 import { BASE_API_URL, errorHandeling } from './api'
 
 const labelApi = () => ({
-  // createLabel: (body) => {
-  //   console.log('body', body)
-  //   return axios
-  //     .post(`/api/labels`, body)
-  //     .then((res) => res.data)
-  //     .then((res) => {
-  //       if (res.status === 'success') {
-
-  //       })
-  //     .catch((err) => console.log(err))
-  // },
   fetchLabel: async () => {
     try {
       const res: AxiosResponse<any> = await axios.get(
@@ -53,7 +42,7 @@ const labelApi = () => ({
         `${BASE_API_URL}/api/labels`,
         body
       )
-      return res.data
+      return res
     } catch (err) {
       return errorHandeling(err)
     }

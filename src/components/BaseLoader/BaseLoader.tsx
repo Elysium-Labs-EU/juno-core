@@ -12,7 +12,7 @@ const Baseloader = () => {
       <Inner>
         {!serviceUnavailable && (
           <>
-            <h1 style={{ marginBottom: '1rem' }}>{LOADING_TEXT}</h1>
+            <h2 className="page_title" style={{ marginBottom: '1rem' }}>{LOADING_TEXT}</h2>
             <CircularProgress />
           </>
         )}

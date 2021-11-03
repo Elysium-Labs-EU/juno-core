@@ -33,7 +33,7 @@ const TodoFocusOption = () => {
       <CustomButtonText
         className="sort-button"
         onClick={handleClick}
-        disabled={isLoading}
+        disabled={isLoading || emailListIndex < 0}
         label={local.BUTTON_FOCUS}
       />
     </S.SortContainer>
