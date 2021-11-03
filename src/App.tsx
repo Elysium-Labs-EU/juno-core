@@ -5,7 +5,7 @@ import {
   Route,
 } from 'react-router-dom'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { checkBase } from './Store/baseSlice'
+import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
 import './App.scss'
 import './styles/ElementStyles.scss'
 import './styles/typography.scss'
@@ -14,6 +14,8 @@ import Header from './components/MainHeader/Header'
 import Routes from './constants/routes.json'
 import * as GS from './styles/globalStyles'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
+import { selectStorageLabels } from './Store/labelsSlice'
+import { BASE_ARRAY } from './constants/baseConstants'
 
 const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetail'))
@@ -26,12 +28,20 @@ const DraftEmail = React.lazy(() => import('./components/Draft/DraftEmail'))
 
 const App = () => {
   const dispatch = useAppDispatch()
-  const baseLoaded = useAppSelector((state) => state.base.baseLoaded)
+  const baseLoaded = useAppSelector(selectBaseLoaded)
+  const storageLabels = useAppSelector(selectStorageLabels)
+
   useEffect(() => {
     if (!baseLoaded) {
       dispatch(checkBase())
     }
   }, [baseLoaded])
+
+  useEffect(() => {
+    if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {
+      dispatch(recheckBase())
+    }
+  }, [baseLoaded, storageLabels])
 
   return (
     <Router>

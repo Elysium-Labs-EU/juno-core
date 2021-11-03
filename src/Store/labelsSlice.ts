@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
 import type { AppThunk, RootState } from './store'
 import labelApi from '../data/labelApi'
 import { setServiceUnavailable } from './utilsSlice'
@@ -12,8 +11,6 @@ const initialState: LabelState = Object.freeze({
   storageLabels: [],
 })
 
-const api = labelApi()
-
 export const labelsSlice = createSlice({
   name: 'labels',
   initialState,
@@ -22,11 +19,17 @@ export const labelsSlice = createSlice({
       state.labelIds = action.payload
     },
     setLoadedInbox: (state, action) => {
-      // const labelArray: string[] = Array.isArray(action.payload)
-      //   ? action.payload
-      //   : [action.payload]
-      if (!state.loadedInbox.includes(action.payload)) {
-        state.loadedInbox = [...new Set([...state.loadedInbox, action.payload])]
+      const doesLabelAlreadyExist =
+        state.loadedInbox.length > 0 &&
+        state.loadedInbox
+          .map((item) => item.includes(action.payload[0]))
+          .filter((result) => result === false)
+
+      if (!doesLabelAlreadyExist) {
+        state.loadedInbox.push(action.payload)
+      }
+      if (doesLabelAlreadyExist && doesLabelAlreadyExist.length > 0) {
+        state.loadedInbox = [...state.loadedInbox, action.payload]
       }
     },
     setStorageLabels: (state, action) => {
@@ -37,11 +40,13 @@ export const labelsSlice = createSlice({
         }
         state.storageLabels = [...state.storageLabels, labelIdName]
       }
-      const labelIdNameArray = action.payload.map((label: GoogleLabel[]) => ({
-        id: label[0].id,
-        name: label[0].name,
-      }))
-      state.storageLabels = [...state.storageLabels, ...labelIdNameArray]
+      if (Array.isArray(action.payload)) {
+        const labelIdNameArray = action.payload.map((label: GoogleLabel[]) => ({
+          id: label[0].id,
+          name: label[0].name,
+        }))
+        state.storageLabels = [...state.storageLabels, ...labelIdNameArray]
+      }
     },
   },
 })
@@ -50,8 +55,7 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
 export const createLabel =
-  (label: any): AppThunk =>
-  // (label: GoogleLabel | string): AppThunk =>
+  (label: string): AppThunk =>
   async (dispatch) => {
     try {
       const body =
@@ -62,16 +66,14 @@ export const createLabel =
               messageListVisibility: 'show',
             }
           : label
-      return await axios
-        .post(`/api/labels`, body)
-        .then((res) => {
-          if (res.status === 200) {
-            dispatch(setStorageLabels(res.data.message))
-          } else {
-            dispatch(setServiceUnavailable('Error creating label.'))
-          }
-        })
-        .catch((err) => console.log(err))
+
+      const response = await labelApi().createLabel(body)
+
+      if (response && response.status === 200) {
+        dispatch(setStorageLabels(response.data.message))
+      } else {
+        dispatch(setServiceUnavailable('Error creating label.'))
+      }
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error creating label.'))
@@ -83,7 +85,7 @@ export const fetchLabelIds =
   (LABEL: string): AppThunk =>
   async (dispatch) => {
     try {
-      const listAllLabels = await api.fetchLabel()
+      const listAllLabels = await labelApi().fetchLabel()
       const {
         message: { labels },
       } = listAllLabels
@@ -92,7 +94,6 @@ export const fetchLabelIds =
           (label: LabelIdName) => label.name === LABEL
         )
         if (labelObject.length > 0) {
-          // console.log(labelObject)
           dispatch(setCurrentLabels([labelObject[0].id]))
           dispatch(setStorageLabels([labelObject[0].id]))
         } else {

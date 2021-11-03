@@ -41,6 +41,13 @@ export const baseSlice = createSlice({
 
 export const { setBaseLoaded, setProfile } = baseSlice.actions
 
+// The base can only be set to be loaded whenever all the labels are created.
+export const recheckBase = (): AppThunk => async (dispatch, getState) => {
+  if (getState().labels.storageLabels.length === BASE_ARRAY.length) {
+    dispatch(setBaseLoaded(true))
+  }
+}
+
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const user = await userApi().fetchUser()
@@ -55,13 +62,22 @@ export const checkBase = (): AppThunk => async (dispatch) => {
             labelArray.map((item: GoogleLabel) => item.name)
           )
         ) {
-          BASE_ARRAY.map((item) =>
+          const checkArray = BASE_ARRAY.map((item) =>
             labelArray.map((label: any) => label.name).includes(item)
-          ).map(
-            (checkValue, index) =>
-              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
           )
-          dispatch(setBaseLoaded(true))
+          const createMissingLabels = () =>
+            checkArray.map(
+              (checkValue, index) =>
+                !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
+            )
+          createMissingLabels()
+
+          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+            labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
+          ).filter((result) => result.length > 0)
+
+          dispatch(setStorageLabels(prefetchedBoxes))
+
           // What happends if the label is removed from gmail, but the emails still exist. The label
           // is recreated. Does it still attempt to load the base?
         } else {
@@ -69,7 +85,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
             labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
           )
           dispatch(setStorageLabels(prefetchedBoxes))
-          dispatch(setBaseLoaded(true))
+          // dispatch(setBaseLoaded(true))
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))

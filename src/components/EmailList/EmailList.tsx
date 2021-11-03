@@ -53,51 +53,56 @@ const EmailList = () => {
       labelIds &&
       labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
     ) {
-      const params = {
-        labelIds,
-        maxResults: 500,
+      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels.includes(labelIds[0])).length > 0) {
+        const params = {
+          labelIds,
+          maxResults: 500,
+        }
+        dispatch(refreshEmailFeed(params))
       }
-      dispatch(refreshEmailFeed(params))
     }
   }, [location])
 
   const renderEmailList = (filteredOnLabel: EmailListObject) => {
-    const { threads, nextPageToken } = filteredOnLabel && filteredOnLabel
-    return (
-      <>
-        <S.Scroll>
-          <GS.OuterContainer>
-            <S.ThreadList>
-              {threads.length > 0 && (
-                <div className="base">
-                  {threads.map((email) => (
-                    <EmailListItem key={email.id} email={email} />
-                  ))}
-                </div>
-              )}
-              {threads.length === 0 && <Emptystate />}
-            </S.ThreadList>
-            {nextPageToken ? (
-              <S.LoadMoreContainer>
-                {!isLoading && (
-                  <CustomButtonText
-                    className="button button-small button-light"
-                    disabled={isLoading}
-                    onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
-                    label={local.LOAD_OLDER}
-                  />
+    if (filteredOnLabel) {
+      const { threads, nextPageToken } = filteredOnLabel
+      return (
+        <>
+          <S.Scroll>
+            <GS.OuterContainer>
+              <S.ThreadList>
+                {threads.length > 0 && (
+                  <div className="base">
+                    {threads.map((email) => (
+                      <EmailListItem key={email.id} email={email} />
+                    ))}
+                  </div>
                 )}
-                {isLoading && <CircularProgress />}
-              </S.LoadMoreContainer>
-            ) : (
-              <S.LoadMoreContainer>
-                <small className="text_muted">{local.NO_MORE_RESULTS}</small>
-              </S.LoadMoreContainer>
-            )}
-          </GS.OuterContainer>
-        </S.Scroll>
-      </>
-    )
+                {threads.length === 0 && <Emptystate />}
+              </S.ThreadList>
+              {nextPageToken ? (
+                <S.LoadMoreContainer>
+                  {!isLoading && (
+                    <CustomButtonText
+                      className="button button-small button-light"
+                      disabled={isLoading}
+                      onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
+                      label={local.LOAD_OLDER}
+                    />
+                  )}
+                  {isLoading && <CircularProgress />}
+                </S.LoadMoreContainer>
+              ) : (
+                <S.LoadMoreContainer>
+                  <small className="text_muted">{local.NO_MORE_RESULTS}</small>
+                </S.LoadMoreContainer>
+              )}
+            </GS.OuterContainer>
+          </S.Scroll>
+        </>
+      )
+    }
+    return <Emptystate />
   }
 
   const filteredOnLabel = useMemo(
