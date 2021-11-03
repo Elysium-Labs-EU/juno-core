@@ -10,7 +10,7 @@ import BackButton from '../BackButton'
 import * as S from './EmailDetailHeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
-import { FindLabelById } from '../../utils'
+import { FindLabelById } from '../../utils/findLabel'
 
 const Emaildetailheader = () => {
   const isFocused = useAppSelector(selectIsFocused)

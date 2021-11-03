@@ -1,6 +1,7 @@
 import { History } from 'history'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
-import { convertArrayToString, FindLabelByName } from '../../utils'
+import { convertArrayToString } from '../../utils'
+import { FindLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
 import { LocationObjectType } from '../types/globalTypes'
 import { LabelIdName } from '../../Store/labelsTypes'

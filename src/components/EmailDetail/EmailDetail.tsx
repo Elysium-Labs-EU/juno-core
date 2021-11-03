@@ -26,6 +26,7 @@ import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
+import { FindLabelById } from '../../utils/findLabel'
 // import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
@@ -132,6 +133,7 @@ const EmailDetail = () => {
                   isLoading={isLoading}
                   isReplying={isReplying}
                   isReplyingListener={isReplyingListener}
+                  labelIds={labelIds}
                 />)
             )}
           {overviewId &&
