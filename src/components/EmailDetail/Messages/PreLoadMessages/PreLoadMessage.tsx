@@ -1,13 +1,11 @@
 import React from 'react'
 import DraftMessage from '../DisplayVariants/DraftMessage'
-import ReadUnreadMessage from '../DisplayVariants/ReadUnreadMessage'
 import { EmailListThreadItem, EmailMessage } from '../../../../Store/emailListTypes'
 import * as draft from '../../../../constants/draftConstants'
-import * as local from '../../../../constants/emailDetailConstants'
+import PreLoadNormalMessage from './PreLoadNormalMessage'
 
 const detailDisplaySelector = ({
     message,
-    threadDetail,
     index,
 }: {
     message: EmailMessage
@@ -18,7 +16,7 @@ const detailDisplaySelector = ({
         return <DraftMessage message={message} messageIndex={index} />
     }
     if (!message.labelIds.includes(draft.LABEL)) {
-        return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} messageIndex={index} />
+        return <PreLoadNormalMessage message={message} />
     }
     return null
 }

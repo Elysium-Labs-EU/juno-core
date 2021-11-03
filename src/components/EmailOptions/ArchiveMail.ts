@@ -1,5 +1,5 @@
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
-import { convertArrayToString } from '../../utils'
+// import { convertArrayToString } from '../../utils'
 import { LocationObjectType } from '../types/globalTypes'
 
 const ArchiveMail = ({
@@ -16,7 +16,7 @@ const ArchiveMail = ({
   dispatch: any
 }) => {
   const request = { removeLabelIds: [...labelIds] }
-  const labelURL = labelIds && convertArrayToString(labelIds[0])
+  // const labelURL = labelIds && convertArrayToString(labelIds[0])
 
   const MarkEmailArchived = () => {
     dispatch(

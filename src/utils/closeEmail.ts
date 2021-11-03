@@ -1,5 +1,5 @@
 import { History } from 'history'
-import { FindLabelById } from '.'
+import { FindLabelById } from './findLabel'
 import Routes from '../constants/routes.json'
 import { LabelIdName } from '../Store/labelsTypes'
 

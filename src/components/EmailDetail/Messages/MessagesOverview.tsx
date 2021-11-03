@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -9,6 +9,8 @@ import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import { findPayloadHeadersData } from '../../../utils'
 import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
+import { useAppDispatch } from '../../../Store/hooks'
+import MarkEmailAsRead from '../../../utils/markEmailAsRead'
 
 const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
@@ -52,12 +54,15 @@ const MessagesOverview = React.memo(
     isLoading,
     isReplying,
     isReplyingListener,
+    labelIds,
   }: {
     threadDetail: EmailListThreadItem
     isLoading: boolean
     isReplying: boolean
     isReplyingListener: any
+    labelIds: string[]
   }) => {
+    const dispatch = useAppDispatch()
 
     const MappedMessages = () =>
       threadDetail &&
@@ -76,6 +81,17 @@ const MessagesOverview = React.memo(
             })}
           </ES.EmailWrapper>
         ))
+
+    useEffect(() => {
+      if (threadDetail && Object.keys(threadDetail).length > 0) {
+        if (threadDetail.messages && threadDetail.messages.length > 0) {
+          if (threadDetail.messages.filter((message) => message.labelIds.includes('UNREAD') === true).length > 0) {
+            const messageId = threadDetail.id
+            MarkEmailAsRead({ messageId, dispatch, labelIds })
+          }
+        }
+      }
+    }, [threadDetail])
 
     return (
       <>

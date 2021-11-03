@@ -58,8 +58,14 @@ const EmailDetailBody = ({
   }
 
   useEffect(() => {
+    let mounted = true
     if (messageId.length > 0) {
-      bodyDecoder(threadDetailBody)
+      if (mounted) {
+        bodyDecoder(threadDetailBody)
+      }
+    }
+    return () => {
+      mounted = false
     }
   }, [messageId])
 

@@ -62,7 +62,6 @@ const ReadMessage = ({
     }
   }, [isReplying])
 
-
   const From = (): string => {
     if (message) {
       if (message.payload.headers) {

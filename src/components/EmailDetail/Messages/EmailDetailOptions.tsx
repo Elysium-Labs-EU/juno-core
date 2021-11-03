@@ -9,7 +9,7 @@ import {
 import { useHistory, useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
-import { FindLabelByName } from '../../../utils'
+import { FindLabelByName } from '../../../utils/findLabel'
 import // selectEmailList,
   // selectIsFocused,
   // selectIsSorting,
