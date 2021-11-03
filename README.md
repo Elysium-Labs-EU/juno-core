@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2217e01a094448e398f59f5036419040)](https://www.codacy.com/gh/sgnilreutr/react-gmail-minimal/dashboard?utm_source=github.com&utm_medium=referral&utm_content=sgnilreutr/react-gmail-minimal&utm_campaign=Badge_Grade)
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/sgnilreutr/react-gmail-minimal)
-[![Build Status](https://travis-ci.com/sgnilreutr/react-gmail-minimal.svg?branch=main)](https://travis-ci.com/sgnilreutr/react-gmail-minimal)
+[![CodeQL](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml)
 
 ## Available Scripts
 
