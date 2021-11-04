@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { MessagePayload } from '../../../../Store/draftsTypes'
 import { EmailMessage } from '../../../../Store/emailListTypes'
 
-const DraftMessage = ({ message, messageIndex }: { message: EmailMessage, messageIndex: number }) => {
+const DraftMessage = ({ message }: { message: EmailMessage}) => {
   const dispatch = useAppDispatch()
   const history = useHistory()
   const id = useAppSelector(selectCurrentEmail)

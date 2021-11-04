@@ -111,46 +111,6 @@ body {
   cursor: default;
 }
 
-.signatureLabel {
-  position: absolute;
-  left: -120px;
-  top: 0;
-  width: 100px;
-  text-align: right;
-}
-
-.inputContainer {
-  transition: opacity 0.2s ease 0s;
-  opacity: 1;
-}
-.inputContainerDimmed {
-  opacity: 0.3;
-}
-.inputContainerSignature {
-  padding-top: 2px;
-}
-
-.textarea {
-  padding-top: 1px;
-  caret-color: rgb(31, 36, 238);
-  line-height: 1.8;
-  font-size: 13px;
-  color: rgb(20, 20, 21);
-}
-
-.textareaReset {
-  display: block;
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  outline: none;
-  resize: none;
-  background-color: transparent;
-}
-
 .select {
   opacity: 0;
   position: absolute;

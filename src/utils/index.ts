@@ -1,6 +1,5 @@
 import { MessagePayload } from '../Store/draftsTypes'
 import { EmailListObject, EmailListThreadItem } from '../Store/emailListTypes'
-import { LabelIdName } from '../Store/labelsTypes'
 import { MetaListObject } from '../Store/metaListTypes'
 
 export const convertArrayToString = (data: string | string[]) => {
@@ -11,7 +10,6 @@ export const convertArrayToString = (data: string | string[]) => {
   if (data && Array.isArray(data)) {
     const converted = data[0].toString().replace(',', '-')
     return converted
-    // return data.map((item) => item.toString().replace(',', '-'))
   }
   return ''
 }
