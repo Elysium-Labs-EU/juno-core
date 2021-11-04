@@ -1,5 +1,5 @@
 import React from 'react'
-import { CircularProgress } from '@material-ui/core'
+import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import EmailAttachment from '../Attachment/EmailAttachment'

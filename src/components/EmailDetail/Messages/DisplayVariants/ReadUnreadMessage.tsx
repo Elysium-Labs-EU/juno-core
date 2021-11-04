@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FiChevronDown } from 'react-icons/fi'
-import Popper, { PopperPlacementType } from '@material-ui/core/Popper'
+import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import EmailAvatar from '../../../EmailAvatar'
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'

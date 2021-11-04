@@ -1,5 +1,5 @@
 import React from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useSelector } from 'react-redux'
 import { Inner, Wrapper } from './BaseLoaderStyles'
 import { LOADING_TEXT } from '../../constants/globalConstants'

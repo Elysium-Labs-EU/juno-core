@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadEmails, refreshEmailFeed } from '../../Store/metaListSlice'
