@@ -20,6 +20,10 @@ Looking for a first issue to tackle?
 *   Issues tagged with `good first issue` are a good place to start.
 *   Or contact me via Discord: `Dhr_RT#5882`
 
+Contributing guidelines
+*   When encountering a bug, create an issue with the bug label in the active project. Be as specific as possible.
+*   To suggest a new feature, create an issue with the enhancement label in the active project.
+
 In the project directory, you can run:
 
 ### `yarn start`
@@ -34,6 +38,8 @@ You will also see any lint errors in the console.
 
 For the Roadmap of this project please check [this](https://github.com/Elysium-Labs-EU/juno-core/projects/1)
 The current focus is to stabilize the app and adding some core mail features, such as forwarding, cc/bcc options.
+
+⚠️ The current codebase doesn't support tests yet. Looking for suggestions and contributions.
 
 ## Learn More
 
