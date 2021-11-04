@@ -1,6 +1,5 @@
 import { History } from 'history'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
-import { convertArrayToString } from '../../utils'
 import { LocationObjectType } from '../types/globalTypes'
 
 interface ThrashMailProps {
@@ -13,7 +12,6 @@ interface ThrashMailProps {
 
 const ThrashMail = (props: ThrashMailProps) => {
   const { messageId, history, labelIds, location, dispatch } = props
-  const labelURL = labelIds && convertArrayToString(labelIds)
   const request = { delete: true }
 
   const MarkEmailThrashed = () => {

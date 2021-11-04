@@ -6,14 +6,12 @@ import PreLoadNormalMessage from './PreLoadNormalMessage'
 
 const detailDisplaySelector = ({
     message,
-    index,
 }: {
     message: EmailMessage
     threadDetail: EmailListThreadItem
-    index: number,
 }) => {
     if (message.labelIds.includes(draft.LABEL)) {
-        return <DraftMessage message={message} messageIndex={index} />
+        return <DraftMessage message={message} />
     }
     if (!message.labelIds.includes(draft.LABEL)) {
         return <PreLoadNormalMessage message={message} />
@@ -28,12 +26,11 @@ const PreLoadMessage = ({ threadDetail }: { threadDetail: EmailListThreadItem })
         threadDetail.messages
             .slice(0)
             .reverse()
-            .map((message, index) => (
+            .map((message) => (
                 <div key={message.id}>
                     {detailDisplaySelector({
                         message,
                         threadDetail,
-                        index,
                     })}
                 </div>
             ))

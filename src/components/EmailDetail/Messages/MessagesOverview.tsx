@@ -40,7 +40,7 @@ const detailDisplaySelector = ({
   index: number
 }) => {
   if (message.labelIds.includes(draft.LABEL)) {
-    return <DraftMessage message={message} messageIndex={index} />
+    return <DraftMessage message={message} />
   }
   if (!message.labelIds.includes(draft.LABEL)) {
     return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />

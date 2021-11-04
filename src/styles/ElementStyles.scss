@@ -36,8 +36,10 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out,
+   background-color 0.15s ease-in-out,
+   border-color 0.15s ease-in-out,
+   box-shadow 0.15s ease-in-out;
   cursor: pointer;
   font-family: 'Raleway Variable', sans-serif;
 }
@@ -71,6 +73,7 @@
 .button > .button-inner {
   display: flex;
   align-items: center;
+
   .icon {
     margin-right: 13px;
     line-height: 0;
@@ -85,8 +88,10 @@
   border-radius: 20px;
   border: none;
   background-color: #8e23d1;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   div {
     margin: 0.4rem 0.8rem;
     span {

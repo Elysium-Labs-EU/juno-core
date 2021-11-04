@@ -4,8 +4,8 @@ import isEmpty from 'lodash/isEmpty'
 import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
-import draftApi from '../data/draftApi'
-import CloseMail from '../utils/closeEmail'
+// import draftApi from '../data/draftApi'
+// import CloseMail from '../utils/closeEmail'
 import type { AppThunk, RootState } from './store'
 import { ComposePayload, ComposeState, SendComposeEmail } from './composeTypes'
 
@@ -66,8 +66,8 @@ export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
     try {
       const { composeEmail } = getState().compose
       const sender = getState().base.profile.emailAddress
-      const { labelIds } = getState().labels
-      const { storageLabels } = getState().labels
+      // const { labelIds } = getState().labels
+      // const { storageLabels } = getState().labels
       const completeEmail = { ...composeEmail, sender }
 
       if (Object.keys(completeEmail).length >= 4) {
