@@ -1,11 +1,17 @@
-# Juno * [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8cf13c07c4294ab9acad70f593c88259)](https://www.codacy.com/gh/Elysium-Labs-EU/juno-core/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Elysium-Labs-EU/juno-core&amp;utm_campaign=Badge_Grade) [![CodeQL](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml)
+# Juno - [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8cf13c07c4294ab9acad70f593c88259)](https://www.codacy.com/gh/Elysium-Labs-EU/juno-core/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Elysium-Labs-EU/juno-core&amp;utm_campaign=Badge_Grade) [![CodeQL](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml)
+
+Juno is a React based Gmail application.
+* A minimalistic design for less cognitive load, so you can use your brain for the needed work.
+* Go through your emails with minimal clicks.
+* Keep clear track of your to-do emails and new emails.
 
 ## Getting Started
-1.  Download the code
-2.  Run `yarn` to install all packages
-3.  Create a file called `.env` in the root of the project
-4.  Add `REACT_APP_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
-5.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+ 1. Download the code to your local machine
+ 2. Run `yarn` to install all packages
+ 3. Create a file called `.env` in the root of the project
+ 4. Add `REACT_APP_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
+ 5. Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend/blob/main/README.md)
+ 6. Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Contributing
 
