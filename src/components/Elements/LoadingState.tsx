@@ -1,5 +1,5 @@
 import React from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'

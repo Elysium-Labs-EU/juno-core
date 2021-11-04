@@ -4,7 +4,7 @@ import {
   Switch,
   Route,
 } from 'react-router-dom'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@mui/material/CircularProgress'
 import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
 import './App.scss'
 import './styles/ElementStyles.scss'

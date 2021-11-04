@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useHistory, useLocation } from 'react-router-dom'
-import { CircularProgress } from '@material-ui/core'
+import CircularProgress from '@mui/material/CircularProgress'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
 import { selectCurrentEmail, selectViewIndex } from '../../Store/emailDetailSlice'
