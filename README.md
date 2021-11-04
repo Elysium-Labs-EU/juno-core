@@ -14,7 +14,7 @@ Juno is an Open Source React based Gmail application.
  6.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Contributing
-Thank you for using Juno 😎, with the help of its contributers your experience with email will be as good as possible 🚀.
+Thank you for using Juno 😎 . With the help of its contributors, your experience with email will be as good as possible 🚀.
 
 Looking for a first issue to tackle?
 *  Issues tagged with `good first issue` are a good place to start.
