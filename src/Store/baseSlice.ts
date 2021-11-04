@@ -9,19 +9,26 @@ import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './labelsTypes'
 
-// interface Profile {
-//   n
-// }
-// ToDo: Set Profile interface
+interface Profile {
+  emailAddress: string
+  messagesTotal: number
+  threadsTotal: number
+  historyId: string
+}
 
 interface BaseState {
   baseLoaded: boolean
-  profile: any
+  profile: Profile
 }
 
 const initialState: BaseState = Object.freeze({
   baseLoaded: false,
-  profile: {},
+  profile: {
+    emailAddress: '',
+    messagesTotal: 0,
+    threadsTotal: 0,
+    historyId: '',
+  },
 })
 
 export const baseSlice = createSlice({
@@ -63,7 +70,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           )
         ) {
           const checkArray = BASE_ARRAY.map((item) =>
-            labelArray.map((label: any) => label.name).includes(item)
+            labelArray.map((label: GoogleLabel) => label.name).includes(item)
           )
           const createMissingLabels = () =>
             checkArray.map(
@@ -77,15 +84,12 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           ).filter((result) => result.length > 0)
 
           dispatch(setStorageLabels(prefetchedBoxes))
-
-          // What happends if the label is removed from gmail, but the emails still exist. The label
-          // is recreated. Does it still attempt to load the base?
         } else {
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
             labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
           )
           dispatch(setStorageLabels(prefetchedBoxes))
-          // dispatch(setBaseLoaded(true))
+          dispatch(setBaseLoaded(true))
         }
       } else {
         dispatch(setServiceUnavailable('Network Error. Please try again later'))
