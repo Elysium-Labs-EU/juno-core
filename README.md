@@ -21,8 +21,8 @@ Looking for a first issue to tackle?
 *   Or contact me via Discord: `Dhr_RT#5882`
 
 Contributing guidelines
-*   When encountering a bug, create an issue with the bug label in the active project. Be as specific as possible.
-*   To suggest a new feature, create an issue with the enhancement label in the active project.
+*   When encountering a bug, create a Github issue with the bug label in the active project. Be as specific as possible.
+*   To suggest a new feature, create a Github issue with the enhancement label in the active project.
 
 In the project directory, you can run:
 
