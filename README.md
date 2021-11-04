@@ -17,8 +17,8 @@ Juno is an Open Source React based Gmail application.
 Thank you for using Juno 😎 . With the help of its contributors, your experience with email will be as good as possible 🚀.
 
 Looking for a first issue to tackle?
-*  Issues tagged with `good first issue` are a good place to start.
-*  Or contact me via Discord: `Dhr_RT#5882`
+*   Issues tagged with `good first issue` are a good place to start.
+*   Or contact me via Discord: `Dhr_RT#5882`
 
 In the project directory, you can run:
 
