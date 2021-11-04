@@ -1,6 +1,6 @@
 # Juno - [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8cf13c07c4294ab9acad70f593c88259)](https://www.codacy.com/gh/Elysium-Labs-EU/juno-core/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Elysium-Labs-EU/juno-core&amp;utm_campaign=Badge_Grade) [![CodeQL](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml)
 
-Juno is a React based Gmail application.
+Juno is an Open Source React based Gmail application.
 *   A minimalistic design for less cognitive load, so you can use your brain for the needed work.
 *   Go through your emails with minimal clicks.
 *   Keep clear track of your to-do emails and new emails.
@@ -14,6 +14,11 @@ Juno is a React based Gmail application.
  6.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Contributing
+Thank you for using Juno 😎, with the help of its contributers your experience with email will be as good as possible 🚀.
+
+Looking for a first issue to tackle?
+*  Issues tagged with `good first issue` are a good place to start.
+*  Or contact me via Discord: `Dhr_RT#5882`
 
 In the project directory, you can run:
 
