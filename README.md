@@ -36,7 +36,7 @@ You will also see any lint errors in the console.
 
 ## Roadmap
 
-For the Roadmap of this project please check [this](https://github.com/Elysium-Labs-EU/juno-core/projects/1)
+For the Roadmap of this project please check [this](https://github.com/Elysium-Labs-EU/juno-core/projects/1).
 The current focus is to stabilize the app and adding some core mail features, such as forwarding, cc/bcc options.
 
 ⚠️ The current codebase doesn't support tests yet. Looking for suggestions and contributions.
