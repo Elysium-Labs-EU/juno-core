@@ -12,7 +12,7 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.177",
     "@types/material-ui": "^0.21.12",
     "@types/node": "^16.11.7",
