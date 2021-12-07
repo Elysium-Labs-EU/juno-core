@@ -67,39 +67,37 @@ const EmailList = () => {
     if (filteredOnLabel) {
       const { threads, nextPageToken } = filteredOnLabel
       return (
-        <>
-          <S.Scroll>
-            <GS.OuterContainer>
-              <S.ThreadList>
-                {threads.length > 0 && (
-                  <div className="base">
-                    {threads.map((email) => (
-                      <EmailListItem key={email.id} email={email} />
-                    ))}
-                  </div>
-                )}
-                {threads.length === 0 && <Emptystate />}
-              </S.ThreadList>
-              {nextPageToken ? (
-                <S.LoadMoreContainer>
-                  {!isLoading && (
-                    <CustomButtonText
-                      className="button button-small button-light"
-                      disabled={isLoading}
-                      onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
-                      label={local.LOAD_OLDER}
-                    />
-                  )}
-                  {isLoading && <CircularProgress />}
-                </S.LoadMoreContainer>
-              ) : (
-                <S.LoadMoreContainer>
-                  <small className="text_muted">{local.NO_MORE_RESULTS}</small>
-                </S.LoadMoreContainer>
+        <S.Scroll>
+          <GS.OuterContainer>
+            <S.ThreadList>
+              {threads.length > 0 && (
+                <div className="base">
+                  {threads.map((email) => (
+                    <EmailListItem key={email.id} email={email} />
+                  ))}
+                </div>
               )}
-            </GS.OuterContainer>
-          </S.Scroll>
-        </>
+              {threads.length === 0 && <Emptystate />}
+            </S.ThreadList>
+            {nextPageToken ? (
+              <S.LoadMoreContainer>
+                {!isLoading && (
+                  <CustomButtonText
+                    className="button button-small button-light"
+                    disabled={isLoading}
+                    onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
+                    label={local.LOAD_OLDER}
+                  />
+                )}
+                {isLoading && <CircularProgress />}
+              </S.LoadMoreContainer>
+            ) : (
+              <S.LoadMoreContainer>
+                <small className="text_muted">{local.NO_MORE_RESULTS}</small>
+              </S.LoadMoreContainer>
+            )}
+          </GS.OuterContainer>
+        </S.Scroll>
       )
     }
     return <Emptystate />

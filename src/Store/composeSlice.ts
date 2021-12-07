@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
 import isEmpty from 'lodash/isEmpty'
 import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
@@ -62,7 +63,7 @@ export const TrackComposeEmail =
 
 export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
   const { messageId } = props
-  return async (dispatch, getState, history) => {
+  return async (dispatch, getState) => {
     try {
       const { composeEmail } = getState().compose
       const sender = getState().base.profile.emailAddress
@@ -88,7 +89,7 @@ export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
         // } else if (messageId === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response && response.status === 200) {
-          history.push(`/`)
+          dispatch(push(`/`))
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
         } else {

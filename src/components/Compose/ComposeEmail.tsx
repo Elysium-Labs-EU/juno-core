@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import InputBase from '@mui/material/InputBase'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -44,9 +44,7 @@ const ComposeEmail = ({
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const { messageId } = useParams<{ messageId: string }>()
-  const history = useHistory()
 
-  // console.log(currentMessage)
 
   useEffect(() => {
     if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
@@ -142,7 +140,7 @@ const ComposeEmail = ({
     e.preventDefault()
     if (toValue.length > 0) {
       if (emailValidation(toValue)) {
-        dispatch(SendComposedEmail({ history, messageId }))
+        dispatch(SendComposedEmail({ messageId }))
       } else {
         setToError(true)
       }

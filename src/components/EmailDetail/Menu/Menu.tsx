@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { push } from 'redux-first-history'
+import { useLocation } from 'react-router-dom'
 import { MenuContainer } from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
 import { LocationObjectType } from '../../types/globalTypes'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 
 interface MenuItemType {
   name: string
@@ -12,14 +13,14 @@ interface MenuItemType {
 }
 
 const Menu = () => {
-  const currentEmail = useSelector(selectCurrentEmail)
+  const currentEmail = useAppSelector(selectCurrentEmail)
+  const dispatch = useAppDispatch()
   const [activeLink, setActiveLink] = useState('')
-  const history = useHistory()
   const location = useLocation<LocationObjectType>()
 
   const navigateTo = (item: MenuItemType) => {
     setActiveLink(item.name)
-    history.push(item.link)
+    dispatch(push(item.link))
   }
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
-import { History } from 'history'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -16,11 +15,9 @@ import { LocationObjectType } from '../types/globalTypes'
 
 const InlineThreadActions = ({
   id,
-  history,
   labelIds,
 }: {
   id: string
-  history: History
   labelIds: string[]
 }) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -35,7 +32,7 @@ const InlineThreadActions = ({
         <CustomIconLink
           className="button button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
-          onClick={() => ReplyOverview({ history, labelIds, id, dispatch })}
+          onClick={() => ReplyOverview({ labelIds, id, dispatch })}
           title="Reply"
         />
         {/* <CustomIconLink
@@ -54,7 +51,6 @@ const InlineThreadActions = ({
             <CustomIconLink
               onClick={() =>
                 SetToDoMail({
-                  history,
                   messageId,
                   labelIds,
                   dispatch,

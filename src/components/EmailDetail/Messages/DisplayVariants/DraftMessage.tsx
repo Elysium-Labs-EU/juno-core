@@ -1,5 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
 import EmailAvatar from '../../../EmailAvatar'
 import TimeStamp from '../../../TimeStamp'
 import { OpenDraftEmail } from '../../../../Store/draftsSlice'
@@ -10,9 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { MessagePayload } from '../../../../Store/draftsTypes'
 import { EmailMessage } from '../../../../Store/emailListTypes'
 
-const DraftMessage = ({ message }: { message: EmailMessage}) => {
+const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const dispatch = useAppDispatch()
-  const history = useHistory()
   const id = useAppSelector(selectCurrentEmail)
   const messageId = message && message.id
 
@@ -25,7 +23,7 @@ const DraftMessage = ({ message }: { message: EmailMessage}) => {
   const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   const handleClick = () => {
-    dispatch(OpenDraftEmail({ history, id, messageId }))
+    dispatch(OpenDraftEmail({ id, messageId }))
   }
 
   return (

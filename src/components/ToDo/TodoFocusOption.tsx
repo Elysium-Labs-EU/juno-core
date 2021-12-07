@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react'
-import { useHistory } from 'react-router-dom'
 import { CustomButtonText } from '../Elements/Buttons'
 import { convertArrayToString } from '../../utils'
 import { selectLabelIds } from '../../Store/labelsSlice'
@@ -14,7 +13,6 @@ const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
   const emailList = useAppSelector(selectEmailList)
-  const history = useHistory()
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
@@ -24,7 +22,7 @@ const TodoFocusOption = () => {
 
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
-    startSort({ history, labelURL, emailList, emailListIndex })
+    startSort({ dispatch, labelURL, emailList, emailListIndex })
     dispatch(setIsFocused(true))
   }
 

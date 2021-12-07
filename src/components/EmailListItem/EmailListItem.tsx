@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import { useHistory } from 'react-router-dom'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../EmailAvatar'
 import EmailHasAttachment from '../EmailHasAttachment'
@@ -17,7 +16,6 @@ import { EmailListThreadItem } from '../../Store/emailListTypes'
 const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
-  const history = useHistory()
   const dispatch = useAppDispatch()
 
   const emailLabels = () => {
@@ -71,7 +69,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         <div className="cellGradientLeft" />
         <div className="cellCheckbox" />
         <S.CellName
-          onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
+          onClick={() => openEmail({ labelIds, id, email, dispatch })}
           aria-hidden="true"
         >
           <S.Avatars>
@@ -89,7 +87,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
         <S.CellMessage
-          onClick={() => openEmail({ labelIds, history, id, email, dispatch })}
+          onClick={() => openEmail({ labelIds, id, email, dispatch })}
           aria-hidden="true"
         >
           <div className="subjectSnippet text_truncate">
@@ -113,7 +111,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         </S.CellDate>
         <div />
         <div className="cellGradientRight" />
-        <InlineThreadActions id={id} history={history} labelIds={labelIds} />
+        <InlineThreadActions id={id} labelIds={labelIds} />
       </S.ThreadRow>
     </S.ThreadBase>
   )

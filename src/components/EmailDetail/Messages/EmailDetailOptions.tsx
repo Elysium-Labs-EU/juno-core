@@ -6,7 +6,7 @@ import {
   // FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../../EmailMoreOptions'
 import { FindLabelByName } from '../../../utils/findLabel'
@@ -32,7 +32,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messa
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
-  const history = useHistory()
   const [showMenu, setShowMenu] = useState<Boolean>(false)
   const location = useLocation<LocationObjectType>()
 
@@ -68,7 +67,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messa
                   icon={<FiCheckCircle />}
                   onClick={() =>
                     SetToDoMail({
-                      history,
                       messageId,
                       labelIds,
                       dispatch,
@@ -95,7 +93,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messa
               onClick={() =>
                 ArchiveMail({
                   messageId,
-                  history,
                   labelIds,
                   location,
                   dispatch,

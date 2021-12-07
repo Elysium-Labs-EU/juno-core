@@ -1,16 +1,16 @@
-import { History } from 'history'
+import { push } from 'redux-first-history'
 import { FindLabelById } from './findLabel'
 import Routes from '../constants/routes.json'
 import { LabelIdName } from '../Store/labelsTypes'
 
 interface CloseMailProps {
-  history: History
   labelIds: string[]
   storageLabels: LabelIdName[]
+  dispatch: any
 }
 
 const CloseMail = (props: CloseMailProps) => {
-  const { history, labelIds, storageLabels } = props
+  const { dispatch, labelIds, storageLabels } = props
   FindLabelById({ storageLabels, labelIds })
 
   const labelMap: { [key: string]: string } = {
@@ -21,8 +21,8 @@ const CloseMail = (props: CloseMailProps) => {
     SENT: `${Routes.SENT}`,
   }
 
-  return history.push(
-    labelMap[FindLabelById({ storageLabels, labelIds })[0].name]
+  return dispatch(
+    push(labelMap[FindLabelById({ storageLabels, labelIds })[0].name])
   )
 }
 

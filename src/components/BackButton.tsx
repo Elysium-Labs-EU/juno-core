@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { go } from 'redux-first-history'
 import { CustomButtonText } from './Elements/Buttons'
 import * as global from '../constants/globalConstants'
 import { setIsFocused, setIsSorting } from '../Store/emailListSlice'
@@ -13,10 +13,9 @@ interface BackButtonType {
 const BackButton = (props: BackButtonType) => {
   const { isFocused, isSorting } = props
   const dispatch = useAppDispatch()
-  const history = useHistory()
 
   const navigateBack = () => {
-    history.go(-1)
+    dispatch(go(-1))
     isFocused && dispatch(setIsFocused(false))
     isSorting && dispatch(setIsSorting(false))
   }
