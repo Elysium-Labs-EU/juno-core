@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {
-  BrowserRouter as Router,
+  Router,
   Switch,
   Route,
 } from 'react-router-dom'
@@ -16,6 +16,7 @@ import * as GS from './styles/globalStyles'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
+import { history } from "./Store/store"
 
 const ToDo = React.lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = React.lazy(() => import('./components/EmailDetail/EmailDetail'))
@@ -44,7 +45,7 @@ const App = () => {
   }, [baseLoaded, storageLabels])
 
   return (
-    <Router>
+    <Router history={history}>
       {!baseLoaded && <BaseLoader />}
       {baseLoaded && (
         <GS.App>

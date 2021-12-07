@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
 import threadApi from '../data/threadApi'
 import {
   setIsLoading,
@@ -313,7 +314,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
     location,
   } = props
 
-  return async (dispatch, getState, history) => {
+  return async (dispatch, getState) => {
     try {
       const { emailList } = getState().email
 
@@ -362,7 +363,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
 
             if (nextID() !== null) {
               dispatch(setCurrentEmail(nextID()))
-              history.push(`/mail/${labelURL()}/${nextID()}/messages`)
+              dispatch(push(`/mail/${labelURL()}/${nextID()}/messages`))
             }
           }
         }

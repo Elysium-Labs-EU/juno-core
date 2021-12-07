@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { FiPaperclip } from 'react-icons/fi'
 import { EmailMessage } from '../Store/emailListTypes'
 
 const EmailHasAttachment = ({ messages }: { messages: EmailMessage | EmailMessage[] }) => {
-  const CheckAttachment = () => {
+  const CheckAttachment = memo(() => {
     if (
       messages &&
       Array.isArray(messages) &&
@@ -35,7 +35,7 @@ const EmailHasAttachment = ({ messages }: { messages: EmailMessage | EmailMessag
       }
     }
     return null
-  }
+  })
 
   return <CheckAttachment />
 }

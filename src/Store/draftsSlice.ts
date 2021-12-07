@@ -2,6 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import base64url from 'base64url'
 import isEmpty from 'lodash/isEmpty'
+import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
@@ -129,14 +130,12 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
   }
 }
 
-const pushDraftDetails = (
-  enhancedDraftDetails: EnhancedDraftDetails
-): AppThunk => {
+const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   const {
     draft,
     draft: { message },
-  } = enhancedDraftDetails
-  return (dispatch, getState, history) => {
+  } = props
+  return (dispatch) => {
     try {
       const loadEmail = {
         to: message.payload.headers.find((e: MessagePayload) => e.name === 'To')
@@ -171,9 +170,9 @@ const pushDraftDetails = (
         dispatch(listUpdateDraft(draftDetails))
         dispatch(setComposeEmail(loadEmail))
         dispatch(setCurrentEmail(draft.id))
-        history.push(`/compose/${draft.id}`)
+        dispatch(push(`/compose/${draft.id}`))
       } else {
-        history.push(`/compose/`)
+        dispatch(push(`/compose/`))
       }
     } catch (err) {
       console.error(err)
@@ -184,16 +183,16 @@ const pushDraftDetails = (
 
 const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   const { draftId } = draftDetails
-  return async (dispatch, getState, history) => {
+  return async (dispatch) => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
       console.log('response', response)
       if (response?.status && response.status === 200) {
         console.log('here y-ellow')
         const { draft } = response.data
-        const enhancedDraftDetails = { history, draft }
+        const enhancedDraftDetails = { draft }
         console.log('enhancedDraftDetails', enhancedDraftDetails)
-        dispatch(pushDraftDetails(enhancedDraftDetails))
+        dispatch(pushDraftDetails(draft))
       }
     } catch (err) {
       console.error(err)
@@ -204,7 +203,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
 
 export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
   const { messageId, id } = props
-  return async (dispatch, getState, history) => {
+  return async (dispatch, getState) => {
     try {
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {
@@ -220,7 +219,7 @@ export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
               (draft: any) => draft.message.id === messageId
             )
             if (!isEmpty(draftId)) {
-              dispatch(loadDraftDetails({ draftId, history }))
+              dispatch(loadDraftDetails({ draftId }))
             }
           } else {
             dispatch(setServiceUnavailable('Error setting up compose email.'))
@@ -235,9 +234,9 @@ export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
           ? draftList.filter((draft) => draft.message.id === messageId)
           : draftList.filter((draft) => draft.message.threadId === id)
 
-      if (selectedEmail.length > 0 && history) {
+      if (selectedEmail.length > 0) {
         const draftId = selectedEmail[0].id
-        dispatch(loadDraftDetails({ draftId, history }))
+        dispatch(loadDraftDetails({ draftId }))
       }
     } catch (err) {
       console.error(err)

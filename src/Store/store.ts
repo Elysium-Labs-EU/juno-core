@@ -1,4 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
+import { createReduxHistoryContext } from 'redux-first-history'
+import { createBrowserHistory } from 'history'
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import emailReducer from './emailListSlice'
@@ -7,9 +9,11 @@ import draftsReducer from './draftsSlice'
 import labelsReducer from './labelsSlice'
 import metaReducer from './metaListSlice'
 import utilsReducer from './utilsSlice'
-import history from '../utils/history'
 
-const store = configureStore({
+const { createReduxHistory, routerMiddleware, routerReducer } =
+  createReduxHistoryContext({ history: createBrowserHistory() })
+
+export const store = configureStore({
   reducer: {
     base: baseReducer,
     compose: composeReducer,
@@ -19,22 +23,18 @@ const store = configureStore({
     labels: labelsReducer,
     meta: metaReducer,
     utils: utilsReducer,
+    router: routerReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: {
-        extraArgument: history,
-      },
-    }),
+    getDefaultMiddleware().concat(routerMiddleware),
 })
 
+export const history = createReduxHistory(store)
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch | any
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,
-  typeof history,
+  any,
   Action<string>
 >
-
-export default store

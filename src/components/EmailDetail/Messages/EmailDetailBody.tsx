@@ -70,7 +70,7 @@ const EmailDetailBody = ({
   }, [messageId])
 
   return (
-    <>
+    <div>
       {!isEmpty(bodyState) &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
@@ -94,7 +94,7 @@ const EmailDetailBody = ({
             />
           )
         )}
-    </>
+    </div>
   )
 }
 

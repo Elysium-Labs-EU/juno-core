@@ -1,14 +1,10 @@
-import { History } from 'history'
-
 export interface OpenDraftEmailType {
-  history: History
   messageId: string
   id: string
 }
 
 export interface DraftDetails {
   draftId: string
-  history: History
 }
 
 export interface FullEmailType {
@@ -30,7 +26,6 @@ export interface EnhancedDraftDetails {
     id: string
     message: FullEmailType
   }
-  history: History
 }
 
 export interface MessagePayload {

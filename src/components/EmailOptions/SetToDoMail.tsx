@@ -1,4 +1,3 @@
-import { History } from 'history'
 import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { FindLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
@@ -7,7 +6,6 @@ import { LabelIdName } from '../../Store/labelsTypes'
 
 interface SetToDoMailProps {
   messageId: string
-  history: History
   labelIds: string[]
   dispatch: any
   location: LocationObjectType
@@ -15,7 +13,7 @@ interface SetToDoMailProps {
 }
 
 const SetToDoMail = (props: SetToDoMailProps) => {
-  const { history, messageId, labelIds, dispatch, location, storageLabels } = props
+  const { messageId, labelIds, dispatch, location, storageLabels } = props
 
   const ToDoAction = () => {
     const toDoLabel = FindLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
@@ -23,7 +21,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateMetaListLabel({ messageId, request, history, location, labelIds }))
+    dispatch(UpdateMetaListLabel({ messageId, request, location, labelIds }))
   }
 
   return ToDoAction()

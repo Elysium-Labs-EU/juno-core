@@ -5,7 +5,6 @@ export interface UpdateRequest {
 }
 
 export interface UpdateRequestParams {
-  history?: any
   location?: any
   messageId: string
   request: UpdateRequest

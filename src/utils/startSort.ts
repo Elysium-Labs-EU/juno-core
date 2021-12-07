@@ -1,18 +1,20 @@
-import { History } from 'history'
+import { push } from 'redux-first-history'
 
 interface Props {
-  history: History
+  dispatch: any
   labelURL: string
   emailList: any
   emailListIndex: number
 }
 
 const startSort = (props: Props) => {
-  const { history, labelURL, emailList, emailListIndex } = props
+  const { dispatch, labelURL, emailList, emailListIndex } = props
 
-  if (history && labelURL && emailList && emailListIndex > -1) {
-    return history.push(
-      `/mail/${labelURL}/${emailList[emailListIndex].threads[0].id}/messages`
+  if (dispatch && labelURL && emailList && emailListIndex > -1) {
+    return dispatch(
+      push(
+        `/mail/${labelURL}/${emailList[emailListIndex].threads[0].id}/messages`
+      )
     )
   }
   return null

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import * as S from './DetailNavigationStyles'
@@ -28,7 +28,6 @@ const DetailNavigation = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
   const [currLocal, setCurrLocal] = useState<string>('')
-  const history = useHistory()
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
 
@@ -54,7 +53,6 @@ const DetailNavigation = () => {
       labelIds
     ) {
       NavigateNextMail({
-        history,
         labelIds,
         emailListIndex,
         emailList,
@@ -121,7 +119,6 @@ const DetailNavigation = () => {
         className="button option-link"
         onClick={() =>
           NavigatePreviousMail({
-            history,
             labelIds,
             emailListIndex,
             emailList,
@@ -140,7 +137,7 @@ const DetailNavigation = () => {
       />
       <CustomIconLink
         className="button option-link"
-        onClick={() => CloseMail({ history, labelIds, storageLabels })}
+        onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
         icon={<FiX size={20} />}
       />
     </S.Wrapper>

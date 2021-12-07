@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { push } from 'redux-first-history'
+import { useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import './Navigation.scss'
@@ -9,6 +10,7 @@ import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import * as Routes from '../../../constants/routes.json'
 import { LocationObjectType } from '../../types/globalTypes'
+import { useAppDispatch } from '../../../Store/hooks'
 
 const SIZE = 16
 
@@ -18,7 +20,7 @@ const Navigation = () => {
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation<LocationObjectType>()
-  const history = useHistory()
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     if (location) {
@@ -35,7 +37,7 @@ const Navigation = () => {
   }, [location])
 
   const navigateTo = (destination: string) => {
-    history.push(destination)
+    dispatch(push(destination))
   }
 
   const handleSpecificMenu =

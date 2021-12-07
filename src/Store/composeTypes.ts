@@ -1,7 +1,4 @@
-import { History } from 'history'
-
 export interface SendComposeEmail {
-  history: History
   messageId: string
 }
 

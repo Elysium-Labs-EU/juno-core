@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { MdRefresh } from 'react-icons/md'
 import { CustomButtonText, CustomIconLink } from '../Elements/Buttons'
 import { convertArrayToString } from '../../utils'
@@ -19,7 +18,6 @@ const SortInbox = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const isFetching = useAppSelector(selectIsFetching)
   const dispatch = useAppDispatch()
-  const history = useHistory()
   const [disableRefresh, setDisableRefresh] = useState(false)
 
   const emailListIndex = useMemo(
@@ -29,7 +27,7 @@ const SortInbox = () => {
 
   const handleClick = () => {
     const labelURL = convertArrayToString(labelIds && labelIds)
-    startSort({ history, labelURL, emailList, emailListIndex })
+    startSort({ dispatch, labelURL, emailList, emailListIndex })
     dispatch(setIsSorting(true))
   }
 

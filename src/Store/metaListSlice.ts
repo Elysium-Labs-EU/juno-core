@@ -205,7 +205,6 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
     messageId,
     request,
     request: { addLabelIds, removeLabelIds },
-    history,
     location,
     labelIds,
   } = props
@@ -271,7 +270,6 @@ export const UpdateMetaListLabel = (props: UpdateRequestParams): AppThunk => {
           request,
           messageId,
           labelIds,
-          history,
           location,
         })
       )
