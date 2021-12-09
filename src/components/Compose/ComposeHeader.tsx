@@ -3,20 +3,20 @@ import BackButton from '../BackButton'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import '../MainHeader/Navigation/Navigation.scss'
 import * as local from '../../constants/composeEmailConstants'
-import * as S from './ComposeStyles'
+import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 
 const ComposeHeader = () => (
   <GS.OuterContainer>
-    <div className="nav-container">
-      <S.HeaderButton>
-        <BackButton />
-      </S.HeaderButton>
+    <S.Wrapper>
       <div className="header-center">
-        <h2 className="page_title">{local.COMPOSE}</h2>
+        <S.PageTitle>{local.COMPOSE}</S.PageTitle>
       </div>
-      <Navigation />
-    </div>
+      <S.BackButtonWithNavgationContainer>
+        <BackButton />
+        <Navigation />
+      </S.BackButtonWithNavgationContainer>
+    </S.Wrapper>
   </GS.OuterContainer>
 )
 

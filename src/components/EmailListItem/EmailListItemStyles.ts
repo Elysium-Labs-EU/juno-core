@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as theme from '../../constants/themeConstants'
 
 interface ThreadBaseProps {
   emailLabels: string[] | null
@@ -22,10 +23,10 @@ export const ThreadRow = styled.div`
   font-size: 13px;
   height: 56px;
   background-color: transparent;
-  transition: background-color ease-in 0.3s;
+  transition: background-color ease-in 0.125s;
 
   &:hover {
-    background-color: #f7f7f7;
+    background-color: ${theme.greyHover};
     z-index: 2;
     border-radius: 5px;
   }

@@ -9,7 +9,7 @@ const InboxHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
       <div className="header-center">
-        <h2 className="page_title">{local.DRAFT_HEADER}</h2>
+        <S.PageTitle>{local.DRAFT_HEADER}</S.PageTitle>
       </div>
       <Navigation />
     </S.NavContainer>

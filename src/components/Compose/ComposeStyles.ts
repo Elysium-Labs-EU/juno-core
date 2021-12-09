@@ -4,11 +4,6 @@ interface WrapperType {
   isReplying: boolean
 }
 
-export const HeaderButton = styled.div`
-  display: flex;
-  align-items: center;
-`
-
 export const Wrapper = styled.div<WrapperType>`
   max-width: 850px;
   width: 100%;

@@ -7,7 +7,7 @@ import DetailNavigation from './DetailNavigation'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import BackButton from '../BackButton'
-import * as S from './EmailDetailHeaderStyles'
+import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import { FindLabelById } from '../../utils/findLabel'
@@ -35,25 +35,25 @@ const Emaildetailheader = () => {
   return (
     <GS.OuterContainer>
       {!(isFocused || isSorting) ? (
-        <>
+        <S.Wrapper>
           <div className="header-center">
-            <h2 className="page_title">{detailHeader || local.INVALID_HEADER}</h2>
+            <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
           </div>
           <Navigation />
           <S.InnerMenu>
             <Menu />
             <DetailNavigation />
           </S.InnerMenu>
-        </>
+        </S.Wrapper>
       ) : (
-        <S.InnerMenu>
-          <S.ButtonWrapper>
+        <S.Wrapper>
+          <S.FocusSortHeaderWrapper>
+            {isFocused ? <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle> : <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>}
+          </S.FocusSortHeaderWrapper>
+          <div>
             <BackButton isFocused={isFocused} isSorting={isSorting} />
-          </S.ButtonWrapper>
-          <S.HeaderWrapper>
-            {isFocused ? <h1 className="page_title">{local.HEADER_FOCUS}</h1> : <h1 className="page_title">{local.HEADER_SORT}</h1>}
-          </S.HeaderWrapper>
-        </S.InnerMenu>
+          </div>
+        </S.Wrapper>
       )}
     </GS.OuterContainer>
   )
