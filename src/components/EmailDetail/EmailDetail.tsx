@@ -15,7 +15,7 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
-import { selectEmailList } from '../../Store/emailListSlice'
+import { selectEmailList, selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
@@ -36,6 +36,8 @@ const EmailDetail = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const isReplying = useAppSelector(selectIsReplying)
   const viewIndex = useAppSelector(selectViewIndex)
+  const isSorting = useAppSelector(selectIsSorting)
+  const isFocused = useAppSelector(selectIsFocused)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
@@ -120,7 +122,7 @@ const EmailDetail = () => {
   return (
     <>
       <EmailDetailHeader />
-      <S.Scroll>
+      <S.Scroll clientState={isSorting || isFocused}>
         <GS.OuterContainer isReplying={isReplying}>
           {overviewId &&
             overviewId.length &&
