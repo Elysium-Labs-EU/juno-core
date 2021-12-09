@@ -7,8 +7,8 @@ export const Wrapper = styled.div`
 `
 
 export const InnerMenu = styled.div`
-  margin-top: 2rem;
   display: flex;
+  flex-flow: row;
 `
 
 export const NavContainer = styled.div`
