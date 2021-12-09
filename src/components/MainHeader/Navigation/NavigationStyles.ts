@@ -5,8 +5,8 @@ export const NavControls = styled.nav`
   display: flex;
   max-width: max-content;
   /* position: absolute; */
-  right: 0;
-  top: 35%;
+  /* right: 0;
+  top: 35%; */
 `
 
 export const NavList = styled.ol`

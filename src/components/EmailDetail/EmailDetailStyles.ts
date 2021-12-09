@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as theme from '../../constants/themeConstants'
 
 interface EmailWrapperProps {
   labelIds?: string[]
@@ -15,7 +16,7 @@ export const HiddenMessagesFeed = styled.div`
 export const Scroll = styled.div`
   position: relative;
   width: 100%;
-  height: 85.5vh;
+  height: 82.5vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -34,6 +35,7 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
   margin-bottom: 0.5rem;
   padding: 1rem;
+  border: 1px solid ${theme.greyBorder};
 `
 
 export const EmailOptionsContainer = styled.div`

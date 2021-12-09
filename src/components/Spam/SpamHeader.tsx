@@ -2,6 +2,7 @@ import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import SpamClearOption from './SpamClearOption'
 import * as GS from '../../styles/globalStyles'
+import * as S from '../MainHeader/HeaderStyles'
 
 const SPAM_HEADER = 'Spam'
 
@@ -9,7 +10,7 @@ const SpamHeader = () => (
   <GS.OuterContainer>
     <div className="nav-container">
       <div className="header-center">
-        <h2 className="page_title">{SPAM_HEADER}</h2>
+        <S.PageTitle>{SPAM_HEADER}</S.PageTitle>
       </div>
       <Navigation />
     </div>
