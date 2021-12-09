@@ -11,6 +11,7 @@ import { setLoadedInbox } from './labelsSlice'
 import { convertArrayToString, FilteredEmailList } from '../utils'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
+import * as global from '../constants/globalConstants'
 import type { AppThunk, RootState } from './store'
 import {
   EmailListThreadItem,
@@ -229,7 +230,7 @@ export const emailListSlice = createSlice({
           const updatedEmailListObject: any =
             emailStateWithoutActiveEmailListObject.length > 0
               ? [
-                  emailStateWithoutActiveEmailListObject,
+                  ...emailStateWithoutActiveEmailListObject,
                   updateEmailListObject(),
                 ]
               : Array(updateEmailListObject())
@@ -320,7 +321,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
 
       const filteredCurrentEmailList = (): EmailListObject[] => {
         if (emailList && (removeLabelIds || request.delete)) {
-          if (removeLabelIds && !removeLabelIds.includes('UNREAD')) {
+          if (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) {
             return FilteredEmailList({ emailList, labelIds: removeLabelIds })
           }
           return FilteredEmailList({ emailList, labelIds })
@@ -341,11 +342,11 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           location.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(draft.LABEL)
         ) {
-          // The history push should only work when the action is Archive or ToDo via Detail actions.
+          // The push method should only work when the action is Archive or ToDo via Detail actions.
           if (
             request &&
             request.removeLabelIds &&
-            !request.removeLabelIds.includes('UNREAD')
+            !request.removeLabelIds.includes(global.UNREAD_LABEL)
           ) {
             const { viewIndex } = getState().emailDetail
 
@@ -388,7 +389,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             )
           }
           if (
-            (removeLabelIds && !removeLabelIds.includes('UNREAD')) ||
+            (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request.delete
           ) {
             const copyCurrentEmailList: EmailListObject[] =
@@ -402,7 +403,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           }
 
           // NOTE: The newly added threadObject doesn't have a historyId during this process. On refetch of list it will.
-          if (removeLabelIds && removeLabelIds.includes('UNREAD')) {
+          if (removeLabelIds && removeLabelIds.includes(global.UNREAD_LABEL)) {
             const copyCurrentEmailList: EmailListObject[] =
               filteredCurrentEmailList()
             const responseEmail = response.data
