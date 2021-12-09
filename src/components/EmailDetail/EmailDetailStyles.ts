@@ -9,14 +9,18 @@ interface EmailContainerProps {
   isReplying?: boolean
 }
 
+interface IScroll {
+  clientState: boolean
+}
+
 export const HiddenMessagesFeed = styled.div`
   display: none;
 `
 
-export const Scroll = styled.div`
+export const Scroll = styled.div<IScroll>`
   position: relative;
   width: 100%;
-  height: 82.5vh;
+  height: ${(props) => (props.clientState ? '90.5vh' : '82.5vh')};
   overflow-y: auto;
   display: flex;
   flex-direction: column;
