@@ -71,7 +71,7 @@
     "@types/dompurify": "^2.3.1",
     "@types/file-saver": "^2.0.4",
     "@types/jest": "^27.0.3",
-    "@types/lodash": "^4.14.177",
+    "@types/lodash": "^4.14.178",
     "@types/material-ui": "^0.21.12",
     "@types/node": "^16.11.12",
     "@types/qs": "^6.9.7",
