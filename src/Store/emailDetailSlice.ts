@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import { EmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
+import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
 import { baseBase64 } from '../utils/decodeBase64'
@@ -45,7 +45,7 @@ export const fetchAttachment = ({
   attachmentData,
   messageId,
 }: {
-  attachmentData: EmailAttachmentType
+  attachmentData: IEmailAttachmentType
   messageId: string
 }): AppThunk => {
   const {
@@ -55,20 +55,23 @@ export const fetchAttachment = ({
   } = attachmentData
   return async () => {
     try {
-      const fetchedAttachment = await messageApi().getAttachment({
-        messageId,
-        attachmentId,
-      })
-      if (fetchedAttachment) {
-        const decodedB64 = baseBase64(
-          fetchedAttachment.data.messageAttachment.data
-        )
-        const attachment = {
-          mimeType,
-          decodedB64,
-          filename,
+      if (attachmentId && messageId) {
+        const fetchedAttachment = await messageApi().getAttachment({
+          messageId,
+          attachmentId,
+        })
+        if (fetchedAttachment) {
+          const decodedB64 = baseBase64(
+            fetchedAttachment.data.messageAttachment.data
+          )
+          const attachment = {
+            mimeType,
+            decodedB64,
+            filename,
+          }
+          return attachment
         }
-        return attachment
+        return null
       }
       return null
     } catch (err) {
@@ -82,7 +85,7 @@ export const downloadAttachment = ({
   attachmentData,
   messageId,
 }: {
-  attachmentData: EmailAttachmentType
+  attachmentData: IEmailAttachmentType
   messageId: string
 }): AppThunk => {
   const {

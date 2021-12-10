@@ -64,6 +64,8 @@ const MessagesOverview = React.memo(
   }) => {
     const dispatch = useAppDispatch()
 
+    console.log('threadDetail', threadDetail)
+
     const MappedMessages = () =>
       threadDetail &&
       threadDetail.messages &&

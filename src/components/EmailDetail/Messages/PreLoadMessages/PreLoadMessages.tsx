@@ -36,10 +36,12 @@ const PreLoadMessages =
             return []
         }
 
-        if (preLoadMargins().length > 0) {
+        const preLoadMarginsStatic = preLoadMargins()
+
+        if (preLoadMarginsStatic.length > 0) {
             return (
                 <>
-                    {preLoadMargins().map((item) =>
+                    {preLoadMarginsStatic.map((item) =>
                         <PreLoadMessage
                             key={item.id}
                             threadDetail={item}

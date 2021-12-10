@@ -1,4 +1,4 @@
-export interface EmailAttachmentType {
+export interface IEmailAttachmentType {
   body: {
     size: number
     data: string
