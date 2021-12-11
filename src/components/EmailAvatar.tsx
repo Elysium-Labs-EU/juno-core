@@ -1,4 +1,5 @@
 import React from 'react'
+import getRandomColor from '../utils/getRandomColor'
 import * as S from './EmailAvatarStyles'
 
 const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
@@ -10,18 +11,14 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
       const finalIntials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
       return finalIntials
     }
-    return null
+    return '##'
   }
 
-  // let name = splittedURL[0]
-  // let initials = name.match(/\b\w/g) || []
-  // initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+  const staticInitials = intialCreator()
 
   return (
-    // <img className="avatar avatar-xs rounded-circle" src={item.image} alt={item.nameSurname} />
-    <S.EmailAvatarContainer>
-      {/* <>{finalIntials}</> */}
-      {intialCreator()}
+    <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
+      <span>{staticInitials}</span>
     </S.EmailAvatarContainer>
   )
 }

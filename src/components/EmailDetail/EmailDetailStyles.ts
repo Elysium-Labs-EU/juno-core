@@ -61,8 +61,9 @@ export const OpenMessageWrapper = styled.div`
 `
 
 export const ClosedMessageWrapper = styled.div`
-  justify-content: space-between;
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content auto 95px;
+  column-gap: 15px;
   align-items: center;
 `
 
