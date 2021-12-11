@@ -10791,10 +10791,10 @@ redent@^3.0.0:
     indent-string "^4.0.0"
     strip-indent "^3.0.0"
 
-redux-first-history@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/redux-first-history/-/redux-first-history-5.0.3.tgz#cd56a8ba7238b88c62b918cf70522f434a8753e2"
-  integrity sha512-8oguMN9aEH7kfpJx6DmxPKwhd44DN34mAM8lhxAkIeBu+pkBD3/pgVo2fO0kIRRJ1AGtpaWAYn806OPZQ8nOOQ==
+redux-first-history@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/redux-first-history/-/redux-first-history-5.0.6.tgz#1ea61fb7b9c8e096550e0b18edb34f8cadd7aa6d"
+  integrity sha512-SCvzp5gqCoGZ6zDq8E6mphXZ6mKHrMlgmFJc1KtWwWMR4fRvCpwFKyxMAbVStTRulk3sRkfdgyzbwmLimUYgvA==
 
 redux-thunk@^2.3.0:
   version "2.4.1"
