@@ -25,18 +25,36 @@ const ReadMessage = ({
   message: EmailMessage
   threadDetail: EmailListThreadItem
   FROM: string
-  isReplyingListener?: any
+  isReplyingListener?: Function
   messageIndex: number
 }) => {
-  const [open, setOpen] = useState<boolean>(
-    threadDetail && threadDetail.messages && threadDetail.messages.length > 1
-      ? message && message.labelIds?.includes(local.UNREAD)
-      : true
-  )
+  const [open, setOpen] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const isReplying = useAppSelector(selectIsReplying)
+
+  useEffect(() => {
+    if (threadDetail && threadDetail.messages) {
+      if (threadDetail.messages.length > 1) {
+        if (message && message.labelIds?.includes(local.UNREAD)) {
+          setOpen(true)
+          return
+        }
+        if (message && !Object.prototype.hasOwnProperty.call(message, 'labelIds') && messageIndex === 0) {
+          setOpen(true)
+          return
+        }
+        if (message && messageIndex === 0) {
+          setOpen(true)
+          return
+        }
+      }
+      if (threadDetail.messages.length === 1) {
+        setOpen(true)
+      }
+    }
+  }, [])
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
