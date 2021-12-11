@@ -7,11 +7,11 @@ import { CustomIconLink } from '../../Elements/Buttons'
 import { downloadAttachment } from '../../../Store/emailDetailSlice'
 import EmailAttachmentIcon from './EmailAttachmentIcon'
 import { useAppDispatch } from '../../../Store/hooks'
-import { EmailAttachmentType } from './EmailAttachmentTypes'
+import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
 const FILE = 'File - '
 
-const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: EmailAttachmentType, messageId: string }) => {
+const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmailAttachmentType, messageId: string }) => {
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -38,7 +38,7 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: Email
   )
 }
 
-const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: EmailAttachmentType, messageId: string }) => (attachmentData.filename.length > 0 && messageId.length > 0 ? <RenderAttachment attachmentData={attachmentData} messageId={messageId} /> : null)
+const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: IEmailAttachmentType, messageId: string }) => (attachmentData.filename.length > 0 && messageId.length > 0 ? <RenderAttachment attachmentData={attachmentData} messageId={messageId} /> : null)
 
 
 export default EmailAttachmentBubble

@@ -4,7 +4,7 @@ import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as fileOverview from '../../../constants/filesOverviewConstants'
 import * as S from './EmailAttachmentStyles'
 import { EmailMessage } from '../../../Store/emailListTypes'
-import { EmailAttachmentType } from './EmailAttachmentTypes'
+import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
 const EmailAttachment = ({ message, overview }: { message: EmailMessage; overview: boolean }) => {
   const CheckAttachment = () => {
@@ -13,9 +13,9 @@ const EmailAttachment = ({ message, overview }: { message: EmailMessage; overvie
       !isEmpty(message) &&
       Object.prototype.hasOwnProperty.call(message.payload, 'parts')
     ) {
-      const parts = message.payload.parts.filter((item: EmailAttachmentType) => item !== undefined)
-      if (parts && parts.some((object: EmailAttachmentType) => object?.filename.length > 0)) {
-        return parts.map((attachment: EmailAttachmentType) =>
+      const parts = message.payload.parts.filter((item: IEmailAttachmentType) => item !== undefined)
+      if (parts && parts.some((object: IEmailAttachmentType) => object?.filename.length > 0)) {
+        return parts.map((attachment: IEmailAttachmentType) =>
           attachment?.filename.length > 0 ? (
             <EmailAttachmentBubble
               attachmentData={attachment}

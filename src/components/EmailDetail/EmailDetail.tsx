@@ -119,13 +119,14 @@ const EmailDetail = () => {
     }
   }, [viewIndex, threadDetailList])
 
+
   return (
     <>
       <EmailDetailHeader />
       <S.Scroll clientState={isSorting || isFocused}>
         <GS.OuterContainer isReplying={isReplying}>
           {overviewId &&
-            overviewId.length &&
+            overviewId.length > 0 &&
             overviewId === local.MESSAGES &&
             threadDetailList.length > 0 && (
               viewIndex > -1 && (

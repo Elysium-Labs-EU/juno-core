@@ -5,12 +5,14 @@ import { fetchAttachment } from '../../../Store/emailDetailSlice'
 import { decodeBase64 } from '../../../utils/decodeBase64'
 import { useAppDispatch } from '../../../Store/hooks'
 import { EmailMessagePayload } from '../../../Store/emailListTypes'
+import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 
-interface InlineImageType {
+interface IInlineImageTypeResponse {
   mimeType: string
   decodeB64: string
   filename: string
 }
+
 
 const EmailDetailBody = ({
   threadDetailBody,
@@ -22,35 +24,48 @@ const EmailDetailBody = ({
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
-  const inlineImage = () => {
-    const attachmentData = threadDetailBody.parts[threadDetailBody.parts.length - 1]
-    dispatch(fetchAttachment({ attachmentData, messageId })).then((response: InlineImageType) => {
-      setBodyState((currState) => [...currState, response])
+  const inlineImage = (attachmentData: IEmailAttachmentType) => {
+    dispatch(fetchAttachment({ attachmentData, messageId })).then((response: IInlineImageTypeResponse) => {
+      if (response) {
+        setBodyState((currState) => [...currState, response])
+      }
     })
   }
 
   // This function recursively loops in the emailbody to find a body to decode.
   const bodyDecoder = (inputObject: any) => {
     Object.keys(inputObject).forEach((key) => {
-      if (inputObject.body.size > 0) {
-        if (key === 'body') {
-          const str = decodeBase64(`${ inputObject.body.data }`)
-          setBodyState((currState) => [...currState, str])
-        }
-      }
-      if (inputObject.body.size === 0) {
-        if (key === 'parts') {
-          if (inputObject.parts[inputObject.parts.length - 1].body.size === 0) {
-            bodyDecoder(inputObject.parts[inputObject.parts.length - 1])
-          }
-          if (inputObject.parts[inputObject.parts.length - 1].body.size > 0) {
-            if (inputObject.parts[inputObject.parts.length - 1].filename.length === 0) {
-              const str = decodeBase64(
-                `${ inputObject.parts[inputObject.parts.length - 1].body.data }`
-              )
-              setBodyState((currState) => [...currState, str])
+      if (key === 'body' || key === 'parts') {
+        if (inputObject.body.size > 0) {
+          if (key === 'body') {
+            if (Object.prototype.hasOwnProperty.call(inputObject.body, 'attachmentId')) {
+              inlineImage(inputObject)
             }
-            if (inputObject.parts[inputObject.parts.length - 1].filename.length > 0) inlineImage()
+            const str = decodeBase64(`${ inputObject.body.data }`)
+            if (str) setBodyState((prevState) => [...prevState, str])
+          }
+        }
+        if (inputObject.body.size === 0 || !Object.prototype.hasOwnProperty.call(inputObject, 'body')) {
+          if (key === 'parts') {
+            if (Object.prototype.hasOwnProperty.call(inputObject.parts[0], 'parts')) {
+              bodyDecoder(inputObject.parts[0])
+              if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
+                bodyDecoder(inputObject.parts[1])
+              }
+              return
+            }
+            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'parts')) {
+              bodyDecoder(inputObject.parts[1])
+              return
+            }
+            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
+              bodyDecoder(inputObject.parts[0])
+              bodyDecoder(inputObject.parts[1])
+              return
+            }
+            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')) {
+              bodyDecoder(inputObject.parts[1])
+            }
           }
         }
       }
@@ -71,7 +86,7 @@ const EmailDetailBody = ({
 
   return (
     <div>
-      {!isEmpty(bodyState) &&
+      {!isEmpty(bodyState) && bodyState[0] &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
             Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
