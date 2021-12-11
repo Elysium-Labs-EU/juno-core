@@ -80,7 +80,7 @@ const ReadMessage = ({
     }
   }, [isReplying])
 
-  const From = (): string => {
+  const FromFull = (): string => {
     if (message) {
       if (message.payload.headers) {
         return message.payload.headers.find((e: MessagePayload) => e.name === 'From')
@@ -91,6 +91,20 @@ const ReadMessage = ({
     }
     return '(No sender)'
   }
+  const staticFromFull = FromFull()
+
+  const FromPartial = (): string => {
+    if (message) {
+      if (message.payload.headers) {
+        return message.payload.headers.find((e: MessagePayload) => e.name === 'From')
+          ? message.payload.headers.find((e: MessagePayload) => e.name === 'From').value.split('<')[0].trim()
+          : message.payload.headers.find((e: MessagePayload) => e.name === 'from').value.split('<')[0].trim()
+      }
+      return '(No sender)'
+    }
+    return '(No sender)'
+  }
+  const staticFromPartial = FromPartial()
 
   const Subject = (): string => {
     if (message) {
@@ -114,6 +128,8 @@ const ReadMessage = ({
     return ''
   }
 
+  const staticSnippet = EmailSnippet()
+
   return (
     <>
       {open && (
@@ -121,7 +137,7 @@ const ReadMessage = ({
           <S.TopContainer>
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
-                <EmailAvatar avatarURL={From()} />
+                <EmailAvatar avatarURL={staticFromFull} />
                 <span title={Subject()} className="email_detail_title text_truncate">
                   {Subject()}
                 </span>
@@ -142,7 +158,7 @@ const ReadMessage = ({
             <span className="text_muted text_small" style={{ marginRight: '4px' }}>
               {FROM}
             </span>
-            <span className="text_small">{From()}</span>
+            <span className="text_small">{staticFromFull}</span>
           </S.FromContainer>
           <S.EmailBody>
             {message && message.payload && message.id && (
@@ -160,12 +176,12 @@ const ReadMessage = ({
         <div onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>
             <S.ClosedAvatarSender>
-              <EmailAvatar avatarURL={From()} />
+              <EmailAvatar avatarURL={staticFromFull} />
               <S.ClosedSender>
-                <span>{From()}</span>
+                <span className="text_normal text_bold">{staticFromPartial}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
-            <S.ClosedSnippet>{EmailSnippet()}</S.ClosedSnippet>
+            <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
             <S.TimeAttachmentContainer>
               <EmailHasAttachment messages={message} />
               <TimeStamp threadTimeStamp={message.internalDate} />
