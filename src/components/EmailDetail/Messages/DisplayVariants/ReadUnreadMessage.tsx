@@ -30,7 +30,7 @@ const ReadMessage = ({
 }) => {
   const [open, setOpen] = useState<boolean>(
     threadDetail && threadDetail.messages && threadDetail.messages.length > 1
-      ? message && message.labelIds.includes(local.UNREAD)
+      ? message && message.labelIds?.includes(local.UNREAD)
       : true
   )
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
