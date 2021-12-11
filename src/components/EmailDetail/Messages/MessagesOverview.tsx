@@ -39,13 +39,16 @@ const detailDisplaySelector = ({
   isReplyingListener: any
   index: number
 }) => {
-  if (message.labelIds.includes(draft.LABEL)) {
-    return <DraftMessage message={message} />
+  if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
+    if (message.labelIds.includes(draft.LABEL)) {
+      return <DraftMessage message={message} />
+    }
+    if (!message.labelIds.includes(draft.LABEL)) {
+      return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
+    }
+    return null
   }
-  if (!message.labelIds.includes(draft.LABEL)) {
-    return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
-  }
-  return null
+  return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
 }
 
 const MessagesOverview = React.memo(
@@ -63,8 +66,6 @@ const MessagesOverview = React.memo(
     labelIds: string[]
   }) => {
     const dispatch = useAppDispatch()
-
-    console.log('threadDetail', threadDetail)
 
     const MappedMessages = () =>
       threadDetail &&
@@ -87,7 +88,7 @@ const MessagesOverview = React.memo(
     useEffect(() => {
       if (threadDetail && Object.keys(threadDetail).length > 0) {
         if (threadDetail.messages && threadDetail.messages.length > 0) {
-          if (threadDetail.messages.filter((message) => message.labelIds.includes('UNREAD') === true).length > 0) {
+          if (threadDetail.messages.filter((message) => message.labelIds?.includes('UNREAD') === true).length > 0) {
             const messageId = threadDetail.id
             MarkEmailAsRead({ messageId, dispatch, labelIds })
           }

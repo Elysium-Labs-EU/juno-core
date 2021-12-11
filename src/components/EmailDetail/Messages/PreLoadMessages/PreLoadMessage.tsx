@@ -10,13 +10,16 @@ const detailDisplaySelector = ({
     message: EmailMessage
     threadDetail: EmailListThreadItem
 }) => {
-    if (message.labelIds.includes(draft.LABEL)) {
-        return <DraftMessage message={message} />
+    if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
+        if (message.labelIds.includes(draft.LABEL)) {
+            return <DraftMessage message={message} />
+        }
+        if (!message.labelIds.includes(draft.LABEL)) {
+            return <PreLoadNormalMessage message={message} />
+        }
+        return null
     }
-    if (!message.labelIds.includes(draft.LABEL)) {
-        return <PreLoadNormalMessage message={message} />
-    }
-    return null
+    return <PreLoadNormalMessage message={message} />
 }
 
 const PreLoadMessage = ({ threadDetail }: { threadDetail: EmailListThreadItem }) => {
