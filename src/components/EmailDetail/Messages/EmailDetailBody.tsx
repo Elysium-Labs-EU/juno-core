@@ -25,12 +25,8 @@ const EmailDetailBody = ({
   const dispatch = useAppDispatch()
 
   const inlineImage = (attachmentData: IEmailAttachmentType) => {
-    // console.log('attachmentData', attachmentData)
-    // const attachmentData = threadDetailBody.parts[threadDetailBody.parts.length - 1]
     dispatch(fetchAttachment({ attachmentData, messageId })).then((response: IInlineImageTypeResponse) => {
-      // console.log(response)
       if (response) {
-        // console.log('here', response)
         setBodyState((currState) => [...currState, response])
       }
     })
@@ -40,24 +36,18 @@ const EmailDetailBody = ({
   const bodyDecoder = (inputObject: any) => {
     Object.keys(inputObject).forEach((key) => {
       if (key === 'body' || key === 'parts') {
-        console.log(inputObject)
         if (inputObject.body.size > 0) {
           if (key === 'body') {
-            // console.log(key)
-            console.log(inputObject)
             if (Object.prototype.hasOwnProperty.call(inputObject.body, 'attachmentId')) {
               inlineImage(inputObject)
             }
             const str = decodeBase64(`${ inputObject.body.data }`)
-            // console.log(str)
             if (str) setBodyState((prevState) => [...prevState, str])
           }
         }
         if (inputObject.body.size === 0 || !Object.prototype.hasOwnProperty.call(inputObject, 'body')) {
           if (key === 'parts') {
-            console.log(inputObject.parts)
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[0], 'parts')) {
-              console.log('here1')
               bodyDecoder(inputObject.parts[0])
               if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
                 bodyDecoder(inputObject.parts[1])
@@ -65,16 +55,13 @@ const EmailDetailBody = ({
               return
             }
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'parts')) {
-              console.log('here2')
               bodyDecoder(inputObject.parts[1])
               return
             }
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
-              console.log('here3')
-              console.log(inputObject.parts[0])
-              console.log(inputObject.parts[1])
               bodyDecoder(inputObject.parts[0])
               bodyDecoder(inputObject.parts[1])
+              return
             }
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')) {
               bodyDecoder(inputObject.parts[1])
@@ -84,8 +71,6 @@ const EmailDetailBody = ({
       }
     })
   }
-
-  // useEffect(() => { console.log(messageId, bodyState) }, [bodyState])
 
   useEffect(() => {
     let mounted = true
@@ -101,7 +86,6 @@ const EmailDetailBody = ({
 
   return (
     <div>
-      {/* {console.log(bodyState)} */}
       {!isEmpty(bodyState) && bodyState[0] &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
