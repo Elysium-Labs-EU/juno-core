@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import { MenuContainer } from './MenuStyles'
+import * as S from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
 import { LocationObjectType } from '../../types/globalTypes'
@@ -33,7 +33,7 @@ const Menu = () => {
   }, [location, currentEmail])
 
   const mappedMenu = local.MENU_OPTIONS && (
-    <ul className="no-bullet-ul flex-flow-row">
+    <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
         <li
           key={`${ item.name + index }`}
@@ -45,10 +45,10 @@ const Menu = () => {
           {item.name}
         </li>
       ))}
-    </ul>
+    </S.ItemsContainer>
   )
 
-  return <MenuContainer>{mappedMenu}</MenuContainer>
+  return <S.MenuContainer>{mappedMenu}</S.MenuContainer>
 }
 
 export default Menu

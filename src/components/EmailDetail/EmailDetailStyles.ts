@@ -20,7 +20,7 @@ export const HiddenMessagesFeed = styled.div`
 export const Scroll = styled.div<IScroll>`
   position: relative;
   width: 100%;
-  height: ${(props) => (props.clientState ? '90.5vh' : '85vh')};
+  height: ${(props) => (props.clientState ? '90.5vh' : '88.3vh')};
   overflow-y: auto;
   display: flex;
   flex-direction: column;
