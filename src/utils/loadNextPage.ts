@@ -1,4 +1,4 @@
-import { loadEmails } from '../Store/metaListSlice'
+import { loadEmails } from '../Store/emailListSlice'
 import * as local from '../constants/emailListConstants'
 
 const loadNextPage = ({

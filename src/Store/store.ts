@@ -7,7 +7,6 @@ import emailReducer from './emailListSlice'
 import emailDetailReducer from './emailDetailSlice'
 import draftsReducer from './draftsSlice'
 import labelsReducer from './labelsSlice'
-import metaReducer from './metaListSlice'
 import utilsReducer from './utilsSlice'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
@@ -21,7 +20,6 @@ export const store = configureStore({
     emailDetail: emailDetailReducer,
     drafts: draftsReducer,
     labels: labelsReducer,
-    meta: metaReducer,
     utils: utilsReducer,
     router: routerReducer,
   },

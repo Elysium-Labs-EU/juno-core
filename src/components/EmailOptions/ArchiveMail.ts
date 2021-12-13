@@ -1,4 +1,4 @@
-import { UpdateMetaListLabel } from '../../Store/metaListSlice'
+import { UpdateEmailListLabel } from '../../Store/emailListSlice'
 import { LocationObjectType } from '../types/globalTypes'
 
 const ArchiveMail = ({
@@ -16,7 +16,7 @@ const ArchiveMail = ({
 
   const MarkEmailArchived = () => {
     dispatch(
-      UpdateMetaListLabel({
+      UpdateEmailListLabel({
         messageId,
         request,
         location,

@@ -1,6 +1,5 @@
 import { MessagePayload } from '../Store/draftsTypes'
 import { EmailListObject, EmailListThreadItem } from '../Store/emailListTypes'
-import { MetaListObject } from '../Store/metaListTypes'
 
 export const convertArrayToString = (data: string | string[]) => {
   if (data && typeof data === 'string') {
@@ -12,21 +11,6 @@ export const convertArrayToString = (data: string | string[]) => {
     return converted
   }
   return ''
-}
-
-interface FilteredMetaListProps {
-  metaList: MetaListObject[]
-  labelIds: string[]
-}
-
-export const FilteredMetaList = (props: FilteredMetaListProps) => {
-  const { metaList, labelIds } = props
-  if (metaList && metaList.length > 0 && labelIds && labelIds.length > 0) {
-    return metaList.filter((threadList) =>
-      threadList.labels.includes(labelIds[0])
-    )
-  }
-  return []
 }
 
 interface FilteredEmailListProps {

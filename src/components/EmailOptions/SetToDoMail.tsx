@@ -1,8 +1,8 @@
-import { UpdateMetaListLabel } from '../../Store/metaListSlice'
 import { FindLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
 import { LocationObjectType } from '../types/globalTypes'
 import { LabelIdName } from '../../Store/labelsTypes'
+import { UpdateEmailListLabel } from '../../Store/emailListSlice'
 
 interface SetToDoMailProps {
   messageId: string
@@ -21,7 +21,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateMetaListLabel({ messageId, request, location, labelIds }))
+    dispatch(UpdateEmailListLabel({ messageId, request, location, labelIds }))
   }
 
   return ToDoAction()

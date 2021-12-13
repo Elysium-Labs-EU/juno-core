@@ -38,4 +38,5 @@ export interface EmailListState {
   emailList: EmailListObject[]
   isFocused: boolean
   isSorting: boolean
+  isFetching: boolean
 }
