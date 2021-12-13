@@ -21,11 +21,15 @@ import {
 import { UpdateRequestParams } from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import { setCurrentEmail } from './emailDetailSlice'
+import { LoadEmailObject, MetaListThreadItem } from './metaListTypes'
+import userApi from '../data/userApi'
+import { setProfile } from './baseSlice'
 
 const initialState: EmailListState = Object.freeze({
   emailList: [],
   isFocused: false,
   isSorting: false,
+  isFetching: false,
 })
 
 // TODO: Ensure no double emails
@@ -47,6 +51,9 @@ export const emailListSlice = createSlice({
     },
     setIsSorting: (state, action) => {
       state.isSorting = action.payload
+    },
+    setIsFetching: (state, action) => {
+      state.isFetching = action.payload
     },
     listAddEmailList: (state, action) => {
       // Find emailList sub-array index
@@ -247,6 +254,7 @@ export const emailListSlice = createSlice({
 export const {
   setIsFocused,
   setIsSorting,
+  setIsFetching,
   listAddEmailList,
   listAddItemDetail,
   listRemoveItemDetail,
@@ -303,6 +311,53 @@ export const loadEmailDetails =
     } catch (err) {
       console.log(err)
       dispatch(setServiceUnavailable('Error hydrating emails.'))
+    }
+  }
+
+export const loadEmails =
+  (params: LoadEmailObject): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const { labelIds, silentLoading, activeMetaObjArray } = params
+      if (!silentLoading && !getState().utils.isLoading) {
+        dispatch(setIsLoading(true))
+      }
+      if (silentLoading && !getState().utils.isSilentLoading) {
+        dispatch(setIsSilentLoading(true))
+      }
+      const metaList = await threadApi().getThreads(params)
+      if (metaList) {
+        if (metaList.message.resultSizeEstimate > 0) {
+          const { threads, nextPageToken } = metaList.message
+
+          // If there is a specific email array being sent as parameter, append that to the list of threads.
+          const labeledThreads = {
+            labels: labelIds,
+            threads: activeMetaObjArray
+              ? threads.concat(activeMetaObjArray)
+              : threads,
+            nextPageToken: nextPageToken ?? null,
+          }
+          // dispatch(listAddMeta(labeledThreads))
+          dispatch(loadEmailDetails(labeledThreads))
+        } else {
+          dispatch(setLoadedInbox(labelIds))
+          dispatch(setIsLoading(false))
+          getState().utils.isSilentLoading &&
+            dispatch(setIsSilentLoading(false))
+        }
+      } else {
+        dispatch(setServiceUnavailable('No feed found'))
+        dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
+      }
+    } catch (err) {
+      console.log(err)
+      dispatch(setIsLoading(false))
+      getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
+      dispatch(
+        setServiceUnavailable('Something went wrong whilst loading Meta data.')
+      )
     }
   }
 
@@ -423,8 +478,42 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
   }
 }
 
+// Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the meta list for inbox only first.
+export const refreshEmailFeed =
+  (params: LoadEmailObject): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      dispatch(setIsFetching(true))
+      const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+      const checkFeed = await threadApi().getThreads(params)
+      const newEmailsIdx = checkFeed.message.threads.findIndex(
+        (thread: MetaListThreadItem) =>
+          parseInt(thread.historyId, 10) < savedHistoryId
+      )
+      if (newEmailsIdx > -1) {
+        const newSlice = checkFeed.message.threads.slice(0, newEmailsIdx)
+        if (newSlice.length > 0) {
+          const user = await userApi().fetchUser()
+          dispatch(setProfile(user?.data.data))
+          const labeledThreads = {
+            labels: params.labelIds,
+            threads: newSlice,
+            nextPageToken: checkFeed.message.nextPageToken ?? null,
+          }
+          dispatch(loadEmailDetails(labeledThreads))
+        }
+      }
+    } catch (err) {
+      console.log(err)
+      dispatch(setServiceUnavailable('Cannot refresh feed'))
+    } finally {
+      dispatch(setIsFetching(false))
+    }
+  }
+
 export const selectIsFocused = (state: RootState) => state.email.isFocused
 export const selectIsSorting = (state: RootState) => state.email.isSorting
+export const selectIsFetching = (state: RootState) => state.email.isFetching
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectNextPageToken = (state: any) =>
   state.email.emailList.nextPageToken
