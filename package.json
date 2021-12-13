@@ -7,7 +7,7 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@reduxjs/toolkit": "^1.6.2",
     "@sentry/react": "^6.16.1",
-    "@sentry/tracing": "^6.16.0",
+    "@sentry/tracing": "^6.16.1",
     "axios": "^0.24.0",
     "base64url": "^3.0.1",
     "bootstrap": "^4.5.3",
