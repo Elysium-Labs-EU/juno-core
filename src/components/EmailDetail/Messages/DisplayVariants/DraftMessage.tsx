@@ -1,6 +1,6 @@
 import React from 'react'
-import EmailAvatar from '../../../EmailAvatar'
-import TimeStamp from '../../../TimeStamp'
+import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
+import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import { OpenDraftEmail } from '../../../../Store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
@@ -8,19 +8,16 @@ import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { MessagePayload } from '../../../../Store/draftsTypes'
 import { EmailMessage } from '../../../../Store/emailListTypes'
+import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 
 const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const dispatch = useAppDispatch()
   const id = useAppSelector(selectCurrentEmail)
   const messageId = message && message.id
 
-  const AvatarURL =
-    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
-
-  const From =
-    message && message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
-
   const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+
+  const staticSenderFull = SenderNameFull(message)
 
   const handleClick = () => {
     dispatch(OpenDraftEmail({ id, messageId }))
@@ -30,9 +27,9 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
     <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
       <S.TopContainer>
         <S.ClosedAvatarSender>
-          <EmailAvatar avatarURL={AvatarURL} />
+          <EmailAvatar avatarURL={staticSenderFull} />
           <S.ClosedSender>
-            <span style={{ fontStyle: 'italic' }}>{From}</span>
+            <span style={{ fontStyle: 'italic' }}>{staticSenderFull}</span>
           </S.ClosedSender>
         </S.ClosedAvatarSender>
       </S.TopContainer>

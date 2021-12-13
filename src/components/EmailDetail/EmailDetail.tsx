@@ -26,7 +26,6 @@ import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
-// import InformationOverview from './Information/InformationOverview'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -75,7 +74,6 @@ const EmailDetail = () => {
     }
   }
 
-
   // Need to update the threadDetailList whenever an email is archived or removed.
   useEffect(() => {
     if (threadDetailList.length > 0 && emailList) {
@@ -97,7 +95,7 @@ const EmailDetail = () => {
       emailList.length > 0 && fetchEmailDetails()
     }
   }, [labelIds, emailList])
-  // DetailNavigation will refetch metaList + emailList if empty.
+  // DetailNavigation will refetch emailList if empty.
 
   useEffect(() => {
     if (messageId !== undefined && currentEmail !== messageId) {
@@ -152,12 +150,6 @@ const EmailDetail = () => {
           {overviewId === local.FILES && threadDetailList.length > 0 && (
             <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
           )}
-          {/* {overviewId === local.INFORMATION && (
-        <InformationOverview
-          threadDetail={threadDetail}
-          isLoading={isLoading}
-        />
-      )} */}
         </GS.OuterContainer>
       </S.Scroll>
     </>

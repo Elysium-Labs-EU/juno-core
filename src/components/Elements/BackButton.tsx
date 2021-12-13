@@ -1,9 +1,9 @@
 import React from 'react'
 import { go } from 'redux-first-history'
-import { CustomButtonText } from './Elements/Buttons'
-import * as global from '../constants/globalConstants'
-import { setIsFocused, setIsSorting } from '../Store/emailListSlice'
-import { useAppDispatch } from '../Store/hooks'
+import { CustomButtonText } from './Buttons'
+import * as global from '../../constants/globalConstants'
+import { setIsFocused, setIsSorting } from '../../Store/emailListSlice'
+import { useAppDispatch } from '../../Store/hooks'
 
 interface BackButtonType {
   isFocused?: boolean

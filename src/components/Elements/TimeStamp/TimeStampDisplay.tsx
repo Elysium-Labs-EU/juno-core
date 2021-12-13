@@ -5,7 +5,7 @@ type TimeStampType = {
   threadTimeStamp: string
 }
 
-const TimeStamp = ({ threadTimeStamp }: TimeStampType) => {
+const TimeStampDisplay = ({ threadTimeStamp }: TimeStampType) => {
   const unixTimestamp = parseInt(threadTimeStamp.toString(), 10)
   const currentTimestamp = Date.now()
 
@@ -16,4 +16,4 @@ const TimeStamp = ({ threadTimeStamp }: TimeStampType) => {
   return <span className="date">{isSameDayCheck}</span>
 }
 
-export default TimeStamp
+export default TimeStampDisplay

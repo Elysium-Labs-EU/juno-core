@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { FiChevronDown } from 'react-icons/fi'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
-import EmailAvatar from '../../../EmailAvatar'
+import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
-import TimeStamp from '../../../TimeStamp'
+import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import * as local from '../../../../constants/unreadConstants'
 import * as S from '../../EmailDetailStyles'
-import EmailHasAttachment from '../../../EmailHasAttachment'
+import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
 import { MessagePayload } from '../../../../Store/draftsTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import { CustomIconLink } from '../../../Elements/Buttons'
 import { useAppSelector } from '../../../../Store/hooks'
 import { selectIsReplying } from '../../../../Store/emailDetailSlice'
+import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
+import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
+import EmailSubject from '../../../Elements/EmailSubject'
+import EmailSnippet from '../../../Elements/EmailSnippet'
 
 const ReadMessage = ({
   message,
@@ -80,55 +84,11 @@ const ReadMessage = ({
     }
   }, [isReplying])
 
-  const FromFull = (): string => {
-    if (message) {
-      if (message.payload.headers) {
-        return message.payload.headers.find((e: MessagePayload) => e.name === 'From')
-          ? message.payload.headers.find((e: MessagePayload) => e.name === 'From').value
-          : message.payload.headers.find((e: MessagePayload) => e.name === 'from').value
-      }
-      return '(No sender)'
-    }
-    return '(No sender)'
-  }
-  const staticFromFull = FromFull()
 
-  const FromPartial = (): string => {
-    if (message) {
-      if (message.payload.headers) {
-        return message.payload.headers.find((e: MessagePayload) => e.name === 'From')
-          ? message.payload.headers.find((e: MessagePayload) => e.name === 'From').value.split('<')[0].trim()
-          : message.payload.headers.find((e: MessagePayload) => e.name === 'from').value.split('<')[0].trim()
-      }
-      return '(No sender)'
-    }
-    return '(No sender)'
-  }
-  const staticFromPartial = FromPartial()
-
-  const Subject = (): string => {
-    if (message) {
-      if (message.payload.headers) {
-        return message.payload.headers.find((e: MessagePayload) => e.name === 'Subject')
-          ? message.payload.headers.find((e: MessagePayload) => e.name === 'Subject').value
-          : message.payload.headers.find((e: MessagePayload) => e.name === 'subject').value
-      }
-      return '(No subject)'
-    }
-    return '(No subject)'
-  }
-
-  const EmailSnippet = (): string => {
-    if (message) {
-      if (message.snippet) {
-        return `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
-      }
-      return ''
-    }
-    return ''
-  }
-
-  const staticSnippet = EmailSnippet()
+  const staticSenderNameFull = SenderNameFull(message)
+  const staticEmailSubject = EmailSubject(message)
+  const staticSnippet = EmailSnippet(message)
+  const staticSenderPartial = SenderNamePartial(message)
 
   return (
     <>
@@ -137,9 +97,9 @@ const ReadMessage = ({
           <S.TopContainer>
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
-                <EmailAvatar avatarURL={staticFromFull} />
-                <span title={Subject()} className="email_detail_title text_truncate">
-                  {Subject()}
+                <EmailAvatar avatarURL={staticSenderNameFull} />
+                <span title={staticEmailSubject} className="email_detail_title text_truncate">
+                  {staticEmailSubject}
                 </span>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
@@ -158,7 +118,7 @@ const ReadMessage = ({
             <span className="text_muted text_small" style={{ marginRight: '4px' }}>
               {FROM}
             </span>
-            <span className="text_small">{staticFromFull}</span>
+            <span className="text_small">{staticSenderNameFull}</span>
           </S.FromContainer>
           <S.EmailBody>
             {message && message.payload && message.id && (
@@ -176,9 +136,9 @@ const ReadMessage = ({
         <div onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>
             <S.ClosedAvatarSender>
-              <EmailAvatar avatarURL={staticFromFull} />
+              <EmailAvatar avatarURL={staticSenderNameFull} />
               <S.ClosedSender>
-                <span className="text_normal text_bold">{staticFromPartial}</span>
+                <span className="text_normal text_bold" title={staticSenderPartial[1]}>{staticSenderPartial[0]}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>

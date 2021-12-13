@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
-import EmailMoreOptions from '../../EmailMoreOptions'
+import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { FindLabelByName } from '../../../utils/findLabel'
 import // selectEmailList,
   // selectIsFocused,
