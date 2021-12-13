@@ -6,7 +6,6 @@ import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
 import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
-import { MessagePayload } from '../../../../Store/draftsTypes'
 import { EmailMessage } from '../../../../Store/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 
