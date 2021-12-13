@@ -1,7 +1,3 @@
-export interface SendComposeEmail {
-  messageId: string
-}
-
 export interface ComposePayload {
   id?: string
   value?: string

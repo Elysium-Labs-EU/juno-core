@@ -11,13 +11,13 @@ import * as global from '../../constants/globalConstants'
 import * as S from './ComposeStyles'
 import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
-import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
+import { CreateDraft, resetDraftDetails, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
 interface ComposeEmailProps {
   isReplying: boolean
-  isReplyingListener: any
+  isReplyingListener: Function
   to: string
   subject: string
   threadId: string
@@ -30,7 +30,6 @@ const ComposeEmail = ({
   subject,
   threadId,
 }: ComposeEmailProps) => {
-  // console.log('threadId', threadId)
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
@@ -140,7 +139,8 @@ const ComposeEmail = ({
     e.preventDefault()
     if (toValue.length > 0) {
       if (emailValidation(toValue)) {
-        dispatch(SendComposedEmail({ messageId }))
+        dispatch(SendComposedEmail())
+        dispatch(resetDraftDetails())
       } else {
         setToError(true)
       }
@@ -149,89 +149,87 @@ const ComposeEmail = ({
 
   return (
     <S.Wrapper isReplying={isReplying}>
-      <>
-        <S.UpdateContainer>
-          {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
-        </S.UpdateContainer>
-        <S.ComposerContainer className="composer composerIsVisible">
-          <div className="base">
-            <form onSubmit={onSubmit} autoComplete="off">
-              <div style={{ marginBottom: `7px` }}>
-                <div className="base">
-                  <S.Row>
-                    <S.Label>
-                      <label htmlFor="to" className="label-base">
-                        {local.TO_LABEL}
-                      </label>
-                    </S.Label>
-                    <FormControl error={toError} fullWidth>
-                      <InputBase
-                        id="to"
-                        // label={local.TO_LABEL}
-                        value={toValue ?? []}
-                        onChange={handleChange}
-                        required
-                        fullWidth
-                        autoFocus={!isReplying}
-                      />
-                      {toError && (
-                        <FormHelperText id="component-helper-text">
-                          {local.EMAIL_WARNING}
-                        </FormHelperText>
-                      )}
-                    </FormControl>
-                  </S.Row>
-                  <S.Row>
-                    <S.Label>
-                      <label htmlFor="subject" className="label-base">
-                        {local.SUBJECT_LABEL}
-                      </label>
-                    </S.Label>
+      <S.UpdateContainer>
+        {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
+      </S.UpdateContainer>
+      <S.ComposerContainer className="composer composerIsVisible">
+        <div className="base">
+          <form onSubmit={onSubmit} autoComplete="off">
+            <div style={{ marginBottom: `7px` }}>
+              <div className="base">
+                <S.Row>
+                  <S.Label>
+                    <label htmlFor="to" className="label-base">
+                      {local.TO_LABEL}
+                    </label>
+                  </S.Label>
+                  <FormControl error={toError} fullWidth>
                     <InputBase
-                      id="subject"
-                      // label={local.SUBJECT_LABEL}
-                      value={subjectValue ?? ''}
+                      id="to"
+                      // label={local.TO_LABEL}
+                      value={toValue ?? []}
                       onChange={handleChange}
+                      required
                       fullWidth
+                      autoFocus={!isReplying}
                     />
-                  </S.Row>
-                  <S.Row>
-                    <S.Label>
-                      <label htmlFor="body" className="label-base">
-                        {local.BODY_LABEL}
-                      </label>
-                    </S.Label>
-                    <InputBase
-                      id="body"
-                      // label={local.BODY_LABEL}
-                      multiline
-                      value={bodyValue ?? ''}
-                      onChange={handleChange}
-                      minRows={12}
-                      maxRows={25}
-                      fullWidth
-                      autoFocus={isReplying}
-                    />
-                  </S.Row>
-                </div>
+                    {toError && (
+                      <FormHelperText id="component-helper-text">
+                        {local.EMAIL_WARNING}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                </S.Row>
+                <S.Row>
+                  <S.Label>
+                    <label htmlFor="subject" className="label-base">
+                      {local.SUBJECT_LABEL}
+                    </label>
+                  </S.Label>
+                  <InputBase
+                    id="subject"
+                    // label={local.SUBJECT_LABEL}
+                    value={subjectValue ?? ''}
+                    onChange={handleChange}
+                    fullWidth
+                  />
+                </S.Row>
+                <S.Row>
+                  <S.Label>
+                    <label htmlFor="body" className="label-base">
+                      {local.BODY_LABEL}
+                    </label>
+                  </S.Label>
+                  <InputBase
+                    id="body"
+                    // label={local.BODY_LABEL}
+                    multiline
+                    value={bodyValue ?? ''}
+                    onChange={handleChange}
+                    minRows={12}
+                    maxRows={25}
+                    fullWidth
+                    autoFocus={isReplying}
+                  />
+                </S.Row>
               </div>
+            </div>
+            <CustomButtonText
+              type="submit"
+              className="button button-small button-light"
+              label={local.SEND_BUTTON}
+              disabled={!toValue}
+            />
+            {isReplying && (
               <CustomButtonText
-                type="submit"
-                className="button button-small button-light"
-                label={local.SEND_BUTTON}
-                disabled={!toValue}
+                className="button button-small"
+                label={local.CANCEL_BUTTON}
+                onClick={() => isReplyingListener(-1)}
               />
-              {isReplying && (
-                <CustomButtonText
-                  className="button button-small"
-                  label={local.CANCEL_BUTTON}
-                  onClick={() => isReplyingListener(-1)}
-                />
-              )}
-            </form>
-          </div>
-        </S.ComposerContainer>
-      </>
+            )}
+          </form>
+        </div>
+      </S.ComposerContainer>
     </S.Wrapper>
   )
 }

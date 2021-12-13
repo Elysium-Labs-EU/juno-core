@@ -39,6 +39,9 @@ export const draftsSlice = createSlice({
     setDraftListLoaded: (state, action) => {
       state.draftListLoaded = action.payload
     },
+    resetDraftDetails: (state) => {
+      state.draftDetails = {}
+    },
   },
 })
 
@@ -47,6 +50,7 @@ export const {
   listUpdateDraft,
   // listRemoveDraft,
   setDraftListLoaded,
+  resetDraftDetails,
 } = draftsSlice.actions
 
 export const loadDraftList = (): AppThunk => async (dispatch) => {
