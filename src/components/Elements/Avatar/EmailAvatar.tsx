@@ -1,5 +1,5 @@
 import React from 'react'
-import getRandomColor from '../utils/getRandomColor'
+import getRandomColor from '../../../utils/getRandomColor'
 import * as S from './EmailAvatarStyles'
 
 const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {

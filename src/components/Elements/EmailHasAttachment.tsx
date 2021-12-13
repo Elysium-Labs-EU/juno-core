@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import { FiPaperclip } from 'react-icons/fi'
-import { EmailMessage } from '../Store/emailListTypes'
+import { EmailMessage } from '../../Store/emailListTypes'
 
 const EmailHasAttachment = ({ messages }: { messages: EmailMessage | EmailMessage[] }) => {
   const CheckAttachment = memo(() => {

@@ -7,15 +7,15 @@ import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
-import { findPayloadHeadersData } from '../../../utils'
 import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import MarkEmailAsRead from '../../../utils/markEmailAsRead'
+import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 
 const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
   if (threadDetail) {
-    return findPayloadHeadersData({ threadDetail, query })
+    return findPayloadHeadersData(query, threadDetail)
   }
   return null
 }
@@ -23,7 +23,7 @@ const fromEmail = (threadDetail: EmailListThreadItem) => {
 const emailSubject = (threadDetail: EmailListThreadItem) => {
   const query = 'Subject'
   if (threadDetail) {
-    return findPayloadHeadersData({ threadDetail, query })
+    return findPayloadHeadersData(query, threadDetail)
   }
   return null
 }

@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import { EmailMessage } from '../Store/emailListTypes'
+import { EmailMessage } from '../../Store/emailListTypes'
 
 const MessageCount = ({ countOfMessage }: { countOfMessage: EmailMessage[] }) => {
   const LengthMessageCount = memo(() => {

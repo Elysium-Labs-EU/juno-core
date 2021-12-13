@@ -1,5 +1,4 @@
-import { MessagePayload } from '../Store/draftsTypes'
-import { EmailListObject, EmailListThreadItem } from '../Store/emailListTypes'
+import { EmailListObject } from '../Store/emailListTypes'
 
 export const convertArrayToString = (data: string | string[]) => {
   if (data && typeof data === 'string') {
@@ -31,45 +30,4 @@ export const FilteredEmailList = (props: FilteredEmailListProps) => {
 export const multipleIncludes = (first: any, second: any) => {
   const indexArray = first.map((el: any) => second.indexOf(el))
   return indexArray.indexOf(-1) === -1
-}
-
-interface FindPayloadHeadersDataType {
-  query: string
-  email?: EmailListThreadItem
-  threadDetail?: EmailListThreadItem
-}
-
-export const findPayloadHeadersData = (props: FindPayloadHeadersDataType) => {
-  const { query, email, threadDetail } = props
-  if (email) {
-    if (email.messages) {
-      return email.messages[0].payload.headers.find(
-        (data: MessagePayload) => data.name === query
-      )
-        ? email.messages[0].payload.headers.find(
-            (data: MessagePayload) => data.name === query
-          ).value
-        : undefined
-    }
-    if (email.message) {
-      return email.message.payload.headers.find(
-        (data: MessagePayload) => data.name === query
-      )
-        ? email.message.payload.headers.find(
-            (data: MessagePayload) => data.name === query
-          ).value
-        : undefined
-    }
-  }
-
-  if (threadDetail && threadDetail.messages) {
-    return threadDetail.messages[0].payload.headers.find(
-      (data: MessagePayload) => data.name === query
-    )
-      ? threadDetail.messages[0].payload.headers.find(
-          (data: MessagePayload) => data.name === query
-        ).value
-      : undefined
-  }
-  return null
 }
