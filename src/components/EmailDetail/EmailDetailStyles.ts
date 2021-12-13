@@ -146,6 +146,8 @@ export const FromContainer = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  border-bottom: 1px solid ${theme.greyBorder};
+  padding-bottom: 1rem;
 `
 
 export const EmailBody = styled.div`
