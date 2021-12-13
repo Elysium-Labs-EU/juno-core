@@ -91,11 +91,9 @@ export const emailListSlice = createSlice({
 
           if (activeCount === completeCount) {
             const currentState = state.emailList
-            const concatNewEmailThreads = currentState[arrayIndex].threads
-              .concat(tempArray)
-              .sort(
-                (a, b) => parseInt(b.historyId, 10) - parseInt(a.historyId, 10)
-              )
+            const concatNewEmailThreads = sortThreads(
+              currentState[arrayIndex].threads.concat(tempArray)
+            )
             const newObject: EmailListObject = {
               ...action.payload,
               threads: concatNewEmailThreads,
@@ -418,9 +416,11 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
                 ? filteredCurrentEmailList()[0].threads[viewIndex + 1].id
                 : null
 
-            if (nextID() !== null) {
-              dispatch(setCurrentEmail(nextID()))
-              dispatch(push(`/mail/${labelURL()}/${nextID()}/messages`))
+            const staticNextID = nextID()
+
+            if (staticNextID !== null) {
+              dispatch(setCurrentEmail(staticNextID))
+              dispatch(push(`/mail/${labelURL()}/${staticNextID}/messages`))
             }
           }
         }
