@@ -11,7 +11,7 @@ const TimeStamp = ({ threadTimeStamp }: TimeStampType) => {
 
   // If the timestamp is of today - send hours, if timestamp is not of today send date
   const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp) ?
-    format(unixTimestamp, 'HH:m') : format(unixTimestamp, 'dd LLL')
+    format(unixTimestamp, 'HH:mm') : format(unixTimestamp, 'dd LLL')
 
   return <span className="date">{isSameDayCheck}</span>
 }
