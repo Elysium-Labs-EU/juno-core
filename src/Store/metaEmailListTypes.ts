@@ -10,3 +10,17 @@ export interface UpdateRequestParams {
   request: UpdateRequest
   labelIds: string[]
 }
+
+export interface MetaListThreadItem {
+  id: string
+  snippet: string
+  historyId: string
+}
+
+export interface LoadEmailObject {
+  labelIds: string[]
+  maxResults: number
+  nextPageToken?: string
+  silentLoading?: boolean
+  activeMetaObjArray?: MetaListThreadItem[]
+}

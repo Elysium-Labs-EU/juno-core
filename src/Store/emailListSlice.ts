@@ -18,10 +18,13 @@ import {
   EmailListObject,
   EmailListState,
 } from './emailListTypes'
-import { UpdateRequestParams } from './metaEmailListTypes'
+import {
+  LoadEmailObject,
+  MetaListThreadItem,
+  UpdateRequestParams,
+} from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import { setCurrentEmail } from './emailDetailSlice'
-import { LoadEmailObject, MetaListThreadItem } from './metaListTypes'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 
