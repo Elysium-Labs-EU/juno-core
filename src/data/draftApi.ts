@@ -48,7 +48,6 @@ const draftApi = () => ({
   },
 
   sendDraft: async (data: any) => {
-    console.log('data', data)
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/send-draft`,

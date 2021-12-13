@@ -5,10 +5,10 @@ import isEmpty from 'lodash/isEmpty'
 import messageApi from '../data/messageApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
-// import draftApi from '../data/draftApi'
-// import CloseMail from '../utils/closeEmail'
+import draftApi from '../data/draftApi'
+import CloseMail from '../utils/closeEmail'
 import type { AppThunk, RootState } from './store'
-import { ComposePayload, ComposeState, SendComposeEmail } from './composeTypes'
+import { ComposePayload, ComposeState } from './composeTypes'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
@@ -61,32 +61,30 @@ export const TrackComposeEmail =
     }
   }
 
-export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
-  const { messageId } = props
-  return async (dispatch, getState) => {
-    try {
-      const { composeEmail } = getState().compose
-      const sender = getState().base.profile.emailAddress
-      // const { labelIds } = getState().labels
-      // const { storageLabels } = getState().labels
-      const completeEmail = { ...composeEmail, sender }
+export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
+  try {
+    const { composeEmail } = getState().compose
+    const sender = getState().base.profile.emailAddress
+    const draftId = getState().drafts.draftDetails.id
+    const { labelIds } = getState().labels
+    const { storageLabels } = getState().labels
+    const completeEmail = { ...composeEmail, sender }
 
-      if (Object.keys(completeEmail).length >= 4) {
-        // If the message has a messageId, it is a draft.
-        // TODO: MessageId can also be from an inline reply, need to fix this.
-        console.log(messageId)
-        // if (messageId && messageId.length > 0) {
-        //   const { draftDetails } = getState().drafts
-        //   const body = { completeEmail, draftDetails }
-        //   const response = await draftApi().sendDraft(body)
-        //   if (response && response.status === 200) {
-        //     CloseMail({ history, labelIds, storageLabels })
-        //     dispatch(resetComposeEmail())
-        //     dispatch(setCurrentEmail(''))
-        //   } else {
-        //     dispatch(setServiceUnavailable('Error sending email.'))
-        //   }
-        // } else if (messageId === undefined) {
+    if (Object.keys(completeEmail).length >= 4) {
+      if (draftId) {
+        const body = {
+          id: draftId,
+        }
+        const response = await draftApi().sendDraft(body)
+        if (response && response.status === 200) {
+          CloseMail({ dispatch, labelIds, storageLabels })
+          dispatch(resetComposeEmail())
+          dispatch(setCurrentEmail(''))
+        } else {
+          dispatch(setServiceUnavailable('Error sending email.'))
+        }
+      }
+      if (draftId === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response && response.status === 200) {
           dispatch(push(`/`))
@@ -95,14 +93,13 @@ export const SendComposedEmail = (props: SendComposeEmail): AppThunk => {
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
-        // }
       }
-    } catch (err) {
-      console.error(err)
-      dispatch(setServiceUnavailable('Error sending email.'))
     }
-    return null
+  } catch (err) {
+    console.error(err)
+    dispatch(setServiceUnavailable('Error sending email.'))
   }
+  return null
 }
 
 export const selectComposeEmail = (state: RootState) =>

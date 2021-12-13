@@ -9,21 +9,24 @@ interface CloseMailProps {
   dispatch: any
 }
 
+const labelMap: { [key: string]: string } = {
+  INBOX: `${Routes.INBOX}`,
+  'Juno/To Do': `${Routes.HOME}`,
+  SPAM: `${Routes.SPAM}`,
+  DRAFT: `${Routes.DRAFTS}`,
+  SENT: `${Routes.SENT}`,
+}
+
 const CloseMail = (props: CloseMailProps) => {
   const { dispatch, labelIds, storageLabels } = props
-  FindLabelById({ storageLabels, labelIds })
-
-  const labelMap: { [key: string]: string } = {
-    INBOX: `${Routes.INBOX}`,
-    'Juno/To Do': `${Routes.HOME}`,
-    SPAM: `${Routes.SPAM}`,
-    DRAFT: `${Routes.DRAFTS}`,
-    SENT: `${Routes.SENT}`,
+  const foundLabel = FindLabelById({ storageLabels, labelIds })
+  if (foundLabel.length > 0) {
+    return dispatch(push(labelMap[foundLabel[0].name]))
   }
-
-  return dispatch(
-    push(labelMap[FindLabelById({ storageLabels, labelIds })[0].name])
-  )
+  if (foundLabel.length === 0) {
+    return dispatch(push('/'))
+  }
+  return null
 }
 
 export default CloseMail
