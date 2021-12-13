@@ -49,22 +49,30 @@ const EmailDetailBody = ({
           if (key === 'parts') {
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[0], 'parts')) {
               bodyDecoder(inputObject.parts[0])
-              if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
-                bodyDecoder(inputObject.parts[1])
+              if (inputObject.parts.length > 1) {
+                if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body') && Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
+                  bodyDecoder(inputObject.parts[1])
+                }
               }
               return
             }
-            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'parts')) {
-              bodyDecoder(inputObject.parts[1])
-              return
+            if (inputObject.parts.length > 1) {
+              if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'parts')) {
+                bodyDecoder(inputObject.parts[1])
+                return
+              }
             }
-            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
-              bodyDecoder(inputObject.parts[0])
-              bodyDecoder(inputObject.parts[1])
-              return
+            if (inputObject.parts.length > 1) {
+              if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body') && Object.prototype.hasOwnProperty.call(inputObject.parts[1].body, 'attachmentId')) {
+                bodyDecoder(inputObject.parts[0])
+                bodyDecoder(inputObject.parts[1])
+                return
+              }
             }
-            if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')) {
-              bodyDecoder(inputObject.parts[1])
+            if (inputObject.parts.length > 1) {
+              if (Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')) {
+                bodyDecoder(inputObject.parts[1])
+              }
             }
           }
         }
