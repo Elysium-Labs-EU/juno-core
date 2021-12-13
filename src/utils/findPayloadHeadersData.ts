@@ -1,7 +1,6 @@
 import { MessagePayload } from '../Store/draftsTypes'
 
 const findPayloadHeadersData = (query: string, email: any) => {
-  console.log(email)
   if (email && query) {
     if (email.internalDate) {
       return email.payload.headers.find((e: MessagePayload) => e.name === query)
