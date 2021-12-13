@@ -64,13 +64,12 @@ export const emailListSlice = createSlice({
         .map((emailArray) => emailArray.labels)
         .flat(1)
         .findIndex((obj) => obj.includes(action.payload.labels))
-
       // If emailList sub-array index exists, add to or update the existing array
       if (arrayIndex > -1) {
         // It loops through all the newly fetched threads, and if check what to do with this. Either push it to the tempArray, or update the entry in the emailList state.
         const tempArray: any = []
         let activeCount: number = 0
-        const completeCount: number = action.payload.threads.length - 1
+        const completeCount: number = action.payload.threads.length
 
         action.payload.threads.map((thread: any) => {
           const objectIndex = state.emailList[arrayIndex].threads.findIndex(
@@ -104,7 +103,6 @@ export const emailListSlice = createSlice({
             currentState[arrayIndex] = newObject
             state.emailList = currentState
           }
-
           return null
         })
       } else {
@@ -481,7 +479,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
   }
 }
 
-// Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the meta list for inbox only first.
+// Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the email list for inbox only.
 export const refreshEmailFeed =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
