@@ -12,12 +12,10 @@ import {
   DraftsState,
   ComposedEmail,
   EnhancedDraftDetails,
-  MessagePayload,
   OpenDraftEmailType,
   DraftListObject,
 } from './draftsTypes'
 import bodyDecoder from '../utils/bodyDecoder'
-import EmailSubject from '../components/Elements/EmailSubject'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 
 const initialState: DraftsState = Object.freeze({
@@ -36,11 +34,11 @@ export const draftsSlice = createSlice({
       }
     },
     listRemoveDraft: (state, action) => {
-      const { id } = action.payload
+      const { threadId } = action.payload
       const copyCurrentDraftList = state.draftList
-      if (!Array.isArray(id)) {
+      if (!Array.isArray(threadId)) {
         const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
-          (item) => item.id !== id
+          (item) => item.message.threadId !== threadId
         )
         state.draftList = newDraftList
       }

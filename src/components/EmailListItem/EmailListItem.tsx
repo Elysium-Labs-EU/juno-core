@@ -5,7 +5,7 @@ import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
 import MessageCount from '../Elements/MessageCount'
 import Snippet from './Snippet'
-import InlineThreadActions from './InlineThreadActions'
+import InlineThreadActionsRegular from './InlineThreadActionsRegular'
 import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
@@ -18,6 +18,7 @@ import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
 import SenderNameFull from '../Elements/SenderName/senderNameFull'
 import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
+import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 
 const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -30,12 +31,12 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
     return null
   }
 
-  const staticRecipientName = RecipientName(email.message || email.messages![0] || null)
-  const staticSenderPartial = SenderNamePartial(email.message || email.messages![0] || null)
-  const staticSenderFull = SenderNameFull(email.message || email.messages![0] || null)
-  const staticSubjectFetch = EmailSubject(email.message || email.messages![0] || null)
+  const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1] || null)
+  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1] || null)
+  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1] || null)
+  const staticSubjectFetch = EmailSubject(email.message || email.messages![email.messages!.length - 1] || null)
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
-  const staticSnippet = EmailSnippet(email.message || email.messages![0] || null)
+  const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1] || null)
 
   return (
     <S.ThreadBase key={id} emailLabels={emailLabels()}>
@@ -85,7 +86,11 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         </S.CellDate>
         <div />
         <div className="cellGradientRight" />
-        <InlineThreadActions id={id} labelIds={labelIds} />
+        {!labelIds.includes(draft.LABEL) ? (
+          <InlineThreadActionsRegular id={id} labelIds={labelIds} />
+        ) : (
+          <InlineThreadActionsDraft threadId={id} email={email} />
+        )}
       </S.ThreadRow>
     </S.ThreadBase>
   )

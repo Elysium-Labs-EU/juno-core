@@ -13,7 +13,7 @@ import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const InlineThreadActions = ({
+const InlineThreadActionsRegular = ({
   id,
   labelIds,
 }: {
@@ -80,4 +80,4 @@ const InlineThreadActions = ({
   )
 }
 
-export default InlineThreadActions
+export default InlineThreadActionsRegular
