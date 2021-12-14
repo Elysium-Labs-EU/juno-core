@@ -1,8 +1,6 @@
 import { EmailMessage } from '../../Store/emailListTypes'
 import findPayloadHeadersData from '../../utils/findPayloadHeadersData'
 
-const NO_SUBJECT = '(No subject)'
-
 const EmailSubject = (message: EmailMessage): string => {
   if (message) {
     const query = 'Subject'
@@ -10,9 +8,9 @@ const EmailSubject = (message: EmailMessage): string => {
     if (from.length > 0) {
       return from
     }
-    return NO_SUBJECT
+    return ''
   }
-  return NO_SUBJECT
+  return ''
 }
 
 export default EmailSubject

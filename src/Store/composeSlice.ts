@@ -9,6 +9,9 @@ import draftApi from '../data/draftApi'
 import CloseMail from '../utils/closeEmail'
 import type { AppThunk, RootState } from './store'
 import { ComposePayload, ComposeState } from './composeTypes'
+import { listRemoveItemDetail } from './emailListSlice'
+import { FilteredEmailList } from '../utils'
+import { EmailListObject } from './emailListTypes'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
@@ -65,26 +68,41 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail } = getState().compose
     const sender = getState().base.profile.emailAddress
-    const draftId = getState().drafts.draftDetails.id
+    const {
+      id,
+      message: { threadId },
+    } = getState().drafts.draftDetails
+    const { emailList } = getState().email
     const { labelIds } = getState().labels
     const { storageLabels } = getState().labels
     const completeEmail = { ...composeEmail, sender }
 
     if (Object.keys(completeEmail).length >= 4) {
-      if (draftId) {
+      if (id) {
         const body = {
-          id: draftId,
+          id,
         }
         const response = await draftApi().sendDraft(body)
         if (response && response.status === 200) {
           CloseMail({ dispatch, labelIds, storageLabels })
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
+          const copyCurrentEmailList: EmailListObject[] = FilteredEmailList({
+            emailList,
+            labelIds: ['DRAFT'],
+          })
+          if (copyCurrentEmailList && copyCurrentEmailList.length > 0)
+            dispatch(
+              listRemoveItemDetail({
+                messageId: threadId,
+                copyCurrentEmailList,
+              })
+            )
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
       }
-      if (draftId === undefined) {
+      if (id === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response && response.status === 200) {
           dispatch(push(`/`))

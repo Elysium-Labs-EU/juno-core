@@ -36,7 +36,6 @@ const draftApi = () => ({
   },
 
   getDraftDetail: async (draftId: string) => {
-    console.log(draftId)
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${BASE_API_URL}/api/draft/${draftId}`

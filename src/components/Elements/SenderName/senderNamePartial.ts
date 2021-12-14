@@ -3,7 +3,7 @@ import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 
 export const NO_SENDER = '(No sender)'
 
-const SenderNamePartial = (message: EmailMessage): [string, string] => {
+const SenderNamePartial = (message: EmailMessage): string[] => {
   if (message) {
     const query = 'From'
     const from = findPayloadHeadersData(query, message)

@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import base64url from 'base64url'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
@@ -15,7 +14,11 @@ import {
   EnhancedDraftDetails,
   MessagePayload,
   OpenDraftEmailType,
+  DraftListObject,
 } from './draftsTypes'
+import bodyDecoder from '../utils/bodyDecoder'
+import EmailSubject from '../components/Elements/EmailSubject'
+import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 
 const initialState: DraftsState = Object.freeze({
   draftListLoaded: false,
@@ -32,7 +35,16 @@ export const draftsSlice = createSlice({
         state.draftList = action.payload
       }
     },
-    // listRemoveDraft: (state, action) => {},
+    listRemoveDraft: (state, action) => {
+      const { id } = action.payload
+      const copyCurrentDraftList = state.draftList
+      if (!Array.isArray(id)) {
+        const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
+          (item) => item.id !== id
+        )
+        state.draftList = newDraftList
+      }
+    },
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
     },
@@ -48,7 +60,7 @@ export const draftsSlice = createSlice({
 export const {
   listAddDraft,
   listUpdateDraft,
-  // listRemoveDraft,
+  listRemoveDraft,
   setDraftListLoaded,
   resetDraftDetails,
 } = draftsSlice.actions
@@ -141,24 +153,15 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   } = props
   return (dispatch) => {
     try {
+      const body = bodyDecoder(message.payload).map((item) =>
+        item.replace(/<[^>]*>/g, '')
+      )
+      const subject = findPayloadHeadersData('Subject', message)
+      const to = findPayloadHeadersData('To', message)
       const loadEmail = {
-        to: message.payload.headers.find((e: MessagePayload) => e.name === 'To')
-          ? message.payload.headers.find((e: MessagePayload) => e.name === 'To')
-              .value
-          : '',
-        subject: message.payload.headers.find(
-          (e: MessagePayload) => e.name === 'Subject'
-        )
-          ? message.payload.headers.find(
-              (e: MessagePayload) => e.name === 'Subject'
-            ).value
-          : '',
-        body:
-          message.payload.body.size > 0
-            ? base64url
-                .decode(message.payload.body.data)
-                .replace(/<[^>]*>/g, '') ?? ''
-            : '',
+        to,
+        subject,
+        body,
       }
       const draftDetails = {
         id: draft.id && draft.id,
@@ -167,10 +170,7 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
           threadId: message.threadId && message.threadId,
         },
       }
-      console.log('loadEmail', loadEmail)
-      console.log('draftDetails', draftDetails)
       if (draft.id) {
-        // Or need to push threadId?
         dispatch(listUpdateDraft(draftDetails))
         dispatch(setComposeEmail(loadEmail))
         dispatch(setCurrentEmail(draft.id))
@@ -190,13 +190,9 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   return async (dispatch) => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
-      console.log('response', response)
       if (response?.status && response.status === 200) {
-        console.log('here y-ellow')
         const { draft } = response.data
-        const enhancedDraftDetails = { draft }
-        console.log('enhancedDraftDetails', enhancedDraftDetails)
-        dispatch(pushDraftDetails(draft))
+        dispatch(pushDraftDetails({ draft }))
       }
     } catch (err) {
       console.error(err)
