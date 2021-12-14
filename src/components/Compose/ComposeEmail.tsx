@@ -11,7 +11,7 @@ import * as global from '../../constants/globalConstants'
 import * as S from './ComposeStyles'
 import emailValidation from '../../utils/emailValidation'
 import { CustomButtonText } from '../Elements/Buttons'
-import { CreateDraft, resetDraftDetails, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
+import { CreateDraft, listRemoveDraft, resetDraftDetails, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 
@@ -141,6 +141,7 @@ const ComposeEmail = ({
       if (emailValidation(toValue)) {
         dispatch(SendComposedEmail())
         dispatch(resetDraftDetails())
+        dispatch(listRemoveDraft({ id: draftDetails.id }))
       } else {
         setToError(true)
       }

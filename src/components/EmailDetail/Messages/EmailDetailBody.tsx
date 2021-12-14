@@ -13,14 +13,13 @@ interface IInlineImageTypeResponse {
   filename: string
 }
 
-
-const EmailDetailBody = ({
-  threadDetailBody,
-  messageId,
-}: {
+interface IEmailDetailBody {
   threadDetailBody: EmailMessagePayload
   messageId: string
-}) => {
+}
+
+
+const EmailDetailBody = ({ threadDetailBody, messageId }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
@@ -34,10 +33,11 @@ const EmailDetailBody = ({
 
   // This function recursively loops in the emailbody to find a body to decode.
   const bodyDecoder = (inputObject: any) => {
-    Object.keys(inputObject).forEach((key) => {
-      if (key === 'body' || key === 'parts') {
+    const objectKeys = Object.keys(inputObject)
+    for (let i: number = 0; i < objectKeys.length; i += 1) {
+      if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
         if (inputObject.body.size > 0) {
-          if (key === 'body') {
+          if (objectKeys[i] === 'body') {
             if (Object.prototype.hasOwnProperty.call(inputObject.body, 'attachmentId')) {
               inlineImage(inputObject)
             }
@@ -46,7 +46,7 @@ const EmailDetailBody = ({
           }
         }
         if (inputObject.body.size === 0 || !Object.prototype.hasOwnProperty.call(inputObject, 'body')) {
-          if (key === 'parts') {
+          if (objectKeys[i] === 'parts') {
             if (Object.prototype.hasOwnProperty.call(inputObject.parts[0], 'parts')) {
               bodyDecoder(inputObject.parts[0])
               if (inputObject.parts.length > 1) {
@@ -77,7 +77,7 @@ const EmailDetailBody = ({
           }
         }
       }
-    })
+    }
   }
 
   useEffect(() => {

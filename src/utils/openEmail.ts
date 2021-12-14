@@ -18,14 +18,11 @@ const openEmail = (props: OpenEmailProps) => {
 
   if (!labelIds.includes(LABEL)) {
     dispatch(push(`mail/${labelURL}/${id}/messages`))
-  } else {
-    if (email && email.messages.length > 1) {
-      dispatch(push(`mail/${labelURL}/${id}/messages`))
-    }
-    if (email && email.messages.length === 1) {
-      const messageId = email.messages[0].id
-      dispatch(OpenDraftEmail({ id, messageId }))
-    }
+    return
+  }
+  if (labelIds.includes(LABEL)) {
+    const messageId = email.messages[email.messages.length - 1].id
+    dispatch(OpenDraftEmail({ id, messageId }))
   }
 }
 

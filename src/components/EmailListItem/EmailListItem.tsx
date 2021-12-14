@@ -8,6 +8,7 @@ import Snippet from './Snippet'
 import InlineThreadActions from './InlineThreadActions'
 import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
+import * as global from '../../constants/globalConstants'
 import openEmail from '../../utils/openEmail'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { EmailListThreadItem } from '../../Store/emailListTypes'
@@ -29,10 +30,11 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
     return null
   }
 
-  const staticRecipientName = RecipientName(email)
+  const staticRecipientName = RecipientName(email.message || email.messages![0] || null)
   const staticSenderPartial = SenderNamePartial(email.message || email.messages![0] || null)
   const staticSenderFull = SenderNameFull(email.message || email.messages![0] || null)
-  const staticSubject = EmailSubject(email.message || email.messages![0] || null)
+  const staticSubjectFetch = EmailSubject(email.message || email.messages![0] || null)
+  const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = EmailSnippet(email.message || email.messages![0] || null)
 
   return (
@@ -48,13 +50,13 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
             {!labelIds.includes(draft.LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
-              <EmailAvatar avatarURL={staticRecipientName} />
+              <EmailAvatar avatarURL={staticRecipientName[0]} />
             )}
           </S.Avatars>
           {!labelIds.includes(draft.LABEL) ? (
             <span className="text_truncate" title={staticSenderPartial[1]}>{staticSenderPartial[0]}</span>
           ) : (
-            <span className="text_truncate">{staticRecipientName}</span>
+            <span className="text_truncate" title={staticRecipientName[1]}>{staticRecipientName[0]}</span>
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>

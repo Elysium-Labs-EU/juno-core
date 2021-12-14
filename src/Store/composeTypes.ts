@@ -1,7 +1,7 @@
 export interface ComposePayload {
   id?: string
   value?: string
-  body?: string
+  body?: string | string[]
   subject?: string
   to?: string
 }
