@@ -5,6 +5,7 @@ import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
+import * as global from '../../../constants/globalConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
@@ -88,7 +89,7 @@ const MessagesOverview = React.memo(
     useEffect(() => {
       if (threadDetail && Object.keys(threadDetail).length > 0) {
         if (threadDetail.messages && threadDetail.messages.length > 0) {
-          if (threadDetail.messages.filter((message) => message.labelIds?.includes('UNREAD') === true).length > 0) {
+          if (threadDetail.messages.filter((message) => message.labelIds?.includes(global.UNREAD_LABEL) === true).length > 0) {
             const messageId = threadDetail.id
             MarkEmailAsRead({ messageId, dispatch, labelIds })
           }
