@@ -199,7 +199,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   }
 }
 
-export const OpenDraftEmail = (props: OpenDraftEmailType): AppThunk => {
+export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
   const { messageId, id } = props
   return async (dispatch, getState) => {
     try {

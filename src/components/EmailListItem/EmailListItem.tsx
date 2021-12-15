@@ -89,7 +89,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         {!labelIds.includes(draft.LABEL) ? (
           <InlineThreadActionsRegular id={id} labelIds={labelIds} />
         ) : (
-          <InlineThreadActionsDraft threadId={id} email={email} />
+          <InlineThreadActionsDraft threadId={id} />
         )}
       </S.ThreadRow>
     </S.ThreadBase>

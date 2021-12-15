@@ -35,10 +35,6 @@ const InlineThreadActionsRegular = ({
           onClick={() => ReplyOverview({ labelIds, id, dispatch })}
           title="Reply"
         />
-        {/* <CustomIconLink
-          className="button button-small text_muted option-link"
-          icon={<FiClock />}
-        /> */}
         {labelIds &&
           !labelIds.some(
             (item) =>
