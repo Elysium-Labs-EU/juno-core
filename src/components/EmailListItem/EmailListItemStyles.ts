@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import * as theme from '../../constants/themeConstants'
+import * as global from '../../constants/globalConstants'
 
 interface ThreadBaseProps {
   emailLabels: string[] | null
@@ -7,7 +8,9 @@ interface ThreadBaseProps {
 
 export const ThreadBase = styled.div<ThreadBaseProps>`
   font-weight: ${(props) =>
-    props.emailLabels && props.emailLabels.includes('UNREAD') ? '550' : '400'};
+    props.emailLabels && props.emailLabels.includes(global.UNREAD_LABEL)
+      ? '550'
+      : '400'};
   position: relative;
   user-select: none;
   &:hover {
@@ -30,6 +33,23 @@ export const ThreadRow = styled.div`
     z-index: 2;
     border-radius: 5px;
   }
+`
+
+export const CellCheckbox = styled.div`
+  display: flex;
+  place-items: center;
+`
+
+export const UnreadDot = styled.div`
+  height: 5px;
+  width: 5px;
+  background-image: radial-gradient(
+    circle at 100% -82%,
+    rgb(119, 97, 245),
+    rgb(118, 96, 245) 32%,
+    rgb(31, 36, 238)
+  );
+  border-radius: 50%;
 `
 
 export const Avatars = styled.div`

@@ -31,18 +31,22 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
     return null
   }
 
-  const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1] || null)
-  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1] || null)
-  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1] || null)
-  const staticSubjectFetch = EmailSubject(email.message || email.messages![email.messages!.length - 1] || null)
+  const staticEmailLabels = emailLabels()
+  const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1])
+  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1])
+  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1])
+  const staticSubjectFetch = EmailSubject(email.message || email.messages![email.messages!.length - 1])
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
-  const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1] || null)
+  const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
 
   return (
-    <S.ThreadBase key={id} emailLabels={emailLabels()}>
+    <S.ThreadBase key={id} emailLabels={staticEmailLabels}>
       <S.ThreadRow>
         <div className="cellGradientLeft" />
-        <div className="cellCheckbox" />
+        <S.CellCheckbox>{
+          staticEmailLabels &&
+          staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
+        }</S.CellCheckbox>
         <S.CellName
           onClick={() => openEmail({ labelIds, id, email, dispatch })}
           aria-hidden="true"
