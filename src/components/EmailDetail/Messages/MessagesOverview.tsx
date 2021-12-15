@@ -3,7 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
-import ComposeEmail from '../../Compose/ComposeEmail'
+import ComposeEmail from '../../Compose/ComposeEmailContainer'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import * as draft from '../../../constants/draftConstants'
@@ -13,8 +13,17 @@ import { useAppDispatch } from '../../../Store/hooks'
 import MarkEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 
+
 const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
+  if (threadDetail) {
+    return findPayloadHeadersData(query, threadDetail)
+  }
+  return null
+}
+
+const ccEmail = (threadDetail: EmailListThreadItem) => {
+  const query = 'Cc'
   if (threadDetail) {
     return findPayloadHeadersData(query, threadDetail)
   }
@@ -129,6 +138,7 @@ const MessagesOverview = React.memo(
             isReplying={isReplying}
             isReplyingListener={isReplyingListener}
             to={fromEmail(threadDetail)}
+            cc={ccEmail(threadDetail)}
             subject={emailSubject(threadDetail)}
             threadId={threadDetail.id}
           />

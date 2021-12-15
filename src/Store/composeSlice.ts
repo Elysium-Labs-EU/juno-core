@@ -79,9 +79,7 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
 
     if (Object.keys(completeEmail).length >= 4) {
       if (id) {
-        const body = {
-          id,
-        }
+        const body = { id }
         const response = await draftApi().sendDraft(body)
         if (response && response.status === 200) {
           CloseMail({ dispatch, labelIds, storageLabels })

@@ -33,4 +33,5 @@ export const Row = styled.div`
   min-height: 35px;
   display: flex;
   align-content: flex-start;
+  padding: 0.25rem 0;
 `
