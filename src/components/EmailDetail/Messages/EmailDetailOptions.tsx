@@ -3,17 +3,12 @@ import {
   FiArchive,
   FiCheckCircle,
   FiCornerUpLeft,
-  // FiClock,
   FiMoreHorizontal,
 } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { FindLabelByName } from '../../../utils/findLabel'
-import // selectEmailList,
-  // selectIsFocused,
-  // selectIsSorting,
-  '../../../Store/emailListSlice'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
@@ -25,20 +20,22 @@ import { LocationObjectType } from '../../types/globalTypes'
 
 const messageIndex = 0
 
-const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messageId: string; isReplyingListener: any, threadId: string }) => {
-  // const emailList = useAppSelector(selectEmailList)
-  // const isFocused = useAppSelector(selectIsFocused)
-  // const isSorting = useAppSelector(selectIsSorting)
+interface IEmailDetailOptions {
+  messageId: string
+  isReplyingListener: Function
+  threadId: string
+}
+
+const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
-  const [showMenu, setShowMenu] = useState<Boolean>(false)
+  const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
     setShowMenu(false)
   }, [location])
-
 
   return (
     <S.EmailOptionsContainer>
@@ -77,14 +74,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: { messa
                   label={local.BUTTON_TODO}
                 />
               )}
-          </div>
-          <div>
-            {/* <CustomButtonText
-              className="button option-link"
-              icon={<FiClock />}
-              // onClick={ToDoAction}
-              label={local.BUTTON_REMIND}
-            /> */}
           </div>
           <div>
             <CustomButtonText

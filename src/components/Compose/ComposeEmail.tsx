@@ -83,6 +83,7 @@ const ComposeEmail = ({
         dispatch(TrackComposeEmail(updateEventObject))
       }
     }
+    return () => { }
   }, [debouncedToValue])
 
   useEffect(() => {
@@ -93,6 +94,7 @@ const ComposeEmail = ({
       }
       dispatch(TrackComposeEmail(updateEventObject))
     }
+    return () => { }
   }, [debouncedSubjectValue])
 
   useEffect(() => {
@@ -100,6 +102,7 @@ const ComposeEmail = ({
       const updateEventObject = { id: global.BODY, value: debouncedBodyValue }
       dispatch(TrackComposeEmail(updateEventObject))
     }
+    return () => { }
   }, [debouncedBodyValue])
 
   // Set the form values
@@ -113,6 +116,7 @@ const ComposeEmail = ({
       to && setToValue(to)
       subject && setSubjectValue(subject)
     }
+    return () => { }
   }, [])
 
   useEffect(() => {
@@ -123,6 +127,7 @@ const ComposeEmail = ({
       }
       dispatch(TrackComposeEmail(updateEventObject))
     }
+    return () => { }
   }, [currentMessage])
 
   useEffect(() => {
@@ -133,6 +138,7 @@ const ComposeEmail = ({
       }
       dispatch(TrackComposeEmail(updateEventObject))
     }
+    return () => { }
   }, [threadId])
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

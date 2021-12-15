@@ -26,6 +26,8 @@ import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
+import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
+import { resetDraftDetails } from '../../Store/draftsSlice'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -37,6 +39,7 @@ const EmailDetail = () => {
   const viewIndex = useAppSelector(selectViewIndex)
   const isSorting = useAppSelector(selectIsSorting)
   const isFocused = useAppSelector(selectIsFocused)
+  const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
@@ -44,11 +47,18 @@ const EmailDetail = () => {
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
 
+  const cleanUpComposerAndDraft = () => {
+    dispatch(resetComposeEmail())
+    dispatch(resetDraftDetails())
+  }
+
   const isReplyingListener = ({ messageIndex }: { messageIndex: number }) => {
     if (messageIndex > -1) {
+      Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
       dispatch(setIsReplying(true))
     }
     if (messageIndex === undefined) {
+      Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
       dispatch(setIsReplying(false))
     }
     const activeThreadListMessages = threadDetailList[threadDetailList.findIndex((item) => item.id === messageId)].messages
