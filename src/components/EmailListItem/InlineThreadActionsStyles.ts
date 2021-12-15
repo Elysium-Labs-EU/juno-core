@@ -4,15 +4,24 @@ import * as theme from '../../constants/themeConstants'
 export const Wrapper = styled.div`
   opacity: 0;
   position: absolute;
-  top: 18px;
-  right: 30px;
+  top: 0;
+  right: 1rem;
   bottom: 0;
   z-index: 10;
   transition: opacity 0.2s ease-in-out;
+  display: flex;
+  place-content: center;
+  padding-left: 5rem;
+  padding-right: 2rem;
 
   :hover {
     opacity: 1;
-    background-color: ${theme.greyHover};
+    background: ${theme.greyHover};
+    background: linear-gradient(
+      90deg,
+      rgba(2, 0, 36, 0) 0%,
+      rgba(226, 226, 226, 1) 25%
+    );
   }
 `
 

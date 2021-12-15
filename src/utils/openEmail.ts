@@ -1,6 +1,6 @@
 import { push } from 'redux-first-history'
 import { convertArrayToString } from '.'
-import { OpenDraftEmail } from '../Store/draftsSlice'
+import { openDraftEmail } from '../Store/draftsSlice'
 import * as draft from '../constants/draftConstants'
 
 interface OpenEmailProps {
@@ -22,7 +22,7 @@ const openEmail = (props: OpenEmailProps) => {
   }
   if (labelIds.includes(LABEL)) {
     const messageId = email.messages[email.messages.length - 1].id
-    dispatch(OpenDraftEmail({ id, messageId }))
+    dispatch(openDraftEmail({ id, messageId }))
   }
 }
 

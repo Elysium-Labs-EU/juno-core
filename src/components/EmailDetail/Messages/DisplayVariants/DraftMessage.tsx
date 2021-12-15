@@ -1,7 +1,7 @@
 import React from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import { OpenDraftEmail } from '../../../../Store/draftsSlice'
+import { openDraftEmail } from '../../../../Store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
 import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
@@ -19,7 +19,7 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const staticSenderFull = SenderNameFull(message)
 
   const handleClick = () => {
-    dispatch(OpenDraftEmail({ id, messageId }))
+    dispatch(openDraftEmail({ id, messageId }))
   }
 
   return (

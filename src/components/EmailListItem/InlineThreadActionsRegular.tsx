@@ -13,7 +13,7 @@ import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const InlineThreadActions = ({
+const InlineThreadActionsRegular = ({
   id,
   labelIds,
 }: {
@@ -35,10 +35,6 @@ const InlineThreadActions = ({
           onClick={() => ReplyOverview({ labelIds, id, dispatch })}
           title="Reply"
         />
-        {/* <CustomIconLink
-          className="button button-small text_muted option-link"
-          icon={<FiClock />}
-        /> */}
         {labelIds &&
           !labelIds.some(
             (item) =>
@@ -80,4 +76,4 @@ const InlineThreadActions = ({
   )
 }
 
-export default InlineThreadActions
+export default InlineThreadActionsRegular
