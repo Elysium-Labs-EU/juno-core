@@ -13,13 +13,12 @@ import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
 
-const InlineThreadActionsRegular = ({
-  id,
-  labelIds,
-}: {
+interface IInlineThreadActionsRegular {
   id: string
   labelIds: string[]
-}) => {
+}
+
+const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
