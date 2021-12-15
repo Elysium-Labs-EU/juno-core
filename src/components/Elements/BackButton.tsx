@@ -1,7 +1,8 @@
 import React from 'react'
-import { go } from 'redux-first-history'
+import { go, push } from 'redux-first-history'
 import { CustomButtonText } from './Buttons'
 import * as global from '../../constants/globalConstants'
+import Routes from '../../constants/routes.json'
 import { setIsFocused, setIsSorting } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
@@ -23,9 +24,17 @@ const BackButton = (props: BackButtonType) => {
   }
 
   const navigateBack = () => {
-    dispatch(go(-1))
-    isFocused && dispatch(setIsFocused(false))
-    isSorting && dispatch(setIsSorting(false))
+    !isFocused && !isSorting && dispatch(go(-1))
+    if (isFocused) {
+      dispatch(setIsFocused(false))
+      dispatch(push(Routes.HOME))
+      return
+    }
+    if (isSorting) {
+      dispatch(setIsSorting(false))
+      dispatch(push(Routes.INBOX))
+      return
+    }
     Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
   }
 
