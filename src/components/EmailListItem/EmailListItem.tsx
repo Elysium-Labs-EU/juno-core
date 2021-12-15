@@ -28,7 +28,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const emailLabels = () => {
     if (email && email.messages) return email.messages[email.messages.length - 1].labelIds
     if (email && email.message) return email.message.labelIds
-    return null
+    return ''
   }
 
   const staticEmailLabels = emailLabels()
@@ -44,7 +44,6 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
       <S.ThreadRow>
         <div className="cellGradientLeft" />
         <S.CellCheckbox>{
-          staticEmailLabels &&
           staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
         }</S.CellCheckbox>
         <S.CellName

@@ -3,7 +3,7 @@ import * as theme from '../../constants/themeConstants'
 import * as global from '../../constants/globalConstants'
 
 interface ThreadBaseProps {
-  emailLabels: string[] | null
+  emailLabels: string[] | string
 }
 
 export const ThreadBase = styled.div<ThreadBaseProps>`
