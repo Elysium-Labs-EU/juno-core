@@ -22,6 +22,14 @@ const fromEmail = (threadDetail: EmailListThreadItem) => {
   return null
 }
 
+const bccEmail = (threadDetail: EmailListThreadItem) => {
+  const query = 'Bcc'
+  if (threadDetail) {
+    return findPayloadHeadersData(query, threadDetail)
+  }
+  return null
+}
+
 const ccEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'Cc'
   if (threadDetail) {
@@ -38,17 +46,19 @@ const emailSubject = (threadDetail: EmailListThreadItem) => {
   return null
 }
 
+interface IDetailDisplaySelector {
+  message: EmailMessage
+  threadDetail: EmailListThreadItem
+  isReplyingListener: Function
+  index: number
+}
+
 const detailDisplaySelector = ({
   message,
   threadDetail,
   isReplyingListener,
   index
-}: {
-  message: EmailMessage
-  threadDetail: EmailListThreadItem
-  isReplyingListener: any
-  index: number
-}) => {
+}: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
     if (message.labelIds.includes(draft.LABEL)) {
       return <DraftMessage message={message} />
@@ -61,6 +71,14 @@ const detailDisplaySelector = ({
   return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
 }
 
+interface IMessagesOverview {
+  threadDetail: EmailListThreadItem
+  isLoading: boolean
+  isReplying: boolean
+  isReplyingListener: Function
+  labelIds: string[]
+}
+
 const MessagesOverview = React.memo(
   ({
     threadDetail,
@@ -68,13 +86,7 @@ const MessagesOverview = React.memo(
     isReplying,
     isReplyingListener,
     labelIds,
-  }: {
-    threadDetail: EmailListThreadItem
-    isLoading: boolean
-    isReplying: boolean
-    isReplyingListener: any
-    labelIds: string[]
-  }) => {
+  }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
 
     const MappedMessages = () =>
@@ -139,6 +151,7 @@ const MessagesOverview = React.memo(
             isReplyingListener={isReplyingListener}
             to={fromEmail(threadDetail)}
             cc={ccEmail(threadDetail)}
+            bcc={bccEmail(threadDetail)}
             subject={emailSubject(threadDetail)}
             threadId={threadDetail.id}
           />

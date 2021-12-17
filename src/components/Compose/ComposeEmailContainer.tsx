@@ -15,6 +15,7 @@ interface ComposeEmailProps {
   isReplying: boolean
   isReplyingListener: Function
   to: string
+  bcc: string
   cc: string
   subject: string
   threadId: string
@@ -24,6 +25,7 @@ const ComposeEmail = ({
   isReplying,
   isReplyingListener,
   to,
+  bcc,
   cc,
   subject,
   threadId,
@@ -36,6 +38,9 @@ const ComposeEmail = ({
   const [showCC, setShowCC] = useState<boolean>(false)
   const [ccValue, setCCValue] = useState<string>('')
   const debouncedCCValue = useDebounce(ccValue, 500)
+  const [showBCC, setShowBCC] = useState<boolean>(false)
+  const [bccValue, setBCCValue] = useState<string>('')
+  const debouncedBCCValue = useDebounce(bccValue, 500)
   const [subjectValue, setSubjectValue] = useState('')
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const [bodyValue, setBodyValue] = useState('')
@@ -80,6 +85,10 @@ const ComposeEmail = ({
     }
     if (e.target.id === global.CC) {
       setCCValue(e.target.value)
+      return
+    }
+    if (e.target.id === global.BCC) {
+      setBCCValue(e.target.value)
     }
   }
 
@@ -92,6 +101,16 @@ const ComposeEmail = ({
     }
     return () => { }
   }, [debouncedToValue])
+
+  useEffect(() => {
+    if (debouncedBCCValue && debouncedBCCValue.length > 0) {
+      if (emailValidation(debouncedBCCValue)) {
+        const updateEventObject = { id: global.BCC, value: debouncedBCCValue }
+        dispatch(TrackComposeEmail(updateEventObject))
+      }
+    }
+    return () => { }
+  }, [debouncedBCCValue])
 
   useEffect(() => {
     if (debouncedCCValue && debouncedCCValue.length > 0) {
@@ -133,8 +152,9 @@ const ComposeEmail = ({
       setSubjectValue(composeEmail.subject)
       setBodyValue(composeEmail.body)
     }
-    if (to || subject || cc) {
+    if (to || subject || cc || bcc) {
       cc && setCCValue(cc)
+      bcc && setBCCValue(bcc)
       to && setToValue(to)
       subject && setSubjectValue(subject)
     }
@@ -165,7 +185,26 @@ const ComposeEmail = ({
 
 
 
-  return <ComposeEmailView bodyValue={bodyValue} ccValue={ccValue} draftDetails={draftDetails} handleChange={handleChange} isReplying={isReplying} isReplyingListener={isReplyingListener} toError={toError} toValue={toValue} setToError={setToError} saveSuccess={saveSuccess} showCC={showCC} setShowCC={setShowCC} subjectValue={subjectValue} />
+  return (
+    <ComposeEmailView
+      bccValue={bccValue}
+      bodyValue={bodyValue}
+      ccValue={ccValue}
+      draftDetails={draftDetails}
+      handleChange={handleChange}
+      isReplying={isReplying}
+      isReplyingListener={isReplyingListener}
+      toError={toError}
+      toValue={toValue}
+      setToError={setToError}
+      saveSuccess={saveSuccess}
+      showCC={showCC}
+      showBCC={showBCC}
+      setShowBCC={setShowBCC}
+      setShowCC={setShowCC}
+      subjectValue={subjectValue}
+    />
+  )
 }
 
 export default ComposeEmail

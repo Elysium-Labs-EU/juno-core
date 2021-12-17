@@ -39,6 +39,8 @@ export interface ComposedEmail {
   messageId: string
   labelIds: string[]
   to: string
+  cc: string
+  bcc: string
   subject: string
   body: string
 }

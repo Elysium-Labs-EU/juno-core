@@ -32,6 +32,10 @@ export const Row = styled.div`
   position: relative;
   min-height: 35px;
   display: flex;
-  align-content: flex-start;
   padding: 0.25rem 0;
+`
+
+export const CcBccContainer = styled.div`
+  display: flex;
+  flex-flow: row;
 `

@@ -92,6 +92,8 @@ export const CreateDraft = (): AppThunk => async (dispatch, getState) => {
       messageId: message?.id && message.id,
       labelIds: message?.labelIds && message.labelIds,
       to: composeEmail.to ?? [],
+      cc: composeEmail.cc ?? [],
+      bcc: composeEmail.bcc ?? [],
       subject: composeEmail.subject ?? '',
       body: composeEmail.body ?? '',
     }
@@ -124,6 +126,7 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
       labelIds: message?.labelIds && message.labelIds,
       to: composeEmail.to ?? [],
       cc: composeEmail.cc ?? [],
+      bcc: composeEmail.bcc ?? [],
       subject: composeEmail.subject ?? '',
       body: composeEmail.body ?? '',
     }

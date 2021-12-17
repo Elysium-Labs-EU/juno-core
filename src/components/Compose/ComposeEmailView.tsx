@@ -6,11 +6,13 @@ import { CustomButtonText } from '../Elements/Buttons'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as local from '../../constants/composeEmailConstants'
+import * as global from '../../constants/globalConstants'
 import { useAppDispatch } from '../../Store/hooks'
 import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
 
 interface IComposeEmailView {
+    bccValue: string | string[]
     bodyValue: string
     ccValue: string | string[]
     draftDetails: any
@@ -20,6 +22,8 @@ interface IComposeEmailView {
     saveSuccess: boolean
     setToError: Function
     setShowCC: Function
+    setShowBCC: Function
+    showBCC: boolean
     showCC: boolean
     subjectValue: string
     toError: boolean
@@ -27,7 +31,7 @@ interface IComposeEmailView {
 }
 
 const ComposeEmailView = (props: IComposeEmailView) => {
-    const { bodyValue, ccValue, draftDetails, handleChange, isReplying, isReplyingListener, saveSuccess, setToError, showCC, setShowCC, subjectValue, toError, toValue } = props
+    const { bccValue, bodyValue, ccValue, draftDetails, handleChange, isReplying, isReplyingListener, saveSuccess, setToError, showBCC, showCC, setShowBCC, setShowCC, subjectValue, toError, toValue } = props
     const dispatch = useAppDispatch()
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -75,20 +79,25 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                             </FormHelperText>
                                         )}
                                     </FormControl>
+                                    <S.CcBccContainer>
+                                        {!showCC && <CustomButtonText label="CC" className="button option-link" onClick={() => setShowCC(true)} />}
+                                        {!showBCC && <CustomButtonText label="BCC" className="button option-link" onClick={() => setShowBCC(true)} />}
+                                    </S.CcBccContainer>
                                 </S.Row>
-                                <S.Row>
+                                {showCC && <S.Row>
                                     <S.Label>
-                                        <label htmlFor="cc" className="label-base">
+                                        <label htmlFor={global.CC} className="label-base">
                                             {local.CC_LABEL}
                                         </label>
                                     </S.Label>
                                     <FormControl error={toError} fullWidth>
                                         <InputBase
-                                            id="cc"
+                                            id={global.CC}
                                             // label={local.TO_LABEL}
                                             value={ccValue}
                                             onChange={handleChange}
                                             fullWidth
+                                            autoFocus={showCC}
                                         />
                                         {toError && (
                                             <FormHelperText id="component-helper-text">
@@ -96,7 +105,29 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                             </FormHelperText>
                                         )}
                                     </FormControl>
-                                </S.Row>
+                                </S.Row>}
+                                {showBCC && <S.Row>
+                                    <S.Label>
+                                        <label htmlFor="bcc" className="label-base">
+                                            {local.BCC_LABEL}
+                                        </label>
+                                    </S.Label>
+                                    <FormControl error={toError} fullWidth>
+                                        <InputBase
+                                            id="bcc"
+                                            // label={local.TO_LABEL}
+                                            value={bccValue}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            autoFocus={showBCC}
+                                        />
+                                        {toError && (
+                                            <FormHelperText id="component-helper-text">
+                                                {local.EMAIL_WARNING}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                </S.Row>}
                                 <S.Row>
                                     <S.Label>
                                         <label htmlFor="subject" className="label-base">
