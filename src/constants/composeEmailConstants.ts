@@ -1,4 +1,6 @@
 export const TO_LABEL = 'To'
+export const CC_LABEL = 'CC'
+export const BCC_LABEL = 'BCC'
 export const SUBJECT_LABEL = 'Subject'
 export const BODY_LABEL = 'Body'
 export const SEND_BUTTON = 'Send'
