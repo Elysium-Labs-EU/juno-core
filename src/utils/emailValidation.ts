@@ -3,10 +3,10 @@ const regexTest =
 
 const emailValidation = (email: string | string[]) => {
   if (Array.isArray(email)) {
-    for (let i = 0; i < email.length; i += 1) {
-      if (!regexTest.test(email[i])) {
-        return false
-      }
+    const isValidEmail = (emailEntry: string) => regexTest.test(emailEntry)
+    const arrayTestResult = email.every(isValidEmail)
+    if (arrayTestResult) {
+      return email
     }
   }
   if (typeof email === 'string' && regexTest.test(email)) {
