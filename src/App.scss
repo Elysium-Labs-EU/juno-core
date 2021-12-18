@@ -3,13 +3,6 @@ body {
   margin: 0;
 }
 
-.label-container {
-  flex: 1 1 0%;
-  transition: transform 0.3s ease 0s;
-  white-space: nowrap;
-  user-select: none;
-}
-
 .base {
   display: flex;
   flex-direction: column;
@@ -19,19 +12,6 @@ body {
   width: 100%;
 }
 
-.label-base {
-  cursor: default;
-  user-select: none;
-  transition: opacity 0.3s ease 0s, color 0.3s ease 0s;
-}
-
-.input-base {
-  position: relative;
-  display: flex;
-  flex-flow: row wrap;
-  cursor: text;
-}
-
 .participants-input {
   margin-left: 0;
 }
@@ -39,28 +19,6 @@ body {
 .wrapper-participants {
   // margin-left: -10px;
   margin-right: 20px;
-}
-
-.ccBcc {
-  margin-left: auto;
-}
-
-.ccBccButtons {
-  display: inline-flex;
-  flex-direction: row;
-  height: 35px;
-}
-
-.ccBccButton {
-  border: 0;
-  box-shadow: none;
-  padding: 0;
-  background-color: transparent;
-  outline: 0;
-  color: rgba(20, 20, 21, 0.3);
-  cursor: pointer;
-  user-select: none;
-  transition: color 0.2s ease 0s;
 }
 
 .dnd-base {
@@ -82,14 +40,4 @@ body {
   opacity: 0.5;
   user-select: none;
   cursor: default;
-}
-
-.select {
-  opacity: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 31px;
-  cursor: pointer;
 }

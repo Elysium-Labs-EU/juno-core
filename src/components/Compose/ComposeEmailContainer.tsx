@@ -3,7 +3,7 @@ import isEmpty from 'lodash/isEmpty'
 import { useParams } from 'react-router-dom'
 import { selectComposeEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
-import * as global from '../../constants/globalConstants'
+import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
@@ -33,14 +33,17 @@ const ComposeEmail = ({
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [toValue, setToValue] = useState<string>('')
+  const [toValue, setToValue] = useState<string[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
+  const [inputToValue, setInputToValue] = useState<string | number>('')
   const [showCC, setShowCC] = useState<boolean>(false)
-  const [ccValue, setCCValue] = useState<string>('')
+  const [ccValue, setCCValue] = useState<string[]>([])
   const debouncedCCValue = useDebounce(ccValue, 500)
+  const [inputCCValue, setInputCCValue] = useState<string | number>('')
   const [showBCC, setShowBCC] = useState<boolean>(false)
-  const [bccValue, setBCCValue] = useState<string>('')
+  const [bccValue, setBCCValue] = useState<string[]>([])
   const debouncedBCCValue = useDebounce(bccValue, 500)
+  const [inputBCCValue, setInputBCCValue] = useState<string | number>('')
   const [subjectValue, setSubjectValue] = useState('')
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const [bodyValue, setBodyValue] = useState('')
@@ -49,7 +52,6 @@ const ComposeEmail = ({
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const dispatch = useAppDispatch()
   const { messageId } = useParams<{ messageId: string }>()
-
 
   useEffect(() => {
     if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
@@ -71,31 +73,79 @@ const ComposeEmail = ({
   }, [draftDetails])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === global.TO) {
-      setToValue(e.target.value)
-      return
+    switch (e.target.id) {
+      case local.TO: {
+        const validation = emailValidation(e.target.value)
+        if (validation) {
+          setToValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+        }
+        if (!validation) {
+          setToError(true)
+        }
+        break
+      }
+      case local.CC: {
+        const validation = emailValidation(e.target.value)
+        if (validation) {
+          setCCValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+        }
+        if (!validation) {
+          setToError(true)
+        }
+        break
+      }
+      case local.BCC: {
+        const validation = emailValidation(e.target.value)
+        if (validation) {
+          setBCCValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+        }
+        if (!validation) {
+          setToError(true)
+        }
+        break
+      }
+      case local.SUBJECT: {
+        setSubjectValue(e.target.value)
+        break
+      }
+      case local.BODY: {
+        setBodyValue(e.target.value)
+        break
+      }
+      default:
     }
-    if (e.target.id === global.SUBJECT) {
-      setSubjectValue(e.target.value)
-      return
-    }
-    if (e.target.id === global.BODY) {
-      setBodyValue(e.target.value)
-      return
-    }
-    if (e.target.id === global.CC) {
-      setCCValue(e.target.value)
-      return
-    }
-    if (e.target.id === global.BCC) {
-      setBCCValue(e.target.value)
+  }
+
+  useEffect(() => {
+    console.log(bccValue)
+  }, [bccValue])
+
+  const handleDelete = (selectedOption: any) => {
+    console.log(selectedOption)
+    const { option, fieldId } = selectedOption
+    switch (fieldId) {
+      case local.TO: {
+        setToValue(toValue.filter(item => item !== option))
+        break
+      }
+      case local.CC: {
+        setCCValue(ccValue.filter(item => item !== option))
+        break
+      }
+      case local.BCC: {
+        setBCCValue(bccValue.filter(item => item !== option))
+        break
+      }
+      default: {
+        break
+      }
     }
   }
 
   useEffect(() => {
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
-        const updateEventObject = { id: global.TO, value: debouncedToValue }
+        const updateEventObject = { id: local.TO, value: debouncedToValue }
         dispatch(TrackComposeEmail(updateEventObject))
       }
     }
@@ -105,7 +155,7 @@ const ComposeEmail = ({
   useEffect(() => {
     if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
-        const updateEventObject = { id: global.BCC, value: debouncedBCCValue }
+        const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
         dispatch(TrackComposeEmail(updateEventObject))
       }
     }
@@ -115,7 +165,7 @@ const ComposeEmail = ({
   useEffect(() => {
     if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
-        const updateEventObject = { id: global.CC, value: debouncedCCValue }
+        const updateEventObject = { id: local.CC, value: debouncedCCValue }
         dispatch(TrackComposeEmail(updateEventObject))
       }
     }
@@ -125,7 +175,7 @@ const ComposeEmail = ({
   useEffect(() => {
     if (debouncedSubjectValue) {
       const updateEventObject = {
-        id: global.SUBJECT,
+        id: local.SUBJECT,
         value: debouncedSubjectValue,
       }
       dispatch(TrackComposeEmail(updateEventObject))
@@ -135,7 +185,7 @@ const ComposeEmail = ({
 
   useEffect(() => {
     if (debouncedBodyValue) {
-      const updateEventObject = { id: global.BODY, value: debouncedBodyValue }
+      const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
       dispatch(TrackComposeEmail(updateEventObject))
     }
     return () => { }
@@ -153,9 +203,10 @@ const ComposeEmail = ({
       setBodyValue(composeEmail.body)
     }
     if (to || subject || cc || bcc) {
-      cc && setCCValue(cc)
-      bcc && setBCCValue(bcc)
-      to && setToValue(to)
+      console.log(to)
+      cc && setCCValue([cc])
+      bcc && setBCCValue([bcc])
+      to && setToValue([to])
       subject && setSubjectValue(subject)
     }
     return () => { }
@@ -192,6 +243,10 @@ const ComposeEmail = ({
       ccValue={ccValue}
       draftDetails={draftDetails}
       handleChange={handleChange}
+      handleDelete={handleDelete}
+      inputToValue={inputToValue}
+      inputCCValue={inputCCValue}
+      inputBCCValue={inputBCCValue}
       isReplying={isReplying}
       isReplyingListener={isReplyingListener}
       toError={toError}
@@ -202,6 +257,9 @@ const ComposeEmail = ({
       showBCC={showBCC}
       setShowBCC={setShowBCC}
       setShowCC={setShowCC}
+      setInputToValue={setInputToValue}
+      setInputCCValue={setInputCCValue}
+      setInputBCCValue={setInputBCCValue}
       subjectValue={subjectValue}
     />
   )

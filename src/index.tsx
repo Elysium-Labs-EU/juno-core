@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom'
 // import * as Sentry from '@sentry/react'
 // import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
+import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { store } from './Store/store'
 import './App.scss'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import { theme } from './styles/globalStyles'
 
 // Sentry.init({
 //   dsn: 'https://493389e033b54228a97252c427fdebe6@o917516.ingest.sentry.io/5859846',
@@ -19,11 +21,13 @@ import reportWebVitals from './reportWebVitals'
 // })
 
 ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Provider>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 )
 

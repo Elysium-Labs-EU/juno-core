@@ -3,11 +3,15 @@ export interface ComposePayload {
   value?: string
   body?: string | string[]
   subject?: string
-  to?: string
+  to?: string[]
+  cc?: string[]
+  bcc?: string[]
 }
 
 export interface ComposeEmail {
-  to: string
+  to: string[]
+  cc: string[]
+  bcc: string[]
   subject: string
   body: string
 }

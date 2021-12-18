@@ -1,3 +1,4 @@
+import createTheme from '@mui/material/styles/createTheme'
 import styled from 'styled-components'
 
 export const App = styled.div`
@@ -30,3 +31,27 @@ export const MenuPopper = styled.div`
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
 `
+
+export const theme = createTheme({
+  // breakpoints: {
+  //   values: {
+  //     xs: parseInt(BP.MAX_XS, 10),
+  //     sm: parseInt(BP.MAX_S, 10),
+  //     md: parseInt(BP.MAX_M, 10),
+  //     lg: parseInt(BP.MAX_L, 10),
+  //     xl: 1200,
+  //   },
+  // },
+  typography: {
+    fontFamily: [
+      'Urbanist Variable',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
+  },
+})
