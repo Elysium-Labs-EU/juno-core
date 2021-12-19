@@ -54,13 +54,13 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
             {!labelIds.includes(draft.LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
-              <EmailAvatar avatarURL={staticRecipientName[0]} />
+              <EmailAvatar avatarURL={staticRecipientName.name} />
             )}
           </S.Avatars>
           {!labelIds.includes(draft.LABEL) ? (
-            <span className="text_truncate" title={staticSenderPartial[1]}>{staticSenderPartial[0]}</span>
+            <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name}</span>
           ) : (
-            <span className="text_truncate" title={staticRecipientName[1]}>{staticRecipientName[0]}</span>
+            <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>

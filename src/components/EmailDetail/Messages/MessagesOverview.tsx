@@ -12,12 +12,15 @@ import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes
 import { useAppDispatch } from '../../../Store/hooks'
 import MarkEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
+import convertToContact from '../../../utils/convertToContact'
 
 
 const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
   if (threadDetail) {
-    return findPayloadHeadersData(query, threadDetail)
+    const data: string = findPayloadHeadersData(query, threadDetail)
+    console.log(data)
+    return convertToContact(data)
   }
   return null
 }

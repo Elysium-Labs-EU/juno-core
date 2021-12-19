@@ -3,24 +3,6 @@ body {
   margin: 0;
 }
 
-.base {
-  display: flex;
-  flex-direction: column;
-}
-
-.headerFullWidth {
-  width: 100%;
-}
-
-.participants-input {
-  margin-left: 0;
-}
-
-.wrapper-participants {
-  // margin-left: -10px;
-  margin-right: 20px;
-}
-
 .dnd-base {
   min-height: 140px;
   border: 1px dashed rgb(221, 221, 231);

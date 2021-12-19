@@ -2,14 +2,14 @@ import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
 import { BASE_API_URL, errorHandeling } from './api'
 
-interface QueryObject {
+interface EmailQueryObject {
   labelIds: string[]
   maxResults?: number
   nextPageToken?: string
 }
 
 const threadApi = () => ({
-  getThreads: async (query: QueryObject) => {
+  getThreads: async (query: EmailQueryObject) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${BASE_API_URL}/api/threads/`,

@@ -70,11 +70,11 @@ const EmailList = () => {
           <GS.OuterContainer>
             <S.ThreadList>
               {threads.length > 0 && (
-                <div className="base">
+                <GS.Base>
                   {threads.map((email) => (
                     <EmailListItem key={email.id} email={email} />
                   ))}
-                </div>
+                </GS.Base>
               )}
               {threads.length === 0 && <Emptystate />}
             </S.ThreadList>

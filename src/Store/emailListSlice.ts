@@ -337,7 +337,6 @@ export const loadEmails =
               : threads,
             nextPageToken: nextPageToken ?? null,
           }
-          // dispatch(listAddMeta(labeledThreads))
           dispatch(loadEmailDetails(labeledThreads))
         } else {
           dispatch(setLoadedInbox(labelIds))
