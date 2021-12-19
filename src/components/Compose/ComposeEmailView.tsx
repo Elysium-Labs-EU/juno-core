@@ -7,11 +7,10 @@ import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import * as local from '../../constants/composeEmailConstants'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch } from '../../Store/hooks'
 import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
 import EmailInput from './ComposeFields/EmailInput'
-import { selectAllContacts } from '../../Store/contactsSlice'
 import { Contact } from '../../Store/contactsTypes'
 
 interface IComposeEmailView {
@@ -69,7 +68,6 @@ const ComposeEmailView = (props: IComposeEmailView) => {
         toValue
     } = props
     const dispatch = useAppDispatch()
-    const allContacts = useAppSelector(selectAllContacts)
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -104,7 +102,6 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                         <EmailInput
                                             id={local.TO}
                                             valueState={toValue}
-                                            availableOptions={allContacts}
                                             handleChange={handleChangeRecipients}
                                             inputValue={inputToValue}
                                             setInputValue={setInputToValue}
@@ -132,7 +129,6 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                         <EmailInput
                                             id={local.CC}
                                             valueState={ccValue}
-                                            availableOptions={allContacts}
                                             handleChange={handleChangeRecipients}
                                             inputValue={inputCCValue}
                                             setInputValue={setInputCCValue}
@@ -157,7 +153,6 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                             <EmailInput
                                                 id={local.BCC}
                                                 valueState={bccValue}
-                                                availableOptions={allContacts}
                                                 handleChange={handleChangeRecipients}
                                                 inputValue={inputBCCValue}
                                                 setInputValue={setInputBCCValue}

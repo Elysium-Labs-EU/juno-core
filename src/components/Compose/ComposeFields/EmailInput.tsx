@@ -4,13 +4,15 @@ import Autocomplete from '@mui/material/Autocomplete'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../Elements/RecipientChip/RecipientChip'
 import { Contact } from '../../../Store/contactsTypes'
-import { useAppSelector } from '../../../Store/hooks'
-import { selectAllContacts } from '../../../Store/contactsSlice'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { selectAllContacts, selectContactsLoaded, setAllContacts, setContactsLoaded } from '../../../Store/contactsSlice'
+import contactApi from '../../../data/contactApi'
+import { setServiceUnavailable } from '../../../Store/utilsSlice'
+import useDebounce from '../../../Hooks/useDebounce'
 
 interface IEmailInputProps {
   id: string
   valueState: Contact[]
-  availableOptions: any
   handleChange: any
   handleDelete: Function
   inputValue: string
@@ -20,44 +22,83 @@ interface IEmailInputProps {
 
 
 const emailInput = (props: IEmailInputProps) => {
-  const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<readonly Contact[]>([])
-  const availableContacts: Contact[] = useAppSelector(selectAllContacts)
-
-  const loading = open && options.length === 0
   const {
     id,
     valueState,
-    availableOptions,
     handleChange,
     inputValue,
     setInputValue,
     handleDelete,
     willAutoFocus
   } = props
+  const [open, setOpen] = useState(false)
+  const [options, setOptions] = useState<readonly Contact[]>([])
+  const debouncedInputValue = useDebounce(inputValue, 500)
+  const availableContacts: Contact[] = useAppSelector(selectAllContacts)
+  const contactsLoaded: boolean = useAppSelector(selectContactsLoaded)
+  const dispatch = useAppDispatch()
+
+  // const loading = open && options.length === 0
 
   useEffect(() => {
+    console.log(debouncedInputValue)
+
+    // const active = true
     let active = true
+    if (debouncedInputValue && debouncedInputValue.length > 1) {
 
-    if (!loading) {
-      return undefined
+      // if (!loading) {
+      //   return undefined
+      // }
+
+      (async () => {
+        const check = availableContacts.some((contact) => contact.emailAddress.includes(inputValue.toLowerCase()))
+        if (check) {
+          console.log('exists')
+        }
+        const params = {
+          query: inputValue,
+          readMask: 'emailAddresses,names'
+        }
+        try {
+          const responseQueryContacts = await contactApi().queryContacts(params)
+          if (responseQueryContacts.status === 200) {
+            const {
+              data: {
+                message: { results },
+              },
+            } = responseQueryContacts
+
+            const mappedResults = results.map(
+              (contact: any): Contact => ({
+                name: Object.prototype.hasOwnProperty.call(
+                  contact.person,
+                  'names'
+                )
+                  ? contact.person.names[0].displayName
+                  : contact.person.emailAddresses[0].value,
+                emailAddress: contact.person.emailAddresses[0].value,
+              })
+            )
+
+            dispatch(setAllContacts(mappedResults))
+            dispatch(setContactsLoaded(true))
+          }
+        } catch (err) {
+          console.log(err)
+          dispatch(setServiceUnavailable('Error fetching contacts.'))
+        }
+
+        if (active) {
+          setOptions(availableContacts)
+        }
+      })()
+
     }
-
-    (async () => {
-      if (availableContacts.some((contact) => valueState.map((item) => item.emailAddress === contact.emailAddress))) {
-        console.log('exists')
-      }
-      // await  // For demo purposes.
-
-      if (active) {
-        setOptions([{ name: 'Robbert Tuerlings', emailAddress: 'robberttg@gmail.com' }])
-      }
-    })()
-
     return () => {
       active = false
     }
-  }, [loading])
+  }, [debouncedInputValue, contactsLoaded])
 
   useEffect(() => {
     if (!open) {
@@ -69,8 +110,10 @@ const emailInput = (props: IEmailInputProps) => {
     <Autocomplete
       multiple
       size="small"
+      limitTags={3}
       id={id}
       open={open}
+      filterSelectedOptions
       onOpen={() => {
         setOpen(true)
       }}
@@ -96,7 +139,6 @@ const emailInput = (props: IEmailInputProps) => {
         <StyledTextField
           {...params}
           variant="outlined"
-          required
           fullWidth
           autoFocus={willAutoFocus}
         />

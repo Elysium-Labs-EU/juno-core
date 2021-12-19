@@ -9,7 +9,6 @@ import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/drafts
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
-import { getAllContacts, querySpecificContacts } from '../../Store/contactsSlice'
 import { Contact } from '../../Store/contactsTypes'
 
 // Props are coming from MessageOverview
@@ -17,8 +16,8 @@ interface ComposeEmailProps {
   isReplying: boolean
   isReplyingListener: Function
   to: Contact | null
-  bcc: Contact
-  cc: Contact
+  bcc: Contact | null
+  cc: Contact | null
   subject: string
   threadId: string
 }
@@ -56,10 +55,6 @@ const ComposeEmail = ({
   const { messageId } = useParams<{ messageId: string }>()
 
   useEffect(() => {
-    console.log(inputToValue)
-  }, [inputToValue])
-
-  useEffect(() => {
     if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
       dispatch(CreateDraft())
     } else if (!isEmpty(draftDetails) && messageId) {
@@ -78,21 +73,18 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  // useEffect(() => {
-  //   const params = {
-  //     readMask: "emailAddresses,names",
-  //     query: 'ro'
-  //   }
-  //   dispatch(querySpecificContacts(params))
-  // }, [])
-
-  const handleChangeRecipients = (e: any) => {
-    console.log(e)
-    switch (e.fieldId) {
+  const handleChangeRecipients = (recipientListRaw: any) => {
+    const recipientList = {
+      fieldId: recipientListRaw.fieldId,
+      newValue: recipientListRaw.newValue.map(
+        (item: string | Contact) => typeof (item) === 'string'
+          ? { name: item, emailAddress: item } : item)
+    }
+    switch (recipientList.fieldId) {
       case local.TO: {
-        const validation = emailValidation(e.newValue)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setToValue(e.newValue)
+          setToValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
@@ -100,9 +92,9 @@ const ComposeEmail = ({
         break
       }
       case local.CC: {
-        const validation = emailValidation(e.newValue)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setCCValue(e.newValue)
+          setCCValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
@@ -110,9 +102,9 @@ const ComposeEmail = ({
         break
       }
       case local.BCC: {
-        const validation = emailValidation(e.newValue)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setBCCValue(e.newValue)
+          setBCCValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
@@ -219,7 +211,6 @@ const ComposeEmail = ({
       setBodyValue(composeEmail.body)
     }
     if (to || subject || cc || bcc) {
-      console.log(to)
       cc && setCCValue([cc])
       bcc && setBCCValue([bcc])
       to && setToValue([to])
@@ -249,8 +240,6 @@ const ComposeEmail = ({
     }
     return () => { }
   }, [threadId])
-
-
 
   return (
     <ComposeEmailView

@@ -22,7 +22,14 @@ export const contactsSlice = createSlice({
   initialState,
   reducers: {
     setAllContacts: (state, action) => {
-      state.allContacts = action.payload
+      const uniqueContacts = [
+        ...new Set(
+          [...state.allContacts, ...action.payload].map((contact) =>
+            JSON.stringify(contact)
+          )
+        ),
+      ].map((string) => JSON.parse(string))
+      state.allContacts = uniqueContacts
     },
     setContactsNextPageToken: (state, action) => {
       state.contactNextPageToken = action.payload
@@ -79,7 +86,12 @@ export const querySpecificContacts =
           setAllContacts(
             results.map(
               (contact: any): Contact => ({
-                name: contact.person.names[0].displayName,
+                name: Object.prototype.hasOwnProperty.call(
+                  contact.person,
+                  'names'
+                )
+                  ? contact.person.names[0].displayName
+                  : contact.person.emailAddresses[0].value,
                 emailAddress: contact.person.emailAddresses[0].value,
               })
             )

@@ -28,7 +28,6 @@ const contactApi = () => ({
             qs.stringify(params, { arrayFormat: 'repeat' }),
         }
       )
-      console.log(res)
       return res
     } catch (err) {
       return errorHandeling(err)
@@ -47,7 +46,6 @@ const contactApi = () => ({
             qs.stringify(params, { arrayFormat: 'repeat' }),
         }
       )
-      console.log(res)
       return res
     } catch (err) {
       return errorHandeling(err)

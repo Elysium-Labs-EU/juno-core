@@ -1,7 +1,6 @@
-// const regexTest = /[<>]/g
+// Takes the string email format from Gmail, and converts it to object email format for this app.
 
 const convertToContact = (data: any) => {
-  console.log('here', data)
   if (data.length > 0) {
     const splitted = data.split('<')
     if (splitted.length > 1) {
