@@ -20,7 +20,6 @@ interface IEmailInputProps {
   willAutoFocus: boolean
 }
 
-
 const emailInput = (props: IEmailInputProps) => {
   const {
     id,
@@ -35,58 +34,48 @@ const emailInput = (props: IEmailInputProps) => {
   const [options, setOptions] = useState<readonly Contact[]>([])
   const debouncedInputValue = useDebounce(inputValue, 500)
   const availableContacts: Contact[] = useAppSelector(selectAllContacts)
-  const contactsLoaded: boolean = useAppSelector(selectContactsLoaded)
+  const contactsLoaded: string = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
-  // const loading = open && options.length === 0
-
   useEffect(() => {
-    console.log(debouncedInputValue)
-
-    // const active = true
     let active = true
     if (debouncedInputValue && debouncedInputValue.length > 1) {
 
-      // if (!loading) {
-      //   return undefined
-      // }
-
       (async () => {
         const check = availableContacts.some((contact) => contact.emailAddress.includes(inputValue.toLowerCase()))
-        if (check) {
-          console.log('exists')
-        }
-        const params = {
-          query: inputValue,
-          readMask: 'emailAddresses,names'
-        }
-        try {
-          const responseQueryContacts = await contactApi().queryContacts(params)
-          if (responseQueryContacts.status === 200) {
-            const {
-              data: {
-                message: { results },
-              },
-            } = responseQueryContacts
-
-            const mappedResults = results.map(
-              (contact: any): Contact => ({
-                name: Object.prototype.hasOwnProperty.call(
-                  contact.person,
-                  'names'
-                )
-                  ? contact.person.names[0].displayName
-                  : contact.person.emailAddresses[0].value,
-                emailAddress: contact.person.emailAddresses[0].value,
-              })
-            )
-
-            dispatch(setAllContacts(mappedResults))
-            dispatch(setContactsLoaded(true))
+        if (!check) {
+          const params = {
+            query: inputValue,
+            readMask: 'emailAddresses,names'
           }
-        } catch (err) {
-          console.log(err)
-          dispatch(setServiceUnavailable('Error fetching contacts.'))
+          try {
+            const responseQueryContacts = await contactApi().queryContacts(params)
+            if (responseQueryContacts.status === 200) {
+              const {
+                data: {
+                  message: { results },
+                },
+              } = responseQueryContacts
+
+              const mappedResults = results.length > 0 ? results.map(
+                (contact: any): Contact => ({
+                  name: Object.prototype.hasOwnProperty.call(
+                    contact.person,
+                    'names'
+                  )
+                    ? contact.person.names[0].displayName
+                    : contact.person.emailAddresses[0].value,
+                  emailAddress: contact.person.emailAddresses[0].value,
+                })
+              ) : []
+
+              dispatch(setAllContacts(mappedResults))
+              dispatch(setContactsLoaded(JSON.stringify(Date.now())))
+            }
+          } catch (err) {
+            console.log(err)
+            dispatch(setServiceUnavailable('Error fetching contacts.'))
+          }
         }
 
         if (active) {

@@ -8,13 +8,13 @@ import contactApi from '../data/contactApi'
 interface ContactState {
   allContacts: any
   contactNextPageToken: string
-  contactsLoaded: boolean
+  contactsLoaded: string
 }
 
 const initialState: ContactState = Object.freeze({
   allContacts: [],
   contactNextPageToken: '',
-  contactsLoaded: false,
+  contactsLoaded: '',
 })
 
 export const contactsSlice = createSlice({
