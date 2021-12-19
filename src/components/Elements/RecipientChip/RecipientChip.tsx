@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React from 'react'
+import React, { useState } from 'react'
 import StyledChip from './RecipientChipStyles'
 
 interface IRecipientChip {
@@ -13,8 +13,20 @@ interface IRecipientChip {
 
 const RecipientChip = (props: IRecipientChip) => {
     const { option, getTagProps, handleDelete, id, index } = props
+    const [showFull, setShowFull] = useState(false)
 
-    return <StyledChip variant="filled" label={option} {...getTagProps({ index })} onDelete={() => handleDelete({ option, fieldId: id })} />
+    const chipLabel = () => {
+        if (option.name && showFull) {
+            return `${ option.name } <${ option.emailAddress }>`
+        }
+        if (option.name && !showFull) {
+            return option.name
+        }
+
+        return option.emailAddress
+    }
+
+    return <StyledChip variant="filled" label={chipLabel()} {...getTagProps({ index })} onDelete={() => handleDelete({ option, fieldId: id })} onClick={() => setShowFull(!showFull)} title={option.emailAddress} />
 }
 
 export default RecipientChip

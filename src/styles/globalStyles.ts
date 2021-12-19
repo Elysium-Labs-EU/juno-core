@@ -1,7 +1,7 @@
 import createTheme from '@mui/material/styles/createTheme'
 import styled from 'styled-components'
 
-export const App = styled.div`
+export const Base = styled.div`
   display: flex;
   flex-flow: column;
 `

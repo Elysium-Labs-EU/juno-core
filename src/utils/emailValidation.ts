@@ -1,9 +1,14 @@
+import { Contact } from '../Store/contactsTypes'
+
 const regexTest =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-const emailValidation = (email: string | string[]) => {
+// Test the input if the content are valid emails.
+
+const emailValidation = (email: Contact[]) => {
   if (Array.isArray(email)) {
-    const isValidEmail = (emailEntry: string) => regexTest.test(emailEntry)
+    const isValidEmail = (emailEntry: Contact) =>
+      regexTest.test(emailEntry.emailAddress)
     const arrayTestResult = email.every(isValidEmail)
     if (arrayTestResult) {
       return email

@@ -9,14 +9,15 @@ import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/drafts
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
+import { Contact } from '../../Store/contactsTypes'
 
 // Props are coming from MessageOverview
 interface ComposeEmailProps {
   isReplying: boolean
   isReplyingListener: Function
-  to: string
-  bcc: string
-  cc: string
+  to: Contact | null
+  bcc: Contact | null
+  cc: Contact | null
   subject: string
   threadId: string
 }
@@ -33,15 +34,15 @@ const ComposeEmail = ({
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [toValue, setToValue] = useState<string[]>([])
+  const [toValue, setToValue] = useState<Contact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [inputToValue, setInputToValue] = useState<string | number>('')
   const [showCC, setShowCC] = useState<boolean>(false)
-  const [ccValue, setCCValue] = useState<string[]>([])
+  const [ccValue, setCCValue] = useState<Contact[]>([])
   const debouncedCCValue = useDebounce(ccValue, 500)
   const [inputCCValue, setInputCCValue] = useState<string | number>('')
   const [showBCC, setShowBCC] = useState<boolean>(false)
-  const [bccValue, setBCCValue] = useState<string[]>([])
+  const [bccValue, setBCCValue] = useState<Contact[]>([])
   const debouncedBCCValue = useDebounce(bccValue, 500)
   const [inputBCCValue, setInputBCCValue] = useState<string | number>('')
   const [subjectValue, setSubjectValue] = useState('')
@@ -72,12 +73,18 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    switch (e.target.id) {
+  const handleChangeRecipients = (recipientListRaw: any) => {
+    const recipientList = {
+      fieldId: recipientListRaw.fieldId,
+      newValue: recipientListRaw.newValue.map(
+        (item: string | Contact) => typeof (item) === 'string'
+          ? { name: item, emailAddress: item } : item)
+    }
+    switch (recipientList.fieldId) {
       case local.TO: {
-        const validation = emailValidation(e.target.value)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setToValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+          setToValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
@@ -85,9 +92,9 @@ const ComposeEmail = ({
         break
       }
       case local.CC: {
-        const validation = emailValidation(e.target.value)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setCCValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+          setCCValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
@@ -95,15 +102,21 @@ const ComposeEmail = ({
         break
       }
       case local.BCC: {
-        const validation = emailValidation(e.target.value)
+        const validation = emailValidation(recipientList.newValue)
         if (validation) {
-          setBCCValue(prevState => prevState ? [...prevState, e.target.value] : [e.target.value])
+          setBCCValue(recipientList.newValue)
         }
         if (!validation) {
           setToError(true)
         }
         break
       }
+      default:
+    }
+  }
+
+  const handleChangeSubjectBody = (e: React.ChangeEvent<HTMLInputElement>) => {
+    switch (e.target.id) {
       case local.SUBJECT: {
         setSubjectValue(e.target.value)
         break
@@ -116,12 +129,7 @@ const ComposeEmail = ({
     }
   }
 
-  useEffect(() => {
-    console.log(bccValue)
-  }, [bccValue])
-
   const handleDelete = (selectedOption: any) => {
-    console.log(selectedOption)
     const { option, fieldId } = selectedOption
     switch (fieldId) {
       case local.TO: {
@@ -203,7 +211,6 @@ const ComposeEmail = ({
       setBodyValue(composeEmail.body)
     }
     if (to || subject || cc || bcc) {
-      console.log(to)
       cc && setCCValue([cc])
       bcc && setBCCValue([bcc])
       to && setToValue([to])
@@ -234,15 +241,14 @@ const ComposeEmail = ({
     return () => { }
   }, [threadId])
 
-
-
   return (
     <ComposeEmailView
       bccValue={bccValue}
       bodyValue={bodyValue}
       ccValue={ccValue}
       draftDetails={draftDetails}
-      handleChange={handleChange}
+      handleChangeRecipients={handleChangeRecipients}
+      handleChangeSubjectBody={handleChangeSubjectBody}
       handleDelete={handleDelete}
       inputToValue={inputToValue}
       inputCCValue={inputCCValue}

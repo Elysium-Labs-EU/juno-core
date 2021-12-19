@@ -137,7 +137,7 @@ const ReadMessage = ({
             <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={staticSenderNameFull} />
               <S.ClosedSender>
-                <span className="text_normal text_bold" title={staticSenderPartial[1]}>{staticSenderPartial[0]}</span>
+                <span className="text_normal text_bold" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>

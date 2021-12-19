@@ -48,7 +48,7 @@ const App = () => {
     <Router history={history}>
       {!baseLoaded && <BaseLoader />}
       {baseLoaded && (
-        <GS.App>
+        <GS.Base>
           <GS.OuterContainer>
             <Header />
           </GS.OuterContainer>
@@ -65,7 +65,7 @@ const App = () => {
               <Route path={Routes.INBOX} component={Inbox} />
             </Switch>
           </React.Suspense>
-        </GS.App>
+        </GS.Base>
       )}
     </Router>
   )

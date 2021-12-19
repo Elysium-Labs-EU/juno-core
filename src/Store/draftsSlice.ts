@@ -17,6 +17,7 @@ import {
 } from './draftsTypes'
 import bodyDecoder from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
+import convertToGmailEmail from '../utils/convertToGmailEmail'
 
 const initialState: DraftsState = Object.freeze({
   draftListLoaded: false,
@@ -86,14 +87,15 @@ export const CreateDraft = (): AppThunk => async (dispatch, getState) => {
     const { composeEmail }: any = getState().compose
     const { id, message } =
       getState().drafts.draftDetails && getState().drafts.draftDetails
+
     const baseComposedEmail: ComposedEmail = {
       draftId: id && id,
       threadId: message?.threadId && message.threadId,
       messageId: message?.id && message.id,
       labelIds: message?.labelIds && message.labelIds,
-      to: composeEmail.to ?? [],
-      cc: composeEmail.cc ?? [],
-      bcc: composeEmail.bcc ?? [],
+      to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
+      cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
+      bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
       subject: composeEmail.subject ?? '',
       body: composeEmail.body ?? '',
     }
@@ -124,16 +126,15 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
       threadId: message?.threadId && message.threadId,
       messageId: message?.id && message.id,
       labelIds: message?.labelIds && message.labelIds,
-      to: composeEmail.to ?? [],
-      cc: composeEmail.cc ?? [],
-      bcc: composeEmail.bcc ?? [],
+      to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
+      cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
+      bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
       subject: composeEmail.subject ?? '',
       body: composeEmail.body ?? '',
     }
 
     const response = await draftApi().updateDrafts(baseComposedEmail)
     if (response && response.status === 200) {
-      console.log(response)
       const {
         data: {
           message: { data },
