@@ -120,18 +120,24 @@ const ReadMessage = ({
           </S.TopContainer>
 
           <S.FromCCContainer>
-            <S.FromCCInner>
+            <S.FromBCCInner>
               <span className="text_muted text_small" style={{ marginRight: '4px' }}>
                 {FROM}
               </span>
               <span className="text_small">{staticSenderNameFull}</span>
-            </S.FromCCInner>
-            {staticCCNameFull && staticCCNameFull.length > 0 && <S.FromCCInner>
+            </S.FromBCCInner>
+            {staticCCNameFull && staticCCNameFull.length > 0 && <S.FromBCCInner>
               <span className="text_muted text_small" style={{ marginRight: '4px' }}>
                 {compose.CC_LABEL}
               </span>
               <span className="text_small" title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</span>
-            </S.FromCCInner>}
+            </S.FromBCCInner>}
+            {staticBCCNameFull && staticBCCNameFull.length > 0 && <S.FromBCCInner>
+              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                {compose.BCC_LABEL}
+              </span>
+              <span className="text_small" title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</span>
+            </S.FromBCCInner>}
           </S.FromCCContainer>
 
           <S.EmailBody>

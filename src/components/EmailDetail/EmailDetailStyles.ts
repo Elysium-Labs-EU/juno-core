@@ -153,10 +153,11 @@ export const FromCCContainer = styled.div`
   padding-bottom: 1rem;
 `
 
-export const FromCCInner = styled.div`
+export const FromBCCInner = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
+  max-width: 33%;
 `
 
 export const EmailBody = styled.div`
