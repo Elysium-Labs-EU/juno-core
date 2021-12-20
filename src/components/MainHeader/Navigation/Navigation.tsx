@@ -8,7 +8,7 @@ import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox } from 'react-icons/fi
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
-import * as Routes from '../../../constants/routes.json'
+import Routes from '../../../constants/routes.json'
 import { LocationObjectType } from '../../types/globalTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 
