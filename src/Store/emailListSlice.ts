@@ -35,16 +35,6 @@ const initialState: EmailListState = Object.freeze({
   isFetching: false,
 })
 
-// TODO: Ensure no double emails
-// const uniqueCandidates = [
-//   ...new Set(
-//     [...state.candidates, ...action.payload].map((candidate) =>
-//       JSON.stringify(candidate)
-//     )
-//   ),
-// ].map((string) => JSON.parse(string))
-// state.candidates = uniqueCandidates
-
 export const emailListSlice = createSlice({
   name: 'email',
   initialState,
