@@ -5,4 +5,5 @@ workflows:
   run-npm-command:
     jobs:
       - node/run:
+          pkg-manager: yarn
           yarn-run: build
