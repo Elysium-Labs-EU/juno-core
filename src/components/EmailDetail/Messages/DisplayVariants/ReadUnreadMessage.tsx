@@ -6,6 +6,7 @@ import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import * as local from '../../../../constants/unreadConstants'
+import * as compose from '../../../../constants/composeEmailConstants'
 import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
@@ -17,6 +18,8 @@ import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import EmailSubject from '../../../Elements/EmailSubject'
 import EmailSnippet from '../../../Elements/EmailSnippet'
+import BCCNameFull from '../../../Elements/BCCNameFull'
+import convertToContact from '../../../../utils/convertToContact'
 
 const ReadMessage = ({
   message,
@@ -85,6 +88,8 @@ const ReadMessage = ({
 
 
   const staticSenderNameFull = SenderNameFull(message)
+  const staticCCNameFull = BCCNameFull(message, 'Cc')
+  const staticBCCNameFull = BCCNameFull(message, 'Bcc')
   const staticEmailSubject = EmailSubject(message)
   const staticSnippet = EmailSnippet(message)
   const staticSenderPartial = SenderNamePartial(message)
@@ -113,12 +118,22 @@ const ReadMessage = ({
               </S.TimeAttachmentContainer>
             </S.HeaderFullWidth>
           </S.TopContainer>
-          <S.FromContainer>
-            <span className="text_muted text_small" style={{ marginRight: '4px' }}>
-              {FROM}
-            </span>
-            <span className="text_small">{staticSenderNameFull}</span>
-          </S.FromContainer>
+
+          <S.FromCCContainer>
+            <S.FromCCInner>
+              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                {FROM}
+              </span>
+              <span className="text_small">{staticSenderNameFull}</span>
+            </S.FromCCInner>
+            {staticCCNameFull && staticCCNameFull.length > 0 && <S.FromCCInner>
+              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                {compose.CC_LABEL}
+              </span>
+              <span className="text_small" title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</span>
+            </S.FromCCInner>}
+          </S.FromCCContainer>
+
           <S.EmailBody>
             {message && message.payload && message.id && (
               <EmailDetailBody

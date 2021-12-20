@@ -137,7 +137,7 @@ export const HeaderFullWidth = styled.div`
   place-items: center;
 `
 
-export const FromContainer = styled.div`
+export const FromCCContainer = styled.div`
   margin-top: 0.5rem;
   align-items: center;
   display: flex;
@@ -146,8 +146,17 @@ export const FromContainer = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  div:last-child {
+    margin-left: 2rem;
+  }
   border-bottom: 1px solid ${theme.greyBorder};
   padding-bottom: 1rem;
+`
+
+export const FromCCInner = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
 `
 
 export const EmailBody = styled.div`
