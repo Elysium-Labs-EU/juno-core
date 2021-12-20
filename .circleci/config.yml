@@ -1,9 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@5.0.0
-
 workflows:
   run-npm-command:
     jobs:
       - node/run:
-          yarn-run: lint:prettier
+          yarn-run: build
