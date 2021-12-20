@@ -10,6 +10,7 @@ import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
 import { Contact } from '../../Store/contactsTypes'
+import convertToContact from '../../utils/convertToContact'
 
 // Props are coming from MessageOverview
 interface ComposeEmailProps {
@@ -22,7 +23,7 @@ interface ComposeEmailProps {
   threadId: string
 }
 
-const ComposeEmail = ({
+const ComposeEmailContainer = ({
   isReplying,
   isReplyingListener,
   to,
@@ -201,19 +202,24 @@ const ComposeEmail = ({
 
   // Set the form values
   useEffect(() => {
-    if (composeEmail) {
-      setToValue(composeEmail.to)
-      if (composeEmail.length > 0) {
+    if (!isEmpty(composeEmail)) {
+      setToValue(Array(composeEmail.to).map((item) => convertToContact(item)))
+      if (composeEmail.cc && composeEmail.cc.length > 0) {
         setShowCC(true)
-        setCCValue(composeEmail.cc)
+        setCCValue(Array(composeEmail.cc).map((item) => convertToContact(item)))
+      }
+      if (composeEmail.bcc && composeEmail.bcc.length > 0) {
+        setShowBCC(true)
+        setBCCValue(Array(composeEmail.bcc).map((item) => convertToContact(item)))
       }
       setSubjectValue(composeEmail.subject)
       setBodyValue(composeEmail.body)
     }
+    // Form values coming from a new reply via MessageOverview
     if (to || subject || cc || bcc) {
+      to && setToValue([to])
       cc && setCCValue([cc])
       bcc && setBCCValue([bcc])
-      to && setToValue([to])
       subject && setSubjectValue(subject)
     }
     return () => { }
@@ -271,4 +277,4 @@ const ComposeEmail = ({
   )
 }
 
-export default ComposeEmail
+export default ComposeEmailContainer

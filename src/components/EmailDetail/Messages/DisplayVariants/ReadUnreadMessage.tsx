@@ -88,11 +88,11 @@ const ReadMessage = ({
 
 
   const staticSenderNameFull = SenderNameFull(message)
+  const staticSenderNamePartial = SenderNamePartial(message)
   const staticCCNameFull = BCCNameFull(message, 'Cc')
   const staticBCCNameFull = BCCNameFull(message, 'Bcc')
   const staticEmailSubject = EmailSubject(message)
   const staticSnippet = EmailSnippet(message)
-  const staticSenderPartial = SenderNamePartial(message)
 
   return (
     <>
@@ -119,7 +119,7 @@ const ReadMessage = ({
             </S.HeaderFullWidth>
           </S.TopContainer>
 
-          <S.FromCCContainer>
+          <S.FromCCContainer multipleComponents={Boolean(staticSenderNameFull && (staticCCNameFull || staticBCCNameFull))}>
             <S.FromBCCInner>
               <span className="text_muted text_small" style={{ marginRight: '4px' }}>
                 {FROM}
@@ -158,7 +158,7 @@ const ReadMessage = ({
             <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={staticSenderNameFull} />
               <S.ClosedSender>
-                <span className="text_normal text_bold" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name}</span>
+                <span className="text_normal text_bold" title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>

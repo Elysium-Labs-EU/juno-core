@@ -40,6 +40,11 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
   margin-bottom: 0.5rem;
   padding: 1rem;
   border: 1px solid ${theme.greyBorder};
+  transition: background-color ease-in 0.125s;
+  cursor: pointer;
+  &:hover {
+    background-color: ${theme.greyHover};
+  }
 `
 
 export const EmailOptionsContainer = styled.div`
@@ -137,7 +142,11 @@ export const HeaderFullWidth = styled.div`
   place-items: center;
 `
 
-export const FromCCContainer = styled.div`
+interface IFromCCContainer {
+  multipleComponents: boolean
+}
+
+export const FromCCContainer = styled.div<IFromCCContainer>`
   margin-top: 0.5rem;
   align-items: center;
   display: flex;
@@ -145,9 +154,7 @@ export const FromCCContainer = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  div:last-child {
-    margin-left: 2rem;
+    margin-right: ${(props) => (props.multipleComponents ? '2rem' : 0)};
   }
   border-bottom: 1px solid ${theme.greyBorder};
   padding-bottom: 1rem;
