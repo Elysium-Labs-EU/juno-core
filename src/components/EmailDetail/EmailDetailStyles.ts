@@ -38,13 +38,20 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
   background-color: ${(props) =>
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
   margin-bottom: 0.5rem;
-  padding: 1rem;
   border: 1px solid ${theme.greyBorder};
+`
+
+export const EmailClosedWrapper = styled.div`
+  padding: 1rem;
   transition: background-color ease-in 0.125s;
   cursor: pointer;
   &:hover {
     background-color: ${theme.greyHover};
   }
+`
+
+export const EmailOpenWrapper = styled.div`
+  padding: 1rem;
 `
 
 export const EmailOptionsContainer = styled.div`

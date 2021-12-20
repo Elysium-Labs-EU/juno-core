@@ -97,7 +97,7 @@ const ReadMessage = ({
   return (
     <>
       {open && (
-        <>
+        <S.EmailOpenWrapper>
           <S.TopContainer>
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
@@ -150,10 +150,10 @@ const ReadMessage = ({
           </S.EmailBody>
           <EmailAttachment message={message} overview={false} />
           <small>{message?.id}</small>
-        </>
+        </S.EmailOpenWrapper>
       )}
       {!open && (
-        <div onClick={handleClick} aria-hidden="true">
+        <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>
             <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={staticSenderNameFull} />
@@ -167,7 +167,7 @@ const ReadMessage = ({
               <TimeStamp threadTimeStamp={message.internalDate} />
             </S.TimeAttachmentContainer>
           </S.ClosedMessageWrapper>
-        </div>
+        </S.EmailClosedWrapper>
       )}
     </>
   )
