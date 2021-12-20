@@ -8,6 +8,7 @@ import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { EmailMessage } from '../../../../Store/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
+import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 
 const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const dispatch = useAppDispatch()
@@ -16,7 +17,8 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
 
   const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
-  const staticSenderFull = SenderNameFull(message)
+  const staticSenderNameFull = SenderNameFull(message)
+  const staticSenderNamePartial = SenderNamePartial(message)
 
   const handleClick = () => {
     dispatch(openDraftEmail({ id, messageId }))
@@ -26,9 +28,9 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
     <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
       <S.TopContainer>
         <S.ClosedAvatarSender>
-          <EmailAvatar avatarURL={staticSenderFull} />
+          <EmailAvatar avatarURL={staticSenderNameFull} />
           <S.ClosedSender>
-            <span style={{ fontStyle: 'italic' }}>{staticSenderFull}</span>
+            <span style={{ fontStyle: 'italic' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
           </S.ClosedSender>
         </S.ClosedAvatarSender>
       </S.TopContainer>
@@ -36,7 +38,9 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
         <span style={{ fontWeight: 'bold' }}>{local.DRAFT_SNIPPET_INDICATOR}</span>
         <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
       </S.ClosedSnippet>
-      <TimeStamp threadTimeStamp={message.internalDate} />
+      <S.TimeAttachmentContainer>
+        <TimeStamp threadTimeStamp={message.internalDate} />
+      </S.TimeAttachmentContainer>
     </S.ClosedMessageWrapper>
   )
 }

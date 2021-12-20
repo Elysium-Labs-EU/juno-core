@@ -19,7 +19,6 @@ const fromEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'From'
   if (threadDetail) {
     const data: string = findPayloadHeadersData(query, threadDetail)
-    console.log(data)
     return convertToContact(data)
   }
   return null
@@ -28,7 +27,8 @@ const fromEmail = (threadDetail: EmailListThreadItem) => {
 const bccEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'Bcc'
   if (threadDetail) {
-    return findPayloadHeadersData(query, threadDetail)
+    const data: string = findPayloadHeadersData(query, threadDetail)
+    return convertToContact(data)
   }
   return null
 }
@@ -36,7 +36,8 @@ const bccEmail = (threadDetail: EmailListThreadItem) => {
 const ccEmail = (threadDetail: EmailListThreadItem) => {
   const query = 'Cc'
   if (threadDetail) {
-    return findPayloadHeadersData(query, threadDetail)
+    const data: string = findPayloadHeadersData(query, threadDetail)
+    return convertToContact(data)
   }
   return null
 }

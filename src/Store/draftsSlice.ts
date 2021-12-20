@@ -121,6 +121,7 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
     const { composeEmail } = getState().compose
     const { id, message } =
       getState().drafts.draftDetails && getState().drafts.draftDetails
+
     const baseComposedEmail = {
       draftId: id && id,
       threadId: message?.threadId && message.threadId,
@@ -162,16 +163,20 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
       )
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
+      const cc = findPayloadHeadersData('Cc', message)
+      const bcc = findPayloadHeadersData('Bcc', message)
       const loadEmail = {
         to,
+        cc,
+        bcc,
         subject,
         body,
       }
       const draftDetails = {
-        id: draft.id && draft.id,
+        id: draft.id,
         message: {
-          id: message.id && message.id,
-          threadId: message.threadId && message.threadId,
+          id: message.id,
+          threadId: message.threadId,
         },
       }
       if (draft.id) {
@@ -211,23 +216,23 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
     try {
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {
-        const res = await draftApi().getDrafts()
-        if (res.status === 200) {
-          if (res.data.message.resultSizeEstimate > 0) {
-            const {
-              data: {
-                message: { drafts },
-              },
-            } = res
-            const draftId = drafts.filter(
-              (draft: any) => draft.message.id === messageId
-            )
-            if (!isEmpty(draftId)) {
-              dispatch(loadDraftDetails({ draftId }))
-            }
-          } else {
-            dispatch(setServiceUnavailable('Error setting up compose email.'))
+        // console.log('here2')
+        const draftList = await draftApi().getDrafts()
+        // console.log(draftList)
+        if (draftList.message.resultSizeEstimate > 0) {
+          const {
+            message: { drafts },
+          } = draftList
+          const draftIdFilter = drafts.filter(
+            (draft: any) => draft.message.id === messageId
+          )
+          // console.log(draftIdFilter[0].id)
+          const draftId = draftIdFilter[0].id
+          if (!isEmpty(draftId)) {
+            dispatch(loadDraftDetails({ draftId }))
           }
+        } else {
+          dispatch(setServiceUnavailable('Error setting up compose email.'))
         }
       }
       const { draftList } = getState().drafts
@@ -237,6 +242,8 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
         draftList && messageId
           ? draftList.filter((draft) => draft.message.id === messageId)
           : draftList.filter((draft) => draft.message.threadId === id)
+
+      // console.log(selectedEmail)
 
       if (selectedEmail.length > 0) {
         const draftId = selectedEmail[0].id

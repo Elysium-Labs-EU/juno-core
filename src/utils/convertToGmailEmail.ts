@@ -3,11 +3,14 @@
 import { Contact } from '../Store/contactsTypes'
 
 const convertToGmailEmail = (data: Contact[]) => {
-  const convertedData = data
-    .map((item) => `${item.name} <${item.emailAddress}>`)
-    .toString()
+  if (data.length > 0 && typeof data !== 'string') {
+    const convertedData = data
+      .map((item) => `${item.name} <${item.emailAddress}>`)
+      .toString()
 
-  return convertedData
+    return convertedData
+  }
+  return ''
 }
 
 export default convertToGmailEmail
