@@ -6,4 +6,4 @@ workflows:
     jobs:
       - node/run:
           pkg-manager: yarn
-          yarn-run: build
+          yarn-run: lint:prettier
