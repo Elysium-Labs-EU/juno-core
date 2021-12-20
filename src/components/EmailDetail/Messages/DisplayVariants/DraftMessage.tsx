@@ -25,23 +25,25 @@ const DraftMessage = ({ message }: { message: EmailMessage }) => {
   }
 
   return (
-    <S.ClosedMessageWrapper onClick={handleClick} aria-hidden="true">
-      <S.TopContainer>
-        <S.ClosedAvatarSender>
-          <EmailAvatar avatarURL={staticSenderNameFull} />
-          <S.ClosedSender>
-            <span style={{ fontStyle: 'italic' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
-          </S.ClosedSender>
-        </S.ClosedAvatarSender>
-      </S.TopContainer>
-      <S.ClosedSnippet>
-        <span style={{ fontWeight: 'bold' }}>{local.DRAFT_SNIPPET_INDICATOR}</span>
-        <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
-      </S.ClosedSnippet>
-      <S.TimeAttachmentContainer>
-        <TimeStamp threadTimeStamp={message.internalDate} />
-      </S.TimeAttachmentContainer>
-    </S.ClosedMessageWrapper>
+    <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
+      <S.ClosedMessageWrapper>
+        <S.TopContainer>
+          <S.ClosedAvatarSender>
+            <EmailAvatar avatarURL={staticSenderNameFull} />
+            <S.ClosedSender>
+              <span style={{ fontStyle: 'italic' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
+            </S.ClosedSender>
+          </S.ClosedAvatarSender>
+        </S.TopContainer>
+        <S.ClosedSnippet>
+          <span style={{ fontWeight: 'bold' }}>{local.DRAFT_SNIPPET_INDICATOR}</span>
+          <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
+        </S.ClosedSnippet>
+        <S.TimeAttachmentContainer>
+          <TimeStamp threadTimeStamp={message.internalDate} />
+        </S.TimeAttachmentContainer>
+      </S.ClosedMessageWrapper>
+    </S.EmailClosedWrapper>
   )
 }
 
