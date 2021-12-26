@@ -12,7 +12,7 @@ Juno is an Open Source React based Gmail application.
 2.  Run `yarn` to install all packages
 3.  Create a file called `.env` in the root of the project
 4.  Add `REACT_APP_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
-5.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend/blob/main/README.md)
+5.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
 6.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Contributing
