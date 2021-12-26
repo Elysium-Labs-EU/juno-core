@@ -158,9 +158,7 @@ export const FromCCContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
   div {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    max-width: ${(props) => (props.multipleComponents ? '33%' : '100%')};
     margin-right: ${(props) => (props.multipleComponents ? '2rem' : 0)};
   }
   border-bottom: 1px solid ${theme.greyBorder};
@@ -171,7 +169,11 @@ export const FromBCCInner = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
-  max-width: 33%;
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `
 
 export const EmailBody = styled.div`

@@ -21,19 +21,21 @@ import EmailSnippet from '../../../Elements/EmailSnippet'
 import BCCNameFull from '../../../Elements/BCCNameFull'
 import convertToContact from '../../../../utils/convertToContact'
 
+interface IReadMessage {
+  message: EmailMessage
+  threadDetail: EmailListThreadItem
+  FROM: string
+  isReplyingListener?: Function
+  messageIndex: number
+}
+
 const ReadMessage = ({
   message,
   threadDetail,
   FROM,
   isReplyingListener,
   messageIndex
-}: {
-  message: EmailMessage
-  threadDetail: EmailListThreadItem
-  FROM: string
-  isReplyingListener?: Function
-  messageIndex: number
-}) => {
+}: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
@@ -124,20 +126,22 @@ const ReadMessage = ({
               <span className="text_muted text_small" style={{ marginRight: '4px' }}>
                 {FROM}
               </span>
-              <span className="text_small">{staticSenderNameFull}</span>
+              <span className="text_small truncate">{staticSenderNameFull}</span>
             </S.FromBCCInner>
-            {staticCCNameFull && staticCCNameFull.length > 0 && <S.FromBCCInner>
-              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
-                {compose.CC_LABEL}
-              </span>
-              <span className="text_small" title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</span>
-            </S.FromBCCInner>}
-            {staticBCCNameFull && staticBCCNameFull.length > 0 && <S.FromBCCInner>
-              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
-                {compose.BCC_LABEL}
-              </span>
-              <span className="text_small" title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</span>
-            </S.FromBCCInner>}
+            {staticCCNameFull && staticCCNameFull.length > 0 &&
+              <S.FromBCCInner>
+                <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                  {compose.CC_LABEL}
+                </span>
+                <span className="text_small truncate" title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</span>
+              </S.FromBCCInner>}
+            {staticBCCNameFull && staticBCCNameFull.length > 0 &&
+              <S.FromBCCInner>
+                <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                  {compose.BCC_LABEL}
+                </span>
+                <span className="text_small truncate" title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</span>
+              </S.FromBCCInner>}
           </S.FromCCContainer>
 
           <S.EmailBody>
@@ -149,7 +153,6 @@ const ReadMessage = ({
             )}
           </S.EmailBody>
           <EmailAttachment message={message} overview={false} />
-          <small>{message?.id}</small>
         </S.EmailOpenWrapper>
       )}
       {!open && (
