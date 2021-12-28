@@ -4,9 +4,32 @@ import FormHelperText from '@mui/material/FormHelperText'
 import * as S from '../ComposeStyles'
 import * as local from '../../../constants/composeEmailConstants'
 import EmailInput from './EmailInput'
+import { Contact } from '../../../Store/contactsTypes'
 
-const RecipientField = (props: any) => {
-    const { recipientFieldValue, fieldId, fieldLabel, toError, handleChangeRecipients, inputValue, setInputValue, handleDelete, showField } = props
+interface IRecipientField {
+    recipientFieldValue: Contact[]
+    fieldId: string
+    fieldLabel: string
+    toError: boolean
+    handleChangeRecipients: Function
+    inputValue: string
+    setInputValue: Function
+    handleDelete: Function
+    showField: boolean
+}
+
+const RecipientField = (props: IRecipientField) => {
+    const {
+        recipientFieldValue,
+        fieldId,
+        fieldLabel,
+        toError,
+        handleChangeRecipients,
+        inputValue,
+        setInputValue,
+        handleDelete,
+        showField }
+        = props
 
     return (
         <>
