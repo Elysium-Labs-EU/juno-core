@@ -216,12 +216,10 @@ const ComposeEmailContainer = ({
       setBodyValue(composeEmail.body)
     }
     // Form values coming from a new reply via MessageOverview
-    if (to || subject || cc || bcc) {
-      to && setToValue([to])
-      cc && setCCValue([cc])
-      bcc && setBCCValue([bcc])
-      subject && setSubjectValue(subject)
-    }
+    if (to) setToValue([to])
+    if (cc) setCCValue([cc])
+    if (bcc) setBCCValue([bcc])
+    if (subject) setSubjectValue(subject)
     return () => { }
   }, [])
 
