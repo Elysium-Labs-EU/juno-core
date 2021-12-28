@@ -29,17 +29,19 @@ const DetailNavigationContainer = () => {
   )
 
   const isDisabledPrev = !!(
+    emailList.length > 0 &&
     emailList[emailListIndex].threads[viewIndex - 1] === undefined
   )
 
   const isDisabledNext =
+    emailList.length > 0 &&
     emailList[emailListIndex].nextPageToken === null &&
     emailList[emailListIndex].threads[viewIndex + 1] === undefined
 
   const nextButtonSelector = () => {
     const { nextPageToken } = emailList[emailListIndex]
     if (
-      emailList[emailListIndex].threads[viewIndex + 1] !== undefined &&
+      emailList.length > 0 && emailList[emailListIndex].threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
       NavigateNextMail({
@@ -51,7 +53,7 @@ const DetailNavigationContainer = () => {
       })
 
       // Attempt to load the next emails on the background when approaching the edge
-      if ((emailList[emailListIndex].threads.length - 1) - viewIndex <= 4) {
+      if (emailList.length > 0 && (emailList[emailListIndex].threads.length - 1) - viewIndex <= 4) {
         if (!isSilentLoading) {
           const silentLoading = true
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
@@ -60,6 +62,7 @@ const DetailNavigationContainer = () => {
     }
     // If loading isn't already happening, load the nextPage
     if (
+      emailList.length > 0 &&
       emailList[emailListIndex].nextPageToken !== null &&
       emailList[emailListIndex].threads[viewIndex + 1] === undefined
     ) {
@@ -98,7 +101,7 @@ const DetailNavigationContainer = () => {
       if (emailList[emailListIndex].threads.length - 1 === viewIndex) {
         const { nextPageToken } = emailList[emailListIndex]
         const silentLoading = true
-        if (nextPageToken !== null &&
+        if (nextPageToken &&
           emailList[emailListIndex].threads[viewIndex + 1] === undefined) {
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
         }
