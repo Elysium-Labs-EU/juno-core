@@ -98,10 +98,14 @@ const DetailNavigationContainer = () => {
       if (emailList[emailListIndex].threads.length - 1 === viewIndex) {
         const { nextPageToken } = emailList[emailListIndex]
         const silentLoading = true
-        nextPageToken !== null &&
-          emailList[emailListIndex].threads[viewIndex + 1] === undefined && loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+        if (nextPageToken !== null &&
+          emailList[emailListIndex].threads[viewIndex + 1] === undefined) {
+          return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+        }
       }
+      return () => { }
     }
+    return () => { }
   }, [viewIndex, isSilentLoading, emailListIndex])
 
   return (
