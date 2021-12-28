@@ -1,7 +1,5 @@
 import React from 'react'
 import InputBase from '@mui/material/InputBase'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
 import { CustomButtonText } from '../Elements/Buttons'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
@@ -10,8 +8,8 @@ import * as local from '../../constants/composeEmailConstants'
 import { useAppDispatch } from '../../Store/hooks'
 import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
-import EmailInput from './ComposeFields/EmailInput'
 import { Contact } from '../../Store/contactsTypes'
+import RecipientField from './ComposeFields/RecipientField'
 
 interface IComposeEmailView {
     bccValue: Contact[]
@@ -93,79 +91,52 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                         <div style={{ marginBottom: `7px` }}>
                             <GS.Base>
                                 <S.Row>
-                                    <S.Label hasValue={toValue && Object.keys(toValue).length > 0}>
-                                        <label htmlFor={local.TO}>
-                                            {local.TO_LABEL}
-                                        </label>
-                                    </S.Label>
-                                    <FormControl error={toError} fullWidth>
-                                        <EmailInput
-                                            id={local.TO}
-                                            valueState={toValue}
-                                            handleChange={handleChangeRecipients}
-                                            inputValue={inputToValue}
-                                            setInputValue={setInputToValue}
-                                            handleDelete={handleDelete}
-                                            willAutoFocus={!isReplying}
-                                        />
-                                        {toError && (
-                                            <FormHelperText id="component-helper-text">
-                                                {local.EMAIL_WARNING}
-                                            </FormHelperText>
-                                        )}
-                                    </FormControl>
+                                    <RecipientField
+                                        recipientFieldValue={toValue}
+                                        fieldId={local.TO}
+                                        fieldLabel={local.TO_LABEL}
+                                        toError={toError}
+                                        handleChangeRecipients={handleChangeRecipients}
+                                        inputValue={inputToValue}
+                                        setInputValue={setInputToValue}
+                                        handleDelete={handleDelete}
+                                        showField={!isReplying}
+                                    />
                                     <S.CcBccContainer>
-                                        {!showCC && <CustomButtonText label="CC" className="button option-link" onClick={() => setShowCC(true)} />}
-                                        {!showBCC && <CustomButtonText label="BCC" className="button option-link" onClick={() => setShowBCC(true)} />}
+                                        {!showCC && <CustomButtonText label={local.CC_LABEL} className="button option-link" onClick={() => setShowCC(true)} />}
+                                        {!showBCC && <CustomButtonText label={local.BCC_LABEL} className="button option-link" onClick={() => setShowBCC(true)} />}
                                     </S.CcBccContainer>
                                 </S.Row>
-                                {showCC && <S.Row>
-                                    <S.Label hasValue={ccValue && Object.keys(ccValue).length > 0}>
-                                        <label htmlFor={local.CC}>
-                                            {local.CC_LABEL}
-                                        </label>
-                                    </S.Label>
-                                    <FormControl error={toError} fullWidth>
-                                        <EmailInput
-                                            id={local.CC}
-                                            valueState={ccValue}
-                                            handleChange={handleChangeRecipients}
+                                {showCC &&
+                                    <S.Row>
+                                        <RecipientField
+                                            recipientFieldValue={ccValue}
+                                            fieldId={local.CC}
+                                            fieldLabel={local.CC_LABEL}
+                                            toError={toError}
+                                            handleChangeRecipients={handleChangeRecipients}
                                             inputValue={inputCCValue}
                                             setInputValue={setInputCCValue}
                                             handleDelete={handleDelete}
-                                            willAutoFocus={showCC}
+                                            showField={showCC}
                                         />
-                                        {toError && (
-                                            <FormHelperText id="component-helper-text">
-                                                {local.EMAIL_WARNING}
-                                            </FormHelperText>
-                                        )}
-                                    </FormControl>
-                                </S.Row>}
+                                    </S.Row>
+                                }
                                 {showBCC &&
                                     <S.Row>
-                                        <S.Label hasValue={bccValue && Object.keys(bccValue).length > 0}>
-                                            <label htmlFor={local.BCC}>
-                                                {local.BCC_LABEL}
-                                            </label>
-                                        </S.Label>
-                                        <FormControl error={toError} fullWidth>
-                                            <EmailInput
-                                                id={local.BCC}
-                                                valueState={bccValue}
-                                                handleChange={handleChangeRecipients}
-                                                inputValue={inputBCCValue}
-                                                setInputValue={setInputBCCValue}
-                                                handleDelete={handleDelete}
-                                                willAutoFocus={showBCC}
-                                            />
-                                            {toError && (
-                                                <FormHelperText id="component-helper-text">
-                                                    {local.EMAIL_WARNING}
-                                                </FormHelperText>
-                                            )}
-                                        </FormControl>
-                                    </S.Row>}
+                                        <RecipientField
+                                            recipientFieldValue={bccValue}
+                                            fieldId={local.BCC}
+                                            fieldLabel={local.BCC_LABEL}
+                                            toError={toError}
+                                            handleChangeRecipients={handleChangeRecipients}
+                                            inputValue={inputBCCValue}
+                                            setInputValue={setInputBCCValue}
+                                            handleDelete={handleDelete}
+                                            showField={showBCC}
+                                        />
+                                    </S.Row>
+                                }
                                 <S.Row>
                                     <S.Label hasValue={Boolean(subjectValue)}>
                                         <label htmlFor={local.SUBJECT}>
