@@ -70,7 +70,7 @@ const DetailNavigationContainer = () => {
     return null
   }
 
-  const refetchMeta = () => {
+  const refetchEmailList = () => {
     const labels = labelIds
     const params = {
       labelIds: labels,
@@ -86,9 +86,9 @@ const DetailNavigationContainer = () => {
     if (currEmail !== currLocal) {
       if (emailList.length > 0) {
         setCurrLocal(currEmail)
-      } else {
-        refetchMeta()
+        return
       }
+      refetchEmailList()
     }
   }, [currEmail, emailList])
 
