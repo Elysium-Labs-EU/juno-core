@@ -1,30 +1,23 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
-import CircularProgress from '@mui/material/CircularProgress'
-import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
-import * as S from './DetailNavigationStyles'
-import { selectCurrentEmail, selectViewIndex } from '../../Store/emailDetailSlice'
-import CloseMail from '../../utils/closeEmail'
-import NavigateNextMail from '../../utils/navigateNextEmail'
-import NavigatePreviousMail from '../../utils/navigatePreviousEmail'
-import { CustomIconLink } from '../Elements/Buttons'
-import loadNextPage from '../../utils/loadNextPage'
-import { loadEmails, selectEmailList } from '../../Store/emailListSlice'
-import { selectIsLoading, selectIsSilentLoading } from '../../Store/utilsSlice'
-import { loadDraftList, selectDraftListLoaded } from '../../Store/draftsSlice'
-import * as draft from '../../constants/draftConstants'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { LocationObjectType } from '../types/globalTypes'
+import { selectLabelIds } from '../../../Store/labelsSlice'
+import { selectCurrentEmail, selectViewIndex } from '../../../Store/emailDetailSlice'
+import NavigateNextMail from '../../../utils/navigateNextEmail'
+import loadNextPage from '../../../utils/loadNextPage'
+import { loadEmails, selectEmailList } from '../../../Store/emailListSlice'
+import { selectIsSilentLoading } from '../../../Store/utilsSlice'
+import { loadDraftList, selectDraftListLoaded } from '../../../Store/draftsSlice'
+import * as draft from '../../../constants/draftConstants'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { LocationObjectType } from '../../types/globalTypes'
+import DetailNavigationView from './DetailNavigationView'
 
 const DetailNavigation = () => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
-  const isLoading = useAppSelector(selectIsLoading)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const currEmail = useAppSelector(selectCurrentEmail)
-  const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
   const [currLocal, setCurrLocal] = useState<string>('')
   const dispatch = useAppDispatch()
@@ -36,18 +29,16 @@ const DetailNavigation = () => {
   )
 
   const isDisabledPrev = !!(
-    emailList.length > 0 && emailList[emailListIndex].threads[viewIndex - 1] === undefined
+    emailList[emailListIndex].threads[viewIndex - 1] === undefined
   )
 
   const isDisabledNext =
-    emailList.length > 0 &&
     emailList[emailListIndex].nextPageToken === null &&
     emailList[emailListIndex].threads[viewIndex + 1] === undefined
 
   const nextButtonSelector = () => {
     const { nextPageToken } = emailList[emailListIndex]
     if (
-      emailList.length > 0 &&
       emailList[emailListIndex].threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
@@ -58,6 +49,8 @@ const DetailNavigation = () => {
         viewIndex,
         dispatch,
       })
+
+      // Attempt to load the next emails on the background when approaching the edge
       if ((emailList[emailListIndex].threads.length - 1) - viewIndex <= 4) {
         if (!isSilentLoading) {
           const silentLoading = true
@@ -65,8 +58,8 @@ const DetailNavigation = () => {
         }
       }
     }
+    // If loading isn't already happening, load the nextPage
     if (
-      emailList.length > 0 &&
       emailList[emailListIndex].nextPageToken !== null &&
       emailList[emailListIndex].threads[viewIndex + 1] === undefined
     ) {
@@ -105,41 +98,22 @@ const DetailNavigation = () => {
       if (emailList[emailListIndex].threads.length - 1 === viewIndex) {
         const { nextPageToken } = emailList[emailListIndex]
         const silentLoading = true
-        emailList.length > 0 &&
-          nextPageToken !== null &&
+        nextPageToken !== null &&
           emailList[emailListIndex].threads[viewIndex + 1] === undefined && loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
       }
     }
   }, [viewIndex, isSilentLoading, emailListIndex])
 
   return (
-    <S.Wrapper>
-      <CustomIconLink
-        className="button option-link"
-        onClick={() =>
-          NavigatePreviousMail({
-            labelIds,
-            emailListIndex,
-            emailList,
-            viewIndex,
-            dispatch,
-          })
-        }
-        disabled={isDisabledPrev}
-        icon={<FiChevronLeft size={20} />}
-      />
-      <CustomIconLink
-        className="button option-link"
-        onClick={() => nextButtonSelector()}
-        disabled={isDisabledNext || isLoading}
-        icon={!isLoading ? <FiChevronRight size={20} /> : <CircularProgress size={10} />}
-      />
-      <CustomIconLink
-        className="button option-link"
-        onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
-        icon={<FiX size={20} />}
-      />
-    </S.Wrapper>
+    <DetailNavigationView
+      labelIds={labelIds}
+      emailListIndex={emailListIndex}
+      emailList={emailList}
+      viewIndex={viewIndex}
+      isDisabledPrev={isDisabledPrev}
+      isDisabledNext={isDisabledNext}
+      nextButtonSelector={nextButtonSelector}
+    />
   )
 }
 
