@@ -12,7 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 import DetailNavigationView from './DetailNavigationView'
 
-const DetailNavigation = () => {
+const DetailNavigationContainer = () => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
@@ -117,4 +117,4 @@ const DetailNavigation = () => {
   )
 }
 
-export default DetailNavigation
+export default DetailNavigationContainer
