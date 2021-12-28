@@ -28,8 +28,8 @@ const RecipientField = (props: IRecipientField) => {
         inputValue,
         setInputValue,
         handleDelete,
-        showField }
-        = props
+        showField
+    } = props
 
     return (
         <>
