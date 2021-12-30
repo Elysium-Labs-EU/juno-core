@@ -3,12 +3,16 @@
 const convertToContact = (data: any) => {
   if (data.length > 0) {
     const splitted = data.split('<')
+
     if (splitted.length > 1) {
-      const cleanUpFirstPart: string = splitted[0].trim().replace(/(")+/g, '')
-      const cleanUpSecondPart: string = splitted[1]
+      const cleanUpName: string = splitted[0].trim().replace(/(")+/g, '')
+      const cleanUpEmailAddress: string = splitted[1]
         .substring(0, splitted[1].length - 1)
         .replace(/(")+/g, '')
-      return { name: cleanUpFirstPart, emailAddress: cleanUpSecondPart }
+      if (cleanUpName.length > 1) {
+        return { name: cleanUpName, emailAddress: cleanUpEmailAddress }
+      }
+      return { name: cleanUpEmailAddress, emailAddress: cleanUpEmailAddress }
     }
     if (splitted.length === 1) {
       splitted[0].replace(/(")+/g, '')

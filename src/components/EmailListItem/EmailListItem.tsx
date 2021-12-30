@@ -42,7 +42,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   return (
     <S.ThreadBase key={id} emailLabels={staticEmailLabels}>
       <S.ThreadRow>
-        <div className="cellGradientLeft" />
+        <div />
         <S.CellCheckbox>{
           staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
         }</S.CellCheckbox>
@@ -58,7 +58,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
             )}
           </S.Avatars>
           {!labelIds.includes(draft.LABEL) ? (
-            <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name}</span>
+            <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</span>
           ) : (
             <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
           )}
@@ -88,7 +88,7 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
           </S.DatePosition>
         </S.CellDate>
         <div />
-        <div className="cellGradientRight" />
+        <div />
         {!labelIds.includes(draft.LABEL) ? (
           <InlineThreadActionsRegular id={id} labelIds={labelIds} />
         ) : (
