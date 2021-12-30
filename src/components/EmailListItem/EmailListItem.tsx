@@ -19,9 +19,11 @@ import SenderNameFull from '../Elements/SenderName/senderNameFull'
 import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
+import { selectProfile } from '../../Store/baseSlice'
 
 const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const labelIds = useAppSelector(selectLabelIds)
+  const { emailAddress } = useAppSelector(selectProfile)
   const { id } = email
   const dispatch = useAppDispatch()
 
@@ -33,8 +35,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
 
   const staticEmailLabels = emailLabels()
   const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1])
-  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1])
-  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1])
+  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1], emailAddress)
+  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1], emailAddress)
   const staticSubjectFetch = EmailSubject(email.message || email.messages![email.messages!.length - 1])
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])

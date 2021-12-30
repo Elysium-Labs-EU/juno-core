@@ -2,11 +2,17 @@ import { EmailMessage } from '../../../Store/emailListTypes'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import { NO_SENDER } from './senderNamePartial'
 
-const SenderNameFull = (message: EmailMessage): string => {
+const SenderNameFull = (
+  message: EmailMessage,
+  emailAddress: string
+): string => {
   if (message) {
     const query = 'From'
     const from = findPayloadHeadersData(query, message)
     if (from.length > 0) {
+      if (from.includes(emailAddress)) {
+        return 'me'
+      }
       return from
     }
     return NO_SENDER

@@ -9,16 +9,18 @@ import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { EmailMessage } from '../../../../Store/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
+import { selectProfile } from '../../../../Store/baseSlice'
 
 const DraftMessage = ({ message }: { message: EmailMessage }) => {
   const dispatch = useAppDispatch()
   const id = useAppSelector(selectCurrentEmail)
+  const { emailAddress } = useAppSelector(selectProfile)
   const messageId = message && message.id
 
   const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
-  const staticSenderNameFull = SenderNameFull(message)
-  const staticSenderNamePartial = SenderNamePartial(message)
+  const staticSenderNameFull = SenderNameFull(message, emailAddress)
+  const staticSenderNamePartial = SenderNamePartial(message, emailAddress)
 
   const handleClick = () => {
     dispatch(openDraftEmail({ id, messageId }))
