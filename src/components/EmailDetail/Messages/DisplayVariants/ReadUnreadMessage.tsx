@@ -20,6 +20,7 @@ import EmailSubject from '../../../Elements/EmailSubject'
 import EmailSnippet from '../../../Elements/EmailSnippet'
 import BCCNameFull from '../../../Elements/BCCNameFull'
 import convertToContact from '../../../../utils/convertToContact'
+import { selectProfile } from '../../../../Store/baseSlice'
 
 interface IReadMessage {
   message: EmailMessage
@@ -41,6 +42,7 @@ const ReadMessage = ({
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const isReplying = useAppSelector(selectIsReplying)
+  const { emailAddress } = useAppSelector(selectProfile)
 
   useEffect(() => {
     if (threadDetail && threadDetail.messages) {
@@ -89,8 +91,8 @@ const ReadMessage = ({
   }, [isReplying])
 
 
-  const staticSenderNameFull = SenderNameFull(message)
-  const staticSenderNamePartial = SenderNamePartial(message)
+  const staticSenderNameFull = SenderNameFull(message, emailAddress)
+  const staticSenderNamePartial = SenderNamePartial(message, emailAddress)
   const staticCCNameFull = BCCNameFull(message, 'Cc')
   const staticBCCNameFull = BCCNameFull(message, 'Bcc')
   const staticEmailSubject = EmailSubject(message)

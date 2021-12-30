@@ -8,20 +8,9 @@ import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './labelsTypes'
+import { IBaseState } from './baseTypes'
 
-interface Profile {
-  emailAddress: string
-  messagesTotal: number
-  threadsTotal: number
-  historyId: string
-}
-
-interface BaseState {
-  baseLoaded: boolean
-  profile: Profile
-}
-
-const initialState: BaseState = Object.freeze({
+const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
   profile: {
     emailAddress: '',
