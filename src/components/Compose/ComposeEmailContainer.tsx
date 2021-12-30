@@ -5,7 +5,7 @@ import { selectComposeEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
-import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
+import { CreateUpdateDraft, selectDraftDetails } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
@@ -56,13 +56,12 @@ const ComposeEmailContainer = ({
   const { messageId } = useParams<{ messageId: string }>()
 
   useEffect(() => {
-    if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
-      dispatch(CreateDraft())
-    } else if (!isEmpty(draftDetails) && messageId) {
-      dispatch(UpdateDraft())
-    } else if (!isEmpty(draftDetails)) {
-      dispatch(UpdateDraft())
-    }
+    // if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
+    //   dispatch(CreateDraft())
+    // } else if (!isEmpty(draftDetails)) {
+    //   dispatch(UpdateDraft())
+    // }
+    dispatch(CreateUpdateDraft())
   }, [composeEmail, messageId])
 
   useEffect(() => {
