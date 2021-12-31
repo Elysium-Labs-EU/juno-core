@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import { selectCurrentEmail, selectViewIndex } from '../../../Store/emailDetailSlice'
@@ -11,8 +11,9 @@ import * as draft from '../../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { LocationObjectType } from '../../types/globalTypes'
 import DetailNavigationView from './DetailNavigationView'
+import { EmailListObject } from '../../../Store/emailListTypes'
 
-const DetailNavigationContainer = () => {
+const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
@@ -23,37 +24,29 @@ const DetailNavigationContainer = () => {
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
 
-  const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
-    [emailList, labelIds]
-  )
-
   const isDisabledPrev = !!(
-    emailList.length > 0 &&
-    emailList[emailListIndex].threads[viewIndex - 1] === undefined
+    activeEmailList.threads[viewIndex - 1] === undefined
   )
 
   const isDisabledNext =
-    emailList.length > 0 &&
-    emailList[emailListIndex].nextPageToken === null &&
-    emailList[emailListIndex].threads[viewIndex + 1] === undefined
+    activeEmailList.nextPageToken === null &&
+    activeEmailList.threads[viewIndex + 1] === undefined
 
   const nextButtonSelector = () => {
-    const { nextPageToken } = emailList[emailListIndex]
+    const { nextPageToken } = activeEmailList
     if (
-      emailList.length > 0 && emailList[emailListIndex].threads[viewIndex + 1] !== undefined &&
+      emailList.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
       NavigateNextMail({
         labelIds,
-        emailListIndex,
-        emailList,
+        activeEmailList,
         viewIndex,
         dispatch,
       })
 
       // Attempt to load the next emails on the background when approaching the edge
-      if (emailList.length > 0 && (emailList[emailListIndex].threads.length - 1) - viewIndex <= 4) {
+      if ((activeEmailList.threads.length - 1) - viewIndex <= 4) {
         if (!isSilentLoading) {
           const silentLoading = true
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
@@ -62,9 +55,8 @@ const DetailNavigationContainer = () => {
     }
     // If loading isn't already happening, load the nextPage
     if (
-      emailList.length > 0 &&
-      emailList[emailListIndex].nextPageToken !== null &&
-      emailList[emailListIndex].threads[viewIndex + 1] === undefined
+      activeEmailList.nextPageToken !== null &&
+      activeEmailList.threads[viewIndex + 1] === undefined
     ) {
       if (!isSilentLoading) {
         return loadNextPage({ nextPageToken, labelIds, dispatch })
@@ -97,25 +89,24 @@ const DetailNavigationContainer = () => {
 
   // Load additional emails when the first, current viewed email happens to be the last in the list
   useEffect(() => {
-    if (viewIndex > -1 && !isSilentLoading && emailListIndex > -1) {
-      if (emailList[emailListIndex].threads.length - 1 === viewIndex) {
-        const { nextPageToken } = emailList[emailListIndex]
+    if (viewIndex > -1 && !isSilentLoading) {
+      if (activeEmailList.threads.length - 1 === viewIndex) {
+        const { nextPageToken } = activeEmailList
         const silentLoading = true
         if (nextPageToken &&
-          emailList[emailListIndex].threads[viewIndex + 1] === undefined) {
+          activeEmailList.threads[viewIndex + 1] === undefined) {
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
         }
       }
       return () => { }
     }
     return () => { }
-  }, [viewIndex, isSilentLoading, emailListIndex])
+  }, [viewIndex, isSilentLoading])
 
   return (
     <DetailNavigationView
       labelIds={labelIds}
-      emailListIndex={emailListIndex}
-      emailList={emailList}
+      activeEmailList={activeEmailList}
       viewIndex={viewIndex}
       isDisabledPrev={isDisabledPrev}
       isDisabledNext={isDisabledNext}

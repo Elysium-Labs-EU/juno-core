@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppSelector } from '../../Store/hooks'
 import Menu from './Menu/Menu'
-import DetailNavigation from './DetailNavigation/DetailNavigationContainer'
+import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import BackButton from '../Elements/BackButton'
@@ -11,8 +11,10 @@ import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import { FindLabelById } from '../../utils/findLabel'
+import EmailPosition from './EmailPosition/EmailPosition'
+import { EmailListObject } from '../../Store/emailListTypes'
 
-const Emaildetailheader = () => {
+const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
   const isFocused = useAppSelector(selectIsFocused)
   const isSorting = useAppSelector(selectIsSorting)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -42,7 +44,7 @@ const Emaildetailheader = () => {
           <Navigation />
           <S.InnerMenu>
             <Menu />
-            <DetailNavigation />
+            <DetailNavigationContainer activeEmailList={activeEmailList} />
           </S.InnerMenu>
         </S.Wrapper>
       ) : (
@@ -50,13 +52,14 @@ const Emaildetailheader = () => {
           <S.FocusSortHeaderWrapper>
             {isFocused ? <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle> : <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>}
           </S.FocusSortHeaderWrapper>
-          <div>
+          <S.InnerMenu>
             <BackButton isFocused={isFocused} isSorting={isSorting} />
-          </div>
+            <EmailPosition activeEmailList={activeEmailList} />
+          </S.InnerMenu>
         </S.Wrapper>
       )}
     </GS.OuterContainer>
   )
 }
 
-export default Emaildetailheader
+export default EmailDetailHeader
