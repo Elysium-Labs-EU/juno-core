@@ -19,7 +19,7 @@
   }
 }
 
-.button {
+.juno-button {
   display: inline-block;
   font-weight: 600;
   color: #212529;
@@ -36,22 +36,20 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out,
-    background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
   font-family: 'Raleway Variable', sans-serif;
 }
 
-.button-small {
+.juno-button-small {
   padding: 0.25rem 0.5rem;
   font-size: 0.875rem;
   line-height: 1.5;
   border-radius: 0.2rem;
 }
 
-.button-light {
+.juno-button-light {
   color: #212529;
   background-color: #f8f9fa;
   border-color: #f8f9fa;
@@ -70,7 +68,7 @@
   }
 }
 
-.button > .button-inner {
+.juno-button > .button-inner {
   display: flex;
   align-items: center;
 
@@ -88,10 +86,8 @@
   border-radius: 20px;
   border: none;
   background-color: #8e23d1;
-  transition: color 0.15s ease-in-out,
-    background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 0.4rem 0.8rem;
     span {

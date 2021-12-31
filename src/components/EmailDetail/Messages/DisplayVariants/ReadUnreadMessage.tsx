@@ -114,7 +114,7 @@ const ReadMessage = ({
                 <EmailHasAttachment messages={message} />
                 <TimeStamp threadTimeStamp={message.internalDate} />
 
-                <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="button" aria-describedby={popperId} />
+                <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="juno-button" aria-describedby={popperId} />
                 <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
                   <SpecificEmailOptions messageId={message?.id} isReplyingListener={isReplyingListener} messageIndex={messageIndex} />
                 </Popper>

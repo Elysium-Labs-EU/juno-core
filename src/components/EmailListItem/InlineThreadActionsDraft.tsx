@@ -26,7 +26,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
       <S.Inner>
         <CustomIconLink
           onClick={() => DeleteDraft({ threadId, dispatch, copyCurrentEmailList, draftId })}
-          className="button button-small text_muted option-link"
+          className="juno-button juno-button-small text_muted option-link"
           icon={<FiDelete />}
           title="Discard Draft"
         />

@@ -82,7 +82,7 @@ const EmailList = () => {
               <S.LoadMoreContainer>
                 {!isLoading && (
                   <CustomButtonText
-                    className="button button-small button-light"
+                    className="juno-button juno-button-small juno-button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
                     label={local.LOAD_OLDER}

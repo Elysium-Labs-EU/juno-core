@@ -103,8 +103,8 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                         showField={!isReplying}
                                     />
                                     <S.CcBccContainer>
-                                        {!showCC && <CustomButtonText label={local.CC_LABEL} className="button option-link" onClick={() => setShowCC(true)} />}
-                                        {!showBCC && <CustomButtonText label={local.BCC_LABEL} className="button option-link" onClick={() => setShowBCC(true)} />}
+                                        {!showCC && <CustomButtonText label={local.CC_LABEL} className="juno-button option-link" onClick={() => setShowCC(true)} />}
+                                        {!showBCC && <CustomButtonText label={local.BCC_LABEL} className="juno-button option-link" onClick={() => setShowBCC(true)} />}
                                     </S.CcBccContainer>
                                 </S.Row>
                                 {showCC &&
@@ -171,13 +171,13 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                         </div>
                         <CustomButtonText
                             type="submit"
-                            className="button button-small button-light"
+                            className="juno-button juno-button-small juno-button-light"
                             label={local.SEND_BUTTON}
                             disabled={!toValue}
                         />
                         {isReplying && (
                             <CustomButtonText
-                                className="button button-small"
+                                className="juno-button juno-button-small"
                                 label={local.CANCEL_BUTTON}
                                 onClick={() => isReplyingListener(-1)}
                             />

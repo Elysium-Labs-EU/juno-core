@@ -56,6 +56,7 @@ export const EmailOpenWrapper = styled.div`
 
 export const EmailOptionsContainer = styled.div`
   position: relative;
+  min-height: 200px;
   padding: 30px;
 `
 

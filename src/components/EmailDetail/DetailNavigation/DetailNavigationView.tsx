@@ -35,7 +35,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
     return (
         <S.Wrapper>
             <CustomIconLink
-                className="button option-link"
+                className="juno-button option-link"
                 onClick={() =>
                     NavigatePreviousMail({
                         labelIds,
@@ -49,14 +49,14 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
                 icon={<FiChevronLeft size={20} />}
             />
             <CustomIconLink
-                className="button option-link"
+                className="juno-button option-link"
                 onClick={() => nextButtonSelector()}
                 disabled={isDisabledNext || isLoading}
                 title="Next email"
                 icon={!isLoading ? <FiChevronRight size={20} /> : <CircularProgress size={10} />}
             />
             <CustomIconLink
-                className="button option-link"
+                className="juno-button option-link"
                 title="Close view"
                 onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
                 icon={<FiX size={20} />}

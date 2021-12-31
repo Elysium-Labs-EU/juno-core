@@ -14,7 +14,7 @@ const EmailMoreOptions = ({ messageId, labelIds }: { messageId: string; labelIds
   return (
     <S.Wrapper>
       <CustomButtonText
-        className="button option-link text-danger"
+        className="juno-button option-link text-danger"
         onClick={() =>
           ThrashMail({
             messageId,
