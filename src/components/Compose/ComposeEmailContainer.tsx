@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import isEmpty from 'lodash/isEmpty'
-import { useParams } from 'react-router-dom'
 import { selectComposeEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
-import { CreateDraft, selectDraftDetails, UpdateDraft } from '../../Store/draftsSlice'
+import { CreateUpdateDraft, selectDraftDetails } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
@@ -53,17 +52,12 @@ const ComposeEmailContainer = ({
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const dispatch = useAppDispatch()
-  const { messageId } = useParams<{ messageId: string }>()
 
   useEffect(() => {
-    if (!messageId && Object.values(composeEmail).length > 0 && isEmpty(draftDetails)) {
-      dispatch(CreateDraft())
-    } else if (!isEmpty(draftDetails) && messageId) {
-      dispatch(UpdateDraft())
-    } else if (!isEmpty(draftDetails)) {
-      dispatch(UpdateDraft())
+    if (!isEmpty(composeEmail)) {
+      dispatch(CreateUpdateDraft())
     }
-  }, [composeEmail, messageId])
+  }, [composeEmail])
 
   useEffect(() => {
     if (!isEmpty(draftDetails)) {
@@ -152,7 +146,7 @@ const ComposeEmailContainer = ({
   }
 
   useEffect(() => {
-    if (debouncedToValue && debouncedToValue.length > 0) {
+    if (debouncedToValue) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
         dispatch(TrackComposeEmail(updateEventObject))
@@ -162,7 +156,7 @@ const ComposeEmailContainer = ({
   }, [debouncedToValue])
 
   useEffect(() => {
-    if (debouncedBCCValue && debouncedBCCValue.length > 0) {
+    if (debouncedBCCValue) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
         dispatch(TrackComposeEmail(updateEventObject))
@@ -172,7 +166,7 @@ const ComposeEmailContainer = ({
   }, [debouncedBCCValue])
 
   useEffect(() => {
-    if (debouncedCCValue && debouncedCCValue.length > 0) {
+    if (debouncedCCValue) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
         dispatch(TrackComposeEmail(updateEventObject))

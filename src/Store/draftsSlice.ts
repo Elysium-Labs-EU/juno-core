@@ -82,48 +82,13 @@ export const loadDraftList = (): AppThunk => async (dispatch) => {
   return null
 }
 
-export const CreateDraft = (): AppThunk => async (dispatch, getState) => {
+export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail }: any = getState().compose
-    const { id, message } =
-      getState().drafts.draftDetails && getState().drafts.draftDetails
+    const { id, message } = getState().drafts.draftDetails
 
     const baseComposedEmail: ComposedEmail = {
-      draftId: id && id,
-      threadId: message?.threadId && message.threadId,
-      messageId: message?.id && message.id,
-      labelIds: message?.labelIds && message.labelIds,
-      to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
-      cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
-      bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
-      subject: composeEmail.subject ?? '',
-      body: composeEmail.body ?? '',
-    }
-    const response = await draftApi().createDrafts(baseComposedEmail)
-    if (response && response.status === 200) {
-      const {
-        data: {
-          message: { data },
-        },
-      } = response
-      dispatch(listUpdateDraft(data))
-    } else {
-      dispatch(setServiceUnavailable('Cannot create draft.'))
-    }
-  } catch (err) {
-    console.error(err)
-    dispatch(setServiceUnavailable('Cannot create draft.'))
-  }
-}
-
-export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
-  try {
-    const { composeEmail } = getState().compose
-    const { id, message } =
-      getState().drafts.draftDetails && getState().drafts.draftDetails
-
-    const baseComposedEmail = {
-      draftId: id && id,
+      draftId: id,
       threadId: message?.threadId && message.threadId,
       messageId: message?.id && message.id,
       labelIds: message?.labelIds && message.labelIds,
@@ -134,7 +99,10 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
       body: composeEmail.body ?? '',
     }
 
-    const response = await draftApi().updateDrafts(baseComposedEmail)
+    const response = isEmpty(getState().drafts.draftDetails)
+      ? await draftApi().createDrafts(baseComposedEmail)
+      : await draftApi().updateDrafts(baseComposedEmail)
+
     if (response && response.status === 200) {
       const {
         data: {
@@ -143,11 +111,11 @@ export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
       } = response
       dispatch(listUpdateDraft(data))
     } else {
-      dispatch(setServiceUnavailable('Cannot update draft.'))
+      dispatch(setServiceUnavailable('Cannot create or update draft.'))
     }
   } catch (err) {
     console.error(err)
-    dispatch(setServiceUnavailable('Cannot update draft.'))
+    dispatch(setServiceUnavailable('Cannot create or update draft.'))
   }
 }
 
@@ -216,9 +184,7 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
     try {
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {
-        // console.log('here2')
         const draftList = await draftApi().getDrafts()
-        // console.log(draftList)
         if (draftList.message.resultSizeEstimate > 0) {
           const {
             message: { drafts },
@@ -226,7 +192,6 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
           const draftIdFilter = drafts.filter(
             (draft: any) => draft.message.id === messageId
           )
-          // console.log(draftIdFilter[0].id)
           const draftId = draftIdFilter[0].id
           if (!isEmpty(draftId)) {
             dispatch(loadDraftDetails({ draftId }))
@@ -242,8 +207,6 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
         draftList && messageId
           ? draftList.filter((draft) => draft.message.id === messageId)
           : draftList.filter((draft) => draft.message.threadId === id)
-
-      // console.log(selectedEmail)
 
       if (selectedEmail.length > 0) {
         const draftId = selectedEmail[0].id
