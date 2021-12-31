@@ -14,8 +14,6 @@ interface IFilesOverview {
 const FilesOverview = (props: IFilesOverview) => {
   const { threadDetail, isLoading } = props
 
-  console.log(props)
-
   const files = () => {
     if (threadDetail && threadDetail.messages) {
       return (
