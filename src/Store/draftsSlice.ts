@@ -98,9 +98,11 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
       subject: composeEmail.subject ?? '',
       body: composeEmail.body ?? '',
     }
+
     const response = isEmpty(getState().drafts.draftDetails)
       ? await draftApi().createDrafts(baseComposedEmail)
       : await draftApi().updateDrafts(baseComposedEmail)
+
     if (response && response.status === 200) {
       const {
         data: {
@@ -116,41 +118,6 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
     dispatch(setServiceUnavailable('Cannot create or update draft.'))
   }
 }
-
-// export const UpdateDraft = (): AppThunk => async (dispatch, getState) => {
-//   try {
-//     const { composeEmail } = getState().compose
-//     const { id, message } =
-//       getState().drafts.draftDetails && getState().drafts.draftDetails
-
-//     const baseComposedEmail: ComposedEmail = {
-//       draftId: id,
-//       threadId: message?.threadId && message.threadId,
-//       messageId: message?.id && message.id,
-//       labelIds: message?.labelIds && message.labelIds,
-//       to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
-//       cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
-//       bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
-//       subject: composeEmail.subject ?? '',
-//       body: composeEmail.body ?? '',
-//     }
-
-//     const response = await draftApi().updateDrafts(baseComposedEmail)
-//     if (response && response.status === 200) {
-//       const {
-//         data: {
-//           message: { data },
-//         },
-//       } = response
-//       dispatch(listUpdateDraft(data))
-//     } else {
-//       dispatch(setServiceUnavailable('Cannot update draft.'))
-//     }
-//   } catch (err) {
-//     console.error(err)
-//     dispatch(setServiceUnavailable('Cannot update draft.'))
-//   }
-// }
 
 const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   const {
