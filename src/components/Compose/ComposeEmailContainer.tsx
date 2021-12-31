@@ -146,7 +146,7 @@ const ComposeEmailContainer = ({
   }
 
   useEffect(() => {
-    if (debouncedToValue) {
+    if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
         dispatch(TrackComposeEmail(updateEventObject))
@@ -156,7 +156,7 @@ const ComposeEmailContainer = ({
   }, [debouncedToValue])
 
   useEffect(() => {
-    if (debouncedBCCValue) {
+    if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
         dispatch(TrackComposeEmail(updateEventObject))
@@ -166,7 +166,7 @@ const ComposeEmailContainer = ({
   }, [debouncedBCCValue])
 
   useEffect(() => {
-    if (debouncedCCValue) {
+    if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
         dispatch(TrackComposeEmail(updateEventObject))
