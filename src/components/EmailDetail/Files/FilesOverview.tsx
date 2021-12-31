@@ -2,37 +2,43 @@ import React from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
+import * as local from '../../../constants/filesOverviewConstants'
 import EmailAttachment from '../Attachment/EmailAttachment'
 import { EmailListThreadItem } from '../../../Store/emailListTypes'
 
-interface Props {
+interface IFilesOverview {
   threadDetail: EmailListThreadItem | null
   isLoading: boolean
 }
 
-const FilesOverview = (props: Props) => {
+const FilesOverview = (props: IFilesOverview) => {
   const { threadDetail, isLoading } = props
 
+  console.log(props)
+
   const files = () => {
-    if (threadDetail && threadDetail.messages && !isLoading) {
+    if (threadDetail && threadDetail.messages) {
       return (
-        <EmailAttachment
-          message={threadDetail.messages[threadDetail.messages.length - 1]}
-          overview
-        />
+        threadDetail.messages.map((message) => <EmailAttachment
+          key={message.id}
+          message={message}
+        />)
       )
     }
-    return null
+    return <span>{local.NO_FILES}</span>
   }
+
+  const staticFiles = files()
 
   return (
     <ES.DetailRow>
       <ES.EmailDetailContainer>
         <S.FilesWrapper>
-          {files() && !isLoading && files()}
+          {staticFiles && !isLoading && staticFiles}
           {isLoading && <CircularProgress />}
         </S.FilesWrapper>
       </ES.EmailDetailContainer>
+      <ES.EmailOptionsPlaceholder />
     </ES.DetailRow>
   )
 }

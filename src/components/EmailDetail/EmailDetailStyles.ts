@@ -58,6 +58,12 @@ export const EmailOptionsContainer = styled.div`
   position: relative;
   padding: 30px;
 `
+
+export const EmailOptionsPlaceholder = styled.div`
+  width: 170px;
+  padding: 30px;
+`
+
 export const StickyOptions = styled.div`
   position: sticky;
   top: 50px;
