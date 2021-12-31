@@ -6,7 +6,7 @@ const SpecificEmailOptions = ({ messageId, isReplyingListener, messageIndex }: {
 (
     <GS.MenuPopper>
         <CustomButtonText
-            className="button option-link"
+            className="juno-button option-link"
             label="Reply to this message"
             onClick={() => isReplyingListener({ messageId, messageIndex })}
         />

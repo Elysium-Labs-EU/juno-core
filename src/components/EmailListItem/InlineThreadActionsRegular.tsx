@@ -29,7 +29,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
     <S.Wrapper>
       <S.Inner>
         <CustomIconLink
-          className="button button-small text_muted option-link"
+          className="juno-button juno-button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() => ReplyOverview({ labelIds, id, dispatch })}
           title="Reply"
@@ -53,20 +53,20 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
                   storageLabels,
                 })
               }
-              className="button button-small text_muted option-link"
+              className="juno-button juno-button-small text_muted option-link"
               icon={<FiCheckCircle />}
               title="Mark as To Do"
             />
           )}
         <CustomIconLink
           onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
-          className="button button-small text_muted option-link"
+          className="juno-button juno-button-small text_muted option-link"
           icon={<FiArchive />}
           title="Archive"
         />
         <CustomIconLink
           onClick={() => setShowMenu(!showMenu)}
-          className="button button-small text_muted option-link"
+          className="juno-button juno-button-small text_muted option-link"
           icon={<FiMoreHorizontal />}
         />
       </S.Inner>

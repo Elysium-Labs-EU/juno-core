@@ -42,7 +42,7 @@ const BackButton = (props: BackButtonType) => {
     <CustomButtonText
       onClick={navigateBack}
       label={global.BUTTON_BACK}
-      className="button button-small button-light"
+      className="juno-button juno-button-small juno-button-light"
     />
   )
 }

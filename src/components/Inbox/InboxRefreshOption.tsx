@@ -35,7 +35,7 @@ const InboxRefresh = () => {
 
     return (
         <CustomIconLink
-            className="button button-light"
+            className="juno-button juno-button-light"
             onClick={() => refreshFeed()}
             disabled={isLoading || disableRefresh}
             icon={<MdRefresh />}
