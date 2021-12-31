@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
@@ -66,14 +66,17 @@ const EmailDetail = () => {
     }
   }
 
+  const emailListIndex = useMemo(
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    [emailList, labelIds]
+  )
+
   const fetchEmailDetails = () => {
     if (labelIds) {
-      const activeList =
-        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
-      const currentActivePageToken = emailList[activeList].nextPageToken
-      if (activeList > -1 && activePageTokenRef.current !== currentActivePageToken) {
+      const currentActivePageToken = emailList[emailListIndex].nextPageToken
+      if (emailListIndex > -1 && activePageTokenRef.current !== currentActivePageToken) {
         activePageTokenRef.current = currentActivePageToken
-        setActiveEmailList(emailList[activeList])
+        setActiveEmailList(emailList[emailListIndex])
       }
       if (serviceUnavailable && serviceUnavailable.length > 0) {
         dispatch(setServiceUnavailable(''))
