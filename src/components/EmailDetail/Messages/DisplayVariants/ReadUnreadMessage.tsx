@@ -37,7 +37,7 @@ const ReadMessage = ({
   isReplyingListener,
   messageIndex
 }: IReadMessage) => {
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -52,10 +52,6 @@ const ReadMessage = ({
           return
         }
         if (message && !Object.prototype.hasOwnProperty.call(message, 'labelIds') && messageIndex === 0) {
-          setOpen(true)
-          return
-        }
-        if (message && messageIndex === 0) {
           setOpen(true)
           return
         }
