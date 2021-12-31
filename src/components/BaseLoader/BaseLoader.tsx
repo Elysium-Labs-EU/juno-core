@@ -2,8 +2,8 @@ import React from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useSelector } from 'react-redux'
 import { Inner, Wrapper } from './BaseLoaderStyles'
-import { LOADING_TEXT } from '../../constants/globalConstants'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
+import Logo from '../../images/Juno_logo.png'
 
 const Baseloader = () => {
   const serviceUnavailable = useSelector(selectServiceUnavailable)
@@ -12,7 +12,7 @@ const Baseloader = () => {
       <Inner>
         {!serviceUnavailable && (
           <>
-            <h2 className="page_title" style={{ marginBottom: '1rem' }}>{LOADING_TEXT}</h2>
+            <img style={{ marginBottom: '1rem' }} src={Logo} alt="Juno's Logo" />
             <CircularProgress />
           </>
         )}
