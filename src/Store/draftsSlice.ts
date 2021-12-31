@@ -219,6 +219,17 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
   }
 }
 
+export const deleteDraft =
+  (id: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      await draftApi().deleteDraft(id)
+    } catch (err) {
+      console.error(err)
+      dispatch(setServiceUnavailable('Error deleting draft.'))
+    }
+  }
+
 export const selectDraft = (state: RootState) => state.drafts.draftList
 export const selectDraftListLoaded = (state: RootState) =>
   state.drafts.draftListLoaded

@@ -57,6 +57,20 @@ const draftApi = () => ({
       return errorHandeling(err)
     }
   },
+
+  deleteDraft: async (id: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.delete(
+        `${BASE_API_URL}/api/draft`,
+        {
+          data: { id },
+        }
+      )
+      return res
+    } catch (err) {
+      return errorHandeling(err)
+    }
+  },
 })
 
 export default draftApi
