@@ -3,31 +3,29 @@ import { convertArrayToString } from '.'
 import { setViewIndex } from '../Store/emailDetailSlice'
 import { EmailListObject } from '../Store/emailListTypes'
 
-interface NavigateNextMailProps {
+interface INavigateNextMail {
   labelIds: string[]
-  emailList?: EmailListObject[]
-  emailListIndex?: number
+  activeEmailList?: EmailListObject
   filteredCurrentEmailList?: any
   viewIndex: number
   dispatch: any
 }
 
-const NavigateNextMail = (props: NavigateNextMailProps) => {
+const NavigateNextMail = (props: INavigateNextMail) => {
   const {
     labelIds,
-    emailList,
-    emailListIndex,
+    activeEmailList,
     filteredCurrentEmailList,
     viewIndex,
     dispatch,
   } = props
 
-  const activeEmailList = () => {
+  const selectActiveEmailList = () => {
     if (filteredCurrentEmailList) {
       return filteredCurrentEmailList[0]
     }
-    if (emailList && emailListIndex !== undefined && emailListIndex > -1) {
-      return emailList[emailListIndex]
+    if (activeEmailList) {
+      return activeEmailList
     }
     return null
   }
@@ -41,8 +39,10 @@ const NavigateNextMail = (props: NavigateNextMailProps) => {
     return null
   }
 
-  if (activeEmailList() !== null && labelURL() !== null) {
-    const nextID = activeEmailList().threads[viewIndex + 1].id
+  const staticActiveEmailList = selectActiveEmailList()
+
+  if (staticActiveEmailList !== null && labelURL() !== null) {
+    const nextID = staticActiveEmailList.threads[viewIndex + 1].id
     return dispatch(push(`/mail/${labelURL()}/${nextID}/messages`))
   }
   return null

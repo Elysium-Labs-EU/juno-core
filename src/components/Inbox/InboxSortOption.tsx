@@ -21,7 +21,7 @@ const SortInbox = () => {
   )
 
   const handleClick = () => {
-    const labelURL = convertArrayToString(labelIds && labelIds)
+    const labelURL = convertArrayToString(labelIds)
     startSort({ dispatch, labelURL, emailList, emailListIndex })
     dispatch(setIsSorting(true))
   }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
@@ -21,7 +21,7 @@ import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListThreadItem } from '../../Store/emailListTypes'
+import { EmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
@@ -43,7 +43,7 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
-  const [threadDetailList, setThreadDetailList] = useState<EmailListThreadItem[]>([])
+  const [activeEmailList, setActiveEmailList] = useState<EmailListObject>()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
 
@@ -61,20 +61,22 @@ const EmailDetail = () => {
       Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
       dispatch(setIsReplying(false))
     }
-    const activeThreadListMessages = threadDetailList[threadDetailList.findIndex((item) => item.id === messageId)].messages
-    if (activeThreadListMessages) {
-      dispatch(setCurrentMessage(activeThreadListMessages[(activeThreadListMessages.length - 1) - messageIndex]))
+    if (activeEmailList && activeEmailList.threads.length > 0) {
+      dispatch(setCurrentMessage(activeEmailList.threads[(activeEmailList.threads.length - 1) - messageIndex]))
     }
   }
 
+  const emailListIndex = useMemo(
+    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    [emailList, labelIds]
+  )
+
   const fetchEmailDetails = () => {
     if (labelIds) {
-      const activeList =
-        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
-      const currentActivePageToken = emailList[activeList].nextPageToken
-      if (activeList > -1 && activePageTokenRef.current !== currentActivePageToken) {
+      const currentActivePageToken = emailList[emailListIndex].nextPageToken
+      if (emailListIndex > -1 && activePageTokenRef.current !== currentActivePageToken) {
         activePageTokenRef.current = currentActivePageToken
-        setThreadDetailList(emailList[activeList].threads)
+        setActiveEmailList(emailList[emailListIndex])
       }
       if (serviceUnavailable && serviceUnavailable.length > 0) {
         dispatch(setServiceUnavailable(''))
@@ -86,15 +88,14 @@ const EmailDetail = () => {
 
   // Need to update the threadDetailList whenever an email is archived or removed.
   useEffect(() => {
-    if (threadDetailList.length > 0 && emailList) {
-      const activeList =
-        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
-      if (emailList[activeList].threads.length !== threadDetailList.length) {
-        setThreadDetailList(emailList[activeList].threads)
+    if (activeEmailList && activeEmailList.threads.length > 0 && emailList) {
+      if (emailList[emailListIndex].threads.length !== activeEmailList.threads.length) {
+        setActiveEmailList(emailList[emailListIndex])
       }
     }
-  }, [emailList, threadDetailList])
+  }, [emailList, activeEmailList])
 
+  // DetailNavigation will refetch emailList if empty.
   useEffect(() => {
     if (labelIds && labelIds === localLabels.current) {
       emailList.length > 0 && fetchEmailDetails()
@@ -105,7 +106,6 @@ const EmailDetail = () => {
       emailList.length > 0 && fetchEmailDetails()
     }
   }, [labelIds, emailList])
-  // DetailNavigation will refetch emailList if empty.
 
   useEffect(() => {
     if (messageId !== undefined && currentEmail !== messageId) {
@@ -121,26 +121,27 @@ const EmailDetail = () => {
 
   useEffect(() => {
     if (viewIndex === -1) {
-      if (threadDetailList && threadDetailList.length > 0) {
-        dispatch(setViewIndex(threadDetailList.findIndex((item) => item.id === currentEmail)))
+      if (activeEmailList && activeEmailList.threads.length > 0) {
+        dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
       }
     }
-  }, [viewIndex, threadDetailList])
+  }, [viewIndex, activeEmailList])
 
 
   return (
     <>
-      <EmailDetailHeader />
+      {activeEmailList && <EmailDetailHeader activeEmailList={activeEmailList} />}
       <S.Scroll clientState={isSorting || isFocused}>
         <GS.OuterContainer isReplying={isReplying}>
           {overviewId &&
             overviewId.length > 0 &&
             overviewId === local.MESSAGES &&
-            threadDetailList.length > 0 && (
+            activeEmailList &&
+            activeEmailList.threads.length > 0 && (
               viewIndex > -1 && (
                 <>
                   <MessagesOverview
-                    threadDetail={threadDetailList[viewIndex]}
+                    threadDetail={activeEmailList.threads[viewIndex]}
                     isLoading={isLoading}
                     isReplying={isReplying}
                     isReplyingListener={isReplyingListener}
@@ -148,14 +149,14 @@ const EmailDetail = () => {
                   />
                   <S.HiddenMessagesFeed>
                     <PreLoadMessages
-                      threadDetailList={threadDetailList}
+                      threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}
                     />
                   </S.HiddenMessagesFeed>
                 </>)
             )}
-          {overviewId === local.FILES && threadDetailList.length > 0 && (
-            <FilesOverview threadDetail={threadDetailList[viewIndex]} isLoading={isLoading} />
+          {overviewId === local.FILES && activeEmailList && activeEmailList.threads.length > 0 && (
+            <FilesOverview threadDetail={activeEmailList.threads[viewIndex]} isLoading={isLoading} />
           )}
         </GS.OuterContainer>
       </S.Scroll>

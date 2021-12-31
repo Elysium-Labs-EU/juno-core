@@ -12,8 +12,7 @@ import { EmailListObject } from '../../../Store/emailListTypes'
 
 interface IDetailNavigationView {
     labelIds: string[]
-    emailListIndex: number
-    emailList: EmailListObject[]
+    activeEmailList: EmailListObject
     viewIndex: number
     isDisabledPrev: boolean
     isDisabledNext: boolean
@@ -23,8 +22,7 @@ interface IDetailNavigationView {
 const DetailNavigationView = (props: IDetailNavigationView) => {
     const {
         labelIds,
-        emailListIndex,
-        emailList,
+        activeEmailList,
         viewIndex,
         isDisabledPrev,
         isDisabledNext,
@@ -41,23 +39,25 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
                 onClick={() =>
                     NavigatePreviousMail({
                         labelIds,
-                        emailListIndex,
-                        emailList,
+                        activeEmailList,
                         viewIndex,
                         dispatch,
                     })
                 }
                 disabled={isDisabledPrev}
+                title="Previous email"
                 icon={<FiChevronLeft size={20} />}
             />
             <CustomIconLink
                 className="button option-link"
                 onClick={() => nextButtonSelector()}
                 disabled={isDisabledNext || isLoading}
+                title="Next email"
                 icon={!isLoading ? <FiChevronRight size={20} /> : <CircularProgress size={10} />}
             />
             <CustomIconLink
                 className="button option-link"
+                title="Close view"
                 onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
                 icon={<FiX size={20} />}
             />
