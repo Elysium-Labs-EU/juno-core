@@ -89,10 +89,8 @@ const EmailDetail = () => {
   // Need to update the threadDetailList whenever an email is archived or removed.
   useEffect(() => {
     if (activeEmailList && activeEmailList.threads.length > 0 && emailList) {
-      const activeList =
-        emailList && emailList.findIndex((list) => list.labels.includes(labelIds[0]))
-      if (emailList[activeList].threads.length !== activeEmailList.threads.length) {
-        setActiveEmailList(emailList[activeList])
+      if (emailList[emailListIndex].threads.length !== activeEmailList.threads.length) {
+        setActiveEmailList(emailList[emailListIndex])
       }
     }
   }, [emailList, activeEmailList])
