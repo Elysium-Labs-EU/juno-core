@@ -1,6 +1,7 @@
 {
   "name": "juno-core",
   "version": "0.1.0",
+  "main": "public/electron.ts",
   "dependencies": {
     "@mui/material": "^5.2.5",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
@@ -36,6 +37,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "dev": "concurrently -k \"BROWSER=none yarn start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron .",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,md, tsx, ts}\"",
@@ -80,6 +83,9 @@
     "@types/styled-components": "^5.1.18",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "concurrently": "^6.5.1",
+    "electron": "^16.0.5",
+    "electron-is-dev": "^2.0.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-config-airbnb-typescript": "^14.0.2",
@@ -88,6 +94,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "wait-on": "^6.0.0"
   }
 }
