@@ -27,7 +27,6 @@
     "base64url": "^3.0.1",
     "date-fns": "^2.27.0",
     "dompurify": "^2.3.4",
-    "electron-is-dev": "^2.0.0",
     "file-saver": "^2.0.5",
     "history": "4.10.1",
     "lodash": "^4.17.21",
@@ -59,6 +58,7 @@
     "electron:start": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
     "electron:dir": "electron-builder --dir",
     "electron": "wait-on tcp:3000 && electron .",
+    "release": "electron-builder --publish always",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
@@ -83,14 +83,21 @@
       "buildResources": "public"
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "artifactName": "electron-circleci-${version}.${ext}"
     },
     "win": {
       "target": "nsis"
     },
     "linux": {
       "target": "deb"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "releaseType": "release"
+      }
+    ]
   },
   "browserslist": {
     "production": [
