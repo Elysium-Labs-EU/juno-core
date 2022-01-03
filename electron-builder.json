@@ -1,0 +1,38 @@
+{
+  "appId": "io.elysium-labs.juno",
+  "productName": "Juno",
+  "copyright": "Elysium Labs",
+  "directories": {
+    "app": ".",
+    "output": "out",
+    "buildResources": "src/build-res"
+  },
+  "compression": "store",
+  "removePackageScripts": true,
+  "files": ["package.json", "src/**/*", "node_modules", "./public/electron.ts"],
+  "dmg": {
+    "background": null,
+    "backgroundColor": "#ffffff",
+    "icon": "App_logo.icns",
+    "window": {
+      "width": "1280",
+      "height": "720"
+    },
+    "contents": [
+      {
+        "x": 100,
+        "y": 100
+      },
+      {
+        "x": 300,
+        "y": 100,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ]
+  },
+  "mac": {
+    "target": "dmg",
+    "category": "public.app-category.productivity"
+  }
+}

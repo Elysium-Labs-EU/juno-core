@@ -1,7 +1,22 @@
 {
   "name": "juno-core",
   "version": "0.1.0",
+  "description": "Main app for Juno",
   "main": "public/electron.ts",
+  "homepage": "./",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elysium-Labs-EU/juno-core.git"
+  },
+  "author": {
+    "name": "Robbert Tuerlings",
+    "email": "robberttg@protonmail.com",
+    "url": "https://elysium-labs.io"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Elysium-Labs-EU/juno-core/issues"
+  },
   "dependencies": {
     "@mui/material": "^5.2.5",
     "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
@@ -12,6 +27,7 @@
     "base64url": "^3.0.1",
     "date-fns": "^2.27.0",
     "dompurify": "^2.3.4",
+    "electron-is-dev": "^2.0.0",
     "file-saver": "^2.0.5",
     "history": "4.10.1",
     "lodash": "^4.17.21",
@@ -37,8 +53,15 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
+    "electron:start": "concurrently -k \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electronmon .\"",
+    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.ts",
+    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.ts",
+    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.ts",
+    "app:dev": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
     "electron": "wait-on tcp:3000 && electron .",
+    "postinstall": "electron-builder install-app-deps",
+    "app:pack": "electron-builder -m",
+    "app:dir": "electron-builder --dir",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,md, tsx, ts}\"",
@@ -50,20 +73,48 @@
       "react-app/jest"
     ]
   },
+  "build": {
+    "appId": "io.elysium-labs.juno",
+    "productName": "Juno",
+    "copyright": "Elysium Labs",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "dmg": {
+      "background": null,
+      "backgroundColor": "#ffffff",
+      "icon": "App_logo.png"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb"
+    }
+  },
   "browserslist": {
     "production": [
+      "last 1 electron version",
       ">0.2%",
       "not dead",
       "not op_mini all"
     ],
     "development": [
+      "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
@@ -85,7 +136,8 @@
     "@typescript-eslint/parser": "^4.33.0",
     "concurrently": "^6.5.1",
     "electron": "^16.0.5",
-    "electron-is-dev": "^2.0.0",
+    "electron-builder": "^22.14.5",
+    "electronmon": "^2.0.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-config-airbnb-typescript": "^14.0.2",
