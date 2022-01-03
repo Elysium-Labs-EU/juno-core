@@ -1,19 +1,10 @@
 version: 2.1
-jobs:
-  build_macos:
-    macos:
-      xcode: '13.0.0'
-    steps:
-      - checkout
-      - run: yarn && yarn electron:package:mac
-
 workflows:
   build:
     jobs:
       - node/run:
           pkg-manager: yarn
           yarn-run: lint:prettier
-      - build_macos
 
 orbs:
   node: circleci/node@5.0.0
