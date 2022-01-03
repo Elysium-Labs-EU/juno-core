@@ -79,13 +79,8 @@
       "build/**/*",
       "node_modules/**/*"
     ],
-    "removePackageScripts": true,
     "directories": {
       "buildResources": "public"
-    },
-    "dmg": {
-      "background": null,
-      "backgroundColor": "#ffffff"
     },
     "mac": {
       "target": "dmg"
