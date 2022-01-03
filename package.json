@@ -2,7 +2,7 @@
   "name": "juno-core",
   "version": "0.1.0",
   "description": "Main app for Juno",
-  "main": "public/electron.ts",
+  "main": "public/electron.js",
   "homepage": "./",
   "repository": {
     "type": "git",
@@ -53,15 +53,13 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron:start": "concurrently -k \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electronmon .\"",
-    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.ts",
-    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.ts",
-    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.ts",
-    "app:dev": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
+    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
+    "electron:start": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
+    "electron:dir": "electron-builder --dir",
     "electron": "wait-on tcp:3000 && electron .",
     "postinstall": "electron-builder install-app-deps",
-    "app:pack": "electron-builder -m",
-    "app:dir": "electron-builder --dir",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,md, tsx, ts}\"",
@@ -81,13 +79,13 @@
       "build/**/*",
       "node_modules/**/*"
     ],
+    "removePackageScripts": true,
     "directories": {
       "buildResources": "public"
     },
     "dmg": {
       "background": null,
-      "backgroundColor": "#ffffff",
-      "icon": "App_logo.png"
+      "backgroundColor": "#ffffff"
     },
     "mac": {
       "target": "dmg"
