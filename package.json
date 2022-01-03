@@ -84,13 +84,15 @@
     },
     "mac": {
       "target": "dmg",
-      "artifactName": "electron-circleci-${version}.${ext}"
+      "artifactName": "${name}-${version}.${ext}"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "${name}-${version}.${ext}"
     },
     "linux": {
-      "target": "deb"
+      "target": "deb",
+      "artifactName": "${name}-${version}.${ext}"
     },
     "publish": [
       {
