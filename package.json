@@ -1,6 +1,6 @@
 {
   "name": "juno-core",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Main app for Juno",
   "main": "public/electron.js",
   "homepage": "./",
