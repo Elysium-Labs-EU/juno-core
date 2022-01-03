@@ -1,9 +1,25 @@
 {
   "name": "juno-core",
   "version": "0.1.0",
+  "description": "Main app for Juno",
+  "main": "public/electron.js",
+  "homepage": "./",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elysium-Labs-EU/juno-core.git"
+  },
+  "author": {
+    "name": "Robbert Tuerlings",
+    "email": "robberttg@protonmail.com",
+    "url": "https://elysium-labs.io"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Elysium-Labs-EU/juno-core/issues"
+  },
   "dependencies": {
     "@mui/material": "^5.2.5",
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+    "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
     "@reduxjs/toolkit": "^1.7.1",
     "@sentry/react": "^6.16.1",
     "@sentry/tracing": "^6.16.1",
@@ -36,6 +52,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
+    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
+    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
+    "electron:start": "concurrently -k \"BROWSER=none yarn start\" \"yarn:electron\"",
+    "electron:dir": "electron-builder --dir",
+    "electron": "wait-on tcp:3000 && electron .",
+    "release": "electron-builder --publish always",
+    "postinstall": "electron-builder install-app-deps",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"**/*.{js,jsx,json,md, tsx, ts}\"",
@@ -47,20 +71,50 @@
       "react-app/jest"
     ]
   },
+  "build": {
+    "appId": "io.elysium-labs.juno",
+    "productName": "Juno",
+    "copyright": "Elysium Labs",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "public"
+    },
+    "mac": {
+      "target": "dmg",
+      "artifactName": "electron-circleci-${version}.${ext}"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "deb"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "releaseType": "release"
+      }
+    ]
+  },
   "browserslist": {
     "production": [
+      "last 1 electron version",
       ">0.2%",
       "not dead",
       "not op_mini all"
     ],
     "development": [
+      "last 1 electron version",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
   },
   "resolutions": {
-    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.1",
@@ -80,6 +134,10 @@
     "@types/styled-components": "^5.1.18",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
+    "concurrently": "^6.5.1",
+    "electron": "^16.0.5",
+    "electron-builder": "^22.14.5",
+    "electronmon": "^2.0.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.2",
     "eslint-config-airbnb-typescript": "^14.0.2",
@@ -88,6 +146,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "wait-on": "^6.0.0"
   }
 }

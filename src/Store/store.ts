@@ -1,6 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { createReduxHistoryContext } from 'redux-first-history'
-import { createBrowserHistory } from 'history'
+import { createMemoryHistory } from 'history'
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import contactsReducer from './contactsSlice'
@@ -11,7 +11,7 @@ import labelsReducer from './labelsSlice'
 import utilsReducer from './utilsSlice'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
-  createReduxHistoryContext({ history: createBrowserHistory() })
+  createReduxHistoryContext({ history: createMemoryHistory() })
 
 export const store = configureStore({
   reducer: {
