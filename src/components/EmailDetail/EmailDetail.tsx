@@ -15,8 +15,9 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
-import { selectEmailList, selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
+import { loadEmails, selectEmailList, selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
+import * as draft from '../../constants/draftConstants'
 import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
@@ -27,7 +28,9 @@ import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
-import { resetDraftDetails } from '../../Store/draftsSlice'
+import { loadDraftList, resetDraftDetails, selectDraftListLoaded } from '../../Store/draftsSlice'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
+import Baseloader from '../BaseLoader/BaseLoader'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -35,6 +38,7 @@ const EmailDetail = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const isReplying = useAppSelector(selectIsReplying)
   const viewIndex = useAppSelector(selectViewIndex)
   const isSorting = useAppSelector(selectIsSorting)
@@ -42,6 +46,7 @@ const EmailDetail = () => {
   const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
+  const [currLocal, setCurrLocal] = useState<string>('')
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
   const [activeEmailList, setActiveEmailList] = useState<EmailListObject>()
   const localLabels = useRef<string[] | string>([])
@@ -71,6 +76,18 @@ const EmailDetail = () => {
     [emailList, labelIds]
   )
 
+  const fetchEmailList = () => {
+    const labels = labelIds
+    const params = {
+      labelIds: labels,
+      maxResults: 20,
+    }
+    dispatch(loadEmails(params))
+    if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
+      dispatch(loadDraftList())
+    }
+  }
+
   const fetchEmailDetails = () => {
     if (labelIds) {
       const currentActivePageToken = emailList[emailListIndex].nextPageToken
@@ -94,6 +111,16 @@ const EmailDetail = () => {
       }
     }
   }, [emailList, activeEmailList])
+
+  useEffect(() => {
+    if (currentEmail !== currLocal) {
+      if (emailList.length > 0) {
+        setCurrLocal(currentEmail)
+        return
+      }
+      fetchEmailList()
+    }
+  }, [currentEmail, emailList])
 
   // DetailNavigation will refetch emailList if empty.
   useEffect(() => {
@@ -129,38 +156,38 @@ const EmailDetail = () => {
 
 
   return (
-    <>
-      {activeEmailList && <EmailDetailHeader activeEmailList={activeEmailList} />}
-      <S.Scroll clientState={isSorting || isFocused}>
-        <GS.OuterContainer isReplying={isReplying}>
-          {overviewId &&
-            overviewId.length > 0 &&
-            overviewId === local.MESSAGES &&
-            activeEmailList &&
-            activeEmailList.threads.length > 0 && (
-              viewIndex > -1 && (
-                <>
-                  <MessagesOverview
-                    threadDetail={activeEmailList.threads[viewIndex]}
-                    isLoading={isLoading}
-                    isReplying={isReplying}
-                    isReplyingListener={isReplyingListener}
-                    labelIds={labelIds}
-                  />
-                  <S.HiddenMessagesFeed>
-                    <PreLoadMessages
-                      threadDetailList={activeEmailList.threads}
-                      viewIndex={viewIndex}
+    activeEmailList ?
+      <>
+        <EmailDetailHeader activeEmailList={activeEmailList} />
+        <AnimatedMountUnmount>
+          <S.Scroll clientState={isSorting || isFocused}>
+            <GS.OuterContainer isReplying={isReplying}>
+              {overviewId === local.MESSAGES &&
+                activeEmailList.threads.length > 0 &&
+                viewIndex > -1 && (
+                  <>
+                    <MessagesOverview
+                      threadDetail={activeEmailList.threads[viewIndex]}
+                      isLoading={isLoading}
+                      isReplying={isReplying}
+                      isReplyingListener={isReplyingListener}
+                      labelIds={labelIds}
                     />
-                  </S.HiddenMessagesFeed>
-                </>)
-            )}
-          {overviewId === local.FILES && activeEmailList && activeEmailList.threads.length > 0 && (
-            <FilesOverview threadDetail={activeEmailList.threads[viewIndex]} isLoading={isLoading} />
-          )}
-        </GS.OuterContainer>
-      </S.Scroll>
-    </>
+                    <S.HiddenMessagesFeed>
+                      <PreLoadMessages
+                        threadDetailList={activeEmailList.threads}
+                        viewIndex={viewIndex}
+                      />
+                    </S.HiddenMessagesFeed>
+                  </>)
+              }
+              {overviewId === local.FILES && activeEmailList.threads.length > 0 && (
+                <FilesOverview threadDetail={activeEmailList.threads[viewIndex]} isLoading={isLoading} />
+              )}
+            </GS.OuterContainer>
+          </S.Scroll>
+        </AnimatedMountUnmount>
+      </> : <Baseloader />
   )
 }
 

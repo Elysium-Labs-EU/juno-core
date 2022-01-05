@@ -3,6 +3,7 @@ import EmailList from '../EmailList/EmailList'
 import { setCurrentLabels } from '../../Store/labelsSlice'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 
 const LABEL = ['INBOX']
 
@@ -15,7 +16,7 @@ const Inbox = () => {
     }
   }, [baseLoaded])
 
-  return <EmailList />
+  return <AnimatedMountUnmount><EmailList /></AnimatedMountUnmount>
 }
 
 export default Inbox

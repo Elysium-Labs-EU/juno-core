@@ -12,6 +12,7 @@ import { LocationObjectType } from '../types/globalTypes'
 const SetHeader = memo(() => {
   const location = useLocation<LocationObjectType>()
 
+  // The email detail header is coming from EmailDetail.
   if (location.pathname === '/inbox') {
     return <InboxHeader />
   }
