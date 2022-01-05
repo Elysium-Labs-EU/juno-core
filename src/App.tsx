@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { AnimatePresence } from "framer-motion"
 import {
   Router,
   Switch,
@@ -53,18 +54,20 @@ const App = () => {
             <Header />
           </GS.OuterContainer>
 
-          <React.Suspense fallback={<CircularProgress />}>
-            <Switch>
-              <Route path={Routes.HOME} exact component={ToDo} />
-              <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
-              <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
-              <Route path={Routes.DRAFTS} component={DraftEmail} />
-              <Route path={Routes.SENT} component={SentEmail} />
-              {/* <Route path={Routes.SPAM} component={SpamEmail} /> */}
-              <Route path={Routes.SETTINGS} component={Settings} />
-              <Route path={Routes.INBOX} component={Inbox} />
-            </Switch>
-          </React.Suspense>
+          <AnimatePresence exitBeforeEnter>
+            <React.Suspense fallback={<CircularProgress />}>
+              <Switch>
+                <Route path={Routes.HOME} exact component={ToDo} />
+                <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
+                <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
+                <Route path={Routes.DRAFTS} component={DraftEmail} />
+                <Route path={Routes.SENT} component={SentEmail} />
+                {/* <Route path={Routes.SPAM} component={SpamEmail} /> */}
+                <Route path={Routes.SETTINGS} component={Settings} />
+                <Route path={Routes.INBOX} component={Inbox} />
+              </Switch>
+            </React.Suspense>
+          </AnimatePresence>
         </GS.Base>
       )}
     </Router>

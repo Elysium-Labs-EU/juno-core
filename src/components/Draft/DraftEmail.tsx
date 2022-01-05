@@ -4,6 +4,7 @@ import { setCurrentLabels } from '../../Store/labelsSlice'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import * as local from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 
 const DraftEmail = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
@@ -14,7 +15,7 @@ const DraftEmail = () => {
     }
   }, [baseLoaded])
 
-  return <EmailList />
+  return <AnimatedMountUnmount><EmailList /></AnimatedMountUnmount>
 }
 
 export default DraftEmail

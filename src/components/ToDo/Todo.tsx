@@ -3,6 +3,7 @@ import EmailList from '../EmailList/EmailList'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import { fetchLabelIds, setCurrentLabels, selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 
 const LABEL = 'Juno/To Do'
 
@@ -20,7 +21,7 @@ const Todo = () => {
     }
   }, [baseLoaded])
 
-  return <EmailList />
+  return <AnimatedMountUnmount><EmailList /></AnimatedMountUnmount>
 }
 
 export default Todo

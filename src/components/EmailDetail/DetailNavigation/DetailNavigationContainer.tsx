@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import { selectCurrentEmail, selectViewIndex } from '../../../Store/emailDetailSlice'
 import NavigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
-import { loadEmails, selectEmailList } from '../../../Store/emailListSlice'
 import { selectIsSilentLoading } from '../../../Store/utilsSlice'
-import { loadDraftList, selectDraftListLoaded } from '../../../Store/draftsSlice'
-import * as draft from '../../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { LocationObjectType } from '../../types/globalTypes'
 import DetailNavigationView from './DetailNavigationView'
 import { EmailListObject } from '../../../Store/emailListTypes'
 
 const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
-  const emailList = useAppSelector(selectEmailList)
-  const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const labelIds = useAppSelector(selectLabelIds)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
-  const currEmail = useAppSelector(selectCurrentEmail)
+  const currentEmail = useAppSelector(selectCurrentEmail)
   const viewIndex = useAppSelector(selectViewIndex)
   const [currLocal, setCurrLocal] = useState<string>('')
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
 
   const isDisabledPrev = !!(
     activeEmailList.threads[viewIndex - 1] === undefined
@@ -35,7 +27,7 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
   const nextButtonSelector = () => {
     const { nextPageToken } = activeEmailList
     if (
-      emailList.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
+      activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
       NavigateNextMail({
@@ -65,27 +57,13 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
     return null
   }
 
-  const refetchEmailList = () => {
-    const labels = labelIds
-    const params = {
-      labelIds: labels,
-      maxResults: 20,
-    }
-    dispatch(loadEmails(params))
-    if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
-      dispatch(loadDraftList())
-    }
-  }
-
   useEffect(() => {
-    if (currEmail !== currLocal) {
-      if (emailList.length > 0) {
-        setCurrLocal(currEmail)
-        return
+    if (currentEmail !== currLocal) {
+      if (activeEmailList.threads.length > 0) {
+        setCurrLocal(currentEmail)
       }
-      refetchEmailList()
     }
-  }, [currEmail, emailList])
+  }, [currentEmail, activeEmailList])
 
   // Load additional emails when the first, current viewed email happens to be the last in the list
   useEffect(() => {
