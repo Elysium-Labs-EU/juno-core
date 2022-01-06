@@ -10,14 +10,16 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { theme } from './styles/globalStyles'
 
-Sentry.init({
+
+// Don't run Sentry when developing.
+process.env.NODE_ENV !== 'development' && Sentry.init({
   dsn: 'https://493389e033b54228a97252c427fdebe6@o917516.ingest.sentry.io/5859846',
   integrations: [new Integrations.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
-  tracesSampleRate: process.env.NODE_ENV === 'development' ? 1.0 : 0,
+  tracesSampleRate: 1.0
 })
 
 ReactDOM.render(

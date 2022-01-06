@@ -1,4 +1,4 @@
-import { UpdateEmailListLabel } from '../Store/emailListSlice'
+import { updateEmailListLabel } from '../Store/emailListSlice'
 
 const MarkEmailAsRead = ({
   dispatch,
@@ -14,7 +14,7 @@ const MarkEmailAsRead = ({
       removeLabelIds: ['UNREAD'],
     }
     dispatch(
-      UpdateEmailListLabel({
+      updateEmailListLabel({
         messageId,
         request,
         labelIds,

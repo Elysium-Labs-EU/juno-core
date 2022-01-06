@@ -307,7 +307,7 @@ export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { labelIds, silentLoading, activeMetaObjArray } = params
+      const { labelIds, silentLoading } = params
       if (!silentLoading && !getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
@@ -315,33 +315,24 @@ export const loadEmails =
         dispatch(setIsSilentLoading(true))
       }
       const metaList = await threadApi().getThreads(params)
-      if (metaList) {
-        if (metaList.message.resultSizeEstimate > 0) {
-          const { threads, nextPageToken } = metaList.message
+      if (metaList.resultSizeEstimate > 0) {
+        const { threads, nextPageToken } = metaList
 
-          // If there is a specific email array being sent as parameter, append that to the list of threads.
-          const labeledThreads = {
-            labels: labelIds,
-            threads: activeMetaObjArray
-              ? threads.concat(activeMetaObjArray)
-              : threads,
-            nextPageToken: nextPageToken ?? null,
-          }
-          dispatch(loadEmailDetails(labeledThreads))
-        } else {
-          dispatch(setLoadedInbox(labelIds))
-          dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
+        // If there is a specific email array being sent as parameter, append that to the list of threads.
+        const labeledThreads = {
+          labels: labelIds,
+          threads,
+          nextPageToken: nextPageToken ?? null,
         }
+        dispatch(loadEmailDetails(labeledThreads))
       } else {
-        dispatch(setServiceUnavailable('No feed found'))
-        dispatch(setIsLoading(false))
+        dispatch(setLoadedInbox(labelIds))
+        getState().utils.isLoading && dispatch(setIsLoading(false))
         getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       }
     } catch (err) {
       console.log(err)
-      dispatch(setIsLoading(false))
+      getState().utils.isLoading && dispatch(setIsLoading(false))
       getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       dispatch(
         setServiceUnavailable('Something went wrong whilst loading Meta data.')
@@ -349,7 +340,7 @@ export const loadEmails =
     }
   }
 
-export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
+export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
   const {
     messageId,
     request,
@@ -468,7 +459,7 @@ export const UpdateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
   }
 }
 
-// Use profile history id, compare this to the received history id. If the history id is higher than stored version. Refetch the email list for inbox only.
+// Use profile history id, compare this to the received history id. If the received history id is higher than stored version. Refetch the email list for inbox only.
 export const refreshEmailFeed =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
@@ -476,7 +467,7 @@ export const refreshEmailFeed =
       dispatch(setIsFetching(true))
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
       const checkFeed = await threadApi().getThreads(params)
-      const newEmailsIdx = checkFeed.message.threads.findIndex(
+      const newEmailsIdx = checkFeed.threads.findIndex(
         (thread: MetaListThreadItem) =>
           parseInt(thread.historyId, 10) < savedHistoryId
       )
@@ -488,7 +479,7 @@ export const refreshEmailFeed =
           const labeledThreads = {
             labels: params.labelIds,
             threads: newSlice,
-            nextPageToken: checkFeed.message.nextPageToken ?? null,
+            nextPageToken: checkFeed.nextPageToken ?? null,
           }
           dispatch(loadEmailDetails(labeledThreads))
         }

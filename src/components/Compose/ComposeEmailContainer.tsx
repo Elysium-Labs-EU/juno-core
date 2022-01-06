@@ -146,97 +146,123 @@ const ComposeEmailContainer = ({
   }
 
   useEffect(() => {
+    let mounted = true
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
-        dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(TrackComposeEmail(updateEventObject))
       }
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [debouncedToValue])
 
   useEffect(() => {
+    let mounted = true
     if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
-        dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(TrackComposeEmail(updateEventObject))
       }
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [debouncedBCCValue])
 
   useEffect(() => {
+    let mounted = true
     if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
-        dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(TrackComposeEmail(updateEventObject))
       }
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [debouncedCCValue])
 
   useEffect(() => {
+    let mounted = true
     if (debouncedSubjectValue) {
       const updateEventObject = {
         id: local.SUBJECT,
         value: debouncedSubjectValue,
       }
-      dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(TrackComposeEmail(updateEventObject))
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [debouncedSubjectValue])
 
   useEffect(() => {
+    let mounted = true
     if (debouncedBodyValue) {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(TrackComposeEmail(updateEventObject))
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [debouncedBodyValue])
 
   // Set the form values
   useEffect(() => {
-    if (!isEmpty(composeEmail)) {
-      setToValue(Array(composeEmail.to).map((item) => convertToContact(item)))
-      if (composeEmail.cc && composeEmail.cc.length > 0) {
-        setShowCC(true)
-        setCCValue(Array(composeEmail.cc).map((item) => convertToContact(item)))
+    let mounted = true
+    if (mounted) {
+      if (!isEmpty(composeEmail)) {
+        setToValue(Array(composeEmail.to).map((item) => convertToContact(item)))
+        if (composeEmail.cc && composeEmail.cc.length > 0) {
+          setShowCC(true)
+          setCCValue(Array(composeEmail.cc).map((item) => convertToContact(item)))
+        }
+        if (composeEmail.bcc && composeEmail.bcc.length > 0) {
+          setShowBCC(true)
+          setBCCValue(Array(composeEmail.bcc).map((item) => convertToContact(item)))
+        }
+        setSubjectValue(composeEmail.subject)
+        setBodyValue(composeEmail.body)
       }
-      if (composeEmail.bcc && composeEmail.bcc.length > 0) {
-        setShowBCC(true)
-        setBCCValue(Array(composeEmail.bcc).map((item) => convertToContact(item)))
-      }
-      setSubjectValue(composeEmail.subject)
-      setBodyValue(composeEmail.body)
+      // Form values coming from a new reply via MessageOverview
+      if (to) setToValue([to])
+      if (cc) setCCValue([cc])
+      if (bcc) setBCCValue([bcc])
+      if (subject) setSubjectValue(subject)
     }
-    // Form values coming from a new reply via MessageOverview
-    if (to) setToValue([to])
-    if (cc) setCCValue([cc])
-    if (bcc) setBCCValue([bcc])
-    if (subject) setSubjectValue(subject)
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [])
 
   useEffect(() => {
+    let mounted = true
     if (currentMessage && currentMessage.id) {
       const updateEventObject = {
         id: 'id',
         value: currentMessage.id,
       }
-      dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(TrackComposeEmail(updateEventObject))
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [currentMessage])
 
   useEffect(() => {
+    let mounted = true
     if (threadId) {
       const updateEventObject = {
         id: 'threadId',
         value: threadId,
       }
-      dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(TrackComposeEmail(updateEventObject))
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [threadId])
 
   return (

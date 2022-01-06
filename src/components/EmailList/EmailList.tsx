@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
@@ -29,15 +28,19 @@ const EmailList = () => {
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
+    let mounted = true
     if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
       const params = {
         labelIds,
         maxResults: local.MAX_RESULTS,
       }
-      dispatch(loadEmails(params))
+      mounted && dispatch(loadEmails(params))
       if (labelIds.includes(draft.LABEL)) {
-        dispatch(loadDraftList())
+        mounted && dispatch(loadDraftList())
       }
+    }
+    return () => {
+      mounted = false
     }
   }, [labelIds])
 
@@ -88,7 +91,7 @@ const EmailList = () => {
                     label={local.LOAD_OLDER}
                   />
                 )}
-                {isLoading && <CircularProgress />}
+                {isLoading && <LoadingState />}
               </S.LoadMoreContainer>
             ) : (
               <S.LoadMoreContainer>
@@ -111,7 +114,7 @@ const EmailList = () => {
     if (emailList && emailListIndex > -1) {
       return renderEmailList(emailList[emailListIndex])
     }
-    return null
+    return <EmptyState />
   }
 
   return (

@@ -1,4 +1,4 @@
-import { UpdateEmailListLabel } from '../../Store/emailListSlice'
+import { updateEmailListLabel } from '../../Store/emailListSlice'
 import { LocationObjectType } from '../types/globalTypes'
 
 interface ThrashMailProps {
@@ -14,7 +14,7 @@ const ThrashMail = (props: ThrashMailProps) => {
 
   const MarkEmailThrashed = () => {
     dispatch(
-      UpdateEmailListLabel({
+      updateEmailListLabel({
         messageId,
         request,
         location,

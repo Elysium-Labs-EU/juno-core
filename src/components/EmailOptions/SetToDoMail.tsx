@@ -2,7 +2,7 @@ import { FindLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
 import { LocationObjectType } from '../types/globalTypes'
 import { LabelIdName } from '../../Store/labelsTypes'
-import { UpdateEmailListLabel } from '../../Store/emailListSlice'
+import { updateEmailListLabel } from '../../Store/emailListSlice'
 
 interface SetToDoMailProps {
   messageId: string
@@ -21,7 +21,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: labelIds,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(UpdateEmailListLabel({ messageId, request, location, labelIds }))
+    dispatch(updateEmailListLabel({ messageId, request, location, labelIds }))
   }
 
   return ToDoAction()

@@ -67,18 +67,20 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
 
   // Load additional emails when the first, current viewed email happens to be the last in the list
   useEffect(() => {
+    let mounted = true
     if (viewIndex > -1 && !isSilentLoading) {
       if (activeEmailList.threads.length - 1 === viewIndex) {
         const { nextPageToken } = activeEmailList
         const silentLoading = true
         if (nextPageToken &&
-          activeEmailList.threads[viewIndex + 1] === undefined) {
+          activeEmailList.threads[viewIndex + 1] === undefined && mounted) {
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
         }
       }
-      return () => { }
     }
-    return () => { }
+    return () => {
+      mounted = false
+    }
   }, [viewIndex, isSilentLoading])
 
   return (
