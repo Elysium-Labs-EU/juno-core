@@ -8,10 +8,10 @@ const Wrapper = styled.div`
   justify-content: center;
 `
 
-const Emptystate = () => (
+const EmptyState = () => (
   <Wrapper>
     <p>{global.NOTHING_TO_SEE}</p>
   </Wrapper>
 )
 
-export default Emptystate
+export default EmptyState

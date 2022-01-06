@@ -6,7 +6,7 @@ import { loadDraftList } from '../../Store/draftsSlice'
 import { loadEmails, refreshEmailFeed, selectEmailList } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import Emptystate from '../Elements/EmptyState'
+import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
 import * as local from '../../constants/emailListConstants'
 import * as draft from '../../constants/draftConstants'
@@ -76,7 +76,7 @@ const EmailList = () => {
                   ))}
                 </GS.Base>
               )}
-              {threads.length === 0 && <Emptystate />}
+              {threads.length === 0 && <EmptyState />}
             </S.ThreadList>
             {nextPageToken ? (
               <S.LoadMoreContainer>
@@ -99,7 +99,7 @@ const EmailList = () => {
         </S.Scroll>
       )
     }
-    return <Emptystate />
+    return <EmptyState />
   }
 
   const emailListIndex = useMemo(
@@ -108,7 +108,7 @@ const EmailList = () => {
   )
 
   const labeledInbox = () => {
-    if (labelIds) {
+    if (emailList && emailListIndex > -1) {
       return renderEmailList(emailList[emailListIndex])
     }
     return null
@@ -116,10 +116,8 @@ const EmailList = () => {
 
   return (
     <>
-      {labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
-      {isLoading && labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
-        <LoadingState />
-      )}
+      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
+      {!labelIds || isLoading && <LoadingState />}
     </>
   )
 }
