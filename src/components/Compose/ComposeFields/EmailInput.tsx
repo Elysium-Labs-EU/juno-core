@@ -38,7 +38,7 @@ const emailInput = (props: IEmailInputProps) => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    let active = true
+    let mounted = true
     if (debouncedInputValue && debouncedInputValue.length > 1) {
 
       (async () => {
@@ -78,14 +78,14 @@ const emailInput = (props: IEmailInputProps) => {
           }
         }
 
-        if (active) {
+        if (mounted) {
           setOptions(availableContacts)
         }
       })()
 
     }
     return () => {
-      active = false
+      mounted = false
     }
   }, [debouncedInputValue, contactsLoaded])
 

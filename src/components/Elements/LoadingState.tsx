@@ -5,9 +5,9 @@ import { useSelector } from 'react-redux'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 
 const Wrapper = styled.div`
-  margin-top: 3rem;
   display: flex;
   justify-content: center;
+  height: 2rem;
 `
 
 const LoadingState = () => {
