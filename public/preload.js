@@ -12,19 +12,29 @@ const isValidHttpUrl = (checkString) => {
     return false
   }
 
-  return url.protocol === 'http:' || url.protocol === 'https:' || url.protocol === 'mailto:'
+  return (
+    url.protocol === 'http:' ||
+    url.protocol === 'https:' ||
+    url.protocol === 'mailto:'
+  )
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  document.body.addEventListener('click', event => {
-    if (event.target.tagName.toLowerCase() === 'a' && event.target.protocol !== 'file:') {
+  document.body.addEventListener('click', (event) => {
+    if (
+      event.target.tagName.toLowerCase() === 'a' &&
+      event.target.protocol !== 'file:'
+    ) {
       event.preventDefault()
       if (isValidHttpUrl(event.target.href)) {
         shell.openExternal(event.target.href)
       }
-    } else if (event.target.parentNode.tagName.toLowerCase() === 'a' && event.target.parentNode.protocol !== 'file:') {
+    } else if (
+      event.target.parentNode.tagName.toLowerCase() === 'a' &&
+      event.target.parentNode.protocol !== 'file:'
+    ) {
       event.preventDefault()
-      if(isValidHttpUrl(event.target.parentNode.href)){
+      if (isValidHttpUrl(event.target.parentNode.href)) {
         shell.openExternal(event.target.parentNode.href)
       }
     }
