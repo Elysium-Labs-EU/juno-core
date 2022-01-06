@@ -466,20 +466,20 @@ export const refreshEmailFeed =
     try {
       dispatch(setIsFetching(true))
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
-      const checkFeed = await threadApi().getThreads(params)
-      const newEmailsIdx = checkFeed.threads.findIndex(
+      const { threads, nextPageToken } = await threadApi().getThreads(params)
+      const newEmailsIdx = threads.findIndex(
         (thread: MetaListThreadItem) =>
           parseInt(thread.historyId, 10) < savedHistoryId
       )
       if (newEmailsIdx > -1) {
-        const newSlice = checkFeed.message.threads.slice(0, newEmailsIdx)
+        const newSlice = threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
           const user = await userApi().fetchUser()
           dispatch(setProfile(user?.data.data))
           const labeledThreads = {
             labels: params.labelIds,
             threads: newSlice,
-            nextPageToken: checkFeed.nextPageToken ?? null,
+            nextPageToken: nextPageToken ?? null,
           }
           dispatch(loadEmailDetails(labeledThreads))
         }

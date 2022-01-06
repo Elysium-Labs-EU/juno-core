@@ -54,17 +54,28 @@ const ComposeEmailContainer = ({
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    let mounted = true
     if (!isEmpty(composeEmail)) {
-      dispatch(CreateUpdateDraft())
+      mounted && dispatch(CreateUpdateDraft())
+    }
+    return () => {
+      mounted = false
     }
   }, [composeEmail])
 
   useEffect(() => {
-    if (!isEmpty(draftDetails)) {
+    let mounted = true
+    if (!isEmpty(draftDetails) && mounted) {
       setSaveSuccess(true)
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setSaveSuccess(false)
       }, 2500)
+      return () => {
+        clearTimeout(timer)
+      }
+    }
+    return () => {
+      mounted = false
     }
   }, [draftDetails])
 
