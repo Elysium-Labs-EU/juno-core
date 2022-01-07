@@ -8,7 +8,7 @@ import {
   setServiceUnavailable,
 } from './utilsSlice'
 import { setLoadedInbox } from './labelsSlice'
-import { convertArrayToString, FilteredEmailList } from '../utils'
+import emailListFilteredByLabel from '../utils/emailListFilteredByLabel'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
@@ -27,6 +27,7 @@ import sortThreads from '../utils/sortThreads'
 import { setCurrentEmail } from './emailDetailSlice'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
+import labelURL from '../utils/createLabelURL'
 
 const initialState: EmailListState = Object.freeze({
   emailList: [],
@@ -356,16 +357,19 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
       const filteredCurrentEmailList = (): EmailListObject[] => {
         if (emailList && (removeLabelIds || request.delete)) {
           if (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) {
-            return FilteredEmailList({ emailList, labelIds: removeLabelIds })
+            return emailListFilteredByLabel({
+              emailList,
+              labelIds: removeLabelIds,
+            })
           }
-          return FilteredEmailList({ emailList, labelIds })
+          return emailListFilteredByLabel({ emailList, labelIds })
         }
         return []
       }
 
       const filteredTargetEmailList = () => {
         if (emailList && addLabelIds) {
-          return FilteredEmailList({ emailList, labelIds: addLabelIds })
+          return emailListFilteredByLabel({ emailList, labelIds: addLabelIds })
         }
         return []
       }
@@ -384,23 +388,17 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           ) {
             const { viewIndex } = getState().emailDetail
 
-            const labelURL = () => {
-              if (labelIds && labelIds.length > 0) {
-                return convertArrayToString(labelIds)
-              }
-              return null
-            }
-
             const nextID = () =>
               filteredCurrentEmailList()[0].threads[viewIndex + 1] !== undefined
                 ? filteredCurrentEmailList()[0].threads[viewIndex + 1].id
                 : null
 
             const staticNextID = nextID()
+            const staticLabelURL = labelURL(labelIds)
 
-            if (staticNextID !== null) {
+            if (staticNextID && staticLabelURL) {
               dispatch(setCurrentEmail(staticNextID))
-              dispatch(push(`/mail/${labelURL()}/${staticNextID}/messages`))
+              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
             }
           }
         }

@@ -75,7 +75,7 @@ const EmailList = () => {
               {threads.length > 0 && (
                 <GS.Base>
                   {threads.map((email) => (
-                    <EmailListItem key={email.id} email={email} />
+                    <EmailListItem key={email.id} email={email} showLabel={false} />
                   ))}
                 </GS.Base>
               )}

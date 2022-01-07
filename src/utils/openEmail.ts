@@ -1,7 +1,7 @@
 import { push } from 'redux-first-history'
-import { convertArrayToString } from '.'
 import { openDraftEmail } from '../Store/draftsSlice'
 import * as draft from '../constants/draftConstants'
+import labelURL from './createLabelURL'
 
 interface OpenEmailProps {
   labelIds: string[]
@@ -14,10 +14,10 @@ interface OpenEmailProps {
 const openEmail = (props: OpenEmailProps) => {
   const { labelIds, id, email, dispatch } = props
   const { LABEL } = draft
-  const labelURL = convertArrayToString(labelIds)
+  const staticLabelURL = labelURL(labelIds)
 
   if (!labelIds.includes(LABEL)) {
-    dispatch(push(`mail/${labelURL}/${id}/messages`))
+    dispatch(push(`/mail/${staticLabelURL}/${id}/messages`))
     return
   }
   if (labelIds.includes(LABEL)) {

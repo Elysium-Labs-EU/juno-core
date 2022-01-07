@@ -12,19 +12,20 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
 import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
+import { setViewIndex } from '../../Store/emailDetailSlice'
 
-const GO = 'Go'
+const SEARCH = 'Search'
 
 const Search = () => {
     const [searchValue, setSearchValue] = useState('')
     const searchValueRef = useRef('')
-    const searchInputRef = useRef(null)
+    const searchInputRef = useRef<HTMLInputElement | null>(null)
     const [searchResults, setSearchResults] = useState<EmailListObject>()
     const [loadState, setLoadState] = useState('idle')
     const dispatch = useAppDispatch()
     const isSearching = useAppSelector(selectIsSearching)
-    const handleClose = () => dispatch(setIsSearching(false))
 
+    const handleClose = () => dispatch(setIsSearching(false))
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(event.target.value)
@@ -34,7 +35,9 @@ const Search = () => {
         setSearchValue('')
         setSearchResults(undefined)
         setLoadState('idle')
-        // searchInputRef.current.focus()
+        if (searchInputRef.current !== null) {
+            searchInputRef.current.focus()
+        }
     }
 
     const fetchSearchThreads = async (searchBody: any) => {
@@ -51,7 +54,7 @@ const Search = () => {
                     if (searchValueRef.current !== searchValue) {
                         searchValueRef.current = searchValue
                         setSearchResults({
-                            labels: response.labels ?? [''],
+                            labels: response.labels,
                             threads: sortThreads(buffer),
                             nextPageToken: response.nextPageToken ?? null
                         })
@@ -59,7 +62,7 @@ const Search = () => {
                     }
                     if (searchResults && searchResults.threads.length > 0) {
                         setSearchResults({
-                            labels: response.labels ?? [''],
+                            labels: response.labels,
                             threads: sortThreads(searchResults.threads.concat(buffer)),
                             nextPageToken: response.nextPageToken ?? null
                         })
@@ -93,63 +96,73 @@ const Search = () => {
         fetchSearchThreads(searchBody)
     }
 
+    // Reset viewIndex to have emailDetail reassess its viewIndex
+    const setNewViewIndex = () => {
+        dispatch(setViewIndex(-1))
+    }
+
     return (
-        <div>
-            <Modal
-                open={isSearching}
-                onClose={handleClose}
-                aria-labelledby="modal-search"
-                aria-describedby="modal-search-box"
-            >
-                <S.Dialog>
-                    <S.InputRow>
-                        <S.Icon>
-                            <FiSearch size={24} />
-                        </S.Icon>
-                        <InputBase
-                            id="search"
-                            placeholder="Search"
-                            value={searchValue}
-                            onChange={handleSearchChange}
-                            autoFocus={isSearching}
-                            ref={searchInputRef}
-                            fullWidth
-                        />
-                        {searchValue.length > 0 && <button className="juno-button" type="button" onClick={resetSearch} aria-label="Clear search"><S.Icon><FiX size={16} /></S.Icon></button>}
-                        <button className="juno-button" type="button" onClick={intitialSearch} disabled={searchValue.length < 1}>{GO}</button>
-                    </S.InputRow>
-                    <S.SearchResults>
-                        {searchResults &&
-                            searchResults.threads ?
-                            <>
-                                {searchResults.threads.map((thread) =>
-                                    <EmailListItem key={thread.id} email={thread} />
-                                )}
-                                {searchResults.nextPageToken ? (
-                                    <S.FooterRow>
-                                        {loadState !== 'loading' && (
-                                            <CustomButtonText
-                                                className="juno-button juno-button-small juno-button-light"
-                                                onClick={loadMoreResults}
-                                                label={global.LOAD_OLDER}
-                                            />
-                                        )}
-                                        {loadState === 'loading' && <LoadingState />}
-                                    </S.FooterRow>
-                                ) : (
-                                    <S.FooterRow>
-                                        <small className="text_muted">{global.NO_MORE_RESULTS}</small>
-                                    </S.FooterRow>
-                                )}
-                            </> :
-                            <S.NoSearchResults>
-                                {loadState === 'loading' ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
-                            </S.NoSearchResults>
-                        }
-                    </S.SearchResults>
-                </S.Dialog>
-            </Modal>
-        </div>
+        <Modal
+            open={isSearching}
+            onClose={handleClose}
+            aria-labelledby="modal-search"
+            aria-describedby="modal-search-box"
+        >
+            <S.Dialog>
+                <S.InputRow>
+                    <S.Icon>
+                        <FiSearch size={24} />
+                    </S.Icon>
+                    <InputBase
+                        id="search"
+                        placeholder="Search"
+                        value={searchValue}
+                        onChange={handleSearchChange}
+                        autoFocus={isSearching}
+                        inputRef={searchInputRef}
+                        fullWidth
+                    />
+                    {searchValue.length > 0 &&
+                        <button className="juno-button" type="button"
+                            onClick={resetSearch} aria-label="clear-search">
+                            <S.Icon><FiX size={16} /></S.Icon>
+                        </button>}
+                    <button className="juno-button" type="button"
+                        onClick={intitialSearch} disabled={searchValue.length < 1}><span>{SEARCH}</span></button>
+                </S.InputRow>
+                <S.SearchResults>
+                    {searchResults &&
+                        searchResults.threads ?
+                        <>
+                            {searchResults.threads.map((thread) =>
+                                <div key={`${ thread.id }-search`} onClick={setNewViewIndex} aria-hidden="true">
+                                    <EmailListItem email={thread} showLabel />
+                                </div>
+                            )}
+                            {searchResults.nextPageToken ? (
+                                <S.FooterRow>
+                                    {loadState !== 'loading' && (
+                                        <CustomButtonText
+                                            className="juno-button juno-button-small juno-button-light"
+                                            onClick={loadMoreResults}
+                                            label={global.LOAD_OLDER}
+                                        />
+                                    )}
+                                    {loadState === 'loading' && <LoadingState />}
+                                </S.FooterRow>
+                            ) : (
+                                <S.FooterRow>
+                                    <small className="text_muted">{global.NO_MORE_RESULTS}</small>
+                                </S.FooterRow>
+                            )}
+                        </> :
+                        <S.NoSearchResults>
+                            {loadState === 'loading' ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
+                        </S.NoSearchResults>
+                    }
+                </S.SearchResults>
+            </S.Dialog>
+        </Modal>
     )
 }
 

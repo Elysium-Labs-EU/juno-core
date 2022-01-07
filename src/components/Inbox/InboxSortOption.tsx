@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
 import { CustomButtonText } from '../Elements/Buttons'
-import { convertArrayToString } from '../../utils'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import startSort from '../../utils/startSort'
 import { selectEmailList, setIsSorting } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import labelURL from '../../utils/createLabelURL'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -21,9 +21,11 @@ const SortInbox = () => {
   )
 
   const handleClick = () => {
-    const labelURL = convertArrayToString(labelIds)
-    startSort({ dispatch, labelURL, emailList, emailListIndex })
-    dispatch(setIsSorting(true))
+    const staticLabelURL = labelURL(labelIds)
+    if (staticLabelURL) {
+      startSort({ dispatch, labelURL: staticLabelURL, emailList, emailListIndex })
+      dispatch(setIsSorting(true))
+    }
   }
 
 

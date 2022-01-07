@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
@@ -20,20 +19,23 @@ import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
+import CustomLabel from '../Elements/Label'
 
-const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
-  const labelIds = useAppSelector(selectLabelIds)
+const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const { id } = email
   const dispatch = useAppDispatch()
 
+  console.log(email)
+
   const emailLabels = () => {
-    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? ['']
-    if (email && email.message) return email.message.labelIds ?? ['']
-    return ['']
+    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
+    if (email && email.message) return email.message.labelIds ?? [global.ARCHIVE_LABEL]
+    return [global.ARCHIVE_LABEL]
   }
 
   const staticEmailLabels = emailLabels()
+  console.log(staticEmailLabels)
   const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1])
   const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1], emailAddress)
   const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1], emailAddress)
@@ -43,35 +45,36 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
 
   return (
     <S.ThreadBase key={id} emailLabels={staticEmailLabels}>
-      <S.ThreadRow>
+      <S.ThreadRow showLabel={showLabel}>
         <div />
         <S.CellCheckbox>{
           staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
         }</S.CellCheckbox>
         <S.CellName
-          onClick={() => openEmail({ labelIds, id, email, dispatch })}
+          onClick={() => openEmail({ labelIds: staticEmailLabels, id, email, dispatch })}
           aria-hidden="true"
         >
           <S.Avatars>
-            {!labelIds.includes(draft.LABEL) ? (
+            {!staticEmailLabels.includes(draft.LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
               <EmailAvatar avatarURL={staticRecipientName.name} />
             )}
           </S.Avatars>
-          {!labelIds.includes(draft.LABEL) ? (
+          {!staticEmailLabels.includes(draft.LABEL) ? (
             <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</span>
           ) : (
             <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
+        {showLabel && <S.CellLabels>{staticEmailLabels.map((label) => <CustomLabel key={label} labelName={label} />)}</S.CellLabels>}
         <S.CellMessage
-          onClick={() => openEmail({ labelIds, id, email, dispatch })}
+          onClick={() => openEmail({ labelIds: staticEmailLabels, id, email, dispatch })}
           aria-hidden="true"
         >
           <div className="subjectSnippet text_truncate">
-            {labelIds.includes(draft.LABEL) && (
+            {staticEmailLabels.includes(draft.LABEL) && (
               <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{staticSubject}</span>
@@ -91,8 +94,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         </S.CellDate>
         <div />
         <div />
-        {!labelIds.includes(draft.LABEL) ? (
-          <InlineThreadActionsRegular id={id} labelIds={labelIds} />
+        {!staticEmailLabels.includes(draft.LABEL) ? (
+          <InlineThreadActionsRegular id={id} labelIds={staticEmailLabels} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />
         )}

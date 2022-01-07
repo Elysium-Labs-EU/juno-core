@@ -106,7 +106,7 @@ const EmailDetail = () => {
   // Need to update the threadDetailList whenever an email is archived or removed.
   useEffect(() => {
     if (activeEmailList && activeEmailList.threads.length > 0 && emailList) {
-      if (emailList[emailListIndex].threads.length !== activeEmailList.threads.length) {
+      if (emailList[emailListIndex] && emailList[emailListIndex].threads.length !== activeEmailList.threads.length) {
         setActiveEmailList(emailList[emailListIndex])
       }
     }
@@ -114,7 +114,7 @@ const EmailDetail = () => {
 
   useEffect(() => {
     if (currentEmail !== currLocal) {
-      if (emailList.length > 0) {
+      if (emailList.length > 0 && emailList[emailListIndex] && emailList[emailListIndex].threads.length > 0) {
         setCurrLocal(currentEmail)
         return
       }
@@ -125,17 +125,17 @@ const EmailDetail = () => {
   // DetailNavigation will refetch emailList if empty.
   useEffect(() => {
     if (labelIds && labelIds === localLabels.current) {
-      emailList.length > 0 && fetchEmailDetails()
+      if (emailList.length > 0 && emailList[emailListIndex]) fetchEmailDetails()
     } else {
       const newLabelIds = [location.pathname.split('/')[2]]
       dispatch(setCurrentLabels(newLabelIds))
       localLabels.current = newLabelIds
-      emailList.length > 0 && fetchEmailDetails()
+      if (emailList.length > 0 && emailList[emailListIndex]) fetchEmailDetails()
     }
   }, [labelIds, emailList])
 
   useEffect(() => {
-    if (messageId !== undefined && currentEmail !== messageId) {
+    if (messageId && currentEmail !== messageId) {
       dispatch(setCurrentEmail(messageId))
     }
   }, [messageId])
@@ -146,13 +146,15 @@ const EmailDetail = () => {
     }
   }, [messageId])
 
+
+  // If there is no viewIndex set it by finding the index of the email.
   useEffect(() => {
     if (viewIndex === -1) {
       if (activeEmailList && activeEmailList.threads.length > 0) {
         dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
       }
     }
-  }, [viewIndex, activeEmailList])
+  }, [viewIndex, activeEmailList, currentEmail])
 
 
   return (
