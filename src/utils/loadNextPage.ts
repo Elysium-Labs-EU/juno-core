@@ -1,5 +1,5 @@
 import { loadEmails } from '../Store/emailListSlice'
-import * as local from '../constants/emailListConstants'
+import * as global from '../constants/globalConstants'
 
 const loadNextPage = ({
   nextPageToken,
@@ -16,7 +16,7 @@ const loadNextPage = ({
     const params = {
       labelIds,
       nextPageToken,
-      maxResults: local.MAX_RESULTS,
+      maxResults: global.MAX_RESULTS,
       silentLoading,
     }
     dispatch(loadEmails(params))

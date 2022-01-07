@@ -7,7 +7,7 @@ import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
-import * as local from '../../constants/emailListConstants'
+import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
 import { CustomButtonText } from '../Elements/Buttons'
 import * as S from './EmailListStyles'
@@ -32,7 +32,7 @@ const EmailList = () => {
     if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
       const params = {
         labelIds,
-        maxResults: local.MAX_RESULTS,
+        maxResults: global.MAX_RESULTS,
       }
       mounted && dispatch(loadEmails(params))
       if (labelIds.includes(draft.LABEL)) {
@@ -88,14 +88,14 @@ const EmailList = () => {
                     className="juno-button juno-button-small juno-button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
-                    label={local.LOAD_OLDER}
+                    label={global.LOAD_OLDER}
                   />
                 )}
                 {isLoading && <LoadingState />}
               </S.LoadMoreContainer>
             ) : (
               <S.LoadMoreContainer>
-                <small className="text_muted">{local.NO_MORE_RESULTS}</small>
+                <small className="text_muted">{global.NO_MORE_RESULTS}</small>
               </S.LoadMoreContainer>
             )}
           </GS.OuterContainer>
@@ -120,7 +120,9 @@ const EmailList = () => {
   return (
     <>
       {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
-      {!labelIds || isLoading && <LoadingState />}
+      {isLoading && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+        <LoadingState />
+      )}
     </>
   )
 }

@@ -28,9 +28,9 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const dispatch = useAppDispatch()
 
   const emailLabels = () => {
-    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds
-    if (email && email.message) return email.message.labelIds
-    return ''
+    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? ['']
+    if (email && email.message) return email.message.labelIds ?? ['']
+    return ['']
   }
 
   const staticEmailLabels = emailLabels()

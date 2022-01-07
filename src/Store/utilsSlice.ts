@@ -2,13 +2,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 
-interface UtilsState {
+interface IUtilsState {
+  isSearching: boolean
   isLoading: boolean
   serviceUnavailable: string
   isSilentLoading: boolean
 }
 
-const initialState: UtilsState = Object.freeze({
+const initialState: IUtilsState = Object.freeze({
+  isSearching: false,
   isLoading: false,
   serviceUnavailable: '',
   isSilentLoading: false,
@@ -18,6 +20,9 @@ export const utilsSlice = createSlice({
   name: 'utils',
   initialState,
   reducers: {
+    setIsSearching: (state, action: PayloadAction<boolean>) => {
+      state.isSearching = action.payload
+    },
     setIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload
     },
@@ -30,9 +35,14 @@ export const utilsSlice = createSlice({
   },
 })
 
-export const { setIsLoading, setServiceUnavailable, setIsSilentLoading } =
-  utilsSlice.actions
+export const {
+  setIsSearching,
+  setIsLoading,
+  setServiceUnavailable,
+  setIsSilentLoading,
+} = utilsSlice.actions
 
+export const selectIsSearching = (state: RootState) => state.utils.isSearching
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable
