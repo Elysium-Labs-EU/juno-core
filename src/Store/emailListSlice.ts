@@ -324,6 +324,7 @@ export const loadEmails =
           threads,
           nextPageToken: nextPageToken ?? null,
         }
+
         dispatch(loadEmailDetails(labeledThreads))
       } else {
         dispatch(setLoadedInbox(labelIds))
