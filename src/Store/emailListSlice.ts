@@ -317,8 +317,8 @@ export const loadEmails =
       }
       const metaList = await threadApi().getThreads(params)
       // console.log(metaList);
-      if (metaList.message.resultSizeEstimate > 0) {
-        const { threads, nextPageToken } = metaList.message
+      if (metaList.resultSizeEstimate > 0) {
+        const { threads, nextPageToken } = metaList
         
         // If there is a specific email array being sent as parameter, append that to the list of threads.
         const labeledThreads = {
@@ -327,7 +327,6 @@ export const loadEmails =
           nextPageToken: nextPageToken ?? null,
         }
 
-        // console.log(labeledThreads);
         dispatch(loadEmailDetails(labeledThreads))
       } else {
         dispatch(setLoadedInbox(labelIds))
