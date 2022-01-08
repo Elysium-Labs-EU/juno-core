@@ -253,6 +253,7 @@ export const {
 export const loadEmailDetails =
   (labeledThreads: EmailListObject): AppThunk =>
   async (dispatch, getState) => {
+    console.log(labeledThreads)
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
@@ -315,15 +316,18 @@ export const loadEmails =
         dispatch(setIsSilentLoading(true))
       }
       const metaList = await threadApi().getThreads(params)
-      if (metaList.resultSizeEstimate > 0) {
-        const { threads, nextPageToken } = metaList
-
+      // console.log(metaList);
+      if (metaList.message.resultSizeEstimate > 0) {
+        const { threads, nextPageToken } = metaList.message
+        
         // If there is a specific email array being sent as parameter, append that to the list of threads.
         const labeledThreads = {
           labels: labelIds,
           threads,
           nextPageToken: nextPageToken ?? null,
         }
+
+        // console.log(labeledThreads);
         dispatch(loadEmailDetails(labeledThreads))
       } else {
         dispatch(setLoadedInbox(labelIds))
