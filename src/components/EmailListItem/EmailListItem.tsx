@@ -19,15 +19,14 @@ import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
-import CustomLabel from '../Elements/Label'
+import EmailLabel from '../Elements/EmailLabel'
 
 const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const { id } = email
   const dispatch = useAppDispatch()
 
-  console.log(email)
-
+  // Setting an email label is required for the path.
   const emailLabels = () => {
     if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
     if (email && email.message) return email.message.labelIds ?? [global.ARCHIVE_LABEL]
@@ -35,7 +34,6 @@ const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, 
   }
 
   const staticEmailLabels = emailLabels()
-  console.log(staticEmailLabels)
   const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1])
   const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1], emailAddress)
   const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1], emailAddress)
@@ -68,7 +66,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, 
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
-        {showLabel && <S.CellLabels>{staticEmailLabels.map((label) => <CustomLabel key={label} labelName={label} />)}</S.CellLabels>}
+        {showLabel && <S.CellLabels><EmailLabel labelNames={staticEmailLabels} /></S.CellLabels>}
         <S.CellMessage
           onClick={() => openEmail({ labelIds: staticEmailLabels, id, email, dispatch })}
           aria-hidden="true"

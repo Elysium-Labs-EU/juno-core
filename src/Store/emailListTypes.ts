@@ -34,6 +34,12 @@ export interface EmailListObject {
   nextPageToken: string
 }
 
+export interface EmailListObjectSearch {
+  labels: string[] | undefined
+  threads: EmailListThreadItem[]
+  nextPageToken: string | null
+}
+
 export interface EmailListState {
   emailList: EmailListObject[]
   isFocused: boolean

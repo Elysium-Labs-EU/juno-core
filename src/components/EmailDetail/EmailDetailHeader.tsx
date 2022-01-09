@@ -6,6 +6,7 @@ import Menu from './Menu/Menu'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
+import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/BackButton'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
@@ -29,7 +30,9 @@ const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: EmailListObje
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
           setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
+          return
         }
+        setDetailHeader(global.ARCHIVE_LABEL.toLowerCase())
       }
     }
   }, [storageLabels, labelIds])

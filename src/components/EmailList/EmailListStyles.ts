@@ -20,6 +20,11 @@ export const LoadMoreContainer = styled.div`
   display: flex;
 `
 
+export const UnavailableContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
 export const ThreadList = styled.div`
   flex: 1 1;
   display: flex;

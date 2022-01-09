@@ -1,5 +1,6 @@
 import { updateEmailListLabel } from '../../Store/emailListSlice'
 import { LocationObjectType } from '../types/globalTypes'
+import * as global from '../../constants/globalConstants'
 
 const ArchiveMail = ({
   messageId,
@@ -12,7 +13,11 @@ const ArchiveMail = ({
   location: LocationObjectType
   dispatch: any
 }) => {
-  const request = { removeLabelIds: [...labelIds] }
+  const request = {
+    removeLabelIds: [
+      ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
+    ],
+  }
 
   const MarkEmailArchived = () => {
     dispatch(

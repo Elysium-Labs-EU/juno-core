@@ -82,9 +82,6 @@ export const CellLabels = styled.div`
   user-select: none;
   padding-left: 15px;
   overflow: hidden;
-  div:not(:first-child) {
-    margin-left: 5px;
-  }
 `
 
 export const CellMessage = styled.div`

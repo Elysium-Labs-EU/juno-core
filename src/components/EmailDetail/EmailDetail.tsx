@@ -15,8 +15,9 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
-import { loadEmails, selectEmailList, selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
+import { loadEmails, selectEmailList, selectIsFocused, selectIsSorting, storeSearchResults } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
+import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
 import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
@@ -31,6 +32,7 @@ import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
 import { loadDraftList, resetDraftDetails, selectDraftListLoaded } from '../../Store/draftsSlice'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
+import threadApi from '../../data/threadApi'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -72,19 +74,32 @@ const EmailDetail = () => {
   }
 
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
-  const fetchEmailList = () => {
-    const labels = labelIds
-    const params = {
-      labelIds: labels,
-      maxResults: 20,
+  const fetchEmailList = async () => {
+    if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+      const params = {
+        labelIds,
+        maxResults: 20,
+      }
+      dispatch(loadEmails(params))
     }
-    dispatch(loadEmails(params))
     if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
       dispatch(loadDraftList())
+    }
+    if (labelIds.includes(global.ARCHIVE_LABEL) && currentEmail) {
+      // If the requested thread is Archive, fetch the individual thread and save it.
+      const response = await threadApi().getThreadDetail(currentEmail)
+      if (response) {
+        const emailListObject = {
+          labels: undefined,
+          threads: [response.thread],
+          nextPageToken: null
+        }
+        dispatch(storeSearchResults(emailListObject))
+      }
     }
   }
 

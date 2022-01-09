@@ -19,7 +19,7 @@ const EmailAttachment = ({ message }: { message: EmailMessage }) => {
             <EmailAttachmentBubble
               attachmentData={attachment}
               messageId={message.id}
-              key={message.id}
+              key={attachment.body.attachmentId}
             />
           ) : null
         )

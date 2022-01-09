@@ -4,7 +4,7 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { loadEmails, refreshEmailFeed, selectEmailList } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
-import { selectIsLoading } from '../../Store/utilsSlice'
+import { selectIsLoading, selectServiceUnavailable } from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
 import * as global from '../../constants/globalConstants'
@@ -24,12 +24,13 @@ const EmailList = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
+  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
     let mounted = true
-    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
+    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && !labelIds.includes(global.ARCHIVE_LABEL)) {
       const params = {
         labelIds,
         maxResults: global.MAX_RESULTS,
@@ -53,9 +54,10 @@ const EmailList = () => {
     if (
       !location.pathname.includes(Routes.INBOX) &&
       labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
+      !labelIds.includes(global.ARCHIVE_LABEL)
     ) {
-      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels.includes(labelIds[0])).length > 0) {
+      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels?.includes(labelIds[0])).length > 0) {
         const params = {
           labelIds,
           maxResults: 500,
@@ -106,7 +108,7 @@ const EmailList = () => {
   }
 
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
@@ -123,6 +125,7 @@ const EmailList = () => {
       {isLoading && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
         <LoadingState />
       )}
+      {serviceUnavailable.length > 0 && <S.UnavailableContainer><span>{serviceUnavailable}</span></S.UnavailableContainer>}
     </>
   )
 }

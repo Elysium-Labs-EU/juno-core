@@ -13,6 +13,7 @@ import LoadingState from '../Elements/LoadingState'
 import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
+import { storeSearchResults } from '../../Store/emailListSlice'
 
 const SEARCH = 'Search'
 
@@ -53,11 +54,15 @@ const Search = () => {
                     setLoadState('loaded')
                     if (searchValueRef.current !== searchValue) {
                         searchValueRef.current = searchValue
-                        setSearchResults({
+                        const newStateObject = {
                             labels: response.labels,
                             threads: sortThreads(buffer),
                             nextPageToken: response.nextPageToken ?? null
-                        })
+                        }
+                        setSearchResults(newStateObject)
+                        dispatch(
+                            storeSearchResults(newStateObject)
+                        )
                         return
                     }
                     if (searchResults && searchResults.threads.length > 0) {
