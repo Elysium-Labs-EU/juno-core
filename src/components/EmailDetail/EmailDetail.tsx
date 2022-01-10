@@ -11,6 +11,7 @@ import {
 } from '../../Store/emailDetailSlice'
 import {
   selectIsLoading,
+  selectIsSilentLoading,
   selectServiceUnavailable,
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
@@ -38,6 +39,7 @@ const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
   const isLoading = useAppSelector(selectIsLoading)
+  const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
@@ -53,6 +55,7 @@ const EmailDetail = () => {
   const [activeEmailList, setActiveEmailList] = useState<EmailListObject>()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
+  const activeEmailListThreadsLengthRef = useRef<number>(-1)
 
   const cleanUpComposerAndDraft = () => {
     dispatch(resetComposeEmail())
@@ -137,6 +140,24 @@ const EmailDetail = () => {
     }
   }, [currentEmail, emailList])
 
+  // If after loading the emails the viewIndex is still -1, attempt a different load method
+  useEffect(() => {
+    if (!isLoading && viewIndex === -1 && currLocal && !labelIds.includes(global.ARCHIVE_LABEL)) {
+      const loadSpecificEmail = async () => {
+        const response = await threadApi().getThreadDetail(currLocal)
+        if (response) {
+          const emailListObject = {
+            labels: labelIds,
+            threads: [response.thread],
+            nextPageToken: null
+          }
+          dispatch(storeSearchResults(emailListObject))
+        }
+      }
+      loadSpecificEmail()
+    }
+  }, [isLoading, viewIndex, currLocal])
+
   // DetailNavigation will refetch emailList if empty.
   useEffect(() => {
     if (labelIds && labelIds === localLabels.current) {
@@ -164,13 +185,23 @@ const EmailDetail = () => {
 
   // If there is no viewIndex set it by finding the index of the email.
   useEffect(() => {
-    if (viewIndex === -1) {
+    if (viewIndex === -1 && !isLoading) {
       if (activeEmailList && activeEmailList.threads.length > 0) {
+        dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
+        activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
+      }
+    }
+  }, [viewIndex, activeEmailList, currentEmail, isLoading])
+
+  // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
+  useEffect(() => {
+    if (viewIndex > -1 && !isSilentLoading) {
+      if (activeEmailList && activeEmailList.threads.length > 0 && activeEmailListThreadsLengthRef.current < activeEmailList.threads.length) {
+        activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
         dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
       }
     }
-  }, [viewIndex, activeEmailList, currentEmail])
-
+  }, [viewIndex, activeEmailList, currentEmail, isSilentLoading])
 
   return (
     activeEmailList ?

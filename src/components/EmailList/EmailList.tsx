@@ -90,7 +90,7 @@ const EmailList = () => {
                     className="juno-button juno-button-small juno-button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
-                    label={global.LOAD_OLDER}
+                    label={global.LOAD_MORE}
                   />
                 )}
                 {isLoading && <LoadingState />}

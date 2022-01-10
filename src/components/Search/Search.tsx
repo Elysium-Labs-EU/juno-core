@@ -66,11 +66,15 @@ const Search = () => {
                         return
                     }
                     if (searchResults && searchResults.threads.length > 0) {
-                        setSearchResults({
+                        const newStateObject = {
                             labels: response.labels,
                             threads: sortThreads(searchResults.threads.concat(buffer)),
                             nextPageToken: response.nextPageToken ?? null
-                        })
+                        }
+                        setSearchResults(newStateObject)
+                        dispatch(
+                            storeSearchResults(newStateObject)
+                        )
                     }
                 }
             })
@@ -102,7 +106,8 @@ const Search = () => {
     }
 
     // Reset viewIndex to have emailDetail reassess its viewIndex
-    const setNewViewIndex = () => {
+    const openDetail = () => {
+        // dispatch(setIsSearching(false))
         dispatch(setViewIndex(-1))
     }
 
@@ -140,7 +145,7 @@ const Search = () => {
                         searchResults.threads ?
                         <>
                             {searchResults.threads.map((thread) =>
-                                <div key={`${ thread.id }-search`} onClick={setNewViewIndex} aria-hidden="true">
+                                <div key={`${ thread.id }-search`} onClick={openDetail} aria-hidden="true">
                                     <EmailListItem email={thread} showLabel />
                                 </div>
                             )}
@@ -150,7 +155,7 @@ const Search = () => {
                                         <CustomButtonText
                                             className="juno-button juno-button-small juno-button-light"
                                             onClick={loadMoreResults}
-                                            label={global.LOAD_OLDER}
+                                            label={global.LOAD_MORE}
                                         />
                                     )}
                                     {loadState === 'loading' && <LoadingState />}

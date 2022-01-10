@@ -4,12 +4,7 @@ import { EmailListThreadItem, EmailMessage } from '../../../../Store/emailListTy
 import * as draft from '../../../../constants/draftConstants'
 import PreLoadNormalMessage from './PreLoadNormalMessage'
 
-const detailDisplaySelector = ({
-    message,
-}: {
-    message: EmailMessage
-    threadDetail: EmailListThreadItem
-}) => {
+const detailDisplaySelector = (message: EmailMessage) => {
     if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
         if (message.labelIds.includes(draft.LABEL)) {
             return <DraftMessage message={message} />
@@ -31,10 +26,9 @@ const PreLoadMessage = ({ threadDetail }: { threadDetail: EmailListThreadItem })
             .reverse()
             .map((message) => (
                 <div key={message.id}>
-                    {detailDisplaySelector({
-                        message,
-                        threadDetail,
-                    })}
+                    {detailDisplaySelector(
+                        message
+                    )}
                 </div>
             ))
 

@@ -1,17 +1,19 @@
 import { loadEmails } from '../Store/emailListSlice'
 import * as global from '../constants/globalConstants'
 
+interface ILoadNextPage {
+  nextPageToken: string
+  labelIds: string[]
+  dispatch: any
+  silentLoading?: boolean
+}
+
 const loadNextPage = ({
   nextPageToken,
   labelIds,
   dispatch,
   silentLoading,
-}: {
-  nextPageToken: string
-  labelIds: string[]
-  dispatch: any
-  silentLoading?: boolean
-}) => {
+}: ILoadNextPage) => {
   if (labelIds && nextPageToken) {
     const params = {
       labelIds,

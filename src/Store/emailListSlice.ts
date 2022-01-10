@@ -69,21 +69,22 @@ export const emailListSlice = createSlice({
           let activeCount: number = 0
           const completeCount: number = action.payload.threads.length
 
-          action.payload.threads.map((thread: any) => {
+          for (let i = 0; i < action.payload.threads.length; i += 1) {
             // Check if the object already exists on the Redux store.
             const objectIndex = state.emailList[arrayIndex].threads.findIndex(
-              (item) => item.id === thread.id
+              (item) => item.id === action.payload.threads[i].id
             )
 
             if (objectIndex === -1) {
               activeCount += 1
-              tempArray.push(thread)
+              tempArray.push(action.payload.threads[i])
             }
 
             if (objectIndex > -1) {
               activeCount += 1
               const currentState = state.emailList
-              currentState[arrayIndex].threads[objectIndex] = thread
+              currentState[arrayIndex].threads[objectIndex] =
+                action.payload.threads[i]
               state.emailList = currentState
             }
 
@@ -103,8 +104,7 @@ export const emailListSlice = createSlice({
               currentState[arrayIndex] = newObject
               state.emailList = currentState
             }
-            return null
-          })
+          }
         }
         if (arrayIndex === -1) {
           const sortedThreads = sortThreads(action.payload.threads)
@@ -423,7 +423,6 @@ export const loadEmailDetails =
 export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
-    console.log(params)
     try {
       const { labelIds, silentLoading } = params
       if (!silentLoading && !getState().utils.isLoading) {
@@ -474,6 +473,12 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
       const filteredCurrentEmailList = (): EmailListObject[] => {
         if (emailList && (removeLabelIds || request.delete)) {
           if (removeLabelIds) {
+            if (removeLabelIds.includes(global.UNREAD_LABEL)) {
+              return emailListFilteredByLabel({
+                emailList,
+                labelIds,
+              })
+            }
             return emailListFilteredByLabel({
               emailList,
               labelIds: removeLabelIds,

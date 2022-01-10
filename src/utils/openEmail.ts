@@ -8,7 +8,7 @@ interface OpenEmailProps {
   id: string
   messageId?: string
   email?: any
-  dispatch?: any
+  dispatch: Function
 }
 
 const openEmail = (props: OpenEmailProps) => {

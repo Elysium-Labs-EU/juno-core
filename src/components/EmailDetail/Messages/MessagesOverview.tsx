@@ -10,7 +10,7 @@ import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
-import MarkEmailAsRead from '../../../utils/markEmailAsRead'
+import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
 
@@ -116,7 +116,7 @@ const MessagesOverview = React.memo(
         if (threadDetail.messages && threadDetail.messages.length > 0) {
           if (threadDetail.messages.filter((message) => message.labelIds?.includes(global.UNREAD_LABEL) === true).length > 0) {
             const messageId = threadDetail.id
-            MarkEmailAsRead({ messageId, dispatch, labelIds })
+            markEmailAsRead({ messageId, dispatch, labelIds })
           }
         }
       }
