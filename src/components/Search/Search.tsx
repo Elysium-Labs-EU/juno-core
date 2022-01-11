@@ -14,7 +14,6 @@ import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
 import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
-import { setCurrentLabels } from '../../Store/labelsSlice'
 import undoubleThreads from '../../utils/undoubleThreads'
 
 interface IShouldClearOutPreviousResults {
