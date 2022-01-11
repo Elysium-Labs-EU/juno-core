@@ -1,15 +1,15 @@
 import React from 'react'
 import DraftMessage from '../DisplayVariants/DraftMessage'
-import { EmailListThreadItem, EmailMessage } from '../../../../Store/emailListTypes'
+import { IEmailListThreadItem, IEmailMessage } from '../../../../Store/emailListTypes'
 import * as draft from '../../../../constants/draftConstants'
 import PreLoadNormalMessage from './PreLoadNormalMessage'
 
-const detailDisplaySelector = (message: EmailMessage) => {
+const detailDisplaySelector = (message: IEmailMessage) => {
     if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
-        if (message.labelIds.includes(draft.LABEL)) {
+        if (message.labelIds.includes(draft.DRAFT_LABEL)) {
             return <DraftMessage message={message} />
         }
-        if (!message.labelIds.includes(draft.LABEL)) {
+        if (!message.labelIds.includes(draft.DRAFT_LABEL)) {
             return <PreLoadNormalMessage message={message} />
         }
         return null
@@ -17,7 +17,7 @@ const detailDisplaySelector = (message: EmailMessage) => {
     return <PreLoadNormalMessage message={message} />
 }
 
-const PreLoadMessage = ({ threadDetail }: { threadDetail: EmailListThreadItem }) => {
+const PreLoadMessage = ({ threadDetail }: { threadDetail: IEmailListThreadItem }) => {
     const MappedMessages = () =>
         threadDetail &&
         threadDetail.messages &&

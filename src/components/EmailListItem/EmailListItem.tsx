@@ -10,7 +10,7 @@ import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
 import openEmail from '../../utils/openEmail'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListThreadItem } from '../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../Store/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
@@ -20,9 +20,11 @@ import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
+import { selectIsSearching } from '../../Store/utilsSlice'
 
-const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, showLabel: boolean }) => {
+const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
+  const isSearching = useAppSelector(selectIsSearching)
   const { id } = email
   const dispatch = useAppDispatch()
 
@@ -41,25 +43,29 @@ const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, 
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
 
+  const handleClick = () => {
+    openEmail({ labelIds: staticEmailLabels, id, email, dispatch, isSearching })
+  }
+
   return (
-    <S.ThreadBase key={id} emailLabels={staticEmailLabels}>
+    <S.ThreadBase emailLabels={staticEmailLabels}>
       <S.ThreadRow showLabel={showLabel}>
         <div />
         <S.CellCheckbox>{
           staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
         }</S.CellCheckbox>
         <S.CellName
-          onClick={() => openEmail({ labelIds: staticEmailLabels, id, email, dispatch })}
+          onClick={handleClick}
           aria-hidden="true"
         >
           <S.Avatars>
-            {!staticEmailLabels.includes(draft.LABEL) ? (
+            {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
               <EmailAvatar avatarURL={staticRecipientName.name} />
             )}
           </S.Avatars>
-          {!staticEmailLabels.includes(draft.LABEL) ? (
+          {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
             <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</span>
           ) : (
             <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
@@ -68,11 +74,11 @@ const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, 
         </S.CellName>
         {showLabel && <S.CellLabels><EmailLabel labelNames={staticEmailLabels} /></S.CellLabels>}
         <S.CellMessage
-          onClick={() => openEmail({ labelIds: staticEmailLabels, id, email, dispatch })}
+          onClick={handleClick}
           aria-hidden="true"
         >
           <div className="subjectSnippet text_truncate">
-            {staticEmailLabels.includes(draft.LABEL) && (
+            {staticEmailLabels.includes(draft.DRAFT_LABEL) && (
               <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{staticSubject}</span>
@@ -92,7 +98,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: EmailListThreadItem, 
         </S.CellDate>
         <div />
         <div />
-        {!staticEmailLabels.includes(draft.LABEL) ? (
+        {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
           <InlineThreadActionsRegular id={id} labelIds={staticEmailLabels} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />

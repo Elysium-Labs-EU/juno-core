@@ -8,14 +8,14 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
-import { EmailListThreadItem, EmailMessage } from '../../../Store/emailListTypes'
+import { IEmailListThreadItem, IEmailMessage } from '../../../Store/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
 
 
-const fromEmail = (threadDetail: EmailListThreadItem) => {
+const fromEmail = (threadDetail: IEmailListThreadItem) => {
   const query = 'From'
   if (threadDetail) {
     const data: string = findPayloadHeadersData(query, threadDetail)
@@ -24,7 +24,7 @@ const fromEmail = (threadDetail: EmailListThreadItem) => {
   return null
 }
 
-const bccEmail = (threadDetail: EmailListThreadItem) => {
+const bccEmail = (threadDetail: IEmailListThreadItem) => {
   const query = 'Bcc'
   if (threadDetail) {
     const data: string = findPayloadHeadersData(query, threadDetail)
@@ -33,7 +33,7 @@ const bccEmail = (threadDetail: EmailListThreadItem) => {
   return null
 }
 
-const ccEmail = (threadDetail: EmailListThreadItem) => {
+const ccEmail = (threadDetail: IEmailListThreadItem) => {
   const query = 'Cc'
   if (threadDetail) {
     const data: string = findPayloadHeadersData(query, threadDetail)
@@ -42,7 +42,7 @@ const ccEmail = (threadDetail: EmailListThreadItem) => {
   return null
 }
 
-const emailSubject = (threadDetail: EmailListThreadItem) => {
+const emailSubject = (threadDetail: IEmailListThreadItem) => {
   const query = 'Subject'
   if (threadDetail) {
     return findPayloadHeadersData(query, threadDetail)
@@ -51,8 +51,8 @@ const emailSubject = (threadDetail: EmailListThreadItem) => {
 }
 
 interface IDetailDisplaySelector {
-  message: EmailMessage
-  threadDetail: EmailListThreadItem
+  message: IEmailMessage
+  threadDetail: IEmailListThreadItem
   isReplyingListener: Function
   index: number
 }
@@ -64,10 +64,10 @@ const detailDisplaySelector = ({
   index
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
-    if (message.labelIds.includes(draft.LABEL)) {
+    if (message.labelIds.includes(draft.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
-    if (!message.labelIds.includes(draft.LABEL)) {
+    if (!message.labelIds.includes(draft.DRAFT_LABEL)) {
       return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
     }
     return null
@@ -76,7 +76,7 @@ const detailDisplaySelector = ({
 }
 
 interface IMessagesOverview {
-  threadDetail: EmailListThreadItem
+  threadDetail: IEmailListThreadItem
   isLoading: boolean
   isReplying: boolean
   isReplyingListener: Function

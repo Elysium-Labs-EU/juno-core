@@ -4,7 +4,7 @@ import * as global from '../constants/globalConstants'
 interface ILoadNextPage {
   nextPageToken: string
   labelIds: string[]
-  dispatch: any
+  dispatch: Function
   silentLoading?: boolean
 }
 

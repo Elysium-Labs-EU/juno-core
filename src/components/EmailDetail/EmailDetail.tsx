@@ -16,7 +16,7 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
-import { loadEmails, selectEmailList, selectIsFocused, selectIsSorting, storeSearchResults } from '../../Store/emailListSlice'
+import { selectEmailList, selectIsFocused, selectIsSorting, selectSearchList, storeSearchResults } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
@@ -24,7 +24,7 @@ import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
@@ -38,6 +38,7 @@ import threadApi from '../../data/threadApi'
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
+  const searchList = useAppSelector(selectSearchList)
   const isLoading = useAppSelector(selectIsLoading)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
@@ -52,7 +53,7 @@ const EmailDetail = () => {
   const location = useLocation<LocationObjectType>()
   const [currLocal, setCurrLocal] = useState<string>('')
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
-  const [activeEmailList, setActiveEmailList] = useState<EmailListObject>()
+  const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
   const activeEmailListThreadsLengthRef = useRef<number>(-1)
@@ -66,10 +67,12 @@ const EmailDetail = () => {
     if (messageIndex > -1) {
       Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
       dispatch(setIsReplying(true))
+      return
     }
     if (messageIndex === undefined) {
       Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
       dispatch(setIsReplying(false))
+      return
     }
     if (activeEmailList && activeEmailList.threads.length > 0) {
       dispatch(setCurrentMessage(activeEmailList.threads[(activeEmailList.threads.length - 1) - messageIndex]))
@@ -81,37 +84,41 @@ const EmailDetail = () => {
     [emailList, labelIds]
   )
 
+
+  // TODO: Allow loading of the emailList when refreshing. The system should understand loading 1 single email on refresh is considered a search.
   const fetchEmailList = async () => {
-    if (!labelIds.includes(global.ARCHIVE_LABEL)) {
-      const params = {
-        labelIds,
-        maxResults: 20,
-      }
-      dispatch(loadEmails(params))
-    }
-    if (location.pathname.includes(draft.LABEL) && !draftListLoaded) {
+    // if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+    //   const params = {
+    //     labelIds,
+    //     maxResults: 20,
+    //   }
+    //   dispatch(loadEmails(params))
+    //   return
+    // }
+    if (location.pathname.includes(draft.DRAFT_LABEL) && !draftListLoaded) {
       dispatch(loadDraftList())
+      return
     }
-    if (labelIds.includes(global.ARCHIVE_LABEL) && currentEmail) {
-      // If the requested thread is Archive, fetch the individual thread and save it.
-      const response = await threadApi().getThreadDetail(currentEmail)
-      if (response) {
-        const emailListObject = {
-          labels: undefined,
-          threads: [response.thread],
-          nextPageToken: null
-        }
-        dispatch(storeSearchResults(emailListObject))
+    // if (labelIds.includes(global.ARCHIVE_LABEL) && currentEmail) {
+    const response = await threadApi().getThreadDetail(currentEmail)
+    if (response) {
+      const emailListObject = {
+        threads: [response.thread],
+        nextPageToken: null
       }
+      dispatch(storeSearchResults(emailListObject))
     }
+    // }
   }
 
   const fetchEmailDetails = () => {
     if (labelIds) {
-      const currentActivePageToken = emailList[emailListIndex].nextPageToken
-      if (emailListIndex > -1 && activePageTokenRef.current !== currentActivePageToken) {
-        activePageTokenRef.current = currentActivePageToken
-        setActiveEmailList(emailList[emailListIndex])
+      if (emailListIndex > -1) {
+        const currentActivePageToken = emailList[emailListIndex].nextPageToken
+        if (activePageTokenRef.current !== currentActivePageToken) {
+          activePageTokenRef.current = currentActivePageToken
+          setActiveEmailList(emailList[emailListIndex])
+        }
       }
       if (serviceUnavailable && serviceUnavailable.length > 0) {
         dispatch(setServiceUnavailable(''))
@@ -121,24 +128,32 @@ const EmailDetail = () => {
     }
   }
 
-  // Need to update the threadDetailList whenever an email is archived or removed.
+  // This will set the activeEmailList when first opening the email.
+  // It will also update the activeEmailList whenever an email is archived or removed.
   useEffect(() => {
-    if (activeEmailList && activeEmailList.threads.length > 0 && emailList) {
-      if (emailList[emailListIndex] && emailList[emailListIndex].threads.length !== activeEmailList.threads.length) {
-        setActiveEmailList(emailList[emailListIndex])
-      }
+    if (activeEmailList && activeEmailList.threads.length > 0 && emailList && emailList[emailListIndex] && viewIndex === -1) {
+      setActiveEmailList(emailList[emailListIndex])
+      return
     }
-  }, [emailList, activeEmailList])
+    if (searchList && emailListIndex === -1) {
+      setActiveEmailList(searchList)
+    }
+  }, [emailList, activeEmailList, searchList, emailListIndex])
 
+  // If the current email is found, set the id to the store. Otherwise attempt a fetch.
   useEffect(() => {
     if (currentEmail !== currLocal) {
       if (emailList.length > 0 && emailList[emailListIndex] && emailList[emailListIndex].threads.length > 0) {
         setCurrLocal(currentEmail)
         return
       }
+      if (searchList) {
+        setCurrLocal(currentEmail)
+        return
+      }
       fetchEmailList()
     }
-  }, [currentEmail, emailList])
+  }, [currentEmail, emailList, viewIndex])
 
   // If after loading the emails the viewIndex is still -1, attempt a different load method
   useEffect(() => {
@@ -193,11 +208,23 @@ const EmailDetail = () => {
     }
   }, [viewIndex, activeEmailList, currentEmail, isLoading])
 
+  // If there is no viewIndex set it by finding the index of the email in searchList.
+  useEffect(() => {
+    if (viewIndex === -1 && searchList && !isLoading) {
+      const viewIndexSearchList = searchList.threads.findIndex((item) => item.id === currentEmail)
+      if (viewIndexSearchList > -1) {
+        dispatch(setViewIndex(viewIndexSearchList))
+      }
+    }
+  }, [viewIndex, searchList, currentEmail, isLoading])
+
+  // TODO: Double check this logic
   // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
   useEffect(() => {
     if (viewIndex > -1 && !isSilentLoading) {
       if (activeEmailList && activeEmailList.threads.length > 0 && activeEmailListThreadsLengthRef.current < activeEmailList.threads.length) {
         activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
+        console.log('here123')
         dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
       }
     }

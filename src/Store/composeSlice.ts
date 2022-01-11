@@ -11,7 +11,7 @@ import type { AppThunk, RootState } from './store'
 import { ComposePayload, ComposeState } from './composeTypes'
 import { listRemoveItemDetail } from './emailListSlice'
 import emailListFilteredByLabel from '../utils/emailListFilteredByLabel'
-import { EmailListObject } from './emailListTypes'
+import { IEmailListObject } from './emailListTypes'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
@@ -85,7 +85,7 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
           CloseMail({ dispatch, labelIds, storageLabels })
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
-          const copyCurrentEmailList: EmailListObject[] =
+          const copyCurrentEmailList: IEmailListObject[] =
             emailListFilteredByLabel({
               emailList,
               labelIds: ['DRAFT'],

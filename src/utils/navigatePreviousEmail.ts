@@ -1,11 +1,11 @@
 import { push } from 'redux-first-history'
 import { setViewIndex } from '../Store/emailDetailSlice'
-import { EmailListObject } from '../Store/emailListTypes'
+import { IEmailListObject } from '../Store/emailListTypes'
 import labelURL from './createLabelURL'
 
 interface NavigatePreviousMailProps {
   labelIds: string[]
-  activeEmailList?: EmailListObject
+  activeEmailList?: IEmailListObject
   viewIndex: number
   dispatch: any
 }

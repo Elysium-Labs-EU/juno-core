@@ -1,5 +1,4 @@
 const convertArrayToString = (data: string | string[]) => {
-  console.log(data)
   if (data && typeof data === 'string') {
     const converted = data.toString().replace(',', '-')
     return converted

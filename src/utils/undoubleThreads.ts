@@ -1,6 +1,6 @@
-import { EmailListThreadItem } from '../Store/emailListTypes'
+import { IEmailListThreadItem } from '../Store/emailListTypes'
 
-const undoubleThreads = (undoubleObject: EmailListThreadItem[]) => {
+const undoubleThreads = (undoubleObject: IEmailListThreadItem[]) => {
   if (undoubleObject && undoubleObject.length > 0) {
     return [
       ...new Set(undoubleObject.map((thread) => JSON.stringify(thread))),

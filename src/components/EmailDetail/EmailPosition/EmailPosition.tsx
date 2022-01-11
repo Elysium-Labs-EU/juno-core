@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react'
-import { EmailListObject } from '../../../Store/emailListTypes'
+import { IEmailListObject } from '../../../Store/emailListTypes'
 import * as S from './EmailPositionStyles'
 
-const EmailPosition = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
-    const threadsObjectStart = useRef<EmailListObject | undefined>()
+const EmailPosition = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
+    const threadsObjectStart = useRef<IEmailListObject | undefined>()
 
     useEffect(() => {
         threadsObjectStart.current = activeEmailList

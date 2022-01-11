@@ -7,26 +7,82 @@ import * as global from '../../constants/globalConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsSearching, setIsSearching } from '../../Store/utilsSlice'
 import threadApi from '../../data/threadApi'
-import { EmailListObject, EmailListThreadItem } from '../../Store/emailListTypes'
+import { IEmailListObject, IEmailListObjectSearch, IEmailListThreadItem } from '../../Store/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
 import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
-import { storeSearchResults } from '../../Store/emailListSlice'
+import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
+import { setCurrentLabels } from '../../Store/labelsSlice'
+import undoubleThreads from '../../utils/undoubleThreads'
+
+interface IShouldClearOutPreviousResults {
+    searchValueRef: any
+    searchValue: string
+    setSearchResults: Function
+    dispatch: Function
+}
+interface IIntitialSearch {
+    searchValue: string
+    setLoadState: Function
+    fetchSearchThreads: Function
+    searchValueRef: any
+    setSearchResults: Function
+    dispatch: Function
+}
+interface ILoadMoreResults {
+    searchValue: string
+    searchResults: IEmailListObjectSearch,
+    setLoadState: Function
+    fetchSearchThreads: Function
+}
 
 const SEARCH = 'Search'
+
+const shouldClearOutPreviousResults = ({ searchValueRef, searchValue, setSearchResults, dispatch }: IShouldClearOutPreviousResults) => {
+    if (searchValueRef.current !== searchValue && searchValueRef.current.length > 0) {
+        setSearchResults(undefined)
+        dispatch(listClearSearchResults())
+    }
+}
+
+const intitialSearch = ({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch }: IIntitialSearch) => {
+    const searchBody = {
+        q: searchValue
+    }
+    setLoadState('loading')
+    shouldClearOutPreviousResults({ searchValueRef, searchValue, setSearchResults, dispatch })
+    fetchSearchThreads(searchBody)
+}
+
+
+const loadMoreResults = ({ searchValue, searchResults, setLoadState, fetchSearchThreads }: ILoadMoreResults) => {
+    const searchBody = {
+        q: searchValue,
+        nextPageToken: searchResults?.nextPageToken
+    }
+    setLoadState('loading')
+    fetchSearchThreads(searchBody)
+}
+
+// Reset viewIndex to have emailDetail reassess its viewIndex
+const openDetail = (dispatch: Function) => {
+    dispatch(setIsSearching(false))
+    dispatch(setViewIndex(-1))
+}
+
+const handleClose = (dispatch: Function) => dispatch(setIsSearching(false))
 
 const Search = () => {
     const [searchValue, setSearchValue] = useState('')
     const searchValueRef = useRef('')
     const searchInputRef = useRef<HTMLInputElement | null>(null)
-    const [searchResults, setSearchResults] = useState<EmailListObject>()
+    const [searchResults, setSearchResults] = useState<IEmailListObjectSearch>()
     const [loadState, setLoadState] = useState('idle')
     const dispatch = useAppDispatch()
     const isSearching = useAppSelector(selectIsSearching)
 
-    const handleClose = () => dispatch(setIsSearching(false))
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(event.target.value)
@@ -36,15 +92,16 @@ const Search = () => {
         setSearchValue('')
         setSearchResults(undefined)
         setLoadState('idle')
+        dispatch(listClearSearchResults())
         if (searchInputRef.current !== null) {
             searchInputRef.current.focus()
         }
     }
 
     const fetchSearchThreads = async (searchBody: any) => {
-        const response: EmailListObject = await threadApi().getThreads(searchBody)
+        const response: IEmailListObject = await threadApi().getThreads(searchBody)
         if (response?.threads.length > 0) {
-            const buffer: EmailListThreadItem[] = []
+            const buffer: IEmailListThreadItem[] = []
             const loadCount = response.threads.length
 
             response.threads.forEach(async (item) => {
@@ -54,9 +111,9 @@ const Search = () => {
                     setLoadState('loaded')
                     if (searchValueRef.current !== searchValue) {
                         searchValueRef.current = searchValue
+                        const sortedThreads = sortThreads(buffer)
                         const newStateObject = {
-                            labels: response.labels,
-                            threads: sortThreads(buffer),
+                            threads: undoubleThreads(sortedThreads),
                             nextPageToken: response.nextPageToken ?? null
                         }
                         setSearchResults(newStateObject)
@@ -66,9 +123,9 @@ const Search = () => {
                         return
                     }
                     if (searchResults && searchResults.threads.length > 0) {
+                        const sortedThreads = sortThreads(searchResults.threads.concat(buffer))
                         const newStateObject = {
-                            labels: response.labels,
-                            threads: sortThreads(searchResults.threads.concat(buffer)),
+                            threads: undoubleThreads(sortedThreads),
                             nextPageToken: response.nextPageToken ?? null
                         }
                         setSearchResults(newStateObject)
@@ -81,40 +138,12 @@ const Search = () => {
         }
     }
 
-    const shouldClearOutPreviousResults = () => {
-        if (searchValueRef.current !== searchValue) {
-            setSearchResults(undefined)
-        }
-    }
 
-    const intitialSearch = () => {
-        const searchBody = {
-            q: searchValue
-        }
-        setLoadState('loading')
-        shouldClearOutPreviousResults()
-        fetchSearchThreads(searchBody)
-    }
-
-    const loadMoreResults = () => {
-        const searchBody = {
-            q: searchValue,
-            nextPageToken: searchResults?.nextPageToken
-        }
-        setLoadState('loading')
-        fetchSearchThreads(searchBody)
-    }
-
-    // Reset viewIndex to have emailDetail reassess its viewIndex
-    const openDetail = () => {
-        // dispatch(setIsSearching(false))
-        dispatch(setViewIndex(-1))
-    }
 
     return (
         <Modal
             open={isSearching}
-            onClose={handleClose}
+            onClose={() => handleClose(dispatch)}
             aria-labelledby="modal-search"
             aria-describedby="modal-search-box"
         >
@@ -138,14 +167,14 @@ const Search = () => {
                             <S.Icon><FiX size={16} /></S.Icon>
                         </button>}
                     <button className="juno-button" type="button"
-                        onClick={intitialSearch} disabled={searchValue.length < 1}><span>{SEARCH}</span></button>
+                        onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })} disabled={searchValue.length < 1}><span>{SEARCH}</span></button>
                 </S.InputRow>
                 <S.SearchResults>
                     {searchResults &&
                         searchResults.threads ?
                         <>
                             {searchResults.threads.map((thread) =>
-                                <div key={`${ thread.id }-search`} onClick={openDetail} aria-hidden="true">
+                                <div key={`${ thread.id }-search`} onClick={() => openDetail(dispatch)} aria-hidden="true">
                                     <EmailListItem email={thread} showLabel />
                                 </div>
                             )}
@@ -154,7 +183,7 @@ const Search = () => {
                                     {loadState !== 'loading' && (
                                         <CustomButtonText
                                             className="juno-button juno-button-small juno-button-light"
-                                            onClick={loadMoreResults}
+                                            onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}
                                         />
                                     )}

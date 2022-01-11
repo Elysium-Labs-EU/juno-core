@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import DeleteDraft from '../EmailOptions/DeleteDraft'
 import { selectEmailList } from '../../Store/emailListSlice'
 import emailListFilteredByLabel from '../../utils/emailListFilteredByLabel'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 import { selectDraft } from '../../Store/draftsSlice'
 
 const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
@@ -14,7 +14,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftList = useAppSelector(selectDraft)
 
-  const copyCurrentEmailList: EmailListObject[] = emailListFilteredByLabel({
+  const copyCurrentEmailList: IEmailListObject[] = emailListFilteredByLabel({
     emailList,
     labelIds: ['DRAFT'],
   })

@@ -6,12 +6,12 @@ import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
 import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
-import { EmailMessage } from '../../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../../Store/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import { selectProfile } from '../../../../Store/baseSlice'
 
-const DraftMessage = ({ message }: { message: EmailMessage }) => {
+const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const dispatch = useAppDispatch()
   const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)

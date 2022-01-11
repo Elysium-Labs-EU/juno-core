@@ -1,7 +1,7 @@
-import { EmailListObject } from '../Store/emailListTypes'
+import { IEmailListObject } from '../Store/emailListTypes'
 
 interface IEmailListFilteredByLabel {
-  emailList: EmailListObject[]
+  emailList: IEmailListObject[]
   labelIds: string[]
 }
 

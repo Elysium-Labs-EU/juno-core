@@ -1,9 +1,9 @@
-import { EmailMessage } from '../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../Store/emailListTypes'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import { NO_SENDER } from './senderNamePartial'
 
 const SenderNameFull = (
-  message: EmailMessage,
+  message: IEmailMessage,
   emailAddress: string
 ): string => {
   if (message) {

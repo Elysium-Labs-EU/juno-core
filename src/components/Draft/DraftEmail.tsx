@@ -11,7 +11,7 @@ const DraftEmail = () => {
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (baseLoaded) {
-      dispatch(setCurrentLabels(local.LABEL_ARRAY))
+      dispatch(setCurrentLabels(local.DRAFT_LABEL_ARRAY))
     }
   }, [baseLoaded])
 

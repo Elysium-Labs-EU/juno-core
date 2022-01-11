@@ -15,7 +15,7 @@ import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
 
@@ -36,7 +36,7 @@ const EmailList = () => {
         maxResults: global.MAX_RESULTS,
       }
       mounted && dispatch(loadEmails(params))
-      if (labelIds.includes(draft.LABEL)) {
+      if (labelIds.includes(draft.DRAFT_LABEL)) {
         mounted && dispatch(loadDraftList())
       }
     }
@@ -67,7 +67,7 @@ const EmailList = () => {
     }
   }, [location])
 
-  const renderEmailList = (filteredOnLabel: EmailListObject) => {
+  const renderEmailList = (filteredOnLabel: IEmailListObject) => {
     if (filteredOnLabel) {
       const { threads, nextPageToken } = filteredOnLabel
       return (
@@ -107,6 +107,8 @@ const EmailList = () => {
     return <EmptyState />
   }
 
+
+  // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
     () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]

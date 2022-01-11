@@ -6,9 +6,9 @@ import loadNextPage from '../../../utils/loadNextPage'
 import { selectIsSilentLoading } from '../../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import DetailNavigationView from './DetailNavigationView'
-import { EmailListObject } from '../../../Store/emailListTypes'
+import { IEmailListObject } from '../../../Store/emailListTypes'
 
-const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
+const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -16,18 +16,18 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
   const [currLocal, setCurrLocal] = useState<string>('')
   const dispatch = useAppDispatch()
 
-  const isDisabledPrev = !!(
-    activeEmailList.threads[viewIndex - 1] === undefined
-  )
+  const isDisabledPrev =
+    !activeEmailList.threads[viewIndex - 1]
+
 
   const isDisabledNext =
-    activeEmailList.nextPageToken === null &&
-    activeEmailList.threads[viewIndex + 1] === undefined
+    !activeEmailList.nextPageToken &&
+    !activeEmailList.threads[viewIndex + 1]
 
   const nextButtonSelector = () => {
     const { nextPageToken } = activeEmailList
     if (
-      activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
+      activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] &&
       labelIds
     ) {
       NavigateNextMail({
@@ -47,8 +47,8 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
     }
     // If loading isn't already happening, load the nextPage
     if (
-      activeEmailList.nextPageToken !== null &&
-      activeEmailList.threads[viewIndex + 1] === undefined
+      activeEmailList.nextPageToken &&
+      !activeEmailList.threads[viewIndex + 1]
     ) {
       if (!isSilentLoading) {
         return loadNextPage({ nextPageToken, labelIds, dispatch })
@@ -73,7 +73,7 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: Email
         const { nextPageToken } = activeEmailList
         const silentLoading = true
         if (nextPageToken &&
-          activeEmailList.threads[viewIndex + 1] === undefined && mounted) {
+          !activeEmailList.threads[viewIndex + 1] && mounted) {
           return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
         }
       }

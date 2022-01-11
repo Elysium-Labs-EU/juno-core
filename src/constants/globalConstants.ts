@@ -7,3 +7,4 @@ export const LOAD_MORE = 'Load more messages'
 export const MAX_RESULTS = 20
 export const NO_MORE_RESULTS = "You've reached the end."
 export const ARCHIVE_LABEL = 'ARCHIVE'
+export const SEARCH_LABEL = 'SEARCH'

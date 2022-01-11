@@ -1,7 +1,7 @@
-import { EmailMessage } from '../../Store/emailListTypes'
+import { IEmailMessage } from '../../Store/emailListTypes'
 import findPayloadHeadersData from '../../utils/findPayloadHeadersData'
 
-const BCCNameFull = (message: EmailMessage, query: string): string => {
+const BCCNameFull = (message: IEmailMessage, query: string): string => {
   if (message) {
     const fetchedData = findPayloadHeadersData(query, message)
     if (fetchedData.length > 0) {
