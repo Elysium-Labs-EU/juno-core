@@ -151,6 +151,7 @@ const ReadMessage = ({
             )}
           </S.EmailBody>
           <EmailAttachment message={message} />
+          {message.id}
         </S.EmailOpenWrapper>
       )}
       {!open && (

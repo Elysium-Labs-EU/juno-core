@@ -5,18 +5,17 @@ interface IEmailListFilteredByLabel {
   labelIds: string[]
 }
 
-const emailListFilteredByLabel = (props: IEmailListFilteredByLabel) => {
+const emailListFilteredByLabel = (props: IEmailListFilteredByLabel): number => {
   const { emailList, labelIds } = props
   if (emailList.length > 0 && labelIds.length > 0) {
-    return emailList.filter((threadList) => {
-      // If the threadList doesn't have Labels, it is the Archive threadList. We don't show that one.
+    return emailList.findIndex((threadList) => {
       if (threadList.labels) {
         return threadList.labels.includes(labelIds[0])
       }
-      return []
+      return -1
     })
   }
-  return []
+  return -1
 }
 
 export default emailListFilteredByLabel

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import { selectCurrentEmail, selectViewIndex } from '../../../Store/emailDetailSlice'
+import * as global from '../../../constants/globalConstants'
 import NavigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
 import { selectIsSilentLoading } from '../../../Store/utilsSlice'
@@ -16,18 +17,18 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
   const [currLocal, setCurrLocal] = useState<string>('')
   const dispatch = useAppDispatch()
 
-  const isDisabledPrev =
-    !activeEmailList.threads[viewIndex - 1]
-
+  const isDisabledPrev = !!(
+    activeEmailList.threads[viewIndex - 1] === undefined
+  )
 
   const isDisabledNext =
-    !activeEmailList.nextPageToken &&
-    !activeEmailList.threads[viewIndex + 1]
+    activeEmailList.nextPageToken === null &&
+    activeEmailList.threads[viewIndex + 1] === undefined
 
   const nextButtonSelector = () => {
     const { nextPageToken } = activeEmailList
     if (
-      activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] &&
+      activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
       NavigateNextMail({
@@ -36,24 +37,28 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
         viewIndex,
         dispatch,
       })
-
-      // Attempt to load the next emails on the background when approaching the edge
-      if ((activeEmailList.threads.length - 1) - viewIndex <= 4) {
-        if (!isSilentLoading) {
-          const silentLoading = true
-          return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+      if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+        // Attempt to load the next emails on the background when approaching the edge
+        if ((activeEmailList.threads.length - 1) - viewIndex <= 4) {
+          if (!isSilentLoading) {
+            const silentLoading = true
+            return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+          }
         }
       }
     }
-    // If loading isn't already happening, load the nextPage
-    if (
-      activeEmailList.nextPageToken &&
-      !activeEmailList.threads[viewIndex + 1]
-    ) {
-      if (!isSilentLoading) {
-        return loadNextPage({ nextPageToken, labelIds, dispatch })
+    if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+      // If loading isn't already happening, load the nextPage
+      if (
+        activeEmailList.nextPageToken !== null &&
+        activeEmailList.threads[viewIndex + 1] === undefined
+      ) {
+        if (!isSilentLoading) {
+          return loadNextPage({ nextPageToken, labelIds, dispatch })
+        }
       }
     }
+
     return null
   }
 
@@ -73,8 +78,10 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
         const { nextPageToken } = activeEmailList
         const silentLoading = true
         if (nextPageToken &&
-          !activeEmailList.threads[viewIndex + 1] && mounted) {
-          return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+          activeEmailList.threads[viewIndex + 1] === undefined && mounted) {
+          if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+            return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+          }
         }
       }
     }

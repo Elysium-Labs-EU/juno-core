@@ -14,7 +14,6 @@ import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
 import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
-import undoubleThreads from '../../utils/undoubleThreads'
 
 interface IShouldClearOutPreviousResults {
     searchValueRef: any
@@ -38,6 +37,11 @@ interface ILoadMoreResults {
 }
 
 const SEARCH = 'Search'
+const SEARCH_STATE = {
+    IDLE: 'Idle',
+    LOADING: 'Loading',
+    LOADED: 'Loaded'
+}
 
 const shouldClearOutPreviousResults = ({ searchValueRef, searchValue, setSearchResults, dispatch }: IShouldClearOutPreviousResults) => {
     if (searchValueRef.current !== searchValue && searchValueRef.current.length > 0) {
@@ -50,7 +54,7 @@ const intitialSearch = ({ searchValue, setLoadState, fetchSearchThreads, searchV
     const searchBody = {
         q: searchValue
     }
-    setLoadState('loading')
+    setLoadState(SEARCH_STATE.LOADING)
     shouldClearOutPreviousResults({ searchValueRef, searchValue, setSearchResults, dispatch })
     fetchSearchThreads(searchBody)
 }
@@ -61,7 +65,7 @@ const loadMoreResults = ({ searchValue, searchResults, setLoadState, fetchSearch
         q: searchValue,
         nextPageToken: searchResults?.nextPageToken
     }
-    setLoadState('loading')
+    setLoadState(SEARCH_STATE.LOADING)
     fetchSearchThreads(searchBody)
 }
 
@@ -78,7 +82,7 @@ const Search = () => {
     const searchValueRef = useRef('')
     const searchInputRef = useRef<HTMLInputElement | null>(null)
     const [searchResults, setSearchResults] = useState<IEmailListObjectSearch>()
-    const [loadState, setLoadState] = useState('idle')
+    const [loadState, setLoadState] = useState(SEARCH_STATE.IDLE)
     const dispatch = useAppDispatch()
     const isSearching = useAppSelector(selectIsSearching)
 
@@ -90,7 +94,7 @@ const Search = () => {
     const resetSearch = () => {
         setSearchValue('')
         setSearchResults(undefined)
-        setLoadState('idle')
+        setLoadState(SEARCH_STATE.IDLE)
         dispatch(listClearSearchResults())
         if (searchInputRef.current !== null) {
             searchInputRef.current.focus()
@@ -107,12 +111,11 @@ const Search = () => {
                 const threadDetail = await threadApi().getThreadDetail(item.id)
                 buffer.push(threadDetail.thread)
                 if (buffer.length === loadCount) {
-                    setLoadState('loaded')
+                    setLoadState(SEARCH_STATE.LOADED)
                     if (searchValueRef.current !== searchValue) {
                         searchValueRef.current = searchValue
-                        const sortedThreads = sortThreads(buffer)
                         const newStateObject = {
-                            threads: undoubleThreads(sortedThreads),
+                            threads: sortThreads(buffer),
                             nextPageToken: response.nextPageToken ?? null
                         }
                         setSearchResults(newStateObject)
@@ -122,9 +125,8 @@ const Search = () => {
                         return
                     }
                     if (searchResults && searchResults.threads.length > 0) {
-                        const sortedThreads = sortThreads(searchResults.threads.concat(buffer))
                         const newStateObject = {
-                            threads: undoubleThreads(sortedThreads),
+                            threads: sortThreads(searchResults.threads.concat(buffer)),
                             nextPageToken: response.nextPageToken ?? null
                         }
                         setSearchResults(newStateObject)
@@ -166,7 +168,8 @@ const Search = () => {
                             <S.Icon><FiX size={16} /></S.Icon>
                         </button>}
                     <button className="juno-button" type="button"
-                        onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })} disabled={searchValue.length < 1}><span>{SEARCH}</span></button>
+                        onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })}
+                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current}><span>{SEARCH}</span></button>
                 </S.InputRow>
                 <S.SearchResults>
                     {searchResults &&
@@ -179,14 +182,14 @@ const Search = () => {
                             )}
                             {searchResults.nextPageToken ? (
                                 <S.FooterRow>
-                                    {loadState !== 'loading' && (
+                                    {loadState !== SEARCH_STATE.LOADING && (
                                         <CustomButtonText
                                             className="juno-button juno-button-small juno-button-light"
                                             onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}
                                         />
                                     )}
-                                    {loadState === 'loading' && <LoadingState />}
+                                    {loadState === SEARCH_STATE.LOADING && <LoadingState />}
                                 </S.FooterRow>
                             ) : (
                                 <S.FooterRow>
@@ -195,7 +198,7 @@ const Search = () => {
                             )}
                         </> :
                         <S.NoSearchResults>
-                            {loadState === 'loading' ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
+                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
                         </S.NoSearchResults>
                     }
                 </S.SearchResults>

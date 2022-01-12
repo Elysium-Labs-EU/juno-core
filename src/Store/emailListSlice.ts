@@ -26,7 +26,7 @@ import {
 } from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
-import { setCurrentEmail } from './emailDetailSlice'
+import { setCurrentEmail, setViewIndex } from './emailDetailSlice'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
@@ -120,28 +120,29 @@ export const emailListSlice = createSlice({
     },
     listAddItemDetail: (state, action) => {
       const {
-        copyTargetEmailList,
+        staticTargetEmailList,
         activEmailObjArray,
       }: {
-        copyTargetEmailList: IEmailListObject[]
+        staticTargetEmailList: IEmailListObject
         activEmailObjArray: IEmailListThreadItem[]
       } = action.payload
-      const objectIndex: number = copyTargetEmailList[0].threads.findIndex(
+      console.log(action.payload)
+      const objectIndex: number = staticTargetEmailList.threads.findIndex(
         (item) => item.id === activEmailObjArray[0].id
       )
       // If the object doesn't exist yet on the array, add it - otherwise do nothing since the item already exists.
       if (objectIndex === -1) {
         const newEmailListEntry: IEmailListObject = {
-          ...copyTargetEmailList[0],
+          ...staticTargetEmailList,
           threads: sortThreads(
-            copyTargetEmailList[0].threads.concat(activEmailObjArray)
+            staticTargetEmailList.threads.concat(activEmailObjArray)
           ),
         }
 
         const updatedEmailList: IEmailListObject[] = [
           ...state.emailList.filter(
             (threadList) =>
-              !threadList.labels.includes(copyTargetEmailList[0].labels[0])
+              !threadList.labels.includes(staticTargetEmailList.labels[0])
           ),
           newEmailListEntry,
         ]
@@ -149,17 +150,17 @@ export const emailListSlice = createSlice({
       }
     },
     listRemoveItemDetail: (state, action) => {
-      const { copyCurrentEmailList, messageId } = action.payload
+      const { staticActiveEmailList, messageId } = action.payload
       const newEmailListEntry: IEmailListObject = {
-        ...copyCurrentEmailList[0],
-        threads: copyCurrentEmailList[0].threads.filter(
+        ...staticActiveEmailList,
+        threads: staticActiveEmailList.threads.filter(
           (item: IEmailListThreadItem) => item.id !== messageId
         ),
       }
       const updatedEmailList: IEmailListObject[] = [
         ...state.emailList.filter(
           (threadList) =>
-            !threadList.labels.includes(copyCurrentEmailList[0].labels[0])
+            !threadList.labels.includes(staticActiveEmailList.labels[0])
         ),
         newEmailListEntry,
       ]
@@ -167,13 +168,12 @@ export const emailListSlice = createSlice({
     },
     listUpdateItemDetail: (state, action) => {
       const {
-        copyCurrentEmailList,
+        staticActiveEmailList,
         responseEmail,
-      }: { copyCurrentEmailList: IEmailListObject[]; responseEmail: any } =
+      }: { staticActiveEmailList: IEmailListObject; responseEmail: any } =
         action.payload
       if (
-        copyCurrentEmailList !== undefined &&
-        copyCurrentEmailList.length > 0 &&
+        Object.keys(staticActiveEmailList).length > 0 &&
         responseEmail &&
         Object.keys(responseEmail).length > 0
       ) {
@@ -181,17 +181,16 @@ export const emailListSlice = createSlice({
           // Need to loop through the existing emailObject and replace the labelIds on each message.
           // The emailObject will be filtered from the old list, and the new object will be added.
 
-          const objectIndex = copyCurrentEmailList[0].threads.findIndex(
+          const objectIndex = staticActiveEmailList.threads.findIndex(
             (thread: any) => thread.id === responseEmail.message.id
           )
 
           const updateIEmailListObject = () => {
             if (
-              Object.keys(copyCurrentEmailList[0].threads[objectIndex]).length >
-              0
+              Object.keys(staticActiveEmailList.threads[objectIndex]).length > 0
             ) {
               const updatedThreadMessages = (): any =>
-                copyCurrentEmailList[0].threads[objectIndex].messages?.map(
+                staticActiveEmailList.threads[objectIndex].messages?.map(
                   (message: any) => {
                     const convertedObjectToArray = Object.entries(message)
                     const attributeIndex = convertedObjectToArray.findIndex(
@@ -210,14 +209,14 @@ export const emailListSlice = createSlice({
                 )
 
               const filteredCurrentEmailList = {
-                ...copyCurrentEmailList[0],
-                threads: copyCurrentEmailList[0].threads.filter(
+                ...staticActiveEmailList,
+                threads: staticActiveEmailList.threads.filter(
                   (thread: any) => thread.id !== responseEmail.message.id
                 ),
               }
 
               const newThreadObject = {
-                ...copyCurrentEmailList[0].threads[objectIndex],
+                ...staticActiveEmailList.threads[objectIndex],
                 messages: updatedThreadMessages(),
               }
 
@@ -236,7 +235,7 @@ export const emailListSlice = createSlice({
           const emailStateWithoutActiveIEmailListObject = [
             ...state.emailList.filter(
               (threadList) =>
-                !threadList.labels.includes(copyCurrentEmailList[0].labels[0])
+                !threadList.labels.includes(staticActiveEmailList.labels[0])
             ),
           ]
 
@@ -387,7 +386,7 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
     try {
       const { emailList } = getState().email
 
-      const filteredCurrentEmailList = (): IEmailListObject[] => {
+      const indexActiveEmailList = (): number => {
         if (emailList && (removeLabelIds || request.delete)) {
           if (removeLabelIds) {
             if (removeLabelIds.includes(global.UNREAD_LABEL)) {
@@ -403,20 +402,20 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           }
           return emailListFilteredByLabel({ emailList, labelIds })
         }
-        return []
+        return -1
       }
 
-      const filteredTargetEmailList = () => {
+      const indexTargetEmailList = (): number => {
         if (emailList && addLabelIds) {
           return emailListFilteredByLabel({ emailList, labelIds: addLabelIds })
         }
-        return []
+        return -1
       }
 
-      const staticFilteredCurrentEmailList = filteredCurrentEmailList()
-      const staticFilteredTargetEmailList = filteredTargetEmailList()
+      const staticActiveEmailList = emailList[indexActiveEmailList()]
+      const staticTargetEmailList = emailList[indexTargetEmailList()]
 
-      if (staticFilteredCurrentEmailList.length > 0) {
+      if (Object.keys(staticActiveEmailList).length > 0) {
         if (
           location &&
           location.pathname.includes('/mail/') &&
@@ -431,9 +430,8 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             const { viewIndex } = getState().emailDetail
 
             const nextID = () =>
-              staticFilteredCurrentEmailList[0].threads[viewIndex + 1] !==
-              undefined
-                ? staticFilteredCurrentEmailList[0].threads[viewIndex + 1].id
+              staticActiveEmailList.threads[viewIndex + 1] !== undefined
+                ? staticActiveEmailList.threads[viewIndex + 1].id
                 : null
 
             const staticNextID = nextID()
@@ -441,6 +439,7 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
 
             if (staticNextID && staticLabelURL) {
               dispatch(setCurrentEmail(staticNextID))
+              dispatch(setViewIndex(viewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
             }
           }
@@ -451,17 +450,14 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           : await messageApi().thrashMessage({ messageId })
 
         if (response && response.status === 200) {
-          if (addLabelIds && staticFilteredTargetEmailList.length > 0) {
-            const activEmailObjArray =
-              staticFilteredCurrentEmailList[0].threads.filter(
-                (item: IEmailListThreadItem) => item.id === messageId
-              )
-            const copyTargetEmailList: IEmailListObject[] =
-              staticFilteredTargetEmailList
+          if (addLabelIds && Object.keys(staticTargetEmailList).length > 0) {
+            const activeEmailObjArray = staticActiveEmailList.threads.filter(
+              (item: IEmailListThreadItem) => item.id === messageId
+            )
             dispatch(
               listAddItemDetail({
-                activEmailObjArray,
-                copyTargetEmailList,
+                activeEmailObjArray,
+                staticTargetEmailList,
               })
             )
           }
@@ -469,24 +465,20 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request.delete
           ) {
-            const copyCurrentEmailList: IEmailListObject[] =
-              staticFilteredCurrentEmailList
             dispatch(
               listRemoveItemDetail({
                 messageId,
-                copyCurrentEmailList,
+                staticActiveEmailList,
               })
             )
           }
 
           // NOTE: The newly added threadObject doesn't have a historyId during this process. On refetch of list it will.
           if (removeLabelIds && removeLabelIds.includes(global.UNREAD_LABEL)) {
-            const copyCurrentEmailList: IEmailListObject[] =
-              staticFilteredCurrentEmailList
             const responseEmail = response.data
             dispatch(
               listUpdateItemDetail({
-                copyCurrentEmailList,
+                staticActiveEmailList,
                 responseEmail,
               })
             )

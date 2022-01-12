@@ -85,12 +85,14 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
           CloseMail({ dispatch, labelIds, storageLabels })
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
-          const copyCurrentEmailList: IEmailListObject[] =
-            emailListFilteredByLabel({
-              emailList,
-              labelIds: ['DRAFT'],
-            })
-          if (copyCurrentEmailList && copyCurrentEmailList.length > 0)
+          const copyCurrentEmailList: IEmailListObject =
+            emailList[
+              emailListFilteredByLabel({
+                emailList,
+                labelIds: ['DRAFT'],
+              })
+            ]
+          if (copyCurrentEmailList && copyCurrentEmailList)
             dispatch(
               listRemoveItemDetail({
                 messageId: threadId,

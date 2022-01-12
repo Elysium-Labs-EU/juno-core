@@ -14,10 +14,10 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftList = useAppSelector(selectDraft)
 
-  const copyCurrentEmailList: IEmailListObject[] = emailListFilteredByLabel({
+  const copyCurrentEmailList: IEmailListObject = emailList[emailListFilteredByLabel({
     emailList,
     labelIds: ['DRAFT'],
-  })
+  })]
 
   const draftId = draftList.length > 0 && draftList.find((draft) => draft.message.threadId === threadId)?.id
 
