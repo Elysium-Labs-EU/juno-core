@@ -224,7 +224,6 @@ const EmailDetail = () => {
     if (viewIndex > -1 && !isSilentLoading) {
       if (activeEmailList && activeEmailList.threads.length > 0 && activeEmailListThreadsLengthRef.current < activeEmailList.threads.length) {
         activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
-        console.log('here123')
         dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
       }
     }

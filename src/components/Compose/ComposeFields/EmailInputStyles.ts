@@ -4,7 +4,7 @@ import * as themeConstants from '../../../constants/themeConstants'
 
 const StyledTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: 'transparent',
+    color: `${themeConstants.greyBorder}`,
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'transparant',
@@ -17,10 +17,13 @@ const StyledTextField = styled(TextField)({
       borderColor: 'transparent',
     },
     '&.Mui-focused fieldset': {
-      borderColor: `${themeConstants.greyBorder}`,
+      borderColor: `${themeConstants.colorPurpleSoft}`,
     },
     '&.MuiInputBase-sizeSmall': {
       padding: '0 6px',
+    },
+    '&.MuiInputBase-root': {
+      background: `${themeConstants.slightWhite}`,
     },
   },
 })

@@ -126,7 +126,6 @@ export const emailListSlice = createSlice({
         staticTargetEmailList: IEmailListObject
         activEmailObjArray: IEmailListThreadItem[]
       } = action.payload
-      console.log(action.payload)
       const objectIndex: number = staticTargetEmailList.threads.findIndex(
         (item) => item.id === activEmailObjArray[0].id
       )
@@ -200,11 +199,7 @@ export const emailListSlice = createSlice({
                     convertedObjectToArray[attributeIndex][1] =
                       responseEmail.message.messages[0].labelIds
 
-                    const revertedObject = Object.fromEntries(
-                      convertedObjectToArray
-                    )
-
-                    return revertedObject
+                    return Object.fromEntries(convertedObjectToArray)
                   }
                 )
 
