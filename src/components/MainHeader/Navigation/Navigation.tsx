@@ -4,13 +4,14 @@ import { useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import './Navigation.scss'
-import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox } from 'react-icons/fi'
+import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
 import { CustomIconLink } from '../../Elements/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
 import { LocationObjectType } from '../../types/globalTypes'
 import { useAppDispatch } from '../../../Store/hooks'
+import { setIsSearching } from '../../../Store/utilsSlice'
 
 const SIZE = 16
 
@@ -72,15 +73,15 @@ const Navigation = () => {
           </S.NavItem>
         </Tooltip>
 
-        {/* <S.NavItem>
+        <S.NavItem>
           <CustomIconLink
             className={
               active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
             }
-            icon={<FiSettings />}
-            onClick={() => navigateTo(Routes.SETTINGS)}
+            icon={<FiSearch size={SIZE} />}
+            onClick={() => dispatch(setIsSearching(true))}
           />
-        </S.NavItem> */}
+        </S.NavItem>
         <Tooltip title="Compose">
           <S.NavItem>
             <CustomIconLink

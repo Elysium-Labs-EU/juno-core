@@ -2,13 +2,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 import labelApi from '../data/labelApi'
 import userApi from '../data/userApi'
-import { multipleIncludes } from '../utils'
 import { setServiceUnavailable } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './labelsTypes'
 import { IBaseState } from './baseTypes'
+import multipleIncludes from '../utils/multipleIncludes'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -61,12 +61,10 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           const checkArray = BASE_ARRAY.map((item) =>
             labelArray.map((label: GoogleLabel) => label.name).includes(item)
           )
-          const createMissingLabels = () =>
-            checkArray.map(
-              (checkValue, index) =>
-                !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-            )
-          createMissingLabels()
+          checkArray.map(
+            (checkValue, index) =>
+              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
+          )
 
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
             labelArray.filter((item: GoogleLabel) => item.name === baseLabel)

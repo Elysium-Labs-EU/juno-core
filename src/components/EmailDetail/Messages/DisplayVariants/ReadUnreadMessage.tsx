@@ -9,7 +9,7 @@ import * as local from '../../../../constants/unreadConstants'
 import * as compose from '../../../../constants/composeEmailConstants'
 import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
-import { EmailMessage, EmailListThreadItem } from '../../../../Store/emailListTypes'
+import { IEmailMessage, IEmailListThreadItem } from '../../../../Store/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import { CustomIconLink } from '../../../Elements/Buttons'
 import { useAppSelector } from '../../../../Store/hooks'
@@ -23,8 +23,8 @@ import convertToContact from '../../../../utils/convertToContact'
 import { selectProfile } from '../../../../Store/baseSlice'
 
 interface IReadMessage {
-  message: EmailMessage
-  threadDetail: EmailListThreadItem
+  message: IEmailMessage
+  threadDetail: IEmailListThreadItem
   FROM: string
   isReplyingListener?: Function
   messageIndex: number
@@ -151,6 +151,7 @@ const ReadMessage = ({
             )}
           </S.EmailBody>
           <EmailAttachment message={message} />
+          {message.id}
         </S.EmailOpenWrapper>
       )}
       {!open && (

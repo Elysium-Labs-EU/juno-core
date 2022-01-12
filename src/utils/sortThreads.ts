@@ -1,6 +1,6 @@
-import { EmailListThreadItem } from '../Store/emailListTypes'
+import { IEmailListThreadItem } from '../Store/emailListTypes'
 
-const sortThreads = (sortObject: EmailListThreadItem[]) => {
+const sortThreads = (sortObject: IEmailListThreadItem[]) => {
   if (sortObject && sortObject.length > 0) {
     return sortObject.sort((a, b) => {
       if (a.messages && b.messages) {

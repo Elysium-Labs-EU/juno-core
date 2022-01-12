@@ -2,10 +2,10 @@ import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as S from './EmailAttachmentStyles'
-import { EmailMessage } from '../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../Store/emailListTypes'
 import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
-const EmailAttachment = ({ message }: { message: EmailMessage }) => {
+const EmailAttachment = ({ message }: { message: IEmailMessage }) => {
   const CheckAttachment = () => {
     if (
       message &&
@@ -19,7 +19,7 @@ const EmailAttachment = ({ message }: { message: EmailMessage }) => {
             <EmailAttachmentBubble
               attachmentData={attachment}
               messageId={message.id}
-              key={message.id}
+              key={attachment.body.attachmentId}
             />
           ) : null
         )

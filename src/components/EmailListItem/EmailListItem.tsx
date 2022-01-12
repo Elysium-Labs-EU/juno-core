@@ -1,5 +1,4 @@
 import React, { memo } from 'react'
-import { selectLabelIds } from '../../Store/labelsSlice'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
@@ -11,7 +10,7 @@ import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
 import openEmail from '../../utils/openEmail'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListThreadItem } from '../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../Store/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
@@ -20,17 +19,20 @@ import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
+import EmailLabel from '../Elements/EmailLabel'
+import { selectIsSearching } from '../../Store/utilsSlice'
 
-const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
-  const labelIds = useAppSelector(selectLabelIds)
+const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
+  const isSearching = useAppSelector(selectIsSearching)
   const { id } = email
   const dispatch = useAppDispatch()
 
+  // Setting an email label is required for the path.
   const emailLabels = () => {
-    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds
-    if (email && email.message) return email.message.labelIds
-    return ''
+    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
+    if (email && email.message) return email.message.labelIds ?? [global.ARCHIVE_LABEL]
+    return [global.ARCHIVE_LABEL]
   }
 
   const staticEmailLabels = emailLabels()
@@ -41,37 +43,42 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
 
+  const handleClick = () => {
+    openEmail({ labelIds: staticEmailLabels, id, email, dispatch, isSearching })
+  }
+
   return (
-    <S.ThreadBase key={id} emailLabels={staticEmailLabels}>
-      <S.ThreadRow>
+    <S.ThreadBase emailLabels={staticEmailLabels}>
+      <S.ThreadRow showLabel={showLabel}>
         <div />
         <S.CellCheckbox>{
           staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />
         }</S.CellCheckbox>
         <S.CellName
-          onClick={() => openEmail({ labelIds, id, email, dispatch })}
+          onClick={handleClick}
           aria-hidden="true"
         >
           <S.Avatars>
-            {!labelIds.includes(draft.LABEL) ? (
+            {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
               <EmailAvatar avatarURL={staticRecipientName.name} />
             )}
           </S.Avatars>
-          {!labelIds.includes(draft.LABEL) ? (
+          {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
             <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</span>
           ) : (
             <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
+        {showLabel && <S.CellLabels><EmailLabel labelNames={staticEmailLabels} /></S.CellLabels>}
         <S.CellMessage
-          onClick={() => openEmail({ labelIds, id, email, dispatch })}
+          onClick={handleClick}
           aria-hidden="true"
         >
           <div className="subjectSnippet text_truncate">
-            {labelIds.includes(draft.LABEL) && (
+            {staticEmailLabels.includes(draft.DRAFT_LABEL) && (
               <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{staticSubject}</span>
@@ -91,8 +98,8 @@ const EmailListItem = memo(({ email }: { email: EmailListThreadItem }) => {
         </S.CellDate>
         <div />
         <div />
-        {!labelIds.includes(draft.LABEL) ? (
-          <InlineThreadActionsRegular id={id} labelIds={labelIds} />
+        {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
+          <InlineThreadActionsRegular id={id} labelIds={staticEmailLabels} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />
         )}

@@ -4,7 +4,7 @@ import DOMPurify from 'dompurify'
 import { fetchAttachment } from '../../../Store/emailDetailSlice'
 import { decodeBase64 } from '../../../utils/decodeBase64'
 import { useAppDispatch } from '../../../Store/hooks'
-import { EmailMessagePayload } from '../../../Store/emailListTypes'
+import { IEmailMessagePayload } from '../../../Store/emailListTypes'
 import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 
 interface IInlineImageTypeResponse {
@@ -14,7 +14,7 @@ interface IInlineImageTypeResponse {
 }
 
 interface IEmailDetailBody {
-  threadDetailBody: EmailMessagePayload
+  threadDetailBody: IEmailMessagePayload
   messageId: string
 }
 

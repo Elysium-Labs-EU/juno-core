@@ -8,6 +8,7 @@ import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
 import { LocationObjectType } from '../types/globalTypes'
+import Search from '../Search/Search'
 
 const SetHeader = memo(() => {
   const location = useLocation<LocationObjectType>()
@@ -38,6 +39,7 @@ const Header = () => (
   <>
     <NoMobileOverlay />
     <SetHeader />
+    <Search />
   </>
 )
 

@@ -5,7 +5,6 @@ import {
   Switch,
   Route,
 } from 'react-router-dom'
-import CircularProgress from '@mui/material/CircularProgress'
 import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
 import './App.scss'
 import './styles/ElementStyles.scss'
@@ -13,6 +12,7 @@ import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import Routes from './constants/routes.json'
+import LoadingState from './components/Elements/LoadingState'
 import * as GS from './styles/globalStyles'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
@@ -55,7 +55,7 @@ const App = () => {
           </GS.OuterContainer>
 
           <AnimatePresence exitBeforeEnter>
-            <React.Suspense fallback={<CircularProgress />}>
+            <React.Suspense fallback={<LoadingState />}>
               <Switch>
                 <Route path={Routes.HOME} exact component={ToDo} />
                 <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />

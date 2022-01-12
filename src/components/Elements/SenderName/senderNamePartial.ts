@@ -1,12 +1,12 @@
 import { Contact } from '../../../Store/contactsTypes'
-import { EmailMessage } from '../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../Store/emailListTypes'
 import convertToContact from '../../../utils/convertToContact'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 
 export const NO_SENDER = '(No sender)'
 
 const SenderNamePartial = (
-  message: EmailMessage,
+  message: IEmailMessage,
   emailAddress: string
 ): Contact => {
   if (message) {

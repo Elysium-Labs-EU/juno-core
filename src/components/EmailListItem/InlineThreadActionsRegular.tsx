@@ -12,6 +12,7 @@ import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { LocationObjectType } from '../types/globalTypes'
+import { selectIsSearching } from '../../Store/utilsSlice'
 
 interface IInlineThreadActionsRegular {
   id: string
@@ -21,6 +22,7 @@ interface IInlineThreadActionsRegular {
 const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
+  const isSearching = useAppSelector(selectIsSearching)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
   const messageId = id && id
@@ -31,7 +33,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
         <CustomIconLink
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
-          onClick={() => ReplyOverview({ labelIds, id, dispatch })}
+          onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching })}
           title="Reply"
         />
         {labelIds &&

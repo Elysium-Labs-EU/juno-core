@@ -8,11 +8,11 @@ import { CustomIconLink } from '../../Elements/Buttons'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
-import { EmailListObject } from '../../../Store/emailListTypes'
+import { IEmailListObject } from '../../../Store/emailListTypes'
 
 interface IDetailNavigationView {
     labelIds: string[]
-    activeEmailList: EmailListObject
+    activeEmailList: IEmailListObject
     viewIndex: number
     isDisabledPrev: boolean
     isDisabledNext: boolean

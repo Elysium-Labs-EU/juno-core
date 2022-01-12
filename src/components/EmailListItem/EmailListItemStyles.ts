@@ -2,11 +2,11 @@ import styled from 'styled-components'
 import * as theme from '../../constants/themeConstants'
 import * as global from '../../constants/globalConstants'
 
-interface ThreadBaseProps {
+interface IThreadBaseProps {
   emailLabels: string[] | string
 }
 
-export const ThreadBase = styled.div<ThreadBaseProps>`
+export const ThreadBase = styled.div<IThreadBaseProps>`
   font-weight: ${(props) =>
     props.emailLabels && props.emailLabels.includes(global.UNREAD_LABEL)
       ? '550'
@@ -19,10 +19,17 @@ export const ThreadBase = styled.div<ThreadBaseProps>`
   }
 `
 
-export const ThreadRow = styled.div`
+interface IThreadRow {
+  showLabel: boolean
+}
+
+export const ThreadRow = styled.div<IThreadRow>`
   position: relative;
   display: grid;
-  grid-template-columns: 30px 20px 215px auto max-content 105px 20px 30px;
+  grid-template-columns: ${(props) =>
+    !props.showLabel
+      ? '30px 20px 215px auto max-content 105px 20px 30px'
+      : '30px 20px 215px fit-content(450px) auto max-content 105px 20px 30px'};
   font-size: 13px;
   height: 56px;
   background-color: transparent;
@@ -62,6 +69,19 @@ export const CellName = styled.div`
   -webkit-box-align: center;
   align-items: center;
   user-select: none;
+`
+
+export const CellLabels = styled.div`
+  display: flex;
+  flex-direction: row;
+  -webkit-box-align: center;
+  align-items: center;
+  min-width: 0px;
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+  padding-left: 15px;
+  overflow: hidden;
 `
 
 export const CellMessage = styled.div`

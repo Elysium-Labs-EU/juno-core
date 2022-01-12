@@ -1,7 +1,7 @@
-import { EmailMessage } from '../../Store/emailListTypes'
+import { IEmailMessage } from '../../Store/emailListTypes'
 import findPayloadHeadersData from '../../utils/findPayloadHeadersData'
 
-const EmailSubject = (message: EmailMessage): string => {
+const EmailSubject = (message: IEmailMessage): string => {
   if (message) {
     const query = 'Subject'
     const from = findPayloadHeadersData(query, message)

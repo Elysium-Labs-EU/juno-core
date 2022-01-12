@@ -4,10 +4,10 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
 import { loadEmails, refreshEmailFeed, selectEmailList } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
-import { selectIsLoading } from '../../Store/utilsSlice'
+import { selectIsLoading, selectServiceUnavailable } from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
-import * as local from '../../constants/emailListConstants'
+import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
 import { CustomButtonText } from '../Elements/Buttons'
 import * as S from './EmailListStyles'
@@ -15,7 +15,7 @@ import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 import { LocationObjectType } from '../types/globalTypes'
 import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
 
@@ -24,18 +24,19 @@ const EmailList = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
+  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const dispatch = useAppDispatch()
   const location = useLocation<LocationObjectType>()
 
   useEffect(() => {
     let mounted = true
-    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
+    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && !labelIds.includes(global.ARCHIVE_LABEL)) {
       const params = {
         labelIds,
-        maxResults: local.MAX_RESULTS,
+        maxResults: global.MAX_RESULTS,
       }
       mounted && dispatch(loadEmails(params))
-      if (labelIds.includes(draft.LABEL)) {
+      if (labelIds.includes(draft.DRAFT_LABEL)) {
         mounted && dispatch(loadDraftList())
       }
     }
@@ -53,9 +54,10 @@ const EmailList = () => {
     if (
       !location.pathname.includes(Routes.INBOX) &&
       labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
+      !labelIds.includes(global.ARCHIVE_LABEL)
     ) {
-      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels.includes(labelIds[0])).length > 0) {
+      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels?.includes(labelIds[0])).length > 0) {
         const params = {
           labelIds,
           maxResults: 500,
@@ -65,7 +67,7 @@ const EmailList = () => {
     }
   }, [location])
 
-  const renderEmailList = (filteredOnLabel: EmailListObject) => {
+  const renderEmailList = (filteredOnLabel: IEmailListObject) => {
     if (filteredOnLabel) {
       const { threads, nextPageToken } = filteredOnLabel
       return (
@@ -75,7 +77,7 @@ const EmailList = () => {
               {threads.length > 0 && (
                 <GS.Base>
                   {threads.map((email) => (
-                    <EmailListItem key={email.id} email={email} />
+                    <EmailListItem key={email.id} email={email} showLabel={false} />
                   ))}
                 </GS.Base>
               )}
@@ -88,14 +90,14 @@ const EmailList = () => {
                     className="juno-button juno-button-small juno-button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
-                    label={local.LOAD_OLDER}
+                    label={global.LOAD_MORE}
                   />
                 )}
                 {isLoading && <LoadingState />}
               </S.LoadMoreContainer>
             ) : (
               <S.LoadMoreContainer>
-                <small className="text_muted">{local.NO_MORE_RESULTS}</small>
+                <small className="text_muted">{global.NO_MORE_RESULTS}</small>
               </S.LoadMoreContainer>
             )}
           </GS.OuterContainer>
@@ -105,8 +107,10 @@ const EmailList = () => {
     return <EmptyState />
   }
 
+
+  // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
@@ -120,7 +124,10 @@ const EmailList = () => {
   return (
     <>
       {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
-      {!labelIds || isLoading && <LoadingState />}
+      {isLoading && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+        <LoadingState />
+      )}
+      {serviceUnavailable.length > 0 && <S.UnavailableContainer><span>{serviceUnavailable}</span></S.UnavailableContainer>}
     </>
   )
 }

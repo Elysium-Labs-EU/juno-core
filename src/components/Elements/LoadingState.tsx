@@ -8,6 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   height: 2rem;
+  padding-top: 0.5rem;
 `
 
 const LoadingState = () => {

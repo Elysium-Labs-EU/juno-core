@@ -1,11 +1,11 @@
 import { deleteDraft, listRemoveDraft } from '../../Store/draftsSlice'
 import { listRemoveItemDetail } from '../../Store/emailListSlice'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 
 interface IDeleteDraft {
   threadId: string
   dispatch: any
-  copyCurrentEmailList: EmailListObject[]
+  copyCurrentEmailList: IEmailListObject
   draftId: string | undefined | false
 }
 

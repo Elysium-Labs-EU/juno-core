@@ -5,8 +5,8 @@ import { CustomIconLink } from '../Elements/Buttons'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import DeleteDraft from '../EmailOptions/DeleteDraft'
 import { selectEmailList } from '../../Store/emailListSlice'
-import { FilteredEmailList } from '../../utils'
-import { EmailListObject } from '../../Store/emailListTypes'
+import emailListFilteredByLabel from '../../utils/emailListFilteredByLabel'
+import { IEmailListObject } from '../../Store/emailListTypes'
 import { selectDraft } from '../../Store/draftsSlice'
 
 const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
@@ -14,10 +14,10 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftList = useAppSelector(selectDraft)
 
-  const copyCurrentEmailList: EmailListObject[] = FilteredEmailList({
+  const copyCurrentEmailList: IEmailListObject = emailList[emailListFilteredByLabel({
     emailList,
     labelIds: ['DRAFT'],
-  })
+  })]
 
   const draftId = draftList.length > 0 && draftList.find((draft) => draft.message.threadId === threadId)?.id
 

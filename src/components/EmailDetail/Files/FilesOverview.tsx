@@ -4,10 +4,10 @@ import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import * as local from '../../../constants/filesOverviewConstants'
 import EmailAttachment from '../Attachment/EmailAttachment'
-import { EmailListThreadItem } from '../../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 
 interface IFilesOverview {
-  threadDetail: EmailListThreadItem | null
+  threadDetail: IEmailListThreadItem | null
   isLoading: boolean
 }
 

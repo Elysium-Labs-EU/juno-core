@@ -6,15 +6,16 @@ import Menu from './Menu/Menu'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
+import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/BackButton'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import { FindLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
-import { EmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/emailListTypes'
 
-const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: EmailListObject }) => {
+const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const isFocused = useAppSelector(selectIsFocused)
   const isSorting = useAppSelector(selectIsSorting)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -29,7 +30,9 @@ const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: EmailListObje
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
           setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
+          return
         }
+        setDetailHeader(global.SEARCH_LABEL.toLowerCase())
       }
     }
   }, [storageLabels, labelIds])

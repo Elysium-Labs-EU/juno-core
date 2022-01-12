@@ -1,5 +1,5 @@
 import React from 'react'
-import { EmailListThreadItem } from '../../../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../../../Store/emailListTypes'
 import PreLoadMessage from './PreLoadMessage'
 
 const PreLoadMessages =
@@ -7,7 +7,7 @@ const PreLoadMessages =
         threadDetailList,
         viewIndex,
     }: {
-        threadDetailList: EmailListThreadItem[]
+        threadDetailList: IEmailListThreadItem[]
         viewIndex: number
     }) => {
         // const preLoadedMessagesRef = useRef<any>(null)

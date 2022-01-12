@@ -1,11 +1,11 @@
 import { push } from 'redux-first-history'
-import { convertArrayToString } from '.'
 import { setViewIndex } from '../Store/emailDetailSlice'
-import { EmailListObject } from '../Store/emailListTypes'
+import { IEmailListObject } from '../Store/emailListTypes'
+import labelURL from './createLabelURL'
 
 interface INavigateNextMail {
   labelIds: string[]
-  activeEmailList?: EmailListObject
+  activeEmailList?: IEmailListObject
   filteredCurrentEmailList?: any
   viewIndex: number
   dispatch: any
@@ -32,18 +32,12 @@ const NavigateNextMail = (props: INavigateNextMail) => {
 
   dispatch(setViewIndex(viewIndex + 1))
 
-  const labelURL = () => {
-    if (labelIds && labelIds.length > 0) {
-      return convertArrayToString(labelIds)
-    }
-    return null
-  }
-
+  const staticLabelURL = labelURL(labelIds)
   const staticActiveEmailList = selectActiveEmailList()
 
-  if (staticActiveEmailList !== null && labelURL() !== null) {
+  if (staticActiveEmailList !== null && staticLabelURL !== null) {
     const nextID = staticActiveEmailList.threads[viewIndex + 1].id
-    return dispatch(push(`/mail/${labelURL()}/${nextID}/messages`))
+    return dispatch(push(`/mail/${staticLabelURL}/${nextID}/messages`))
   }
   return null
 }

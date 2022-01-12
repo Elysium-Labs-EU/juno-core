@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { CustomButtonText } from '../Elements/Buttons'
-import { convertArrayToString } from '../../utils'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
@@ -8,6 +7,7 @@ import * as local from '../../constants/todoConstants'
 import startSort from '../../utils/startSort'
 import { selectEmailList, setIsFocused } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import labelURL from '../../utils/createLabelURL'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -16,14 +16,16 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels.includes(labelIds[0])),
+    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
     [emailList, labelIds]
   )
 
   const handleClick = () => {
-    const labelURL = convertArrayToString(labelIds)
-    startSort({ dispatch, labelURL, emailList, emailListIndex })
-    dispatch(setIsFocused(true))
+    const staticLabelURL = labelURL(labelIds)
+    if (staticLabelURL) {
+      startSort({ dispatch, labelURL: staticLabelURL, emailList, emailListIndex })
+      dispatch(setIsFocused(true))
+    }
   }
 
   return (

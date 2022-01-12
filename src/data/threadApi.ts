@@ -6,6 +6,7 @@ interface EmailQueryObject {
   labelIds: string[]
   maxResults?: number
   nextPageToken?: string
+  q?: string
 }
 
 const threadApi = () => ({
@@ -15,9 +16,10 @@ const threadApi = () => ({
         `${BASE_API_URL}/api/threads/`,
         {
           params: {
-            labelIds: query.labelIds,
+            labelIds: query.labelIds ?? [''],
             maxResults: query.maxResults ?? 20,
             pageToken: query.nextPageToken ?? undefined,
+            q: query.q ?? undefined,
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
