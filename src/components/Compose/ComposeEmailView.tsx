@@ -1,10 +1,10 @@
 import React from 'react'
-import InputBase from '@mui/material/InputBase'
 import { CustomButtonText } from '../Elements/Buttons'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import * as local from '../../constants/composeEmailConstants'
+import StyledTextField from './ComposeFields/EmailInputStyles'
 import { useAppDispatch } from '../../Store/hooks'
 import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
@@ -143,11 +143,12 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                             {local.SUBJECT_LABEL}
                                         </label>
                                     </S.Label>
-                                    <InputBase
+                                    <StyledTextField
                                         id={local.SUBJECT}
                                         value={subjectValue ?? ''}
                                         onChange={handleChangeSubjectBody}
                                         fullWidth
+                                        variant="outlined"
                                     />
                                 </S.Row>
                                 <S.Row>
@@ -156,7 +157,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                             {local.BODY_LABEL}
                                         </label>
                                     </S.Label>
-                                    <InputBase
+                                    <StyledTextField
                                         id={local.BODY}
                                         multiline
                                         value={bodyValue ?? ''}

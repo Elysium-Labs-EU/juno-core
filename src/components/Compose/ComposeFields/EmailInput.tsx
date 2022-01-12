@@ -57,7 +57,7 @@ const emailInput = (props: IEmailInputProps) => {
                 },
               } = responseQueryContacts
 
-              const mappedResults = results.length > 0 ? results.map(
+              const mappedResults = results && results.length > 0 ? results.map(
                 (contact: any): Contact => ({
                   name: Object.prototype.hasOwnProperty.call(
                     contact.person,
@@ -98,7 +98,6 @@ const emailInput = (props: IEmailInputProps) => {
   return (
     <Autocomplete
       multiple
-      size="small"
       limitTags={3}
       id={id}
       open={open}
