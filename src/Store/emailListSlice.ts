@@ -171,6 +171,8 @@ export const emailListSlice = createSlice({
         responseEmail,
       }: { staticActiveEmailList: IEmailListObject; responseEmail: any } =
         action.payload
+
+      console.log(action.payload)
       if (
         Object.keys(staticActiveEmailList).length > 0 &&
         responseEmail &&
@@ -227,17 +229,36 @@ export const emailListSlice = createSlice({
             return []
           }
 
-          const emailStateWithoutActiveIEmailListObject = [
-            ...state.emailList.filter(
-              (threadList) =>
-                !threadList.labels.includes(staticActiveEmailList.labels[0])
-            ),
-          ]
+          // The system should know when to update the searchList and when to update the regular list.
+
+          const emailStateWithoutActiveEmailListObject = () => {
+            if (
+              Object.prototype.hasOwnProperty.call(
+                staticActiveEmailList,
+                'labelIds'
+              )
+            ) {
+              return [
+                ...state.emailList.filter(
+                  (threadList) =>
+                    !threadList.labels.includes(staticActiveEmailList.labels[0])
+                ),
+              ]
+            }
+            return []
+          }
+
+          console.log(updateIEmailListObject())
+
+          const staticEmailStateWithoutActiveEmailListObject =
+            emailStateWithoutActiveEmailListObject()
+
+          console.log(staticEmailStateWithoutActiveEmailListObject)
 
           const updatedIEmailListObject: any =
-            emailStateWithoutActiveIEmailListObject.length > 0
+            staticEmailStateWithoutActiveEmailListObject.length > 0
               ? [
-                  ...emailStateWithoutActiveIEmailListObject,
+                  ...staticEmailStateWithoutActiveEmailListObject,
                   updateIEmailListObject(),
                 ]
               : Array(updateIEmailListObject())
@@ -378,12 +399,22 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
     location,
   } = props
 
+  console.log(props)
+
   return async (dispatch, getState) => {
     try {
-      const { emailList } = getState().email
+      const { emailList, searchList } = getState().email
 
+      console.log(searchList)
+      console.log(labelIds)
+
+      // This function should know when to check the searchList and when to check the emailList
       const indexActiveEmailList = (): number => {
-        if (emailList && (removeLabelIds || request.delete)) {
+        if (
+          !labelIds.includes(global.ARCHIVE_LABEL) &&
+          emailList &&
+          (removeLabelIds || request.delete)
+        ) {
           if (removeLabelIds) {
             if (removeLabelIds.includes(global.UNREAD_LABEL)) {
               return emailListFilteredByLabel({
@@ -408,10 +439,16 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
         return -1
       }
 
-      const staticActiveEmailList = emailList[indexActiveEmailList()]
+      const staticActiveEmailList =
+        emailList[indexActiveEmailList()] ?? searchList
       const staticTargetEmailList = emailList[indexTargetEmailList()]
+      console.log(staticActiveEmailList)
+      console.log(staticTargetEmailList)
 
-      if (Object.keys(staticActiveEmailList).length > 0) {
+      if (
+        staticActiveEmailList &&
+        Object.keys(staticActiveEmailList).length > 0
+      ) {
         if (
           location &&
           location.pathname.includes('/mail/') &&
@@ -445,8 +482,14 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           ? await messageApi().updateMessage({ messageId, request })
           : await messageApi().thrashMessage({ messageId })
 
+        console.log('response', response)
+
         if (response && response.status === 200) {
-          if (addLabelIds && Object.keys(staticTargetEmailList).length > 0) {
+          if (
+            addLabelIds &&
+            staticTargetEmailList &&
+            Object.keys(staticTargetEmailList).length > 0
+          ) {
             const activeEmailObjArray = staticActiveEmailList.threads.filter(
               (item: IEmailListThreadItem) => item.id === messageId
             )

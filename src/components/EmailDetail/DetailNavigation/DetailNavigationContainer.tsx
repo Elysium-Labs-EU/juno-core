@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import { selectCurrentEmail, selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
-import NavigateNextMail from '../../../utils/navigateNextEmail'
+import navigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
 import { selectIsSilentLoading } from '../../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
@@ -31,7 +31,7 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
       activeEmailList.threads.length > 0 && activeEmailList.threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
-      NavigateNextMail({
+      navigateNextMail({
         labelIds,
         activeEmailList,
         viewIndex,
@@ -41,8 +41,7 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
         // Attempt to load the next emails on the background when approaching the edge
         if ((activeEmailList.threads.length - 1) - viewIndex <= 4) {
           if (!isSilentLoading) {
-            const silentLoading = true
-            return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading })
+            return loadNextPage({ nextPageToken, labelIds, dispatch, silentLoading: true })
           }
         }
       }
@@ -63,10 +62,8 @@ const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmai
   }
 
   useEffect(() => {
-    if (currentEmail !== currLocal) {
-      if (activeEmailList.threads.length > 0) {
-        setCurrLocal(currentEmail)
-      }
+    if (currentEmail !== currLocal && activeEmailList.threads.length > 0) {
+      setCurrLocal(currentEmail)
     }
   }, [currentEmail, activeEmailList])
 

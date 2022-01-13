@@ -6,24 +6,14 @@ import labelURL from './createLabelURL'
 interface INavigateNextMail {
   labelIds: string[]
   activeEmailList?: IEmailListObject
-  filteredCurrentEmailList?: any
   viewIndex: number
-  dispatch: any
+  dispatch: Function
 }
 
-const NavigateNextMail = (props: INavigateNextMail) => {
-  const {
-    labelIds,
-    activeEmailList,
-    filteredCurrentEmailList,
-    viewIndex,
-    dispatch,
-  } = props
+const navigateNextMail = (props: INavigateNextMail) => {
+  const { labelIds, activeEmailList, viewIndex, dispatch } = props
 
   const selectActiveEmailList = () => {
-    if (filteredCurrentEmailList) {
-      return filteredCurrentEmailList[0]
-    }
     if (activeEmailList) {
       return activeEmailList
     }
@@ -42,4 +32,4 @@ const NavigateNextMail = (props: INavigateNextMail) => {
   return null
 }
 
-export default NavigateNextMail
+export default navigateNextMail
