@@ -21,10 +21,12 @@ import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
 import { selectIsSearching } from '../../Store/utilsSlice'
+import { selectStorageLabels } from '../../Store/labelsSlice'
 
 const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const isSearching = useAppSelector(selectIsSearching)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const { id } = email
   const dispatch = useAppDispatch()
 
@@ -44,7 +46,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
   const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
 
   const handleClick = () => {
-    openEmail({ labelIds: staticEmailLabels, id, email, dispatch, isSearching })
+    openEmail({ labelIds: staticEmailLabels, id, email, dispatch, isSearching, storageLabels })
   }
 
   return (
