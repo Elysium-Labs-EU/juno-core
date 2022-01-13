@@ -10,7 +10,6 @@ const PreLoadMessages =
         threadDetailList: IEmailListThreadItem[]
         viewIndex: number
     }) => {
-        // const preLoadedMessagesRef = useRef<any>(null)
         // Only preload the messages 3 before and 3 after the current message.
         // If a message has been preloaded before, and the user is still on the detail view, do not remove this message from the feed. So extend the range of the view.
         // Only preload a new batch, apart from the initial batch, once the cursor reaches a point of within 1 distance of the edge.
@@ -22,17 +21,8 @@ const PreLoadMessages =
             const leftCursor = viewIndex - 3 < 0 ? 0 : viewIndex - 3
             const rightCursor = viewIndex + 4
             if (viewIndex > -1 && threadDetailList.length > 0) {
-                // preLoadedMessagesRef.current = threadDetailList.slice(leftCursor, rightCursor).map((item) => item.id)
                 return threadDetailList.slice(leftCursor, rightCursor)
             }
-            // if (viewIndexState > -1 && threadDetailList.length > 0 && preLoadedMessagesRef.current !== null && preLoadedMessagesRef.current.length > 0) {
-            //     console.log('here3', preLoadedMessagesRef.current.indexOf(threadDetailList[viewIndexState].id) < preLoadedMessagesRef.current.length - 2)
-            //     console.log('here4', preLoadedMessagesRef.current.indexOf(threadDetailList[viewIndexState].id) < 3)
-            //     console.log('here5', preLoadedMessagesRef.current.indexOf(threadDetailList[viewIndexState].id))
-            //     if (preLoadedMessagesRef.current.indexOf(threadDetailList[viewIndexState].id) < preLoadedMessagesRef.current.length - 2 || preLoadedMessagesRef.current.indexOf(threadDetailList[viewIndexState].id) < 3)
-            //         console.log('here2')
-            //     preLoadedMessagesRef.current = preLoadedMessagesRef.current.concat(threadDetailList.slice(leftCursor, rightCursor).map((item) => item.id))
-            // }
             return []
         }
 
