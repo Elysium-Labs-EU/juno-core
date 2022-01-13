@@ -33,7 +33,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
         <CustomIconLink
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
-          onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching })}
+          onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching, storageLabels })}
           title="Reply"
         />
         {labelIds &&
