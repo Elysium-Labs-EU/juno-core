@@ -98,7 +98,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
               label={local.BUTTON_MORE}
             />
           </div>
-          {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} />}
+          {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} storageLabels={storageLabels} />}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
     </S.EmailOptionsContainer>
