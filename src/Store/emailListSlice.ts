@@ -457,15 +457,12 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             if (
               (request.removeLabelIds &&
                 !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-              request.delete
-            )
-              if (staticNextID && staticLabelURL) {
-                dispatch(setCurrentEmail(staticNextID))
-                dispatch(setViewIndex(viewIndex + 1))
-                dispatch(
-                  push(`/mail/${staticLabelURL}/${staticNextID}/messages`)
-                )
-              }
+              (request.delete && staticNextID && staticLabelURL)
+            ) {
+              dispatch(setCurrentEmail(staticNextID))
+              dispatch(setViewIndex(viewIndex + 1))
+              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
+            }
           }
         }
 
