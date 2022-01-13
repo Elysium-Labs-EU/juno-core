@@ -430,8 +430,6 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
       const staticActiveEmailList = emailList[staticIndexActiveEmailList]
       const staticTargetEmailList = emailList[staticIndexTargetEmailList]
 
-      console.log(staticActiveEmailList)
-
       if (
         staticActiveEmailList &&
         Object.keys(staticActiveEmailList).length > 0
