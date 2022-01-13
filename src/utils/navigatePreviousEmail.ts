@@ -7,7 +7,7 @@ interface NavigatePreviousMailProps {
   labelIds: string[]
   activeEmailList?: IEmailListObject
   viewIndex: number
-  dispatch: any
+  dispatch: Function
 }
 
 const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {

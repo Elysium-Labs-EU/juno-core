@@ -6,7 +6,7 @@ import { LabelIdName } from '../Store/labelsTypes'
 interface CloseMailProps {
   labelIds: string[]
   storageLabels: LabelIdName[]
-  dispatch: any
+  dispatch: Function
 }
 
 const labelMap: { [key: string]: string } = {

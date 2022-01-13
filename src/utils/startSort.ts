@@ -1,13 +1,13 @@
 import { push } from 'redux-first-history'
 
-interface Props {
-  dispatch: any
+interface IStartSort {
+  dispatch: Function
   labelURL: string
   emailList: any
   emailListIndex: number
 }
 
-const startSort = (props: Props) => {
+const startSort = (props: IStartSort) => {
   const { dispatch, labelURL, emailList, emailListIndex } = props
 
   if (dispatch && labelURL && emailList && emailListIndex > -1) {

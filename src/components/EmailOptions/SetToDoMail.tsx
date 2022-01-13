@@ -8,7 +8,7 @@ import filterIllegalLabels from '../../utils/filterIllegalLabels'
 interface SetToDoMailProps {
   messageId: string
   labelIds: string[]
-  dispatch: any
+  dispatch: Function
   location: LocationObjectType
   storageLabels: LabelIdName[]
 }

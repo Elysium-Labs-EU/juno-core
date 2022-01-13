@@ -4,7 +4,7 @@ import { IEmailListObject } from '../../Store/emailListTypes'
 
 interface IDeleteDraft {
   threadId: string
-  dispatch: any
+  dispatch: Function
   copyCurrentEmailList: IEmailListObject
   draftId: string | undefined | false
 }
