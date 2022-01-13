@@ -8,7 +8,7 @@ interface INavigateNextMail {
   activeEmailList?: IEmailListObject
   filteredCurrentEmailList?: any
   viewIndex: number
-  dispatch: any
+  dispatch: Function
 }
 
 const NavigateNextMail = (props: INavigateNextMail) => {

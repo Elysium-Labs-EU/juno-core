@@ -183,31 +183,30 @@ export const emailListSlice = createSlice({
         responseEmail,
       }: { staticIndexActiveEmailList: number; responseEmail: any } =
         action.payload
+
       if (
-        Object.keys(state.emailList[staticIndexActiveEmailList]).length > 0 &&
+        state.emailList[staticIndexActiveEmailList] &&
         responseEmail &&
         Object.keys(responseEmail).length > 0
       ) {
         const updatedEmailList = (): IEmailListObject[] => {
           // Need to loop through the existing emailObject and replace the labelIds on each message.
           // The emailObject will be filtered from the old list, and the new object will be added.
+          // Redux Immutability is not allowing a direct modification.
 
           const objectIndex = state.emailList[
             staticIndexActiveEmailList
           ].threads.findIndex(
-            (thread: any) => thread.id === responseEmail.message.id
+            (thread) => thread.id === responseEmail.message.id
           )
 
-          const updateIEmailListObject = () => {
-            if (
-              Object.keys(
-                state.emailList[staticIndexActiveEmailList].threads[objectIndex]
-              ).length > 0
-            ) {
+          // ObjectIndex will be -1 if the Redux has already removed the item, but the user is still in emailDetail.
+          if (objectIndex > -1) {
+            const updateEmailListObject = (): IEmailListObject => {
               const updatedThreadMessages = (): any =>
                 state.emailList[staticIndexActiveEmailList].threads[
                   objectIndex
-                ].messages?.map((message: any) => {
+                ].messages?.map((message) => {
                   const convertedObjectToArray = Object.entries(message)
                   const attributeIndex = convertedObjectToArray.findIndex(
                     (item) => item[0] === 'labelIds'
@@ -224,7 +223,7 @@ export const emailListSlice = createSlice({
                 threads: state.emailList[
                   staticIndexActiveEmailList
                 ].threads.filter(
-                  (thread: any) => thread.id !== responseEmail.message.id
+                  (thread) => thread.id !== responseEmail.message.id
                 ),
               }
 
@@ -244,27 +243,24 @@ export const emailListSlice = createSlice({
 
               return newIEmailListObject
             }
-            return []
-          }
 
-          const emailStateWithoutActiveIEmailListObject = [
-            ...state.emailList.filter(
-              (threadList) =>
-                !threadList.labels.includes(
-                  state.emailList[staticIndexActiveEmailList].labels[0]
-                )
-            ),
-          ]
+            const emailStateWithoutActiveEmailListObject = [
+              ...state.emailList.filter(
+                (threadList) =>
+                  !threadList.labels.includes(
+                    state.emailList[staticIndexActiveEmailList].labels[0]
+                  )
+              ),
+            ]
 
-          const updatedIEmailListObject: any =
-            emailStateWithoutActiveIEmailListObject.length > 0
+            return emailStateWithoutActiveEmailListObject.length > 0
               ? [
-                  ...emailStateWithoutActiveIEmailListObject,
-                  updateIEmailListObject(),
+                  ...emailStateWithoutActiveEmailListObject,
+                  updateEmailListObject(),
                 ]
-              : Array(updateIEmailListObject())
-
-          return updatedIEmailListObject
+              : Array(updateEmailListObject())
+          }
+          return []
         }
         const staticUpdatedEmailList = updatedEmailList()
         if (staticUpdatedEmailList.length > 0)
@@ -433,6 +429,8 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
       const staticIndexTargetEmailList = indexTargetEmailList()
       const staticActiveEmailList = emailList[staticIndexActiveEmailList]
       const staticTargetEmailList = emailList[staticIndexTargetEmailList]
+
+      console.log(staticActiveEmailList)
 
       if (
         staticActiveEmailList &&
