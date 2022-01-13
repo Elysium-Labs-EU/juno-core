@@ -120,28 +120,32 @@ export const emailListSlice = createSlice({
     },
     listAddItemDetail: (state, action) => {
       const {
-        staticTargetEmailList,
-        activEmailObjArray,
+        staticIndexTargetEmailList,
+        activeEmailObjArray,
       }: {
-        staticTargetEmailList: IEmailListObject
-        activEmailObjArray: IEmailListThreadItem[]
+        staticIndexTargetEmailList: number
+        activeEmailObjArray: IEmailListThreadItem[]
       } = action.payload
-      const objectIndex: number = staticTargetEmailList.threads.findIndex(
-        (item) => item.id === activEmailObjArray[0].id
-      )
+      const objectIndex: number = state.emailList[
+        staticIndexTargetEmailList
+      ].threads.findIndex((item) => item.id === activeEmailObjArray[0].id)
       // If the object doesn't exist yet on the array, add it - otherwise do nothing since the item already exists.
       if (objectIndex === -1) {
         const newEmailListEntry: IEmailListObject = {
-          ...staticTargetEmailList,
+          ...state.emailList[staticIndexTargetEmailList],
           threads: sortThreads(
-            staticTargetEmailList.threads.concat(activEmailObjArray)
+            state.emailList[staticIndexTargetEmailList].threads.concat(
+              activeEmailObjArray
+            )
           ),
         }
 
         const updatedEmailList: IEmailListObject[] = [
           ...state.emailList.filter(
             (threadList) =>
-              !threadList.labels.includes(staticTargetEmailList.labels[0])
+              !threadList.labels.includes(
+                state.emailList[staticIndexTargetEmailList].labels[0]
+              )
           ),
           newEmailListEntry,
         ]
@@ -149,17 +153,25 @@ export const emailListSlice = createSlice({
       }
     },
     listRemoveItemDetail: (state, action) => {
-      const { staticActiveEmailList, messageId } = action.payload
+      const {
+        staticIndexActiveEmailList,
+        messageId,
+      }: {
+        staticIndexActiveEmailList: number
+        messageId: string
+      } = action.payload
       const newEmailListEntry: IEmailListObject = {
-        ...staticActiveEmailList,
-        threads: staticActiveEmailList.threads.filter(
+        ...state.emailList[staticIndexActiveEmailList],
+        threads: state.emailList[staticIndexActiveEmailList].threads.filter(
           (item: IEmailListThreadItem) => item.id !== messageId
         ),
       }
       const updatedEmailList: IEmailListObject[] = [
         ...state.emailList.filter(
           (threadList) =>
-            !threadList.labels.includes(staticActiveEmailList.labels[0])
+            !threadList.labels.includes(
+              state.emailList[staticIndexActiveEmailList].labels[0]
+            )
         ),
         newEmailListEntry,
       ]
@@ -167,12 +179,12 @@ export const emailListSlice = createSlice({
     },
     listUpdateItemDetail: (state, action) => {
       const {
-        staticActiveEmailList,
+        staticIndexActiveEmailList,
         responseEmail,
-      }: { staticActiveEmailList: IEmailListObject; responseEmail: any } =
+      }: { staticIndexActiveEmailList: number; responseEmail: any } =
         action.payload
       if (
-        Object.keys(staticActiveEmailList).length > 0 &&
+        Object.keys(state.emailList[staticIndexActiveEmailList]).length > 0 &&
         responseEmail &&
         Object.keys(responseEmail).length > 0
       ) {
@@ -180,38 +192,46 @@ export const emailListSlice = createSlice({
           // Need to loop through the existing emailObject and replace the labelIds on each message.
           // The emailObject will be filtered from the old list, and the new object will be added.
 
-          const objectIndex = staticActiveEmailList.threads.findIndex(
+          const objectIndex = state.emailList[
+            staticIndexActiveEmailList
+          ].threads.findIndex(
             (thread: any) => thread.id === responseEmail.message.id
           )
 
           const updateIEmailListObject = () => {
             if (
-              Object.keys(staticActiveEmailList.threads[objectIndex]).length > 0
+              Object.keys(
+                state.emailList[staticIndexActiveEmailList].threads[objectIndex]
+              ).length > 0
             ) {
               const updatedThreadMessages = (): any =>
-                staticActiveEmailList.threads[objectIndex].messages?.map(
-                  (message: any) => {
-                    const convertedObjectToArray = Object.entries(message)
-                    const attributeIndex = convertedObjectToArray.findIndex(
-                      (item) => item[0] === 'labelIds'
-                    )
+                state.emailList[staticIndexActiveEmailList].threads[
+                  objectIndex
+                ].messages?.map((message: any) => {
+                  const convertedObjectToArray = Object.entries(message)
+                  const attributeIndex = convertedObjectToArray.findIndex(
+                    (item) => item[0] === 'labelIds'
+                  )
 
-                    convertedObjectToArray[attributeIndex][1] =
-                      responseEmail.message.messages[0].labelIds
+                  convertedObjectToArray[attributeIndex][1] =
+                    responseEmail.message.messages[0].labelIds
 
-                    return Object.fromEntries(convertedObjectToArray)
-                  }
-                )
+                  return Object.fromEntries(convertedObjectToArray)
+                })
 
               const filteredCurrentEmailList = {
-                ...staticActiveEmailList,
-                threads: staticActiveEmailList.threads.filter(
+                ...state.emailList[staticIndexActiveEmailList],
+                threads: state.emailList[
+                  staticIndexActiveEmailList
+                ].threads.filter(
                   (thread: any) => thread.id !== responseEmail.message.id
                 ),
               }
 
               const newThreadObject = {
-                ...staticActiveEmailList.threads[objectIndex],
+                ...state.emailList[staticIndexActiveEmailList].threads[
+                  objectIndex
+                ],
                 messages: updatedThreadMessages(),
               }
 
@@ -230,7 +250,9 @@ export const emailListSlice = createSlice({
           const emailStateWithoutActiveIEmailListObject = [
             ...state.emailList.filter(
               (threadList) =>
-                !threadList.labels.includes(staticActiveEmailList.labels[0])
+                !threadList.labels.includes(
+                  state.emailList[staticIndexActiveEmailList].labels[0]
+                )
             ),
           ]
 
@@ -326,7 +348,7 @@ export const loadEmailDetails =
         }
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error hydrating emails.'))
     }
   }
@@ -360,7 +382,7 @@ export const loadEmails =
         getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       getState().utils.isLoading && dispatch(setIsLoading(false))
       getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       dispatch(
@@ -369,13 +391,12 @@ export const loadEmails =
     }
   }
 
-export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
+export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
   const {
     messageId,
     request,
     request: { addLabelIds, removeLabelIds },
     labelIds,
-    location,
   } = props
 
   return async (dispatch, getState) => {
@@ -408,21 +429,21 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
         return -1
       }
 
-      const staticActiveEmailList = emailList[indexActiveEmailList()]
-      const staticTargetEmailList = emailList[indexTargetEmailList()]
+      const staticIndexActiveEmailList = indexActiveEmailList()
+      const staticIndexTargetEmailList = indexTargetEmailList()
+      const staticActiveEmailList = emailList[staticIndexActiveEmailList]
+      const staticTargetEmailList = emailList[staticIndexTargetEmailList]
 
-      if (Object.keys(staticActiveEmailList).length > 0) {
+      if (
+        staticActiveEmailList &&
+        Object.keys(staticActiveEmailList).length > 0
+      ) {
         if (
-          location &&
-          location.pathname.includes('/mail/') &&
+          getState().router.location?.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(draft.DRAFT_LABEL)
         ) {
-          // The push method should only work when the action is Archive or ToDo via Detail actions.
-          if (
-            request &&
-            request.removeLabelIds &&
-            !request.removeLabelIds.includes(global.UNREAD_LABEL)
-          ) {
+          // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
+          if (request) {
             const { viewIndex } = getState().emailDetail
 
             const nextID = () =>
@@ -433,11 +454,18 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
 
-            if (staticNextID && staticLabelURL) {
-              dispatch(setCurrentEmail(staticNextID))
-              dispatch(setViewIndex(viewIndex + 1))
-              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
-            }
+            if (
+              (request.removeLabelIds &&
+                !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+              request.delete
+            )
+              if (staticNextID && staticLabelURL) {
+                dispatch(setCurrentEmail(staticNextID))
+                dispatch(setViewIndex(viewIndex + 1))
+                dispatch(
+                  push(`/mail/${staticLabelURL}/${staticNextID}/messages`)
+                )
+              }
           }
         }
 
@@ -446,14 +474,25 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
           : await messageApi().thrashMessage({ messageId })
 
         if (response && response.status === 200) {
-          if (addLabelIds && Object.keys(staticTargetEmailList).length > 0) {
-            const activeEmailObjArray = staticActiveEmailList.threads.filter(
-              (item: IEmailListThreadItem) => item.id === messageId
-            )
+          if (addLabelIds) {
+            if (staticTargetEmailList) {
+              const activeEmailObjArray = staticActiveEmailList.threads.filter(
+                (item: IEmailListThreadItem) => item.id === messageId
+              )
+              dispatch(
+                listAddItemDetail({
+                  activeEmailObjArray,
+                  staticIndexTargetEmailList,
+                })
+              )
+            }
+          }
+          // NOTE: The newly added threadObject doesn't have a historyId during this process. On refetch of list it will.
+          if (removeLabelIds && removeLabelIds.includes(global.UNREAD_LABEL)) {
             dispatch(
-              listAddItemDetail({
-                activeEmailObjArray,
-                staticTargetEmailList,
+              listUpdateItemDetail({
+                staticIndexActiveEmailList,
+                responseEmail: response.data,
               })
             )
           }
@@ -464,18 +503,7 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
             dispatch(
               listRemoveItemDetail({
                 messageId,
-                staticActiveEmailList,
-              })
-            )
-          }
-
-          // NOTE: The newly added threadObject doesn't have a historyId during this process. On refetch of list it will.
-          if (removeLabelIds && removeLabelIds.includes(global.UNREAD_LABEL)) {
-            const responseEmail = response.data
-            dispatch(
-              listUpdateItemDetail({
-                staticActiveEmailList,
-                responseEmail,
+                staticIndexActiveEmailList,
               })
             )
           }
@@ -484,7 +512,7 @@ export const updateEmailListLabel = (props: UpdateRequestParams): AppThunk => {
         }
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Error updating label.'))
     }
     return null
@@ -517,7 +545,7 @@ export const refreshEmailFeed =
         }
       }
     } catch (err) {
-      console.log(err)
+      console.error(err)
       dispatch(setServiceUnavailable('Cannot refresh feed'))
     } finally {
       dispatch(setIsFetching(false))

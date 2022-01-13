@@ -1,29 +1,25 @@
-import { updateEmailListLabel } from '../../Store/emailListSlice'
-import { LocationObjectType } from '../types/globalTypes'
+import { updateEmailLabel } from '../../Store/emailListSlice'
 
-interface ThrashMailProps {
+interface IThrashMailProps {
   messageId: string
   labelIds: string[]
-  location: LocationObjectType
-  dispatch: any
+  dispatch: Function
 }
 
-const ThrashMail = (props: ThrashMailProps) => {
-  const { messageId, labelIds, location, dispatch } = props
-  const request = { delete: true }
+const thrashMail = (props: IThrashMailProps) => {
+  const { messageId, labelIds, dispatch } = props
 
-  const MarkEmailThrashed = () => {
+  const markEmailThrashed = () => {
     dispatch(
-      updateEmailListLabel({
+      updateEmailLabel({
         messageId,
-        request,
-        location,
+        request: { delete: true },
         labelIds,
       })
     )
   }
 
-  return MarkEmailThrashed()
+  return markEmailThrashed()
 }
 
-export default ThrashMail
+export default thrashMail

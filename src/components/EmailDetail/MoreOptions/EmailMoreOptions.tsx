@@ -1,25 +1,24 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
 import { CustomButtonText } from '../../Elements/Buttons'
-import ThrashMail from '../../EmailOptions/ThrashMail'
+import thrashMail from '../../EmailOptions/ThrashMail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as S from './EmailMoreOptionsStyles'
 import { useAppDispatch } from '../../../Store/hooks'
-import { LocationObjectType } from '../../types/globalTypes'
+import { LabelIdName } from '../../../Store/labelsTypes'
+import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 
-const EmailMoreOptions = ({ messageId, labelIds }: { messageId: string; labelIds: string[] }) => {
+const EmailMoreOptions = ({ messageId, labelIds, storageLabels }: { messageId: string; labelIds: string[], storageLabels: LabelIdName[] }) => {
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
   return (
     <S.Wrapper>
       <CustomButtonText
         className="juno-button option-link text-danger"
         onClick={() =>
-          ThrashMail({
+          thrashMail({
             messageId,
-            labelIds,
-            location,
+            labelIds: onlyLegalLabels,
             dispatch,
           })
         }

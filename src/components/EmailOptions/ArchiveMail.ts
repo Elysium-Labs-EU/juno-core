@@ -1,27 +1,29 @@
-import { updateEmailListLabel } from '../../Store/emailListSlice'
+import { updateEmailLabel } from '../../Store/emailListSlice'
 import { LocationObjectType } from '../types/globalTypes'
 import * as global from '../../constants/globalConstants'
 
-const ArchiveMail = ({
+interface IArchiveEmail {
+  messageId: string
+  labelIds: string[]
+  location: LocationObjectType
+  dispatch: Function
+}
+
+const archiveMail = ({
   messageId,
   labelIds,
   location,
   dispatch,
-}: {
-  messageId: string
-  labelIds: string[]
-  location: LocationObjectType
-  dispatch: any
-}) => {
+}: IArchiveEmail) => {
   const request = {
     removeLabelIds: [
       ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
     ],
   }
 
-  const MarkEmailArchived = () => {
+  const markEmailArchived = () => {
     dispatch(
-      updateEmailListLabel({
+      updateEmailLabel({
         messageId,
         request,
         location,
@@ -30,7 +32,7 @@ const ArchiveMail = ({
     )
   }
 
-  return MarkEmailArchived()
+  return markEmailArchived()
 }
 
-export default ArchiveMail
+export default archiveMail

@@ -1,4 +1,4 @@
-import { updateEmailListLabel } from '../Store/emailListSlice'
+import { updateEmailLabel } from '../Store/emailListSlice'
 import * as global from '../constants/globalConstants'
 
 interface IMarkEmailAsRead {
@@ -14,7 +14,7 @@ const markEmailAsRead = ({
 }: IMarkEmailAsRead) => {
   if (messageId.length > 0 && dispatch) {
     dispatch(
-      updateEmailListLabel({
+      updateEmailLabel({
         messageId,
         request: {
           removeLabelIds: [global.UNREAD_LABEL],

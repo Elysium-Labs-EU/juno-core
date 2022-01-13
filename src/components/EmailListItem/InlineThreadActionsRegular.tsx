@@ -72,7 +72,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
           icon={<FiMoreHorizontal />}
         />
       </S.Inner>
-      {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} />}
+      {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} storageLabels={storageLabels} />}
     </S.Wrapper>
   )
 }

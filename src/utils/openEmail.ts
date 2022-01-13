@@ -4,6 +4,7 @@ import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
 import labelURL from './createLabelURL'
 import { LabelIdName } from '../Store/labelsTypes'
+import filterIllegalLabels from './filterIllegalLabels'
 
 interface IOpenEmailProps {
   labelIds: string[]
@@ -17,9 +18,7 @@ interface IOpenEmailProps {
 
 const openEmail = (props: IOpenEmailProps) => {
   const { labelIds, id, email, dispatch, isSearching, storageLabels } = props
-  const onlyLegalLabels = labelIds.filter((label) =>
-    storageLabels.map((storageLabel) => storageLabel.id).includes(label)
-  )
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
   const staticLabelURL = labelURL(onlyLegalLabels)
 
   if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && !isSearching) {
