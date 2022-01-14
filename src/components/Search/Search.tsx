@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
 import { FiSearch, FiX } from 'react-icons/fi'
@@ -13,7 +13,7 @@ import LoadingState from '../Elements/LoadingState'
 import { CustomButtonText } from '../Elements/Buttons'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
-import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
+import { listClearSearchResults, selectSearchList, storeSearchResults } from '../../Store/emailListSlice'
 
 interface IShouldClearOutPreviousResults {
     searchValueRef: any
@@ -85,6 +85,7 @@ const Search = () => {
     const [loadState, setLoadState] = useState(SEARCH_STATE.IDLE)
     const dispatch = useAppDispatch()
     const isSearching = useAppSelector(selectIsSearching)
+    const searchList = useAppSelector(selectSearchList)
 
 
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -100,6 +101,12 @@ const Search = () => {
             searchInputRef.current.focus()
         }
     }
+
+    useEffect(() => {
+        if (searchList && searchValue.length > 0) {
+            setSearchResults(searchList)
+        }
+    }, [searchList])
 
     const fetchSearchThreads = async (searchBody: any) => {
         const response: IEmailListObject = await threadApi().getThreads(searchBody)
@@ -169,7 +176,9 @@ const Search = () => {
                         </button>}
                     <button className="juno-button" type="button"
                         onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })}
-                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current}><span>{SEARCH}</span></button>
+                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current}>
+                        <span>{SEARCH}</span>
+                    </button>
                 </S.InputRow>
                 <S.SearchResults>
                     {searchResults &&
@@ -185,7 +194,9 @@ const Search = () => {
                                     {loadState !== SEARCH_STATE.LOADING && (
                                         <CustomButtonText
                                             className="juno-button juno-button-small juno-button-light"
-                                            onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
+                                            onClick={() => loadMoreResults({
+                                                searchValue, searchResults, setLoadState, fetchSearchThreads
+                                            })}
                                             label={global.LOAD_MORE}
                                         />
                                     )}
@@ -198,7 +209,9 @@ const Search = () => {
                             )}
                         </> :
                         <S.NoSearchResults>
-                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
+                            {loadState === SEARCH_STATE.LOADING ?
+                                <LoadingState /> :
+                                <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
                         </S.NoSearchResults>
                     }
                 </S.SearchResults>

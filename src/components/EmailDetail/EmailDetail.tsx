@@ -245,7 +245,9 @@ const EmailDetail = () => {
                       isLoading={isLoading}
                       isReplying={isReplying}
                       isReplyingListener={isReplyingListener}
+                      activeEmailList={activeEmailList}
                       labelIds={labelIds}
+                      viewIndex={viewIndex}
                     />
                     <S.HiddenMessagesFeed>
                       <PreLoadMessages

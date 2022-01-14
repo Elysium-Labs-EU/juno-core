@@ -9,10 +9,12 @@ import * as global from '../../../constants/globalConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import { IEmailListThreadItem, IEmailMessage } from '../../../Store/emailListTypes'
-import { useAppDispatch } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
+import { selectEmailList, selectSearchList } from '../../../Store/emailListSlice'
+import { selectLabelIds } from '../../../Store/labelsSlice'
 
 
 const fromEmail = (threadDetail: IEmailListThreadItem) => {
@@ -80,7 +82,9 @@ interface IMessagesOverview {
   isLoading: boolean
   isReplying: boolean
   isReplyingListener: Function
+  activeEmailList: any
   labelIds: string[]
+  viewIndex: number
 }
 
 const MessagesOverview = React.memo(
@@ -89,7 +93,9 @@ const MessagesOverview = React.memo(
     isLoading,
     isReplying,
     isReplyingListener,
+    activeEmailList,
     labelIds,
+    viewIndex
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
 
@@ -111,16 +117,20 @@ const MessagesOverview = React.memo(
           </ES.EmailWrapper>
         ))
 
+
+    // TODO: This should listen to the Redux state opposed to the local state. It will enter a loop whenever the UNREAD label is still there.
     useEffect(() => {
-      if (threadDetail && Object.keys(threadDetail).length > 0) {
+      if (activeEmailList && threadDetail && Object.keys(threadDetail).length > 0) {
         if (threadDetail.messages && threadDetail.messages.length > 0) {
-          if (threadDetail.messages.filter((message) => message.labelIds?.includes(global.UNREAD_LABEL) === true).length > 0) {
+          console.log(activeEmailList)
+          if (activeEmailList.threads[viewIndex].messages.filter((message: any) => message.labelIds?.includes(global.UNREAD_LABEL) === true).length > 0) {
             const messageId = threadDetail.id
-            markEmailAsRead({ messageId, dispatch, labelIds })
+            console.log('here')
+            // markEmailAsRead({ messageId, dispatch, labelIds })
           }
         }
       }
-    }, [threadDetail])
+    }, [threadDetail, activeEmailList])
 
     return (
       <>

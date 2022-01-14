@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
+import isEmpty from 'lodash/isEmpty'
 import threadApi from '../data/threadApi'
 import {
   setIsLoading,
@@ -184,55 +185,101 @@ export const emailListSlice = createSlice({
       }: { staticIndexActiveEmailList: number; responseEmail: any } =
         action.payload
 
-      if (
-        state.emailList[staticIndexActiveEmailList] &&
-        responseEmail &&
-        Object.keys(responseEmail).length > 0
-      ) {
-        const updatedEmailList = (): IEmailListObject[] => {
+      console.log(action.payload)
+
+      if (responseEmail && Object.keys(responseEmail).length > 0) {
+        const updatedEmailList = (): IEmailListObject | IEmailListObject[] => {
           // Need to loop through the existing emailObject and replace the labelIds on each message.
           // The emailObject will be filtered from the old list, and the new object will be added.
           // Redux Immutability is not allowing a direct modification.
 
-          const objectIndex = state.emailList[
-            staticIndexActiveEmailList
-          ].threads.findIndex(
-            (thread) => thread.id === responseEmail.message.id
-          )
+          const objectIndex = (): number => {
+            if (staticIndexActiveEmailList > -1) {
+              return state.emailList[
+                staticIndexActiveEmailList
+              ].threads.findIndex(
+                (thread) => thread.id === responseEmail.message.id
+              )
+            }
+            if (state.searchList) {
+              return state.searchList.threads.findIndex(
+                (thread) => thread.id === responseEmail.message.id
+              )
+            }
+            return -1
+          }
+
+          const staticObjectIndex = objectIndex()
+          console.log(staticObjectIndex)
+          console.log(responseEmail)
 
           // ObjectIndex will be -1 if the Redux has already removed the item, but the user is still in emailDetail.
-          if (objectIndex > -1) {
+          if (staticObjectIndex > -1) {
             const updateEmailListObject = (): IEmailListObject => {
-              const updatedThreadMessages = (): any =>
-                state.emailList[staticIndexActiveEmailList].threads[
-                  objectIndex
-                ].messages?.map((message) => {
-                  const convertedObjectToArray = Object.entries(message)
-                  const attributeIndex = convertedObjectToArray.findIndex(
-                    (item) => item[0] === 'labelIds'
-                  )
+              const updatedThreadMessages = (): any => {
+                if (staticIndexActiveEmailList > -1) {
+                  return state.emailList[staticIndexActiveEmailList].threads[
+                    staticObjectIndex
+                  ].messages?.map((message) => {
+                    const convertedObjectToArray = Object.entries(message)
+                    const attributeIndex = convertedObjectToArray.findIndex(
+                      (item) => item[0] === 'labelIds'
+                    )
 
-                  convertedObjectToArray[attributeIndex][1] =
-                    responseEmail.message.messages[0].labelIds
+                    convertedObjectToArray[attributeIndex][1] =
+                      responseEmail.message.messages[0].labelIds
 
-                  return Object.fromEntries(convertedObjectToArray)
-                })
-
-              const filteredCurrentEmailList = {
-                ...state.emailList[staticIndexActiveEmailList],
-                threads: state.emailList[
-                  staticIndexActiveEmailList
-                ].threads.filter(
-                  (thread) => thread.id !== responseEmail.message.id
-                ),
+                    return Object.fromEntries(convertedObjectToArray)
+                  })
+                }
+                if (state.searchList) {
+                  console.log(state.searchList.threads[staticObjectIndex])
+                  return state.searchList.threads[
+                    staticObjectIndex
+                  ].messages?.map((message) => {
+                    const convertedObjectToArray = Object.entries(message)
+                    const attributeIndex = convertedObjectToArray.findIndex(
+                      (item) => item[0] === 'labelIds'
+                    )
+                    if (responseEmail.message.messages[0].labelIds)
+                      convertedObjectToArray[attributeIndex][1] =
+                        responseEmail.message.messages[0].labelIds
+                    console.log(Object.fromEntries(convertedObjectToArray))
+                    return Object.fromEntries(convertedObjectToArray)
+                  })
+                }
+                return []
               }
 
-              const newThreadObject = {
-                ...state.emailList[staticIndexActiveEmailList].threads[
-                  objectIndex
-                ],
-                messages: updatedThreadMessages(),
-              }
+              const filteredCurrentEmailList =
+                staticIndexActiveEmailList === -1 && state.searchList
+                  ? {
+                      ...state.searchList,
+                      threads: state.searchList.threads.filter(
+                        (thread) => thread.id !== responseEmail.message.id
+                      ),
+                    }
+                  : {
+                      ...state.emailList[staticIndexActiveEmailList],
+                      threads: state.emailList[
+                        staticIndexActiveEmailList
+                      ].threads.filter(
+                        (thread) => thread.id !== responseEmail.message.id
+                      ),
+                    }
+
+              const newThreadObject =
+                staticIndexActiveEmailList === -1 && state.searchList
+                  ? {
+                      ...state.searchList.threads[staticObjectIndex],
+                      messages: updatedThreadMessages(),
+                    }
+                  : {
+                      ...state.emailList[staticIndexActiveEmailList].threads[
+                        staticObjectIndex
+                      ],
+                      messages: updatedThreadMessages(),
+                    }
 
               const newIEmailListObject = {
                 ...filteredCurrentEmailList,
@@ -244,15 +291,22 @@ export const emailListSlice = createSlice({
               return newIEmailListObject
             }
 
-            const emailStateWithoutActiveEmailListObject = [
-              ...state.emailList.filter(
-                (threadList) =>
-                  !threadList.labels.includes(
-                    state.emailList[staticIndexActiveEmailList].labels[0]
-                  )
-              ),
-            ]
+            // There is only 1 searchList, we can use an empty one to fill it again.
+            const emailStateWithoutActiveEmailListObject =
+              staticIndexActiveEmailList === -1 && state.searchList
+                ? []
+                : [
+                    ...state.emailList.filter(
+                      (threadList) =>
+                        !threadList.labels.includes(
+                          state.emailList[staticIndexActiveEmailList].labels[0]
+                        )
+                    ),
+                  ]
 
+            if (staticIndexActiveEmailList === -1 && state.searchList) {
+              return updateEmailListObject()
+            }
             return emailStateWithoutActiveEmailListObject.length > 0
               ? [
                   ...emailStateWithoutActiveEmailListObject,
@@ -263,7 +317,16 @@ export const emailListSlice = createSlice({
           return []
         }
         const staticUpdatedEmailList = updatedEmailList()
-        if (staticUpdatedEmailList.length > 0)
+        if (!isEmpty(staticUpdatedEmailList))
+          if (
+            staticIndexActiveEmailList === -1 &&
+            state.searchList &&
+            !Array.isArray(staticUpdatedEmailList)
+          ) {
+            state.searchList = staticUpdatedEmailList
+            return
+          }
+        if (Array.isArray(staticUpdatedEmailList))
           state.emailList = staticUpdatedEmailList
       }
     },
@@ -397,7 +460,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
   return async (dispatch, getState) => {
     try {
-      const { emailList } = getState().email
+      const { emailList, searchList } = getState().email
 
       const indexActiveEmailList = (): number => {
         if (emailList && (removeLabelIds || request.delete)) {
@@ -427,9 +490,12 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
       const staticIndexActiveEmailList = indexActiveEmailList()
       const staticIndexTargetEmailList = indexTargetEmailList()
-      const staticActiveEmailList = emailList[staticIndexActiveEmailList]
+      const staticActiveEmailList = labelIds.includes(global.ARCHIVE_LABEL)
+        ? searchList
+        : emailList[staticIndexActiveEmailList]
       const staticTargetEmailList = emailList[staticIndexTargetEmailList]
 
+      console.log(staticActiveEmailList)
       if (
         staticActiveEmailList &&
         Object.keys(staticActiveEmailList).length > 0
