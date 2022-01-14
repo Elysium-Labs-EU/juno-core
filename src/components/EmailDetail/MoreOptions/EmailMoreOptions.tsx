@@ -1,5 +1,5 @@
 import React from 'react'
-import { CustomButtonText } from '../../Elements/Buttons/Buttons'
+import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as S from './EmailMoreOptionsStyles'
@@ -13,7 +13,7 @@ const EmailMoreOptions = ({ messageId, labelIds, storageLabels }: { messageId: s
 
   return (
     <S.Wrapper>
-      <CustomButtonText
+      <CustomButton
         className="juno-button option-link text-danger"
         onClick={() =>
           thrashMail({

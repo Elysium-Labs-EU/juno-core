@@ -1,7 +1,7 @@
 import React from 'react'
 import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
-import { CustomIconLink } from '../Elements/Buttons/Buttons'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import DeleteDraft from '../EmailOptions/DeleteDraft'
 import { selectEmailList } from '../../Store/emailListSlice'
@@ -24,7 +24,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   return (
     <S.Wrapper>
       <S.Inner>
-        <CustomIconLink
+        <CustomIconButton
           onClick={() => DeleteDraft({ threadId, dispatch, copyCurrentEmailList, draftId })}
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiDelete />}

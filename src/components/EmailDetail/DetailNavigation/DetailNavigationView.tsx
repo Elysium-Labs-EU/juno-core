@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import CloseMail from '../../../utils/closeEmail'
 import NavigatePreviousMail from '../../../utils/navigatePreviousEmail'
-import { CustomIconLink } from '../../Elements/Buttons/Buttons'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
@@ -34,7 +34,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
 
     return (
         <S.Wrapper>
-            <CustomIconLink
+            <CustomIconButton
                 className="juno-button option-link"
                 onClick={() =>
                     NavigatePreviousMail({
@@ -47,19 +47,22 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
                 disabled={isDisabledPrev}
                 title="Previous email"
                 icon={<FiChevronLeft size={20} />}
+                type="button"
             />
-            <CustomIconLink
+            <CustomIconButton
                 className="juno-button option-link"
                 onClick={() => nextButtonSelector()}
                 disabled={isDisabledNext || isLoading}
                 title="Next email"
                 icon={!isLoading ? <FiChevronRight size={20} /> : <CircularProgress size={10} />}
+                type="button"
             />
-            <CustomIconLink
+            <CustomIconButton
                 className="juno-button option-link"
                 title="Close view"
                 onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
                 icon={<FiX size={20} />}
+                type="button"
             />
         </S.Wrapper>
     )

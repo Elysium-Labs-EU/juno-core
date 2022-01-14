@@ -11,7 +11,7 @@ import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import { IEmailMessage, IEmailListThreadItem } from '../../../../Store/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
-import { CustomIconLink } from '../../../Elements/Buttons/Buttons'
+import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import { useAppSelector } from '../../../../Store/hooks'
 import { selectIsReplying } from '../../../../Store/emailDetailSlice'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
@@ -110,7 +110,7 @@ const ReadMessage = ({
                 <EmailHasAttachment messages={message} />
                 <TimeStamp threadTimeStamp={message.internalDate} />
 
-                <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="juno-button" aria-describedby={popperId} />
+                <CustomIconButton onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="juno-button" aria-describedby={popperId} />
                 <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
                   <SpecificEmailOptions messageId={message?.id} isReplyingListener={isReplyingListener} messageIndex={messageIndex} />
                 </Popper>

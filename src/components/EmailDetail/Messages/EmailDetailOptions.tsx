@@ -13,7 +13,7 @@ import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
-import { CustomButtonText } from '../../Elements/Buttons/Buttons'
+import CustomButton from '../../Elements/Buttons/CustomButton'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 
@@ -41,7 +41,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           <div>
-            <CustomButtonText
+            <CustomButton
               className="juno-button option-link"
               icon={<FiCornerUpLeft />}
               label={local.BUTTON_REPLY}
@@ -58,7 +58,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                     LABEL_NAME: todo.LABEL,
                   })[0].id
               ) && (
-                <CustomButtonText
+                <CustomButton
                   className="juno-button option-link"
                   icon={<FiCheckCircle />}
                   onClick={() =>
@@ -74,7 +74,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
               )}
           </div>
           <div>
-            <CustomButtonText
+            <CustomButton
               className="juno-button option-link"
               icon={<FiArchive />}
               onClick={() =>
@@ -88,7 +88,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
             />
           </div>
           <div>
-            <CustomButtonText
+            <CustomButton
               className="juno-button option-link"
               icon={<FiMoreHorizontal />}
               onClick={() => setShowMenu(!showMenu)}

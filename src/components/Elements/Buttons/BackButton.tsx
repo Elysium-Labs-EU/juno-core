@@ -1,6 +1,6 @@
 import React from 'react'
 import { go, push } from 'redux-first-history'
-import { CustomButtonText } from './Buttons'
+import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { setIsFocused, setIsSorting } from '../../../Store/emailListSlice'
@@ -39,7 +39,7 @@ const BackButton = (props: BackButtonType) => {
   }
 
   return (
-    <CustomButtonText
+    <CustomButton
       onClick={navigateBack}
       label={global.BUTTON_BACK}
       className="juno-button juno-button-small juno-button-light"

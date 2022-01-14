@@ -1,11 +1,11 @@
 import React from 'react'
 import * as GS from '../../../styles/globalStyles'
-import { CustomButtonText } from '../../Elements/Buttons/Buttons'
+import CustomButton from '../../Elements/Buttons/CustomButton'
 
 const SpecificEmailOptions = ({ messageId, isReplyingListener, messageIndex }: { messageId?: string, isReplyingListener: any, messageIndex: number }) =>
 (
     <GS.MenuPopper>
-        <CustomButtonText
+        <CustomButton
             className="juno-button option-link"
             label="Reply to this message"
             onClick={() => isReplyingListener({ messageId, messageIndex })}

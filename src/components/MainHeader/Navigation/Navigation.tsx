@@ -5,7 +5,7 @@ import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import './Navigation.scss'
 import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
-import { CustomIconLink } from '../../Elements/Buttons/Buttons'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
@@ -23,16 +23,14 @@ const Navigation = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (location) {
-      if (location.pathname.includes('inbox')) {
-        setActive('inbox')
-      } else if (location.pathname.includes('settings')) {
-        setActive('settings')
-      } else if (location.pathname.includes('compose')) {
-        setActive('compose')
-      } else if (location.pathname === '/') {
-        setActive('todo')
-      }
+    if (location.pathname.includes('inbox')) {
+      setActive('inbox')
+    } else if (location.pathname.includes('settings')) {
+      setActive('settings')
+    } else if (location.pathname.includes('compose')) {
+      setActive('compose')
+    } else if (location.pathname === '/') {
+      setActive('todo')
     }
   }, [location])
 
@@ -47,14 +45,14 @@ const Navigation = () => {
         setShowMenu((prev) => placement !== newPlacement || !prev)
         setPlacement(newPlacement)
       }
-  const popperId = showMenu ? 'specifc-email-popper' : undefined
+  const popperId = showMenu ? 'navigation-more-menu' : undefined
 
   return (
     <S.NavControls>
       <S.NavList>
         <Tooltip title="To Do">
           <S.NavItem>
-            <CustomIconLink
+            <CustomIconButton
               className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
               icon={<FiCheckSquare size={SIZE} />}
               onClick={() => navigateTo(Routes.HOME)}
@@ -64,26 +62,27 @@ const Navigation = () => {
 
         <Tooltip title="Inbox">
           <S.NavItem>
-            <CustomIconLink
+            <CustomIconButton
               className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
               icon={<FiInbox size={SIZE} />}
               onClick={() => navigateTo(Routes.INBOX)}
             />
           </S.NavItem>
         </Tooltip>
-
-        <S.NavItem>
-          <CustomIconLink
-            className={
-              active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
-            }
-            icon={<FiSearch size={SIZE} />}
-            onClick={() => dispatch(setIsSearching(true))}
-          />
-        </S.NavItem>
+        <Tooltip title="Search">
+          <S.NavItem>
+            <CustomIconButton
+              className={
+                active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
+              }
+              icon={<FiSearch size={SIZE} />}
+              onClick={() => dispatch(setIsSearching(true))}
+            />
+          </S.NavItem>
+        </Tooltip>
         <Tooltip title="Compose">
           <S.NavItem>
-            <CustomIconLink
+            <CustomIconButton
               className={
                 active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
               }
@@ -93,14 +92,16 @@ const Navigation = () => {
           </S.NavItem>
         </Tooltip>
 
-        <S.NavItem>
-          <CustomIconLink
-            onClick={handleSpecificMenu('bottom-start')}
-            aria-describedby={popperId}
-            className="nav-item-button"
-            icon={<FiMoreHorizontal size={SIZE} />}
-          />
-        </S.NavItem>
+        <Tooltip title="More options">
+          <S.NavItem>
+            <CustomIconButton
+              onClick={handleSpecificMenu('bottom-start')}
+              // aria-describedby={popperId}
+              className="nav-item-button"
+              icon={<FiMoreHorizontal size={SIZE} />}
+            />
+          </S.NavItem>
+        </Tooltip>
         <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
           <SubMenuHeader />
         </Popper>

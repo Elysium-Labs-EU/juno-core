@@ -3,7 +3,7 @@ import { FiCheck, FiDownload } from 'react-icons/fi'
 import './EmailAttachmentBubble.scss'
 import prettyBytes from 'pretty-bytes'
 import * as S from './EmailAttachmentBubbleStyles'
-import { CustomIconLink } from '../../Elements/Buttons/Buttons'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { downloadAttachment } from '../../../Store/emailDetailSlice'
 import EmailAttachmentIcon from './EmailAttachmentIcon'
 import { useAppDispatch } from '../../../Store/hooks'
@@ -27,12 +27,13 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
           {prettyBytes(attachmentData.body.size)}
         </p>
       </S.AttachmentInner>
-      <CustomIconLink
+      <CustomIconButton
         onClick={() =>
           dispatch(downloadAttachment({ messageId, attachmentData })).then(setDownloaded(true))
         }
         icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
         className="nav-item-button"
+        type="button"
       />
     </S.Attachment>
   )

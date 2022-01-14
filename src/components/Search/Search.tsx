@@ -10,7 +10,7 @@ import threadApi from '../../data/threadApi'
 import { IEmailListObject, IEmailListObjectSearch, IEmailListThreadItem } from '../../Store/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
-import { CustomButtonText } from '../Elements/Buttons/Buttons'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
 import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
@@ -183,7 +183,7 @@ const Search = () => {
                             {searchResults.nextPageToken ? (
                                 <S.FooterRow>
                                     {loadState !== SEARCH_STATE.LOADING && (
-                                        <CustomButtonText
+                                        <CustomButton
                                             className="juno-button juno-button-small juno-button-light"
                                             onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}

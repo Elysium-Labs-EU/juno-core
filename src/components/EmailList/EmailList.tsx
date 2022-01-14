@@ -9,7 +9,7 @@ import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
 import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
-import { CustomButtonText } from '../Elements/Buttons/Buttons'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
@@ -85,7 +85,7 @@ const EmailList = () => {
             {nextPageToken ? (
               <S.LoadMoreContainer>
                 {!isLoading && (
-                  <CustomButtonText
+                  <CustomButton
                     className="juno-button juno-button-small juno-button-light"
                     disabled={isLoading}
                     onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}

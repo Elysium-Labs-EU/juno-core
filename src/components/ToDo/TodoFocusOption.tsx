@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { CustomButtonText } from '../Elements/Buttons/Buttons'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
@@ -30,7 +30,7 @@ const TodoFocusOption = () => {
 
   return (
     <S.SortContainer>
-      <CustomButtonText
+      <CustomButton
         className="sort-button"
         onClick={handleClick}
         disabled={isLoading || emailListIndex < 0}

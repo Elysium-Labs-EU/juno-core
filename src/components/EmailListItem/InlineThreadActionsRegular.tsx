@@ -4,7 +4,7 @@ import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
-import { CustomIconLink } from '../Elements/Buttons/Buttons'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils/findLabel'
@@ -22,16 +22,16 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
   const storageLabels = useAppSelector(selectStorageLabels)
   const isSearching = useAppSelector(selectIsSearching)
   const dispatch = useAppDispatch()
-  const messageId = id && id
 
   return (
     <S.Wrapper>
       <S.Inner>
-        <CustomIconLink
+        <CustomIconButton
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiCornerUpLeft />}
           onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching, storageLabels })}
           title="Reply"
+          type="button"
         />
         {labelIds &&
           !labelIds.some(
@@ -42,10 +42,10 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
                 LABEL_NAME: todo.LABEL,
               })[0].id
           ) && (
-            <CustomIconLink
+            <CustomIconButton
               onClick={() =>
                 SetToDoMail({
-                  messageId,
+                  messageId: id,
                   labelIds,
                   dispatch,
                   storageLabels,
@@ -54,18 +54,21 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
               className="juno-button juno-button-small text_muted option-link"
               icon={<FiCheckCircle />}
               title="Mark as To Do"
+              type="button"
             />
           )}
-        <CustomIconLink
-          onClick={() => ArchiveMail({ messageId, dispatch, labelIds })}
+        <CustomIconButton
+          onClick={() => ArchiveMail({ messageId: id, dispatch, labelIds })}
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiArchive />}
           title="Archive"
+          type="button"
         />
-        <CustomIconLink
+        <CustomIconButton
           onClick={() => setShowMenu(!showMenu)}
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiMoreHorizontal />}
+          type="button"
         />
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} storageLabels={storageLabels} />}
