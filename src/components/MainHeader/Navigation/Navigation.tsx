@@ -53,9 +53,9 @@ const Navigation = () => {
         <Tooltip title="To Do">
           <S.NavItem>
             <CustomIconButton
-              className={active === 'todo' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
               icon={<FiCheckSquare size={SIZE} />}
               onClick={() => navigateTo(Routes.HOME)}
+              isActive={active === 'todo'}
             />
           </S.NavItem>
         </Tooltip>
@@ -63,19 +63,17 @@ const Navigation = () => {
         <Tooltip title="Inbox">
           <S.NavItem>
             <CustomIconButton
-              className={active === 'inbox' ? 'nav-item-selected nav-item-button' : 'nav-item-button'}
               icon={<FiInbox size={SIZE} />}
               onClick={() => navigateTo(Routes.INBOX)}
+              isActive={active === 'inbox'}
             />
           </S.NavItem>
         </Tooltip>
         <Tooltip title="Search">
           <S.NavItem>
             <CustomIconButton
-              className={
-                active === 'settings' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
-              }
               icon={<FiSearch size={SIZE} />}
+              isActive={active === 'settings'}
               onClick={() => dispatch(setIsSearching(true))}
             />
           </S.NavItem>
@@ -83,25 +81,20 @@ const Navigation = () => {
         <Tooltip title="Compose">
           <S.NavItem>
             <CustomIconButton
-              className={
-                active === 'compose' ? 'nav-item-selected nav-item-button' : 'nav-item-button'
-              }
               icon={<FiEdit size={SIZE} />}
+              isActive={active === 'compose'}
               onClick={() => navigateTo('/compose')}
             />
           </S.NavItem>
         </Tooltip>
 
-        <Tooltip title="More options">
-          <S.NavItem>
-            <CustomIconButton
-              onClick={handleSpecificMenu('bottom-start')}
-              // aria-describedby={popperId}
-              className="nav-item-button"
-              icon={<FiMoreHorizontal size={SIZE} />}
-            />
-          </S.NavItem>
-        </Tooltip>
+        <S.NavItem>
+          <CustomIconButton
+            onClick={handleSpecificMenu('bottom-start')}
+            // aria-describedby={popperId}
+            icon={<FiMoreHorizontal size={SIZE} />}
+          />
+        </S.NavItem>
         <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
           <SubMenuHeader />
         </Popper>

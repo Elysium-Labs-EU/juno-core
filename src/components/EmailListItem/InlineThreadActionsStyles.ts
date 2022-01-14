@@ -28,4 +28,7 @@ export const Wrapper = styled.div`
 export const Inner = styled.div`
   display: flex;
   flex-flow: row;
+  button {
+    margin-left: 1rem;
+  }
 `

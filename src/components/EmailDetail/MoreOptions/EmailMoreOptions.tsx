@@ -7,14 +7,19 @@ import { useAppDispatch } from '../../../Store/hooks'
 import { LabelIdName } from '../../../Store/labelsTypes'
 import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 
-const EmailMoreOptions = ({ messageId, labelIds, storageLabels }: { messageId: string; labelIds: string[], storageLabels: LabelIdName[] }) => {
+interface IEmailMoreOptions {
+  messageId: string
+  labelIds: string[]
+  storageLabels: LabelIdName[]
+}
+
+const EmailMoreOptions = ({ messageId, labelIds, storageLabels }: IEmailMoreOptions) => {
   const dispatch = useAppDispatch()
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
   return (
     <S.Wrapper>
       <CustomButton
-        className="juno-button option-link text-danger"
         onClick={() =>
           thrashMail({
             messageId,

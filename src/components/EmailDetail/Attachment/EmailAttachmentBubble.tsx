@@ -32,8 +32,6 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
           dispatch(downloadAttachment({ messageId, attachmentData })).then(setDownloaded(true))
         }
         icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
-        className="nav-item-button"
-        type="button"
       />
     </S.Attachment>
   )

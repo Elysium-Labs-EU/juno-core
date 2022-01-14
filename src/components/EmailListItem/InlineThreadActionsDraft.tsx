@@ -9,6 +9,8 @@ import emailListFilteredByLabel from '../../utils/emailListFilteredByLabel'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import { selectDraft } from '../../Store/draftsSlice'
 
+const SIZE = 16
+
 const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const dispatch = useAppDispatch()
   const emailList = useAppSelector(selectEmailList)
@@ -26,8 +28,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
       <S.Inner>
         <CustomIconButton
           onClick={() => DeleteDraft({ threadId, dispatch, copyCurrentEmailList, draftId })}
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiDelete />}
+          icon={<FiDelete size={SIZE} />}
           title="Discard Draft"
         />
       </S.Inner>

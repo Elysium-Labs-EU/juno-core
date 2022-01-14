@@ -13,5 +13,44 @@ export const ItemsContainer = styled.ul`
   display: flex;
   flex-flow: row;
   list-style-type: none;
-  margin: 1rem 0 0 0;
+  margin: 2rem 0 0 0;
+  li:last-child {
+    margin-left: 3rem;
+  }
+`
+
+interface StyledListItem {
+  isActive: boolean | undefined
+}
+
+export const StyedListItem = styled.li<StyledListItem>`
+  font-size: 1.125rem;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+  text-align: left;
+  color: ${(props) => (props.isActive ? '#1c1c1c' : '#a5a5a5')};
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  font-family: 'Urbanist Variable', sans-serif;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+  &:hover {
+    color: #1c1c1c;
+    text-decoration: none;
+  }
+
+  &:active {
+    color: #1c1c1c;
+    text-decoration: none;
+  }
+
+  &:disabled {
+    color: #d9d9d9;
+    cursor: not-allowed;
+  }
 `

@@ -14,6 +14,7 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
 import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 interface IShouldClearOutPreviousResults {
     searchValueRef: any
@@ -163,13 +164,13 @@ const Search = () => {
                         fullWidth
                     />
                     {searchValue.length > 0 &&
-                        <button className="juno-button" type="button"
-                            onClick={resetSearch} aria-label="clear-search">
-                            <S.Icon><FiX size={16} /></S.Icon>
-                        </button>}
-                    <button className="juno-button" type="button"
+                        <CustomIconButton
+                            onClick={resetSearch} aria-label="clear-search"
+                            icon={<FiX size={16} />}
+                        />}
+                    <CustomButton
                         onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })}
-                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current}><span>{SEARCH}</span></button>
+                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current} label={SEARCH} />
                 </S.InputRow>
                 <S.SearchResults>
                     {searchResults &&
@@ -184,7 +185,6 @@ const Search = () => {
                                 <S.FooterRow>
                                     {loadState !== SEARCH_STATE.LOADING && (
                                         <CustomButton
-                                            className="juno-button juno-button-small juno-button-light"
                                             onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}
                                         />

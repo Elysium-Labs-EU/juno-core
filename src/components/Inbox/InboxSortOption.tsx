@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import CustomButton from '../Elements/Buttons/CustomButton'
+import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import startSort from '../../utils/startSort'
@@ -30,8 +30,7 @@ const SortInbox = () => {
 
 
   return (
-    <CustomButton
-      className="sort-button"
+    <CustomAttentionButton
       onClick={handleClick}
       disabled={isLoading}
       label={INBOX_BUTTON}

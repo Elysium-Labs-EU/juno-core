@@ -1,4 +1,5 @@
 import React from 'react'
+import { FiChevronLeft } from 'react-icons/fi'
 import { go, push } from 'redux-first-history'
 import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
@@ -42,7 +43,8 @@ const BackButton = (props: BackButtonType) => {
     <CustomButton
       onClick={navigateBack}
       label={global.BUTTON_BACK}
-      className="juno-button juno-button-small juno-button-light"
+      suppressed
+      icon={<FiChevronLeft />}
     />
   )
 }

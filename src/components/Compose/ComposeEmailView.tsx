@@ -1,4 +1,5 @@
 import React from 'react'
+import { FiSend } from 'react-icons/fi'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
@@ -103,8 +104,8 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                         showField={!isReplying}
                                     />
                                     <S.CcBccContainer>
-                                        {!showCC && <CustomButton label={local.CC_LABEL} className="juno-button option-link" onClick={() => setShowCC(true)} />}
-                                        {!showBCC && <CustomButton label={local.BCC_LABEL} className="juno-button option-link" onClick={() => setShowBCC(true)} />}
+                                        {!showCC && <CustomButton label={local.CC_LABEL} onClick={() => setShowCC(true)} />}
+                                        {!showBCC && <CustomButton label={local.BCC_LABEL} onClick={() => setShowBCC(true)} />}
                                     </S.CcBccContainer>
                                 </S.Row>
                                 {showCC &&
@@ -172,15 +173,16 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                         </div>
                         <CustomButton
                             type="submit"
-                            className="juno-button juno-button-small juno-button-light"
                             label={local.SEND_BUTTON}
                             disabled={!toValue}
+                            icon={<FiSend />}
+                            suppressed
                         />
                         {isReplying && isReplyingListener && (
                             <CustomButton
-                                className="juno-button juno-button-small"
                                 label={local.CANCEL_BUTTON}
                                 onClick={() => isReplyingListener(-1)}
+                                suppressed
                             />
                         )}
                     </form>

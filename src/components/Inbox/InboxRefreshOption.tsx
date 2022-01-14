@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Tooltip from '@mui/material/Tooltip'
 import { MdRefresh } from 'react-icons/md'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
@@ -34,13 +35,13 @@ const InboxRefresh = () => {
     }, [isFetching])
 
     return (
-        <CustomIconButton
-            className="juno-button juno-button-light"
-            onClick={() => refreshFeed()}
-            disabled={isLoading || disableRefresh}
-            icon={<MdRefresh />}
-            type="button"
-        />
+        <Tooltip title="Refresh Inbox">
+            <CustomIconButton
+                onClick={() => refreshFeed()}
+                disabled={isLoading || disableRefresh}
+                icon={<MdRefresh size={20} />}
+            />
+        </Tooltip>
     )
 }
 

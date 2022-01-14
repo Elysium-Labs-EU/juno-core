@@ -42,10 +42,10 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
         <S.InnerOptionsContainer>
           <div>
             <CustomButton
-              className="juno-button option-link"
               icon={<FiCornerUpLeft />}
               label={local.BUTTON_REPLY}
               onClick={() => isReplyingListener({ threadId, messageIndex })}
+              suppressed
             />
           </div>
           <div>
@@ -59,7 +59,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                   })[0].id
               ) && (
                 <CustomButton
-                  className="juno-button option-link"
                   icon={<FiCheckCircle />}
                   onClick={() =>
                     SetToDoMail({
@@ -70,12 +69,12 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                     })
                   }
                   label={local.BUTTON_TODO}
+                  suppressed
                 />
               )}
           </div>
           <div>
             <CustomButton
-              className="juno-button option-link"
               icon={<FiArchive />}
               onClick={() =>
                 ArchiveMail({
@@ -85,14 +84,15 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                 })
               }
               label={local.BUTTON_ARCHIVE}
+              suppressed
             />
           </div>
           <div>
             <CustomButton
-              className="juno-button option-link"
               icon={<FiMoreHorizontal />}
               onClick={() => setShowMenu(!showMenu)}
               label={local.BUTTON_MORE}
+              suppressed
             />
           </div>
           {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} storageLabels={storageLabels} />}

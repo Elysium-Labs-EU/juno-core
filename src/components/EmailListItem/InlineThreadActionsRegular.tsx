@@ -17,6 +17,8 @@ interface IInlineThreadActionsRegular {
   labelIds: string[]
 }
 
+const SIZE = 16
+
 const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -27,11 +29,9 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
     <S.Wrapper>
       <S.Inner>
         <CustomIconButton
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiCornerUpLeft />}
+          icon={<FiCornerUpLeft size={SIZE} />}
           onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching, storageLabels })}
           title="Reply"
-          type="button"
         />
         {labelIds &&
           !labelIds.some(
@@ -51,24 +51,18 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
                   storageLabels,
                 })
               }
-              className="juno-button juno-button-small text_muted option-link"
-              icon={<FiCheckCircle />}
+              icon={<FiCheckCircle size={SIZE} />}
               title="Mark as To Do"
-              type="button"
             />
           )}
         <CustomIconButton
           onClick={() => ArchiveMail({ messageId: id, dispatch, labelIds })}
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiArchive />}
+          icon={<FiArchive size={SIZE} />}
           title="Archive"
-          type="button"
         />
         <CustomIconButton
           onClick={() => setShowMenu(!showMenu)}
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiMoreHorizontal />}
-          type="button"
+          icon={<FiMoreHorizontal size={SIZE} />}
         />
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} storageLabels={storageLabels} />}

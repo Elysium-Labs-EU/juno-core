@@ -4,28 +4,70 @@ import styled from 'styled-components'
 
 interface ICustomButton {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
-  className: string
+  className?: string
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
   icon?: {}
   label: string
+  suppressed?: boolean
 }
 
-const Button = styled.button``
+interface IButton {
+  suppressed: boolean | undefined
+}
+
+const Button = styled.button<IButton>`
+  display: inline-block;
+  font-weight: 400;
+  color: ${ (props) => props.suppressed ? '#a5a5a5' : '#1c1c1c' };
+  text-align: center;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  cursor: pointer;
+  font-family: 'Raleway Variable', sans-serif;
+  
+  &:hover {
+    color: #1c1c1c;
+  }`
+
+const InnerButton = styled.div`
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin-right: 13px;
+    line-height: 0;
+    text-align: center;
+    transition: opacity 0.3s ease 0s;
+  }
+`
 
 const CustomButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, icon, label, type } = props
+  const { onClick, className, disabled, icon, label, type, suppressed } = props
   return (
     <Button
       onClick={onClick ? (event) => onClick(event) : undefined}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
+      suppressed={suppressed}
     >
-      <div className="button-inner">
+      <InnerButton>
         {icon && <div className="icon">{icon}</div>}
         <span>{label}</span>
-      </div>
+      </InnerButton>
     </Button>
   )
 }
@@ -36,6 +78,8 @@ CustomButton.defaultProps = {
   type: 'button',
   disabled: false,
   icon: null,
+  className: null,
+  suppressed: false
 }
 
 
