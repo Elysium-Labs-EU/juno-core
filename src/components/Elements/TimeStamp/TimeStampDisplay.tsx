@@ -1,5 +1,12 @@
 import React from 'react'
 import { format, isSameDay, isThisYear } from 'date-fns'
+import styled from 'styled-components'
+import * as theme from '../../../constants/themeConstants'
+
+const StyledTimeStamp = styled.span`
+  color: ${ theme.colorLightGrey };
+  white-space: nowrap;
+`
 
 interface IThreadTimeStamp {
   threadTimeStamp: string
@@ -16,10 +23,10 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
   if (isThisYear(unixTimestamp)) {
     const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp) ?
       format(unixTimestamp, 'HH:mm') : format(unixTimestamp, 'dd LLL')
-    return <span className="date">{isSameDayCheck}</span>
+    return <StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp>
   }
 
-  return <span className="date">{format(unixTimestamp, 'dd LLL yyyy')}</span>
+  return <StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp>
 }
 
 export default TimeStampDisplay

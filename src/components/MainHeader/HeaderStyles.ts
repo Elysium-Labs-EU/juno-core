@@ -16,6 +16,12 @@ export const NavContainer = styled.div`
   position: relative;
 `
 
+export const HeaderCenter = styled.div`
+  display: flex;
+  width: 100%;
+  place-content: center;
+`
+
 export const BackButtonWithNavgationContainer = styled.div`
   display: flex;
   flex-flow: row;

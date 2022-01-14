@@ -93,9 +93,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
         </S.CellAttachment>
         <S.CellDate>
           <S.DatePosition>
-            <span className="date">
-              <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
-            </span>
+            <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
           </S.DatePosition>
         </S.CellDate>
         <div />

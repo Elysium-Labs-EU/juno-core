@@ -36,7 +36,7 @@ export const ThreadRow = styled.div<IThreadRow>`
   transition: background-color ease-in 0.125s;
 
   &:hover {
-    background-color: ${theme.greyHover};
+    background-color: ${theme.colorGreyHover};
     z-index: 2;
     border-radius: 5px;
   }

@@ -42,10 +42,7 @@ p {
 }
 
 h1,
-h2,
-h3,
-h4,
-h5 {
+h2 {
   margin: 3rem 0 1.38rem;
   font-family: $raleway;
   font-weight: 400;
@@ -61,18 +58,6 @@ h1 {
 h2 {
   font-size: 2.441rem;
   font-weight: 700;
-}
-
-h3 {
-  font-size: 1.953rem;
-}
-
-h4 {
-  font-size: 1.563rem;
-}
-
-h5 {
-  font-size: 1.25rem;
 }
 
 small,
@@ -92,42 +77,8 @@ small,
   font-weight: bold;
 }
 
-.page_title {
-  margin: 2rem 0 0;
-  font-weight: 200;
-  user-select: none;
-  text-transform: capitalize;
-}
-
-.warning {
-  color: hsl(0, 23%, 68%);
-}
-
-.snippet {
-  color: $color-light-grey;
-  font-weight: 400;
-}
-
-.date {
-  color: $color-light-grey;
-  white-space: nowrap;
-}
-
 .text_truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.messageCount {
-  margin-left: 4px;
-  color: $color-light-grey;
-}
-
-.email_detail_title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  line-height: 1.21;
-  color: $color-black;
-  margin-left: 0.5rem;
 }

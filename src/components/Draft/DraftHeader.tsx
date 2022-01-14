@@ -8,9 +8,9 @@ import * as GS from '../../styles/globalStyles'
 const InboxHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{local.DRAFT_HEADER}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <Navigation />
     </S.NavContainer>
   </GS.OuterContainer>

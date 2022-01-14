@@ -22,7 +22,7 @@ const Button = styled.button`
   div {
     margin: 0.4rem 0.8rem;
     span {
-      color: ${ theme.white };
+      color: ${ theme.colorWhite };
       font-size: 1rem;
     }
   }
@@ -33,7 +33,7 @@ const Button = styled.button`
   }
 
   &:disabled {
-    background-color: ${ theme.greyHover };
+    background-color: ${ theme.colorGreyHover };
     opacity: 38%;
     div {
       span {

@@ -102,9 +102,7 @@ const ReadMessage = ({
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
                 <EmailAvatar avatarURL={staticSenderNameFull} />
-                <span title={staticEmailSubject} className="email_detail_title text_truncate">
-                  {staticEmailSubject}
-                </span>
+                <S.EmailDetailTitle title={staticEmailSubject}>{staticEmailSubject}</S.EmailDetailTitle>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
                 <EmailHasAttachment messages={message} />
@@ -154,6 +152,7 @@ const ReadMessage = ({
           {message.id}
         </S.EmailOpenWrapper>
       )}
+
       {!open && (
         <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>

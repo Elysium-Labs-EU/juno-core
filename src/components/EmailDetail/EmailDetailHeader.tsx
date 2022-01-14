@@ -41,9 +41,9 @@ const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: IEmailListObj
     <GS.OuterContainer>
       {!(isFocused || isSorting) ? (
         <S.Wrapper>
-          <div className="header-center">
+          <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
-          </div>
+          </S.HeaderCenter>
           <Navigation />
           <S.InnerMenu>
             <Menu />

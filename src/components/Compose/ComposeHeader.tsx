@@ -9,9 +9,9 @@ import * as GS from '../../styles/globalStyles'
 const ComposeHeader = () => (
   <GS.OuterContainer>
     <S.Wrapper>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{local.COMPOSE}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <S.BackButtonWithNavgationContainer>
         <BackButton />
         <Navigation />

@@ -12,9 +12,9 @@ const INBOX_HEADER = 'Inbox'
 const InboxHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{INBOX_HEADER}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <Navigation />
     </S.NavContainer>
     <InboxS.OptionsContainer>

@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import * as theme from '../../constants/themeConstants'
 
 const Wrapper = styled.div`
-    background-color: ${ theme.greyBorder };
-    border-color: ${ theme.greyBorder };
+    background-color: ${ theme.colorGreyBorder };
+    border-color: ${ theme.colorGreyBorder };
     display: inline-flex;
     height: 21px;
     padding: 0px 8px;

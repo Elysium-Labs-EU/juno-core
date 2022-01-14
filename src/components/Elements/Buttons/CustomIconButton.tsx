@@ -21,7 +21,7 @@ interface IButton {
 
 const Button = styled.button<IButton>`
   border: none;
-  color: ${ (props) => props.isActive ? `${ theme.colorBlack } ` : `${ theme.colorTextLightGrey } ` };
+  color: ${ (props) => props.isActive ? `${ theme.colorBlack } ` : `${ theme.colorGrey } ` };
   outline: none;
   background-color: transparent;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
