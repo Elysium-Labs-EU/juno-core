@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { FiCheck, FiDownload } from 'react-icons/fi'
-import './EmailAttachmentBubble.scss'
 import prettyBytes from 'pretty-bytes'
 import * as S from './EmailAttachmentBubbleStyles'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
@@ -18,9 +17,7 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
   return (
     <S.Attachment key={attachmentData.partId}>
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
-      <S.AttachmentInner
-        className="attachment-inner"
-      >
+      <S.AttachmentInner>
         <span>{attachmentData.filename}</span>
         <p className="text_small text_muted" style={{ margin: 0 }}>
           {FILE}

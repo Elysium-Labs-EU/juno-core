@@ -187,6 +187,7 @@ const Search = () => {
                                         <CustomButton
                                             onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}
+                                            suppressed
                                         />
                                     )}
                                     {loadState === SEARCH_STATE.LOADING && <LoadingState />}

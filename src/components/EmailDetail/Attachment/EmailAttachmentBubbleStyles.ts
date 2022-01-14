@@ -17,4 +17,14 @@ export const AttachmentInner = styled.div`
   display: flex;
   flex-flow: column;
   margin: 0.3rem;
+  span {
+    font-size: 12px;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.17;
+    letter-spacing: normal;
+    text-align: left;
+    color: hsl(0, 0%, 11%);
+  }
 `

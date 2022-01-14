@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom'
 import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
 import './App.scss'
-import './styles/ElementStyles.scss'
 import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'

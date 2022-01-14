@@ -1,6 +1,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react'
 import styled from 'styled-components'
+import * as theme from '../../../constants/themeConstants'
 
 interface ICustomIconButton {
     onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -20,13 +21,13 @@ interface IButton {
 
 const Button = styled.button<IButton>`
   border: none;
-  color: ${ (props) => props.isActive ? '#212529' : '#a6a6a6;' }
+  color: ${ (props) => props.isActive ? `${ theme.colorBlack } ` : `${ theme.colorTextLightGrey } ` };
   outline: none;
   background-color: transparent;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: #212529;
+    color: ${ theme.colorBlack };
     cursor: pointer;
   }
 `
