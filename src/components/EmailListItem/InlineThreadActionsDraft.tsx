@@ -1,7 +1,7 @@
 import React from 'react'
 import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
-import { CustomIconLink } from '../Elements/Buttons'
+import { CustomIconLink } from '../Elements/Buttons/Buttons'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import DeleteDraft from '../EmailOptions/DeleteDraft'
 import { selectEmailList } from '../../Store/emailListSlice'

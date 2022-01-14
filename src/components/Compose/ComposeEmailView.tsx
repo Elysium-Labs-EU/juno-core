@@ -1,5 +1,5 @@
 import React from 'react'
-import { CustomButtonText } from '../Elements/Buttons'
+import { CustomButtonText } from '../Elements/Buttons/Buttons'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
@@ -22,8 +22,8 @@ interface IComposeEmailView {
     inputToValue: any
     inputCCValue: any
     inputBCCValue: any
-    isReplying: boolean
-    isReplyingListener: Function
+    isReplying: boolean | undefined
+    isReplyingListener: Function | undefined
     saveSuccess: boolean
     setToError: Function
     setShowCC: Function
@@ -81,7 +81,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
     }
 
     return (
-        <S.Wrapper isReplying={isReplying}>
+        <S.Wrapper isReplying={isReplying ?? false}>
             <S.UpdateContainer>
                 {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
             </S.UpdateContainer>
@@ -176,7 +176,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                             label={local.SEND_BUTTON}
                             disabled={!toValue}
                         />
-                        {isReplying && (
+                        {isReplying && isReplyingListener && (
                             <CustomButtonText
                                 className="juno-button juno-button-small"
                                 label={local.CANCEL_BUTTON}

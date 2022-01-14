@@ -1,5 +1,5 @@
 import React from 'react'
-import { CustomButtonText } from '../../Elements/Buttons'
+import { CustomButtonText } from '../../Elements/Buttons/Buttons'
 import thrashMail from '../../EmailOptions/ThrashMail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as S from './EmailMoreOptionsStyles'

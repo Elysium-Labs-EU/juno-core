@@ -5,11 +5,10 @@ import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import './Navigation.scss'
 import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
-import { CustomIconLink } from '../../Elements/Buttons'
+import { CustomIconLink } from '../../Elements/Buttons/Buttons'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
-import { LocationObjectType } from '../../types/globalTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import { setIsSearching } from '../../../Store/utilsSlice'
 
@@ -20,7 +19,7 @@ const Navigation = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
   const dispatch = useAppDispatch()
 
   useEffect(() => {

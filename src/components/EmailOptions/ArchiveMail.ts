@@ -1,11 +1,10 @@
 import { updateEmailLabel } from '../../Store/emailListSlice'
-import { LocationObjectType } from '../types/globalTypes'
 import * as global from '../../constants/globalConstants'
 
 interface IArchiveEmail {
   messageId: string
   labelIds: string[]
-  location: LocationObjectType
+  location: any
   dispatch: Function
 }
 

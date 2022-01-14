@@ -5,13 +5,12 @@ import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
-import { CustomIconLink } from '../Elements/Buttons'
+import { CustomIconLink } from '../Elements/Buttons/Buttons'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { LocationObjectType } from '../types/globalTypes'
 import { selectIsSearching } from '../../Store/utilsSlice'
 
 interface IInlineThreadActionsRegular {
@@ -24,7 +23,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
   const storageLabels = useAppSelector(selectStorageLabels)
   const isSearching = useAppSelector(selectIsSearching)
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
   const messageId = id && id
 
   return (

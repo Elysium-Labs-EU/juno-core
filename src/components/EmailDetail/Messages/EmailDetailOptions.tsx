@@ -13,10 +13,9 @@ import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
-import { CustomButtonText } from '../../Elements/Buttons'
+import { CustomButtonText } from '../../Elements/Buttons/Buttons'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { LocationObjectType } from '../../types/globalTypes'
 
 const messageIndex = 0
 
@@ -31,7 +30,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   useEffect(() => {
     setShowMenu(false)

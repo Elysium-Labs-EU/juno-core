@@ -1,6 +1,5 @@
 import { FindLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
-import { LocationObjectType } from '../types/globalTypes'
 import { LabelIdName } from '../../Store/labelsTypes'
 import { updateEmailLabel } from '../../Store/emailListSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
@@ -9,7 +8,7 @@ interface SetToDoMailProps {
   messageId: string
   labelIds: string[]
   dispatch: Function
-  location: LocationObjectType
+  location: any
   storageLabels: LabelIdName[]
 }
 

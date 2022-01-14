@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { CustomButtonText } from '../Elements/Buttons'
+import { CustomButtonText } from '../Elements/Buttons/Buttons'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import startSort from '../../utils/startSort'

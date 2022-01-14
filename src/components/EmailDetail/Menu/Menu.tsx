@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 import * as S from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
-import { LocationObjectType } from '../../types/globalTypes'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 
 interface MenuItemType {
@@ -16,7 +15,7 @@ const Menu = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
   const [activeLink, setActiveLink] = useState('')
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   const navigateTo = (item: MenuItemType) => {
     setActiveLink(item.name)

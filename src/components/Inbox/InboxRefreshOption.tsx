@@ -4,7 +4,7 @@ import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import { CustomIconLink } from '../Elements/Buttons'
+import { CustomIconLink } from '../Elements/Buttons/Buttons'
 
 const InboxRefresh = () => {
     const [disableRefresh, setDisableRefresh] = useState(false)

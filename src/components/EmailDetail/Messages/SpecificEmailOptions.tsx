@@ -1,6 +1,6 @@
 import React from 'react'
 import * as GS from '../../../styles/globalStyles'
-import { CustomButtonText } from '../../Elements/Buttons'
+import { CustomButtonText } from '../../Elements/Buttons/Buttons'
 
 const SpecificEmailOptions = ({ messageId, isReplyingListener, messageIndex }: { messageId?: string, isReplyingListener: any, messageIndex: number }) =>
 (

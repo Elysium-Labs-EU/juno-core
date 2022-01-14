@@ -9,14 +9,13 @@ import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
 import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
-import { CustomButtonText } from '../Elements/Buttons'
+import { CustomButtonText } from '../Elements/Buttons/Buttons'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
-import { LocationObjectType } from '../types/globalTypes'
 import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
 
 const EmailList = () => {
@@ -26,7 +25,7 @@ const EmailList = () => {
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   useEffect(() => {
     let mounted = true

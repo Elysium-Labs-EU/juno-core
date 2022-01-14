@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { AnimatePresence } from "framer-motion"
+import { HistoryRouter } from "redux-first-history/rr6"
 import {
-  Router,
-  Switch,
+  Routes,
   Route,
 } from 'react-router-dom'
 import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
@@ -11,7 +11,7 @@ import './styles/ElementStyles.scss'
 import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
-import Routes from './constants/routes.json'
+import RoutesConstants from './constants/routes.json'
 import LoadingState from './components/Elements/LoadingState'
 import * as GS from './styles/globalStyles'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
@@ -46,7 +46,7 @@ const App = () => {
   }, [baseLoaded, storageLabels])
 
   return (
-    <Router history={history}>
+    <HistoryRouter history={history}>
       {!baseLoaded && <BaseLoader />}
       {baseLoaded && (
         <GS.Base>
@@ -55,22 +55,21 @@ const App = () => {
           </GS.OuterContainer>
 
           <AnimatePresence exitBeforeEnter>
-            <React.Suspense fallback={<LoadingState />}>
-              <Switch>
-                <Route path={Routes.HOME} exact component={ToDo} />
-                <Route path={Routes.EMAIL_DETAIL} component={EmailDetail} />
-                <Route path={Routes.COMPOSE_EMAIL} component={ComposeEmail} />
-                <Route path={Routes.DRAFTS} component={DraftEmail} />
-                <Route path={Routes.SENT} component={SentEmail} />
-                {/* <Route path={Routes.SPAM} component={SpamEmail} /> */}
-                <Route path={Routes.SETTINGS} component={Settings} />
-                <Route path={Routes.INBOX} component={Inbox} />
-              </Switch>
-            </React.Suspense>
+
+            <Routes>
+              <Route path={RoutesConstants.HOME} element={<Suspense fallback={<LoadingState />}><ToDo /></Suspense>} />
+              <Route path={RoutesConstants.EMAIL_DETAIL} element={<Suspense fallback={<LoadingState />}><EmailDetail /></Suspense>} />
+              <Route path={RoutesConstants.COMPOSE_EMAIL} element={<Suspense fallback={<LoadingState />}><ComposeEmail /></Suspense>} />
+              <Route path={RoutesConstants.DRAFTS} element={<Suspense fallback={<LoadingState />}><DraftEmail /></Suspense>} />
+              <Route path={RoutesConstants.SENT} element={<Suspense fallback={<LoadingState />}><SentEmail /></Suspense>} />
+              {/* <Route path={RoutesConstants.SPAM} element={<Suspense fallback={<LoadingState />}><SpamEmail /></Suspense>} /> */}
+              <Route path={RoutesConstants.SETTINGS} element={<Suspense fallback={<LoadingState />}><Settings /></Suspense>} />
+              <Route path={RoutesConstants.INBOX} element={<Suspense fallback={<LoadingState />}><Inbox /></Suspense>} />
+            </Routes>
           </AnimatePresence>
         </GS.Base>
       )}
-    </Router>
+    </HistoryRouter>
   )
 }
 
