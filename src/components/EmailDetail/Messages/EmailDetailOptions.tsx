@@ -66,7 +66,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                       messageId,
                       labelIds,
                       dispatch,
-                      location,
                       storageLabels,
                     })
                   }
@@ -82,7 +81,6 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                 ArchiveMail({
                   messageId,
                   labelIds,
-                  location,
                   dispatch,
                 })
               }

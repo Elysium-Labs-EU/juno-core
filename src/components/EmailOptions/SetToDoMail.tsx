@@ -8,12 +8,11 @@ interface SetToDoMailProps {
   messageId: string
   labelIds: string[]
   dispatch: Function
-  location: any
   storageLabels: LabelIdName[]
 }
 
 const SetToDoMail = (props: SetToDoMailProps) => {
-  const { messageId, labelIds, dispatch, location, storageLabels } = props
+  const { messageId, labelIds, dispatch, storageLabels } = props
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
   const ToDoAction = () => {
@@ -22,7 +21,7 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: onlyLegalLabels,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(updateEmailLabel({ messageId, request, location, labelIds: onlyLegalLabels }))
+    dispatch(updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels }))
   }
 
   return ToDoAction()

@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
-import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -23,7 +22,6 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
   const storageLabels = useAppSelector(selectStorageLabels)
   const isSearching = useAppSelector(selectIsSearching)
   const dispatch = useAppDispatch()
-  const location = useLocation()
   const messageId = id && id
 
   return (
@@ -50,7 +48,6 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
                   messageId,
                   labelIds,
                   dispatch,
-                  location,
                   storageLabels,
                 })
               }
@@ -60,7 +57,7 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
             />
           )}
         <CustomIconLink
-          onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
+          onClick={() => ArchiveMail({ messageId, dispatch, labelIds })}
           className="juno-button juno-button-small text_muted option-link"
           icon={<FiArchive />}
           title="Archive"
