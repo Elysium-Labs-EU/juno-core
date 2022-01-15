@@ -1,7 +1,6 @@
 import React from 'react'
 import BackButton from '../Elements/Buttons/BackButton'
 import Navigation from '../MainHeader/Navigation/Navigation'
-import '../MainHeader/Navigation/Navigation.scss'
 import * as local from '../../constants/composeEmailConstants'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FiCheck, FiDownload } from 'react-icons/fi'
 import prettyBytes from 'pretty-bytes'
 import * as S from './EmailAttachmentBubbleStyles'
+import * as GS from '../../../styles/globalStyles'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { downloadAttachment } from '../../../Store/emailDetailSlice'
 import EmailAttachmentIcon from './EmailAttachmentIcon'
@@ -19,10 +20,10 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
       <S.AttachmentInner>
         <span>{attachmentData.filename}</span>
-        <p className="text_small text_muted" style={{ margin: 0 }}>
+        <GS.TextMutedSmall style={{ margin: 0 }}>
           {FILE}
           {prettyBytes(attachmentData.body.size)}
-        </p>
+        </GS.TextMutedSmall>
       </S.AttachmentInner>
       <CustomIconButton
         onClick={() =>

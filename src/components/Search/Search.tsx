@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
 import { FiSearch, FiX } from 'react-icons/fi'
 import * as S from './SearchStyles'
+import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsSearching, setIsSearching } from '../../Store/utilsSlice'
@@ -194,12 +195,12 @@ const Search = () => {
                                 </S.FooterRow>
                             ) : (
                                 <S.FooterRow>
-                                    <small className="text_muted">{global.NO_MORE_RESULTS}</small>
+                                    <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
                                 </S.FooterRow>
                             )}
                         </> :
                         <S.NoSearchResults>
-                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
+                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <GS.TextMutedParagraph>{global.NOTHING_TO_SEE}</GS.TextMutedParagraph>}
                         </S.NoSearchResults>
                     }
                 </S.SearchResults>

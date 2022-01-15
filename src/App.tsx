@@ -6,8 +6,6 @@ import {
   Route,
 } from 'react-router-dom'
 import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
-import './App.scss'
-import './styles/typography.scss'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
@@ -54,7 +52,6 @@ const App = () => {
           </GS.OuterContainer>
 
           <AnimatePresence exitBeforeEnter>
-
             <Routes>
               <Route path={RoutesConstants.HOME} element={<Suspense fallback={<LoadingState />}><ToDo /></Suspense>} />
               <Route path={RoutesConstants.EMAIL_DETAIL} element={<Suspense fallback={<LoadingState />}><EmailDetail /></Suspense>} />

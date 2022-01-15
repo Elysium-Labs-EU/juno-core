@@ -96,7 +96,7 @@ const EmailList = () => {
               </S.LoadMoreContainer>
             ) : (
               <S.LoadMoreContainer>
-                <small className="text_muted">{global.NO_MORE_RESULTS}</small>
+                <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
               </S.LoadMoreContainer>
             )}
           </GS.OuterContainer>

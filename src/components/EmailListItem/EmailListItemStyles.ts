@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import * as theme from '../../constants/themeConstants'
+import * as themeConstants from '../../constants/themeConstants'
 import * as global from '../../constants/globalConstants'
 
 interface IThreadBaseProps {
@@ -36,7 +36,7 @@ export const ThreadRow = styled.div<IThreadRow>`
   transition: background-color ease-in 0.125s;
 
   &:hover {
-    background-color: ${theme.colorGreyHover};
+    background-color: ${themeConstants.colorGreyHover};
     z-index: 2;
     border-radius: 5px;
   }
@@ -115,4 +115,16 @@ export const DatePosition = styled.div`
   align-items: center;
   -webkit-box-pack: end;
   justify-content: flex-end;
+`
+
+export const TruncatedSpan = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const TruncatedDiv = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

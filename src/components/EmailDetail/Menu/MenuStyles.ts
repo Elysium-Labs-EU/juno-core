@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import * as themeConstants from '../../../constants/themeConstants'
 
 export const MenuContainer = styled.nav`
   position: relative;
@@ -30,7 +31,10 @@ export const StyedListItem = styled.li<StyledListItem>`
   line-height: 1.13;
   letter-spacing: normal;
   text-align: left;
-  color: ${(props) => (props.isActive ? '#1c1c1c' : '#a5a5a5')};
+  color: ${(props) =>
+    props.isActive
+      ? `${themeConstants.colorBlack}`
+      : `${themeConstants.colorGrey}`};
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -40,17 +44,17 @@ export const StyedListItem = styled.li<StyledListItem>`
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:hover {
-    color: #1c1c1c;
+    color: ${themeConstants.colorBlack};
     text-decoration: none;
   }
 
   &:active {
-    color: #1c1c1c;
+    color: ${themeConstants.colorBlack};
     text-decoration: none;
   }
 
   &:disabled {
-    color: #d9d9d9;
+    color: ${themeConstants.colorUltraLightGrey};
     cursor: not-allowed;
   }
 `

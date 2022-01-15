@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import * as theme from '../../constants/themeConstants'
+import * as themeConstants from '../../constants/themeConstants'
 
 interface EmailWrapperProps {
   labelIds?: string[]
@@ -38,7 +38,7 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
   background-color: ${(props) =>
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
   margin-bottom: 0.5rem;
-  border: 1px solid ${theme.colorGreyBorder};
+  border: 1px solid ${themeConstants.colorGreyBorder};
 `
 
 export const EmailClosedWrapper = styled.div`
@@ -46,7 +46,7 @@ export const EmailClosedWrapper = styled.div`
   transition: background-color ease-in 0.125s;
   cursor: pointer;
   &:hover {
-    background-color: ${theme.colorGreyHover};
+    background-color: ${themeConstants.colorGreyHover};
   }
 `
 
@@ -168,7 +168,7 @@ export const FromCCContainer = styled.div<IFromCCContainer>`
     max-width: ${(props) => (props.multipleComponents ? '33%' : '100%')};
     margin-right: ${(props) => (props.multipleComponents ? '2rem' : 0)};
   }
-  border-bottom: 1px solid ${theme.colorGreyBorder};
+  border-bottom: 1px solid ${themeConstants.colorGreyBorder};
   padding-bottom: 1rem;
 `
 
@@ -212,9 +212,22 @@ export const EmailDetailTitle = styled.span`
   font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.21;
-  color: ${theme.colorBlack};
+  color: ${themeConstants.colorBlack};
   margin-left: 0.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+`
+
+export const SmallTextMuted = styled.span`
+  color: ${themeConstants.colorGrey};
+  font-size: ${themeConstants.smallFontSize};
+  margin-right: 4px;
+`
+
+export const SmallTextTruncated = styled.span`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size; ${themeConstants.smallFontSize};
 `

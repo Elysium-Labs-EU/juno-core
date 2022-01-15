@@ -84,7 +84,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
     return (
         <S.Wrapper isReplying={isReplying ?? false}>
             <S.UpdateContainer>
-                {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
+                {saveSuccess && <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>}
             </S.UpdateContainer>
             <S.ComposerContainer>
                 <GS.Base>
