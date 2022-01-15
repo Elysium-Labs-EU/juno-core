@@ -3,11 +3,13 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import * as themeConstants from '../../../constants/themeConstants'
 
-interface IWrapper {
-  isActive: boolean | undefined
+interface ICustomLink {
+  to: string
+  label: string
 }
 
-const Wrapper = styled(Link) <IWrapper>`  font-size: 1rem;
+const Wrapper = styled(Link)`  
+  font-size: 1rem;
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;
@@ -38,10 +40,10 @@ const Wrapper = styled(Link) <IWrapper>`  font-size: 1rem;
     cursor: not-allowed;
   }`
 
-const CustomLink = (props: any) => {
-  const { to, label, isActive } = props
+const CustomLink = (props: ICustomLink) => {
+  const { to, label } = props
   return (
-    <Wrapper to={to} isActive={isActive}>{label}</Wrapper>
+    <Wrapper to={to} >{label}</Wrapper>
   )
 
 }
