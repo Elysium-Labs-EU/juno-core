@@ -68,9 +68,9 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
             )}
           </S.Avatars>
           {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
-            <span className="text_truncate" title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</span>
+            <S.TruncatedSpan title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</S.TruncatedSpan>
           ) : (
-            <span className="text_truncate" title={staticRecipientName.emailAddress}>{staticRecipientName.name}</span>
+            <S.TruncatedSpan title={staticRecipientName.emailAddress}>{staticRecipientName.name}</S.TruncatedSpan>
           )}
           {email.messages && <MessageCount countOfMessage={email.messages} />}
         </S.CellName>
@@ -79,13 +79,13 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
           onClick={handleClick}
           aria-hidden="true"
         >
-          <div className="subjectSnippet text_truncate">
+          <S.TruncatedDiv>
             {staticEmailLabels.includes(draft.DRAFT_LABEL) && (
               <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{staticSubject}</span>
             <Snippet snippet={staticSnippet} />
-          </div>
+          </S.TruncatedDiv>
         </S.CellMessage>
 
         <S.CellAttachment>
@@ -93,9 +93,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
         </S.CellAttachment>
         <S.CellDate>
           <S.DatePosition>
-            <span className="date">
-              <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
-            </span>
+            <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
           </S.DatePosition>
         </S.CellDate>
         <div />

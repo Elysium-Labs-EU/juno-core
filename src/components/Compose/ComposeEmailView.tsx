@@ -1,5 +1,6 @@
 import React from 'react'
-import { CustomButtonText } from '../Elements/Buttons'
+import { FiSend } from 'react-icons/fi'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
@@ -22,8 +23,8 @@ interface IComposeEmailView {
     inputToValue: any
     inputCCValue: any
     inputBCCValue: any
-    isReplying: boolean
-    isReplyingListener: Function
+    isReplying: boolean | undefined
+    isReplyingListener: Function | undefined
     saveSuccess: boolean
     setToError: Function
     setShowCC: Function
@@ -81,9 +82,9 @@ const ComposeEmailView = (props: IComposeEmailView) => {
     }
 
     return (
-        <S.Wrapper isReplying={isReplying}>
+        <S.Wrapper isReplying={isReplying ?? false}>
             <S.UpdateContainer>
-                {saveSuccess && <span className="text_muted">{local.DRAFT_SAVED}</span>}
+                {saveSuccess && <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>}
             </S.UpdateContainer>
             <S.ComposerContainer>
                 <GS.Base>
@@ -103,8 +104,8 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                         showField={!isReplying}
                                     />
                                     <S.CcBccContainer>
-                                        {!showCC && <CustomButtonText label={local.CC_LABEL} className="juno-button option-link" onClick={() => setShowCC(true)} />}
-                                        {!showBCC && <CustomButtonText label={local.BCC_LABEL} className="juno-button option-link" onClick={() => setShowBCC(true)} />}
+                                        {!showCC && <CustomButton label={local.CC_LABEL} onClick={() => setShowCC(true)} />}
+                                        {!showBCC && <CustomButton label={local.BCC_LABEL} onClick={() => setShowBCC(true)} />}
                                     </S.CcBccContainer>
                                 </S.Row>
                                 {showCC &&
@@ -170,17 +171,18 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                 </S.Row>
                             </GS.Base>
                         </div>
-                        <CustomButtonText
+                        <CustomButton
                             type="submit"
-                            className="juno-button juno-button-small juno-button-light"
                             label={local.SEND_BUTTON}
                             disabled={!toValue}
+                            icon={<FiSend />}
+                            suppressed
                         />
-                        {isReplying && (
-                            <CustomButtonText
-                                className="juno-button juno-button-small"
+                        {isReplying && isReplyingListener && (
+                            <CustomButton
                                 label={local.CANCEL_BUTTON}
                                 onClick={() => isReplyingListener(-1)}
+                                suppressed
                             />
                         )}
                     </form>

@@ -25,7 +25,6 @@ import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
-import { LocationObjectType } from '../types/globalTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
@@ -50,7 +49,7 @@ const EmailDetail = () => {
   const isFocused = useAppSelector(selectIsFocused)
   const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
   const [currLocal, setCurrLocal] = useState<string>('')
   const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
   const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()

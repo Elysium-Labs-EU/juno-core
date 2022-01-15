@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import * as theme from '../../constants/themeConstants'
 
 const Wrapper = styled.div`
-    background-color: ${ theme.greyBorder };
-    border-color: ${ theme.greyBorder };
+    background-color: ${ theme.colorGreyBorder };
+    border-color: ${ theme.colorGreyBorder };
     display: inline-flex;
     height: 21px;
     padding: 0px 8px;
@@ -22,11 +22,17 @@ const Wrapper = styled.div`
     align-items: center;
     border-width: 1px;
     border-style: solid;
-    transition: background-color 0.2s ease 0s, border-color 0.2s ease 0s, color 0.2s ease 0s;`
+    transition: background-color 0.2s ease 0s, border-color 0.2s ease 0s, color 0.2s ease 0s;
+    
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }`
 
 const CustomLabel = ({ labelName }: { labelName: string }) => (
     <Wrapper>
-        <span className="text_truncate" title={labelName}>
+        <span title={labelName}>
             {labelName}
         </span>
     </Wrapper>)

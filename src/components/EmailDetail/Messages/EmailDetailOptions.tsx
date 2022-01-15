@@ -13,10 +13,9 @@ import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
-import { CustomButtonText } from '../../Elements/Buttons'
+import CustomButton from '../../Elements/Buttons/CustomButton'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { LocationObjectType } from '../../types/globalTypes'
 
 const messageIndex = 0
 
@@ -31,7 +30,7 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   useEffect(() => {
     setShowMenu(false)
@@ -42,11 +41,11 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           <div>
-            <CustomButtonText
-              className="juno-button option-link"
+            <CustomButton
               icon={<FiCornerUpLeft />}
               label={local.BUTTON_REPLY}
               onClick={() => isReplyingListener({ threadId, messageIndex })}
+              suppressed
             />
           </div>
           <div>
@@ -59,43 +58,41 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
                     LABEL_NAME: todo.LABEL,
                   })[0].id
               ) && (
-                <CustomButtonText
-                  className="juno-button option-link"
+                <CustomButton
                   icon={<FiCheckCircle />}
                   onClick={() =>
                     SetToDoMail({
                       messageId,
                       labelIds,
                       dispatch,
-                      location,
                       storageLabels,
                     })
                   }
                   label={local.BUTTON_TODO}
+                  suppressed
                 />
               )}
           </div>
           <div>
-            <CustomButtonText
-              className="juno-button option-link"
+            <CustomButton
               icon={<FiArchive />}
               onClick={() =>
                 ArchiveMail({
                   messageId,
                   labelIds,
-                  location,
                   dispatch,
                 })
               }
               label={local.BUTTON_ARCHIVE}
+              suppressed
             />
           </div>
           <div>
-            <CustomButtonText
-              className="juno-button option-link"
+            <CustomButton
               icon={<FiMoreHorizontal />}
               onClick={() => setShowMenu(!showMenu)}
               label={local.BUTTON_MORE}
+              suppressed
             />
           </div>
           {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} storageLabels={storageLabels} />}

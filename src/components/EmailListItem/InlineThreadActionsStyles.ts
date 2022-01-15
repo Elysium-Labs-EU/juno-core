@@ -14,9 +14,9 @@ export const Wrapper = styled.div`
   padding-left: 5rem;
   padding-right: 2rem;
 
-  :hover {
+  &:hover {
     opacity: 1;
-    background: ${theme.greyHover};
+    background: ${theme.colorGreyHover};
     background: linear-gradient(
       90deg,
       rgba(2, 0, 36, 0) 0%,
@@ -28,4 +28,7 @@ export const Wrapper = styled.div`
 export const Inner = styled.div`
   display: flex;
   flex-flow: row;
+  button {
+    margin-left: 1rem;
+  }
 `

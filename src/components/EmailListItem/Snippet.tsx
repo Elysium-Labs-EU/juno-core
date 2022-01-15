@@ -1,7 +1,14 @@
 import React from 'react'
+import styled from 'styled-components'
+import * as theme from '../../constants/themeConstants'
+
+const StyledSnippet = styled.span`
+  color: ${ theme.colorLightGrey };
+  font-weight: 400;
+`
 
 const Snippet = ({ snippet }: { snippet: string }) => {
-  if (snippet.length > 0) return <span className="snippet">&nbsp;&nbsp;—&nbsp;&nbsp;{snippet}</span>
+  if (snippet.length > 0) return <StyledSnippet>&nbsp;&nbsp;—&nbsp;&nbsp;{snippet}</StyledSnippet>
   return null
 }
 

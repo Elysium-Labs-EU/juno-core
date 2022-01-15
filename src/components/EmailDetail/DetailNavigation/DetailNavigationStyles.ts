@@ -7,6 +7,9 @@ export const Wrapper = styled.div`
   cursor: pointer;
 `
 
-export const NavButton = styled.button`
-  border: none;
+export const NavButton = styled.div`
+  padding: 0 0.75rem;
+  margin: 2rem 0 0 0;
+  display: flex;
+  align-content: flex-start;
 `

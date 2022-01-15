@@ -11,7 +11,7 @@ import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import { IEmailMessage, IEmailListThreadItem } from '../../../../Store/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
-import { CustomIconLink } from '../../../Elements/Buttons'
+import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import { useAppSelector } from '../../../../Store/hooks'
 import { selectIsReplying } from '../../../../Store/emailDetailSlice'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
@@ -102,15 +102,13 @@ const ReadMessage = ({
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
                 <EmailAvatar avatarURL={staticSenderNameFull} />
-                <span title={staticEmailSubject} className="email_detail_title text_truncate">
-                  {staticEmailSubject}
-                </span>
+                <S.EmailDetailTitle title={staticEmailSubject}>{staticEmailSubject}</S.EmailDetailTitle>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
                 <EmailHasAttachment messages={message} />
                 <TimeStamp threadTimeStamp={message.internalDate} />
 
-                <CustomIconLink onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} className="juno-button" aria-describedby={popperId} />
+                <CustomIconButton onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} aria-describedby={popperId} />
                 <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
                   <SpecificEmailOptions messageId={message?.id} isReplyingListener={isReplyingListener} messageIndex={messageIndex} />
                 </Popper>
@@ -121,24 +119,24 @@ const ReadMessage = ({
 
           <S.FromCCContainer multipleComponents={Boolean(staticSenderNameFull && (staticCCNameFull || staticBCCNameFull))}>
             <S.FromBCCInner>
-              <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+              <S.SmallTextMuted>
                 {FROM}
-              </span>
-              <span className="text_small truncate">{staticSenderNameFull}</span>
+              </S.SmallTextMuted>
+              <S.SmallTextTruncated>{staticSenderNameFull}</S.SmallTextTruncated>
             </S.FromBCCInner>
             {staticCCNameFull && staticCCNameFull.length > 0 &&
               <S.FromBCCInner>
-                <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                <S.SmallTextMuted>
                   {compose.CC_LABEL}
-                </span>
-                <span className="text_small truncate" title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</span>
+                </S.SmallTextMuted>
+                <S.SmallTextTruncated title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</S.SmallTextTruncated>
               </S.FromBCCInner>}
             {staticBCCNameFull && staticBCCNameFull.length > 0 &&
               <S.FromBCCInner>
-                <span className="text_muted text_small" style={{ marginRight: '4px' }}>
+                <S.SmallTextMuted>
                   {compose.BCC_LABEL}
-                </span>
-                <span className="text_small truncate" title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</span>
+                </S.SmallTextMuted>
+                <S.SmallTextTruncated title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</S.SmallTextTruncated>
               </S.FromBCCInner>}
           </S.FromCCContainer>
 
@@ -154,13 +152,14 @@ const ReadMessage = ({
           {message.id}
         </S.EmailOpenWrapper>
       )}
+
       {!open && (
         <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
           <S.ClosedMessageWrapper>
             <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={staticSenderNameFull} />
               <S.ClosedSender>
-                <span className="text_normal text_bold" title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
+                <span style={{ fontWeight: 'bold' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>

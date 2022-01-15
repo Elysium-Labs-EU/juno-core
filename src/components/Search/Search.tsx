@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
 import { FiSearch, FiX } from 'react-icons/fi'
 import * as S from './SearchStyles'
+import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsSearching, setIsSearching } from '../../Store/utilsSlice'
@@ -10,10 +11,11 @@ import threadApi from '../../data/threadApi'
 import { IEmailListObject, IEmailListObjectSearch, IEmailListThreadItem } from '../../Store/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
-import { CustomButtonText } from '../Elements/Buttons'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { setViewIndex } from '../../Store/emailDetailSlice'
 import { listClearSearchResults, storeSearchResults } from '../../Store/emailListSlice'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 interface IShouldClearOutPreviousResults {
     searchValueRef: any
@@ -163,13 +165,13 @@ const Search = () => {
                         fullWidth
                     />
                     {searchValue.length > 0 &&
-                        <button className="juno-button" type="button"
-                            onClick={resetSearch} aria-label="clear-search">
-                            <S.Icon><FiX size={16} /></S.Icon>
-                        </button>}
-                    <button className="juno-button" type="button"
+                        <CustomIconButton
+                            onClick={resetSearch} aria-label="clear-search"
+                            icon={<FiX size={16} />}
+                        />}
+                    <CustomButton
                         onClick={() => intitialSearch({ searchValue, setLoadState, fetchSearchThreads, searchValueRef, setSearchResults, dispatch })}
-                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current}><span>{SEARCH}</span></button>
+                        disabled={searchValue.length < 1 || searchValue === searchValueRef.current} label={SEARCH} />
                 </S.InputRow>
                 <S.SearchResults>
                     {searchResults &&
@@ -183,22 +185,22 @@ const Search = () => {
                             {searchResults.nextPageToken ? (
                                 <S.FooterRow>
                                     {loadState !== SEARCH_STATE.LOADING && (
-                                        <CustomButtonText
-                                            className="juno-button juno-button-small juno-button-light"
+                                        <CustomButton
                                             onClick={() => loadMoreResults({ searchValue, searchResults, setLoadState, fetchSearchThreads })}
                                             label={global.LOAD_MORE}
+                                            suppressed
                                         />
                                     )}
                                     {loadState === SEARCH_STATE.LOADING && <LoadingState />}
                                 </S.FooterRow>
                             ) : (
                                 <S.FooterRow>
-                                    <small className="text_muted">{global.NO_MORE_RESULTS}</small>
+                                    <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
                                 </S.FooterRow>
                             )}
                         </> :
                         <S.NoSearchResults>
-                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <p className="text_muted">{global.NOTHING_TO_SEE}</p>}
+                            {loadState === SEARCH_STATE.LOADING ? <LoadingState /> : <GS.TextMutedParagraph>{global.NOTHING_TO_SEE}</GS.TextMutedParagraph>}
                         </S.NoSearchResults>
                     }
                 </S.SearchResults>

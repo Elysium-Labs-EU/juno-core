@@ -4,7 +4,6 @@ import { useLocation } from 'react-router-dom'
 import * as S from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
 import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
-import { LocationObjectType } from '../../types/globalTypes'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 
 interface MenuItemType {
@@ -16,7 +15,7 @@ const Menu = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
   const [activeLink, setActiveLink] = useState('')
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   const navigateTo = (item: MenuItemType) => {
     setActiveLink(item.name)
@@ -35,15 +34,15 @@ const Menu = () => {
   const mappedMenu = local.MENU_OPTIONS && (
     <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
-        <li
+        <S.StyedListItem
           key={`${ item.name + index }`}
-          className={activeLink === item.name ? 'option-link:active menu' : 'option-link menu'}
           style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"
+          isActive={activeLink === item.name}
         >
           {item.name}
-        </li>
+        </S.StyedListItem>
       ))}
     </S.ItemsContainer>
   )

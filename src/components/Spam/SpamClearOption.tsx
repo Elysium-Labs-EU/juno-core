@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import { CustomButtonText } from '../Elements/Buttons'
+import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { useAppSelector } from '../../Store/hooks'
 // import { selectMetaList } from '../../Store/metaListSlice'
 // import { selectEmailList } from '../../Store/emailListSlice'
@@ -41,8 +41,7 @@ const Spamclearoption = () => {
 
   return (
     <>
-      <CustomButtonText
-        className="sort-button"
+      <CustomAttentionButton
         onClick={handleClickOpen}
         disabled={isLoading}
         label={SPAM_BUTTON}

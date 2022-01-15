@@ -4,7 +4,7 @@ import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import { CustomIconLink } from '../Elements/Buttons'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 const InboxRefresh = () => {
     const [disableRefresh, setDisableRefresh] = useState(false)
@@ -34,11 +34,10 @@ const InboxRefresh = () => {
     }, [isFetching])
 
     return (
-        <CustomIconLink
-            className="juno-button juno-button-light"
+        <CustomIconButton
             onClick={() => refreshFeed()}
             disabled={isLoading || disableRefresh}
-            icon={<MdRefresh />}
+            icon={<MdRefresh size={20} />}
         />
     )
 }
