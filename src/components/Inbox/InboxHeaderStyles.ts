@@ -6,6 +6,7 @@ export const OptionsContainer = styled.div`
   padding: 0 1rem;
   display: grid;
   grid-template-columns: 60px auto 60px;
+  align-items: center;
 `
 
 export const SortOptionWrapper = styled.div`

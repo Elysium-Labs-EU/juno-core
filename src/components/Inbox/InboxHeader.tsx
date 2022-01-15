@@ -2,7 +2,6 @@ import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import InboxSortOption from './InboxSortOption'
 import InboxRefreshOption from './InboxRefreshOption'
-import '../MainHeader/Navigation/Navigation.scss'
 import * as S from '../MainHeader/HeaderStyles'
 import * as InboxS from './InboxHeaderStyles'
 import * as GS from '../../styles/globalStyles'
@@ -12,9 +11,9 @@ const INBOX_HEADER = 'Inbox'
 const InboxHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{INBOX_HEADER}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <Navigation />
     </S.NavContainer>
     <InboxS.OptionsContainer>

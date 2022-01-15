@@ -7,11 +7,10 @@ import DraftHeader from '../Draft/DraftHeader'
 import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
-import { LocationObjectType } from '../types/globalTypes'
 import Search from '../Search/Search'
 
 const SetHeader = memo(() => {
-  const location = useLocation<LocationObjectType>()
+  const location = useLocation()
 
   // The email detail header is coming from EmailDetail.
   if (location.pathname === '/inbox') {

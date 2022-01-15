@@ -8,9 +8,9 @@ const SENT_HEADER = 'Sent'
 const SentHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{SENT_HEADER}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <Navigation />
     </S.NavContainer>
   </GS.OuterContainer>

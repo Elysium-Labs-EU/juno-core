@@ -5,10 +5,9 @@ import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { store } from './Store/store'
-import './App.scss'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import { theme } from './styles/globalStyles'
+import { GlobalStyle, theme } from './styles/globalStyles'
 
 
 // Don't run Sentry when developing.
@@ -25,6 +24,7 @@ process.env.NODE_ENV !== 'development' && Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <GlobalStyle />
       <ThemeProvider theme={theme}>
         <App />
       </ThemeProvider>

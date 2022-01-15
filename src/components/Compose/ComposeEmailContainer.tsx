@@ -12,14 +12,14 @@ import { Contact } from '../../Store/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 
 // Props are coming from MessageOverview
-interface ComposeEmailProps {
-  isReplying: boolean
-  isReplyingListener: Function
-  to: Contact | null
-  bcc: Contact | null
-  cc: Contact | null
-  subject: string
-  threadId: string
+interface IComposeEmailProps {
+  isReplying?: boolean
+  isReplyingListener?: Function
+  to?: Contact | null
+  bcc?: Contact | null
+  cc?: Contact | null
+  subject?: string
+  threadId?: string
 }
 
 const ComposeEmailContainer = ({
@@ -30,7 +30,7 @@ const ComposeEmailContainer = ({
   cc,
   subject,
   threadId,
-}: ComposeEmailProps) => {
+}: IComposeEmailProps) => {
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
@@ -307,3 +307,13 @@ const ComposeEmailContainer = ({
 }
 
 export default ComposeEmailContainer
+
+ComposeEmailContainer.defaultProps = {
+  isReplying: false,
+  isReplyingListener: null,
+  to: null,
+  bcc: null,
+  cc: null,
+  subject: null,
+  threadId: null,
+}

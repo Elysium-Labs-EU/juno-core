@@ -8,9 +8,9 @@ import * as GS from '../../styles/globalStyles'
 const TodoHeader = () => (
   <GS.OuterContainer>
     <S.NavContainer>
-      <div className="header-center">
+      <S.HeaderCenter>
         <S.PageTitle>{local.HEADER_TODO}</S.PageTitle>
-      </div>
+      </S.HeaderCenter>
       <Navigation />
     </S.NavContainer>
     <TodoFocusOption />

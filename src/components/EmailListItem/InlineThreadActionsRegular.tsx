@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
 import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
-import { useLocation } from 'react-router-dom'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
-import { CustomIconLink } from '../Elements/Buttons'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { LocationObjectType } from '../types/globalTypes'
 import { selectIsSearching } from '../../Store/utilsSlice'
 
 interface IInlineThreadActionsRegular {
@@ -19,20 +17,19 @@ interface IInlineThreadActionsRegular {
   labelIds: string[]
 }
 
+const SIZE = 16
+
 const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
   const isSearching = useAppSelector(selectIsSearching)
   const dispatch = useAppDispatch()
-  const location = useLocation<LocationObjectType>()
-  const messageId = id && id
 
   return (
     <S.Wrapper>
       <S.Inner>
-        <CustomIconLink
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiCornerUpLeft />}
+        <CustomIconButton
+          icon={<FiCornerUpLeft size={SIZE} />}
           onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching, storageLabels })}
           title="Reply"
         />
@@ -45,31 +42,27 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
                 LABEL_NAME: todo.LABEL,
               })[0].id
           ) && (
-            <CustomIconLink
+            <CustomIconButton
               onClick={() =>
                 SetToDoMail({
-                  messageId,
+                  messageId: id,
                   labelIds,
                   dispatch,
-                  location,
                   storageLabels,
                 })
               }
-              className="juno-button juno-button-small text_muted option-link"
-              icon={<FiCheckCircle />}
+              icon={<FiCheckCircle size={SIZE} />}
               title="Mark as To Do"
             />
           )}
-        <CustomIconLink
-          onClick={() => ArchiveMail({ messageId, location, dispatch, labelIds })}
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiArchive />}
+        <CustomIconButton
+          onClick={() => ArchiveMail({ messageId: id, dispatch, labelIds })}
+          icon={<FiArchive size={SIZE} />}
           title="Archive"
         />
-        <CustomIconLink
+        <CustomIconButton
           onClick={() => setShowMenu(!showMenu)}
-          className="juno-button juno-button-small text_muted option-link"
-          icon={<FiMoreHorizontal />}
+          icon={<FiMoreHorizontal size={SIZE} />}
         />
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} labelIds={labelIds} storageLabels={storageLabels} />}

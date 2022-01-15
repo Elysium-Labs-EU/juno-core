@@ -7,7 +7,7 @@ import DetailNavigationContainer from './DetailNavigation/DetailNavigationContai
 import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
-import BackButton from '../Elements/BackButton'
+import BackButton from '../Elements/Buttons/BackButton'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
@@ -41,9 +41,9 @@ const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: IEmailListObj
     <GS.OuterContainer>
       {!(isFocused || isSorting) ? (
         <S.Wrapper>
-          <div className="header-center">
+          <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
-          </div>
+          </S.HeaderCenter>
           <Navigation />
           <S.InnerMenu>
             <Menu />

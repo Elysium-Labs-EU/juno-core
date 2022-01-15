@@ -4,11 +4,11 @@ import * as themeConstants from '../../../constants/themeConstants'
 
 const StyledChip = styled(Chip)({
   borderRadius: '0.5rem',
-  backgroundColor: `${themeConstants.greyHover}`,
-  border: `1px solid ${themeConstants.greyBorder}`,
+  backgroundColor: `${themeConstants.colorGreyHover}`,
+  border: `1px solid ${themeConstants.colorGreyBorder}`,
   fontSize: '0.95rem',
   '&:hover': {
-    borderColor: `${themeConstants.greyHover}`,
+    borderColor: `${themeConstants.colorGreyHover}`,
     backgroundColor: `${themeConstants.colorPurpleSoft}`,
   },
 })
