@@ -22,11 +22,11 @@ const openEmail = (props: IOpenEmailProps) => {
   const staticLabelURL = labelURL(onlyLegalLabels)
 
   if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && !isSearching) {
-    dispatch(push(`mail/${staticLabelURL}/${id}/messages`))
+    dispatch(push(`/mail/${staticLabelURL}/${id}/messages`))
     return
   }
   if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && isSearching) {
-    dispatch(push(`mail/${global.ARCHIVE_LABEL}/${id}/messages`))
+    dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${id}/messages`))
     return
   }
   if (onlyLegalLabels.includes(draft.DRAFT_LABEL)) {
