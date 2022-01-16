@@ -30,6 +30,26 @@ const threadApi = () => ({
       return errorHandeling(err)
     }
   },
+  getFullThreads: async (query: EmailQueryObject) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${BASE_API_URL}/api/threads_full/`,
+        {
+          params: {
+            labelIds: query.labelIds ?? [''],
+            maxResults: query.maxResults ?? 20,
+            pageToken: query.nextPageToken ?? undefined,
+            q: query.q ?? undefined,
+          },
+          paramsSerializer: (params) =>
+            qs.stringify(params, { arrayFormat: 'repeat' }),
+        }
+      )
+      return res.data
+    } catch (err) {
+      return errorHandeling(err)
+    }
+  },
 
   getThreadDetail: async (messageId: string) => {
     try {
