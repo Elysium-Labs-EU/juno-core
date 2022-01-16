@@ -360,12 +360,11 @@ export const loadEmails =
       if (silentLoading && !getState().utils.isSilentLoading) {
         dispatch(setIsSilentLoading(true))
       }
-      const requestBody = {
+      const fetchedEmails = await threadApi().getFullThreads({
         labelIds,
         maxResults: maxResults ?? 20,
-        nextPageToken: nextPageToken ?? undefined,
-      }
-      const fetchedEmails = await threadApi().getFullThreads(requestBody)
+        nextPageToken,
+      })
       if (fetchedEmails && fetchedEmails.length > 0) {
         dispatch(
           listAddEmailList({
