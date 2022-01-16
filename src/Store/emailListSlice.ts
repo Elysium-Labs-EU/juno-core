@@ -353,25 +353,29 @@ export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { labelIds, silentLoading } = params
+      const { labelIds, silentLoading, nextPageToken, maxResults } = params
       if (!silentLoading && !getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
       if (silentLoading && !getState().utils.isSilentLoading) {
         dispatch(setIsSilentLoading(true))
       }
-      const metaList = await threadApi().getThreads(params)
-      if (metaList.resultSizeEstimate > 0) {
-        const { threads, nextPageToken } = metaList
-
-        // If there is a specific email array being sent as parameter, append that to the list of threads.
-        const labeledThreads = {
-          labels: labelIds,
-          threads,
-          nextPageToken: nextPageToken ?? null,
-        }
-
-        dispatch(loadEmailDetails(labeledThreads))
+      const fetchedEmails = await threadApi().getFullThreads({
+        labelIds,
+        maxResults: maxResults ?? 20,
+        nextPageToken,
+      })
+      if (fetchedEmails && fetchedEmails.length > 0) {
+        dispatch(
+          listAddEmailList({
+            labels: labelIds,
+            threads: fetchedEmails,
+            nextPageToken: nextPageToken ?? null,
+          })
+        )
+        dispatch(setLoadedInbox(labelIds))
+        getState().utils.isLoading && dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       } else {
         dispatch(setLoadedInbox(labelIds))
         getState().utils.isLoading && dispatch(setIsLoading(false))
