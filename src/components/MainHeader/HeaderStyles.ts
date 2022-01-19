@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
 export const InnerMenu = styled.div`
   display: flex;
   flex-flow: row;
+  margin-bottom: 1rem;
 `
 
 export const NavContainer = styled.div`
