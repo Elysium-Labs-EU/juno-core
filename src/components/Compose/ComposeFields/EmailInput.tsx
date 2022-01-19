@@ -52,9 +52,7 @@ const emailInput = (props: IEmailInputProps) => {
             const responseQueryContacts = await contactApi().queryContacts(params)
             if (responseQueryContacts.status === 200) {
               const {
-                data: {
-                  message: { results },
-                },
+                data: { results },
               } = responseQueryContacts
 
               const mappedResults = results && results.length > 0 ? results.map(

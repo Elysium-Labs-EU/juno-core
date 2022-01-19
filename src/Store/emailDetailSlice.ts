@@ -61,9 +61,7 @@ export const fetchAttachment = ({
           attachmentId,
         })
         if (fetchedAttachment) {
-          const decodedB64 = baseBase64(
-            fetchedAttachment.data.messageAttachment.data
-          )
+          const decodedB64 = baseBase64(fetchedAttachment.data.data)
           const attachment = {
             mimeType,
             decodedB64,

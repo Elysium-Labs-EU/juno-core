@@ -67,19 +67,15 @@ export const {
 export const loadDraftList = (): AppThunk => async (dispatch) => {
   try {
     const draftList = await draftApi().getDrafts()
-    if (draftList.message.resultSizeEstimate > 0) {
-      dispatch(listAddDraft(draftList.message.drafts))
-    } else {
-      return null
+    if (draftList.resultSizeEstimate > 0) {
+      dispatch(listAddDraft(draftList.drafts))
     }
-    return null
   } catch (err) {
     console.error(err)
     dispatch(setServiceUnavailable('Error getting Draft list.'))
   } finally {
     dispatch(setDraftListLoaded(true))
   }
-  return null
 }
 
 export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
@@ -105,9 +101,7 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
 
     if (response && response.status === 200) {
       const {
-        data: {
-          message: { data },
-        },
+        data: { data },
       } = response
       dispatch(listUpdateDraft(data))
     } else {
@@ -185,10 +179,8 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {
         const draftList = await draftApi().getDrafts()
-        if (draftList.message.resultSizeEstimate > 0) {
-          const {
-            message: { drafts },
-          } = draftList
+        if (draftList.resultSizeEstimate > 0) {
+          const { drafts } = draftList
           const draftIdFilter = drafts.filter(
             (draft: any) => draft.message.id === messageId
           )
