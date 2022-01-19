@@ -6,7 +6,6 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import DeleteDraft from '../EmailOptions/DeleteDraft'
 import { selectEmailList } from '../../Store/emailListSlice'
 import emailListFilteredByLabel from '../../utils/emailListFilteredByLabel'
-import { IEmailListObject } from '../../Store/emailListTypes'
 import { selectDraft } from '../../Store/draftsSlice'
 
 const SIZE = 16
@@ -16,10 +15,10 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const emailList = useAppSelector(selectEmailList)
   const draftList = useAppSelector(selectDraft)
 
-  const copyCurrentEmailList: IEmailListObject = emailList[emailListFilteredByLabel({
+  const staticIndexActiveEmailList: number = emailListFilteredByLabel({
     emailList,
     labelIds: ['DRAFT'],
-  })]
+  })
 
   const draftId = draftList.length > 0 && draftList.find((draft) => draft.message.threadId === threadId)?.id
 
@@ -27,7 +26,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
     <S.Wrapper>
       <S.Inner>
         <CustomIconButton
-          onClick={() => DeleteDraft({ threadId, dispatch, copyCurrentEmailList, draftId })}
+          onClick={() => DeleteDraft({ threadId, dispatch, staticIndexActiveEmailList, draftId })}
           icon={<FiDelete size={SIZE} />}
           title="Discard Draft"
         />
