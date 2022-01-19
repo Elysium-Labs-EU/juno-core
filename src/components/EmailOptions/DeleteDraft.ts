@@ -1,18 +1,17 @@
 import { deleteDraft, listRemoveDraft } from '../../Store/draftsSlice'
 import { listRemoveItemDetail } from '../../Store/emailListSlice'
-import { IEmailListObject } from '../../Store/emailListTypes'
 
 interface IDeleteDraft {
   threadId: string
   dispatch: Function
-  copyCurrentEmailList: IEmailListObject
+  staticIndexActiveEmailList: number
   draftId: string | undefined | false
 }
 
 const DeleteDraft = ({
   threadId,
   dispatch,
-  copyCurrentEmailList,
+  staticIndexActiveEmailList,
   draftId,
 }: IDeleteDraft) => {
   const RemoveDraft = () => {
@@ -20,10 +19,12 @@ const DeleteDraft = ({
     dispatch(
       listRemoveItemDetail({
         messageId: threadId,
-        copyCurrentEmailList,
+        staticIndexActiveEmailList,
       })
     )
-    if (draftId) dispatch(deleteDraft(draftId))
+    if (draftId) {
+      dispatch(deleteDraft(draftId))
+    }
   }
 
   return RemoveDraft()

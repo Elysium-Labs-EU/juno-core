@@ -162,8 +162,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
       if (response?.status && response.status === 200) {
-        const { draft } = response.data
-        dispatch(pushDraftDetails({ draft }))
+        dispatch(pushDraftDetails({ draft: response.data }))
       }
     } catch (err) {
       console.error(err)
