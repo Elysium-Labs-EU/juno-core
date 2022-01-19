@@ -17,9 +17,9 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
   const staticInitials = intialCreator()
 
   return (
-    <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
+    localStorage.getItem('showAvatar') === "true" ? <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
       <span>{staticInitials}</span>
-    </S.EmailAvatarContainer>
+    </S.EmailAvatarContainer> : <div/>
   )
 }
 
