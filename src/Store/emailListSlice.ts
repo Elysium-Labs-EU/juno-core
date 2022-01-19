@@ -196,9 +196,7 @@ export const emailListSlice = createSlice({
 
           const objectIndex = state.emailList[
             staticIndexActiveEmailList
-          ].threads.findIndex(
-            (thread) => thread.id === responseEmail.message.id
-          )
+          ].threads.findIndex((thread) => thread.id === responseEmail.id)
 
           // ObjectIndex will be -1 if the Redux has already removed the item, but the user is still in emailDetail.
           if (objectIndex > -1) {
@@ -213,7 +211,7 @@ export const emailListSlice = createSlice({
                   )
 
                   convertedObjectToArray[attributeIndex][1] =
-                    responseEmail.message.messages[0].labelIds
+                    responseEmail.messages[0].labelIds
 
                   return Object.fromEntries(convertedObjectToArray)
                 })
@@ -360,17 +358,17 @@ export const loadEmails =
       if (silentLoading && !getState().utils.isSilentLoading) {
         dispatch(setIsSilentLoading(true))
       }
-      const fetchedEmails = await threadApi().getFullThreads({
+      const response = await threadApi().getFullThreads({
         labelIds,
         maxResults: maxResults ?? 20,
         nextPageToken,
       })
-      if (fetchedEmails && fetchedEmails.length > 0) {
+      if (response && response.resultSizeEstimate > 0) {
         dispatch(
           listAddEmailList({
             labels: labelIds,
-            threads: fetchedEmails,
-            nextPageToken: nextPageToken ?? null,
+            threads: response.threads,
+            nextPageToken: response.nextPageToken,
           })
         )
         dispatch(setLoadedInbox(labelIds))
@@ -532,7 +530,7 @@ export const refreshEmailFeed =
         const newSlice = threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
           const user = await userApi().fetchUser()
-          dispatch(setProfile(user?.data.data))
+          dispatch(setProfile(user?.data))
           const labeledThreads = {
             labels: params.labelIds,
             threads: newSlice,

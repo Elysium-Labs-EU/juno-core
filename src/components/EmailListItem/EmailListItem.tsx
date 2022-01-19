@@ -100,7 +100,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
         <div />
         <div />
         {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
-          <InlineThreadActionsRegular id={id} labelIds={staticEmailLabels} />
+          <InlineThreadActionsRegular id={id} labelIds={labelIds} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />
         )}

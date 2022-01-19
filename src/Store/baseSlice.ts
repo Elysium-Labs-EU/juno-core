@@ -47,19 +47,18 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const user = await userApi().fetchUser()
-    const labels = await labelApi().fetchLabel()
+    const { labels } = await labelApi().fetchLabel()
     if (labels && user && user.status === 200) {
-      dispatch(setProfile(user.data.data))
-      if (labels.message.labels.length > 0) {
-        const labelArray = labels.message.labels
+      dispatch(setProfile(user.data))
+      if (labels.length > 0) {
         if (
           !multipleIncludes(
             BASE_ARRAY,
-            labelArray.map((item: GoogleLabel) => item.name)
+            labels.map((item: GoogleLabel) => item.name)
           )
         ) {
           const checkArray = BASE_ARRAY.map((item) =>
-            labelArray.map((label: GoogleLabel) => label.name).includes(item)
+            labels.map((label: GoogleLabel) => label.name).includes(item)
           )
           checkArray.map(
             (checkValue, index) =>
@@ -67,13 +66,13 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           )
 
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
+            labels.filter((item: GoogleLabel) => item.name === baseLabel)
           ).filter((result) => result.length > 0)
 
           dispatch(setStorageLabels(prefetchedBoxes))
         } else {
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labelArray.filter((item: GoogleLabel) => item.name === baseLabel)
+            labels.filter((item: GoogleLabel) => item.name === baseLabel)
           )
           dispatch(setStorageLabels(prefetchedBoxes))
           dispatch(setBaseLoaded(true))
