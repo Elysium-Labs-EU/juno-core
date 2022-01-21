@@ -1,24 +1,29 @@
 import styled from 'styled-components'
 
-interface WrapperType {
+interface IWrapper {
   isReplying: boolean
 }
 
-export const Wrapper = styled.div<WrapperType>`
+export const Wrapper = styled.div<IWrapper>`
   max-width: 850px;
   width: 100%;
   margin-left: ${(props) => (props.isReplying ? '10%' : 'auto')};
   margin-right: auto;
-  position: static;
+  position: ${(props) => (props.isReplying ? 'sticky' : 'static')};
+  ${(props) => props.isReplying && 'top: 0px'};
 `
 
 export const UpdateContainer = styled.div`
   min-height: 2rem;
 `
 
-export const ComposerContainer = styled.div`
-  padding-top: 120px;
-  padding-bottom: 121px;
+interface IComposerContainer {
+  isReplying: boolean
+}
+
+export const ComposerContainer = styled.div<IComposerContainer>`
+  padding-top: ${(props) => (props.isReplying ? '0' : '120px')};
+  padding-bottom: ${(props) => (props.isReplying ? '0' : '120px')};
 `
 
 interface ILabel {

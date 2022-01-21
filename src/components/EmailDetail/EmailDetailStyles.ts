@@ -231,3 +231,12 @@ export const SmallTextTruncated = styled.span`
   white-space: nowrap;
   font-size; ${themeConstants.smallFontSize};
 `
+
+export const ComposeWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  max-width: 50%;
+  margin-left: 45px;
+`
