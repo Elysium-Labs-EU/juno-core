@@ -3,7 +3,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import * as S from '../ComposeStyles'
 import * as local from '../../../constants/composeEmailConstants'
-import EmailInput from './EmailInput'
+import EmailInput from './EmailInput/EmailInput'
 import { Contact } from '../../../Store/contactsTypes'
 
 interface IRecipientField {

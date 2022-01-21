@@ -220,9 +220,7 @@ export const emailListSlice = createSlice({
                 ...state.emailList[staticIndexActiveEmailList],
                 threads: state.emailList[
                   staticIndexActiveEmailList
-                ].threads.filter(
-                  (thread) => thread.id !== responseEmail.message.id
-                ),
+                ].threads.filter((thread) => thread.id !== responseEmail.id),
               }
 
               const newThreadObject = {
