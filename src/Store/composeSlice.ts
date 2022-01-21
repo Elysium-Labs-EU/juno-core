@@ -11,7 +11,6 @@ import type { AppThunk, RootState } from './store'
 import { ComposePayload, ComposeState } from './composeTypes'
 import { listRemoveItemDetail } from './emailListSlice'
 import emailListFilteredByLabel from '../utils/emailListFilteredByLabel'
-import { IEmailListObject } from './emailListTypes'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},

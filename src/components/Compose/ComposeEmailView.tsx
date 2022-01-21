@@ -87,7 +87,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
             <S.UpdateContainer>
                 {saveSuccess && <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>}
             </S.UpdateContainer>
-            <S.ComposerContainer>
+            <S.ComposerContainer isReplying={isReplying ?? false}>
                 <GS.Base>
                     <form onSubmit={onSubmit} autoComplete="off">
                         <div style={{ marginBottom: `7px` }}>

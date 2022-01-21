@@ -150,15 +150,17 @@ const MessagesOverview = React.memo(
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (
-          <ComposeEmail
-            isReplying={isReplying}
-            isReplyingListener={isReplyingListener}
-            to={fromEmail(threadDetail)}
-            cc={ccEmail(threadDetail)}
-            bcc={bccEmail(threadDetail)}
-            subject={emailSubject(threadDetail)}
-            threadId={threadDetail.id}
-          />
+          <ES.ComposeWrapper>
+            <ComposeEmail
+              isReplying={isReplying}
+              isReplyingListener={isReplyingListener}
+              to={fromEmail(threadDetail)}
+              cc={ccEmail(threadDetail)}
+              bcc={bccEmail(threadDetail)}
+              subject={emailSubject(threadDetail)}
+              threadId={threadDetail.id}
+            />
+          </ES.ComposeWrapper>
         )}
       </>
     )
