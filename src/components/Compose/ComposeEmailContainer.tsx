@@ -121,18 +121,8 @@ const ComposeEmailContainer = ({
     }
   }
 
-  const handleChangeSubjectBody = (e: React.ChangeEvent<HTMLInputElement>) => {
-    switch (e.target.id) {
-      case local.SUBJECT: {
-        setSubjectValue(e.target.value)
-        break
-      }
-      case local.BODY: {
-        setBodyValue(e.target.value)
-        break
-      }
-      default:
-    }
+  const handleChangeSubject = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSubjectValue(e.target.value)
   }
 
   const handleDelete = (selectedOption: any) => {
@@ -283,7 +273,7 @@ const ComposeEmailContainer = ({
       ccValue={ccValue}
       draftDetails={draftDetails}
       handleChangeRecipients={handleChangeRecipients}
-      handleChangeSubjectBody={handleChangeSubjectBody}
+      handleChangeSubject={handleChangeSubject}
       handleDelete={handleDelete}
       inputToValue={inputToValue}
       inputCCValue={inputCCValue}

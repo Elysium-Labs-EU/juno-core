@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import StyledTextField from './EmailInputStyles'
-import RecipientChip from '../../Elements/RecipientChip/RecipientChip'
-import { Contact } from '../../../Store/contactsTypes'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectAllContacts, selectContactsLoaded, setAllContacts, setContactsLoaded } from '../../../Store/contactsSlice'
-import contactApi from '../../../data/contactApi'
-import { setServiceUnavailable } from '../../../Store/utilsSlice'
-import useDebounce from '../../../Hooks/useDebounce'
+import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
+import { Contact } from '../../../../Store/contactsTypes'
+import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { selectAllContacts, selectContactsLoaded, setAllContacts, setContactsLoaded } from '../../../../Store/contactsSlice'
+import contactApi from '../../../../data/contactApi'
+import { setServiceUnavailable } from '../../../../Store/utilsSlice'
+import useDebounce from '../../../../Hooks/useDebounce'
 
 interface IEmailInputProps {
   id: string
