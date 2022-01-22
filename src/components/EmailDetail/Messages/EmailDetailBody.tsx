@@ -31,8 +31,13 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: IEmailDetailBody) => {
     })
   }
 
+  useEffect(() => {
+    console.log(bodyState)
+  }, [bodyState])
+
   // This function recursively loops in the emailbody to find a body to decode.
   const bodyDecoder = (inputObject: any) => {
+    console.log(inputObject)
     const objectKeys = Object.keys(inputObject)
     for (let i: number = 0; i < objectKeys.length; i += 1) {
       if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {

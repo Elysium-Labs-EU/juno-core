@@ -20,7 +20,7 @@ const Settings = () =>{
     }
 
     return (
-        <Switch onClick={()=>switchAvatarView()} defaultChecked={localStorage.getItem('showAvatar') === "true"}/> 
+        <Switch value='Show Avatar' onClick={()=>switchAvatarView()} defaultChecked={localStorage.getItem('showAvatar') === "true"}/> 
     )
 }
 
