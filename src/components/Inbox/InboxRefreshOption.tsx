@@ -6,7 +6,6 @@ import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 const rotate = keyframes`
   from {
@@ -40,8 +39,6 @@ const RotatingButton = styled.button<IRotatingButton>`
   }
   ${ props => (props.disableRefresh ? rotatingIcon : null) };
 `
-
-/* animation: ${(props) => (props.isFetching ? rotatingIcon : null)}; */
 
 const InboxRefresh = () => {
     const [disableRefresh, setDisableRefresh] = useState(false)
@@ -80,7 +77,6 @@ const InboxRefresh = () => {
             disableRefresh={disableRefresh}
         >
             <MdRefresh size={20} />
-
         </RotatingButton>
     )
 }
