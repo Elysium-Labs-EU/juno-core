@@ -88,7 +88,6 @@ const Search = () => {
     const dispatch = useAppDispatch()
     const isSearching = useAppSelector(selectIsSearching)
 
-
     const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(event.target.value)
     }
@@ -111,7 +110,7 @@ const Search = () => {
 
             response.threads.forEach(async (item) => {
                 const threadDetail = await threadApi().getThreadDetail(item.id)
-                buffer.push(threadDetail.thread)
+                buffer.push(threadDetail)
                 if (buffer.length === loadCount) {
                     setLoadState(SEARCH_STATE.LOADED)
                     if (searchValueRef.current !== searchValue) {

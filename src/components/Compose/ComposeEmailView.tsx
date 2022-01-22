@@ -5,19 +5,20 @@ import emailValidation from '../../utils/emailValidation'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import * as local from '../../constants/composeEmailConstants'
-import StyledTextField from './ComposeFields/EmailInputStyles'
+import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import { useAppDispatch } from '../../Store/hooks'
 import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
 import { Contact } from '../../Store/contactsTypes'
 import RecipientField from './ComposeFields/RecipientField'
+import QuilBody from './ComposeFields/QuillBody/QuilBody'
 
 interface IComposeEmailView {
     bccValue: Contact[]
     bodyValue: string
     ccValue: Contact[]
     draftDetails: any
-    handleChangeSubjectBody: any
+    handleChangeSubject: any
     handleChangeRecipients: any
     handleDelete: Function
     inputToValue: any
@@ -46,7 +47,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
         ccValue,
         draftDetails,
         handleChangeRecipients,
-        handleChangeSubjectBody,
+        handleChangeSubject,
         handleDelete,
         inputToValue,
         inputCCValue,
@@ -86,7 +87,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
             <S.UpdateContainer>
                 {saveSuccess && <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>}
             </S.UpdateContainer>
-            <S.ComposerContainer>
+            <S.ComposerContainer isReplying={isReplying ?? false}>
                 <GS.Base>
                     <form onSubmit={onSubmit} autoComplete="off">
                         <div style={{ marginBottom: `7px` }}>
@@ -147,27 +148,13 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                     <StyledTextField
                                         id={local.SUBJECT}
                                         value={subjectValue ?? ''}
-                                        onChange={handleChangeSubjectBody}
+                                        onChange={handleChangeSubject}
                                         fullWidth
                                         variant="outlined"
                                     />
                                 </S.Row>
                                 <S.Row>
-                                    <S.Label hasValue={Boolean(bodyValue)}>
-                                        <label htmlFor={local.BODY}>
-                                            {local.BODY_LABEL}
-                                        </label>
-                                    </S.Label>
-                                    <StyledTextField
-                                        id={local.BODY}
-                                        multiline
-                                        value={bodyValue ?? ''}
-                                        onChange={handleChangeSubjectBody}
-                                        minRows={12}
-                                        maxRows={25}
-                                        fullWidth
-                                        autoFocus={isReplying}
-                                    />
+                                    <QuilBody fetchedBodyValue={bodyValue} />
                                 </S.Row>
                             </GS.Base>
                         </div>

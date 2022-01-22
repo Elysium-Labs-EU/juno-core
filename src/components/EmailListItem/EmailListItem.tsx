@@ -21,12 +21,13 @@ import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
 import { selectIsSearching } from '../../Store/utilsSlice'
-import { selectStorageLabels } from '../../Store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 
 const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const isSearching = useAppSelector(selectIsSearching)
   const storageLabels = useAppSelector(selectStorageLabels)
+  const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const dispatch = useAppDispatch()
 
@@ -46,7 +47,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
   const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
 
   const handleClick = () => {
-    openEmail({ labelIds: staticEmailLabels, id, email, dispatch, isSearching, storageLabels })
+    openEmail({ labelIds, id, email, dispatch, isSearching, storageLabels })
   }
 
   return (
@@ -99,7 +100,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
         <div />
         <div />
         {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
-          <InlineThreadActionsRegular id={id} labelIds={staticEmailLabels} />
+          <InlineThreadActionsRegular id={id} labelIds={labelIds} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />
         )}
