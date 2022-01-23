@@ -23,6 +23,24 @@ import EmailLabel from '../Elements/EmailLabel'
 import { selectIsSearching } from '../../Store/utilsSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 
+// If the user is on Draft list, show only draft emails.
+const shouldUseDraftOrRegular = (labelIds: string[], email: IEmailListThreadItem) => {
+  if (Array.isArray(labelIds) && labelIds.includes(draft.DRAFT_LABEL)) {
+    if (email.messages) {
+      return { ...email, messages: email.messages.filter((message) => message.labelIds.includes(draft.DRAFT_LABEL)) }
+    }
+    return email
+  }
+  return email
+}
+
+// Setting an email label is required for the path.
+const emailLabels = (staticShouldUseDraftOrRegular: IEmailListThreadItem) => {
+  if (staticShouldUseDraftOrRegular.messages) return staticShouldUseDraftOrRegular.messages[staticShouldUseDraftOrRegular.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
+  if (staticShouldUseDraftOrRegular.message) return staticShouldUseDraftOrRegular.message.labelIds ?? [global.ARCHIVE_LABEL]
+  return [global.ARCHIVE_LABEL]
+}
+
 const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const isSearching = useAppSelector(selectIsSearching)
@@ -31,23 +49,17 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
   const { id } = email
   const dispatch = useAppDispatch()
 
-  // Setting an email label is required for the path.
-  const emailLabels = () => {
-    if (email && email.messages) return email.messages[email.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
-    if (email && email.message) return email.message.labelIds ?? [global.ARCHIVE_LABEL]
-    return [global.ARCHIVE_LABEL]
-  }
-
-  const staticEmailLabels = emailLabels()
-  const staticRecipientName = RecipientName(email.message || email.messages![email.messages!.length - 1])
-  const staticSenderPartial = SenderNamePartial(email.message || email.messages![email.messages!.length - 1], emailAddress)
-  const staticSenderFull = SenderNameFull(email.message || email.messages![email.messages!.length - 1], emailAddress)
-  const staticSubjectFetch = EmailSubject(email.message || email.messages![email.messages!.length - 1])
+  const staticShouldUseDraftOrRegular = shouldUseDraftOrRegular(labelIds, email)
+  const staticEmailLabels = emailLabels(staticShouldUseDraftOrRegular)
+  const staticRecipientName = RecipientName(staticShouldUseDraftOrRegular.message || staticShouldUseDraftOrRegular.messages![staticShouldUseDraftOrRegular.messages!.length - 1], emailAddress)
+  const staticSenderPartial = SenderNamePartial(staticShouldUseDraftOrRegular.message || staticShouldUseDraftOrRegular.messages![staticShouldUseDraftOrRegular.messages!.length - 1], emailAddress)
+  const staticSenderFull = SenderNameFull(staticShouldUseDraftOrRegular.message || staticShouldUseDraftOrRegular.messages![staticShouldUseDraftOrRegular.messages!.length - 1], emailAddress)
+  const staticSubjectFetch = EmailSubject(staticShouldUseDraftOrRegular.message || staticShouldUseDraftOrRegular.messages![staticShouldUseDraftOrRegular.messages!.length - 1])
   const staticSubject = staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
-  const staticSnippet = EmailSnippet(email.message || email.messages![email.messages!.length - 1])
+  const staticSnippet = EmailSnippet(staticShouldUseDraftOrRegular.message || staticShouldUseDraftOrRegular.messages![staticShouldUseDraftOrRegular.messages!.length - 1])
 
   const handleClick = () => {
-    openEmail({ labelIds, id, email, dispatch, isSearching, storageLabels })
+    openEmail({ labelIds, id, email: staticShouldUseDraftOrRegular, dispatch, isSearching, storageLabels })
   }
 
   return (
