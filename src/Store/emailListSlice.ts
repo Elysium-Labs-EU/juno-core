@@ -304,7 +304,7 @@ export const loadEmailDetails =
         if (threads.length > 0) {
           threads.forEach(async (item) => {
             const threadDetail = await threadApi().getThreadDetail(item.id)
-            buffer.push(threadDetail.thread)
+            buffer.push(threadDetail)
             if (buffer.length === loadCount) {
               dispatch(
                 listAddEmailList({
@@ -532,7 +532,7 @@ export const refreshEmailFeed =
           const labeledThreads = {
             labels: params.labelIds,
             threads: newSlice,
-            nextPageToken: nextPageToken ?? null,
+            nextPageToken,
           }
           dispatch(loadEmailDetails(labeledThreads))
         }
