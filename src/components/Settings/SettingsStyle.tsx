@@ -1,27 +1,41 @@
-import { styled } from '@mui/system'
-import ModalUnstyled from '@mui/base/ModalUnstyled'
+import styled from 'styled-components'
+import * as themeConstants from '../../constants/themeConstants'
 
-const StyledModal = styled(ModalUnstyled)`
-  position: fixed;
-  z-index: 1300;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  left: 0;
+// eslint-disable-next-line import/prefer-default-export
+export const Dialog = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  flex-direction: column;
+  transform: translate(-50%, -50%);
+  width: 525px;
+  max-height: calc(100vh - 225px);
+  min-height: 400px;
+  background-color: ${ themeConstants.colorWhite };
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1;
 `
 
-const Backdrop = styled('div')`
-  z-index: -1;
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  -webkit-tap-highlight-color: transparent;
+export const SettingsDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-item: center;
+  height: 10em;
+  width: 30em;
 `
-
-export {Backdrop, StyledModal}
+export const SettingsHeader = styled.div`
+  margin: 2rem 0 0;
+  font-weight: 200;
+  user-select: none;
+  text-transform: capitalize;
+  font-size: 2.441rem;
+  font-family: 'Raleway Variable', serif;
+  line-height: 1.3;
+  color: ${themeConstants.colorBlack} !important;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+`

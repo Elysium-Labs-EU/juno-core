@@ -8,6 +8,7 @@ import SpamHeader from '../Spam/SpamHeader'
 import SentHeader from '../Sent/SentHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
 import Search from '../Search/Search'
+import Settings from '../Settings/Settings'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -39,6 +40,7 @@ const Header = () => (
     <NoMobileOverlay />
     <SetHeader />
     <Search />
+    <Settings/>
   </>
 )
 
