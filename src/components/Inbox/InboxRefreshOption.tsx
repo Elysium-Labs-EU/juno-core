@@ -1,10 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
+import styled, { css, keyframes } from 'styled-components'
+import * as theme from '../../constants/themeConstants'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+`
+
+const rotatingIcon = css`
+  animation: ${ rotate } 1s ease infinite;
+`
+
+interface IRotatingButton {
+    disableRefresh: boolean
+}
+
+const RotatingButton = styled.button<IRotatingButton>`
+  border: none;
+  color: ${ theme.colorGrey };
+  outline: none;
+  background-color: transparent;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  padding: 0;
+
+  &:hover {
+    color: ${ theme.colorBlack };
+    cursor: pointer;
+  }
+  ${ props => (props.disableRefresh ? rotatingIcon : null) };
+`
 
 const InboxRefresh = () => {
     const [disableRefresh, setDisableRefresh] = useState(false)
@@ -22,23 +56,28 @@ const InboxRefresh = () => {
     }
 
     useEffect(() => {
-        if (isFetching) {
-            setDisableRefresh(true)
+
+        setDisableRefresh(true)
+
+        const disableTimer = setTimeout(() => {
+            setDisableRefresh(false)
+        }, 3000)
+
+        return () => {
+            clearTimeout(disableTimer)
+            setDisableRefresh(false)
         }
-        if (!isFetching) {
-            setTimeout(() => {
-                setDisableRefresh(false)
-            }, 3000)
-        }
-        return () => setDisableRefresh(false)
     }, [isFetching])
 
     return (
-        <CustomIconButton
+        <RotatingButton
             onClick={() => refreshFeed()}
             disabled={isLoading || disableRefresh}
-            icon={<MdRefresh size={20} />}
-        />
+            type="button"
+            disableRefresh={disableRefresh}
+        >
+            <MdRefresh size={20} />
+        </RotatingButton>
     )
 }
 
