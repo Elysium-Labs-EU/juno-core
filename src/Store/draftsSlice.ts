@@ -78,7 +78,7 @@ export const loadDraftList = (): AppThunk => async (dispatch) => {
   }
 }
 
-export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
+export const createUpdateDraft = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail }: any = getState().compose
     const { id, message } = getState().drafts.draftDetails
@@ -96,13 +96,10 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
       body: composeEmail.body ?? '',
     }
 
-    // console.log(baseComposedEmail)
-
     const response = isEmpty(getState().drafts.draftDetails)
       ? await draftApi().createDrafts(baseComposedEmail)
       : await draftApi().updateDrafts(baseComposedEmail)
 
-    // console.log(response)
     if (response && response.status === 200) {
       const {
         data: { data },
@@ -126,7 +123,7 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
     try {
       const body = bodyDecoder(message.payload).map((item) =>
         item.replace(/<[^>]*>/g, '')
-      )
+      )[0]
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
       const cc = findPayloadHeadersData('Cc', message)

@@ -11,7 +11,8 @@ import * as Compose from '../../ComposeStyles'
 const QUILL_START_STRING = '<p><br></p>'
 
 const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
-    const [bodyValue, setBodyValue] = useState(fetchedBodyValue ?? '')
+    const [bodyValue, setBodyValue] = useState('')
+    const [loadState, setLoadState] = useState('idle')
     const [isFocused, setIsFocused] = useState(false)
     const debouncedBodyValue = useDebounce(bodyValue, 500)
     const dispatch = useAppDispatch()
@@ -23,6 +24,10 @@ const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
         }
     }, [isReplying])
 
+    useEffect(() => {
+        setBodyValue(fetchedBodyValue)
+        setLoadState('loading')
+    }, [fetchedBodyValue])
 
     useEffect(() => {
         let mounted = true
@@ -35,6 +40,15 @@ const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
         }
     }, [debouncedBodyValue])
 
+    const handleBodyChange = (value: string) => {
+        if (loadState === 'loading') {
+            setLoadState('finished')
+        }
+        if (loadState === 'finished') {
+            setBodyValue(value)
+        }
+    }
+
     return (
         <>
             <Compose.Label hasValue={Boolean(bodyValue !== QUILL_START_STRING || '')}>
@@ -46,7 +60,7 @@ const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
                 <ReactQuill
                     theme="snow"
                     value={bodyValue}
-                    onChange={setBodyValue}
+                    onChange={handleBodyChange}
                     ref={quillRef}
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}

@@ -4,7 +4,7 @@ import { selectComposeEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
-import { CreateUpdateDraft, selectDraftDetails } from '../../Store/draftsSlice'
+import { createUpdateDraft, selectDraftDetails } from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import ComposeEmailView from './ComposeEmailView'
@@ -48,7 +48,6 @@ const ComposeEmailContainer = ({
   const [subjectValue, setSubjectValue] = useState('')
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const [bodyValue, setBodyValue] = useState('')
-  const debouncedBodyValue = useDebounce(bodyValue, 500)
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const dispatch = useAppDispatch()
@@ -56,7 +55,7 @@ const ComposeEmailContainer = ({
   useEffect(() => {
     let mounted = true
     if (!isEmpty(composeEmail)) {
-      mounted && dispatch(CreateUpdateDraft())
+      mounted && dispatch(createUpdateDraft())
     }
     return () => {
       mounted = false
@@ -198,17 +197,6 @@ const ComposeEmailContainer = ({
       mounted = false
     }
   }, [debouncedSubjectValue])
-
-  useEffect(() => {
-    let mounted = true
-    if (debouncedBodyValue) {
-      const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
-    }
-    return () => {
-      mounted = false
-    }
-  }, [debouncedBodyValue])
 
   // Set the form values
   useEffect(() => {
