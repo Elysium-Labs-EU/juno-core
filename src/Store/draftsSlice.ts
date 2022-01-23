@@ -82,12 +82,13 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail }: any = getState().compose
     const { id, message } = getState().drafts.draftDetails
+    const { currEmail } = getState().emailDetail
 
     const baseComposedEmail: ComposedEmail = {
       draftId: id,
-      threadId: message?.threadId && message.threadId,
-      messageId: message?.id && message.id,
-      labelIds: message?.labelIds && message.labelIds,
+      threadId: currEmail,
+      messageId: message?.id,
+      labelIds: message?.labelIds,
       to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
       cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
       bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
@@ -95,10 +96,13 @@ export const CreateUpdateDraft = (): AppThunk => async (dispatch, getState) => {
       body: composeEmail.body ?? '',
     }
 
+    // console.log(baseComposedEmail)
+
     const response = isEmpty(getState().drafts.draftDetails)
       ? await draftApi().createDrafts(baseComposedEmail)
       : await draftApi().updateDrafts(baseComposedEmail)
 
+    // console.log(response)
     if (response && response.status === 200) {
       const {
         data: { data },
@@ -141,10 +145,10 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
           threadId: message.threadId,
         },
       }
-      if (draft.id) {
+      if (draft.id && message.threadId) {
         dispatch(listUpdateDraft(draftDetails))
         dispatch(setComposeEmail(loadEmail))
-        dispatch(setCurrentEmail(draft.id))
+        dispatch(setCurrentEmail(message.threadId))
         dispatch(push(`/compose/${draft.id}`))
       } else {
         dispatch(push(`/compose/`))
