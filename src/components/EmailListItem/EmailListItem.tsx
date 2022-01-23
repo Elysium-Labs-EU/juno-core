@@ -25,12 +25,9 @@ import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 
 // If the user is on Draft list, show only draft emails.
 const shouldUseDraftOrRegular = (labelIds: string[], email: IEmailListThreadItem) => {
-  if (Array.isArray(labelIds) && email) {
-    if (labelIds.includes(draft.DRAFT_LABEL)) {
-      if (email.messages) {
-        return { ...email, messages: email.messages.filter((message) => message.labelIds.includes(draft.DRAFT_LABEL)) }
-      }
-      return email
+  if (Array.isArray(labelIds) && labelIds.includes(draft.DRAFT_LABEL)) {
+    if (email.messages) {
+      return { ...email, messages: email.messages.filter((message) => message.labelIds.includes(draft.DRAFT_LABEL)) }
     }
     return email
   }
