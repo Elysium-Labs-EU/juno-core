@@ -90,6 +90,7 @@ const ComposeEmailContainer = ({
         const validation = emailValidation(recipientList.newValue)
         if (validation) {
           setToValue(recipientList.newValue)
+          toError && setToError(false)
         }
         if (!validation) {
           setToError(true)
@@ -100,6 +101,7 @@ const ComposeEmailContainer = ({
         const validation = emailValidation(recipientList.newValue)
         if (validation) {
           setCCValue(recipientList.newValue)
+          toError && setToError(false)
         }
         if (!validation) {
           setToError(true)
@@ -110,6 +112,7 @@ const ComposeEmailContainer = ({
         const validation = emailValidation(recipientList.newValue)
         if (validation) {
           setBCCValue(recipientList.newValue)
+          toError && setToError(false)
         }
         if (!validation) {
           setToError(true)
@@ -203,14 +206,14 @@ const ComposeEmailContainer = ({
     let mounted = true
     if (mounted) {
       if (!isEmpty(composeEmail)) {
-        setToValue(Array(composeEmail.to).map((item) => convertToContact(item)))
+        setToValue(Array(composeEmail.to).filter((item) => item ? convertToContact(item) : null))
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
-          setCCValue(Array(composeEmail.cc).map((item) => convertToContact(item)))
+          setCCValue(Array(composeEmail.cc).filter((item) => item ? convertToContact(item) : null))
         }
         if (composeEmail.bcc && composeEmail.bcc.length > 0) {
           setShowBCC(true)
-          setBCCValue(Array(composeEmail.bcc).map((item) => convertToContact(item)))
+          setBCCValue(Array(composeEmail.bcc).filter((item) => item ? convertToContact(item) : null))
         }
         setSubjectValue(composeEmail.subject)
         setBodyValue(composeEmail.body)
