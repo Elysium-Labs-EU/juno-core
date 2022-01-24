@@ -22,6 +22,7 @@ import { selectProfile } from '../../Store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
 import { selectIsSearching } from '../../Store/utilsSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
+import emailLabels from '../../utils/emailLabels'
 
 // If the user is on Draft list, show only draft emails.
 const shouldUseDraftOrRegular = (labelIds: string[], email: IEmailListThreadItem) => {
@@ -34,12 +35,6 @@ const shouldUseDraftOrRegular = (labelIds: string[], email: IEmailListThreadItem
   return email
 }
 
-// Setting an email label is required for the path.
-const emailLabels = (staticShouldUseDraftOrRegular: IEmailListThreadItem) => {
-  if (staticShouldUseDraftOrRegular.messages) return staticShouldUseDraftOrRegular.messages[staticShouldUseDraftOrRegular.messages.length - 1].labelIds ?? [global.ARCHIVE_LABEL]
-  if (staticShouldUseDraftOrRegular.message) return staticShouldUseDraftOrRegular.message.labelIds ?? [global.ARCHIVE_LABEL]
-  return [global.ARCHIVE_LABEL]
-}
 
 const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem, showLabel: boolean }) => {
   const { emailAddress } = useAppSelector(selectProfile)
