@@ -9,7 +9,7 @@ import * as S from '../EmailDetailStyles'
 import { useAppSelector } from '../../../Store/hooks'
 import emailLabels from '../../../utils/emailLabels'
 import DeleteOption from '../Options/DeleteOption'
-import onlyLegalLabels from '../../../utils/onlyLegalLabels'
+import onlyLegalLabelObjects from '../../../utils/onlyLegalLabelObjects'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
@@ -34,7 +34,7 @@ const EmailDetailOptions = ({ threadDetail, isReplyingListener }: IEmailDetailOp
 
   // Use on legal labels - if there is at least 1 legal label, the item can be archived still.
   const staticEmailLabels = emailLabels(threadDetail)
-  const staticOnlyLegalLabels = onlyLegalLabels({ labelNames: staticEmailLabels, storageLabels })
+  const staticOnlyLegalLabels = onlyLegalLabelObjects({ labelNames: staticEmailLabels, storageLabels })
 
   return (
     <S.EmailOptionsContainer>
