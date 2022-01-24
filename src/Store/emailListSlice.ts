@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import { push } from 'redux-first-history'
+import { goBack, push } from 'redux-first-history'
 import threadApi from '../data/threadApi'
 import {
   setIsLoading,
@@ -397,7 +397,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
   return async (dispatch, getState) => {
     try {
-      const { emailList } = getState().email
+      const { emailList, searchList, isSorting, isFocused } = getState().email
 
       const indexActiveEmailList = (): number => {
         if (emailList && (removeLabelIds || request.delete)) {
@@ -427,7 +427,10 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
       const staticIndexActiveEmailList = indexActiveEmailList()
       const staticIndexTargetEmailList = indexTargetEmailList()
-      const staticActiveEmailList = emailList[staticIndexActiveEmailList]
+      const staticActiveEmailList =
+        staticIndexActiveEmailList === -1
+          ? searchList
+          : emailList[staticIndexActiveEmailList]
       const staticTargetEmailList = emailList[staticIndexTargetEmailList]
 
       if (
@@ -439,7 +442,12 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
           !getState().labels.labelIds.includes(draft.DRAFT_LABEL)
         ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
-          if (request) {
+          if (
+            (request &&
+              request.removeLabelIds &&
+              !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+            request.delete
+          ) {
             const { viewIndex } = getState().emailDetail
 
             const nextID = () =>
@@ -450,14 +458,13 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
 
-            if (
-              (request.removeLabelIds &&
-                !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-              (request.delete && staticNextID && staticLabelURL)
-            ) {
+            if (isSorting || isFocused) {
               dispatch(setCurrentEmail(staticNextID))
               dispatch(setViewIndex(viewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
+            }
+            if (!isSorting && !isFocused) {
+              dispatch(goBack())
             }
           }
         }
@@ -481,7 +488,11 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             }
           }
           // NOTE: The newly added threadObject doesn't have a historyId during this process. On refetch of list it will.
-          if (removeLabelIds && removeLabelIds.includes(global.UNREAD_LABEL)) {
+          if (
+            removeLabelIds &&
+            removeLabelIds.includes(global.UNREAD_LABEL) &&
+            staticIndexActiveEmailList > -1
+          ) {
             dispatch(
               listUpdateItemDetail({
                 staticIndexActiveEmailList,
@@ -490,8 +501,10 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             )
           }
           if (
-            (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
-            request.delete
+            ((removeLabelIds &&
+              !removeLabelIds.includes(global.UNREAD_LABEL)) ||
+              request.delete) &&
+            staticIndexActiveEmailList > -1
           ) {
             dispatch(
               listRemoveItemDetail({
@@ -508,7 +521,6 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
       console.error(err)
       dispatch(setServiceUnavailable('Error updating label.'))
     }
-    return null
   }
 }
 

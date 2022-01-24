@@ -1,34 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import {
-  FiArchive,
-  FiCheckCircle,
-  FiCornerUpLeft,
-  FiMoreHorizontal,
-} from 'react-icons/fi'
+import { FiDelete } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
-import ArchiveMail from '../../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { FindLabelByName } from '../../../utils/findLabel'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
-import * as local from '../../../constants/emailDetailConstants'
 import * as todo from '../../../constants/todoConstants'
 import * as S from '../EmailDetailStyles'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import SetToDoMail from '../../EmailOptions/SetToDoMail'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-
-const messageIndex = 0
+import { useAppSelector } from '../../../Store/hooks'
+import emailLabels from '../../../utils/emailLabels'
+import DeleteOption from '../Options/DeleteOption'
+import onlyLegalLabels from '../../../utils/onlyLegalLabels'
+import { IEmailListThreadItem } from '../../../Store/emailListTypes'
+import ReplyOption from '../Options/ReplyOption'
+import ToDoOption from '../Options/ToDoOption'
+import ArchiveOption from '../Options/ArchiveOption'
+import MoreOption from '../Options/MoreOption'
 
 interface IEmailDetailOptions {
-  messageId: string
+  threadDetail: IEmailListThreadItem
   isReplyingListener: Function
-  threadId: string
 }
 
-const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailDetailOptions) => {
+const EmailDetailOptions = ({ threadDetail, isReplyingListener }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
-  const dispatch = useAppDispatch()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
 
@@ -36,66 +31,33 @@ const EmailDetailOptions = ({ messageId, isReplyingListener, threadId }: IEmailD
     setShowMenu(false)
   }, [location])
 
+
+  // Use on legal labels - if there is at least 1 legal label, the item can be archived still.
+  const staticEmailLabels = emailLabels(threadDetail)
+  const staticOnlyLegalLabels = onlyLegalLabels({ labelNames: staticEmailLabels, storageLabels })
+
   return (
     <S.EmailOptionsContainer>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
-          <div>
-            <CustomButton
-              icon={<FiCornerUpLeft />}
-              label={local.BUTTON_REPLY}
-              onClick={() => isReplyingListener({ threadId, messageIndex })}
-              suppressed
-            />
-          </div>
-          <div>
-            {labelIds &&
-              !labelIds.some(
-                (item) =>
-                  item ===
-                  FindLabelByName({
-                    storageLabels,
-                    LABEL_NAME: todo.LABEL,
-                  })[0].id
-              ) && (
-                <CustomButton
-                  icon={<FiCheckCircle />}
-                  onClick={() =>
-                    SetToDoMail({
-                      messageId,
-                      labelIds,
-                      dispatch,
-                      storageLabels,
-                    })
-                  }
-                  label={local.BUTTON_TODO}
-                  suppressed
-                />
-              )}
-          </div>
-          <div>
-            <CustomButton
-              icon={<FiArchive />}
-              onClick={() =>
-                ArchiveMail({
-                  messageId,
-                  labelIds,
-                  dispatch,
-                })
-              }
-              label={local.BUTTON_ARCHIVE}
-              suppressed
-            />
-          </div>
-          <div>
-            <CustomButton
-              icon={<FiMoreHorizontal />}
-              onClick={() => setShowMenu(!showMenu)}
-              label={local.BUTTON_MORE}
-              suppressed
-            />
-          </div>
-          {showMenu && <EmailMoreOptions messageId={messageId} labelIds={labelIds} storageLabels={storageLabels} />}
+          <ReplyOption threadDetail={threadDetail} isReplyingListener={isReplyingListener} />
+          {labelIds &&
+            !labelIds.some(
+              (item) =>
+                item ===
+                FindLabelByName({
+                  storageLabels,
+                  LABEL_NAME: todo.LABEL,
+                })[0].id
+            ) && (
+              <ToDoOption threadDetail={threadDetail} />
+            )}
+          {staticOnlyLegalLabels.length > 0 && <>
+            <ArchiveOption threadDetail={threadDetail} />
+            <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
+          </>}
+          {staticOnlyLegalLabels.length === 0 && <DeleteOption messageId={threadDetail.id} icon={<FiDelete />} suppressed />}
+          {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
     </S.EmailOptionsContainer>
