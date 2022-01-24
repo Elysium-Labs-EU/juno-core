@@ -69,13 +69,13 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
           aria-hidden="true"
         >
           <S.Avatars>
-            {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
+            {!labelIds.includes(draft.DRAFT_LABEL) ? (
               <EmailAvatar avatarURL={staticSenderFull} />
             ) : (
               <EmailAvatar avatarURL={staticRecipientName.name} />
             )}
           </S.Avatars>
-          {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
+          {!labelIds.includes(draft.DRAFT_LABEL) ? (
             <S.TruncatedSpan title={staticSenderPartial.emailAddress}>{staticSenderPartial.name ?? staticSenderPartial.emailAddress}</S.TruncatedSpan>
           ) : (
             <S.TruncatedSpan title={staticRecipientName.emailAddress}>{staticRecipientName.name}</S.TruncatedSpan>
@@ -88,7 +88,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
           aria-hidden="true"
         >
           <S.TruncatedDiv>
-            {staticEmailLabels.includes(draft.DRAFT_LABEL) && (
+            {labelIds.includes(draft.DRAFT_LABEL) && (
               <span style={{ fontWeight: 'bold' }}>{draft.DRAFT_SNIPPET_INDICATOR}</span>
             )}
             <span>{staticSubject}</span>
@@ -106,7 +106,7 @@ const EmailListItem = memo(({ email, showLabel }: { email: IEmailListThreadItem,
         </S.CellDate>
         <div />
         <div />
-        {!staticEmailLabels.includes(draft.DRAFT_LABEL) ? (
+        {!labelIds.includes(draft.DRAFT_LABEL) ? (
           <InlineThreadActionsRegular id={id} labelIds={labelIds} />
         ) : (
           <InlineThreadActionsDraft threadId={id} />
