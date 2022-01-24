@@ -460,14 +460,12 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
               dispatch(setViewIndex(viewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
             }
-            if (
-              !isSorting &&
-              !isFocused &&
-              labelIds.includes(global.INBOX_LABEL)
-            ) {
-              dispatch(push(RouteConstants.INBOX))
-            } else {
-              dispatch(push(RouteConstants.HOME))
+            if (!isSorting && !isFocused) {
+              if (labelIds.includes(global.INBOX_LABEL)) {
+                dispatch(push(RouteConstants.INBOX))
+              } else {
+                dispatch(push(RouteConstants.HOME))
+              }
             }
           }
         }
