@@ -19,14 +19,24 @@ const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
     const quillRef = useRef<any | null>(null)
 
     useEffect(() => {
-        if (isReplying && quillRef.current !== null) {
+        let mounted = true
+        if (isReplying && quillRef.current !== null && mounted) {
             quillRef.current.focus()
+        }
+        return () => {
+            mounted = false
         }
     }, [isReplying])
 
     useEffect(() => {
-        setBodyValue(fetchedBodyValue)
-        setLoadState('loading')
+        let mounted = true
+        if (mounted) {
+            setBodyValue(fetchedBodyValue)
+            setLoadState('loading')
+        }
+        return () => {
+            mounted = false
+        }
     }, [fetchedBodyValue])
 
     useEffect(() => {

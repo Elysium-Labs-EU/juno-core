@@ -11,7 +11,7 @@ import { SendComposedEmail } from '../../Store/composeSlice'
 import { listRemoveDraft, resetDraftDetails } from '../../Store/draftsSlice'
 import { Contact } from '../../Store/contactsTypes'
 import RecipientField from './ComposeFields/RecipientField'
-import QuilBody from './ComposeFields/QuillBody/QuilBody'
+import QuillBody from './ComposeFields/QuillBody/QuillBody'
 
 interface IComposeEmailView {
     bccValue: Contact[]
@@ -154,7 +154,7 @@ const ComposeEmailView = (props: IComposeEmailView) => {
                                     />
                                 </S.Row>
                                 <S.Row>
-                                    <QuilBody fetchedBodyValue={bodyValue} />
+                                    <QuillBody fetchedBodyValue={bodyValue} />
                                 </S.Row>
                             </GS.Base>
                         </div>

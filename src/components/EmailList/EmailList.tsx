@@ -50,6 +50,7 @@ const EmailList = () => {
   }, [])
 
   useEffect(() => {
+    let mounted = true
     if (
       !location.pathname.includes(Routes.INBOX) &&
       labelIds &&
@@ -62,7 +63,13 @@ const EmailList = () => {
           maxResults: 500,
         }
         dispatch(refreshEmailFeed(params))
+        if (labelIds.includes(draft.DRAFT_LABEL)) {
+          mounted && dispatch(loadDraftList())
+        }
       }
+    }
+    return () => {
+      mounted = false
     }
   }, [location])
 
