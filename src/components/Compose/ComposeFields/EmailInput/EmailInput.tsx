@@ -117,9 +117,14 @@ const emailInput = (props: IEmailInputProps) => {
         setInputValue(newInputValue)
       }}
       renderTags={(value: readonly Contact[], getTagProps) =>
-        value.map((option: Contact, index: number) => (
-          <RecipientChip key={option.emailAddress} option={option} getTagProps={getTagProps} handleDelete={handleDelete} index={index} id={id} />
-        ))
+        value.map((option: Contact, index: number) => {
+          if (option) {
+            return (
+              <RecipientChip key={option.emailAddress} option={option} getTagProps={getTagProps} handleDelete={handleDelete} index={index} id={id} />
+            )
+          }
+          return null
+        })
       }
       renderInput={(params) => (
         <StyledTextField
