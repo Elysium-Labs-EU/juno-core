@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import * as S from './MenuStyles'
@@ -35,7 +35,7 @@ const Menu = () => {
     <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
         <S.StyedListItem
-          key={`${ item.name + index }`}
+          key={`${item.name + index}`}
           style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"

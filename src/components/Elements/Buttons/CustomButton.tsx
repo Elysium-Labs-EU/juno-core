@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import * as theme from '../../../constants/themeConstants'
 
@@ -20,7 +20,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${ (props) => props.suppressed ? `${ theme.colorGrey } ` : `${ theme.colorBlack } ` };
+  color: ${(props) =>
+    props.suppressed ? `${theme.colorGrey} ` : `${theme.colorBlack} `};
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -38,10 +39,11 @@ const Button = styled.button<IButton>`
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
   font-family: 'Raleway Variable', sans-serif;
-  
+
   &:hover {
-    color: ${ theme.colorBlack };
-  }`
+    color: ${theme.colorBlack};
+  }
+`
 
 const InnerButton = styled.div`
   display: flex;
@@ -80,7 +82,5 @@ CustomButton.defaultProps = {
   disabled: false,
   icon: null,
   className: null,
-  suppressed: false
+  suppressed: false,
 }
-
-

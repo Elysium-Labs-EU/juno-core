@@ -1,4 +1,3 @@
-import React from 'react'
 import getRandomColor from '../../../utils/getRandomColor'
 import * as S from './EmailAvatarStyles'
 
@@ -8,7 +7,9 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
     if (splittedURL) {
       const name = splittedURL[0].length > 0 ? splittedURL[0] : splittedURL[1]
       const initials = name.match(/\b\w/g) || []
-      const finalIntials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase()
+      const finalIntials = (
+        (initials.shift() || '') + (initials.pop() || '')
+      ).toUpperCase()
       return finalIntials
     }
     return '##'

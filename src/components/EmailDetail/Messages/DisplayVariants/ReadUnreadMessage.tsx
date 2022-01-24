@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react'
 import { FiChevronDown } from 'react-icons/fi'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
@@ -9,7 +10,10 @@ import * as local from '../../../../constants/unreadConstants'
 import * as compose from '../../../../constants/composeEmailConstants'
 import * as S from '../../EmailDetailStyles'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
-import { IEmailMessage, IEmailListThreadItem } from '../../../../Store/emailListTypes'
+import {
+  IEmailMessage,
+  IEmailListThreadItem,
+} from '../../../../Store/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import { useAppSelector } from '../../../../Store/hooks'
@@ -35,7 +39,7 @@ const ReadMessage = ({
   threadDetail,
   FROM,
   isReplyingListener,
-  messageIndex
+  messageIndex,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -51,7 +55,11 @@ const ReadMessage = ({
           setOpen(true)
           return
         }
-        if (message && !Object.prototype.hasOwnProperty.call(message, 'labelIds') && messageIndex === 0) {
+        if (
+          message &&
+          !Object.prototype.hasOwnProperty.call(message, 'labelIds') &&
+          messageIndex === 0
+        ) {
           setOpen(true)
           return
         }
@@ -64,11 +72,11 @@ const ReadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget)
-        setShowMenu((prev) => placement !== newPlacement || !prev)
-        setPlacement(newPlacement)
-      }
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+      setShowMenu((prev) => placement !== newPlacement || !prev)
+      setPlacement(newPlacement)
+    }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   const handleClick = () => {
@@ -86,7 +94,6 @@ const ReadMessage = ({
     }
   }, [isReplying])
 
-
   const staticSenderNameFull = SenderNameFull(message, emailAddress)
   const staticSenderNamePartial = SenderNamePartial(message, emailAddress)
   const staticCCNameFull = BCCNameFull(message, 'Cc')
@@ -102,42 +109,66 @@ const ReadMessage = ({
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
                 <EmailAvatar avatarURL={staticSenderNameFull} />
-                <S.EmailDetailTitle title={staticEmailSubject}>{staticEmailSubject}</S.EmailDetailTitle>
+                <S.EmailDetailTitle title={staticEmailSubject}>
+                  {staticEmailSubject}
+                </S.EmailDetailTitle>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
                 <EmailHasAttachment messages={message} />
                 <TimeStamp threadTimeStamp={message.internalDate} />
 
-                <CustomIconButton onClick={handleSpecificMenu('bottom-start')} icon={<FiChevronDown />} aria-describedby={popperId} />
-                <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
-                  <SpecificEmailOptions messageId={message?.id} isReplyingListener={isReplyingListener} messageIndex={messageIndex} />
+                <CustomIconButton
+                  onClick={handleSpecificMenu('bottom-start')}
+                  icon={<FiChevronDown />}
+                  aria-describedby={popperId}
+                />
+                <Popper
+                  id={popperId}
+                  open={showMenu}
+                  anchorEl={anchorEl}
+                  placement={placement}
+                >
+                  <SpecificEmailOptions
+                    messageId={message?.id}
+                    isReplyingListener={isReplyingListener}
+                    messageIndex={messageIndex}
+                  />
                 </Popper>
-
               </S.TimeAttachmentContainer>
             </S.HeaderFullWidth>
           </S.TopContainer>
 
-          <S.FromCCContainer multipleComponents={Boolean(staticSenderNameFull && (staticCCNameFull || staticBCCNameFull))}>
+          <S.FromCCContainer
+            multipleComponents={Boolean(
+              staticSenderNameFull && (staticCCNameFull || staticBCCNameFull)
+            )}
+          >
             <S.FromBCCInner>
-              <S.SmallTextMuted>
-                {FROM}
-              </S.SmallTextMuted>
-              <S.SmallTextTruncated>{staticSenderNameFull}</S.SmallTextTruncated>
+              <S.SmallTextMuted>{FROM}</S.SmallTextMuted>
+              <S.SmallTextTruncated>
+                {staticSenderNameFull}
+              </S.SmallTextTruncated>
             </S.FromBCCInner>
-            {staticCCNameFull && staticCCNameFull.length > 0 &&
+            {staticCCNameFull && staticCCNameFull.length > 0 && (
               <S.FromBCCInner>
-                <S.SmallTextMuted>
-                  {compose.CC_LABEL}
-                </S.SmallTextMuted>
-                <S.SmallTextTruncated title={convertToContact(staticCCNameFull).emailAddress}>{convertToContact(staticCCNameFull).name}</S.SmallTextTruncated>
-              </S.FromBCCInner>}
-            {staticBCCNameFull && staticBCCNameFull.length > 0 &&
+                <S.SmallTextMuted>{compose.CC_LABEL}</S.SmallTextMuted>
+                <S.SmallTextTruncated
+                  title={convertToContact(staticCCNameFull).emailAddress}
+                >
+                  {convertToContact(staticCCNameFull).name}
+                </S.SmallTextTruncated>
+              </S.FromBCCInner>
+            )}
+            {staticBCCNameFull && staticBCCNameFull.length > 0 && (
               <S.FromBCCInner>
-                <S.SmallTextMuted>
-                  {compose.BCC_LABEL}
-                </S.SmallTextMuted>
-                <S.SmallTextTruncated title={convertToContact(staticBCCNameFull).emailAddress}>{convertToContact(staticBCCNameFull).name}</S.SmallTextTruncated>
-              </S.FromBCCInner>}
+                <S.SmallTextMuted>{compose.BCC_LABEL}</S.SmallTextMuted>
+                <S.SmallTextTruncated
+                  title={convertToContact(staticBCCNameFull).emailAddress}
+                >
+                  {convertToContact(staticBCCNameFull).name}
+                </S.SmallTextTruncated>
+              </S.FromBCCInner>
+            )}
           </S.FromCCContainer>
 
           <S.EmailBody>
@@ -158,7 +189,12 @@ const ReadMessage = ({
             <S.ClosedAvatarSender>
               <EmailAvatar avatarURL={staticSenderNameFull} />
               <S.ClosedSender>
-                <span style={{ fontWeight: 'bold' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
+                <span
+                  style={{ fontWeight: 'bold' }}
+                  title={staticSenderNamePartial.emailAddress}
+                >
+                  {staticSenderNamePartial.name}
+                </span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
@@ -174,7 +210,7 @@ const ReadMessage = ({
 }
 
 ReadMessage.defaultProps = {
-  isReplyingListener: {}
+  isReplyingListener: {},
 }
 
 export default ReadMessage

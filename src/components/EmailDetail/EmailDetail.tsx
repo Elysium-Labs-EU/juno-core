@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import {
   selectCurrentEmail,
@@ -16,7 +16,13 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
-import { selectEmailList, selectIsFocused, selectIsSorting, selectSearchList, storeSearchResults } from '../../Store/emailListSlice'
+import {
+  selectEmailList,
+  selectIsFocused,
+  selectIsSorting,
+  selectSearchList,
+  storeSearchResults,
+} from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
@@ -29,7 +35,11 @@ import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
-import { loadDraftList, resetDraftDetails, selectDraftListLoaded } from '../../Store/draftsSlice'
+import {
+  loadDraftList,
+  resetDraftDetails,
+  selectDraftListLoaded,
+} from '../../Store/draftsSlice'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 import threadApi from '../../data/threadApi'
@@ -51,7 +61,8 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const location = useLocation()
   const [currLocal, setCurrLocal] = useState<string>('')
-  const { messageId, overviewId } = useParams<{ messageId: string; overviewId: string }>()
+  const { messageId, overviewId } =
+    useParams<{ messageId: string; overviewId: string }>()
   const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
@@ -74,15 +85,24 @@ const EmailDetail = () => {
       return
     }
     if (activeEmailList && activeEmailList.threads.length > 0) {
-      dispatch(setCurrentMessage(activeEmailList.threads[(activeEmailList.threads.length - 1) - messageIndex]))
+      dispatch(
+        setCurrentMessage(
+          activeEmailList.threads[
+            activeEmailList.threads.length - 1 - messageIndex
+          ]
+        )
+      )
     }
   }
 
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
+    () =>
+      emailList.findIndex(
+        (threadList) =>
+          threadList.labels && threadList.labels.includes(labelIds[0])
+      ),
     [emailList, labelIds]
   )
-
 
   // TODO: Allow loading of the emailList when refreshing. The system should understand loading 1 single email on refresh is considered a search.
   const fetchEmailList = async () => {
@@ -103,7 +123,7 @@ const EmailDetail = () => {
     if (response) {
       const emailListObject = {
         threads: [response],
-        nextPageToken: null
+        nextPageToken: null,
       }
       dispatch(storeSearchResults(emailListObject))
     }
@@ -130,7 +150,13 @@ const EmailDetail = () => {
   // This will set the activeEmailList when first opening the email.
   // It will also update the activeEmailList whenever an email is archived or removed.
   useEffect(() => {
-    if (activeEmailList && activeEmailList.threads.length > 0 && emailList && emailList[emailListIndex] && viewIndex === -1) {
+    if (
+      activeEmailList &&
+      activeEmailList.threads.length > 0 &&
+      emailList &&
+      emailList[emailListIndex] &&
+      viewIndex === -1
+    ) {
       setActiveEmailList(emailList[emailListIndex])
       return
     }
@@ -142,7 +168,11 @@ const EmailDetail = () => {
   // If the current email is found, set the id to the store. Otherwise attempt a fetch.
   useEffect(() => {
     if (currentEmail !== currLocal) {
-      if (emailList.length > 0 && emailList[emailListIndex] && emailList[emailListIndex].threads.length > 0) {
+      if (
+        emailList.length > 0 &&
+        emailList[emailListIndex] &&
+        emailList[emailListIndex].threads.length > 0
+      ) {
         setCurrLocal(currentEmail)
         return
       }
@@ -156,14 +186,19 @@ const EmailDetail = () => {
 
   // If after loading the emails the viewIndex is still -1, attempt a different load method
   useEffect(() => {
-    if (!isLoading && viewIndex === -1 && currLocal && !labelIds.includes(global.ARCHIVE_LABEL)) {
+    if (
+      !isLoading &&
+      viewIndex === -1 &&
+      currLocal &&
+      !labelIds.includes(global.ARCHIVE_LABEL)
+    ) {
       const loadSpecificEmail = async () => {
         const response = await threadApi().getThreadDetail(currLocal)
         if (response) {
           const emailListObject = {
             labels: labelIds,
             threads: [response.thread],
-            nextPageToken: null
+            nextPageToken: null,
           }
           dispatch(storeSearchResults(emailListObject))
         }
@@ -196,12 +231,17 @@ const EmailDetail = () => {
     }
   }, [messageId])
 
-
   // If there is no viewIndex set it by finding the index of the email.
   useEffect(() => {
     if (viewIndex === -1 && !isLoading) {
       if (activeEmailList && activeEmailList.threads.length > 0) {
-        dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
+        dispatch(
+          setViewIndex(
+            activeEmailList.threads.findIndex(
+              (item) => item.id === currentEmail
+            )
+          )
+        )
         activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
       }
     }
@@ -210,7 +250,9 @@ const EmailDetail = () => {
   // If there is no viewIndex set it by finding the index of the email in searchList.
   useEffect(() => {
     if (viewIndex === -1 && searchList && !isLoading) {
-      const viewIndexSearchList = searchList.threads.findIndex((item) => item.id === currentEmail)
+      const viewIndexSearchList = searchList.threads.findIndex(
+        (item) => item.id === currentEmail
+      )
       if (viewIndexSearchList > -1) {
         dispatch(setViewIndex(viewIndexSearchList))
       }
@@ -221,46 +263,61 @@ const EmailDetail = () => {
   // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
   useEffect(() => {
     if (viewIndex > -1 && !isSilentLoading) {
-      if (activeEmailList && activeEmailList.threads.length > 0 && activeEmailListThreadsLengthRef.current < activeEmailList.threads.length) {
+      if (
+        activeEmailList &&
+        activeEmailList.threads.length > 0 &&
+        activeEmailListThreadsLengthRef.current < activeEmailList.threads.length
+      ) {
         activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
-        dispatch(setViewIndex(activeEmailList.threads.findIndex((item) => item.id === currentEmail)))
+        dispatch(
+          setViewIndex(
+            activeEmailList.threads.findIndex(
+              (item) => item.id === currentEmail
+            )
+          )
+        )
       }
     }
   }, [viewIndex, activeEmailList, currentEmail, isSilentLoading])
 
-  return (
-    activeEmailList ?
-      <>
-        <EmailDetailHeader activeEmailList={activeEmailList} />
-        <AnimatedMountUnmount>
-          <S.Scroll clientState={isSorting || isFocused}>
-            <GS.OuterContainer isReplying={isReplying}>
-              {overviewId === local.MESSAGES &&
-                activeEmailList.threads.length > 0 &&
-                viewIndex > -1 && (
-                  <>
-                    <MessagesOverview
-                      threadDetail={activeEmailList.threads[viewIndex]}
-                      isLoading={isLoading}
-                      isReplying={isReplying}
-                      isReplyingListener={isReplyingListener}
-                      labelIds={labelIds}
+  return activeEmailList ? (
+    <>
+      <EmailDetailHeader activeEmailList={activeEmailList} />
+      <AnimatedMountUnmount>
+        <S.Scroll clientState={isSorting || isFocused}>
+          <GS.OuterContainer isReplying={isReplying}>
+            {overviewId === local.MESSAGES &&
+              activeEmailList.threads.length > 0 &&
+              viewIndex > -1 && (
+                <>
+                  <MessagesOverview
+                    threadDetail={activeEmailList.threads[viewIndex]}
+                    isLoading={isLoading}
+                    isReplying={isReplying}
+                    isReplyingListener={isReplyingListener}
+                    labelIds={labelIds}
+                  />
+                  <S.HiddenMessagesFeed>
+                    <PreLoadMessages
+                      threadDetailList={activeEmailList.threads}
+                      viewIndex={viewIndex}
                     />
-                    <S.HiddenMessagesFeed>
-                      <PreLoadMessages
-                        threadDetailList={activeEmailList.threads}
-                        viewIndex={viewIndex}
-                      />
-                    </S.HiddenMessagesFeed>
-                  </>)
-              }
-              {overviewId === local.FILES && activeEmailList.threads.length > 0 && (
-                <FilesOverview threadDetail={activeEmailList.threads[viewIndex]} isLoading={isLoading} />
+                  </S.HiddenMessagesFeed>
+                </>
               )}
-            </GS.OuterContainer>
-          </S.Scroll>
-        </AnimatedMountUnmount>
-      </> : <Baseloader />
+            {overviewId === local.FILES &&
+              activeEmailList.threads.length > 0 && (
+                <FilesOverview
+                  threadDetail={activeEmailList.threads[viewIndex]}
+                  isLoading={isLoading}
+                />
+              )}
+          </GS.OuterContainer>
+        </S.Scroll>
+      </AnimatedMountUnmount>
+    </>
+  ) : (
+    <Baseloader />
   )
 }
 

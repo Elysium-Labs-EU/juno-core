@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -54,13 +54,20 @@ const Spamclearoption = () => {
       >
         <DialogTitle id="alert-dialog-title">{DIALOG_HEADER}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">{DIALOG_CONTENT}</DialogContentText>
+          <DialogContentText id="alert-dialog-description">
+            {DIALOG_CONTENT}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             {CANCEL_BUTTON}
           </Button>
-          <Button variant="contained" onClick={archiveAllSpam} color="primary" autoFocus>
+          <Button
+            variant="contained"
+            onClick={archiveAllSpam}
+            color="primary"
+            autoFocus
+          >
             {OK_BUTTON}
           </Button>
         </DialogActions>

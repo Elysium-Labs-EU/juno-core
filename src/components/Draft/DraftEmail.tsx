@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import EmailList from '../EmailList/EmailList'
 import { setCurrentLabels } from '../../Store/labelsSlice'
 import { selectBaseLoaded } from '../../Store/baseSlice'
@@ -15,7 +15,11 @@ const DraftEmail = () => {
     }
   }, [baseLoaded])
 
-  return <AnimatedMountUnmount><EmailList /></AnimatedMountUnmount>
+  return (
+    <AnimatedMountUnmount>
+      <EmailList />
+    </AnimatedMountUnmount>
+  )
 }
 
 export default DraftEmail

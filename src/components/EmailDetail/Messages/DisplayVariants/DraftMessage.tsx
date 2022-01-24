@@ -1,4 +1,3 @@
-import React from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import { openDraftEmail } from '../../../../Store/draftsSlice'
@@ -17,7 +16,8 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const messageId = message && message.id
 
-  const EmailSnippet = message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+  const EmailSnippet =
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = SenderNameFull(message, emailAddress)
   const staticSenderNamePartial = SenderNamePartial(message, emailAddress)
@@ -33,12 +33,19 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
           <S.ClosedAvatarSender>
             <EmailAvatar avatarURL={staticSenderNameFull} />
             <S.ClosedSender>
-              <span style={{ fontStyle: 'italic' }} title={staticSenderNamePartial.emailAddress}>{staticSenderNamePartial.name}</span>
+              <span
+                style={{ fontStyle: 'italic' }}
+                title={staticSenderNamePartial.emailAddress}
+              >
+                {staticSenderNamePartial.name}
+              </span>
             </S.ClosedSender>
           </S.ClosedAvatarSender>
         </S.TopContainer>
         <S.ClosedSnippet>
-          <span style={{ fontWeight: 'bold' }}>{local.DRAFT_SNIPPET_INDICATOR}</span>
+          <span style={{ fontWeight: 'bold' }}>
+            {local.DRAFT_SNIPPET_INDICATOR}
+          </span>
           <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
         </S.ClosedSnippet>
         <S.TimeAttachmentContainer>

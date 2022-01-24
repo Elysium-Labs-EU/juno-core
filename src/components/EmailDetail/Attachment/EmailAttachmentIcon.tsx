@@ -1,8 +1,10 @@
-
-import React from 'react'
 import { FiFile, FiFilm, FiFileText, FiImage } from 'react-icons/fi'
 
-export default function EmailAttachmentIcon({ mimeType }: { mimeType: string }) {
+export default function EmailAttachmentIcon({
+  mimeType,
+}: {
+  mimeType: string
+}) {
   const iconMap: { [key: string]: {} } = {
     'image/png': <FiImage size={20} />,
     'text/plain': <FiFileText size={20} />,

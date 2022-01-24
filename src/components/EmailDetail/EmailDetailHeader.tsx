@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppSelector } from '../../Store/hooks'
@@ -15,7 +15,11 @@ import { FindLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
 import { IEmailListObject } from '../../Store/emailListTypes'
 
-const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
+const EmailDetailHeader = ({
+  activeEmailList,
+}: {
+  activeEmailList: IEmailListObject
+}) => {
   const isFocused = useAppSelector(selectIsFocused)
   const isSorting = useAppSelector(selectIsSorting)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -53,7 +57,11 @@ const EmailDetailHeader = ({ activeEmailList }: { activeEmailList: IEmailListObj
       ) : (
         <S.Wrapper>
           <S.FocusSortHeaderWrapper>
-            {isFocused ? <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle> : <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>}
+            {isFocused ? (
+              <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle>
+            ) : (
+              <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>
+            )}
           </S.FocusSortHeaderWrapper>
           <S.InnerMenu>
             <BackButton isFocused={isFocused} isSorting={isSorting} />

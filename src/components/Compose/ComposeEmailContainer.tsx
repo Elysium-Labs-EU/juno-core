@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import { selectComposeEmail, TrackComposeEmail } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
@@ -81,9 +82,9 @@ const ComposeEmailContainer = ({
   const handleChangeRecipients = (recipientListRaw: any) => {
     const recipientList = {
       fieldId: recipientListRaw.fieldId,
-      newValue: recipientListRaw.newValue.map(
-        (item: string | Contact) => typeof (item) === 'string'
-          ? { name: item, emailAddress: item } : item)
+      newValue: recipientListRaw.newValue.map((item: string | Contact) =>
+        typeof item === 'string' ? { name: item, emailAddress: item } : item
+      ),
     }
     switch (recipientList.fieldId) {
       case local.TO: {
@@ -131,15 +132,15 @@ const ComposeEmailContainer = ({
     const { option, fieldId } = selectedOption
     switch (fieldId) {
       case local.TO: {
-        setToValue(toValue.filter(item => item !== option))
+        setToValue(toValue.filter((item) => item !== option))
         break
       }
       case local.CC: {
-        setCCValue(ccValue.filter(item => item !== option))
+        setCCValue(ccValue.filter((item) => item !== option))
         break
       }
       case local.BCC: {
-        setBCCValue(bccValue.filter(item => item !== option))
+        setBCCValue(bccValue.filter((item) => item !== option))
         break
       }
       default: {
@@ -206,14 +207,26 @@ const ComposeEmailContainer = ({
     let mounted = true
     if (mounted) {
       if (!isEmpty(composeEmail)) {
-        setToValue(Array(composeEmail.to).filter((item) => item ? convertToContact(item) : null))
+        setToValue(
+          Array(composeEmail.to).filter((item) =>
+            item ? convertToContact(item) : null
+          )
+        )
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
-          setCCValue(Array(composeEmail.cc).filter((item) => item ? convertToContact(item) : null))
+          setCCValue(
+            Array(composeEmail.cc).filter((item) =>
+              item ? convertToContact(item) : null
+            )
+          )
         }
         if (composeEmail.bcc && composeEmail.bcc.length > 0) {
           setShowBCC(true)
-          setBCCValue(Array(composeEmail.bcc).filter((item) => item ? convertToContact(item) : null))
+          setBCCValue(
+            Array(composeEmail.bcc).filter((item) =>
+              item ? convertToContact(item) : null
+            )
+          )
         }
         setSubjectValue(composeEmail.subject)
         setBodyValue(composeEmail.body)

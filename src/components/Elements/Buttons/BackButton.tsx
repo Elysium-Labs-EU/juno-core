@@ -1,4 +1,3 @@
-import React from 'react'
 import { FiChevronLeft } from 'react-icons/fi'
 import { goBack, push } from 'redux-first-history'
 import CustomButton from './CustomButton'
@@ -6,7 +5,10 @@ import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { setIsFocused, setIsSorting } from '../../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { resetComposeEmail, selectComposeEmail } from '../../../Store/composeSlice'
+import {
+  resetComposeEmail,
+  selectComposeEmail,
+} from '../../../Store/composeSlice'
 import { resetDraftDetails } from '../../../Store/draftsSlice'
 
 interface BackButtonType {

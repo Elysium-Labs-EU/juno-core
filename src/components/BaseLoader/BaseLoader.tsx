@@ -1,4 +1,3 @@
-import React from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useSelector } from 'react-redux'
 import { Inner, Wrapper } from './BaseLoaderStyles'
@@ -12,7 +11,11 @@ const Baseloader = () => {
       <Inner>
         {!serviceUnavailable && (
           <>
-            <img style={{ marginBottom: '1rem' }} src={Logo} alt="Juno's Logo" />
+            <img
+              style={{ marginBottom: '1rem' }}
+              src={Logo}
+              alt="Juno's Logo"
+            />
             <CircularProgress />
           </>
         )}

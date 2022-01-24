@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import * as React from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
-import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
+import {
+  FiCheckSquare,
+  FiMoreHorizontal,
+  FiEdit,
+  FiInbox,
+  FiSearch,
+} from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
@@ -39,11 +46,11 @@ const Navigation = () => {
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget)
-        setShowMenu((prev) => placement !== newPlacement || !prev)
-        setPlacement(newPlacement)
-      }
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+      setShowMenu((prev) => placement !== newPlacement || !prev)
+      setPlacement(newPlacement)
+    }
   const popperId = showMenu ? 'navigation-more-menu' : undefined
 
   return (
@@ -94,7 +101,12 @@ const Navigation = () => {
             icon={<FiMoreHorizontal size={SIZE} />}
           />
         </S.NavItem>
-        <Popper id={popperId} open={showMenu} anchorEl={anchorEl} placement={placement}>
+        <Popper
+          id={popperId}
+          open={showMenu}
+          anchorEl={anchorEl}
+          placement={placement}
+        >
           <SubMenuHeader />
         </Popper>
       </S.NavList>

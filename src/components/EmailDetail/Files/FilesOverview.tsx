@@ -1,4 +1,3 @@
-import React from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
@@ -16,12 +15,9 @@ const FilesOverview = (props: IFilesOverview) => {
 
   const files = () => {
     if (threadDetail && threadDetail.messages) {
-      return (
-        threadDetail.messages.map((message) => <EmailAttachment
-          key={message.id}
-          message={message}
-        />)
-      )
+      return threadDetail.messages.map((message) => (
+        <EmailAttachment key={message.id} message={message} />
+      ))
     }
     return <span>{local.NO_FILES}</span>
   }

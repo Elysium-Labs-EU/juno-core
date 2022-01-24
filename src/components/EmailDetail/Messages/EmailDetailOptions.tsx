@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiDelete } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
@@ -21,7 +21,10 @@ interface IEmailDetailOptions {
   isReplyingListener: Function
 }
 
-const EmailDetailOptions = ({ threadDetail, isReplyingListener }: IEmailDetailOptions) => {
+const EmailDetailOptions = ({
+  threadDetail,
+  isReplyingListener,
+}: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const [showMenu, setShowMenu] = useState<boolean>(false)
@@ -31,16 +34,21 @@ const EmailDetailOptions = ({ threadDetail, isReplyingListener }: IEmailDetailOp
     setShowMenu(false)
   }, [location])
 
-
   // Use on legal labels - if there is at least 1 legal label, the item can be archived still.
   const staticEmailLabels = emailLabels(threadDetail)
-  const staticOnlyLegalLabels = onlyLegalLabelObjects({ labelNames: staticEmailLabels, storageLabels })
+  const staticOnlyLegalLabels = onlyLegalLabelObjects({
+    labelNames: staticEmailLabels,
+    storageLabels,
+  })
 
   return (
     <S.EmailOptionsContainer>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
-          <ReplyOption threadDetail={threadDetail} isReplyingListener={isReplyingListener} />
+          <ReplyOption
+            threadDetail={threadDetail}
+            isReplyingListener={isReplyingListener}
+          />
           {labelIds &&
             !labelIds.some(
               (item) =>
@@ -49,14 +57,20 @@ const EmailDetailOptions = ({ threadDetail, isReplyingListener }: IEmailDetailOp
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
                 })[0].id
-            ) && (
-              <ToDoOption threadDetail={threadDetail} />
-            )}
-          {staticOnlyLegalLabels.length > 0 && <>
-            <ArchiveOption threadDetail={threadDetail} />
-            <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
-          </>}
-          {staticOnlyLegalLabels.length === 0 && <DeleteOption messageId={threadDetail.id} icon={<FiDelete />} suppressed />}
+            ) && <ToDoOption threadDetail={threadDetail} />}
+          {staticOnlyLegalLabels.length > 0 && (
+            <>
+              <ArchiveOption threadDetail={threadDetail} />
+              <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
+            </>
+          )}
+          {staticOnlyLegalLabels.length === 0 && (
+            <DeleteOption
+              messageId={threadDetail.id}
+              icon={<FiDelete />}
+              suppressed
+            />
+          )}
           {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
