@@ -8,3 +8,4 @@ export const NO_MORE_RESULTS = "You've reached the end."
 export const UNREAD_LABEL = 'UNREAD'
 export const ARCHIVE_LABEL = 'ARCHIVE'
 export const SEARCH_LABEL = 'SEARCH'
+export const INBOX_LABEL = 'INBOX'

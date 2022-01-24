@@ -1,6 +1,6 @@
 import React from 'react'
 import { FiChevronLeft } from 'react-icons/fi'
-import { go, push } from 'redux-first-history'
+import { goBack, push } from 'redux-first-history'
 import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
@@ -25,18 +25,16 @@ const BackButton = (props: BackButtonType) => {
   }
 
   const navigateBack = () => {
-    !isFocused && !isSorting && dispatch(go(-1))
+    !isFocused && !isSorting && dispatch(goBack())
+    Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
     if (isFocused) {
       dispatch(setIsFocused(false))
       dispatch(push(Routes.HOME))
-      return
     }
     if (isSorting) {
       dispatch(setIsSorting(false))
       dispatch(push(Routes.INBOX))
-      return
     }
-    Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
   }
 
   return (

@@ -12,6 +12,7 @@ import emailListFilteredByLabel from '../utils/emailListFilteredByLabel'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
+import RouteConstants from '../constants/routes.json'
 import type { AppThunk, RootState } from './store'
 import {
   IEmailListThreadItem,
@@ -461,10 +462,14 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             if (isSorting || isFocused) {
               dispatch(setCurrentEmail(staticNextID))
               dispatch(setViewIndex(viewIndex + 1))
-              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
+              dispatch(push(`/mail/${ staticLabelURL }/${ staticNextID }/messages`))
             }
             if (!isSorting && !isFocused) {
-              dispatch(goBack())
+              if (labelIds.includes(global.INBOX_LABEL)) {
+                dispatch(push(RouteConstants.INBOX))
+              } else {
+                dispatch(push(RouteConstants.HOME))
+              }
             }
           }
         }
