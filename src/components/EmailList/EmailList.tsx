@@ -1,10 +1,17 @@
-import React, { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
-import { loadEmails, refreshEmailFeed, selectEmailList } from '../../Store/emailListSlice'
+import {
+  loadEmails,
+  refreshEmailFeed,
+  selectEmailList,
+} from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
-import { selectIsLoading, selectServiceUnavailable } from '../../Store/utilsSlice'
+import {
+  selectIsLoading,
+  selectServiceUnavailable,
+} from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState'
 import * as global from '../../constants/globalConstants'
@@ -29,7 +36,11 @@ const EmailList = () => {
 
   useEffect(() => {
     let mounted = true
-    if (labelIds && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && !labelIds.includes(global.ARCHIVE_LABEL)) {
+    if (
+      labelIds &&
+      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
+      !labelIds.includes(global.ARCHIVE_LABEL)
+    ) {
       const params = {
         labelIds,
         maxResults: global.MAX_RESULTS,
@@ -57,7 +68,12 @@ const EmailList = () => {
       labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
       !labelIds.includes(global.ARCHIVE_LABEL)
     ) {
-      if (emailList.length > 0 && emailList.filter((emailSubList) => emailSubList.labels?.includes(labelIds[0])).length > 0) {
+      if (
+        emailList.length > 0 &&
+        emailList.filter((emailSubList) =>
+          emailSubList.labels?.includes(labelIds[0])
+        ).length > 0
+      ) {
         const params = {
           labelIds,
           maxResults: 500,
@@ -83,7 +99,11 @@ const EmailList = () => {
               {threads.length > 0 && (
                 <GS.Base>
                   {threads.map((email) => (
-                    <EmailListItem key={email.id} email={email} showLabel={false} />
+                    <EmailListItem
+                      key={email.id}
+                      email={email}
+                      showLabel={false}
+                    />
                   ))}
                 </GS.Base>
               )}
@@ -94,7 +114,9 @@ const EmailList = () => {
                 {!isLoading && (
                   <CustomButton
                     disabled={isLoading}
-                    onClick={() => loadNextPage({ nextPageToken, labelIds, dispatch })}
+                    onClick={() =>
+                      loadNextPage({ nextPageToken, labelIds, dispatch })
+                    }
                     label={global.LOAD_MORE}
                     suppressed
                   />
@@ -113,10 +135,13 @@ const EmailList = () => {
     return <EmptyState />
   }
 
-
   // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
+    () =>
+      emailList.findIndex(
+        (threadList) =>
+          threadList.labels && threadList.labels.includes(labelIds[0])
+      ),
     [emailList, labelIds]
   )
 
@@ -129,11 +154,17 @@ const EmailList = () => {
 
   return (
     <>
-      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && labeledInbox()}
-      {isLoading && labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
-        <LoadingState />
+      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
+        labeledInbox()}
+      {isLoading &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
+          <LoadingState />
+        )}
+      {serviceUnavailable.length > 0 && (
+        <S.UnavailableContainer>
+          <span>{serviceUnavailable}</span>
+        </S.UnavailableContainer>
       )}
-      {serviceUnavailable.length > 0 && <S.UnavailableContainer><span>{serviceUnavailable}</span></S.UnavailableContainer>}
     </>
   )
 }

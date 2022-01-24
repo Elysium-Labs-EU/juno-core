@@ -1,5 +1,10 @@
-import React, { useState } from 'react'
-import { FiArchive, FiCheckCircle, FiCornerUpLeft, FiMoreHorizontal } from 'react-icons/fi'
+import { useState } from 'react'
+import {
+  FiArchive,
+  FiCheckCircle,
+  FiCornerUpLeft,
+  FiMoreHorizontal,
+} from 'react-icons/fi'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -19,7 +24,10 @@ interface IInlineThreadActionsRegular {
 
 const SIZE = 16
 
-const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegular) => {
+const InlineThreadActionsRegular = ({
+  id,
+  labelIds,
+}: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
   const isSearching = useAppSelector(selectIsSearching)
@@ -30,7 +38,15 @@ const InlineThreadActionsRegular = ({ id, labelIds }: IInlineThreadActionsRegula
       <S.Inner>
         <CustomIconButton
           icon={<FiCornerUpLeft size={SIZE} />}
-          onClick={() => ReplyOverview({ labelIds, id, dispatch, isSearching, storageLabels })}
+          onClick={() =>
+            ReplyOverview({
+              labelIds,
+              id,
+              dispatch,
+              isSearching,
+              storageLabels,
+            })
+          }
           title="Reply"
         />
         {labelIds &&

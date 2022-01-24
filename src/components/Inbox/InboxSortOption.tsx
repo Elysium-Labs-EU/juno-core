@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
@@ -16,18 +16,26 @@ const SortInbox = () => {
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
-    () => emailList.findIndex((threadList) => threadList.labels && threadList.labels.includes(labelIds[0])),
+    () =>
+      emailList.findIndex(
+        (threadList) =>
+          threadList.labels && threadList.labels.includes(labelIds[0])
+      ),
     [emailList, labelIds]
   )
 
   const handleClick = () => {
     const staticLabelURL = labelURL(labelIds)
     if (staticLabelURL) {
-      startSort({ dispatch, labelURL: staticLabelURL, emailList, emailListIndex })
+      startSort({
+        dispatch,
+        labelURL: staticLabelURL,
+        emailList,
+        emailListIndex,
+      })
       dispatch(setIsSorting(true))
     }
   }
-
 
   return (
     <CustomAttentionButton

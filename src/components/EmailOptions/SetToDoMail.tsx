@@ -21,7 +21,9 @@ const SetToDoMail = (props: SetToDoMailProps) => {
       removeLabelIds: onlyLegalLabels,
       addLabelIds: [toDoLabel[0].id],
     }
-    dispatch(updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels }))
+    dispatch(
+      updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels })
+    )
   }
 
   return ToDoAction()

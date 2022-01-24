@@ -16,6 +16,7 @@
   },
   "extends": [
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "airbnb",
     "airbnb-typescript",
     "prettier"
@@ -60,9 +61,11 @@
     ],
     "@typescript-eslint/no-useless-concat": "off",
     "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
-    "no-use-before-define": "off",
+    "no-use-before-define": "warn",
     "@typescript-eslint/no-use-before-define": ["error"],
     "no-console": "warn",
-    "react/function-component-definition": "off"
+    "no-restricted-syntax": 1,
+    "react/function-component-definition": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }

@@ -1,4 +1,3 @@
-import React from 'react'
 import isEmpty from 'lodash/isEmpty'
 import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as S from './EmailAttachmentStyles'
@@ -12,8 +11,15 @@ const EmailAttachment = ({ message }: { message: IEmailMessage }) => {
       !isEmpty(message) &&
       Object.prototype.hasOwnProperty.call(message.payload, 'parts')
     ) {
-      const parts = message.payload.parts.filter((item: IEmailAttachmentType) => item !== undefined)
-      if (parts && parts.some((object: IEmailAttachmentType) => object?.filename.length > 0)) {
+      const parts = message.payload.parts.filter(
+        (item: IEmailAttachmentType) => item !== undefined
+      )
+      if (
+        parts &&
+        parts.some(
+          (object: IEmailAttachmentType) => object?.filename.length > 0
+        )
+      ) {
         return parts.map((attachment: IEmailAttachmentType) =>
           attachment?.filename.length > 0 ? (
             <EmailAttachmentBubble

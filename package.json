@@ -63,8 +63,8 @@
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
-    "format": "prettier --write \"**/*.{js,jsx,json,md, tsx, ts}\"",
-    "lint:prettier": "prettier --check \"**/*.{js,jsx,json,md, tsx, ts}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
+    "lint:prettier": "prettier --check \"src/**/*.{js,jsx,json,md,tsx,ts}\""
   },
   "eslintConfig": {
     "extends": [

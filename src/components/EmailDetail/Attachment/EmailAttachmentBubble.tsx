@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { FiCheck, FiDownload } from 'react-icons/fi'
 import prettyBytes from 'pretty-bytes'
 import * as S from './EmailAttachmentBubbleStyles'
@@ -11,7 +11,13 @@ import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
 const FILE = 'File - '
 
-const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmailAttachmentType, messageId: string }) => {
+const RenderAttachment = ({
+  attachmentData,
+  messageId,
+}: {
+  attachmentData: IEmailAttachmentType
+  messageId: string
+}) => {
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -27,7 +33,9 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
       </S.AttachmentInner>
       <CustomIconButton
         onClick={() =>
-          dispatch(downloadAttachment({ messageId, attachmentData })).then(setDownloaded(true))
+          dispatch(downloadAttachment({ messageId, attachmentData })).then(
+            setDownloaded(true)
+          )
         }
         icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
       />
@@ -35,7 +43,15 @@ const RenderAttachment = ({ attachmentData, messageId }: { attachmentData: IEmai
   )
 }
 
-const EmailAttachmentBubble = ({ attachmentData, messageId }: { attachmentData: IEmailAttachmentType, messageId: string }) => (attachmentData.filename.length > 0 && messageId.length > 0 ? <RenderAttachment attachmentData={attachmentData} messageId={messageId} /> : null)
-
+const EmailAttachmentBubble = ({
+  attachmentData,
+  messageId,
+}: {
+  attachmentData: IEmailAttachmentType
+  messageId: string
+}) =>
+  attachmentData.filename.length > 0 && messageId.length > 0 ? (
+    <RenderAttachment attachmentData={attachmentData} messageId={messageId} />
+  ) : null
 
 export default EmailAttachmentBubble

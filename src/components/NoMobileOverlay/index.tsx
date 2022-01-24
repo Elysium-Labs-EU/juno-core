@@ -1,11 +1,10 @@
-import React from 'react'
 import styled from 'styled-components'
 import * as S from './noMobileOverlayStyles'
 import * as local from '../../constants/noMobileOverlayConstants'
 import * as theme from '../../constants/themeConstants'
 
 const H1 = styled.h1`
-  font-size: ${ theme.h1FontSize };
+  font-size: ${theme.h1FontSize};
 `
 
 const NoMobileOverlay = () => (

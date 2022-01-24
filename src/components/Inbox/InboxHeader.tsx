@@ -1,4 +1,3 @@
-import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import InboxSortOption from './InboxSortOption'
 import InboxRefreshOption from './InboxRefreshOption'

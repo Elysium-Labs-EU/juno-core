@@ -1,11 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
 import { Contact } from '../../../../Store/contactsTypes'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
-import { selectAllContacts, selectContactsLoaded, setAllContacts, setContactsLoaded } from '../../../../Store/contactsSlice'
+import {
+  selectAllContacts,
+  selectContactsLoaded,
+  setAllContacts,
+  setContactsLoaded,
+} from '../../../../Store/contactsSlice'
 import contactApi from '../../../../data/contactApi'
 import { setServiceUnavailable } from '../../../../Store/utilsSlice'
 import useDebounce from '../../../../Hooks/useDebounce'
@@ -28,7 +33,7 @@ const emailInput = (props: IEmailInputProps) => {
     inputValue,
     setInputValue,
     handleDelete,
-    willAutoFocus
+    willAutoFocus,
   } = props
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly Contact[]>([])
@@ -40,32 +45,38 @@ const emailInput = (props: IEmailInputProps) => {
   useEffect(() => {
     let mounted = true
     if (debouncedInputValue && debouncedInputValue.length > 1) {
-
-      (async () => {
-        const check = availableContacts.some((contact) => contact.emailAddress.includes(inputValue.toLowerCase()))
+      ;(async () => {
+        const check = availableContacts.some((contact) =>
+          contact.emailAddress.includes(inputValue.toLowerCase())
+        )
         if (!check) {
           const params = {
             query: inputValue,
-            readMask: 'emailAddresses,names'
+            readMask: 'emailAddresses,names',
           }
           try {
-            const responseQueryContacts = await contactApi().queryContacts(params)
+            const responseQueryContacts = await contactApi().queryContacts(
+              params
+            )
             if (responseQueryContacts.status === 200) {
               const {
                 data: { results },
               } = responseQueryContacts
 
-              const mappedResults = results && results.length > 0 ? results.map(
-                (contact: any): Contact => ({
-                  name: Object.prototype.hasOwnProperty.call(
-                    contact.person,
-                    'names'
-                  )
-                    ? contact.person.names[0].displayName
-                    : contact.person.emailAddresses[0].value,
-                  emailAddress: contact.person.emailAddresses[0].value,
-                })
-              ) : []
+              const mappedResults =
+                results && results.length > 0
+                  ? results.map(
+                      (contact: any): Contact => ({
+                        name: Object.prototype.hasOwnProperty.call(
+                          contact.person,
+                          'names'
+                        )
+                          ? contact.person.names[0].displayName
+                          : contact.person.emailAddresses[0].value,
+                        emailAddress: contact.person.emailAddresses[0].value,
+                      })
+                    )
+                  : []
 
               dispatch(setAllContacts(mappedResults))
               dispatch(setContactsLoaded(JSON.stringify(Date.now())))
@@ -80,7 +91,6 @@ const emailInput = (props: IEmailInputProps) => {
           setOptions(availableContacts)
         }
       })()
-
     }
     return () => {
       mounted = false
@@ -107,11 +117,15 @@ const emailInput = (props: IEmailInputProps) => {
         setOpen(false)
       }}
       value={valueState ?? []}
-      isOptionEqualToValue={(option, value) => option.emailAddress === value.emailAddress}
-      getOptionLabel={(option) => `${ option.name } <${ option.emailAddress }>`}
+      isOptionEqualToValue={(option, value) =>
+        option.emailAddress === value.emailAddress
+      }
+      getOptionLabel={(option) => `${option.name} <${option.emailAddress}>`}
       options={options}
       freeSolo
-      onChange={(event: any, newValue: any) => handleChange({ newValue, fieldId: id })}
+      onChange={(event: any, newValue: any) =>
+        handleChange({ newValue, fieldId: id })
+      }
       inputValue={inputValue}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue)
@@ -120,7 +134,14 @@ const emailInput = (props: IEmailInputProps) => {
         value.map((option: Contact, index: number) => {
           if (option) {
             return (
-              <RecipientChip key={option.emailAddress} option={option} getTagProps={getTagProps} handleDelete={handleDelete} index={index} id={id} />
+              <RecipientChip
+                key={option.emailAddress}
+                option={option}
+                getTagProps={getTagProps}
+                handleDelete={handleDelete}
+                index={index}
+                id={id}
+              />
             )
           }
           return null

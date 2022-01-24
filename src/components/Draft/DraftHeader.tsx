@@ -1,4 +1,3 @@
-import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import * as local from '../../constants/draftConstants'
 import * as S from '../MainHeader/HeaderStyles'

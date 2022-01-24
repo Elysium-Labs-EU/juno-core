@@ -1,4 +1,3 @@
-import React from 'react'
 import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
@@ -20,13 +19,22 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
     labelIds: ['DRAFT'],
   })
 
-  const draftId = draftList.length > 0 && draftList.find((draft) => draft.message.threadId === threadId)?.id
+  const draftId =
+    draftList.length > 0 &&
+    draftList.find((draft) => draft.message.threadId === threadId)?.id
 
   return (
     <S.Wrapper>
       <S.Inner>
         <CustomIconButton
-          onClick={() => DeleteDraft({ threadId, dispatch, staticIndexActiveEmailList, draftId })}
+          onClick={() =>
+            DeleteDraft({
+              threadId,
+              dispatch,
+              staticIndexActiveEmailList,
+              draftId,
+            })
+          }
           icon={<FiDelete size={SIZE} />}
           title="Discard Draft"
         />

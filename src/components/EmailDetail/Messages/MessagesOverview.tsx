@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { memo, useEffect } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -8,12 +8,14 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
-import { IEmailListThreadItem, IEmailMessage } from '../../../Store/emailListTypes'
+import {
+  IEmailListThreadItem,
+  IEmailMessage,
+} from '../../../Store/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
-
 
 const fromEmail = (threadDetail: IEmailListThreadItem) => {
   const query = 'From'
@@ -61,18 +63,34 @@ const detailDisplaySelector = ({
   message,
   threadDetail,
   isReplyingListener,
-  index
+  index,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
     if (message.labelIds.includes(draft.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
     if (!message.labelIds.includes(draft.DRAFT_LABEL)) {
-      return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
+      return (
+        <ReadUnreadMessage
+          message={message}
+          threadDetail={threadDetail}
+          FROM={local.FROM}
+          isReplyingListener={isReplyingListener}
+          messageIndex={index}
+        />
+      )
     }
     return null
   }
-  return <ReadUnreadMessage message={message} threadDetail={threadDetail} FROM={local.FROM} isReplyingListener={isReplyingListener} messageIndex={index} />
+  return (
+    <ReadUnreadMessage
+      message={message}
+      threadDetail={threadDetail}
+      FROM={local.FROM}
+      isReplyingListener={isReplyingListener}
+      messageIndex={index}
+    />
+  )
 }
 
 interface IMessagesOverview {
@@ -83,7 +101,7 @@ interface IMessagesOverview {
   labelIds: string[]
 }
 
-const MessagesOverview = React.memo(
+const MessagesOverview = memo(
   ({
     threadDetail,
     isLoading,
@@ -106,7 +124,7 @@ const MessagesOverview = React.memo(
               message,
               threadDetail,
               isReplyingListener,
-              index
+              index,
             })}
           </ES.EmailWrapper>
         ))
@@ -114,7 +132,12 @@ const MessagesOverview = React.memo(
     useEffect(() => {
       if (threadDetail && Object.keys(threadDetail).length > 0) {
         if (threadDetail.messages && threadDetail.messages.length > 0) {
-          if (threadDetail.messages.filter((message) => message.labelIds?.includes(global.UNREAD_LABEL) === true).length > 0) {
+          if (
+            threadDetail.messages.filter(
+              (message) =>
+                message.labelIds?.includes(global.UNREAD_LABEL) === true
+            ).length > 0
+          ) {
             const messageId = threadDetail.id
             markEmailAsRead({ messageId, dispatch, labelIds })
           }
@@ -144,9 +167,11 @@ const MessagesOverview = React.memo(
               </ES.CardFullWidth>
             </ES.DetailBase>
           </ES.EmailDetailContainer>
-          {threadDetail && !isReplying && (
-            threadDetail.messages &&
-            <EmailDetailOptions threadDetail={threadDetail} isReplyingListener={isReplyingListener} />
+          {threadDetail && !isReplying && threadDetail.messages && (
+            <EmailDetailOptions
+              threadDetail={threadDetail}
+              isReplyingListener={isReplyingListener}
+            />
           )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (

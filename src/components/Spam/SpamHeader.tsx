@@ -1,4 +1,3 @@
-import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import SpamClearOption from './SpamClearOption'
 import * as GS from '../../styles/globalStyles'

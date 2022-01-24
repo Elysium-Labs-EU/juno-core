@@ -1,4 +1,3 @@
-import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'

@@ -1,4 +1,3 @@
-import React from 'react'
 import BackButton from '../Elements/Buttons/BackButton'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import * as local from '../../constants/composeEmailConstants'

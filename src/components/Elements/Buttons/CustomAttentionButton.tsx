@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import React from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
 import * as theme from '../../../constants/themeConstants'
 
@@ -16,31 +16,32 @@ const Button = styled.button`
   font-family: 'Raleway Variable', sans-serif;
   border-radius: 20px;
   border: none;
-  background-color: ${ theme.colorPurple };
+  background-color: ${theme.colorPurple};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 0.4rem 0.8rem;
     span {
-      color: ${ theme.colorWhite };
+      color: ${theme.colorWhite};
       font-size: 1rem;
     }
   }
 
   &:hover {
-    background-color: ${ theme.colorPurpleDark };
+    background-color: ${theme.colorPurpleDark};
     cursor: pointer;
   }
 
   &:disabled {
-    background-color: ${ theme.colorGreyHover };
+    background-color: ${theme.colorGreyHover};
     opacity: 38%;
     div {
       span {
-        color: ${ theme.colorBlack };
+        color: ${theme.colorBlack};
       }
     }
-  }`
+  }
+`
 
 const InnerButton = styled.div`
   display: flex;
@@ -70,5 +71,3 @@ CustomAttentionButton.defaultProps = {
   disabled: false,
   className: null,
 }
-
-
