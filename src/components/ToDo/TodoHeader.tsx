@@ -1,4 +1,3 @@
-import React from 'react'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import TodoFocusOption from './TodoFocusOption'
 import * as local from '../../constants/todoConstants'

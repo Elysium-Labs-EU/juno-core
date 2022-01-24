@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import { goBack, push } from 'redux-first-history'
+import { push } from 'redux-first-history'
 import threadApi from '../data/threadApi'
 import {
   setIsLoading,
@@ -299,27 +299,23 @@ export const loadEmailDetails =
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
-        const buffer: IEmailListThreadItem[] = []
-        const loadCount = threads.length
+        const buffer: any = []
 
         if (threads.length > 0) {
-          threads.forEach(async (item) => {
-            const threadDetail = await threadApi().getThreadDetail(item.id)
-            buffer.push(threadDetail)
-            if (buffer.length === loadCount) {
-              dispatch(
-                listAddEmailList({
-                  labels,
-                  threads: buffer,
-                  nextPageToken: nextPageToken ?? null,
-                })
-              )
-              dispatch(setLoadedInbox(labels))
-              getState().utils.isLoading && dispatch(setIsLoading(false))
-              getState().utils.isSilentLoading &&
-                dispatch(setIsSilentLoading(false))
-            }
-          })
+          for (const thread of threads) {
+            buffer.push(threadApi().getThreadDetail(thread.id))
+          }
+          dispatch(
+            listAddEmailList({
+              labels,
+              threads: await Promise.all(buffer),
+              nextPageToken: nextPageToken ?? null,
+            })
+          )
+          dispatch(setLoadedInbox(labels))
+          getState().utils.isLoading && dispatch(setIsLoading(false))
+          getState().utils.isSilentLoading &&
+            dispatch(setIsSilentLoading(false))
         }
       } else {
         if (
@@ -462,13 +458,17 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             if (isSorting || isFocused) {
               dispatch(setCurrentEmail(staticNextID))
               dispatch(setViewIndex(viewIndex + 1))
-              dispatch(push(`/mail/${ staticLabelURL }/${ staticNextID }/messages`))
+              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
             }
-            if (!isSorting && !isFocused && labelIds.includes(global.INBOX_LABEL)) {
-                dispatch(push(RouteConstants.INBOX))
-              } else {
-                dispatch(push(RouteConstants.HOME))
-              }
+            if (
+              !isSorting &&
+              !isFocused &&
+              labelIds.includes(global.INBOX_LABEL)
+            ) {
+              dispatch(push(RouteConstants.INBOX))
+            } else {
+              dispatch(push(RouteConstants.HOME))
+            }
           }
         }
 

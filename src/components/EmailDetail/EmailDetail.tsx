@@ -102,7 +102,7 @@ const EmailDetail = () => {
     const response = await threadApi().getThreadDetail(currentEmail)
     if (response) {
       const emailListObject = {
-        threads: [response.thread],
+        threads: [response],
         nextPageToken: null
       }
       dispatch(storeSearchResults(emailListObject))
