@@ -15,7 +15,7 @@ import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectIsSearching } from '../../Store/utilsSlice'
+import { selectInSearch } from '../../Store/utilsSlice'
 
 interface IInlineThreadActionsRegular {
   id: string
@@ -30,7 +30,7 @@ const InlineThreadActionsRegular = ({
 }: IInlineThreadActionsRegular) => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const storageLabels = useAppSelector(selectStorageLabels)
-  const isSearching = useAppSelector(selectIsSearching)
+  const inSearch = useAppSelector(selectInSearch)
   const dispatch = useAppDispatch()
 
   return (
@@ -43,7 +43,7 @@ const InlineThreadActionsRegular = ({
               labelIds,
               id,
               dispatch,
-              isSearching,
+              inSearch,
               storageLabels,
             })
           }

@@ -6,6 +6,7 @@ import startSort from '../../utils/startSort'
 import { selectEmailList, setIsSorting } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
+import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -34,6 +35,7 @@ const SortInbox = () => {
         emailListIndex,
       })
       dispatch(setIsSorting(true))
+      dispatch(setSessionViewIndex(0))
     }
   }
 

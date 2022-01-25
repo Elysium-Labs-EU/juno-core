@@ -8,7 +8,7 @@ interface IReplyOverview {
   labelIds: string[]
   id: string
   dispatch: Function
-  isSearching: boolean
+  inSearch: boolean
   storageLabels: LabelIdName[]
 }
 
@@ -16,14 +16,14 @@ const ReplyOverview = ({
   labelIds,
   id,
   dispatch,
-  isSearching,
+  inSearch,
   storageLabels,
 }: IReplyOverview) => {
   dispatch(resetComposeEmail())
   dispatch(resetDraftDetails())
   dispatch(setCurrentEmail(id))
   dispatch(setIsReplying(true))
-  openEmail({ labelIds, id, dispatch, isSearching, storageLabels })
+  openEmail({ labelIds, id, dispatch, inSearch, storageLabels })
 }
 
 export default ReplyOverview

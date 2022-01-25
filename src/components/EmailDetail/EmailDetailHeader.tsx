@@ -65,7 +65,7 @@ const EmailDetailHeader = ({
           </S.FocusSortHeaderWrapper>
           <S.InnerMenu>
             <BackButton isFocused={isFocused} isSorting={isSorting} />
-            <EmailPosition activeEmailList={activeEmailList} />
+            <EmailPosition />
           </S.InnerMenu>
         </S.Wrapper>
       )}

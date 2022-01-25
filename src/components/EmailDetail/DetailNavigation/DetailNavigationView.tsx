@@ -9,7 +9,7 @@ import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
 import { IEmailListObject } from '../../../Store/emailListTypes'
 
-const SIZE = 20
+const ICON_SIZE = 20
 interface IDetailNavigationView {
   labelIds: string[]
   activeEmailList: IEmailListObject
@@ -46,7 +46,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
           }
           disabled={isDisabledPrev}
           title="Previous email"
-          icon={<FiChevronLeft size={SIZE} />}
+          icon={<FiChevronLeft size={ICON_SIZE} />}
         />
       </S.NavButton>
       <S.NavButton>
@@ -56,7 +56,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
           title="Next email"
           icon={
             !isLoading ? (
-              <FiChevronRight size={SIZE} />
+              <FiChevronRight size={ICON_SIZE} />
             ) : (
               <CircularProgress size={10} />
             )
@@ -67,7 +67,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
         <CustomIconButton
           title="Close view"
           onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
-          icon={<FiX size={SIZE} />}
+          icon={<FiX size={ICON_SIZE} />}
         />
       </S.NavButton>
     </S.Wrapper>

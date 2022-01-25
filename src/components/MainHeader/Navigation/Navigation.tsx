@@ -16,7 +16,7 @@ import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
-import { setIsSearching } from '../../../Store/utilsSlice'
+import { setInSearch } from '../../../Store/utilsSlice'
 
 const SIZE = 16
 
@@ -46,11 +46,11 @@ const Navigation = () => {
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'navigation-more-menu' : undefined
 
   return (
@@ -80,7 +80,7 @@ const Navigation = () => {
             <CustomIconButton
               icon={<FiSearch size={SIZE} />}
               isActive={active === 'settings'}
-              onClick={() => dispatch(setIsSearching(true))}
+              onClick={() => dispatch(setInSearch(true))}
             />
           </S.NavItem>
         </Tooltip>

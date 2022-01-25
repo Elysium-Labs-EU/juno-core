@@ -8,6 +8,7 @@ import startSort from '../../utils/startSort'
 import { selectEmailList, setIsFocused } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
+import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -34,6 +35,7 @@ const TodoFocusOption = () => {
         emailListIndex,
       })
       dispatch(setIsFocused(true))
+      dispatch(setSessionViewIndex(0))
     }
   }
 

@@ -11,7 +11,7 @@ import {
 } from '../../Store/emailDetailSlice'
 import {
   selectIsLoading,
-  selectIsSilentLoading,
+  // selectIsSilentLoading,
   selectServiceUnavailable,
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
@@ -49,7 +49,7 @@ const EmailDetail = () => {
   const emailList = useAppSelector(selectEmailList)
   const searchList = useAppSelector(selectSearchList)
   const isLoading = useAppSelector(selectIsLoading)
-  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  // const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
@@ -88,7 +88,7 @@ const EmailDetail = () => {
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-            activeEmailList.threads.length - 1 - messageIndex
+          activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )
@@ -154,8 +154,7 @@ const EmailDetail = () => {
       activeEmailList &&
       activeEmailList.threads.length > 0 &&
       emailList &&
-      emailList[emailListIndex] &&
-      viewIndex === -1
+      emailList[emailListIndex]
     ) {
       setActiveEmailList(emailList[emailListIndex])
       return
@@ -260,25 +259,25 @@ const EmailDetail = () => {
   }, [viewIndex, searchList, currentEmail, isLoading])
 
   // TODO: Double check this logic
-  // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
-  useEffect(() => {
-    if (viewIndex > -1 && !isSilentLoading) {
-      if (
-        activeEmailList &&
-        activeEmailList.threads.length > 0 &&
-        activeEmailListThreadsLengthRef.current < activeEmailList.threads.length
-      ) {
-        activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
-        dispatch(
-          setViewIndex(
-            activeEmailList.threads.findIndex(
-              (item) => item.id === currentEmail
-            )
-          )
-        )
-      }
-    }
-  }, [viewIndex, activeEmailList, currentEmail, isSilentLoading])
+  // // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
+  // useEffect(() => {
+  //   if (viewIndex > -1 && !isSilentLoading) {
+  //     if (
+  //       activeEmailList &&
+  //       activeEmailList.threads.length > 0 &&
+  //       activeEmailListThreadsLengthRef.current < activeEmailList.threads.length
+  //     ) {
+  //       activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
+  //       dispatch(
+  //         setViewIndex(
+  //           activeEmailList.threads.findIndex(
+  //             (item) => item.id === currentEmail
+  //           )
+  //         )
+  //       )
+  //     }
+  //   }
+  // }, [viewIndex, activeEmailList, currentEmail, isSilentLoading])
 
   return activeEmailList ? (
     <>

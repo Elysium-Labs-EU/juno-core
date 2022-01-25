@@ -47,7 +47,7 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const user = await userApi().fetchUser()
-    const { labels } = await labelApi().fetchLabel()
+    const { labels } = await labelApi().fetchLabels()
     if (labels && user && user.status === 200) {
       dispatch(setProfile(user.data))
       if (labels.length > 0) {

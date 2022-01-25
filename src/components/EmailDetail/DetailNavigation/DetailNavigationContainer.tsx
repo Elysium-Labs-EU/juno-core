@@ -12,11 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import DetailNavigationView from './DetailNavigationView'
 import { IEmailListObject } from '../../../Store/emailListTypes'
 
-const DetailNavigationContainer = ({
-  activeEmailList,
-}: {
-  activeEmailList: IEmailListObject
-}) => {
+const DetailNavigationContainer = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const currentEmail = useAppSelector(selectCurrentEmail)

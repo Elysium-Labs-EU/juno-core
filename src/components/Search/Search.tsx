@@ -7,7 +7,7 @@ import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectIsSearching, setIsSearching } from '../../Store/utilsSlice'
+import { selectInSearch, setInSearch } from '../../Store/utilsSlice'
 import threadApi from '../../data/threadApi'
 import {
   IEmailListObject,
@@ -105,11 +105,11 @@ const loadMoreResults = ({
 
 // Reset viewIndex to have emailDetail reassess its viewIndex
 const openDetail = (dispatch: Function) => {
-  dispatch(setIsSearching(false))
+  dispatch(setInSearch(false))
   dispatch(setViewIndex(-1))
 }
 
-const handleClose = (dispatch: Function) => dispatch(setIsSearching(false))
+const handleClose = (dispatch: Function) => dispatch(setInSearch(false))
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('')
@@ -118,7 +118,7 @@ const Search = () => {
   const [searchResults, setSearchResults] = useState<IEmailListObjectSearch>()
   const [loadState, setLoadState] = useState(SEARCH_STATE.IDLE)
   const dispatch = useAppDispatch()
-  const isSearching = useAppSelector(selectIsSearching)
+  const isSearching = useAppSelector(selectInSearch)
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
@@ -218,7 +218,7 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread) => (
                 <div
-                  key={`${thread.id}-search`}
+                  key={`${ thread.id }-search`}
                   onClick={() => openDetail(dispatch)}
                   aria-hidden="true"
                 >
