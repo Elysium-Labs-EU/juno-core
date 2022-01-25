@@ -7,6 +7,8 @@ interface IUtilsState {
   isLoading: boolean
   serviceUnavailable: string
   isSilentLoading: boolean
+  isSettingsOpen: boolean
+  isAvatarVisible: boolean
 }
 
 const initialState: IUtilsState = Object.freeze({
@@ -14,6 +16,8 @@ const initialState: IUtilsState = Object.freeze({
   isLoading: false,
   serviceUnavailable: '',
   isSilentLoading: false,
+  isSettingsOpen: false,
+  isAvatarVisible: localStorage.getItem("showAvatar") === "true"
 })
 
 export const utilsSlice = createSlice({
@@ -32,6 +36,12 @@ export const utilsSlice = createSlice({
     setIsSilentLoading: (state, action: PayloadAction<boolean>) => {
       state.isSilentLoading = action.payload
     },
+    setIsSettingsOpen: (state, action: PayloadAction<boolean>) => {
+      state.isSettingsOpen = action.payload
+    },
+    setShowAvatar: (state, action: PayloadAction<boolean>) => {
+      state.isAvatarVisible = action.payload
+    }
   },
 })
 
@@ -40,9 +50,13 @@ export const {
   setIsLoading,
   setServiceUnavailable,
   setIsSilentLoading,
+  setIsSettingsOpen,
+  setShowAvatar,
 } = utilsSlice.actions
 
 export const selectIsSearching = (state: RootState) => state.utils.isSearching
+export const selectIsSettingsOpen = (state: RootState) => state.utils.isSettingsOpen
+export const isAvatarVisible = (state: RootState) => state.utils.isAvatarVisible
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable

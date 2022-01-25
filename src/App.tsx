@@ -18,7 +18,6 @@ const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
 const ComposeEmail = lazy(
   () => import('./components/Compose/ComposeEmailContainer')
 )
-const Settings = lazy(() => import('./components/Settings'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 // const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
@@ -93,14 +92,6 @@ const App = () => {
                 }
               />
               {/* <Route path={RoutesConstants.SPAM} element={<Suspense fallback={<LoadingState />}><SpamEmail /></Suspense>} /> */}
-              <Route
-                path={RoutesConstants.SETTINGS}
-                element={
-                  <Suspense fallback={<LoadingState />}>
-                    <Settings />
-                  </Suspense>
-                }
-              />
               <Route
                 path={RoutesConstants.INBOX}
                 element={
