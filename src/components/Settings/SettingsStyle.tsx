@@ -10,9 +10,9 @@ export const Dialog = styled.div`
   justify-content: center;
   flex-direction: column;
   transform: translate(-50%, -50%);
-  width: 525px;
-  max-height: calc(100vh - 225px);
-  min-height: 400px;
+  width: 475px;
+  max-height: calc(100vh - 325px);
+  min-height: 300px;
   background-color: ${ themeConstants.colorWhite };
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   border-radius: 5px;
