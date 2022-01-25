@@ -2,17 +2,17 @@ import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import CloseMail from '../../../utils/closeEmail'
-import NavigatePreviousMail from '../../../utils/navigatePreviousEmail'
+import navigatePreviousMail from '../../../utils/navigatePreviousEmail'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
-import { IEmailListObject } from '../../../Store/emailListTypes'
+import { IEmailListObject, IEmailListObjectSearch } from '../../../Store/emailListTypes'
 
 const ICON_SIZE = 20
 interface IDetailNavigationView {
   labelIds: string[]
-  activeEmailList: IEmailListObject
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
   viewIndex: number
   isDisabledPrev: boolean
   isDisabledNext: boolean
@@ -37,7 +37,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
       <S.NavButton>
         <CustomIconButton
           onClick={() =>
-            NavigatePreviousMail({
+            navigatePreviousMail({
               labelIds,
               activeEmailList,
               viewIndex,

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as React from 'react'
 import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
@@ -18,9 +18,8 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
-import { setViewIndex } from '../../Store/emailDetailSlice'
 import {
-  listClearSearchResults,
+  selectSearchList,
   storeSearchResults,
 } from '../../Store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
@@ -39,7 +38,7 @@ interface IIntitialSearch {
   setSearchResults: Function
   dispatch: Function
 }
-interface ILoadMoreResults {
+interface ILoadMoreSearchResults {
   searchValue: string
   searchResults: IEmailListObjectSearch
   setLoadState: Function
@@ -57,14 +56,12 @@ const shouldClearOutPreviousResults = ({
   searchValueRef,
   searchValue,
   setSearchResults,
-  dispatch,
 }: IShouldClearOutPreviousResults) => {
   if (
     searchValueRef.current !== searchValue &&
     searchValueRef.current.length > 0
   ) {
     setSearchResults(undefined)
-    dispatch(listClearSearchResults())
   }
 }
 
@@ -89,12 +86,12 @@ const intitialSearch = ({
   fetchSearchThreads(searchBody)
 }
 
-const loadMoreResults = ({
+export const loadMoreSearchResults = ({
   searchValue,
   searchResults,
   setLoadState,
   fetchSearchThreads,
-}: ILoadMoreResults) => {
+}: ILoadMoreSearchResults) => {
   const searchBody = {
     q: searchValue,
     nextPageToken: searchResults?.nextPageToken,
@@ -103,10 +100,9 @@ const loadMoreResults = ({
   fetchSearchThreads(searchBody)
 }
 
-// Reset viewIndex to have emailDetail reassess its viewIndex
-const openDetail = (dispatch: Function) => {
+const openDetail = ({ dispatch, searchResults }: { dispatch: Function, searchResults: IEmailListObjectSearch }) => {
+  dispatch(storeSearchResults(searchResults))
   dispatch(setInSearch(false))
-  dispatch(setViewIndex(-1))
 }
 
 const handleClose = (dispatch: Function) => dispatch(setInSearch(false))
@@ -119,6 +115,7 @@ const Search = () => {
   const [loadState, setLoadState] = useState(SEARCH_STATE.IDLE)
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
+  const searchList = useAppSelector(selectSearchList)
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
@@ -128,11 +125,16 @@ const Search = () => {
     setSearchValue('')
     setSearchResults(undefined)
     setLoadState(SEARCH_STATE.IDLE)
-    dispatch(listClearSearchResults())
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    if (searchList && searchResults && searchResults.threads.length < searchList.threads.length) {
+      setSearchResults(searchList)
+    }
+  }, [searchList])
 
   const fetchSearchThreads = async (searchBody: any) => {
     const response: IEmailListObject = await threadApi().getThreads(searchBody)
@@ -148,11 +150,11 @@ const Search = () => {
           if (searchValueRef.current !== searchValue) {
             searchValueRef.current = searchValue
             const newStateObject = {
+              q: searchBody.q,
               threads: sortThreads(buffer),
               nextPageToken: response.nextPageToken ?? null,
             }
             setSearchResults(newStateObject)
-            dispatch(storeSearchResults(newStateObject))
             return
           }
           if (searchResults && searchResults.threads.length > 0) {
@@ -161,7 +163,6 @@ const Search = () => {
               nextPageToken: response.nextPageToken ?? null,
             }
             setSearchResults(newStateObject)
-            dispatch(storeSearchResults(newStateObject))
           }
         }
       })
@@ -218,8 +219,8 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread) => (
                 <div
-                  key={`${thread.id}-search`}
-                  onClick={() => openDetail(dispatch)}
+                  key={`${ thread.id }-search`}
+                  onClick={() => openDetail({ dispatch, searchResults })}
                   aria-hidden="true"
                 >
                   <EmailListItem email={thread} showLabel />
@@ -230,7 +231,7 @@ const Search = () => {
                   {loadState !== SEARCH_STATE.LOADING && (
                     <CustomButton
                       onClick={() =>
-                        loadMoreResults({
+                        loadMoreSearchResults({
                           searchValue,
                           searchResults,
                           setLoadState,

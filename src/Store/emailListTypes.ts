@@ -31,17 +31,18 @@ export interface IEmailListThreadItem {
 export interface IEmailListObject {
   labels: string[]
   threads: IEmailListThreadItem[]
-  nextPageToken: string
+  nextPageToken: string | null
 }
 
 export interface IEmailListObjectSearch {
+  q?: string
   threads: IEmailListThreadItem[]
   nextPageToken: string | null
 }
 
 export interface IEmailListState {
   emailList: IEmailListObject[]
-  searchList: IEmailListObject | null
+  searchList: IEmailListObjectSearch | null
   isFocused: boolean
   isSearching: boolean
   isSorting: boolean

@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   height: 2rem;
-  padding-top: 0.5rem;
+  padding-top: 1rem;
 `
 
 const LoadingState = () => {
