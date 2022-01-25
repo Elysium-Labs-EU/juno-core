@@ -218,7 +218,7 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread) => (
                 <div
-                  key={`${ thread.id }-search`}
+                  key={`${thread.id}-search`}
                   onClick={() => openDetail(dispatch)}
                   aria-hidden="true"
                 >

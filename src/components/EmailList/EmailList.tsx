@@ -23,7 +23,11 @@ import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
-import { setCurrentEmail, setSessionViewIndex, setViewIndex } from '../../Store/emailDetailSlice'
+import {
+  setCurrentEmail,
+  setSessionViewIndex,
+  setViewIndex,
+} from '../../Store/emailDetailSlice'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)

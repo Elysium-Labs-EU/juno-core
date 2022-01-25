@@ -46,11 +46,11 @@ const Navigation = () => {
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget)
-        setShowMenu((prev) => placement !== newPlacement || !prev)
-        setPlacement(newPlacement)
-      }
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+      setShowMenu((prev) => placement !== newPlacement || !prev)
+      setPlacement(newPlacement)
+    }
   const popperId = showMenu ? 'navigation-more-menu' : undefined
 
   return (

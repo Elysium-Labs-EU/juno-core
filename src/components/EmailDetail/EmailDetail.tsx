@@ -88,7 +88,7 @@ const EmailDetail = () => {
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-          activeEmailList.threads.length - 1 - messageIndex
+            activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )

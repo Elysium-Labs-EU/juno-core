@@ -65,38 +65,38 @@ const EmailListItem = memo(
     const staticEmailLabels = emailLabels(staticShouldUseDraftOrRegular)
     const staticRecipientName = RecipientName(
       staticShouldUseDraftOrRegular.message ||
-      staticShouldUseDraftOrRegular.messages![
-      staticShouldUseDraftOrRegular.messages!.length - 1
-      ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
       emailAddress
     )
     const staticSenderPartial = SenderNamePartial(
       staticShouldUseDraftOrRegular.message ||
-      staticShouldUseDraftOrRegular.messages![
-      staticShouldUseDraftOrRegular.messages!.length - 1
-      ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
       emailAddress
     )
     const staticSenderFull = SenderNameFull(
       staticShouldUseDraftOrRegular.message ||
-      staticShouldUseDraftOrRegular.messages![
-      staticShouldUseDraftOrRegular.messages!.length - 1
-      ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
       emailAddress
     )
     const staticSubjectFetch = EmailSubject(
       staticShouldUseDraftOrRegular.message ||
-      staticShouldUseDraftOrRegular.messages![
-      staticShouldUseDraftOrRegular.messages!.length - 1
-      ]
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]
     )
     const staticSubject =
       staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
     const staticSnippet = EmailSnippet(
       staticShouldUseDraftOrRegular.message ||
-      staticShouldUseDraftOrRegular.messages![
-      staticShouldUseDraftOrRegular.messages!.length - 1
-      ]
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]
     )
 
     const handleClick = () => {

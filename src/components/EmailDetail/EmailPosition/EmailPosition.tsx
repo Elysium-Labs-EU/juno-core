@@ -8,7 +8,8 @@ import * as GS from '../../../styles/globalStyles'
 import labelApi from '../../../data/labelApi'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 
-const EXPLANATION = 'This shows on what email you are of all the emails in this GMail box.'
+const EXPLANATION =
+  'This shows on what email you are of all the emails in this GMail box.'
 
 const EmailPosition = () => {
   const sessionViewIndex = useAppSelector(selectSessionViewIndex)
@@ -34,11 +35,13 @@ const EmailPosition = () => {
     <S.Wrapper>
       {loadingState === 'loaded' ? (
         <Tooltip title={EXPLANATION}>
-          <GS.TextMutedParagraph >
+          <GS.TextMutedParagraph>
             {sessionViewIndex + 1} / {totalThreads}
           </GS.TextMutedParagraph>
         </Tooltip>
-      ) : <CircularProgress size={10} />}
+      ) : (
+        <CircularProgress size={10} />
+      )}
     </S.Wrapper>
   )
 }
