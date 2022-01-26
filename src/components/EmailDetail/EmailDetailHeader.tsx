@@ -4,7 +4,7 @@ import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppSelector } from '../../Store/hooks'
 import Menu from './Menu/Menu'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
-import { selectIsFocused, selectIsSorting } from '../../Store/emailListSlice'
+import { selectCoreStatus } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/Buttons/BackButton'
@@ -20,8 +20,7 @@ const EmailDetailHeader = ({
 }: {
   activeEmailList: IEmailListObject | IEmailListObjectSearch
 }) => {
-  const isFocused = useAppSelector(selectIsFocused)
-  const isSorting = useAppSelector(selectIsSorting)
+  const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const labelIds = useAppSelector(selectLabelIds)
   const location = useLocation()
@@ -43,7 +42,7 @@ const EmailDetailHeader = ({
 
   return (
     <GS.OuterContainer>
-      {!(isFocused || isSorting) ? (
+      {!coreStatus || coreStatus === global.CORE_STATUS_SEARCHING ? (
         <S.Wrapper>
           <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
@@ -57,14 +56,14 @@ const EmailDetailHeader = ({
       ) : (
         <S.Wrapper>
           <S.FocusSortHeaderWrapper>
-            {isFocused ? (
+            {coreStatus === global.CORE_STATUS_FOCUSED ? (
               <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle>
             ) : (
               <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>
             )}
           </S.FocusSortHeaderWrapper>
           <S.InnerMenu>
-            <BackButton isFocused={isFocused} isSorting={isSorting} />
+            <BackButton coreStatus={coreStatus} />
             <EmailPosition />
           </S.InnerMenu>
         </S.Wrapper>

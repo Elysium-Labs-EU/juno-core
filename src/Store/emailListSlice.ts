@@ -39,9 +39,7 @@ import labelURL from '../utils/createLabelURL'
 const initialState: IEmailListState = Object.freeze({
   emailList: [],
   searchList: null,
-  isFocused: false,
-  isSearching: false,
-  isSorting: false,
+  coreStatus: null,
   isFetching: false,
 })
 
@@ -49,17 +47,11 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {
-    setIsFocused: (state, action) => {
-      state.isFocused = action.payload
-    },
-    setIsSorting: (state, action) => {
-      state.isSorting = action.payload
+    setCoreStatus: (state, action) => {
+      state.coreStatus = action.payload
     },
     setIsFetching: (state, action) => {
       state.isFetching = action.payload
-    },
-    setIsSearching: (state, action) => {
-      state.isSearching = action.payload
     },
     listAddEmailList: (state, action) => {
       if (action.payload.labels) {
@@ -279,9 +271,7 @@ export const emailListSlice = createSlice({
 })
 
 export const {
-  setIsFocused,
-  setIsSearching,
-  setIsSorting,
+  setCoreStatus,
   setIsFetching,
   listAddEmailList,
   listAddItemDetail,
@@ -435,8 +425,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
   return async (dispatch, getState) => {
     try {
-      const { emailList, searchList, isSorting, isFocused, isSearching } =
-        getState().email
+      const { emailList, searchList, coreStatus } = getState().email
       const { isSilentLoading } = getState().utils
 
       const indexActiveEmailList = (): number => {
@@ -498,15 +487,12 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
 
-            if (isSorting || isFocused || isSearching) {
+            if (coreStatus) {
               dispatch(setCurrentEmail(staticNextID))
               dispatch(setSessionViewIndex(sessionViewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
               if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
-                if (
-                  !isSilentLoading &&
-                  (isFocused || isSorting || isSearching)
-                ) {
+                if (!isSilentLoading && coreStatus) {
                   const params = {
                     labelIds,
                     nextPageToken: staticActiveEmailList.nextPageToken,
@@ -517,7 +503,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
                 }
               }
             }
-            if (!isSorting && !isFocused) {
+            if (!coreStatus) {
               if (labelIds.includes(global.INBOX_LABEL)) {
                 dispatch(push(RouteConstants.INBOX))
               } else {
@@ -616,10 +602,12 @@ export const refreshEmailFeed =
     }
   }
 
-export const selectIsFocused = (state: RootState) => state.email.isFocused
-export const selectIsSorting = (state: RootState) => state.email.isSorting
+// TODO: Clean up
+// export const selectIsFocused = (state: RootState) => state.email.isFocused
+// export const selectIsSorting = (state: RootState) => state.email.isSorting
 export const selectIsFetching = (state: RootState) => state.email.isFetching
-export const selectIsSearching = (state: RootState) => state.email.isSearching
+export const selectCoreStatus = (state: RootState) => state.email.coreStatus
+// export const selectIsSearching = (state: RootState) => state.email.isSearching
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
 export const selectNextPageToken = (state: any) =>

@@ -19,8 +19,7 @@ import {
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
 import {
   selectEmailList,
-  selectIsFocused,
-  selectIsSorting,
+  selectCoreStatus,
   selectSearchList,
   storeSearchResults,
 } from '../../Store/emailListSlice'
@@ -56,8 +55,7 @@ const EmailDetail = () => {
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const isReplying = useAppSelector(selectIsReplying)
   const viewIndex = useAppSelector(selectViewIndex)
-  const isSorting = useAppSelector(selectIsSorting)
-  const isFocused = useAppSelector(selectIsFocused)
+  const coreStatus = useAppSelector(selectCoreStatus)
   const inSearch = useAppSelector(selectInSearch)
   const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
@@ -241,7 +239,7 @@ const EmailDetail = () => {
     <>
       <EmailDetailHeader activeEmailList={activeEmailList} />
       <AnimatedMountUnmount>
-        <S.Scroll clientState={isSorting || isFocused}>
+        <S.Scroll clientState={Boolean(coreStatus)}>
           <GS.OuterContainer isReplying={isReplying}>
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&

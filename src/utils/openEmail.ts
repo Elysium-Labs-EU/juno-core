@@ -5,7 +5,7 @@ import * as global from '../constants/globalConstants'
 import labelURL from './createLabelURL'
 import { LabelIdName } from '../Store/labelsTypes'
 import filterIllegalLabels from './filterIllegalLabels'
-import { setIsSearching } from '../Store/emailListSlice'
+import { setCoreStatus } from '../Store/emailListSlice'
 
 interface IOpenEmailProps {
   labelIds: string[]
@@ -27,7 +27,7 @@ const openEmail = (props: IOpenEmailProps) => {
     return
   }
   if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && inSearch) {
-    dispatch(setIsSearching(true))
+    dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
     dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${id}/messages`))
     return
   }

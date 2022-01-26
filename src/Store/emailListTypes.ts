@@ -43,8 +43,6 @@ export interface IEmailListObjectSearch {
 export interface IEmailListState {
   emailList: IEmailListObject[]
   searchList: IEmailListObjectSearch | null
-  isFocused: boolean
-  isSearching: boolean
-  isSorting: boolean
+  coreStatus: string | null
   isFetching: boolean
 }
