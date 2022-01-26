@@ -3,8 +3,7 @@ import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import * as S from './MenuStyles'
 import * as local from '../../../constants/menuConstants'
-import { selectCurrentEmail } from '../../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch } from '../../../Store/hooks'
 
 interface MenuItemType {
   name: string
@@ -12,7 +11,6 @@ interface MenuItemType {
 }
 
 const Menu = () => {
-  const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
   const [activeLink, setActiveLink] = useState('')
   const location = useLocation()
@@ -29,13 +27,13 @@ const Menu = () => {
     if (location.pathname.includes('files')) {
       setActiveLink('Files')
     }
-  }, [location, currentEmail])
+  }, [location])
 
   const mappedMenu = local.MENU_OPTIONS && (
     <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
         <S.StyedListItem
-          key={`${item.name + index}`}
+          key={`${ item.name + index }`}
           style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"

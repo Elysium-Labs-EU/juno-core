@@ -1,11 +1,13 @@
 import { useMemo } from 'react'
+import * as global from '../../constants/globalConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import startSort from '../../utils/startSort'
-import { selectEmailList, setIsSorting } from '../../Store/emailListSlice'
+import { selectEmailList, setCoreStatus } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
+import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -33,7 +35,8 @@ const SortInbox = () => {
         emailList,
         emailListIndex,
       })
-      dispatch(setIsSorting(true))
+      dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
+      dispatch(setSessionViewIndex(0))
     }
   }
 

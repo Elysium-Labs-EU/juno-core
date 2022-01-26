@@ -12,6 +12,7 @@ const initialState: EmailDetailState = Object.freeze({
   currEmail: '',
   currMessage: '',
   viewIndex: -1,
+  sessionViewIndex: -1,
   isReplying: false,
 })
 
@@ -28,6 +29,9 @@ export const emailDetailSlice = createSlice({
     setViewIndex: (state, action) => {
       state.viewIndex = action.payload
     },
+    setSessionViewIndex: (state, action) => {
+      state.sessionViewIndex = action.payload
+    },
     setIsReplying: (state, action) => {
       state.isReplying = action.payload
     },
@@ -38,6 +42,7 @@ export const {
   setCurrentEmail,
   setCurrentMessage,
   setViewIndex,
+  setSessionViewIndex,
   setIsReplying,
 } = emailDetailSlice.actions
 
@@ -113,6 +118,8 @@ export const selectCurrentEmail = (state: RootState) =>
 export const selectCurrentMessage = (state: RootState) =>
   state.emailDetail.currMessage
 export const selectViewIndex = (state: RootState) => state.emailDetail.viewIndex
+export const selectSessionViewIndex = (state: RootState) =>
+  state.emailDetail.sessionViewIndex
 export const selectIsReplying = (state: RootState) =>
   state.emailDetail.isReplying
 

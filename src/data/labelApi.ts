@@ -2,10 +2,20 @@ import axios, { AxiosResponse } from 'axios'
 import { BASE_API_URL, errorHandeling } from './api'
 
 const labelApi = () => ({
-  fetchLabel: async () => {
+  fetchLabels: async () => {
     try {
       const res: AxiosResponse<any> = await axios.get(
         `${BASE_API_URL}/api/labels`
+      )
+      return res.data
+    } catch (err) {
+      return errorHandeling(err)
+    }
+  },
+  fetchSingleLabel: async (id: string) => {
+    try {
+      const res: AxiosResponse<any> = await axios.get(
+        `${BASE_API_URL}/api/label/${id}`
       )
       return res.data
     } catch (err) {

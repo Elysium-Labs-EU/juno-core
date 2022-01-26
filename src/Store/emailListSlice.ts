@@ -27,7 +27,11 @@ import {
 } from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
-import { setCurrentEmail, setViewIndex } from './emailDetailSlice'
+import {
+  setCurrentEmail,
+  setSessionViewIndex,
+  setViewIndex,
+} from './emailDetailSlice'
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
@@ -35,8 +39,7 @@ import labelURL from '../utils/createLabelURL'
 const initialState: IEmailListState = Object.freeze({
   emailList: [],
   searchList: null,
-  isFocused: false,
-  isSorting: false,
+  coreStatus: null,
   isFetching: false,
 })
 
@@ -44,11 +47,8 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {
-    setIsFocused: (state, action) => {
-      state.isFocused = action.payload
-    },
-    setIsSorting: (state, action) => {
-      state.isSorting = action.payload
+    setCoreStatus: (state, action) => {
+      state.coreStatus = action.payload
     },
     setIsFetching: (state, action) => {
       state.isFetching = action.payload
@@ -267,30 +267,49 @@ export const emailListSlice = createSlice({
     listUpdateSearchResults: (state, action) => {
       state.searchList = action.payload
     },
-    listClearSearchResults: (state) => {
-      state.searchList = null
-    },
   },
 })
 
 export const {
-  setIsFocused,
-  setIsSorting,
+  setCoreStatus,
   setIsFetching,
   listAddEmailList,
   listAddItemDetail,
   listRemoveItemDetail,
   listUpdateItemDetail,
   listUpdateSearchResults,
-  listClearSearchResults,
 } = emailListSlice.actions
 
 // If the received object doesn't have labels of its own.
 // Check per threadObject on the most recent message's labelIds to decide where to store it.
 export const storeSearchResults =
   (searchThreads: IEmailListObjectSearch): AppThunk =>
-  (dispatch) => {
+  (dispatch, getState) => {
+    const { searchList } = getState().email
+    const { currEmail } = getState().emailDetail
+    if (searchList && searchThreads.q === searchList.q) {
+      const sortedThreads = sortThreads(
+        searchList.threads.concat(searchThreads.threads)
+      )
+      const newSearchList = {
+        q: searchList.q,
+        nextPageToken: searchThreads.nextPageToken,
+        threads: undoubleThreads(sortedThreads),
+      }
+      dispatch(listUpdateSearchResults(newSearchList))
+      dispatch(
+        setViewIndex(
+          newSearchList.threads.findIndex((item) => item.id === currEmail)
+        )
+      )
+      return
+    }
     dispatch(listUpdateSearchResults(searchThreads))
+    dispatch(
+      setViewIndex(
+        searchThreads.threads.findIndex((item) => item.id === currEmail)
+      )
+    )
   }
 
 export const loadEmailDetails =
@@ -346,7 +365,7 @@ export const loadEmails =
   (params: LoadEmailObject): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { labelIds, silentLoading, nextPageToken, maxResults } = params
+      const { labelIds, silentLoading, nextPageToken, maxResults, q } = params
       if (!silentLoading && !getState().utils.isLoading) {
         dispatch(setIsLoading(true))
       }
@@ -354,19 +373,31 @@ export const loadEmails =
         dispatch(setIsSilentLoading(true))
       }
       const response = await threadApi().getFullThreads({
+        q,
         labelIds,
         maxResults: maxResults ?? 20,
         nextPageToken,
       })
       if (response && response.resultSizeEstimate > 0) {
-        dispatch(
-          listAddEmailList({
-            labels: labelIds,
-            threads: response.threads,
-            nextPageToken: response.nextPageToken,
-          })
-        )
-        dispatch(setLoadedInbox(labelIds))
+        if (!q) {
+          dispatch(
+            listAddEmailList({
+              labels: labelIds,
+              threads: response.threads,
+              nextPageToken: response.nextPageToken,
+            })
+          )
+          dispatch(setLoadedInbox(labelIds))
+        }
+        if (q) {
+          dispatch(
+            storeSearchResults({
+              q,
+              threads: response.threads,
+              nextPageToken: response.nextPageToken,
+            })
+          )
+        }
         getState().utils.isLoading && dispatch(setIsLoading(false))
         getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       } else {
@@ -394,7 +425,8 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
 
   return async (dispatch, getState) => {
     try {
-      const { emailList, searchList, isSorting, isFocused } = getState().email
+      const { emailList, searchList, coreStatus } = getState().email
+      const { isSilentLoading } = getState().utils
 
       const indexActiveEmailList = (): number => {
         if (emailList && (removeLabelIds || request.delete)) {
@@ -445,7 +477,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
               !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request.delete
           ) {
-            const { viewIndex } = getState().emailDetail
+            const { viewIndex, sessionViewIndex } = getState().emailDetail
 
             const nextID = () =>
               staticActiveEmailList.threads[viewIndex + 1] !== undefined
@@ -455,12 +487,23 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
 
-            if (isSorting || isFocused) {
+            if (coreStatus) {
               dispatch(setCurrentEmail(staticNextID))
-              dispatch(setViewIndex(viewIndex + 1))
+              dispatch(setSessionViewIndex(sessionViewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
+              if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
+                if (!isSilentLoading && coreStatus) {
+                  const params = {
+                    labelIds,
+                    nextPageToken: staticActiveEmailList.nextPageToken,
+                    maxResults: global.MAX_RESULTS,
+                    silentLoading: true,
+                  }
+                  dispatch(loadEmails(params))
+                }
+              }
             }
-            if (!isSorting && !isFocused) {
+            if (!coreStatus) {
               if (labelIds.includes(global.INBOX_LABEL)) {
                 dispatch(push(RouteConstants.INBOX))
               } else {
@@ -532,6 +575,7 @@ export const refreshEmailFeed =
     try {
       dispatch(setIsFetching(true))
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+      const { labelIds } = getState().labels
       const { threads, nextPageToken } = await threadApi().getThreads(params)
       const newEmailsIdx = threads.findIndex(
         (thread: MetaListThreadItem) =>
@@ -543,7 +587,7 @@ export const refreshEmailFeed =
           const user = await userApi().fetchUser()
           dispatch(setProfile(user?.data))
           const labeledThreads = {
-            labels: params.labelIds,
+            labels: labelIds,
             threads: newSlice,
             nextPageToken,
           }
@@ -558,9 +602,12 @@ export const refreshEmailFeed =
     }
   }
 
-export const selectIsFocused = (state: RootState) => state.email.isFocused
-export const selectIsSorting = (state: RootState) => state.email.isSorting
+// TODO: Clean up
+// export const selectIsFocused = (state: RootState) => state.email.isFocused
+// export const selectIsSorting = (state: RootState) => state.email.isSorting
 export const selectIsFetching = (state: RootState) => state.email.isFetching
+export const selectCoreStatus = (state: RootState) => state.email.coreStatus
+// export const selectIsSearching = (state: RootState) => state.email.isSearching
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
 export const selectNextPageToken = (state: any) =>

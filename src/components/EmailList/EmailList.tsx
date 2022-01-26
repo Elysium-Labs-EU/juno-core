@@ -23,7 +23,11 @@ import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
-import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
+import {
+  setCurrentEmail,
+  setSessionViewIndex,
+  setViewIndex,
+} from '../../Store/emailDetailSlice'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -44,6 +48,7 @@ const EmailList = () => {
       const params = {
         labelIds,
         maxResults: global.MAX_RESULTS,
+        nextPageToken: null
       }
       mounted && dispatch(loadEmails(params))
       if (labelIds.includes(draft.DRAFT_LABEL)) {
@@ -58,6 +63,7 @@ const EmailList = () => {
   useEffect(() => {
     dispatch(setCurrentEmail(''))
     dispatch(setViewIndex(-1))
+    dispatch(setSessionViewIndex(-1))
   }, [])
 
   useEffect(() => {
@@ -77,6 +83,7 @@ const EmailList = () => {
         const params = {
           labelIds,
           maxResults: 500,
+          nextPageToken: null
         }
         dispatch(refreshEmailFeed(params))
         if (labelIds.includes(draft.DRAFT_LABEL)) {

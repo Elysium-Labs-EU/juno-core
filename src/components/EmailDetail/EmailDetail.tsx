@@ -10,16 +10,16 @@ import {
   setViewIndex,
 } from '../../Store/emailDetailSlice'
 import {
+  selectInSearch,
   selectIsLoading,
-  selectIsSilentLoading,
+  // selectIsSilentLoading,
   selectServiceUnavailable,
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import { selectLabelIds, setCurrentLabels } from '../../Store/labelsSlice'
 import {
   selectEmailList,
-  selectIsFocused,
-  selectIsSorting,
+  selectCoreStatus,
   selectSearchList,
   storeSearchResults,
 } from '../../Store/emailListSlice'
@@ -30,7 +30,7 @@ import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject, IEmailListObjectSearch } from '../../Store/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
@@ -49,24 +49,23 @@ const EmailDetail = () => {
   const emailList = useAppSelector(selectEmailList)
   const searchList = useAppSelector(selectSearchList)
   const isLoading = useAppSelector(selectIsLoading)
-  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  // const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const draftListLoaded = useAppSelector(selectDraftListLoaded)
   const isReplying = useAppSelector(selectIsReplying)
   const viewIndex = useAppSelector(selectViewIndex)
-  const isSorting = useAppSelector(selectIsSorting)
-  const isFocused = useAppSelector(selectIsFocused)
+  const coreStatus = useAppSelector(selectCoreStatus)
+  const inSearch = useAppSelector(selectInSearch)
   const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
   const location = useLocation()
-  const [currLocal, setCurrLocal] = useState<string>('')
+  const [currentLocal, setCurrentLocal] = useState<string>('')
   const { messageId, overviewId } =
     useParams<{ messageId: string; overviewId: string }>()
-  const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
+  const [activeEmailList, setActiveEmailList] = useState<IEmailListObject | IEmailListObjectSearch>()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
-  const activeEmailListThreadsLengthRef = useRef<number>(-1)
 
   const cleanUpComposerAndDraft = () => {
     dispatch(resetComposeEmail())
@@ -85,10 +84,11 @@ const EmailDetail = () => {
       return
     }
     if (activeEmailList && activeEmailList.threads.length > 0) {
+      // This is used to specifically reply to a message.
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-            activeEmailList.threads.length - 1 - messageIndex
+          activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )
@@ -133,9 +133,9 @@ const EmailDetail = () => {
   const fetchEmailDetails = () => {
     if (labelIds) {
       if (emailListIndex > -1) {
-        const currentActivePageToken = emailList[emailListIndex].nextPageToken
-        if (activePageTokenRef.current !== currentActivePageToken) {
-          activePageTokenRef.current = currentActivePageToken
+        const { nextPageToken } = emailList[emailListIndex]
+        if (nextPageToken && activePageTokenRef.current !== nextPageToken) {
+          activePageTokenRef.current = nextPageToken
           setActiveEmailList(emailList[emailListIndex])
         }
       }
@@ -154,46 +154,37 @@ const EmailDetail = () => {
       activeEmailList &&
       activeEmailList.threads.length > 0 &&
       emailList &&
-      emailList[emailListIndex] &&
-      viewIndex === -1
+      emailList[emailListIndex]
     ) {
       setActiveEmailList(emailList[emailListIndex])
       return
     }
-    if (searchList && emailListIndex === -1) {
+    if (searchList && emailListIndex === -1 && !inSearch) {
       setActiveEmailList(searchList)
     }
-  }, [emailList, activeEmailList, searchList, emailListIndex])
+  }, [emailList, activeEmailList, searchList, emailListIndex, inSearch])
 
   // If the current email is found, set the id to the store. Otherwise attempt a fetch.
   useEffect(() => {
-    if (currentEmail !== currLocal) {
-      if (
-        emailList.length > 0 &&
-        emailList[emailListIndex] &&
-        emailList[emailListIndex].threads.length > 0
-      ) {
-        setCurrLocal(currentEmail)
-        return
-      }
-      if (searchList) {
-        setCurrLocal(currentEmail)
+    if (currentEmail !== currentLocal) {
+      if (activeEmailList) {
+        setCurrentLocal(currentEmail)
         return
       }
       fetchEmailList()
     }
-  }, [currentEmail, emailList, viewIndex])
+  }, [currentEmail, activeEmailList])
 
   // If after loading the emails the viewIndex is still -1, attempt a different load method
   useEffect(() => {
     if (
       !isLoading &&
       viewIndex === -1 &&
-      currLocal &&
+      currentLocal &&
       !labelIds.includes(global.ARCHIVE_LABEL)
     ) {
       const loadSpecificEmail = async () => {
-        const response = await threadApi().getThreadDetail(currLocal)
+        const response = await threadApi().getThreadDetail(currentLocal)
         if (response) {
           const emailListObject = {
             labels: labelIds,
@@ -205,7 +196,7 @@ const EmailDetail = () => {
       }
       loadSpecificEmail()
     }
-  }, [isLoading, viewIndex, currLocal])
+  }, [isLoading, viewIndex, currentLocal])
 
   // DetailNavigation will refetch emailList if empty.
   useEffect(() => {
@@ -226,65 +217,29 @@ const EmailDetail = () => {
   }, [messageId])
 
   useEffect(() => {
-    if (currentEmail !== messageId && isReplying) {
+    if (isReplying && currentEmail && currentEmail !== messageId) {
       dispatch(setIsReplying(false))
     }
   }, [messageId])
 
-  // If there is no viewIndex set it by finding the index of the email.
+  // If there is no viewIndex yet - set it by finding the index of the email.
   useEffect(() => {
-    if (viewIndex === -1 && !isLoading) {
-      if (activeEmailList && activeEmailList.threads.length > 0) {
-        dispatch(
-          setViewIndex(
-            activeEmailList.threads.findIndex(
-              (item) => item.id === currentEmail
-            )
+    if (viewIndex === -1 && !isLoading && activeEmailList && activeEmailList.threads.length > 0) {
+      dispatch(
+        setViewIndex(
+          activeEmailList.threads.findIndex(
+            (item) => item.id === currentEmail
           )
         )
-        activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
-      }
+      )
     }
   }, [viewIndex, activeEmailList, currentEmail, isLoading])
-
-  // If there is no viewIndex set it by finding the index of the email in searchList.
-  useEffect(() => {
-    if (viewIndex === -1 && searchList && !isLoading) {
-      const viewIndexSearchList = searchList.threads.findIndex(
-        (item) => item.id === currentEmail
-      )
-      if (viewIndexSearchList > -1) {
-        dispatch(setViewIndex(viewIndexSearchList))
-      }
-    }
-  }, [viewIndex, searchList, currentEmail, isLoading])
-
-  // TODO: Double check this logic
-  // If there is a viewIndex and the emailList happends to be expanding by silentLoad - recalculate the viewIndex.
-  useEffect(() => {
-    if (viewIndex > -1 && !isSilentLoading) {
-      if (
-        activeEmailList &&
-        activeEmailList.threads.length > 0 &&
-        activeEmailListThreadsLengthRef.current < activeEmailList.threads.length
-      ) {
-        activeEmailListThreadsLengthRef.current = activeEmailList.threads.length
-        dispatch(
-          setViewIndex(
-            activeEmailList.threads.findIndex(
-              (item) => item.id === currentEmail
-            )
-          )
-        )
-      }
-    }
-  }, [viewIndex, activeEmailList, currentEmail, isSilentLoading])
 
   return activeEmailList ? (
     <>
       <EmailDetailHeader activeEmailList={activeEmailList} />
       <AnimatedMountUnmount>
-        <S.Scroll clientState={isSorting || isFocused}>
+        <S.Scroll clientState={Boolean(coreStatus)}>
           <GS.OuterContainer isReplying={isReplying}>
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&

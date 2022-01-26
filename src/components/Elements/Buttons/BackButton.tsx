@@ -3,7 +3,7 @@ import { goBack, push } from 'redux-first-history'
 import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
-import { setIsFocused, setIsSorting } from '../../../Store/emailListSlice'
+import { setCoreStatus } from '../../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import {
   resetComposeEmail,
@@ -12,12 +12,10 @@ import {
 import { resetDraftDetails } from '../../../Store/draftsSlice'
 
 interface BackButtonType {
-  isFocused?: boolean
-  isSorting?: boolean
+  coreStatus?: string | null
 }
 
-const BackButton = (props: BackButtonType) => {
-  const { isFocused, isSorting } = props
+const BackButton = ({ coreStatus }: BackButtonType) => {
   const dispatch = useAppDispatch()
   const composeEmail = useAppSelector(selectComposeEmail)
 
@@ -27,16 +25,20 @@ const BackButton = (props: BackButtonType) => {
   }
 
   const navigateBack = () => {
-    !isFocused && !isSorting && dispatch(goBack())
-    Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
-    if (isFocused) {
-      dispatch(setIsFocused(false))
+    if (!coreStatus) {
+      if (Object.keys(composeEmail).length > 0) {
+        cleanUpComposerAndDraft()
+      }
+      dispatch(goBack())
+      return
+    }
+    if (coreStatus === global.CORE_STATUS_FOCUSED) {
       dispatch(push(Routes.HOME))
     }
-    if (isSorting) {
-      dispatch(setIsSorting(false))
+    if (coreStatus === global.CORE_STATUS_SORTING) {
       dispatch(push(Routes.INBOX))
     }
+    dispatch(setCoreStatus(null))
   }
 
   return (
@@ -52,6 +54,5 @@ const BackButton = (props: BackButtonType) => {
 export default BackButton
 
 BackButton.defaultProps = {
-  isFocused: false,
-  isSorting: false,
+  coreStatus: null,
 }

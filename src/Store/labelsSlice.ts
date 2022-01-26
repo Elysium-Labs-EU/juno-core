@@ -70,7 +70,7 @@ export const createLabel =
       const response = await labelApi().createLabel(body)
 
       if (response && response.status === 200) {
-        dispatch(setStorageLabels(response.data.message))
+        dispatch(setStorageLabels(response.data))
       } else {
         dispatch(setServiceUnavailable('Error creating label.'))
       }
@@ -85,10 +85,7 @@ export const fetchLabelIds =
   (LABEL: string): AppThunk =>
   async (dispatch) => {
     try {
-      const listAllLabels = await labelApi().fetchLabel()
-      const {
-        message: { labels },
-      } = listAllLabels
+      const { labels } = await labelApi().fetchLabels()
       if (labels) {
         const labelObject = labels.filter(
           (label: LabelIdName) => label.name === LABEL

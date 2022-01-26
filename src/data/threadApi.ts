@@ -3,9 +3,9 @@ import qs from 'qs'
 import { BASE_API_URL, errorHandeling } from './api'
 
 interface EmailQueryObject {
-  labelIds: string[]
+  labelIds?: string[]
   maxResults?: number
-  nextPageToken?: string
+  nextPageToken: string | null
   q?: string
 }
 

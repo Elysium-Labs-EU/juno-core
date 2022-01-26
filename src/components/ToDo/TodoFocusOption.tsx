@@ -4,10 +4,12 @@ import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
+import * as global from '../../constants/globalConstants'
 import startSort from '../../utils/startSort'
-import { selectEmailList, setIsFocused } from '../../Store/emailListSlice'
+import { selectEmailList, setCoreStatus } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
+import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -33,7 +35,8 @@ const TodoFocusOption = () => {
         emailList,
         emailListIndex,
       })
-      dispatch(setIsFocused(true))
+      dispatch(setCoreStatus(global.CORE_STATUS_FOCUSED))
+      dispatch(setSessionViewIndex(0))
     }
   }
 

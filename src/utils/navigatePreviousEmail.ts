@@ -1,16 +1,19 @@
 import { push } from 'redux-first-history'
 import { setViewIndex } from '../Store/emailDetailSlice'
-import { IEmailListObject } from '../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../Store/emailListTypes'
 import labelURL from './createLabelURL'
 
 interface NavigatePreviousMailProps {
   labelIds: string[]
-  activeEmailList?: IEmailListObject
+  activeEmailList?: IEmailListObject | IEmailListObjectSearch
   viewIndex: number
   dispatch: Function
 }
 
-const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
+const navigatePreviousMail = (props: NavigatePreviousMailProps) => {
   const { labelIds, activeEmailList, viewIndex, dispatch } = props
 
   dispatch(setViewIndex(viewIndex - 1))
@@ -24,4 +27,4 @@ const NavigatePreviousMail = (props: NavigatePreviousMailProps) => {
   return null
 }
 
-export default NavigatePreviousMail
+export default navigatePreviousMail
