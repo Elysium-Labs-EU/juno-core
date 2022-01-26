@@ -18,7 +18,7 @@ const rotate = keyframes`
 `
 
 const rotatingIcon = css`
-  animation: ${ rotate } 1s ease infinite;
+  animation: ${rotate} 1s ease infinite;
 `
 
 interface IRotatingButton {
@@ -27,17 +27,17 @@ interface IRotatingButton {
 
 const RotatingButton = styled.button<IRotatingButton>`
   border: none;
-  color: ${ theme.colorGrey };
+  color: ${theme.colorGrey};
   outline: none;
   background-color: transparent;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
   padding: 0;
 
   &:hover {
-    color: ${ theme.colorBlack };
+    color: ${theme.colorBlack};
     cursor: pointer;
   }
-  ${ (props) => (props.disableRefresh ? rotatingIcon : null) };
+  ${(props) => (props.disableRefresh ? rotatingIcon : null)};
 `
 
 const InboxRefresh = () => {
@@ -51,7 +51,7 @@ const InboxRefresh = () => {
     const params = {
       labelIds,
       maxResults: 500,
-      nextPageToken: null
+      nextPageToken: null,
     }
     dispatch(refreshEmailFeed(params))
   }

@@ -48,7 +48,7 @@ const EmailList = () => {
       const params = {
         labelIds,
         maxResults: global.MAX_RESULTS,
-        nextPageToken: null
+        nextPageToken: null,
       }
       mounted && dispatch(loadEmails(params))
       if (labelIds.includes(draft.DRAFT_LABEL)) {
@@ -83,7 +83,7 @@ const EmailList = () => {
         const params = {
           labelIds,
           maxResults: 500,
-          nextPageToken: null
+          nextPageToken: null,
         }
         dispatch(refreshEmailFeed(params))
         if (labelIds.includes(draft.DRAFT_LABEL)) {

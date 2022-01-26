@@ -33,7 +33,7 @@ const Menu = () => {
     <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
         <S.StyedListItem
-          key={`${ item.name + index }`}
+          key={`${item.name + index}`}
           style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"

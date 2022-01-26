@@ -17,7 +17,7 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const messageId = message && message.id
 
   const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = SenderNameFull(message, emailAddress)
   const staticSenderNamePartial = SenderNamePartial(message, emailAddress)

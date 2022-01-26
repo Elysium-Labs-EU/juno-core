@@ -7,7 +7,10 @@ import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
-import { IEmailListObject, IEmailListObjectSearch } from '../../../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../Store/emailListTypes'
 
 const ICON_SIZE = 20
 interface IDetailNavigationView {

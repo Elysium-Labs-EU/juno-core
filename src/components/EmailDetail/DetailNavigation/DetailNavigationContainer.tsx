@@ -7,7 +7,10 @@ import loadNextPage from '../../../utils/loadNextPage'
 import { selectIsSilentLoading } from '../../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import DetailNavigationView from './DetailNavigationView'
-import { IEmailListObject, IEmailListObjectSearch } from '../../../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../Store/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,
@@ -40,10 +43,11 @@ const DetailNavigationContainer = ({
         dispatch,
       })
       // Attempt to load the next emails on the background when approaching the edge
-      if ((activeEmailList.threads.length - 1) - viewIndex <= 4) {
+      if (activeEmailList.threads.length - 1 - viewIndex <= 4) {
         if (!isSilentLoading) {
           if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
-            const { q, nextPageToken } = activeEmailList as IEmailListObjectSearch
+            const { q, nextPageToken } =
+              activeEmailList as IEmailListObjectSearch
             return loadNextPage({
               q,
               nextPageToken,
@@ -58,7 +62,6 @@ const DetailNavigationContainer = ({
             dispatch,
             silentLoading: true,
           })
-
         }
       }
     }

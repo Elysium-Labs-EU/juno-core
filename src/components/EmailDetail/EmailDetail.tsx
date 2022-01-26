@@ -30,7 +30,10 @@ import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListObject, IEmailListObjectSearch } from '../../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../Store/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
@@ -63,7 +66,9 @@ const EmailDetail = () => {
   const [currentLocal, setCurrentLocal] = useState<string>('')
   const { messageId, overviewId } =
     useParams<{ messageId: string; overviewId: string }>()
-  const [activeEmailList, setActiveEmailList] = useState<IEmailListObject | IEmailListObjectSearch>()
+  const [activeEmailList, setActiveEmailList] = useState<
+    IEmailListObject | IEmailListObjectSearch
+  >()
   const localLabels = useRef<string[] | string>([])
   const activePageTokenRef = useRef('')
 
@@ -88,7 +93,7 @@ const EmailDetail = () => {
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-          activeEmailList.threads.length - 1 - messageIndex
+            activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )
@@ -224,12 +229,15 @@ const EmailDetail = () => {
 
   // If there is no viewIndex yet - set it by finding the index of the email.
   useEffect(() => {
-    if (viewIndex === -1 && !isLoading && activeEmailList && activeEmailList.threads.length > 0) {
+    if (
+      viewIndex === -1 &&
+      !isLoading &&
+      activeEmailList &&
+      activeEmailList.threads.length > 0
+    ) {
       dispatch(
         setViewIndex(
-          activeEmailList.threads.findIndex(
-            (item) => item.id === currentEmail
-          )
+          activeEmailList.threads.findIndex((item) => item.id === currentEmail)
         )
       )
     }

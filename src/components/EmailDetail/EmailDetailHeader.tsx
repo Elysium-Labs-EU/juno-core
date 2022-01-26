@@ -13,7 +13,10 @@ import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import { FindLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
-import { IEmailListObject, IEmailListObjectSearch } from '../../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../Store/emailListTypes'
 
 const EmailDetailHeader = ({
   activeEmailList,

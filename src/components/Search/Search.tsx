@@ -100,7 +100,13 @@ export const loadMoreSearchResults = ({
   fetchSearchThreads(searchBody)
 }
 
-const openDetail = ({ dispatch, searchResults }: { dispatch: Function, searchResults: IEmailListObjectSearch }) => {
+const openDetail = ({
+  dispatch,
+  searchResults,
+}: {
+  dispatch: Function
+  searchResults: IEmailListObjectSearch
+}) => {
   dispatch(storeSearchResults(searchResults))
   dispatch(setInSearch(false))
 }
@@ -131,7 +137,11 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (searchList && searchResults && searchResults.threads.length < searchList.threads.length) {
+    if (
+      searchList &&
+      searchResults &&
+      searchResults.threads.length < searchList.threads.length
+    ) {
       setSearchResults(searchList)
     }
   }, [searchList])
@@ -219,7 +229,7 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread) => (
                 <div
-                  key={`${ thread.id }-search`}
+                  key={`${thread.id}-search`}
                   onClick={() => openDetail({ dispatch, searchResults })}
                   aria-hidden="true"
                 >
