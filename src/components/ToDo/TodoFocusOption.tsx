@@ -10,6 +10,7 @@ import { selectEmailList, setCoreStatus } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
+import getEmailListIndex from '../../utils/getEmailListIndex'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -19,10 +20,7 @@ const TodoFocusOption = () => {
 
   const emailListIndex = useMemo(
     () =>
-      emailList.findIndex(
-        (threadList) =>
-          threadList.labels && threadList.labels.includes(labelIds[0])
-      ),
+      getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 

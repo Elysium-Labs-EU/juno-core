@@ -5,7 +5,7 @@ interface IEmailListFilteredByLabel {
   labelIds: string[]
 }
 
-const emailListFilteredByLabel = (props: IEmailListFilteredByLabel): number => {
+const getEmailListIndex = (props: IEmailListFilteredByLabel): number => {
   const { emailList, labelIds } = props
   if (emailList.length > 0 && labelIds.length > 0) {
     return emailList.findIndex((threadList) => {
@@ -18,4 +18,4 @@ const emailListFilteredByLabel = (props: IEmailListFilteredByLabel): number => {
   return -1
 }
 
-export default emailListFilteredByLabel
+export default getEmailListIndex

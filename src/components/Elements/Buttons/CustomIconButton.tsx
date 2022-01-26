@@ -31,6 +31,11 @@ const Button = styled.button<IButton>`
     color: ${theme.colorBlack};
     cursor: pointer;
   }
+
+  &:disabled {
+    color: ${theme.colorUltraLightGrey};
+    cursor: not-allowed;
+  }
 `
 
 const CustomIconButton = (props: ICustomIconButton) => {

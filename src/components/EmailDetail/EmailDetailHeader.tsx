@@ -36,9 +36,9 @@ const EmailDetailHeader = ({
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
           setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
-          return
+        } else {
+          setDetailHeader(global.SEARCH_LABEL.toLowerCase())
         }
-        setDetailHeader(global.SEARCH_LABEL.toLowerCase())
       }
     }
   }, [storageLabels, labelIds])
