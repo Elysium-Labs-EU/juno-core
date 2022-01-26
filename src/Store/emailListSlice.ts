@@ -602,12 +602,8 @@ export const refreshEmailFeed =
     }
   }
 
-// TODO: Clean up
-// export const selectIsFocused = (state: RootState) => state.email.isFocused
-// export const selectIsSorting = (state: RootState) => state.email.isSorting
 export const selectIsFetching = (state: RootState) => state.email.isFetching
 export const selectCoreStatus = (state: RootState) => state.email.coreStatus
-// export const selectIsSearching = (state: RootState) => state.email.isSearching
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
 export const selectNextPageToken = (state: any) =>
