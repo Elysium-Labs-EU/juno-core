@@ -18,10 +18,7 @@ import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
-import {
-  selectSearchList,
-  storeSearchResults,
-} from '../../Store/emailListSlice'
+import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 interface IShouldClearOutPreviousResults {
@@ -103,11 +100,13 @@ export const loadMoreSearchResults = ({
 const openDetail = ({
   dispatch,
   searchResults,
+  currentEmail,
 }: {
   dispatch: Function
   searchResults: IEmailListObjectSearch
+  currentEmail: string
 }) => {
-  dispatch(storeSearchResults(searchResults))
+  dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
 }
 
@@ -230,7 +229,13 @@ const Search = () => {
               {searchResults.threads.map((thread) => (
                 <div
                   key={`${thread.id}-search`}
-                  onClick={() => openDetail({ dispatch, searchResults })}
+                  onClick={() =>
+                    openDetail({
+                      dispatch,
+                      searchResults,
+                      currentEmail: thread.id,
+                    })
+                  }
                   aria-hidden="true"
                 >
                   <EmailListItem email={thread} showLabel />

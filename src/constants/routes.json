@@ -1,7 +1,7 @@
 {
   "WILDCARD": "*",
   "HOME": "/",
-  "EMAIL_DETAIL": "/mail/:labelId/:messageId/:overviewId",
+  "EMAIL_DETAIL": "/mail/:labelId/:threadId/:overviewId",
   "COMPOSE_EMAIL": "/compose/*",
   "DRAFTS": "/drafts",
   "SENT": "/sent",

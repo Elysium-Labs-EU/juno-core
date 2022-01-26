@@ -43,7 +43,10 @@ const DetailNavigationContainer = ({
         dispatch,
       })
       // Attempt to load the next emails on the background when approaching the edge
-      if (activeEmailList.threads.length - 1 - viewIndex <= 4) {
+      if (
+        activeEmailList.threads.length - 1 - viewIndex <= 4 &&
+        activeEmailList.nextPageToken
+      ) {
         if (!isSilentLoading) {
           if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
             const { q, nextPageToken } =

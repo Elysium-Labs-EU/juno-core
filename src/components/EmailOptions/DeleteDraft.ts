@@ -4,14 +4,14 @@ import { listRemoveItemDetail } from '../../Store/emailListSlice'
 interface IDeleteDraft {
   threadId: string
   dispatch: Function
-  staticIndexActiveEmailList: number
+  emailListIndex: number
   draftId: string | undefined | false
 }
 
 const DeleteDraft = ({
   threadId,
   dispatch,
-  staticIndexActiveEmailList,
+  emailListIndex,
   draftId,
 }: IDeleteDraft) => {
   const RemoveDraft = () => {
@@ -19,7 +19,7 @@ const DeleteDraft = ({
     dispatch(
       listRemoveItemDetail({
         messageId: threadId,
-        staticIndexActiveEmailList,
+        staticIndexActiveEmailList: emailListIndex,
       })
     )
     if (draftId) {

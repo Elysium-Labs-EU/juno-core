@@ -110,7 +110,10 @@ const App = () => {
                   </Suspense>
                 }
               />
-              <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
+              <Route
+                path={RoutesConstants.WILDCARD}
+                element={<PageNotFound />}
+              />
             </Routes>
           </AnimatePresence>
         </GS.Base>

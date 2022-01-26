@@ -7,8 +7,8 @@ import {
   setIsSilentLoading,
   setServiceUnavailable,
 } from './utilsSlice'
-import { setLoadedInbox } from './labelsSlice'
-import emailListFilteredByLabel from '../utils/emailListFilteredByLabel'
+import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
+import emailListFilteredByLabel from '../utils/getEmailListIndex'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
@@ -29,6 +29,7 @@ import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
 import {
   setCurrentEmail,
+  setCurrentMessage,
   setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
@@ -99,9 +100,9 @@ export const emailListSlice = createSlice({
               const newObject: IEmailListObject = {
                 labels: action.payload.labels,
                 threads: undoubleThreads(sortedThreads),
-                nextPageToken:
-                  action.payload.nextPageToken ??
-                  currentState[arrayIndex].nextPageToken,
+                nextPageToken: action.payload.nextPageToken ?? null,
+                // ??
+                // currentState[arrayIndex].nextPageToken,
               }
               currentState[arrayIndex] = newObject
               state.emailList = currentState
@@ -280,36 +281,48 @@ export const {
   listUpdateSearchResults,
 } = emailListSlice.actions
 
-// If the received object doesn't have labels of its own.
-// Check per threadObject on the most recent message's labelIds to decide where to store it.
 export const storeSearchResults =
-  (searchThreads: IEmailListObjectSearch): AppThunk =>
+  (searchResults: IEmailListObjectSearch): AppThunk =>
   (dispatch, getState) => {
     const { searchList } = getState().email
-    const { currEmail } = getState().emailDetail
-    if (searchList && searchThreads.q === searchList.q) {
+    if (searchList && searchResults.q === searchList.q) {
       const sortedThreads = sortThreads(
-        searchList.threads.concat(searchThreads.threads)
+        searchList.threads.concat(searchResults.threads)
       )
       const newSearchList = {
         q: searchList.q,
-        nextPageToken: searchThreads.nextPageToken,
+        nextPageToken: searchResults.nextPageToken,
         threads: undoubleThreads(sortedThreads),
       }
       dispatch(listUpdateSearchResults(newSearchList))
-      dispatch(
-        setViewIndex(
-          newSearchList.threads.findIndex((item) => item.id === currEmail)
-        )
-      )
-      return
+    } else {
+      dispatch(listUpdateSearchResults(searchResults))
     }
-    dispatch(listUpdateSearchResults(searchThreads))
+  }
+
+export const useSearchResults =
+  ({
+    searchResults,
+    currentEmail,
+  }: {
+    searchResults: IEmailListObjectSearch
+    currentEmail: string
+  }): AppThunk =>
+  (dispatch, getState) => {
+    const { coreStatus, searchList } = getState().email
+    if (searchList !== searchResults) {
+      dispatch(storeSearchResults(searchResults))
+    }
+    if (coreStatus !== global.CORE_STATUS_SEARCHING) {
+      dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
+      dispatch(setCurrentLabels([global.ARCHIVE_LABEL]))
+    }
     dispatch(
       setViewIndex(
-        searchThreads.threads.findIndex((item) => item.id === currEmail)
+        searchResults.threads.findIndex((item) => item.id === currentEmail)
       )
     )
+    dispatch(setCurrentEmail(currentEmail))
   }
 
 export const loadEmailDetails =
@@ -599,6 +612,28 @@ export const refreshEmailFeed =
       dispatch(setServiceUnavailable('Cannot refresh feed'))
     } finally {
       dispatch(setIsFetching(false))
+    }
+  }
+
+export const resetValuesEmailDetail =
+  (): AppThunk => async (dispatch, getState) => {
+    const { currEmail, currMessage, viewIndex, sessionViewIndex } =
+      getState().emailDetail
+    const { coreStatus } = getState().email
+    if (currEmail.length > 0) {
+      dispatch(setCurrentEmail(''))
+    }
+    if (currMessage.length > 0) {
+      dispatch(setCurrentMessage(''))
+    }
+    if (viewIndex > -1) {
+      dispatch(setViewIndex(-1))
+    }
+    if (sessionViewIndex > -1) {
+      dispatch(setSessionViewIndex(-1))
+    }
+    if (coreStatus) {
+      dispatch(setCoreStatus(null))
     }
   }
 
