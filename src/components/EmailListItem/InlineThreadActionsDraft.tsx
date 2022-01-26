@@ -18,8 +18,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const labelIds = useAppSelector(selectLabelIds)
 
   const emailListIndex = useMemo(
-    () =>
-      getEmailListIndex({ emailList, labelIds }),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 

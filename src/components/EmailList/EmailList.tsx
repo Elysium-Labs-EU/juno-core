@@ -139,8 +139,7 @@ const EmailList = () => {
 
   // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
-    () =>
-      getEmailListIndex({ emailList, labelIds }),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 

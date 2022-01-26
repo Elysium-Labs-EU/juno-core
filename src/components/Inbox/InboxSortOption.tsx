@@ -19,8 +19,7 @@ const SortInbox = () => {
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
-    () =>
-      getEmailListIndex({ emailList, labelIds }),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 

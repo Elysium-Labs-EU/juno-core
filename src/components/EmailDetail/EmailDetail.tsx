@@ -76,7 +76,7 @@ const EmailDetail = () => {
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-          activeEmailList.threads.length - 1 - messageIndex
+            activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )
@@ -84,8 +84,7 @@ const EmailDetail = () => {
   }
 
   const emailListIndex = useMemo(
-    () =>
-      getEmailListIndex({ emailList, labelIds }),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 
@@ -183,4 +182,3 @@ const EmailDetail = () => {
 }
 
 export default EmailDetail
-
