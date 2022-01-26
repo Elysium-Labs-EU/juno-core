@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
+import PageNotFound from './components/PageNotFound/PageNotFound'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
@@ -109,6 +110,7 @@ const App = () => {
                   </Suspense>
                 }
               />
+              <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
             </Routes>
           </AnimatePresence>
         </GS.Base>
