@@ -1,11 +1,12 @@
 import { loadEmails } from '../Store/emailListSlice'
-import * as global from '../constants/globalConstants'
+// import * as global from '../constants/globalConstants'
 
 interface ILoadNextPage {
   nextPageToken: string
   labelIds: string[]
   dispatch: Function
   silentLoading?: boolean
+  emailFetchSize: number
 }
 
 const loadNextPage = ({
@@ -13,12 +14,13 @@ const loadNextPage = ({
   labelIds,
   dispatch,
   silentLoading,
+  emailFetchSize 
 }: ILoadNextPage) => {
   if (labelIds && nextPageToken) {
     const params = {
       labelIds,
       nextPageToken,
-      maxResults: global.MAX_RESULTS,
+      maxResults: emailFetchSize,
       silentLoading,
     }
     dispatch(loadEmails(params))

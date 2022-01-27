@@ -9,6 +9,7 @@ import {
 } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import {
+  selectEmailListSize,
   selectIsLoading,
   selectServiceUnavailable,
 } from '../../Store/utilsSlice'
@@ -28,6 +29,7 @@ import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
   const isLoading = useAppSelector(selectIsLoading)
+  const emailFetchSize = useAppSelector(selectEmailListSize)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
@@ -43,8 +45,9 @@ const EmailList = () => {
     ) {
       const params = {
         labelIds,
-        maxResults: global.MAX_RESULTS,
+        maxResults: emailFetchSize,
       }
+
       mounted && dispatch(loadEmails(params))
       if (labelIds.includes(draft.DRAFT_LABEL)) {
         mounted && dispatch(loadDraftList())
@@ -115,7 +118,7 @@ const EmailList = () => {
                   <CustomButton
                     disabled={isLoading}
                     onClick={() =>
-                      loadNextPage({ nextPageToken, labelIds, dispatch })
+                      loadNextPage({ nextPageToken, labelIds, dispatch, emailFetchSize })
                     }
                     label={global.LOAD_MORE}
                     suppressed

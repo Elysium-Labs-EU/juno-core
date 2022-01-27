@@ -33,6 +33,14 @@ const App = () => {
       dispatch(checkBase())
     }
   }, [baseLoaded])
+  
+  useEffect(() => {
+    const emailFetchSizeLS: string | null = localStorage.getItem("fetchSize")
+    const possibleFetchSize: string[] = ["20", "25", "30", "35"]
+
+    if(!emailFetchSizeLS || (emailFetchSizeLS && !possibleFetchSize.includes(emailFetchSizeLS)))
+      localStorage.setItem('fetchSize', '20')
+  }, [])
 
   useEffect(() => {
     if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {
