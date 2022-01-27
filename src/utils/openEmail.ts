@@ -12,20 +12,20 @@ interface IOpenEmailProps {
   messageId?: string
   email?: any
   dispatch: Function
-  isSearching: boolean
+  inSearch: boolean
   storageLabels: LabelIdName[]
 }
 
 const openEmail = (props: IOpenEmailProps) => {
-  const { labelIds, id, email, dispatch, isSearching, storageLabels } = props
+  const { labelIds, id, email, dispatch, inSearch, storageLabels } = props
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
   const staticLabelURL = labelURL(onlyLegalLabels)
 
-  if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && !isSearching) {
+  if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && !inSearch) {
     dispatch(push(`/mail/${staticLabelURL}/${id}/messages`))
     return
   }
-  if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && isSearching) {
+  if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && inSearch) {
     dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${id}/messages`))
     return
   }

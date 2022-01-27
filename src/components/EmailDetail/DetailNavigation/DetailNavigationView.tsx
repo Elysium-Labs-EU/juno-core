@@ -2,17 +2,20 @@ import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import CloseMail from '../../../utils/closeEmail'
-import NavigatePreviousMail from '../../../utils/navigatePreviousEmail'
+import navigatePreviousMail from '../../../utils/navigatePreviousEmail'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectIsLoading } from '../../../Store/utilsSlice'
 import { selectStorageLabels } from '../../../Store/labelsSlice'
-import { IEmailListObject } from '../../../Store/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../Store/emailListTypes'
 
-const SIZE = 20
+const ICON_SIZE = 20
 interface IDetailNavigationView {
   labelIds: string[]
-  activeEmailList: IEmailListObject
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
   viewIndex: number
   isDisabledPrev: boolean
   isDisabledNext: boolean
@@ -37,7 +40,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
       <S.NavButton>
         <CustomIconButton
           onClick={() =>
-            NavigatePreviousMail({
+            navigatePreviousMail({
               labelIds,
               activeEmailList,
               viewIndex,
@@ -46,7 +49,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
           }
           disabled={isDisabledPrev}
           title="Previous email"
-          icon={<FiChevronLeft size={SIZE} />}
+          icon={<FiChevronLeft size={ICON_SIZE} />}
         />
       </S.NavButton>
       <S.NavButton>
@@ -56,7 +59,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
           title="Next email"
           icon={
             !isLoading ? (
-              <FiChevronRight size={SIZE} />
+              <FiChevronRight size={ICON_SIZE} />
             ) : (
               <CircularProgress size={10} />
             )
@@ -67,7 +70,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
         <CustomIconButton
           title="Close view"
           onClick={() => CloseMail({ labelIds, storageLabels, dispatch })}
-          icon={<FiX size={SIZE} />}
+          icon={<FiX size={ICON_SIZE} />}
         />
       </S.NavButton>
     </S.Wrapper>

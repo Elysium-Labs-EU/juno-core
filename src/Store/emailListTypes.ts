@@ -1,14 +1,3 @@
-export interface IEmailMessage {
-  id: string
-  threadId: string
-  labelIds: string[]
-  snippet: string
-  payload: IEmailMessagePayload
-  sizeEstimate: number
-  historyId: string
-  internalDate: string
-}
-
 export interface IEmailMessagePayload {
   partId: string
   mimeType: string
@@ -21,6 +10,17 @@ export interface IEmailMessagePayload {
   parts: any
 }
 
+export interface IEmailMessage {
+  id: string
+  threadId: string
+  labelIds: string[]
+  snippet: string
+  payload: IEmailMessagePayload
+  sizeEstimate: number
+  historyId: string
+  internalDate: string
+}
+
 export interface IEmailListThreadItem {
   id: string
   historyId: string
@@ -31,18 +31,18 @@ export interface IEmailListThreadItem {
 export interface IEmailListObject {
   labels: string[]
   threads: IEmailListThreadItem[]
-  nextPageToken: string
+  nextPageToken: string | null
 }
 
 export interface IEmailListObjectSearch {
+  q?: string
   threads: IEmailListThreadItem[]
   nextPageToken: string | null
 }
 
 export interface IEmailListState {
   emailList: IEmailListObject[]
-  searchList: IEmailListObject | null
-  isFocused: boolean
-  isSorting: boolean
+  searchList: IEmailListObjectSearch | null
+  coreStatus: string | null
   isFetching: boolean
 }

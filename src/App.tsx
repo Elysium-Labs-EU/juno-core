@@ -12,14 +12,13 @@ import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
+import PageNotFound from './components/PageNotFound/PageNotFound'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
-const ComposeEmail = lazy(
-  () => import('./components/Compose/ComposeEmailContainer')
-)
+const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
+const Settings = lazy(() => import('./components/Settings'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
-// const SpamEmail = React.lazy(() => import('./components/Spam/Spam'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
 
@@ -99,7 +98,6 @@ const App = () => {
                   </Suspense>
                 }
               />
-              {/* <Route path={RoutesConstants.SPAM} element={<Suspense fallback={<LoadingState />}><SpamEmail /></Suspense>} /> */}
               <Route
                 path={RoutesConstants.INBOX}
                 element={
@@ -107,6 +105,10 @@ const App = () => {
                     <Inbox />
                   </Suspense>
                 }
+              />
+              <Route
+                path={RoutesConstants.WILDCARD}
+                element={<PageNotFound />}
               />
             </Routes>
           </AnimatePresence>

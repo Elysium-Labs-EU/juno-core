@@ -5,6 +5,7 @@ import { loadDraftList } from '../../Store/draftsSlice'
 import {
   loadEmails,
   refreshEmailFeed,
+  resetValuesEmailDetail,
   selectEmailList,
 } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
@@ -24,7 +25,7 @@ import loadNextPage from '../../utils/loadNextPage'
 import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
-import { setCurrentEmail, setViewIndex } from '../../Store/emailDetailSlice'
+import getEmailListIndex from '../../utils/getEmailListIndex'
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -46,6 +47,7 @@ const EmailList = () => {
       const params = {
         labelIds,
         maxResults: emailFetchSize,
+        nextPageToken: null,
       }
 
       mounted && dispatch(loadEmails(params))
@@ -59,8 +61,7 @@ const EmailList = () => {
   }, [labelIds])
 
   useEffect(() => {
-    dispatch(setCurrentEmail(''))
-    dispatch(setViewIndex(-1))
+    dispatch(resetValuesEmailDetail())
   }, [])
 
   useEffect(() => {
@@ -80,6 +81,7 @@ const EmailList = () => {
         const params = {
           labelIds,
           maxResults: 500,
+          nextPageToken: null,
         }
         dispatch(refreshEmailFeed(params))
         if (labelIds.includes(draft.DRAFT_LABEL)) {
@@ -140,11 +142,7 @@ const EmailList = () => {
 
   // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
-    () =>
-      emailList.findIndex(
-        (threadList) =>
-          threadList.labels && threadList.labels.includes(labelIds[0])
-      ),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 

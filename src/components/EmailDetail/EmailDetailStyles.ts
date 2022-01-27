@@ -229,7 +229,7 @@ export const SmallTextTruncated = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size; ${themeConstants.smallFontSize};
+  font-size: ${themeConstants.smallFontSize};
 `
 
 export const ComposeWrapper = styled.div`

@@ -51,6 +51,7 @@ const InboxRefresh = () => {
     const params = {
       labelIds,
       maxResults: 500,
+      nextPageToken: null,
     }
     dispatch(refreshEmailFeed(params))
   }

@@ -4,10 +4,13 @@ import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
+import * as global from '../../constants/globalConstants'
 import startSort from '../../utils/startSort'
-import { selectEmailList, setIsFocused } from '../../Store/emailListSlice'
+import { selectEmailList, setCoreStatus } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
+import { setSessionViewIndex } from '../../Store/emailDetailSlice'
+import getEmailListIndex from '../../utils/getEmailListIndex'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -16,11 +19,7 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const emailListIndex = useMemo(
-    () =>
-      emailList.findIndex(
-        (threadList) =>
-          threadList.labels && threadList.labels.includes(labelIds[0])
-      ),
+    () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 
@@ -33,7 +32,8 @@ const TodoFocusOption = () => {
         emailList,
         emailListIndex,
       })
-      dispatch(setIsFocused(true))
+      dispatch(setCoreStatus(global.CORE_STATUS_FOCUSED))
+      dispatch(setSessionViewIndex(0))
     }
   }
 
