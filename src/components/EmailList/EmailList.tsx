@@ -120,7 +120,12 @@ const EmailList = () => {
                   <CustomButton
                     disabled={isLoading}
                     onClick={() =>
-                      loadNextPage({ nextPageToken, labelIds, dispatch, emailFetchSize })
+                      loadNextPage({
+                        nextPageToken,
+                        labelIds,
+                        dispatch,
+                        maxResults: emailFetchSize,
+                      })
                     }
                     label={global.LOAD_MORE}
                     suppressed

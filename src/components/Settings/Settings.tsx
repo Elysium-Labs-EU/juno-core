@@ -24,7 +24,7 @@ const Settings = () => {
   const avatarVisible = useAppSelector(setAvatarVisibility)
   const fetchCount = useAppSelector(selectEmailListSize)
 
-  const handleEmailListSizeChange = (e:any) => {
+  const handleEmailListSizeChange = (e: any) => {
     localStorage.setItem('fetchSize', e.target.value)
     dispatch(setEmailFetchSize(e.target.value))
   }
@@ -71,8 +71,10 @@ const Settings = () => {
               }
             />
 
-            <FormControlLabel  label=" Emails Fetched at a time" control={
-              <Box sx={{ minWidth: 25 }}>
+            <FormControlLabel
+              label=" Emails Fetched at a time"
+              control={
+                <Box sx={{ minWidth: 25 }}>
                   <NativeSelect
                     defaultValue={fetchCount}
                     inputProps={{
@@ -81,15 +83,14 @@ const Settings = () => {
                     }}
                     onChange={handleEmailListSizeChange}
                   >
-                  <option value={20}>20</option>
-                  <option value={25}>25</option>
-                  <option value={30}>30</option>
-                  <option value={35}>35</option>
-                </NativeSelect>
-              </Box>
-            }/>
-              
-
+                    <option value={20}>20</option>
+                    <option value={25}>25</option>
+                    <option value={30}>30</option>
+                    <option value={35}>35</option>
+                  </NativeSelect>
+                </Box>
+              }
+            />
           </FormGroup>
         </S.SettingsDiv>
       </S.Dialog>

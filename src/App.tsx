@@ -17,7 +17,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound'
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
 const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
-const Settings = lazy(() => import('./components/Settings'))
+// const Settings = lazy(() => import('./components/Settings'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
@@ -32,12 +32,15 @@ const App = () => {
       dispatch(checkBase())
     }
   }, [baseLoaded])
-  
-  useEffect(() => {
-    const emailFetchSizeLS: string | null = localStorage.getItem("fetchSize")
-    const possibleFetchSize: string[] = ["20", "25", "30", "35"]
 
-    if(!emailFetchSizeLS || (emailFetchSizeLS && !possibleFetchSize.includes(emailFetchSizeLS)))
+  useEffect(() => {
+    const emailFetchSizeLS: string | null = localStorage.getItem('fetchSize')
+    const possibleFetchSize: string[] = ['20', '25', '30', '35']
+
+    if (
+      !emailFetchSizeLS ||
+      (emailFetchSizeLS && !possibleFetchSize.includes(emailFetchSizeLS))
+    )
       localStorage.setItem('fetchSize', '20')
   }, [])
 

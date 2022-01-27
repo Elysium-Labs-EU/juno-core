@@ -4,7 +4,10 @@ import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
 import navigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
-import { selectEmailListSize, selectIsSilentLoading } from '../../../Store/utilsSlice'
+import {
+  selectEmailListSize,
+  selectIsSilentLoading,
+} from '../../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import DetailNavigationView from './DetailNavigationView'
 import {
@@ -56,7 +59,7 @@ const DetailNavigationContainer = ({
               q,
               nextPageToken,
               dispatch,
-              emailFetchSize
+              maxResults: global.MAX_RESULTS,
               silentLoading: true,
             })
           }
@@ -65,6 +68,7 @@ const DetailNavigationContainer = ({
             nextPageToken,
             labelIds,
             dispatch,
+            maxResults: emailFetchSize,
             silentLoading: true,
           })
         }
@@ -78,7 +82,12 @@ const DetailNavigationContainer = ({
         activeEmailList.threads[viewIndex + 1] === undefined
       ) {
         if (!isSilentLoading) {
-          return loadNextPage({ nextPageToken, labelIds, dispatch, emailFetchSize })
+          return loadNextPage({
+            nextPageToken,
+            labelIds,
+            dispatch,
+            maxResults: emailFetchSize,
+          })
         }
       }
     }
@@ -104,7 +113,7 @@ const DetailNavigationContainer = ({
               labelIds,
               dispatch,
               silentLoading,
-              emailFetchSize
+              maxResults: emailFetchSize,
             })
           }
         }
