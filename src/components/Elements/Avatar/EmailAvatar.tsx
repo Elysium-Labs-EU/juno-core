@@ -1,3 +1,6 @@
+import React from 'react'
+import { useAppSelector } from '../../../Store/hooks'
+import { setAvatarVisibility } from '../../../Store/utilsSlice'
 import getRandomColor from '../../../utils/getRandomColor'
 import * as S from './EmailAvatarStyles'
 
@@ -16,11 +19,12 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
   }
 
   const staticInitials = intialCreator()
+  const avatarVisible = useAppSelector(setAvatarVisibility)
 
   return (
-    <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
+    avatarVisible ? <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
       <span>{staticInitials}</span>
-    </S.EmailAvatarContainer>
+    </S.EmailAvatarContainer> : <div/>
   )
 }
 

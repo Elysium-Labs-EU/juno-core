@@ -4,19 +4,13 @@ import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
-import {
-  FiCheckSquare,
-  FiMoreHorizontal,
-  FiEdit,
-  FiInbox,
-  FiSearch,
-} from 'react-icons/fi'
+import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch, FiSettings } from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
-import { setInSearch } from '../../../Store/utilsSlice'
+import { setInSearch, setIsSettingsOpen } from '../../../Store/utilsSlice'
 
 const SIZE = 16
 
@@ -75,6 +69,7 @@ const Navigation = () => {
             />
           </S.NavItem>
         </Tooltip>
+
         <Tooltip title="Search">
           <S.NavItem>
             <CustomIconButton
@@ -84,12 +79,23 @@ const Navigation = () => {
             />
           </S.NavItem>
         </Tooltip>
+
         <Tooltip title="Compose">
           <S.NavItem>
             <CustomIconButton
               icon={<FiEdit size={SIZE} />}
               isActive={active === 'compose'}
               onClick={() => navigateTo('/compose')}
+            />
+          </S.NavItem>
+        </Tooltip>
+        
+        <Tooltip title="Settings">
+          <S.NavItem>
+            <CustomIconButton
+              icon={<FiSettings size={SIZE} />}
+              isActive={active === 'settings'}
+              onClick={() => dispatch(setIsSettingsOpen(true))}
             />
           </S.NavItem>
         </Tooltip>

@@ -4,7 +4,7 @@ import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
 import navigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
-import { selectIsSilentLoading } from '../../../Store/utilsSlice'
+import { selectEmailListSize, selectIsSilentLoading } from '../../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import DetailNavigationView from './DetailNavigationView'
 import {
@@ -21,6 +21,7 @@ const DetailNavigationContainer = ({
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
+  const emailFetchSize = useAppSelector(selectEmailListSize)
 
   const isDisabledPrev = !!(
     activeEmailList.threads[viewIndex - 1] === undefined
@@ -55,6 +56,7 @@ const DetailNavigationContainer = ({
               q,
               nextPageToken,
               dispatch,
+              emailFetchSize
               silentLoading: true,
             })
           }
@@ -76,7 +78,7 @@ const DetailNavigationContainer = ({
         activeEmailList.threads[viewIndex + 1] === undefined
       ) {
         if (!isSilentLoading) {
-          return loadNextPage({ nextPageToken, labelIds, dispatch })
+          return loadNextPage({ nextPageToken, labelIds, dispatch, emailFetchSize })
         }
       }
     }
@@ -102,6 +104,7 @@ const DetailNavigationContainer = ({
               labelIds,
               dispatch,
               silentLoading,
+              emailFetchSize
             })
           }
         }
