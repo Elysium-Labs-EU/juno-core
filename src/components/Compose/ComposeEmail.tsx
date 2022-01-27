@@ -4,11 +4,20 @@ import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
-import { selectComposeEmail, SendComposedEmail, TrackComposeEmail } from '../../Store/composeSlice'
+import {
+  selectComposeEmail,
+  SendComposedEmail,
+  TrackComposeEmail,
+} from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
-import { createUpdateDraft, listRemoveDraft, resetDraftDetails, selectDraftDetails } from '../../Store/draftsSlice'
+import {
+  createUpdateDraft,
+  listRemoveDraft,
+  resetDraftDetails,
+  selectDraftDetails,
+} from '../../Store/draftsSlice'
 import { selectCurrentMessage } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { Contact } from '../../Store/contactsTypes'
@@ -92,45 +101,57 @@ const ComposeEmailContainer = ({
     ),
   })
 
-  const handleChangeTo = useCallback((recipientListRaw: any) => {
-    const recipientList = recipientListTransform(recipientListRaw)
-    const validation = emailValidation(recipientList.newValue)
-    if (validation) {
-      setToValue(recipientList.newValue)
-      toError && setToError(false)
-    }
-    if (!validation) {
-      setToError(true)
-    }
-  }, [toValue])
+  const handleChangeTo = useCallback(
+    (recipientListRaw: any) => {
+      const recipientList = recipientListTransform(recipientListRaw)
+      const validation = emailValidation(recipientList.newValue)
+      if (validation) {
+        setToValue(recipientList.newValue)
+        toError && setToError(false)
+      }
+      if (!validation) {
+        setToError(true)
+      }
+    },
+    [toValue]
+  )
 
-  const handleChangeCC = useCallback((recipientListRaw: any) => {
-    const recipientList = recipientListTransform(recipientListRaw)
-    const validation = emailValidation(recipientList.newValue)
-    if (validation) {
-      setCCValue(recipientList.newValue)
-      toError && setToError(false)
-    }
-    if (!validation) {
-      setToError(true)
-    }
-  }, [ccValue])
+  const handleChangeCC = useCallback(
+    (recipientListRaw: any) => {
+      const recipientList = recipientListTransform(recipientListRaw)
+      const validation = emailValidation(recipientList.newValue)
+      if (validation) {
+        setCCValue(recipientList.newValue)
+        toError && setToError(false)
+      }
+      if (!validation) {
+        setToError(true)
+      }
+    },
+    [ccValue]
+  )
 
-  const handleChangeBCC = useCallback((recipientListRaw: any) => {
-    const recipientList = recipientListTransform(recipientListRaw)
-    const validation = emailValidation(recipientList.newValue)
-    if (validation) {
-      setBCCValue(recipientList.newValue)
-      toError && setToError(false)
-    }
-    if (!validation) {
-      setToError(true)
-    }
-  }, [bccValue])
+  const handleChangeBCC = useCallback(
+    (recipientListRaw: any) => {
+      const recipientList = recipientListTransform(recipientListRaw)
+      const validation = emailValidation(recipientList.newValue)
+      if (validation) {
+        setBCCValue(recipientList.newValue)
+        toError && setToError(false)
+      }
+      if (!validation) {
+        setToError(true)
+      }
+    },
+    [bccValue]
+  )
 
-  const handleChangeSubject = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSubjectValue(e.target.value)
-  }, [subjectValue])
+  const handleChangeSubject = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSubjectValue(e.target.value)
+    },
+    [subjectValue]
+  )
 
   const handleDelete = (selectedOption: any) => {
     const { option, fieldId } = selectedOption
@@ -287,55 +308,74 @@ const ComposeEmailContainer = ({
     }
   }
 
-  const ToField = useMemo(() => <RecipientField
-    recipientFieldValue={toValue}
-    fieldId={local.TO}
-    fieldLabel={local.TO_LABEL}
-    toError={toError}
-    handleChangeRecipients={handleChangeTo}
-    inputValue={inputToValue}
-    setInputValue={setInputToValue}
-    handleDelete={handleDelete}
-    showField={!isReplying}
-  />
-    , [inputToValue, toError, handleChangeTo])
+  const ToField = useMemo(
+    () => (
+      <RecipientField
+        recipientFieldValue={toValue}
+        fieldId={local.TO}
+        fieldLabel={local.TO_LABEL}
+        toError={toError}
+        handleChangeRecipients={handleChangeTo}
+        inputValue={inputToValue}
+        setInputValue={setInputToValue}
+        handleDelete={handleDelete}
+        showField={!isReplying}
+      />
+    ),
+    [inputToValue, toError, handleChangeTo]
+  )
 
-  const CcField = useMemo(() => <RecipientField
-    recipientFieldValue={ccValue}
-    fieldId={local.CC}
-    fieldLabel={local.CC_LABEL}
-    toError={toError}
-    handleChangeRecipients={handleChangeCC}
-    inputValue={inputCCValue}
-    setInputValue={setInputCCValue}
-    handleDelete={handleDelete}
-    showField={showCC}
-  />
-    , [inputCCValue, toError, handleChangeCC])
+  const CcField = useMemo(
+    () => (
+      <RecipientField
+        recipientFieldValue={ccValue}
+        fieldId={local.CC}
+        fieldLabel={local.CC_LABEL}
+        toError={toError}
+        handleChangeRecipients={handleChangeCC}
+        inputValue={inputCCValue}
+        setInputValue={setInputCCValue}
+        handleDelete={handleDelete}
+        showField={showCC}
+      />
+    ),
+    [inputCCValue, toError, handleChangeCC]
+  )
 
-  const BccField = useMemo(() =>
-    <RecipientField
-      recipientFieldValue={bccValue}
-      fieldId={local.BCC}
-      fieldLabel={local.BCC_LABEL}
-      toError={toError}
-      handleChangeRecipients={handleChangeBCC}
-      inputValue={inputBCCValue}
-      setInputValue={setInputBCCValue}
-      handleDelete={handleDelete}
-      showField={showBCC}
-    />, [inputBCCValue, toError, handleChangeBCC])
+  const BccField = useMemo(
+    () => (
+      <RecipientField
+        recipientFieldValue={bccValue}
+        fieldId={local.BCC}
+        fieldLabel={local.BCC_LABEL}
+        toError={toError}
+        handleChangeRecipients={handleChangeBCC}
+        inputValue={inputBCCValue}
+        setInputValue={setInputBCCValue}
+        handleDelete={handleDelete}
+        showField={showBCC}
+      />
+    ),
+    [inputBCCValue, toError, handleChangeBCC]
+  )
 
-  const SubjectField = useMemo(() =>
-    <StyledTextField
-      id={local.SUBJECT}
-      value={subjectValue ?? ''}
-      onChange={handleChangeSubject}
-      fullWidth
-      variant="outlined"
-    />, [subjectValue, handleChangeSubject])
+  const SubjectField = useMemo(
+    () => (
+      <StyledTextField
+        id={local.SUBJECT}
+        value={subjectValue ?? ''}
+        onChange={handleChangeSubject}
+        fullWidth
+        variant="outlined"
+      />
+    ),
+    [subjectValue, handleChangeSubject]
+  )
 
-  const BodyField = useMemo(() => <QuillBody fetchedBodyValue={bodyValue} />, [bodyValue])
+  const BodyField = useMemo(
+    () => <QuillBody fetchedBodyValue={bodyValue} />,
+    [bodyValue]
+  )
 
   return (
     <S.Wrapper isReplying={isReplying ?? false}>
@@ -366,25 +406,15 @@ const ComposeEmailContainer = ({
                     )}
                   </S.CcBccContainer>
                 </S.Row>
-                {showCC && (
-                  <S.Row>
-                    {CcField}
-                  </S.Row>
-                )}
-                {showBCC && (
-                  <S.Row>
-                    {BccField}
-                  </S.Row>
-                )}
+                {showCC && <S.Row>{CcField}</S.Row>}
+                {showBCC && <S.Row>{BccField}</S.Row>}
                 <S.Row>
                   <S.Label hasValue={Boolean(subjectValue)}>
                     <label htmlFor={local.SUBJECT}>{local.SUBJECT_LABEL}</label>
                   </S.Label>
                   {SubjectField}
                 </S.Row>
-                <S.Row>
-                  {BodyField}
-                </S.Row>
+                <S.Row>{BodyField}</S.Row>
               </GS.Base>
             </div>
             <CustomButton
