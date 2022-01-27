@@ -4,7 +4,14 @@ import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
-import { FiCheckSquare, FiMoreHorizontal, FiEdit, FiInbox, FiSearch, FiSettings } from 'react-icons/fi'
+import {
+  FiCheckSquare,
+  FiMoreHorizontal,
+  FiEdit,
+  FiInbox,
+  FiSearch,
+  FiSettings,
+} from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from '../SubMenuHeader'
 import * as S from './NavigationStyles'
@@ -89,7 +96,7 @@ const Navigation = () => {
             />
           </S.NavItem>
         </Tooltip>
-        
+
         <Tooltip title="Settings">
           <S.NavItem>
             <CustomIconButton

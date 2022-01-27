@@ -21,10 +21,12 @@ const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
   const staticInitials = intialCreator()
   const avatarVisible = useAppSelector(setAvatarVisibility)
 
-  return (
-    avatarVisible ? <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
+  return avatarVisible ? (
+    <S.EmailAvatarContainer randomColor={getRandomColor(staticInitials)}>
       <span>{staticInitials}</span>
-    </S.EmailAvatarContainer> : <div/>
+    </S.EmailAvatarContainer>
+  ) : (
+    <div />
   )
 }
 

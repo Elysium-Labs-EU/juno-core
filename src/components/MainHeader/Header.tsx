@@ -40,7 +40,7 @@ const Header = () => (
     <NoMobileOverlay />
     <SetHeader />
     <Search />
-    <Settings/>
+    <Settings />
   </>
 )
 

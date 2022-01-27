@@ -18,8 +18,8 @@ const initialState: IUtilsState = Object.freeze({
   serviceUnavailable: '',
   isSilentLoading: false,
   isSettingsOpen: false,
-  isAvatarVisible: localStorage.getItem("showAvatar") === "true",
-  emailFetchSize: parseInt(localStorage.getItem('fetchSize') ?? "20",10) 
+  isAvatarVisible: localStorage.getItem('showAvatar') === 'true',
+  emailFetchSize: parseInt(localStorage.getItem('fetchSize') ?? '20', 10),
 })
 
 export const utilsSlice = createSlice({
@@ -46,7 +46,7 @@ export const utilsSlice = createSlice({
     },
     setEmailFetchSize(state, action: PayloadAction<number>) {
       state.emailFetchSize = action.payload
-    }
+    },
   },
 })
 
@@ -57,18 +57,20 @@ export const {
   setIsSilentLoading,
   setIsSettingsOpen,
   setShowAvatar,
-  setEmailFetchSize
+  setEmailFetchSize,
 } = utilsSlice.actions
 
-export const selectIsSettingsOpen = (state: RootState) => state.utils.isSettingsOpen
-export const setAvatarVisibility = (state: RootState) => state.utils.isAvatarVisible
+export const selectIsSettingsOpen = (state: RootState) =>
+  state.utils.isSettingsOpen
+export const setAvatarVisibility = (state: RootState) =>
+  state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable
 export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
-
-export const selectEmailListSize = (state: RootState) => state.utils.emailFetchSize
+export const selectEmailListSize = (state: RootState) =>
+  state.utils.emailFetchSize
 
 export default utilsSlice.reducer
