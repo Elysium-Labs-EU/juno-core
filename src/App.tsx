@@ -17,7 +17,7 @@ import PageNotFound from './components/PageNotFound/PageNotFound'
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
 const ComposeEmail = lazy(
-  () => import('./components/Compose/ComposeEmailContainer')
+  () => import('./components/Compose/ComposeEmail')
 )
 const Settings = lazy(() => import('./components/Settings'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
