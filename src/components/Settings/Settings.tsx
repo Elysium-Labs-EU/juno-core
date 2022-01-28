@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Switch from '@mui/material/Switch'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
@@ -14,9 +14,13 @@ import {
   selectEmailListSize,
 } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import * as S from './SettingsStyle'
+import * as S from './SettingsStyles'
+import * as global from '../../constants/globalConstants'
 
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
+
+const SETTINGS = 'Settings'
+const showAvatarLocalStorage = localStorage.getItem('showAvatar')
 
 const Settings = () => {
   const dispatch = useAppDispatch()
@@ -31,17 +35,17 @@ const Settings = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem('showAvatar') === null ||
-      (localStorage.getItem('showAvatar') !== 'true' &&
-        localStorage.getItem('showAvatar') !== 'false')
+      !showAvatarLocalStorage ||
+      (showAvatarLocalStorage !== 'true' &&
+        showAvatarLocalStorage !== 'false')
     ) {
       localStorage.setItem('showAvatar', 'true')
-      dispatch(setShowAvatar(localStorage.getItem('showAvatar') === 'true'))
+      dispatch(setShowAvatar(showAvatarLocalStorage === 'true'))
     }
   }, [])
 
   const switchAvatarView = () => {
-    if (localStorage.getItem('showAvatar') === 'true') {
+    if (showAvatarLocalStorage === 'true') {
       localStorage.setItem('showAvatar', 'false')
       dispatch(setShowAvatar(false))
     } else {
@@ -58,11 +62,11 @@ const Settings = () => {
       aria-describedby="modal-search-box"
     >
       <S.Dialog>
-        <S.SettingsHeader>Settings</S.SettingsHeader>
-        <S.SettingsDiv>
+        <S.SettingsHeader>{SETTINGS}</S.SettingsHeader>
+        <S.SettingsContainer>
           <FormGroup>
             <FormControlLabel
-              label="       Do you want to see Avatars?"
+              label="Do you want to see Avatars?"
               control={
                 <Switch
                   onClick={() => switchAvatarView()}
@@ -72,7 +76,7 @@ const Settings = () => {
             />
 
             <FormControlLabel
-              label=" Emails Fetched at a time"
+              label="Emails Fetched at a time"
               control={
                 <Box sx={{ minWidth: 25 }}>
                   <NativeSelect
@@ -83,16 +87,13 @@ const Settings = () => {
                     }}
                     onChange={handleEmailListSizeChange}
                   >
-                    <option value={20}>20</option>
-                    <option value={25}>25</option>
-                    <option value={30}>30</option>
-                    <option value={35}>35</option>
+                    {global.POSSIBLE_FETCH_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
                   </NativeSelect>
                 </Box>
               }
             />
           </FormGroup>
-        </S.SettingsDiv>
+        </S.SettingsContainer>
       </S.Dialog>
     </Modal>
   )
