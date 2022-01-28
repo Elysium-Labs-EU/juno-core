@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import * as themeConstants from '../../constants/themeConstants'
 
-// eslint-disable-next-line import/prefer-default-export
 export const Dialog = styled.div`
   position: absolute;
   top: 50%;
@@ -20,14 +19,14 @@ export const Dialog = styled.div`
   z-index: 1;
 `
 
-export const SettingsDiv = styled.div`
+export const SettingsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-item: center;
   height: 10em;
   width: 30em;
 `
-export const SettingsHeader = styled.div`
+export const SettingsHeader = styled.h3`
   margin: 2rem 0 0;
   font-weight: 200;
   user-select: none;
@@ -35,7 +34,7 @@ export const SettingsHeader = styled.div`
   font-size: 2.441rem;
   font-family: 'Raleway Variable', serif;
   line-height: 1.3;
-  color: ${themeConstants.colorBlack} !important;
+  color: ${themeConstants.colorBlack};
   margin-left: 2rem;
   margin-bottom: 2rem;
 `

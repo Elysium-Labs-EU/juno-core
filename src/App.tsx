@@ -8,6 +8,7 @@ import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
 import LoadingState from './components/Elements/LoadingState'
 import * as GS from './styles/globalStyles'
+import * as global from './constants/globalConstants'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
@@ -21,6 +22,8 @@ const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
 
+const emailFetchSizeLS: string | null = localStorage.getItem('fetchSize')
+
 const App = () => {
   const dispatch = useAppDispatch()
   const baseLoaded = useAppSelector(selectBaseLoaded)
@@ -33,12 +36,10 @@ const App = () => {
   }, [baseLoaded])
 
   useEffect(() => {
-    const emailFetchSizeLS: string | null = localStorage.getItem('fetchSize')
-    const possibleFetchSize: string[] = ['20', '25', '30', '35']
-
     if (
       !emailFetchSizeLS ||
-      (emailFetchSizeLS && !possibleFetchSize.includes(emailFetchSizeLS))
+      (emailFetchSizeLS &&
+        !global.POSSIBLE_FETCH_SIZES.includes(emailFetchSizeLS))
     )
       localStorage.setItem('fetchSize', '20')
   }, [])
