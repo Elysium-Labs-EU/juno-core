@@ -36,8 +36,7 @@ const Settings = () => {
   useEffect(() => {
     if (
       !showAvatarLocalStorage ||
-      (showAvatarLocalStorage !== 'true' &&
-        showAvatarLocalStorage !== 'false')
+      (showAvatarLocalStorage !== 'true' && showAvatarLocalStorage !== 'false')
     ) {
       localStorage.setItem('showAvatar', 'true')
       dispatch(setShowAvatar(showAvatarLocalStorage === 'true'))
@@ -87,7 +86,11 @@ const Settings = () => {
                     }}
                     onChange={handleEmailListSizeChange}
                   >
-                    {global.POSSIBLE_FETCH_SIZES.map((size) => <option key={size} value={size}>{size}</option>)}
+                    {global.POSSIBLE_FETCH_SIZES.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
                   </NativeSelect>
                 </Box>
               }
