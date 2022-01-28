@@ -38,7 +38,8 @@ const App = () => {
   useEffect(() => {
     if (
       !emailFetchSizeLS ||
-      (emailFetchSizeLS && !global.POSSIBLE_FETCH_SIZES.includes(emailFetchSizeLS))
+      (emailFetchSizeLS &&
+        !global.POSSIBLE_FETCH_SIZES.includes(emailFetchSizeLS))
     )
       localStorage.setItem('fetchSize', '20')
   }, [])
