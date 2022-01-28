@@ -28,7 +28,7 @@ export const SettingsDiv = styled.div`
   width: 30em;
 `
 export const SettingsHeader = styled.div`
-  margin: 2rem 0 0;
+  margin-top: 1.5rem;
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;

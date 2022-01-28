@@ -73,8 +73,9 @@ const Settings = () => {
 
             <FormControlLabel
               label=" Emails Fetched at a time"
+              style={{marginTop: 15, marginLeft: 0.07}}
               control={
-                <Box sx={{ minWidth: 25 }}>
+                <Box sx={{ minWidth: 25, marginRight: 1 }}>
                   <NativeSelect
                     defaultValue={fetchCount}
                     inputProps={{
