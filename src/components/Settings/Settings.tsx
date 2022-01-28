@@ -44,7 +44,7 @@ const Settings = () => {
   }, [])
 
   const switchAvatarView = () => {
-    if (showAvatarLocalStorage === 'true') {
+    if (localStorage.getItem('showAvatar') === 'true') {
       localStorage.setItem('showAvatar', 'false')
       dispatch(setShowAvatar(false))
     } else {
