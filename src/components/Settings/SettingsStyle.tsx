@@ -1,8 +1,9 @@
+// import { Switch } from '@mui/material'
 import styled from 'styled-components'
 import * as themeConstants from '../../constants/themeConstants'
 
 // eslint-disable-next-line import/prefer-default-export
-export const Dialog = styled.div`
+export const Dialog = styled.dialog`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -27,7 +28,7 @@ export const SettingsDiv = styled.div`
   height: 10em;
   width: 30em;
 `
-export const SettingsHeader = styled.div`
+export const SettingsHeader = styled.header`
   margin-top: 1.5rem;
   font-weight: 200;
   user-select: none;

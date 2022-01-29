@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import Switch from '@mui/material/Switch'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import NativeSelect from '@mui/material/NativeSelect'
+import Select from '@mui/material/NativeSelect'
 import Box from '@mui/material/Box'
+import { Switch } from '@mui/material'
 import {
   setAvatarVisibility,
   selectIsSettingsOpen,
@@ -15,6 +15,7 @@ import {
 } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import * as S from './SettingsStyle'
+
 
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
 
@@ -64,10 +65,11 @@ const Settings = () => {
             <FormControlLabel
               label="       Do you want to see Avatars?"
               control={
-                <Switch
-                  onClick={() => switchAvatarView()}
-                  checked={avatarVisible}
-                />
+                  <Switch
+                    onClick={() => switchAvatarView()}
+                    checked={avatarVisible}
+                    color="secondary"
+                  />
               }
             />
 
@@ -76,19 +78,21 @@ const Settings = () => {
               style={{marginTop: 15, marginLeft: 0.07}}
               control={
                 <Box sx={{ minWidth: 25, marginRight: 1 }}>
-                  <NativeSelect
+                  <Select
                     defaultValue={fetchCount}
                     inputProps={{
                       name: 'emailSize',
                       id: 'uncontrolled-native',
                     }}
                     onChange={handleEmailListSizeChange}
+                    variant="standard"
                   >
                     <option value={20}>20</option>
                     <option value={25}>25</option>
                     <option value={30}>30</option>
                     <option value={35}>35</option>
-                  </NativeSelect>
+                    
+                  </Select>
                 </Box>
               }
             />
