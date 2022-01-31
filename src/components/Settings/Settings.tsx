@@ -39,7 +39,7 @@ const Settings = () => {
       (showAvatarLocalStorage !== 'true' && showAvatarLocalStorage !== 'false')
     ) {
       localStorage.setItem('showAvatar', 'true')
-      dispatch(setShowAvatar(showAvatarLocalStorage === 'true'))
+      dispatch(setShowAvatar(true))
     }
   }, [])
 
