@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import * as S from './MenuStyles'
+import * as S from './TabsStyles'
 import * as local from '../../../constants/menuConstants'
 import { useAppDispatch } from '../../../Store/hooks'
 
-interface MenuItemType {
+interface ITabItem {
   name: string
   link: string
 }
 
-const Menu = () => {
+const Tabs = () => {
   const dispatch = useAppDispatch()
   const [activeLink, setActiveLink] = useState('')
   const location = useLocation()
 
-  const navigateTo = (item: MenuItemType) => {
+  const navigateTo = (item: ITabItem) => {
     setActiveLink(item.name)
     dispatch(push(item.link))
   }
@@ -33,7 +33,7 @@ const Menu = () => {
     <S.ItemsContainer>
       {local.MENU_OPTIONS.map((item, index) => (
         <S.StyedListItem
-          key={`${item.name + index}`}
+          key={`${ item.name + index }`}
           style={{ cursor: 'pointer' }}
           onClick={() => navigateTo(item)}
           aria-hidden="true"
@@ -45,7 +45,7 @@ const Menu = () => {
     </S.ItemsContainer>
   )
 
-  return <S.MenuContainer>{mappedMenu}</S.MenuContainer>
+  return <S.TabContainer>{mappedMenu}</S.TabContainer>
 }
 
-export default Menu
+export default Tabs

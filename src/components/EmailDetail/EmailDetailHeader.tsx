@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppSelector } from '../../Store/hooks'
-import Menu from './Menu/Menu'
+import Tabs from './Tabs/Tabs'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import { selectCoreStatus } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
@@ -52,7 +52,7 @@ const EmailDetailHeader = ({
           </S.HeaderCenter>
           <Navigation />
           <S.InnerMenu>
-            <Menu />
+            <Tabs />
             <DetailNavigationContainer activeEmailList={activeEmailList} />
           </S.InnerMenu>
         </S.Wrapper>
