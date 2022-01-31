@@ -15,21 +15,22 @@ const Wrapper = styled(Link)`
   line-height: 1.13;
   letter-spacing: normal;
   text-align: left;
-  color: ${ themeConstants.colorGrey };
+  color: ${themeConstants.colorGrey};
   display: flex;
   align-items: center;
   text-decoration: none;
   cursor: pointer;
   font-family: 'Urbanist Variable', sans-serif;
 
-  &:hover, &:active {
-    color: ${ themeConstants.colorBlack };
+  &:hover,
+  &:active {
+    color: ${themeConstants.colorBlack};
     text-decoration: none;
     font-weight: 500;
   }
-  
+
   &:disabled {
-    color: ${ themeConstants.colorUltraLightGrey };
+    color: ${themeConstants.colorUltraLightGrey};
     cursor: not-allowed;
   }
 `
