@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import * as themeConstants from '../../../constants/themeConstants'
 
-export const MenuContainer = styled.nav`
+export const TabContainer = styled.nav`
   position: relative;
   text-align: center;
   display: flex;
