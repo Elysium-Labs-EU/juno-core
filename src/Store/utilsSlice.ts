@@ -18,7 +18,7 @@ const initialState: IUtilsState = Object.freeze({
   serviceUnavailable: '',
   isSilentLoading: false,
   isSettingsOpen: false,
-  isAvatarVisible: localStorage.getItem('showAvatar') === 'true',
+  isAvatarVisible: !!localStorage.getItem('showAvatar') ?? true,
   emailFetchSize: parseInt(localStorage.getItem('fetchSize') ?? '20', 10),
 })
 
