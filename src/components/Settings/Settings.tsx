@@ -3,7 +3,7 @@ import Switch from '@mui/material/Switch'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import NativeSelect from '@mui/material/NativeSelect'
+import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
 import {
   setAvatarVisibility,
@@ -70,6 +70,7 @@ const Settings = () => {
                 <Switch
                   onClick={() => switchAvatarView()}
                   checked={avatarVisible}
+                  color="secondary"
                 />
               }
             />
@@ -77,8 +78,8 @@ const Settings = () => {
             <FormControlLabel
               label="Emails Fetched at a time"
               control={
-                <Box sx={{ minWidth: 25 }}>
-                  <NativeSelect
+                <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
+                  <S.StyledSelect
                     defaultValue={fetchCount}
                     inputProps={{
                       name: 'emailSize',
@@ -87,11 +88,11 @@ const Settings = () => {
                     onChange={handleEmailListSizeChange}
                   >
                     {global.POSSIBLE_FETCH_SIZES.map((size) => (
-                      <option key={size} value={size}>
+                      <MenuItem key={size} value={size}>
                         {size}
-                      </option>
+                      </MenuItem>
                     ))}
-                  </NativeSelect>
+                  </S.StyledSelect>
                 </Box>
               }
             />
