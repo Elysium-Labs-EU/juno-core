@@ -1,7 +1,6 @@
-// import { Switch } from '@mui/material'
 import styled from 'styled-components'
+import { Select, SelectProps } from '@mui/material'
 import * as themeConstants from '../../constants/themeConstants'
-
 // eslint-disable-next-line import/prefer-default-export
 export const Dialog = styled.dialog`
   position: absolute;
@@ -39,4 +38,15 @@ export const SettingsHeader = styled.header`
   color: ${themeConstants.colorBlack} !important;
   margin-left: 2rem;
   margin-bottom: 2rem;
+`
+
+export const StyledSelect = styled(Select)<SelectProps> `
+  border: 0;
+  width: 3.5rem;
+  height: 2rem;
+  font-size: 0.9rem;
+  font-color: ${themeConstants.colorBlack}
+  background-color: transparent;
+  margin-top: 1em;
+  margin-right: 0.5em
 `

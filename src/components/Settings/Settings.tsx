@@ -2,9 +2,9 @@ import React, { useEffect } from 'react'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import Select from '@mui/material/NativeSelect'
 import Box from '@mui/material/Box'
 import { Switch } from '@mui/material'
+import MenuItem from '@mui/material/MenuItem'
 import {
   setAvatarVisibility,
   selectIsSettingsOpen,
@@ -15,6 +15,7 @@ import {
 } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import * as S from './SettingsStyle'
+// import { transparent } from 'material-ui/styles/colors'
 
 
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
@@ -74,25 +75,19 @@ const Settings = () => {
             />
 
             <FormControlLabel
-              label=" Emails Fetched at a time"
-              style={{marginTop: 15, marginLeft: 0.07}}
+              label="Emails Fetched at a time"
+              style={{marginTop: 5, marginLeft: 0.07}}
               control={
-                <Box sx={{ minWidth: 25, marginRight: 1 }}>
-                  <Select
+                <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
+                  <S.StyledSelect
                     defaultValue={fetchCount}
-                    inputProps={{
-                      name: 'emailSize',
-                      id: 'uncontrolled-native',
-                    }}
                     onChange={handleEmailListSizeChange}
-                    variant="standard"
                   >
-                    <option value={20}>20</option>
-                    <option value={25}>25</option>
-                    <option value={30}>30</option>
-                    <option value={35}>35</option>
-                    
-                  </Select>
+                    <MenuItem value={20}>20</MenuItem>
+                    <MenuItem value={25}>25</MenuItem>
+                    <MenuItem value={30}>30</MenuItem>
+                    <MenuItem value={35}>35</MenuItem>
+                  </S.StyledSelect>
                 </Box>
               }
             />
