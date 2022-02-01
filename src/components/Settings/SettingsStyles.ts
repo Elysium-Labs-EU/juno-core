@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Select, SelectProps } from '@mui/material'
 import * as themeConstants from '../../constants/themeConstants'
 
 export const Dialog = styled.div`
@@ -22,7 +23,6 @@ export const Dialog = styled.div`
 export const SettingsContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-item: center;
   height: 10em;
   width: 30em;
 `
@@ -37,4 +37,15 @@ export const SettingsHeader = styled.h3`
   color: ${themeConstants.colorBlack};
   margin-left: 2rem;
   margin-bottom: 2rem;
+`
+
+export const StyledSelect = styled(Select)<SelectProps>`
+  border: 0;
+  width: 3.5rem;
+  height: 2rem;
+  font-size: 0.9rem;
+  color: ${themeConstants.colorBlack};
+  background-color: transparent;
+  margin-top: 1em;
+  margin-right: 0.5em;
 `
