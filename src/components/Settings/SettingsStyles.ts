@@ -23,7 +23,6 @@ export const Dialog = styled.div`
 export const SettingsContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-item: center;
   height: 10em;
   width: 30em;
 `
