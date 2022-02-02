@@ -22,12 +22,7 @@ const Wrapper = styled(Link)`
   cursor: pointer;
   font-family: 'Urbanist Variable', sans-serif;
 
-  &:hover {
-    color: ${themeConstants.colorBlack};
-    text-decoration: none;
-    font-weight: 500;
-  }
-
+  &:hover,
   &:active {
     color: ${themeConstants.colorBlack};
     text-decoration: none;

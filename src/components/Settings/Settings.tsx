@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import Switch from '@mui/material/Switch'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Box from '@mui/material/Box'
-import { Switch } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
 import {
   setAvatarVisibility,
@@ -14,11 +14,13 @@ import {
   selectEmailListSize,
 } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import * as S from './SettingsStyle'
-// import { transparent } from 'material-ui/styles/colors'
-
+import * as S from './SettingsStyles'
+import * as global from '../../constants/globalConstants'
 
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
+
+const SETTINGS = 'Settings'
+const showAvatarLocalStorage = localStorage.getItem('showAvatar')
 
 const Settings = () => {
   const dispatch = useAppDispatch()
@@ -33,12 +35,11 @@ const Settings = () => {
 
   useEffect(() => {
     if (
-      localStorage.getItem('showAvatar') === null ||
-      (localStorage.getItem('showAvatar') !== 'true' &&
-        localStorage.getItem('showAvatar') !== 'false')
+      !showAvatarLocalStorage ||
+      (showAvatarLocalStorage !== 'true' && showAvatarLocalStorage !== 'false')
     ) {
       localStorage.setItem('showAvatar', 'true')
-      dispatch(setShowAvatar(localStorage.getItem('showAvatar') === 'true'))
+      dispatch(setShowAvatar(true))
     }
   }, [])
 
@@ -60,39 +61,43 @@ const Settings = () => {
       aria-describedby="modal-search-box"
     >
       <S.Dialog>
-        <S.SettingsHeader>Settings</S.SettingsHeader>
-        <S.SettingsDiv>
+        <S.SettingsHeader>{SETTINGS}</S.SettingsHeader>
+        <S.SettingsContainer>
           <FormGroup>
             <FormControlLabel
-              label="       Do you want to see Avatars?"
+              label="Do you want to see Avatars?"
               control={
-                  <Switch
-                    onClick={() => switchAvatarView()}
-                    checked={avatarVisible}
-                    color="secondary"
-                  />
+                <Switch
+                  onClick={() => switchAvatarView()}
+                  checked={avatarVisible}
+                  color="secondary"
+                />
               }
             />
 
             <FormControlLabel
               label="Emails Fetched at a time"
-              style={{marginTop: 5, marginLeft: 0.07}}
               control={
                 <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
                   <S.StyledSelect
-                    defaultValue={fetchCount}
+                    value={fetchCount}
+                    inputProps={{
+                      name: 'emailSize',
+                      id: 'uncontrolled-native',
+                    }}
                     onChange={handleEmailListSizeChange}
                   >
-                    <MenuItem value={20}>20</MenuItem>
-                    <MenuItem value={25}>25</MenuItem>
-                    <MenuItem value={30}>30</MenuItem>
-                    <MenuItem value={35}>35</MenuItem>
+                    {global.POSSIBLE_FETCH_SIZES.map((size) => (
+                      <MenuItem key={size} value={size}>
+                        {size}
+                      </MenuItem>
+                    ))}
                   </S.StyledSelect>
                 </Box>
               }
             />
           </FormGroup>
-        </S.SettingsDiv>
+        </S.SettingsContainer>
       </S.Dialog>
     </Modal>
   )

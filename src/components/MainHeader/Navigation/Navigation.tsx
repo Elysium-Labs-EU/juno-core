@@ -10,14 +10,13 @@ import {
   FiEdit,
   FiInbox,
   FiSearch,
-  FiSettings,
 } from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import SubMenuHeader from '../SubMenuHeader'
+import SubMenuHeader from './More/NavigationMore'
 import * as S from './NavigationStyles'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
-import { setInSearch, setIsSettingsOpen } from '../../../Store/utilsSlice'
+import { setInSearch } from '../../../Store/utilsSlice'
 
 const SIZE = 16
 
@@ -32,11 +31,14 @@ const Navigation = () => {
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
       setActive('inbox')
-    } else if (location.pathname.includes('settings')) {
+    }
+    if (location.pathname.includes('settings')) {
       setActive('settings')
-    } else if (location.pathname.includes('compose')) {
+    }
+    if (location.pathname.includes('compose')) {
       setActive('compose')
-    } else if (location.pathname === '/') {
+    }
+    if (location.pathname === '/') {
       setActive('todo')
     }
   }, [location])
@@ -81,7 +83,7 @@ const Navigation = () => {
           <S.NavItem>
             <CustomIconButton
               icon={<FiSearch size={SIZE} />}
-              isActive={active === 'settings'}
+              isActive={active === 'search'}
               onClick={() => dispatch(setInSearch(true))}
             />
           </S.NavItem>
@@ -93,16 +95,6 @@ const Navigation = () => {
               icon={<FiEdit size={SIZE} />}
               isActive={active === 'compose'}
               onClick={() => navigateTo('/compose')}
-            />
-          </S.NavItem>
-        </Tooltip>
-
-        <Tooltip title="Settings">
-          <S.NavItem>
-            <CustomIconButton
-              icon={<FiSettings size={SIZE} />}
-              isActive={active === 'settings'}
-              onClick={() => dispatch(setIsSettingsOpen(true))}
             />
           </S.NavItem>
         </Tooltip>

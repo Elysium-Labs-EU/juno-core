@@ -5,6 +5,7 @@ import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { FindLabelByName } from '../../../utils/findLabel'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as todo from '../../../constants/todoConstants'
+import * as global from '../../../constants/globalConstants'
 import * as S from '../EmailDetailStyles'
 import { useAppSelector } from '../../../Store/hooks'
 import emailLabels from '../../../utils/emailLabels'
@@ -15,6 +16,8 @@ import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
 import ArchiveOption from '../Options/ArchiveOption'
 import MoreOption from '../Options/MoreOption'
+import { selectCoreStatus } from '../../../Store/emailListSlice'
+import SkipOption from '../Options/SkipOption'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -26,6 +29,7 @@ const EmailDetailOptions = ({
   isReplyingListener,
 }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
+  const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
@@ -59,10 +63,11 @@ const EmailDetailOptions = ({
                 })[0].id
             ) && <ToDoOption threadDetail={threadDetail} />}
           {staticOnlyLegalLabels.length > 0 && (
-            <>
-              <ArchiveOption threadDetail={threadDetail} />
-              <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
-            </>
+            <ArchiveOption threadDetail={threadDetail} />
+          )}
+          {coreStatus === global.CORE_STATUS_FOCUSED && <SkipOption />}
+          {staticOnlyLegalLabels.length > 0 && (
+            <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
           )}
           {staticOnlyLegalLabels.length === 0 && (
             <DeleteOption

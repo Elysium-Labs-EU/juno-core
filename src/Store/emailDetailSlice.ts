@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
@@ -26,13 +26,13 @@ export const emailDetailSlice = createSlice({
     setCurrentMessage: (state, action) => {
       state.currMessage = action.payload
     },
-    setViewIndex: (state, action) => {
+    setViewIndex: (state, action: PayloadAction<number>) => {
       state.viewIndex = action.payload
     },
-    setSessionViewIndex: (state, action) => {
+    setSessionViewIndex: (state, action: PayloadAction<number>) => {
       state.sessionViewIndex = action.payload
     },
-    setIsReplying: (state, action) => {
+    setIsReplying: (state, action: PayloadAction<boolean>) => {
       state.isReplying = action.payload
     },
   },
