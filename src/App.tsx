@@ -45,6 +45,14 @@ const App = () => {
   }, [])
 
   useEffect(() => {
+    const showAvatarLS: string | null = localStorage.getItem('showAvatar')
+
+    if(!showAvatarLS || (showAvatarLS !== "true" && showAvatarLS !== "false")) {
+      localStorage.setItem('showAvatar', 'true')
+    }
+  })
+
+  useEffect(() => {
     if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {
       dispatch(recheckBase())
     }

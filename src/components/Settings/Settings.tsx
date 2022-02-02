@@ -3,8 +3,8 @@ import Switch from '@mui/material/Switch'
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import MenuItem from '@mui/material/MenuItem'
 import Box from '@mui/material/Box'
+import MenuItem from '@mui/material/MenuItem'
 import {
   setAvatarVisibility,
   selectIsSettingsOpen,
@@ -80,7 +80,7 @@ const Settings = () => {
               control={
                 <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
                   <S.StyledSelect
-                    defaultValue={fetchCount}
+                    value={fetchCount}
                     inputProps={{
                       name: 'emailSize',
                       id: 'uncontrolled-native',

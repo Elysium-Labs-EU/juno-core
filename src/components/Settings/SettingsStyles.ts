@@ -44,8 +44,8 @@ export const StyledSelect = styled(Select)<SelectProps>`
   width: 3.5rem;
   height: 2rem;
   font-size: 0.9rem;
-  color: ${themeConstants.colorBlack};
+  color: ${themeConstants.colorBlack}
   background-color: transparent;
   margin-top: 1em;
-  margin-right: 0.5em;
+  margin-right: 0.5em
 `
