@@ -80,7 +80,7 @@ const Settings = () => {
               control={
                 <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
                   <S.StyledSelect
-                    defaultValue={fetchCount}
+                    value={fetchCount}
                     inputProps={{
                       name: 'emailSize',
                       id: 'uncontrolled-native',
