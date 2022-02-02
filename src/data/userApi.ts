@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandeling } from './api'
+import { BASE_API_URL, errorHandeling, fetchToken } from './api'
 
 interface UserType {
   emailAddress: string
@@ -24,7 +24,12 @@ const userApi = () => ({
   fetchUser: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await axios.get(
-        `${BASE_API_URL}/api/user`
+        `${BASE_API_URL}/api/user`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
@@ -32,12 +37,12 @@ const userApi = () => ({
     }
   },
   authUser: async (googleData: any) => {
-    const body = JSON.stringify({
+    const body = {
       token: googleData.tokenId,
-    })
+    }
     try {
       const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/auth`,
+        `${BASE_API_URL}/api/auth/google`,
         body
       )
       console.log(res)

@@ -1,4 +1,14 @@
+import * as global from '../constants/globalConstants'
+
 export const BASE_API_URL = process.env.REACT_APP_BACKEND_URL
+
+export const fetchToken = () => {
+  const token = localStorage.getItem(global.GOOGLE_TOKEN)
+  if (token) {
+    return token
+  }
+  return ''
+}
 
 export const errorHandeling = (err: any) => {
   console.log(err)

@@ -8,4 +8,5 @@ export interface IProfile {
 export interface IBaseState {
   baseLoaded: boolean
   profile: IProfile
+  isAuthenticated: boolean
 }
