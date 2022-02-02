@@ -31,6 +31,21 @@ const userApi = () => ({
       return errorHandeling(err)
     }
   },
+  authUser: async (googleData: any) => {
+    const body = JSON.stringify({
+      token: googleData.tokenId,
+    })
+    try {
+      const res: AxiosResponse<any> = await axios.post(
+        `${BASE_API_URL}/api/auth`,
+        body
+      )
+      console.log(res)
+      return res
+    } catch (err) {
+      return errorHandeling(err)
+    }
+  },
 })
 
 export default userApi
