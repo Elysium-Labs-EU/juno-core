@@ -47,7 +47,10 @@ const App = () => {
   useEffect(() => {
     const showAvatarLS: string | null = localStorage.getItem('showAvatar')
 
-    if(!showAvatarLS || (showAvatarLS !== "true" && showAvatarLS !== "false")) {
+    if (
+      !showAvatarLS ||
+      (showAvatarLS !== 'true' && showAvatarLS !== 'false')
+    ) {
       localStorage.setItem('showAvatar', 'true')
     }
   })
