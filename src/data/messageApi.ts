@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandeling } from './api'
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 const messageApi = () => ({
   getMessageDetail: async (messageId: string) => {
@@ -9,7 +9,7 @@ const messageApi = () => ({
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -22,11 +22,16 @@ const messageApi = () => ({
   }) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
+        `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -34,11 +39,16 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/send-message`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
   updateMessage: async (props: any) => {
@@ -46,21 +56,31 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.patch(
         `${BASE_API_URL}/api/message/${messageId}`,
-        request
+        request,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
   thrashMessage: async ({ messageId }: { messageId: string }) => {
     try {
       const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/message/thrash/${messageId}`
+        `${BASE_API_URL}/api/message/thrash/${messageId}`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
   // unThrashMessage: (messageId) => {
@@ -76,11 +96,14 @@ const messageApi = () => ({
         `${BASE_API_URL}/api/message/`,
         {
           data: { id: messageId },
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 })

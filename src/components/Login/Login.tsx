@@ -12,38 +12,45 @@ import {
   selectServiceUnavailable,
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
+import userApi from '../../data/userApi'
+import setCookie from '../../utils/setCookie'
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno, log in with Google'
 const ERROR_LOADING = 'Cannot load login. Try again later.'
 
-// const SCOPES = [
-//   'https://mail.google.com',
-//   'https://www.googleapis.com/auth/gmail.addons.current.message.action',
-//   'https://www.googleapis.com/auth/gmail.addons.current.message.readonly',
-//   'https://www.googleapis.com/auth/gmail.modify',
-//   'https://www.googleapis.com/auth/gmail.readonly',
-//   'https://www.googleapis.com/auth/gmail.modify',
-//   'https://www.googleapis.com/auth/gmail.compose',
-//   'https://www.googleapis.com/auth/gmail.send',
-//   'https://www.googleapis.com/auth/contacts.other.readonly',
-// ]
+const SCOPES = [
+  'https://mail.google.com',
+  'https://www.googleapis.com/auth/gmail.addons.current.message.action',
+  'https://www.googleapis.com/auth/gmail.addons.current.message.readonly',
+  'https://www.googleapis.com/auth/gmail.modify',
+  'https://www.googleapis.com/auth/gmail.readonly',
+  'https://www.googleapis.com/auth/gmail.modify',
+  'https://www.googleapis.com/auth/gmail.compose',
+  'https://www.googleapis.com/auth/gmail.send',
+  'https://www.googleapis.com/auth/contacts.other.readonly',
+]
+
+interface IOnFailure {
+  error: string
+}
+
+// animation: fadeIn .3s cubic-bezier(.275,.42,0,1)
+
 
 const Login = () => {
   const dispatch = useAppDispatch()
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
   const responseGoogle = async (response: any) => {
-    localStorage.setItem(global.GOOGLE_TOKEN, JSON.stringify(response.tokenObj))
-    // const test2 = await userApi().authUser(response)
-    // console.log('here', test2)
+    setCookie(global.GOOGLE_TOKEN, response.tokenObj, 30)
     dispatch(setIsAuthenticated(true))
     dispatch(push(RouteConstants.HOME))
   }
 
-  const handleFailure = () => {
-    dispatch(setServiceUnavailable('Unable to login'))
+  const handleFailure = (data: IOnFailure) => {
+    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
   }
 
   return (
@@ -63,13 +70,15 @@ const Login = () => {
                 onFailure={handleFailure}
                 cookiePolicy="single_host_origin"
                 theme="dark"
-                accessType="offline"
+              // accessType="offline"
+              // scope={SCOPES.toString()}
+              // scope='openid profile email contacts'
               />
             ) : (
-              <>
+              <S.ErrorBox>
                 <p>{ERROR_LOADING}</p>
                 {serviceUnavailable.length > 0 && <p>{serviceUnavailable}</p>}
-              </>
+              </S.ErrorBox>
             )}
           </S.Inner>
         </S.LoginContainer>

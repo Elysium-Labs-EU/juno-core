@@ -7,7 +7,8 @@ export const Wrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
-  height: 100%;
+  height: 100vh;
+  width: 100vw;
 `
 
 export const LoginContainer = styled.div`
@@ -26,5 +27,12 @@ export const Inner = styled.div`
 
 export const Header = styled.div`
   margin-bottom: 40px;
+  text-align: center;
+`
+
+export const ErrorBox = styled.div`
+  background-color: ${themeConstants.colorPurpleSoft};
+  padding: 1rem;
+  border-radius: 5px;
   text-align: center;
 `

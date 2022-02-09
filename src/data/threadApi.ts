@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL, errorHandeling, fetchToken } from './api'
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 interface EmailQueryObject {
   labelIds?: string[]
@@ -30,7 +30,7 @@ const threadApi = () => ({
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
   getFullThreads: async (query: EmailQueryObject) => {
@@ -54,7 +54,7 @@ const threadApi = () => ({
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -70,7 +70,7 @@ const threadApi = () => ({
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 })

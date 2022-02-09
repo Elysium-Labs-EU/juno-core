@@ -24,19 +24,11 @@ export const GlobalStyle = createGlobalStyle`
     }
   html {
     font-size: 100%;
-    width: 100%;
-    height: 100%;
   }
   body {
     background-color: ${themeConstants.colorOffWhite} !important;
     margin: 0;
     font-family: 'Urbanist Variable', sans-serif;
-    width: 100%;
-    height: 100%;
-    #root {
-      width: 100%;
-      height: 100%;
-    }
   }
 `
 
@@ -44,8 +36,6 @@ export const Base = styled.div`
   display: flex;
   flex-flow: column;
   margin: 0;
-  width: 100%;
-  height: 100%;
 `
 
 interface IOuterContainer {
