@@ -1,5 +1,5 @@
 import * as global from '../constants/globalConstants'
-import getCookie from '../utils/getCookie'
+import getCookie from '../utils/Cookie/getCookie'
 
 export const BASE_API_URL = process.env.REACT_APP_BACKEND_URL
 

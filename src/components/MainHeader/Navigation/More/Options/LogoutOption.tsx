@@ -1,22 +1,19 @@
 import * as S from '../NavigationMoreStyles'
 import * as local from '../../../../../constants/subMenuHeaderConstants'
 import * as global from '../../../../../constants/globalConstants'
-import { useAppDispatch } from '../../../../../Store/hooks'
+import removeCookie from '../../../../../utils/Cookie/removeCookie'
 
 const LogoutOption = () => {
-    const dispatch = useAppDispatch()
+  const handleLogout = () => {
+    removeCookie(global.GOOGLE_TOKEN)
+    window.location.reload()
+  }
 
-    const handleLogout = () => {
-        localStorage.removeItem(global.GOOGLE_TOKEN)
-        // dispatch(setIsAuthenticated(false))
-        window.location.reload()
-    }
-
-    return (
-        <S.MenuItemButton onClick={handleLogout} type="button">
-            {local.LOGOUT}
-        </S.MenuItemButton>
-    )
+  return (
+    <S.MenuItemButton onClick={handleLogout} type="button">
+      {local.LOGOUT}
+    </S.MenuItemButton>
+  )
 }
 
 export default LogoutOption

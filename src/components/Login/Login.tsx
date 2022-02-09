@@ -13,7 +13,7 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import userApi from '../../data/userApi'
-import setCookie from '../../utils/setCookie'
+import setCookie from '../../utils/Cookie/setCookie'
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
@@ -38,19 +38,19 @@ interface IOnFailure {
 
 // animation: fadeIn .3s cubic-bezier(.275,.42,0,1)
 
-
 const Login = () => {
   const dispatch = useAppDispatch()
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
-  const responseGoogle = async (response: any) => {
+  const responseGoogle = (response: any) => {
+    console.log('response', response)
     setCookie(global.GOOGLE_TOKEN, response.tokenObj, 30)
     dispatch(setIsAuthenticated(true))
     dispatch(push(RouteConstants.HOME))
   }
 
   const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
+    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
   }
 
   return (
@@ -70,9 +70,9 @@ const Login = () => {
                 onFailure={handleFailure}
                 cookiePolicy="single_host_origin"
                 theme="dark"
-              // accessType="offline"
-              // scope={SCOPES.toString()}
-              // scope='openid profile email contacts'
+                // accessType="offline"
+                // scope={SCOPES.toString()}
+                scope="openid profile"
               />
             ) : (
               <S.ErrorBox>
