@@ -1,9 +1,6 @@
 import Modal from '@mui/material/Modal'
 import FormGroup from '@mui/material/FormGroup'
-import {
-  selectIsSettingsOpen,
-  setIsSettingsOpen,
-} from '../../Store/utilsSlice'
+import { selectIsSettingsOpen, setIsSettingsOpen } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import * as S from './SettingsStyles'
 import ShowAvatar from './SettingsOptions/ShowAvatar/ShowAvatar'

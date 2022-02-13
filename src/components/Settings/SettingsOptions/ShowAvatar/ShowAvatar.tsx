@@ -1,9 +1,9 @@
-import { FormControlLabel, Switch } from "@mui/material"
-import { useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../Store/hooks"
+import { FormControlLabel, Switch } from '@mui/material'
+import { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import {
   setAvatarVisibility,
-  setShowAvatar
+  setShowAvatar,
 } from '../../../../Store/utilsSlice'
 
 const showAvatarLocalStorage = localStorage.getItem('showAvatar')
@@ -34,15 +34,16 @@ const showAvatar = () => {
 
   return (
     <FormControlLabel
-    label="Do you want to see Avatars?"
-    control={
-      <Switch
-        onClick={() => switchAvatarView()}
-        checked={avatarVisible}
-        color="secondary"
-      />
-    }
-    />)
+      label="Do you want to see Avatars?"
+      control={
+        <Switch
+          onClick={() => switchAvatarView()}
+          checked={avatarVisible}
+          color="secondary"
+        />
+      }
+    />
+  )
 }
 
 export default showAvatar

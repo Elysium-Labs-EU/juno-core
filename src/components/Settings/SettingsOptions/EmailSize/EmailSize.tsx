@@ -1,10 +1,10 @@
 import { Box, FormControlLabel, MenuItem } from '@mui/material'
 import * as S from '../../SettingsStyles'
-import { useAppDispatch, useAppSelector } from "../../../../Store/hooks"
+import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import * as global from '../../../../constants/globalConstants'
 import {
   setEmailFetchSize,
-  selectEmailListSize
+  selectEmailListSize,
 } from '../../../../Store/utilsSlice'
 
 const EmailSize = () => {
