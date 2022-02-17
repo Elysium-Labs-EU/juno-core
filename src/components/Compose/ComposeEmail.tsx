@@ -6,8 +6,8 @@ import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import {
   selectComposeEmail,
-  SendComposedEmail,
-  TrackComposeEmail,
+  sendComposedEmail,
+  trackComposeEmail,
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
@@ -79,7 +79,7 @@ const ComposeEmailContainer = ({
 
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(composeEmail)) {
+    if (!isEmpty(composeEmail) && /(<\w*)((\s\/>)|(.*<\/\w*>))/gm.test(composeEmail.body)) {
       console.log('triggered')
       console.log(composeEmail)
       mounted && dispatch(createUpdateDraft())
@@ -91,7 +91,7 @@ const ComposeEmailContainer = ({
 
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(draftDetails) && mounted && composeEmail.sizeEstimate !== draftDetails.message.sizeEstimate) {
+    if (!isEmpty(draftDetails) && mounted && !draftDetails.skipSave) {
       setSaveSuccess(true)
       const timer = setTimeout(() => {
         setSaveSuccess(false)
@@ -190,7 +190,7 @@ const ComposeEmailContainer = ({
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -203,7 +203,7 @@ const ComposeEmailContainer = ({
     if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -216,7 +216,7 @@ const ComposeEmailContainer = ({
     if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -231,7 +231,7 @@ const ComposeEmailContainer = ({
         id: local.SUBJECT,
         value: debouncedSubjectValue,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -282,7 +282,7 @@ const ComposeEmailContainer = ({
         id: 'id',
         value: currentMessage.id,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -296,7 +296,7 @@ const ComposeEmailContainer = ({
         id: 'threadId',
         value: threadId,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -307,7 +307,7 @@ const ComposeEmailContainer = ({
     e.preventDefault()
     if (toValue.length > 0) {
       if (emailValidation(toValue)) {
-        dispatch(SendComposedEmail())
+        dispatch(sendComposedEmail())
         dispatch(resetDraftDetails())
         dispatch(listRemoveDraft({ threadId: draftDetails.message.threadId }))
       } else {

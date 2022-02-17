@@ -3,7 +3,7 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import * as S from './QuillBodyStyles'
 import useDebounce from '../../../../Hooks/useDebounce'
-import { TrackComposeEmail } from '../../../../Store/composeSlice'
+import { trackComposeEmail } from '../../../../Store/composeSlice'
 import { useAppDispatch } from '../../../../Store/hooks'
 import * as local from '../../../../constants/composeEmailConstants'
 import * as Compose from '../../ComposeStyles'
@@ -41,9 +41,10 @@ const QuilBody = ({ fetchedBodyValue, isReplying }: any) => {
 
   useEffect(() => {
     let mounted = true
-    if (debouncedBodyValue !== QUILL_START_STRING || '') {
+    if (debouncedBodyValue.includes('<') && debouncedBodyValue !== QUILL_START_STRING) {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      console.log(/(<\w*)((\s\/>)|(.*<\/\w*>))/gm.test(debouncedBodyValue))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false

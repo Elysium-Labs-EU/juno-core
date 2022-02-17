@@ -19,7 +19,6 @@ export interface FullEmailType {
   mimeType: string
   threadId: string
   snippet: string
-  sizeEstimate: number
 }
 
 export interface EnhancedDraftDetails {
@@ -27,6 +26,7 @@ export interface EnhancedDraftDetails {
     id: string
     message: FullEmailType
   }
+  skipSave: boolean
 }
 
 export interface MessagePayload {

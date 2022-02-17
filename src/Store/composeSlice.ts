@@ -46,7 +46,7 @@ export const composeSlice = createSlice({
 export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
   composeSlice.actions
 
-export const TrackComposeEmail =
+export const trackComposeEmail =
   (props: ComposePayload): AppThunk =>
   async (dispatch, getState) => {
     const composedEmail = getState().compose.composeEmail
@@ -63,7 +63,7 @@ export const TrackComposeEmail =
     }
   }
 
-export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
+export const sendComposedEmail = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail } = getState().compose
     const sender = getState().base.profile.emailAddress

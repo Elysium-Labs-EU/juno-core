@@ -118,6 +118,7 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   const {
     draft,
     draft: { message },
+    skipSave,
   } = props
   return (dispatch) => {
     try {
@@ -134,7 +135,6 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         bcc,
         subject,
         body,
-        sizeEstimate: message.sizeEstimate,
       }
       console.log(message)
       const draftDetails = {
@@ -142,8 +142,8 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         message: {
           id: message.id,
           threadId: message.threadId,
-          sizeEstimate: message.sizeEstimate,
         },
+        skipSave,
       }
       if (draft.id && message.threadId) {
         dispatch(listUpdateDraft(draftDetails))
@@ -166,7 +166,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
     try {
       const response = await draftApi().getDraftDetail(draftId)
       if (response?.status && response.status === 200) {
-        dispatch(pushDraftDetails({ draft: response.data }))
+        dispatch(pushDraftDetails({ draft: response.data, skipSave: true }))
       }
     } catch (err) {
       console.error(err)
