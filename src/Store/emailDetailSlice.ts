@@ -103,7 +103,7 @@ export const downloadAttachment = ({
         attachmentId,
       })
       if (fetchedAttachment) {
-        const base64Data = fetchedAttachment.data.messageAttachment.data
+        const base64Data = fetchedAttachment.data.data
         const blobData = base64toBlob({ base64Data, mimeType })
         fileSaver(blobData, filename)
       }
