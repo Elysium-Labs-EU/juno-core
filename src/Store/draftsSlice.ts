@@ -134,12 +134,15 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         bcc,
         subject,
         body,
+        sizeEstimate: message.sizeEstimate,
       }
+      console.log(message)
       const draftDetails = {
         id: draft.id,
         message: {
           id: message.id,
           threadId: message.threadId,
+          sizeEstimate: message.sizeEstimate,
         },
       }
       if (draft.id && message.threadId) {

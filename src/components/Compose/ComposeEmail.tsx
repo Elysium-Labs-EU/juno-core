@@ -50,27 +50,38 @@ const ComposeEmailContainer = ({
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
+  const [draftLoaded, setDraftLoaded] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+
   const [toValue, setToValue] = useState<Contact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [inputToValue, setInputToValue] = useState<string>('')
+  const [toError, setToError] = useState<boolean>(false)
+
   const [showCC, setShowCC] = useState<boolean>(false)
   const [ccValue, setCCValue] = useState<Contact[]>([])
   const debouncedCCValue = useDebounce(ccValue, 500)
   const [inputCCValue, setInputCCValue] = useState<string>('')
+
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [bccValue, setBCCValue] = useState<Contact[]>([])
   const debouncedBCCValue = useDebounce(bccValue, 500)
   const [inputBCCValue, setInputBCCValue] = useState<string>('')
+
   const [subjectValue, setSubjectValue] = useState('')
   const debouncedSubjectValue = useDebounce(subjectValue, 500)
   const [bodyValue, setBodyValue] = useState('')
-  const [toError, setToError] = useState<boolean>(false)
-  const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+
   const dispatch = useAppDispatch()
+
+  // TODO: Do not trigger the createUpdateDraft if the initial load is identical to what is already on the emailList item for the draft item.\
+  // If draft exists on the emailList, trigger a flow where it will not createOrUpdateDraft on the initial round.
 
   useEffect(() => {
     let mounted = true
     if (!isEmpty(composeEmail)) {
+      console.log('triggered')
+      console.log(composeEmail)
       mounted && dispatch(createUpdateDraft())
     }
     return () => {
@@ -80,7 +91,7 @@ const ComposeEmailContainer = ({
 
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(draftDetails) && mounted) {
+    if (!isEmpty(draftDetails) && mounted && composeEmail.sizeEstimate !== draftDetails.message.sizeEstimate) {
       setSaveSuccess(true)
       const timer = setTimeout(() => {
         setSaveSuccess(false)
@@ -227,30 +238,27 @@ const ComposeEmailContainer = ({
     }
   }, [debouncedSubjectValue])
 
-  // Set the form values
+  // Set the form values from an earlier draft
   useEffect(() => {
     let mounted = true
     if (mounted) {
       if (!isEmpty(composeEmail)) {
         setToValue(
           Array(composeEmail.to).filter((item) =>
-            item ? convertToContact(item) : null
-          )
+            item || null).map((item) => convertToContact(item))
         )
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
           setCCValue(
-            Array(composeEmail.cc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
+            Array(composeEmail.to).filter((item) =>
+              item || null).map((item) => convertToContact(item))
           )
         }
         if (composeEmail.bcc && composeEmail.bcc.length > 0) {
           setShowBCC(true)
           setBCCValue(
-            Array(composeEmail.bcc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
+            Array(composeEmail.to).filter((item) =>
+              item || null).map((item) => convertToContact(item))
           )
         }
         setSubjectValue(composeEmail.subject)

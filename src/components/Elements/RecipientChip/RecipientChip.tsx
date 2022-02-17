@@ -16,7 +16,7 @@ const RecipientChip = (props: IRecipientChip) => {
 
   const chipLabel = () => {
     if (option.name && showFull) {
-      return `${option.name} <${option.emailAddress}>`
+      return `${ option.name } <${ option.emailAddress }>`
     }
     if (option.name && !showFull) {
       return option.name

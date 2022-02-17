@@ -19,6 +19,7 @@ export interface FullEmailType {
   mimeType: string
   threadId: string
   snippet: string
+  sizeEstimate: number
 }
 
 export interface EnhancedDraftDetails {

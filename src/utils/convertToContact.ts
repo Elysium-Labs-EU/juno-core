@@ -3,7 +3,6 @@
 const convertToContact = (data: any) => {
   if (data.length > 0) {
     const splitted = data.split('<')
-
     if (splitted.length > 1) {
       const cleanUpName: string = splitted[0].trim().replace(/(")+/g, '')
       const cleanUpEmailAddress: string = splitted[1]
