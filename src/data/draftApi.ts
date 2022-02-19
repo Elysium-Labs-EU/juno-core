@@ -4,7 +4,11 @@ import { BASE_API_URL, errorHandling, fetchToken } from './api'
 const draftApi = () => ({
   createDrafts: async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
+      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
       return errorHandling(err)
