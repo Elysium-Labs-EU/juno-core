@@ -1,4 +1,5 @@
-import GoogleLogin from 'react-google-login'
+import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login'
+import type { GoogleLoginResponse } from 'react-google-login'
 import { push } from 'redux-first-history'
 import RouteConstants from '../../constants/routes.json'
 import { setIsAuthenticated } from '../../Store/baseSlice'
@@ -40,8 +41,11 @@ const Login = () => {
   const dispatch = useAppDispatch()
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
-  const responseGoogle = (response: any) => {
-    setCookie(global.GOOGLE_TOKEN, response.tokenObj, 30)
+  const handleSuccess = (
+    response: GoogleLoginResponse | GoogleLoginResponseOffline
+  ) => {
+    const onlineGoogleResponse = response as GoogleLoginResponse
+    setCookie(global.GOOGLE_TOKEN, onlineGoogleResponse.tokenObj, 30)
     dispatch(setIsAuthenticated(true))
     dispatch(push(RouteConstants.HOME))
   }
@@ -62,7 +66,9 @@ const Login = () => {
             {CLIENT_ID && serviceUnavailable.length === 0 ? (
               <GoogleLogin
                 clientId={CLIENT_ID}
-                onSuccess={responseGoogle}
+                onSuccess={(
+                  response: GoogleLoginResponse | GoogleLoginResponseOffline
+                ) => handleSuccess(response)}
                 onFailure={handleFailure}
                 cookiePolicy="single_host_origin"
                 scope={SCOPES.join(' ')}
