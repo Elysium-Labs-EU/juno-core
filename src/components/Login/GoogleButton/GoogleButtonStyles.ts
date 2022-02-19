@@ -34,6 +34,7 @@ export const StyledButton = styled.button`
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
   user-select: none;
+  background-color: white;
   cursor: pointer;
 
   &:hover {

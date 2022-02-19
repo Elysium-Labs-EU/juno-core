@@ -62,11 +62,9 @@ const Login = () => {
             {CLIENT_ID && serviceUnavailable.length === 0 ? (
               <GoogleLogin
                 clientId={CLIENT_ID}
-                buttonText="Login with Google"
                 onSuccess={responseGoogle}
                 onFailure={handleFailure}
                 cookiePolicy="single_host_origin"
-                theme="dark"
                 scope={SCOPES.join(' ')}
                 render={renderProps => (
                   <GoogleButton renderProps={renderProps} />
