@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL, errorHandeling } from './api'
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 interface AllContactsQueryObject {
   readMask: string
@@ -26,11 +26,15 @@ const contactApi = () => ({
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
+
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
   queryContacts: async (query: QueryContactObject) => {
@@ -44,11 +48,14 @@ const contactApi = () => ({
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 })

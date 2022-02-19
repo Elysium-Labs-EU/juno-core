@@ -1,8 +1,15 @@
 import { lazy, useEffect, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
+import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
-import { Routes, Route } from 'react-router-dom'
-import { checkBase, recheckBase, selectBaseLoaded } from './Store/baseSlice'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import {
+  checkBase,
+  recheckBase,
+  selectBaseLoaded,
+  selectIsAuthenticated,
+  setIsAuthenticated,
+} from './Store/baseSlice'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
@@ -13,7 +20,7 @@ import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
-import PageNotFound from './components/PageNotFound/PageNotFound'
+import { fetchToken } from './data/api'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
@@ -21,19 +28,48 @@ const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
+const PageNotFound = lazy(
+  () => import('./components/PageNotFound/PageNotFound')
+)
+const Login = lazy(() => import('./components/Login/Login'))
 
 const emailFetchSizeLS: string | null = localStorage.getItem('fetchSize')
+
+const ProtectedRoute = ({
+  children,
+  isAuthenticated,
+  baseLoaded,
+}: {
+  children: any
+  isAuthenticated: boolean
+  baseLoaded: boolean
+}) => {
+  if (!isAuthenticated) {
+    return <Navigate to={RoutesConstants.LOGIN} replace />
+  }
+
+  return baseLoaded ? children : <BaseLoader />
+}
 
 const App = () => {
   const dispatch = useAppDispatch()
   const baseLoaded = useAppSelector(selectBaseLoaded)
   const storageLabels = useAppSelector(selectStorageLabels)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   useEffect(() => {
-    if (!baseLoaded) {
+    if (!baseLoaded && isAuthenticated) {
       dispatch(checkBase())
     }
-  }, [baseLoaded])
+  }, [baseLoaded, isAuthenticated])
+
+  useEffect(() => {
+    const token = fetchToken()
+    if (token) {
+      dispatch(setIsAuthenticated(true))
+      dispatch(push(RoutesConstants.HOME))
+    }
+  }, [])
 
   useEffect(() => {
     if (
@@ -63,71 +99,105 @@ const App = () => {
 
   return (
     <HistoryRouter history={history}>
-      {!baseLoaded && <BaseLoader />}
-      {baseLoaded && (
-        <GS.Base>
+      <GS.Base>
+        {baseLoaded && (
           <GS.OuterContainer>
             <Header />
           </GS.OuterContainer>
+        )}
 
-          <AnimatePresence exitBeforeEnter>
-            <Routes>
-              <Route
-                path={RoutesConstants.HOME}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+        <AnimatePresence exitBeforeEnter>
+          <Routes>
+            <Route
+              path={RoutesConstants.LOGIN}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.HOME}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <ToDo />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.EMAIL_DETAIL}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.EMAIL_DETAIL}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <EmailDetail />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.COMPOSE_EMAIL}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.COMPOSE_EMAIL}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <ComposeEmail />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.DRAFTS}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.DRAFTS}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <DraftEmail />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.SENT}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.SENT}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <SentEmail />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.INBOX}
-                element={
-                  <Suspense fallback={<LoadingState />}>
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.INBOX}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
                     <Inbox />
-                  </Suspense>
-                }
-              />
-              <Route
-                path={RoutesConstants.WILDCARD}
-                element={<PageNotFound />}
-              />
-            </Routes>
-          </AnimatePresence>
-        </GS.Base>
-      )}
+                  </ProtectedRoute>
+                </Suspense>
+              }
+            />
+            <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
+          </Routes>
+        </AnimatePresence>
+      </GS.Base>
     </HistoryRouter>
   )
 }

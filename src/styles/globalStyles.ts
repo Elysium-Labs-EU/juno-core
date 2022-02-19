@@ -26,9 +26,9 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 100%;
   }
   body {
-    background-color: ${themeConstants.colorWhite} !important;
+    background-color: ${themeConstants.colorOffWhite} !important;
     margin: 0;
-    font-family: 'Urbanist Variable', sans-serif
+    font-family: 'Urbanist Variable', sans-serif;
   }
 `
 

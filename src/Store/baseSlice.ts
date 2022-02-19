@@ -18,6 +18,7 @@ const initialState: IBaseState = Object.freeze({
     threadsTotal: 0,
     historyId: '',
   },
+  isAuthenticated: false,
 })
 
 export const baseSlice = createSlice({
@@ -29,13 +30,17 @@ export const baseSlice = createSlice({
         state.baseLoaded = action.payload
       }
     },
+    setIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload
+    },
     setProfile: (state, action) => {
       state.profile = action.payload
     },
   },
 })
 
-export const { setBaseLoaded, setProfile } = baseSlice.actions
+export const { setBaseLoaded, setIsAuthenticated, setProfile } =
+  baseSlice.actions
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
@@ -90,6 +95,8 @@ export const checkBase = (): AppThunk => async (dispatch) => {
 }
 
 export const selectBaseLoaded = (state: RootState) => state.base.baseLoaded
+export const selectIsAuthenticated = (state: RootState) =>
+  state.base.isAuthenticated
 export const selectProfile = (state: RootState) => state.base.profile
 
 export default baseSlice.reducer

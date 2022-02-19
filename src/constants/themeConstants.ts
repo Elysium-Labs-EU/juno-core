@@ -1,4 +1,5 @@
-export const colorWhite = '#f0f0f0'
+export const colorWhite = 'white'
+export const colorOffWhite = '#f0f0f0'
 export const colorSlightWhite = '#f7f7f7'
 export const colorUltraLightGrey = '#d9d9d9'
 export const colorLightGrey = '#aeaeb4'

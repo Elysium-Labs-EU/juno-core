@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandeling } from './api'
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 interface UserType {
   emailAddress: string
@@ -24,11 +24,16 @@ const userApi = () => ({
   fetchUser: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await axios.get(
-        `${BASE_API_URL}/api/user`
+        `${BASE_API_URL}/api/user`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 })

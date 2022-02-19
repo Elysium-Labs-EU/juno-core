@@ -1,13 +1,17 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandeling } from './api'
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 const draftApi = () => ({
   createDrafts: async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
+      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -16,33 +20,48 @@ const draftApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.put(
         `${BASE_API_URL}/api/update-draft/${draftId}`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
   getDrafts: async () => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/drafts/`
+        `${BASE_API_URL}/api/drafts/`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res.data
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
   getDraftDetail: async (draftId: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/draft/${draftId}`
+        `${BASE_API_URL}/api/draft/${draftId}`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -50,11 +69,16 @@ const draftApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/send-draft`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 
@@ -64,11 +88,14 @@ const draftApi = () => ({
         `${BASE_API_URL}/api/draft`,
         {
           data: { id },
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
     } catch (err) {
-      return errorHandeling(err)
+      return errorHandling(err)
     }
   },
 })
