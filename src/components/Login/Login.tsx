@@ -1,5 +1,7 @@
-import GoogleLogin, { GoogleLoginResponseOffline } from 'react-google-login'
-import type { GoogleLoginResponse } from 'react-google-login'
+import GoogleLogin, {
+  GoogleLoginResponse,
+  GoogleLoginResponseOffline,
+} from 'react-google-login'
 import { push } from 'redux-first-history'
 import RouteConstants from '../../constants/routes.json'
 import { setIsAuthenticated } from '../../Store/baseSlice'
