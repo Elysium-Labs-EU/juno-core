@@ -12,6 +12,7 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import setCookie from '../../utils/Cookie/setCookie'
+import GoogleButton from './GoogleButton/GoogleButton'
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID_2
 const TITLE = 'Login'
@@ -67,6 +68,9 @@ const Login = () => {
                 cookiePolicy="single_host_origin"
                 theme="dark"
                 scope={SCOPES.join(' ')}
+                render={renderProps => (
+                  <GoogleButton renderProps={renderProps} />
+                )}
               />
             ) : (
               <S.ErrorBox>
