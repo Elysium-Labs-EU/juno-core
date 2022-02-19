@@ -47,7 +47,7 @@ const Login = () => {
   }
 
   const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
+    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
   }
 
   return (
@@ -66,7 +66,7 @@ const Login = () => {
                 onFailure={handleFailure}
                 cookiePolicy="single_host_origin"
                 scope={SCOPES.join(' ')}
-                render={renderProps => (
+                render={(renderProps) => (
                   <GoogleButton renderProps={renderProps} />
                 )}
               />
