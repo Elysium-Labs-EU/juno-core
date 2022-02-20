@@ -69,9 +69,11 @@ const messageApi = () => ({
     }
   },
   thrashMessage: async ({ messageId }: { messageId: string }) => {
+    const data = {}
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/message/thrash/${messageId}`,
+        data,
         {
           headers: {
             Authorization: fetchToken(),
