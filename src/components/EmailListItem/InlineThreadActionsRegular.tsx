@@ -3,8 +3,8 @@ import {
   FiArchive,
   FiCheckCircle,
   FiCornerUpLeft,
-  FiMoreHorizontal,
 } from 'react-icons/fi'
+import { AiOutlineDelete } from 'react-icons/ai'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
 import * as S from './InlineThreadActionsStyles'
@@ -16,6 +16,7 @@ import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectInSearch } from '../../Store/utilsSlice'
+import thrashMail from '../EmailOptions/ThrashMail'
 
 interface IInlineThreadActionsRegular {
   id: string
@@ -77,8 +78,8 @@ const InlineThreadActionsRegular = ({
           title="Archive"
         />
         <CustomIconButton
-          onClick={() => setShowMenu(!showMenu)}
-          icon={<FiMoreHorizontal size={SIZE} />}
+          onClick={() => thrashMail({ messageId: id, dispatch, labelIds })}
+          icon={<AiOutlineDelete size={20} />}
         />
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} />}
