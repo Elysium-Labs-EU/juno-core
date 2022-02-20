@@ -24,8 +24,8 @@
     "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
     "@mui/system": "^5.3.0",
     "@reduxjs/toolkit": "^1.7.1",
-    "@sentry/react": "^6.16.1",
-    "@sentry/tracing": "^6.16.1",
+    "@sentry/react": "^6.17.9",
+    "@sentry/tracing": "^6.17.9",
     "axios": "^0.24.0",
     "base64url": "^3.0.1",
     "date-fns": "^2.27.0",
@@ -57,6 +57,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "release-sentry": "(export REACT_APP_SENTRY_RELEASE=$(git rev-parse --short HEAD); react-scripts build && node scripts/sentry.ts)",
     "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
     "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
     "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
@@ -126,6 +127,7 @@
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
+    "@sentry/cli": "^1.72.2",
     "@storybook/addon-actions": "^6.4.12",
     "@storybook/addon-essentials": "^6.4.12",
     "@storybook/addon-links": "^6.4.12",

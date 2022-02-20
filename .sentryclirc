@@ -1,0 +1,6 @@
+[defaults]
+project=juno-core
+org=elysium-labs
+
+[auth]
+token=SENTRY_AUTH_TOKEN
