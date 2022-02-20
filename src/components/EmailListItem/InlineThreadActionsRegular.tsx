@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import {
-  FiArchive,
-  FiCheckCircle,
-  FiCornerUpLeft,
-} from 'react-icons/fi'
+import { FiArchive, FiCheckCircle, FiCornerUpLeft } from 'react-icons/fi'
 import { AiOutlineDelete } from 'react-icons/ai'
 import ArchiveMail from '../EmailOptions/ArchiveMail'
 import EmailMoreOptions from '../EmailDetail/MoreOptions/EmailMoreOptions'
