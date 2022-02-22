@@ -13,6 +13,7 @@ import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectInSearch } from '../../Store/utilsSlice'
 import thrashMail from '../EmailOptions/ThrashMail'
+import * as themeConstants from '../../constants/themeConstants'
 
 interface IInlineThreadActionsRegular {
   id: string
@@ -76,7 +77,10 @@ const InlineThreadActionsRegular = ({
         <CustomIconButton
           onClick={() => thrashMail({ messageId: id, dispatch, labelIds })}
           icon={<AiOutlineDelete size={20} />}
+          title="Delete"
+          hoverColor={themeConstants.colorRed}
         />
+
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} />}
     </S.Wrapper>

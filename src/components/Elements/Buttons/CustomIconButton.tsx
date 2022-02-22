@@ -12,11 +12,13 @@ interface ICustomIconButton {
   title?: string
   className?: string
   isActive?: boolean
+  hoverColor?: string
   // aria-describedby?: null
 }
 
 interface IButton {
   isActive: boolean | undefined
+  hoverColor:string | undefined
 }
 
 const Button = styled.button<IButton>`
@@ -28,7 +30,7 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${theme.colorBlack};
+    color: ${(props) => props.hoverColor ||  theme.colorBlack};
     cursor: pointer;
   }
 
@@ -37,9 +39,8 @@ const Button = styled.button<IButton>`
     cursor: not-allowed;
   }
 `
-
 const CustomIconButton = (props: ICustomIconButton) => {
-  const { onClick, disabled, icon, type, style, title, className, isActive } =
+  const { onClick, disabled, icon, type, style, title, className, isActive,hoverColor } =
     props
   return (
     <Button
@@ -50,6 +51,7 @@ const CustomIconButton = (props: ICustomIconButton) => {
       title={title}
       className={className}
       isActive={isActive}
+      hoverColor={hoverColor}
     >
       <span>{icon}</span>
     </Button>
@@ -65,4 +67,5 @@ CustomIconButton.defaultProps = {
   title: null,
   type: 'button',
   isActive: false,
+  hoverColor: null
 }
