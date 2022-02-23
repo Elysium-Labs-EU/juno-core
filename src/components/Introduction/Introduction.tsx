@@ -37,25 +37,20 @@ const Introduction = () => {
   )
 
   useEffect(() => {
-    if (toDoBoxLoaded) {
+    if (toDoBoxLoaded && emailList && labelIds) {
       const toDoBox = emailList[getEmailListIndex({ labelIds, emailList })]
       if (isEmpty(cookieValue) && isEmpty(toDoBox)) {
         setOpen(true)
       }
     }
-  }, [toDoBoxLoaded, cookieValue])
-
-  useEffect(() => {
-    if (!open) {
-      setCookie(global.INTRODUCTION_TOKEN, { status: 'completed' }, 30)
-    }
-  }, [open])
+  }, [toDoBoxLoaded, cookieValue, emailList, labelIds])
 
   const handleCloseDefault = (event: ChangeEvent<{}>, reason: string) => {
     if (reason === 'backdropClick') {
       return null
     }
     if (reason === 'escapeKeyDown') {
+      setCookie(global.INTRODUCTION_TOKEN, { status: 'completed' }, 30)
       setOpen(false)
       return null
     }
@@ -63,6 +58,7 @@ const Introduction = () => {
   }
 
   const handleClose = () => {
+    setCookie(global.INTRODUCTION_TOKEN, { status: 'completed' }, 30)
     setOpen(false)
   }
 
