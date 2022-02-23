@@ -64,8 +64,8 @@ const Introduction = () => {
     <Dialog
       open={open}
       onClose={handleCloseDefault}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby="introduction-dialog"
+      aria-describedby="alert-dialog-for-first-users"
     >
       <S.DialogContent>
         <S.DialogHeader>{DIALOG_HEADER}</S.DialogHeader>
