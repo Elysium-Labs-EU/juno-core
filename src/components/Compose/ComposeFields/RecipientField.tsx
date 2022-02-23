@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import * as S from '../ComposeStyles'
@@ -17,7 +18,7 @@ interface IRecipientField {
   showField: boolean
 }
 
-const RecipientField = (props: IRecipientField) => {
+const RecipientField = forwardRef((props: IRecipientField, ref) => {
   const {
     recipientFieldValue,
     fieldId,
@@ -48,6 +49,7 @@ const RecipientField = (props: IRecipientField) => {
           setInputValue={setInputValue}
           handleDelete={handleDelete}
           willAutoFocus={showField}
+          fieldRef={ref}
         />
         {toError && (
           <FormHelperText id="component-helper-text">
@@ -57,6 +59,6 @@ const RecipientField = (props: IRecipientField) => {
       </FormControl>
     </>
   )
-}
+})
 
 export default RecipientField

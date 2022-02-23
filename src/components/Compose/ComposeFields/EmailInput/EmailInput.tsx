@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
@@ -23,6 +23,7 @@ interface IEmailInputProps {
   inputValue: string
   setInputValue: Function
   willAutoFocus: boolean
+  fieldRef: any
 }
 
 const emailInput = (props: IEmailInputProps) => {
@@ -34,6 +35,7 @@ const emailInput = (props: IEmailInputProps) => {
     setInputValue,
     handleDelete,
     willAutoFocus,
+    fieldRef
   } = props
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly Contact[]>([])
@@ -45,7 +47,7 @@ const emailInput = (props: IEmailInputProps) => {
   useEffect(() => {
     let mounted = true
     if (debouncedInputValue && debouncedInputValue.length > 1) {
-      ;(async () => {
+      ; (async () => {
         const check = availableContacts.some((contact) =>
           contact.emailAddress.includes(inputValue.toLowerCase())
         )
@@ -66,16 +68,16 @@ const emailInput = (props: IEmailInputProps) => {
               const mappedResults =
                 results && results.length > 0
                   ? results.map(
-                      (contact: any): Contact => ({
-                        name: Object.prototype.hasOwnProperty.call(
-                          contact.person,
-                          'names'
-                        )
-                          ? contact.person.names[0].displayName
-                          : contact.person.emailAddresses[0].value,
-                        emailAddress: contact.person.emailAddresses[0].value,
-                      })
-                    )
+                    (contact: any): Contact => ({
+                      name: Object.prototype.hasOwnProperty.call(
+                        contact.person,
+                        'names'
+                      )
+                        ? contact.person.names[0].displayName
+                        : contact.person.emailAddresses[0].value,
+                      emailAddress: contact.person.emailAddresses[0].value,
+                    })
+                  )
                   : []
 
               dispatch(setAllContacts(mappedResults))
@@ -120,7 +122,7 @@ const emailInput = (props: IEmailInputProps) => {
       isOptionEqualToValue={(option, value) =>
         option.emailAddress === value.emailAddress
       }
-      getOptionLabel={(option) => `${option.name} <${option.emailAddress}>`}
+      getOptionLabel={(option) => `${ option.name } <${ option.emailAddress }>`}
       options={options}
       freeSolo
       onChange={(event: any, newValue: any) =>
@@ -150,9 +152,11 @@ const emailInput = (props: IEmailInputProps) => {
       renderInput={(params) => (
         <StyledTextField
           {...params}
+          ref={fieldRef}
           variant="outlined"
           fullWidth
           autoFocus={willAutoFocus}
+          id={id}
         />
       )}
     />

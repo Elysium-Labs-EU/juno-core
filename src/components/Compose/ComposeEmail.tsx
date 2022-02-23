@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
@@ -38,7 +38,7 @@ interface IComposeEmailProps {
   threadId?: string
 }
 
-const ComposeEmailContainer = ({
+const ComposeEmail = ({
   isReplying,
   isReplyingListener,
   to,
@@ -50,8 +50,20 @@ const ComposeEmailContainer = ({
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [draftLoaded, setDraftLoaded] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+
+  const toInput = useRef(null)
+  if (document.activeElement === toInput.current) {
+    // do something
+    console.log('I am focused')
+  }
+
+  // TODO: Do only trigger the update of the items when a field is focused.
+
+  useEffect(() => {
+    // console.log(toInput.current && toInput.current.children.firstChild)
+    console.log(document.activeElement)
+  }, [toInput])
 
   const [toValue, setToValue] = useState<Contact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
@@ -80,8 +92,6 @@ const ComposeEmailContainer = ({
   useEffect(() => {
     let mounted = true
     if (!isEmpty(composeEmail) && /(<\w*)((\s\/>)|(.*<\/\w*>))/gm.test(composeEmail.body)) {
-      console.log('triggered')
-      console.log(composeEmail)
       mounted && dispatch(createUpdateDraft())
     }
     return () => {
@@ -328,6 +338,7 @@ const ComposeEmailContainer = ({
         setInputValue={setInputToValue}
         handleDelete={handleDelete}
         showField={!isReplying}
+        ref={toInput}
       />
     ),
     [inputToValue, toError, handleChangeTo]
@@ -446,9 +457,9 @@ const ComposeEmailContainer = ({
   )
 }
 
-export default ComposeEmailContainer
+export default ComposeEmail
 
-ComposeEmailContainer.defaultProps = {
+ComposeEmail.defaultProps = {
   isReplying: false,
   isReplyingListener: null,
   to: null,
