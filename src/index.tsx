@@ -10,9 +10,9 @@ import reportWebVitals from './reportWebVitals'
 import { GlobalStyle, theme } from './styles/globalStyles'
 
 // Don't run Sentry when developing.
-process.env.NODE_ENV !== 'development' &&
+process.env.NODE_ENV !== 'development' && process.env.REACT_APP_SENTRY_DSN &&
   Sentry.init({
-    dsn: 'https://493389e033b54228a97252c427fdebe6@o917516.ingest.sentry.io/5859846',
+    dsn: process.env.REACT_APP_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%
