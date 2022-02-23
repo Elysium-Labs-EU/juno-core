@@ -1,12 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { FiArrowRightCircle } from 'react-icons/fi'
+import { isEmpty } from 'lodash'
 import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
 import * as global from '../../constants/globalConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import setCookie from '../../utils/Cookie/setCookie'
 import getCookie from '../../utils/Cookie/getCookie'
-import { selectLabelIds } from '../../Store/labelsSlice'
+import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import { useAppSelector } from '../../Store/hooks'
 import { selectEmailList } from '../../Store/emailListSlice'
 import getEmailListIndex from '../../utils/getEmailListIndex'
@@ -28,16 +29,21 @@ const Introduction = () => {
   const [open, setOpen] = useState(false)
   const labelIds = useAppSelector(selectLabelIds)
   const emailList = useAppSelector(selectEmailList)
+  const cookieValue = getCookie(global.INTRODUCTION_TOKEN)
+  const loadedInbox = useAppSelector(selectLoadedInbox)
+
+  const toDoBoxLoaded = labelIds.some(
+    (val) => loadedInbox.flat(1).indexOf(val) > -1
+  )
 
   useEffect(() => {
-    const cookieValue = getCookie(global.INTRODUCTION_TOKEN)
-    if (
-      !cookieValue &&
-      !emailList[getEmailListIndex({ labelIds, emailList })]
-    ) {
-      setOpen(true)
+    if (toDoBoxLoaded) {
+      const toDoBox = emailList[getEmailListIndex({ labelIds, emailList })]
+      if (isEmpty(cookieValue) && isEmpty(toDoBox)) {
+        setOpen(true)
+      }
     }
-  }, [emailList, labelIds])
+  }, [toDoBoxLoaded, cookieValue])
 
   useEffect(() => {
     if (!open) {
