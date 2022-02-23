@@ -9,6 +9,7 @@ import SentHeader from '../Sent/SentHeader'
 import NoMobileOverlay from '../NoMobileOverlay'
 import Search from '../Search/Search'
 import Settings from '../Settings/Settings'
+import Introduction from '../Introduction/Introduction'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -35,8 +36,18 @@ const SetHeader = memo(() => {
   return null
 })
 
+const ShowIntroduction = memo(() => {
+  const location = useLocation()
+
+  if (location.pathname === '/') {
+    return <Introduction />
+  }
+  return null
+})
+
 const Header = () => (
   <>
+    <ShowIntroduction />
     <NoMobileOverlay />
     <SetHeader />
     <Search />
