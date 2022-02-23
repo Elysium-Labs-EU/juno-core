@@ -23,7 +23,8 @@ const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno, log in with Google'
 const ERROR_LOADING = 'Cannot load login. Try again later.'
-const ELECTRON_WARNING = "The current login doesn't work yet with the Electron app. Please use the web version."
+const ELECTRON_WARNING =
+  "The current login doesn't work yet with the Electron app. Please use the web version."
 
 const SCOPES = [
   'openid',
@@ -58,7 +59,7 @@ const Login = () => {
   }
 
   const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
+    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
   }
 
   return (
@@ -71,18 +72,22 @@ const Login = () => {
               <p>{SUB_HEADER}</p>
             </S.Header>
             {CLIENT_ID && serviceUnavailable.length === 0 ? (
-              thisIsElectron ? <p>{ELECTRON_WARNING}</p> : <GoogleLogin
-                clientId={CLIENT_ID}
-                onSuccess={(
-                  response: GoogleLoginResponse | GoogleLoginResponseOffline
-                ) => handleSuccess(response)}
-                onFailure={handleFailure}
-                cookiePolicy="single_host_origin"
-                scope={SCOPES.join(' ')}
-                render={(renderProps) => (
-                  <GoogleButton renderProps={renderProps} />
-                )}
-              />
+              thisIsElectron ? (
+                <p>{ELECTRON_WARNING}</p>
+              ) : (
+                <GoogleLogin
+                  clientId={CLIENT_ID}
+                  onSuccess={(
+                    response: GoogleLoginResponse | GoogleLoginResponseOffline
+                  ) => handleSuccess(response)}
+                  onFailure={handleFailure}
+                  cookiePolicy="single_host_origin"
+                  scope={SCOPES.join(' ')}
+                  render={(renderProps) => (
+                    <GoogleButton renderProps={renderProps} />
+                  )}
+                />
+              )
             ) : (
               <S.ErrorBox>
                 <p>{ERROR_LOADING}</p>
@@ -92,7 +97,7 @@ const Login = () => {
           </S.Inner>
         </S.LoginContainer>
       </AnimatedMountUnmount>
-    </S.Wrapper >
+    </S.Wrapper>
   )
 }
 
