@@ -1,8 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import GoogleLogin, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from 'react-google-login'
 import { push } from 'redux-first-history'
+import isElectron from 'is-electron'
 import RouteConstants from '../../constants/routes.json'
 import { setIsAuthenticated } from '../../Store/baseSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
@@ -21,6 +23,7 @@ const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno, log in with Google'
 const ERROR_LOADING = 'Cannot load login. Try again later.'
+const ELECTRON_WARNING = "The current login doesn't work yet with the Electron app. Please use the web version."
 
 const SCOPES = [
   'openid',
@@ -39,6 +42,8 @@ interface IOnFailure {
   error: string
 }
 
+const thisIsElectron = isElectron()
+
 const Login = () => {
   const dispatch = useAppDispatch()
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
@@ -53,7 +58,7 @@ const Login = () => {
   }
 
   const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
+    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
   }
 
   return (
@@ -66,7 +71,7 @@ const Login = () => {
               <p>{SUB_HEADER}</p>
             </S.Header>
             {CLIENT_ID && serviceUnavailable.length === 0 ? (
-              <GoogleLogin
+              thisIsElectron ? <p>{ELECTRON_WARNING}</p> : <GoogleLogin
                 clientId={CLIENT_ID}
                 onSuccess={(
                   response: GoogleLoginResponse | GoogleLoginResponseOffline
@@ -87,7 +92,7 @@ const Login = () => {
           </S.Inner>
         </S.LoginContainer>
       </AnimatedMountUnmount>
-    </S.Wrapper>
+    </S.Wrapper >
   )
 }
 
