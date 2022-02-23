@@ -80,7 +80,6 @@ const InlineThreadActionsRegular = ({
           title="Delete"
           hoverColor={themeConstants.colorRed}
         />
-
       </S.Inner>
       {showMenu && <EmailMoreOptions messageId={id} />}
     </S.Wrapper>

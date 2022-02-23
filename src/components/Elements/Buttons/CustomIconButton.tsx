@@ -18,7 +18,7 @@ interface ICustomIconButton {
 
 interface IButton {
   isActive: boolean | undefined
-  hoverColor:string | undefined
+  hoverColor: string | undefined
 }
 
 const Button = styled.button<IButton>`
@@ -30,7 +30,7 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${(props) => props.hoverColor ||  theme.colorBlack};
+    color: ${(props) => props.hoverColor || theme.colorBlack};
     cursor: pointer;
   }
 
@@ -40,8 +40,17 @@ const Button = styled.button<IButton>`
   }
 `
 const CustomIconButton = (props: ICustomIconButton) => {
-  const { onClick, disabled, icon, type, style, title, className, isActive,hoverColor } =
-    props
+  const {
+    onClick,
+    disabled,
+    icon,
+    type,
+    style,
+    title,
+    className,
+    isActive,
+    hoverColor,
+  } = props
   return (
     <Button
       onClick={(event) => onClick(event)}
@@ -67,5 +76,5 @@ CustomIconButton.defaultProps = {
   title: null,
   type: 'button',
   isActive: false,
-  hoverColor: null
+  hoverColor: null,
 }
