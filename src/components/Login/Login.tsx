@@ -59,7 +59,7 @@ const Login = () => {
   }
 
   const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
+    dispatch(setServiceUnavailable(`Unable to login - ${ data.error }`))
   }
 
   return (
@@ -86,6 +86,7 @@ const Login = () => {
                   render={(renderProps) => (
                     <GoogleButton renderProps={renderProps} />
                   )}
+                  prompt="consent"
                 />
               )
             ) : (
