@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { Inner, Wrapper } from './BaseLoaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
+import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
 
 const Baseloader = () => {
   const serviceUnavailable = useSelector(selectServiceUnavailable)
@@ -19,7 +20,11 @@ const Baseloader = () => {
             <CircularProgress />
           </>
         )}
-        {serviceUnavailable && <p>{serviceUnavailable}</p>}
+        {serviceUnavailable && (
+          <>
+            <p>{serviceUnavailable}</p> <LogoutOption />
+          </>
+        )}
       </Inner>
     </Wrapper>
   )
