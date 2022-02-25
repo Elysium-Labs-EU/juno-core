@@ -24,7 +24,6 @@ import { fetchToken } from './data/api'
 import EmailDetail from './components/EmailDetail/EmailDetail'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
-// const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
 const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
