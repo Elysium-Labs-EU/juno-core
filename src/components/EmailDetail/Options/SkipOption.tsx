@@ -10,7 +10,8 @@ import {
 } from '../../../Store/emailDetailSlice'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import getEmailListIndex from '../../../utils/getEmailListIndex'
-import { selectEmailList } from '../../../Store/emailListSlice'
+import { selectCoreStatus, selectEmailList } from '../../../Store/emailListSlice'
+import { selectComposeEmail } from '../../../Store/composeSlice'
 
 const SkipOption = () => {
   const dispatch = useAppDispatch()
@@ -18,6 +19,8 @@ const SkipOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const emailList = useAppSelector(selectEmailList)
   const sessionViewIndex = useAppSelector(selectViewIndex)
+  const coreStatus = useAppSelector(selectCoreStatus)
+  const composeEmail = useAppSelector(selectComposeEmail)
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
@@ -30,6 +33,8 @@ const SkipOption = () => {
       viewIndex,
       labelIds,
       activeEmailList: emailList[emailListIndex],
+      coreStatus,
+      composeEmail
     })
   }
 

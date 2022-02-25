@@ -9,14 +9,20 @@ interface ICustomButton {
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
   label: string
+  variant?: 'primary' | 'secondary'
 }
 
-const Button = styled.button`
+interface IButton {
+  variant: 'primary' | 'secondary'
+}
+
+const Button = styled.button<IButton>`
   font-weight: 600;
   font-family: 'Raleway Variable', sans-serif;
   border-radius: 20px;
   border: none;
-  background-color: ${theme.colorPurple};
+  background-color: ${({ variant }) =>
+    variant === 'primary' ? `${theme.colorPurple}` : `${theme.colorBlue}`};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
@@ -28,7 +34,10 @@ const Button = styled.button`
   }
 
   &:hover {
-    background-color: ${theme.colorPurpleDark};
+    background-color: ${({ variant }) =>
+      variant === 'primary'
+        ? `${theme.colorPurpleDark}`
+        : `${theme.colorBlueDark}`};
     cursor: pointer;
   }
 
@@ -49,13 +58,14 @@ const InnerButton = styled.div`
 `
 
 const CustomAttentionButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, label, type } = props
+  const { onClick, className, disabled, label, type, variant } = props
   return (
     <Button
       onClick={onClick ? (event) => onClick(event) : undefined}
       className={className}
       type={type ?? 'button'}
       disabled={disabled}
+      variant={variant ?? 'primary'}
     >
       <InnerButton>
         <span>{label}</span>
@@ -70,4 +80,5 @@ CustomAttentionButton.defaultProps = {
   type: 'button',
   disabled: false,
   className: null,
+  variant: 'primary',
 }

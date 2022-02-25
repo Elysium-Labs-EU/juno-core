@@ -5,6 +5,7 @@ import {
   IEmailListObjectSearch,
 } from '../Store/emailListTypes'
 import labelURL from './createLabelURL'
+import navigateBack from './navigateBack'
 
 interface INavigateNextMail {
   labelIds: string[]
@@ -12,6 +13,8 @@ interface INavigateNextMail {
   filteredCurrentEmailList?: any
   viewIndex: number
   dispatch: Function
+  coreStatus: string | null
+  composeEmail: any
 }
 
 const navigateNextMail = (props: INavigateNextMail) => {
@@ -21,6 +24,8 @@ const navigateNextMail = (props: INavigateNextMail) => {
     filteredCurrentEmailList,
     viewIndex,
     dispatch,
+    coreStatus,
+    composeEmail,
   } = props
 
   const selectActiveEmailList = () => {
@@ -37,12 +42,12 @@ const navigateNextMail = (props: INavigateNextMail) => {
 
   const staticLabelURL = labelURL(labelIds)
   const staticActiveEmailList = selectActiveEmailList()
+  const nextID = staticActiveEmailList.threads[viewIndex + 1]?.id
 
-  if (staticActiveEmailList !== null && staticLabelURL !== null) {
-    const nextID = staticActiveEmailList.threads[viewIndex + 1].id
+  if (nextID) {
     return dispatch(push(`/mail/${staticLabelURL}/${nextID}/messages`))
   }
-  return null
+  return navigateBack({ coreStatus, composeEmail, dispatch })
 }
 
 export default navigateNextMail
