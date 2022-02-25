@@ -25,6 +25,11 @@ interface IEmailInputProps {
   willAutoFocus: boolean
 }
 
+interface IHandleIncompleteInput {
+  id: string
+  inputValue: string
+}
+
 const emailInput = (props: IEmailInputProps) => {
   const {
     id,
@@ -94,13 +99,26 @@ const emailInput = (props: IEmailInputProps) => {
     return () => {
       mounted = false
     }
-  }, [debouncedInputValue, contactsLoaded])
+  }, [])
+  // }, [debouncedInputValue, contactsLoaded])
 
   useEffect(() => {
     if (!open) {
       setOptions([])
     }
   }, [open])
+
+  const handleIncompleteInput = (incompleteProps: IHandleIncompleteInput) => {
+    handleChange({
+      newValue: [...valueState, incompleteProps.inputValue],
+      fieldId: incompleteProps.id,
+    })
+  }
+
+  // Clear input when a new contact chip is created.
+  useEffect(() => {
+    setInputValue('')
+  }, [valueState])
 
   return (
     <Autocomplete
@@ -114,6 +132,7 @@ const emailInput = (props: IEmailInputProps) => {
       }}
       onClose={() => {
         setOpen(false)
+        handleIncompleteInput({ id, inputValue })
       }}
       value={valueState ?? []}
       isOptionEqualToValue={(option, value) =>
