@@ -146,7 +146,7 @@ const EmailDetail = () => {
       <AnimatedMountUnmount>
         <S.Scroll clientState={Boolean(coreStatus)}>
           <GS.OuterContainer isReplying={isReplying}>
-            {/* {overviewId === local.MESSAGES &&
+            {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
                 <>
@@ -171,7 +171,7 @@ const EmailDetail = () => {
                   threadDetail={activeEmailList.threads[viewIndex]}
                   isLoading={isLoading}
                 />
-              )} */}
+              )}
           </GS.OuterContainer>
         </S.Scroll>
       </AnimatedMountUnmount>
