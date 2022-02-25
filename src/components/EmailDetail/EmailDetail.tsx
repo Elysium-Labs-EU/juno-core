@@ -76,7 +76,7 @@ const EmailDetail = () => {
       dispatch(
         setCurrentMessage(
           activeEmailList.threads[
-            activeEmailList.threads.length - 1 - messageIndex
+          activeEmailList.threads.length - 1 - messageIndex
           ]
         )
       )
@@ -149,21 +149,13 @@ const EmailDetail = () => {
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
-                <>
-                  <MessagesOverview
-                    threadDetail={activeEmailList.threads[viewIndex]}
-                    isLoading={isLoading}
-                    isReplying={isReplying}
-                    isReplyingListener={isReplyingListener}
-                    labelIds={labelIds}
-                  />
-                  <S.HiddenMessagesFeed>
-                    <PreLoadMessages
-                      threadDetailList={activeEmailList.threads}
-                      viewIndex={viewIndex}
-                    />
-                  </S.HiddenMessagesFeed>
-                </>
+                <MessagesOverview
+                  threadDetail={activeEmailList.threads[viewIndex]}
+                  isLoading={isLoading}
+                  isReplying={isReplying}
+                  isReplyingListener={isReplyingListener}
+                  labelIds={labelIds}
+                />
               )}
             {overviewId === local.FILES &&
               activeEmailList.threads.length > 0 && (
