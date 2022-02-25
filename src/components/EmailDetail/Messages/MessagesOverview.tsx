@@ -80,7 +80,7 @@ const detailDisplaySelector = ({
         />
       )
     }
-    return null
+    return <div />
   }
   return (
     <ReadUnreadMessage
