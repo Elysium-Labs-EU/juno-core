@@ -10,7 +10,7 @@ interface IStartSort {
 const startSort = (props: IStartSort) => {
   const { dispatch, labelURL, emailList, emailListIndex } = props
 
-  if (dispatch && labelURL && emailList && emailListIndex > -1) {
+  if (labelURL && emailList && emailListIndex > -1 && emailList) {
     return dispatch(
       push(
         `/mail/${labelURL}/${emailList[emailListIndex].threads[0].id}/messages`

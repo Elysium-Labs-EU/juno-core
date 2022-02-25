@@ -305,6 +305,8 @@ const ComposeEmailContainer = ({
       } else {
         setToError(true)
       }
+    } else {
+      setToError(true)
     }
   }
 
@@ -420,7 +422,7 @@ const ComposeEmailContainer = ({
             <CustomButton
               type="submit"
               label={local.SEND_BUTTON}
-              disabled={!toValue}
+              // disabled={!toValue}
               icon={<FiSend />}
               suppressed
             />

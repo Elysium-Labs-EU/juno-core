@@ -86,6 +86,7 @@ const Login = () => {
                   render={(renderProps) => (
                     <GoogleButton renderProps={renderProps} />
                   )}
+                  prompt="consent"
                 />
               )
             ) : (

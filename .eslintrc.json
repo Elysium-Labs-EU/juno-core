@@ -66,6 +66,7 @@
     "no-console": "warn",
     "no-restricted-syntax": 1,
     "react/function-component-definition": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/no-cycle": "warn"
   }
 }

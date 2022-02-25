@@ -82,7 +82,6 @@ const emailInput = (props: IEmailInputProps) => {
               dispatch(setContactsLoaded(JSON.stringify(Date.now())))
             }
           } catch (err) {
-            console.log(err)
             dispatch(setServiceUnavailable('Error fetching contacts.'))
           }
         }

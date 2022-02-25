@@ -41,7 +41,11 @@ const TodoFocusOption = () => {
     <S.SortContainer>
       <CustomAttentionButton
         onClick={handleClick}
-        disabled={isLoading || emailListIndex < 0}
+        disabled={
+          isLoading ||
+          emailListIndex < 0 ||
+          emailList[emailListIndex].threads.length === 0
+        }
         label={local.BUTTON_FOCUS}
       />
     </S.SortContainer>

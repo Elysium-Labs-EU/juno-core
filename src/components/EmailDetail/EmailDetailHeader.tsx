@@ -66,7 +66,7 @@ const EmailDetailHeader = ({
             )}
           </S.FocusSortHeaderWrapper>
           <S.InnerMenu>
-            <BackButton coreStatus={coreStatus} />
+            <BackButton />
             <EmailPosition />
           </S.InnerMenu>
         </S.Wrapper>

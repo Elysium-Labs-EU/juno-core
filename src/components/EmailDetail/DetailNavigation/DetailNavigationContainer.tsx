@@ -14,6 +14,8 @@ import {
   IEmailListObject,
   IEmailListObjectSearch,
 } from '../../../Store/emailListTypes'
+import { selectCoreStatus } from '../../../Store/emailListSlice'
+import { selectComposeEmail } from '../../../Store/composeSlice'
 
 const DetailNavigationContainer = ({
   activeEmailList,
@@ -25,13 +27,15 @@ const DetailNavigationContainer = ({
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const emailFetchSize = useAppSelector(selectEmailListSize)
+  const coreStatus = useAppSelector(selectCoreStatus)
+  const composeEmail = useAppSelector(selectComposeEmail)
 
   const isDisabledPrev = !!(
     activeEmailList.threads[viewIndex - 1] === undefined
   )
 
   const isDisabledNext =
-    activeEmailList.nextPageToken === null &&
+    activeEmailList.nextPageToken === undefined &&
     activeEmailList.threads[viewIndex + 1] === undefined
 
   const nextButtonSelector = () => {
@@ -45,6 +49,8 @@ const DetailNavigationContainer = ({
         activeEmailList,
         viewIndex,
         dispatch,
+        coreStatus,
+        composeEmail,
       })
       // Attempt to load the next emails on the background when approaching the edge
       if (

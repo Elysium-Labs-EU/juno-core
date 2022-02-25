@@ -36,6 +36,7 @@ import {
 import userApi from '../data/userApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
+import navigateBack from '../utils/navigateBack'
 
 const initialState: IEmailListState = Object.freeze({
   emailList: [],
@@ -500,7 +501,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
             const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
 
-            if (coreStatus) {
+            if (coreStatus && staticNextID) {
               dispatch(setCurrentEmail(staticNextID))
               dispatch(setSessionViewIndex(sessionViewIndex + 1))
               dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
@@ -515,6 +516,10 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
                   dispatch(loadEmails(params))
                 }
               }
+            }
+            if (coreStatus && !staticNextID) {
+              const { composeEmail } = getState().compose
+              navigateBack({ coreStatus, composeEmail, dispatch })
             }
             if (!coreStatus) {
               if (labelIds.includes(global.INBOX_LABEL)) {

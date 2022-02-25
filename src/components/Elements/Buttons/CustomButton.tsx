@@ -43,6 +43,10 @@ const Button = styled.button<IButton>`
   &:hover {
     color: ${theme.colorBlack};
   }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `
 
 const InnerButton = styled.div`
