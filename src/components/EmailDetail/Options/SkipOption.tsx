@@ -10,7 +10,10 @@ import {
 } from '../../../Store/emailDetailSlice'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import getEmailListIndex from '../../../utils/getEmailListIndex'
-import { selectCoreStatus, selectEmailList } from '../../../Store/emailListSlice'
+import {
+  selectCoreStatus,
+  selectEmailList,
+} from '../../../Store/emailListSlice'
 import { selectComposeEmail } from '../../../Store/composeSlice'
 
 const SkipOption = () => {
@@ -34,7 +37,7 @@ const SkipOption = () => {
       labelIds,
       activeEmailList: emailList[emailListIndex],
       coreStatus,
-      composeEmail
+      composeEmail,
     })
   }
 

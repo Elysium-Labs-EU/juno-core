@@ -50,7 +50,7 @@ const DetailNavigationContainer = ({
         viewIndex,
         dispatch,
         coreStatus,
-        composeEmail
+        composeEmail,
       })
       // Attempt to load the next emails on the background when approaching the edge
       if (

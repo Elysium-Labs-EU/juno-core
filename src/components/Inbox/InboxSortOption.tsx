@@ -40,7 +40,11 @@ const SortInbox = () => {
   return (
     <CustomAttentionButton
       onClick={handleClick}
-      disabled={isLoading || emailListIndex < 0 || emailList[emailListIndex].threads.length === 0}
+      disabled={
+        isLoading ||
+        emailListIndex < 0 ||
+        emailList[emailListIndex].threads.length === 0
+      }
       label={INBOX_BUTTON}
       variant="secondary"
     />
