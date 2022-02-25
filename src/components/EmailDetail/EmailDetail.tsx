@@ -149,13 +149,21 @@ const EmailDetail = () => {
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
-                <MessagesOverview
-                  threadDetail={activeEmailList.threads[viewIndex]}
-                  isLoading={isLoading}
-                  isReplying={isReplying}
-                  isReplyingListener={isReplyingListener}
-                  labelIds={labelIds}
-                />
+                <>
+                  <MessagesOverview
+                    threadDetail={activeEmailList.threads[viewIndex]}
+                    isLoading={isLoading}
+                    isReplying={isReplying}
+                    isReplyingListener={isReplyingListener}
+                    labelIds={labelIds}
+                  />
+                  <S.HiddenMessagesFeed>
+                    <PreLoadMessages
+                      threadDetailList={activeEmailList.threads}
+                      viewIndex={viewIndex}
+                    />
+                  </S.HiddenMessagesFeed>
+                </>
               )}
             {overviewId === local.FILES &&
               activeEmailList.threads.length > 0 && (
