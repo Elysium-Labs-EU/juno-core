@@ -599,11 +599,11 @@ export const refreshEmailFeed =
         (thread: MetaListThreadItem) =>
           parseInt(thread.historyId, 10) < savedHistoryId
       )
+      const user = await userApi().fetchUser()
+      dispatch(setProfile(user?.data))
       if (newEmailsIdx > -1) {
         const newSlice = threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
-          const user = await userApi().fetchUser()
-          dispatch(setProfile(user?.data))
           const labeledThreads = {
             labels: labelIds,
             threads: newSlice,
