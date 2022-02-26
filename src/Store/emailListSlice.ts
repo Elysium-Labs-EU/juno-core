@@ -595,15 +595,15 @@ export const refreshEmailFeed =
       const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
       const { labelIds } = getState().labels
       const { threads, nextPageToken } = await threadApi().getThreads(params)
-      const newEmailsIdx = threads.findIndex(
+      const newEmailsIdx = threads?.findIndex(
         (thread: MetaListThreadItem) =>
           parseInt(thread.historyId, 10) < savedHistoryId
       )
+      const user = await userApi().fetchUser()
+      dispatch(setProfile(user?.data))
       if (newEmailsIdx > -1) {
         const newSlice = threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {
-          const user = await userApi().fetchUser()
-          dispatch(setProfile(user?.data))
           const labeledThreads = {
             labels: labelIds,
             threads: newSlice,
@@ -611,6 +611,15 @@ export const refreshEmailFeed =
           }
           dispatch(loadEmailDetails(labeledThreads))
         }
+      } else {
+        // Attempt a fresh feed fetch when the inbox is empty.
+        const { emailFetchSize } = getState().utils
+        const freshInboxParams = {
+          labelIds,
+          maxResults: emailFetchSize,
+          nextPageToken: null,
+        }
+        dispatch(loadEmails(freshInboxParams))
       }
     } catch (err) {
       console.error(err)

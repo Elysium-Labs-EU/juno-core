@@ -4,7 +4,6 @@ import styled, { css, keyframes } from 'styled-components'
 import * as theme from '../../constants/themeConstants'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
 
 const rotate = keyframes`
@@ -40,21 +39,19 @@ const RotatingButton = styled.button<IRotatingButton>`
   ${(props) => (props.disableRefresh ? rotatingIcon : null)};
 `
 
+const refreshFeed = (dispatch: Function) => {
+  const params = {
+    maxResults: 500,
+    nextPageToken: null,
+  }
+  dispatch(refreshEmailFeed(params))
+}
+
 const InboxRefresh = () => {
   const [disableRefresh, setDisableRefresh] = useState(false)
-  const labelIds = useAppSelector(selectLabelIds)
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
   const dispatch = useAppDispatch()
-
-  const refreshFeed = () => {
-    const params = {
-      labelIds,
-      maxResults: 500,
-      nextPageToken: null,
-    }
-    dispatch(refreshEmailFeed(params))
-  }
 
   useEffect(() => {
     setDisableRefresh(true)
@@ -71,7 +68,7 @@ const InboxRefresh = () => {
 
   return (
     <RotatingButton
-      onClick={() => refreshFeed()}
+      onClick={() => refreshFeed(dispatch)}
       disabled={isLoading || disableRefresh}
       type="button"
       disableRefresh={disableRefresh}
