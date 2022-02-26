@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
@@ -26,6 +26,61 @@ import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
+
+const RenderEmailList = ({
+  filteredOnLabel,
+}: {
+  filteredOnLabel: IEmailListObject
+}) => {
+  const dispatch = useAppDispatch()
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const emailFetchSize = useAppSelector(selectEmailListSize)
+
+  const { threads, nextPageToken } = filteredOnLabel
+  return (
+    <S.Scroll>
+      <GS.OuterContainer>
+        <S.ThreadList>
+          {threads.length > 0 && (
+            <GS.Base>
+              {threads.map((email) => (
+                <EmailListItem key={email.id} email={email} showLabel={false} />
+              ))}
+            </GS.Base>
+          )}
+          {threads.length === 0 && <EmptyState />}
+        </S.ThreadList>
+
+        {nextPageToken && (
+          <S.LoadMoreContainer>
+            {!isLoading && (
+              <CustomButton
+                disabled={isLoading}
+                onClick={() =>
+                  loadNextPage({
+                    nextPageToken,
+                    labelIds,
+                    dispatch,
+                    maxResults: emailFetchSize,
+                  })
+                }
+                label={global.LOAD_MORE}
+                suppressed
+              />
+            )}
+            {isLoading && <LoadingState />}
+          </S.LoadMoreContainer>
+        )}
+        {!nextPageToken && threads.length > 0 && (
+          <S.LoadMoreContainer>
+            <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
+          </S.LoadMoreContainer>
+        )}
+      </GS.OuterContainer>
+    </S.Scroll>
+  )
+}
 
 const EmailList = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -94,74 +149,25 @@ const EmailList = () => {
     }
   }, [location])
 
-  const renderEmailList = (filteredOnLabel: IEmailListObject) => {
-    if (filteredOnLabel) {
-      const { threads, nextPageToken } = filteredOnLabel
-      return (
-        <S.Scroll>
-          <GS.OuterContainer>
-            <S.ThreadList>
-              {threads.length > 0 && (
-                <GS.Base>
-                  {threads.map((email) => (
-                    <EmailListItem
-                      key={email.id}
-                      email={email}
-                      showLabel={false}
-                    />
-                  ))}
-                </GS.Base>
-              )}
-              {threads.length === 0 && <EmptyState />}
-            </S.ThreadList>
-            {nextPageToken ? (
-              <S.LoadMoreContainer>
-                {!isLoading && (
-                  <CustomButton
-                    disabled={isLoading}
-                    onClick={() =>
-                      loadNextPage({
-                        nextPageToken,
-                        labelIds,
-                        dispatch,
-                        maxResults: emailFetchSize,
-                      })
-                    }
-                    label={global.LOAD_MORE}
-                    suppressed
-                  />
-                )}
-                {isLoading && <LoadingState />}
-              </S.LoadMoreContainer>
-            ) : (
-              <S.LoadMoreContainer>
-                <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
-              </S.LoadMoreContainer>
-            )}
-          </GS.OuterContainer>
-        </S.Scroll>
-      )
-    }
-    return <EmptyState />
-  }
-
   // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 
-  const labeledInbox = () => {
+  const LabeledInbox = memo(() => {
     if (emailList && emailListIndex > -1) {
-      return renderEmailList(emailList[emailListIndex])
+      return <RenderEmailList filteredOnLabel={emailList[emailListIndex]} />
     }
     return <EmptyState />
-  }
+  })
 
   return (
     <>
-      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        labeledInbox()}
+      {!isLoading &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
+          <LabeledInbox />
+        )}
       {isLoading &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
           <LoadingState />
