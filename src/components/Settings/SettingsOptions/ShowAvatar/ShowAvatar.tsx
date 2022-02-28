@@ -7,6 +7,7 @@ import {
 } from '../../../../Store/utilsSlice'
 
 const showAvatarLocalStorage = localStorage.getItem('showAvatar')
+const SWITCH_LABEL = 'Show avatars'
 
 const showAvatar = () => {
   const dispatch = useAppDispatch()
@@ -34,7 +35,7 @@ const showAvatar = () => {
 
   return (
     <FormControlLabel
-      label="Do you want to see Avatars?"
+      label={SWITCH_LABEL}
       control={
         <Switch
           onClick={() => switchAvatarView()}
