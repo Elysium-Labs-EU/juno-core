@@ -7,11 +7,9 @@ export const Dialog = styled.div`
   top: 50%;
   left: 50%;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   transform: translate(-50%, -50%);
   width: 475px;
-  max-height: calc(100vh - 325px);
   min-height: 300px;
   background-color: ${themeConstants.colorWhite};
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
@@ -23,15 +21,14 @@ export const Dialog = styled.div`
 export const SettingsContainer = styled.div`
   display: flex;
   justify-content: center;
-  height: 10em;
-  width: 30em;
+  flex-flow: column;
+  margin: 0 36px 16px;
 `
-export const SettingsHeader = styled.h3`
+export const SettingsHeader = styled.h2`
   margin: 2rem 0 0;
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;
-  font-size: 2.441rem;
   font-family: 'Raleway Variable', serif;
   line-height: 1.3;
   color: ${themeConstants.colorBlack};
@@ -47,5 +44,11 @@ export const StyledSelect = styled(Select)<SelectProps>`
   color: ${themeConstants.colorBlack}
   background-color: transparent;
   margin-top: 1em;
-  margin-right: 0.5em
+  margin-right: 0.5em;
+`
+
+export const SettingsSubHeader = styled.h3`
+  font-weight: 200;
+  margin-top: 36px;
+  margin-bottom: 0;
 `

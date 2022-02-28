@@ -7,6 +7,8 @@ import {
   selectEmailListSize,
 } from '../../../../Store/utilsSlice'
 
+const LABEL = 'Emails fetched at a time'
+
 const EmailSize = () => {
   const fetchCount = useAppSelector(selectEmailListSize)
   const dispatch = useAppDispatch()
@@ -18,7 +20,7 @@ const EmailSize = () => {
 
   return (
     <FormControlLabel
-      label="Emails Fetched at a time"
+      label={LABEL}
       control={
         <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
           <S.StyledSelect
