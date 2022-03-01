@@ -55,14 +55,12 @@ const emailSubject = (threadDetail: IEmailListThreadItem) => {
 interface IDetailDisplaySelector {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
-  isReplyingListener: Function
   index: number
 }
 
 const detailDisplaySelector = ({
   message,
   threadDetail,
-  isReplyingListener,
   index,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
@@ -75,7 +73,6 @@ const detailDisplaySelector = ({
           message={message}
           threadDetail={threadDetail}
           FROM={local.FROM}
-          isReplyingListener={isReplyingListener}
           messageIndex={index}
         />
       )
@@ -87,7 +84,6 @@ const detailDisplaySelector = ({
       message={message}
       threadDetail={threadDetail}
       FROM={local.FROM}
-      isReplyingListener={isReplyingListener}
       messageIndex={index}
     />
   )
@@ -97,7 +93,7 @@ interface IMessagesOverview {
   threadDetail: IEmailListThreadItem
   isLoading: boolean
   isReplying: boolean
-  isReplyingListener: Function
+  isForwarding: boolean
   labelIds: string[]
 }
 
@@ -106,7 +102,7 @@ const MessagesOverview = memo(
     threadDetail,
     isLoading,
     isReplying,
-    isReplyingListener,
+    isForwarding,
     labelIds,
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
@@ -123,7 +119,6 @@ const MessagesOverview = memo(
             {detailDisplaySelector({
               message,
               threadDetail,
-              isReplyingListener,
               index,
             })}
           </ES.EmailWrapper>
@@ -148,7 +143,7 @@ const MessagesOverview = memo(
     return (
       <>
         <ES.DetailRow>
-          <ES.EmailDetailContainer isReplying={isReplying}>
+          <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
             <ES.DetailBase>
               <ES.CardFullWidth>
                 {threadDetail && threadDetail.messages && !isLoading ? (
@@ -167,21 +162,27 @@ const MessagesOverview = memo(
               </ES.CardFullWidth>
             </ES.DetailBase>
           </ES.EmailDetailContainer>
-          {threadDetail && !isReplying && threadDetail.messages && (
-            <EmailDetailOptions
-              threadDetail={threadDetail}
-              isReplyingListener={isReplyingListener}
-            />
-          )}
+          {threadDetail &&
+            !isReplying &&
+            !isForwarding &&
+            threadDetail.messages && (
+              <EmailDetailOptions threadDetail={threadDetail} />
+            )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (
           <ES.ComposeWrapper>
             <ComposeEmail
-              isReplying={isReplying}
-              isReplyingListener={isReplyingListener}
               to={fromEmail(threadDetail)}
               cc={ccEmail(threadDetail)}
               bcc={bccEmail(threadDetail)}
+              subject={emailSubject(threadDetail)}
+              threadId={threadDetail.id}
+            />
+          </ES.ComposeWrapper>
+        )}
+        {isForwarding && threadDetail && threadDetail.messages && (
+          <ES.ComposeWrapper>
+            <ComposeEmail
               subject={emailSubject(threadDetail)}
               threadId={threadDetail.id}
             />

@@ -1,9 +1,9 @@
-import { FiCornerUpLeft } from 'react-icons/fi'
+import { FiArrowRight } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
-import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import { useAppDispatch } from '../../../Store/hooks'
+import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -11,12 +11,12 @@ interface IEmailDetailOptions {
 
 const messageIndex = 0
 
-const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
+const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
 
   const clickHandeler = () => {
     if (threadDetail.messages) {
-      return isReplyingListener({
+      return isForwardingListener({
         messageIndex,
         dispatch,
       })
@@ -26,12 +26,12 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
 
   return (
     <CustomButton
-      icon={<FiCornerUpLeft />}
-      label={local.BUTTON_REPLY}
+      icon={<FiArrowRight />}
+      label={local.BUTTON_FORWARD}
       onClick={clickHandeler}
       suppressed
     />
   )
 }
 
-export default ReplyOption
+export default ForwardOption

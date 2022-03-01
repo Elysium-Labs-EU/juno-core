@@ -1,25 +1,55 @@
+import {
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../Store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import * as GS from '../../../styles/globalStyles'
 import CustomButton from '../../Elements/Buttons/CustomButton'
+import isForwardingListener from '../../EmailOptions/IsForwardingListener'
+import isReplyingListener from '../../EmailOptions/IsReplyingListener'
+import * as S from './SpecificEmailOptionsStyles'
+
+interface ISpecificEmailOptions {
+  messageId: string
+  messageIndex: number
+}
 
 const SpecificEmailOptions = ({
   messageId,
-  isReplyingListener,
   messageIndex,
-}: {
-  messageId?: string
-  isReplyingListener: any
-  messageIndex: number
-}) => (
-  <GS.MenuPopper>
-    <CustomButton
-      label="Reply to this message"
-      onClick={() => isReplyingListener({ messageId, messageIndex })}
-    />
-  </GS.MenuPopper>
-)
+}: ISpecificEmailOptions) => {
+  const dispatch = useAppDispatch()
+  const isForwarding = useAppSelector(selectIsForwarding)
+  const isReplying = useAppSelector(selectIsReplying)
 
-SpecificEmailOptions.defaultProps = {
-  messageId: null,
+  return (
+    <GS.MenuPopper>
+      <S.Inner>
+        <CustomButton
+          label="Reply to this message"
+          onClick={() =>
+            isReplyingListener({
+              messageIndex,
+              dispatch,
+              messageId,
+              isForwarding,
+            })
+          }
+        />
+        <CustomButton
+          label="Forward this message"
+          onClick={() =>
+            isForwardingListener({
+              messageIndex,
+              dispatch,
+              messageId,
+              isReplying,
+            })
+          }
+        />
+      </S.Inner>
+    </GS.MenuPopper>
+  )
 }
 
 export default SpecificEmailOptions

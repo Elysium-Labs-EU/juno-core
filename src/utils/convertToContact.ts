@@ -1,7 +1,7 @@
 // Takes the string email format from Gmail, and converts it to object email format for this app.
 
 const convertToContact = (data: any) => {
-  if (data.length > 0) {
+  if (!Array.isArray(data) && data.length > 0) {
     const splitted = data.split('<')
 
     if (splitted.length > 1) {

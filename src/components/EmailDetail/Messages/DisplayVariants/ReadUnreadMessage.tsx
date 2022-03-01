@@ -30,7 +30,6 @@ interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   FROM: string
-  isReplyingListener?: Function
   messageIndex: number
 }
 
@@ -38,7 +37,6 @@ const ReadMessage = ({
   message,
   threadDetail,
   FROM,
-  isReplyingListener,
   messageIndex,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
@@ -116,7 +114,6 @@ const ReadMessage = ({
               <S.TimeAttachmentContainer>
                 <EmailHasAttachment messages={message} />
                 <TimeStamp threadTimeStamp={message.internalDate} />
-
                 <CustomIconButton
                   onClick={handleSpecificMenu('bottom-start')}
                   icon={<FiChevronDown />}
@@ -130,7 +127,6 @@ const ReadMessage = ({
                 >
                   <SpecificEmailOptions
                     messageId={message?.id}
-                    isReplyingListener={isReplyingListener}
                     messageIndex={messageIndex}
                   />
                 </Popper>
@@ -207,10 +203,6 @@ const ReadMessage = ({
       )}
     </>
   )
-}
-
-ReadMessage.defaultProps = {
-  isReplyingListener: {},
 }
 
 export default ReadMessage

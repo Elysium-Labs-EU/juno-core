@@ -14,6 +14,7 @@ const initialState: EmailDetailState = Object.freeze({
   viewIndex: -1,
   sessionViewIndex: -1,
   isReplying: false,
+  isForwarding: false,
 })
 
 export const emailDetailSlice = createSlice({
@@ -35,6 +36,9 @@ export const emailDetailSlice = createSlice({
     setIsReplying: (state, action: PayloadAction<boolean>) => {
       state.isReplying = action.payload
     },
+    setIsForwarding: (state, action: PayloadAction<boolean>) => {
+      state.isForwarding = action.payload
+    },
   },
 })
 
@@ -44,6 +48,7 @@ export const {
   setViewIndex,
   setSessionViewIndex,
   setIsReplying,
+  setIsForwarding,
 } = emailDetailSlice.actions
 
 export const fetchAttachment = ({
@@ -122,5 +127,7 @@ export const selectSessionViewIndex = (state: RootState) =>
   state.emailDetail.sessionViewIndex
 export const selectIsReplying = (state: RootState) =>
   state.emailDetail.isReplying
+export const selectIsForwarding = (state: RootState) =>
+  state.emailDetail.isForwarding
 
 export default emailDetailSlice.reducer
