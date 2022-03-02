@@ -7,7 +7,11 @@ import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectInSearch, setInSearch } from '../../Store/utilsSlice'
+import {
+  selectInSearch,
+  setInSearch,
+  setServiceUnavailable,
+} from '../../Store/utilsSlice'
 import threadApi from '../../data/threadApi'
 import {
   IEmailListObject,
@@ -136,45 +140,71 @@ const Search = () => {
   }
 
   useEffect(() => {
+    let mounted = true
     if (
       searchList &&
-      searchResults &&
-      searchResults.threads.length < searchList.threads.length
+      (searchResults?.threads.length ?? 0) < searchList.threads.length
     ) {
-      setSearchResults(searchList)
+      mounted && setSearchResults(searchList)
+    }
+    return () => {
+      mounted = false
     }
   }, [searchList])
 
   const fetchSearchThreads = async (searchBody: any) => {
-    const response: IEmailListObject = await threadApi().getThreads(searchBody)
-    if (response?.threads.length > 0) {
-      const buffer: IEmailListThreadItem[] = []
-      const loadCount = response.threads.length
+    try {
+      const response: IEmailListObject = await threadApi().getThreads(
+        searchBody
+      )
+      if ((response?.resultSizeEstimate ?? 0) > 0) {
+        const buffer: IEmailListThreadItem[] = []
+        const loadCount = response.threads.length
 
-      response.threads.forEach(async (item) => {
-        const threadDetail = await threadApi().getThreadDetail(item.id)
-        buffer.push(threadDetail)
-        if (buffer.length === loadCount) {
-          setLoadState(SEARCH_STATE.LOADED)
-          if (searchValueRef.current !== searchValue) {
-            searchValueRef.current = searchValue
-            const newStateObject = {
-              q: searchBody.q,
-              threads: sortThreads(buffer),
-              nextPageToken: response.nextPageToken ?? null,
+        response.threads.forEach(async (item) => {
+          const threadDetail = await threadApi().getThreadDetail(item.id)
+          buffer.push(threadDetail)
+          if (buffer.length === loadCount) {
+            if (searchValueRef.current !== searchValue) {
+              setLoadState(SEARCH_STATE.LOADED)
+              searchValueRef.current = searchValue
+              const newStateObject = {
+                q: searchBody.q,
+                threads: sortThreads(buffer),
+                nextPageToken: response.nextPageToken ?? null,
+              }
+              setSearchResults(newStateObject)
+              return
             }
-            setSearchResults(newStateObject)
-            return
-          }
-          if (searchResults && searchResults.threads.length > 0) {
-            const newStateObject = {
-              threads: sortThreads(searchResults.threads.concat(buffer)),
-              nextPageToken: response.nextPageToken ?? null,
+            if (searchResults && searchResults.threads.length > 0) {
+              const newStateObject = {
+                threads: sortThreads(searchResults.threads.concat(buffer)),
+                nextPageToken: response.nextPageToken ?? null,
+              }
+              setSearchResults(newStateObject)
             }
-            setSearchResults(newStateObject)
           }
-        }
-      })
+        })
+      } else {
+        setLoadState(SEARCH_STATE.LOADED)
+      }
+    } catch (err) {
+      dispatch(setServiceUnavailable(global.ERROR_MESSAGE))
+    }
+  }
+
+  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === 'Enter') {
+      if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
+        intitialSearch({
+          searchValue,
+          setLoadState,
+          fetchSearchThreads,
+          searchValueRef,
+          setSearchResults,
+          dispatch,
+        })
+      }
     }
   }
 
@@ -197,6 +227,7 @@ const Search = () => {
             onChange={handleSearchChange}
             autoFocus={isSearching}
             inputRef={searchInputRef}
+            onKeyDown={keyDownHandler}
             fullWidth
           />
           {searchValue.length > 0 && (

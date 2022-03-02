@@ -1,6 +1,6 @@
-import CircularProgress from '@mui/material/CircularProgress'
+import { LinearProgress } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { Inner, Wrapper } from './BaseLoaderStyles'
+import * as S from './BaseLoaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
 import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
@@ -8,16 +8,20 @@ import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
 const Baseloader = () => {
   const serviceUnavailable = useSelector(selectServiceUnavailable)
   return (
-    <Wrapper>
-      <Inner>
+    <S.Wrapper>
+      <S.Inner>
         {!serviceUnavailable && (
           <>
-            <img
-              style={{ marginBottom: '1rem' }}
-              src={Logo}
-              alt="Juno's Logo"
-            />
-            <CircularProgress />
+            <S.Container>
+              <img
+                style={{ marginBottom: '1rem' }}
+                src={Logo}
+                alt="Juno's Logo"
+              />
+            </S.Container>
+            <S.LoaderContainer>
+              <LinearProgress />
+            </S.LoaderContainer>
           </>
         )}
         {serviceUnavailable && (
@@ -26,8 +30,8 @@ const Baseloader = () => {
             <LogoutOption />
           </>
         )}
-      </Inner>
-    </Wrapper>
+      </S.Inner>
+    </S.Wrapper>
   )
 }
 
