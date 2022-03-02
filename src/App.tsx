@@ -40,7 +40,7 @@ const ProtectedRoute = ({
   isAuthenticated,
   baseLoaded,
 }: {
-  children: any
+  children: JSX.Element
   isAuthenticated: boolean
   baseLoaded: boolean
 }) => {

@@ -9,6 +9,7 @@ import Contributions from './Contributions/contributions'
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
 
 const SETTINGS = 'Settings'
+const CONTRIBUTIONS = 'Contributions'
 
 const Settings = () => {
   const dispatch = useAppDispatch()
@@ -26,7 +27,7 @@ const Settings = () => {
         <S.SettingsContainer>
           <ShowAvatar />
           <EmailSize />
-          <S.SettingsSubHeader>Contributions</S.SettingsSubHeader>
+          <S.SettingsSubHeader>{CONTRIBUTIONS}</S.SettingsSubHeader>
           <Contributions />
         </S.SettingsContainer>
       </S.Dialog>

@@ -32,6 +32,7 @@ export interface IEmailListObject {
   labels: string[]
   threads: IEmailListThreadItem[]
   nextPageToken: string | null
+  resultSizeEstimate?: number
 }
 
 export interface IEmailListObjectSearch {
