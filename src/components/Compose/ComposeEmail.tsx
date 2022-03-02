@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import {
+  resetComposeEmail,
   selectComposeEmail,
   SendComposedEmail,
   TrackComposeEmail,
@@ -18,7 +19,13 @@ import {
   resetDraftDetails,
   selectDraftDetails,
 } from '../../Store/draftsSlice'
-import { selectCurrentMessage } from '../../Store/emailDetailSlice'
+import {
+  selectCurrentMessage,
+  selectIsForwarding,
+  selectIsReplying,
+  setIsForwarding,
+  setIsReplying,
+} from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { Contact } from '../../Store/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
@@ -27,10 +34,11 @@ import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 
+const handleContactConversion = (contactValue: string): Contact[] =>
+  contactValue.split(',').map((item) => convertToContact(item))
+
 // Props are coming from MessageOverview
 interface IComposeEmailProps {
-  isReplying?: boolean
-  isReplyingListener?: Function
   to?: Contact | null
   bcc?: Contact | null
   cc?: Contact | null
@@ -39,14 +47,15 @@ interface IComposeEmailProps {
 }
 
 const ComposeEmailContainer = ({
-  isReplying,
-  isReplyingListener,
   to,
   bcc,
   cc,
   subject,
   threadId,
 }: IComposeEmailProps) => {
+  const dispatch = useAppDispatch()
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
@@ -66,8 +75,8 @@ const ComposeEmailContainer = ({
   const [bodyValue, setBodyValue] = useState('')
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
 
+  // Listen to any changes of the composeEmail object to update the
   useEffect(() => {
     let mounted = true
     if (!isEmpty(composeEmail)) {
@@ -227,52 +236,55 @@ const ComposeEmailContainer = ({
     }
   }, [debouncedSubjectValue])
 
+  const cleanUpComposerAndDraft = () => {
+    dispatch(resetComposeEmail())
+    dispatch(resetDraftDetails())
+  }
+
   // Set the form values
   useEffect(() => {
     let mounted = true
     if (mounted) {
+      // composeEmail object coming ??
       if (!isEmpty(composeEmail)) {
-        setToValue(
-          Array(composeEmail.to).filter((item) =>
-            item ? convertToContact(item) : null
-          )
-        )
+        setToValue(handleContactConversion(composeEmail.to))
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
-          setCCValue(
-            Array(composeEmail.cc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
-          )
+          setCCValue(handleContactConversion(composeEmail.cc))
         }
         if (composeEmail.bcc && composeEmail.bcc.length > 0) {
           setShowBCC(true)
-          setBCCValue(
-            Array(composeEmail.bcc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
-          )
+          setBCCValue(handleContactConversion(composeEmail.bcc))
         }
         setSubjectValue(composeEmail.subject)
         setBodyValue(composeEmail.body)
       }
-      // Form values coming from a new reply via MessageOverview
-      if (to) setToValue([to])
-      if (cc) setCCValue([cc])
-      if (bcc) setBCCValue([bcc])
-      if (subject) setSubjectValue(subject)
+      // Form values coming from a new reply via MessagesOverview (EmailDetail)
+      if (to) {
+        setToValue([to])
+      }
+      if (cc) {
+        setCCValue([cc])
+      }
+      if (bcc) {
+        setBCCValue([bcc])
+      }
+      if (subject) {
+        setSubjectValue(subject)
+      }
     }
     return () => {
       mounted = false
+      cleanUpComposerAndDraft()
     }
   }, [])
 
   useEffect(() => {
     let mounted = true
-    if (currentMessage && currentMessage.id) {
+    if (currentMessage) {
       const updateEventObject = {
         id: 'id',
-        value: currentMessage.id,
+        value: currentMessage,
       }
       mounted && dispatch(TrackComposeEmail(updateEventObject))
     }
@@ -307,6 +319,15 @@ const ComposeEmailContainer = ({
       }
     } else {
       setToError(true)
+    }
+  }
+
+  const handleCancelButton = () => {
+    if (isReplying) {
+      dispatch(setIsReplying(false))
+    }
+    if (isForwarding) {
+      dispatch(setIsForwarding(false))
     }
   }
 
@@ -380,13 +401,13 @@ const ComposeEmailContainer = ({
   )
 
   return (
-    <S.Wrapper isReplying={isReplying ?? false}>
+    <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
       <S.UpdateContainer>
         {saveSuccess && (
           <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
         )}
       </S.UpdateContainer>
-      <S.ComposerContainer isReplying={isReplying ?? false}>
+      <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
         <GS.Base>
           <form onSubmit={onSubmit} autoComplete="off">
             <div style={{ marginBottom: `7px` }}>
@@ -422,14 +443,13 @@ const ComposeEmailContainer = ({
             <CustomButton
               type="submit"
               label={local.SEND_BUTTON}
-              // disabled={!toValue}
               icon={<FiSend />}
               suppressed
             />
-            {isReplying && isReplyingListener && (
+            {(isReplying || isForwarding) && (
               <CustomButton
                 label={local.CANCEL_BUTTON}
-                onClick={() => isReplyingListener(-1)}
+                onClick={() => handleCancelButton()}
                 suppressed
               />
             )}
@@ -443,8 +463,6 @@ const ComposeEmailContainer = ({
 export default ComposeEmailContainer
 
 ComposeEmailContainer.defaultProps = {
-  isReplying: false,
-  isReplyingListener: null,
   to: null,
   bcc: null,
   cc: null,

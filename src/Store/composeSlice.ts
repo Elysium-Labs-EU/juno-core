@@ -53,10 +53,9 @@ export const TrackComposeEmail =
     try {
       if (isEmpty(composedEmail)) {
         dispatch(setComposeEmail(props))
+        return
       }
-      if (!isEmpty(composedEmail)) {
-        dispatch(updateComposeEmail(props))
-      }
+      dispatch(updateComposeEmail(props))
     } catch (err) {
       console.error(err)
       dispatch(setServiceUnavailable('Error updating compose email.'))

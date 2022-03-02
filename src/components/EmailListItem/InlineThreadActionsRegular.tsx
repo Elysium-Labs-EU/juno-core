@@ -52,7 +52,7 @@ const InlineThreadActionsRegular = ({
                 FindLabelByName({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
-                })[0].id
+                })[0]?.id
             ) && (
               <CustomIconButton
                 onClick={() =>

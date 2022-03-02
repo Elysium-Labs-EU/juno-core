@@ -39,7 +39,7 @@ export const Base = styled.div`
 `
 
 interface IOuterContainer {
-  isReplying?: boolean
+  tabbedView?: boolean
 }
 
 export const OuterContainer = styled.div<IOuterContainer>`
@@ -50,7 +50,7 @@ export const OuterContainer = styled.div<IOuterContainer>`
   position: relative;
   flex: 1 1 0%;
   display: flex;
-  display: ${(props) => (props.isReplying ? 'flex' : 'initial')};
+  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 
 export const MenuPopper = styled.div`

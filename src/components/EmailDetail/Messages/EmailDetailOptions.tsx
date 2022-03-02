@@ -18,16 +18,13 @@ import ArchiveOption from '../Options/ArchiveOption'
 import MoreOption from '../Options/MoreOption'
 import { selectCoreStatus } from '../../../Store/emailListSlice'
 import SkipOption from '../Options/SkipOption'
+import ForwardOption from '../Options/ForwardOption'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
-  isReplyingListener: Function
 }
 
-const EmailDetailOptions = ({
-  threadDetail,
-  isReplyingListener,
-}: IEmailDetailOptions) => {
+const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -49,10 +46,8 @@ const EmailDetailOptions = ({
     <S.EmailOptionsContainer>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
-          <ReplyOption
-            threadDetail={threadDetail}
-            isReplyingListener={isReplyingListener}
-          />
+          <ReplyOption threadDetail={threadDetail} />
+          <ForwardOption threadDetail={threadDetail} />
           {labelIds &&
             !labelIds.some(
               (item) =>

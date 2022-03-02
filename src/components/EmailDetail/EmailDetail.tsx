@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
   selectCurrentEmail,
+  selectIsForwarding,
   selectIsReplying,
   selectViewIndex,
   setCurrentEmail,
-  setCurrentMessage,
+  setIsForwarding,
   setIsReplying,
   setViewIndex,
 } from '../../Store/emailDetailSlice'
@@ -30,8 +31,6 @@ import {
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
-import { resetComposeEmail, selectComposeEmail } from '../../Store/composeSlice'
-import { resetDraftDetails } from '../../Store/draftsSlice'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 import getEmailListIndex from '../../utils/getEmailListIndex'
@@ -43,9 +42,9 @@ const EmailDetail = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
   const viewIndex = useAppSelector(selectViewIndex)
   const coreStatus = useAppSelector(selectCoreStatus)
-  const composeEmail = useAppSelector(selectComposeEmail)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState('idle')
   const [currentLocal, setCurrentLocal] = useState<string>('')
@@ -54,34 +53,6 @@ const EmailDetail = () => {
   const [activeEmailList, setActiveEmailList] = useState<
     IEmailListObject | IEmailListObjectSearch
   >()
-
-  const cleanUpComposerAndDraft = () => {
-    dispatch(resetComposeEmail())
-    dispatch(resetDraftDetails())
-  }
-
-  const isReplyingListener = ({ messageIndex }: { messageIndex: number }) => {
-    if (messageIndex > -1) {
-      Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
-      dispatch(setIsReplying(true))
-      return
-    }
-    if (messageIndex === undefined) {
-      Object.keys(composeEmail).length > 0 && cleanUpComposerAndDraft()
-      dispatch(setIsReplying(false))
-      return
-    }
-    if (activeEmailList && activeEmailList.threads.length > 0) {
-      // This is used to specifically reply to a message.
-      dispatch(
-        setCurrentMessage(
-          activeEmailList.threads[
-            activeEmailList.threads.length - 1 - messageIndex
-          ]
-        )
-      )
-    }
-  }
 
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
@@ -122,6 +93,13 @@ const EmailDetail = () => {
     if (isReplying && currentEmail && currentEmail !== threadId) {
       dispatch(setIsReplying(false))
     }
+    if (isForwarding && currentEmail && currentEmail !== threadId) {
+      dispatch(setIsForwarding(false))
+    }
+    return () => {
+      dispatch(setIsReplying(false))
+      dispatch(setIsForwarding(false))
+    }
   }, [threadId])
 
   // If there is no viewIndex yet - set it by finding the index of the email.
@@ -145,7 +123,7 @@ const EmailDetail = () => {
       <EmailDetailHeader activeEmailList={activeEmailList} />
       <AnimatedMountUnmount>
         <S.Scroll clientState={Boolean(coreStatus)}>
-          <GS.OuterContainer isReplying={isReplying}>
+          <GS.OuterContainer tabbedView={isReplying || isForwarding}>
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
@@ -154,7 +132,7 @@ const EmailDetail = () => {
                     threadDetail={activeEmailList.threads[viewIndex]}
                     isLoading={isLoading}
                     isReplying={isReplying}
-                    isReplyingListener={isReplyingListener}
+                    isForwarding={isForwarding}
                     labelIds={labelIds}
                   />
                   <S.HiddenMessagesFeed>

@@ -6,7 +6,7 @@ interface EmailWrapperProps {
 }
 
 interface EmailContainerProps {
-  isReplying?: boolean
+  tabbedView?: boolean
 }
 
 interface IScroll {
@@ -20,7 +20,7 @@ export const HiddenMessagesFeed = styled.div`
 export const Scroll = styled.div<IScroll>`
   position: relative;
   width: 100%;
-  height: ${(props) => (props.clientState ? '90.5vh' : '88.3vh')};
+  height: ${({ clientState }) => (clientState ? '90.5vh' : '88.3vh')};
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -116,7 +116,7 @@ export const CardFullWidth = styled.div`
 
 export const EmailDetailContainer = styled.div<EmailContainerProps>`
   min-width: 60%;
-  max-width: ${(props) => (props.isReplying ? '40vw' : '60%')};
+  max-width: ${({ tabbedView }) => (tabbedView ? '40vw' : '60%')};
   padding-bottom: 1.5rem;
   margin-bottom: 1rem;
   width: 100%;
@@ -165,8 +165,10 @@ export const FromCCContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
   div {
-    max-width: ${(props) => (props.multipleComponents ? '33%' : '100%')};
-    margin-right: ${(props) => (props.multipleComponents ? '2rem' : 0)};
+    max-width: ${({ multipleComponents }) =>
+      multipleComponents ? '33%' : '100%'};
+    margin-right: ${({ multipleComponents }) =>
+      multipleComponents ? '2rem' : 0};
   }
   border-bottom: 1px solid ${themeConstants.colorGreyBorder};
   padding-bottom: 1rem;
