@@ -34,19 +34,8 @@ import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 
-const handleContactConversion = (composeEmail: any) => {
-  console.log('2. HandleContact (composeEmail)', composeEmail)
-  if (composeEmail.to && !Array.isArray(composeEmail.to)) {
-    const test2 = Array(composeEmail.to).filter((item) =>
-      item ? convertToContact(item) : null
-    )
-    return test2
-  }
-  if (composeEmail.to && Array.isArray(composeEmail.to)) {
-    return composeEmail.to
-  }
-  return []
-}
+const handleContactConversion = (contactValue: string): Contact[] =>
+  contactValue.split(',').map((item) => convertToContact(item))
 
 // Props are coming from MessageOverview
 interface IComposeEmailProps {
@@ -64,6 +53,9 @@ const ComposeEmailContainer = ({
   subject,
   threadId,
 }: IComposeEmailProps) => {
+  const dispatch = useAppDispatch()
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
   const currentMessage = useAppSelector(selectCurrentMessage)
   const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
@@ -83,10 +75,8 @@ const ComposeEmailContainer = ({
   const [bodyValue, setBodyValue] = useState('')
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const isReplying = useAppSelector(selectIsReplying)
-  const isForwarding = useAppSelector(selectIsForwarding)
 
+  // Listen to any changes of the composeEmail object to update the
   useEffect(() => {
     let mounted = true
     if (!isEmpty(composeEmail)) {
@@ -195,7 +185,6 @@ const ComposeEmailContainer = ({
 
   useEffect(() => {
     let mounted = true
-    console.log('1. Debounce', debouncedToValue)
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
@@ -258,29 +247,20 @@ const ComposeEmailContainer = ({
     if (mounted) {
       // composeEmail object coming ??
       if (!isEmpty(composeEmail)) {
-        setToValue(handleContactConversion(composeEmail))
+        setToValue(handleContactConversion(composeEmail.to))
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
-          setCCValue(
-            Array(composeEmail.cc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
-          )
+          setCCValue(handleContactConversion(composeEmail.cc))
         }
         if (composeEmail.bcc && composeEmail.bcc.length > 0) {
           setShowBCC(true)
-          setBCCValue(
-            Array(composeEmail.bcc).filter((item) =>
-              item ? convertToContact(item) : null
-            )
-          )
+          setBCCValue(handleContactConversion(composeEmail.bcc))
         }
         setSubjectValue(composeEmail.subject)
         setBodyValue(composeEmail.body)
       }
       // Form values coming from a new reply via MessagesOverview (EmailDetail)
       if (to) {
-        console.log('3. setToValue on mount', to)
         setToValue([to])
       }
       if (cc) {

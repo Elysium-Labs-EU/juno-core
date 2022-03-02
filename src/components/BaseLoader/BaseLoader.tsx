@@ -22,7 +22,8 @@ const Baseloader = () => {
         )}
         {serviceUnavailable && (
           <>
-            <p>{serviceUnavailable}</p> <LogoutOption />
+            <p>{serviceUnavailable}</p>
+            <LogoutOption />
           </>
         )}
       </Inner>
