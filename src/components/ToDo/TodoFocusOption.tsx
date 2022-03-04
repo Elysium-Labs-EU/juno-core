@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectIsLoading } from '../../Store/utilsSlice'
@@ -11,19 +11,21 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import getEmailListIndex from '../../utils/getEmailListIndex'
+import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
   const emailList = useAppSelector(selectEmailList)
   const dispatch = useAppDispatch()
+  const keysPressed = useMultiKeyPress()
 
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 
-  const handleClick = () => {
+  const activateFocusMode = () => {
     const staticLabelURL = labelURL(labelIds)
     if (staticLabelURL) {
       startSort({
@@ -37,10 +39,24 @@ const TodoFocusOption = () => {
     }
   }
 
+  useEffect(() => {
+    let mounted = true
+    if (
+      mounted &&
+      keysPressed.includes(global.KEY_OSLEFT) &&
+      keysPressed.includes(global.KEY_E)
+    ) {
+      activateFocusMode()
+    }
+    return () => {
+      mounted = false
+    }
+  }, [keysPressed])
+
   return (
     <S.SortContainer>
       <CustomAttentionButton
-        onClick={handleClick}
+        onClick={activateFocusMode}
         disabled={
           isLoading ||
           emailListIndex < 0 ||
