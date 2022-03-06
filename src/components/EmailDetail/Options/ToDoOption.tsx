@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { FiCheckCircle } from 'react-icons/fi'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
@@ -19,18 +19,22 @@ const ToDoOption = ({
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
 
-  const handleEvent = () => {
+  const handleEvent = useCallback(() => {
     SetToDoMail({
       messageId: threadDetail.id,
       labelIds,
       dispatch,
       storageLabels,
     })
-  }
+  }, [threadDetail, labelIds, dispatch, storageLabels])
 
   useEffect(() => {
     let mounted = true
-    if (mounted && keysPressed.includes(global.KEY_OSLEFT) && keysPressed.includes(global.KEY_E)) {
+    if (
+      mounted &&
+      keysPressed.includes(global.KEY_OSLEFT) &&
+      keysPressed.includes(global.KEY_E)
+    ) {
       handleEvent()
     }
     return () => {

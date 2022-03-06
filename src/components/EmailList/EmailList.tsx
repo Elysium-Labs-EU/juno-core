@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useCallback, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
@@ -6,7 +6,9 @@ import {
   loadEmails,
   refreshEmailFeed,
   resetValuesEmailDetail,
+  selectActiveEmailListIndex,
   selectEmailList,
+  setActiveEmailListIndex,
 } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import {
@@ -89,25 +91,45 @@ const EmailList = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const location = useLocation()
 
   useEffect(() => {
     let mounted = true
-    if (
-      labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) &&
-      !labelIds.includes(global.ARCHIVE_LABEL)
-    ) {
-      const params = {
-        labelIds,
-        maxResults: emailFetchSize,
-        nextPageToken: null,
-      }
+    if (labelIds && !labelIds.includes(global.ARCHIVE_LABEL)) {
+      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
+        const params = {
+          labelIds,
+          maxResults: emailFetchSize,
+          nextPageToken: null,
+        }
 
-      mounted && dispatch(loadEmails(params))
-      if (labelIds.includes(draft.DRAFT_LABEL)) {
-        mounted && dispatch(loadDraftList())
+        mounted && dispatch(loadEmails(params))
+        if (labelIds.includes(draft.DRAFT_LABEL)) {
+          mounted && dispatch(loadDraftList())
+        }
+      }
+      if (
+        !location.pathname.includes(Routes.INBOX) &&
+        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
+      ) {
+        if (
+          emailList.length > 0 &&
+          emailList.filter((emailSubList) =>
+            emailSubList.labels?.includes(labelIds[0])
+          ).length > 0
+        ) {
+          const params = {
+            labelIds,
+            maxResults: 500,
+            nextPageToken: null,
+          }
+          mounted && dispatch(refreshEmailFeed(params))
+          if (labelIds.includes(draft.DRAFT_LABEL)) {
+            mounted && dispatch(loadDraftList())
+          }
+        }
       }
     }
     return () => {
@@ -115,59 +137,38 @@ const EmailList = () => {
     }
   }, [labelIds])
 
+  // Run a clean up function to ensure that the email detail values are always back to base.
   useEffect(() => {
     dispatch(resetValuesEmailDetail())
   }, [])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      !location.pathname.includes(Routes.INBOX) &&
-      labelIds &&
-      labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-      !labelIds.includes(global.ARCHIVE_LABEL)
-    ) {
-      if (
-        emailList.length > 0 &&
-        emailList.filter((emailSubList) =>
-          emailSubList.labels?.includes(labelIds[0])
-        ).length > 0
-      ) {
-        const params = {
-          labelIds,
-          maxResults: 500,
-          nextPageToken: null,
-        }
-        dispatch(refreshEmailFeed(params))
-        if (labelIds.includes(draft.DRAFT_LABEL)) {
-          mounted && dispatch(loadDraftList())
-        }
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [location])
-
-  // Show the list of emails that are connected to the labelId mailbox.
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
     [emailList, labelIds]
   )
 
+  // Sync the emailListIndex with Redux
+  useEffect(() => {
+    if (emailListIndex > -1 && activeEmailListIndex !== emailListIndex) {
+      dispatch(setActiveEmailListIndex(emailListIndex))
+    }
+  }, [emailListIndex])
+
   const LabeledInbox = memo(() => {
-    if (emailList && emailListIndex > -1) {
-      return <RenderEmailList filteredOnLabel={emailList[emailListIndex]} />
+    if (emailList && activeEmailListIndex > -1) {
+      // Show the list of emails that are connected to the labelId mailbox.
+      return (
+        <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
+      )
     }
     return <EmptyState />
   })
 
   return (
     <>
-      {!isLoading &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
-          <LabeledInbox />
-        )}
+      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
+        <LabeledInbox />
+      )}
       {isLoading &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
           <LoadingState />

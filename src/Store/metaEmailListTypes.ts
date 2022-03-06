@@ -19,7 +19,7 @@ export interface MetaListThreadItem {
 
 export interface LoadEmailObject {
   q?: string
-  labelIds?: string[]
+  labelIds: string[]
   maxResults: number
   nextPageToken: string | null
   silentLoading?: boolean

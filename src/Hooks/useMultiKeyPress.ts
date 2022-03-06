@@ -12,11 +12,13 @@ export default function useMultiKeyPress() {
         )
     }
     const keyDownHandler = (event: KeyboardEvent) => {
-      mounted && setKeyPressed((prevState) => [...prevState, event.code])
+      mounted &&
+        setKeyPressed((prevState) => [...new Set([...prevState, event.code])])
     }
     window.addEventListener('keydown', keyDownHandler)
     window.addEventListener('keyup', keyUpHandler)
     return () => {
+      setKeyPressed([])
       mounted = false
       window.removeEventListener('keydown', keyDownHandler)
       window.removeEventListener('keyup', keyUpHandler)

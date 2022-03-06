@@ -58,7 +58,7 @@ interface IDetailDisplaySelector {
   index: number
 }
 
-const detailDisplaySelector = ({
+const DetailDisplaySelector = ({
   message,
   threadDetail,
   index,
@@ -89,6 +89,30 @@ const detailDisplaySelector = ({
   )
 }
 
+const MappedMessages = ({
+  threadDetail,
+}: {
+  threadDetail: IEmailListThreadItem
+}) =>
+  threadDetail.messages ? (
+    <>
+      {threadDetail.messages
+        .slice(0)
+        .reverse()
+        .map((message, index) => (
+          <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
+            <DetailDisplaySelector
+              message={message}
+              threadDetail={threadDetail}
+              index={index}
+            />
+          </ES.EmailWrapper>
+        ))}
+    </>
+  ) : (
+    <p>{global.NOTHING_TO_SEE}</p>
+  )
+
 interface IMessagesOverview {
   threadDetail: IEmailListThreadItem
   isLoading: boolean
@@ -106,23 +130,6 @@ const MessagesOverview = memo(
     labelIds,
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
-
-    const MappedMessages = () =>
-      threadDetail &&
-      threadDetail.messages &&
-      !isLoading &&
-      threadDetail.messages
-        .slice(0)
-        .reverse()
-        .map((message, index) => (
-          <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
-            {detailDisplaySelector({
-              message,
-              threadDetail,
-              index,
-            })}
-          </ES.EmailWrapper>
-        ))
 
     useEffect(() => {
       if (threadDetail && Object.keys(threadDetail).length > 0) {
@@ -146,8 +153,8 @@ const MessagesOverview = memo(
           <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
             <ES.DetailBase>
               <ES.CardFullWidth>
-                {threadDetail && threadDetail.messages && !isLoading ? (
-                  MappedMessages()
+                {threadDetail && !isLoading ? (
+                  <MappedMessages threadDetail={threadDetail} />
                 ) : (
                   <ES.LoadingErrorWrapper>
                     <CircularProgress />

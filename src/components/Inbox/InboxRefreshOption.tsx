@@ -5,6 +5,7 @@ import * as theme from '../../constants/themeConstants'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsLoading } from '../../Store/utilsSlice'
+import { INBOX_LABEL } from './Inbox'
 
 const rotate = keyframes`
   from {
@@ -43,6 +44,7 @@ const refreshFeed = (dispatch: Function) => {
   const params = {
     maxResults: 500,
     nextPageToken: null,
+    labelIds: INBOX_LABEL,
   }
   dispatch(refreshEmailFeed(params))
 }

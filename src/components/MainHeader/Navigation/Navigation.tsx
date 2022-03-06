@@ -14,9 +14,11 @@ import {
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from './More/NavigationMore'
 import * as S from './NavigationStyles'
+import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
 import { setInSearch } from '../../../Store/utilsSlice'
+import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 
 const SIZE = 16
 
@@ -27,13 +29,11 @@ const Navigation = () => {
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
   const dispatch = useAppDispatch()
+  const keysPressed = useMultiKeyPress()
 
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
       setActive('inbox')
-    }
-    if (location.pathname.includes('settings')) {
-      setActive('settings')
     }
     if (location.pathname.includes('compose')) {
       setActive('compose')
@@ -46,6 +46,27 @@ const Navigation = () => {
   const navigateTo = (destination: string) => {
     dispatch(push(destination))
   }
+
+  useEffect(() => {
+    let mounted = true
+    if (mounted && keysPressed.includes(global.KEY_ALT_LEFT)) {
+      if (keysPressed.includes(global.KEY_DIGIT_1)) {
+        navigateTo(Routes.HOME)
+      }
+      if (keysPressed.includes(global.KEY_DIGIT_2)) {
+        navigateTo(Routes.INBOX)
+      }
+      if (keysPressed.includes(global.KEY_DIGIT_3)) {
+        dispatch(setInSearch(true))
+      }
+      if (keysPressed.includes(global.KEY_DIGIT_4)) {
+        navigateTo('/compose')
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [keysPressed])
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>

@@ -44,6 +44,7 @@ export interface IEmailListObjectSearch {
 export interface IEmailListState {
   emailList: IEmailListObject[]
   searchList: IEmailListObjectSearch | null
+  activeEmailListIndex: number
   coreStatus: string | null
   isFetching: boolean
 }

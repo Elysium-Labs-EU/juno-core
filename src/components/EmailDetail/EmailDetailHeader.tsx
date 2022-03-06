@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navigation from '../MainHeader/Navigation/Navigation'
-import { useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import Tabs from './Tabs/Tabs'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import { selectCoreStatus } from '../../Store/emailListSlice'
@@ -17,6 +17,12 @@ import {
   IEmailListObject,
   IEmailListObjectSearch,
 } from '../../Store/emailListTypes'
+import { edgeLoadingNextPage } from '../../utils/loadNextPage'
+import { selectViewIndex } from '../../Store/emailDetailSlice'
+import {
+  selectEmailListSize,
+  selectIsSilentLoading,
+} from '../../Store/utilsSlice'
 
 const EmailDetailHeader = ({
   activeEmailList,
@@ -26,6 +32,10 @@ const EmailDetailHeader = ({
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const labelIds = useAppSelector(selectLabelIds)
+  const viewIndex = useAppSelector(selectViewIndex)
+  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  const emailFetchSize = useAppSelector(selectEmailListSize)
+  const dispatch = useAppDispatch()
   const location = useLocation()
   const [detailHeader, setDetailHeader] = useState<string>('')
 
@@ -42,6 +52,20 @@ const EmailDetailHeader = ({
       }
     }
   }, [storageLabels, labelIds])
+
+  // Attempt to load the next emails on the background when approaching the edge
+  if (
+    activeEmailList.threads.length - 1 - viewIndex <= 4 &&
+    activeEmailList.nextPageToken
+  ) {
+    edgeLoadingNextPage({
+      isSilentLoading,
+      dispatch,
+      labelIds,
+      emailFetchSize,
+      activeEmailList,
+    })
+  }
 
   return (
     <GS.OuterContainer>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
@@ -17,6 +17,7 @@ import {
   selectEmailList,
   selectCoreStatus,
   selectSearchList,
+  selectActiveEmailListIndex,
 } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
@@ -33,7 +34,6 @@ import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
-import getEmailListIndex from '../../utils/getEmailListIndex'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
@@ -45,6 +45,7 @@ const EmailDetail = () => {
   const isForwarding = useAppSelector(selectIsForwarding)
   const viewIndex = useAppSelector(selectViewIndex)
   const coreStatus = useAppSelector(selectCoreStatus)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState('idle')
   const [currentLocal, setCurrentLocal] = useState<string>('')
@@ -54,22 +55,17 @@ const EmailDetail = () => {
     IEmailListObject | IEmailListObjectSearch
   >()
 
-  const emailListIndex = useMemo(
-    () => getEmailListIndex({ emailList, labelIds }),
-    [emailList, labelIds]
-  )
-
   // This will set the activeEmailList when first opening the email.
   // It will also update the activeEmailList whenever an email is archived or removed.
   useEffect(() => {
     if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
       setActiveEmailList(searchList)
     }
-    if (emailList && emailList[emailListIndex]) {
-      setActiveEmailList(emailList[emailListIndex])
+    if (emailList && emailList[activeEmailListIndex]) {
+      setActiveEmailList(emailList[activeEmailListIndex])
     }
     setBaseState('loaded')
-  }, [emailList, emailListIndex, searchList])
+  }, [emailList, activeEmailListIndex, searchList])
 
   // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
   useEffect(() => {
@@ -97,8 +93,12 @@ const EmailDetail = () => {
       dispatch(setIsForwarding(false))
     }
     return () => {
-      dispatch(setIsReplying(false))
-      dispatch(setIsForwarding(false))
+      if (isForwarding) {
+        dispatch(setIsForwarding(false))
+      }
+      if (isReplying) {
+        dispatch(setIsReplying(false))
+      }
     }
   }, [threadId])
 

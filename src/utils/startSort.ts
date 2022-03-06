@@ -4,16 +4,16 @@ interface IStartSort {
   dispatch: Function
   labelURL: string
   emailList: any
-  emailListIndex: number
+  activeEmailListIndex: number
 }
 
 const startSort = (props: IStartSort) => {
-  const { dispatch, labelURL, emailList, emailListIndex } = props
+  const { dispatch, labelURL, emailList, activeEmailListIndex } = props
 
-  if (labelURL && emailList && emailListIndex > -1 && emailList) {
+  if (labelURL && emailList && activeEmailListIndex > -1 && emailList) {
     return dispatch(
       push(
-        `/mail/${labelURL}/${emailList[emailListIndex].threads[0].id}/messages`
+        `/mail/${labelURL}/${emailList[activeEmailListIndex].threads[0].id}/messages`
       )
     )
   }
