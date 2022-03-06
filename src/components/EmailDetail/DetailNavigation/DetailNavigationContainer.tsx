@@ -52,49 +52,21 @@ const DetailNavigationContainer = ({
         coreStatus,
         composeEmail,
       })
-      // Attempt to load the next emails on the background when approaching the edge
-      if (
-        activeEmailList.threads.length - 1 - viewIndex <= 4 &&
-        activeEmailList.nextPageToken
-      ) {
-        if (!isSilentLoading) {
-          if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
-            const { q, nextPageToken } =
-              activeEmailList as IEmailListObjectSearch
-            return loadNextPage({
-              q,
-              nextPageToken,
-              dispatch,
-              maxResults: global.MAX_RESULTS,
-              silentLoading: true,
-            })
-          }
-          const { nextPageToken } = activeEmailList as IEmailListObject
-          return loadNextPage({
-            nextPageToken,
-            labelIds,
-            dispatch,
-            maxResults: emailFetchSize,
-            silentLoading: true,
-          })
-        }
-      }
     }
     if (!labelIds.includes(global.ARCHIVE_LABEL)) {
       // If loading isn't already happening, load the nextPage
       const { nextPageToken } = activeEmailList as IEmailListObject
       if (
         activeEmailList.nextPageToken !== null &&
-        activeEmailList.threads[viewIndex + 1] === undefined
+        activeEmailList.threads[viewIndex + 1] === undefined &&
+        !isSilentLoading
       ) {
-        if (!isSilentLoading) {
-          return loadNextPage({
-            nextPageToken,
-            labelIds,
-            dispatch,
-            maxResults: emailFetchSize,
-          })
-        }
+        return loadNextPage({
+          nextPageToken,
+          labelIds,
+          dispatch,
+          maxResults: emailFetchSize,
+        })
       }
     }
 

@@ -1,9 +1,14 @@
 import { loadEmails } from '../Store/emailListSlice'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../Store/emailListTypes'
+import * as global from '../constants/globalConstants'
 
 interface ILoadNextPage {
   q?: string
   nextPageToken: string | null
-  labelIds?: string[]
+  labelIds: string[]
   dispatch: Function
   silentLoading?: boolean
   maxResults: number
@@ -30,3 +35,34 @@ const loadNextPage = ({
 }
 
 export default loadNextPage
+
+export const edgeLoadingNextPage = ({
+  isSilentLoading,
+  dispatch,
+  labelIds,
+  emailFetchSize,
+  activeEmailList,
+}: any) => {
+  if (!isSilentLoading) {
+    if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
+      const { q, nextPageToken } = activeEmailList as IEmailListObjectSearch
+      return loadNextPage({
+        q,
+        nextPageToken,
+        dispatch,
+        maxResults: global.MAX_RESULTS,
+        silentLoading: true,
+        labelIds,
+      })
+    }
+    const { nextPageToken } = activeEmailList as IEmailListObject
+    return loadNextPage({
+      nextPageToken,
+      labelIds,
+      dispatch,
+      maxResults: emailFetchSize,
+      silentLoading: true,
+    })
+  }
+  return null
+}
