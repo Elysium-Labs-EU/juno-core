@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
