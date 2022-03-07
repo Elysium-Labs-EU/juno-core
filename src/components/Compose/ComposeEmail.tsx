@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
@@ -33,6 +33,7 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
+import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 
 const handleContactConversion = (contactValue: string): Contact[] =>
   contactValue.split(',').map((item) => convertToContact(item))
@@ -46,7 +47,7 @@ interface IComposeEmailProps {
   threadId?: string
 }
 
-const ComposeEmailContainer = ({
+const ComposeEmail = ({
   to,
   bcc,
   cc,
@@ -75,11 +76,19 @@ const ComposeEmailContainer = ({
   const [bodyValue, setBodyValue] = useState('')
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+  const keysPressed = useMultiKeyPress()
+  const userInteractedRef = useRef(false)
+
+  useEffect(() => {
+    if (keysPressed.length > 0 && !userInteractedRef.current) {
+      userInteractedRef.current = true
+    }
+  }, [keysPressed])
 
   // Listen to any changes of the composeEmail object to update the
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(composeEmail)) {
+    if (!isEmpty(composeEmail) && userInteractedRef.current) {
       mounted && dispatch(createUpdateDraft())
     }
     return () => {
@@ -89,7 +98,7 @@ const ComposeEmailContainer = ({
 
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(draftDetails) && mounted) {
+    if (!isEmpty(draftDetails) && mounted && userInteractedRef.current) {
       setSaveSuccess(true)
       const timer = setTimeout(() => {
         setSaveSuccess(false)
@@ -162,7 +171,7 @@ const ComposeEmailContainer = ({
     [subjectValue]
   )
 
-  const handleDelete = (selectedOption: any) => {
+  const handleDelete = useCallback((selectedOption: any) => {
     const { option, fieldId } = selectedOption
     switch (fieldId) {
       case local.TO: {
@@ -181,7 +190,7 @@ const ComposeEmailContainer = ({
         break
       }
     }
-  }
+  }, [])
 
   useEffect(() => {
     let mounted = true
@@ -307,20 +316,23 @@ const ComposeEmailContainer = ({
     }
   }, [threadId])
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (toValue.length > 0) {
-      if (emailValidation(toValue)) {
-        dispatch(SendComposedEmail())
-        dispatch(resetDraftDetails())
-        dispatch(listRemoveDraft({ threadId: draftDetails.message.threadId }))
+  const onSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      if (toValue.length > 0) {
+        if (emailValidation(toValue)) {
+          dispatch(SendComposedEmail())
+          dispatch(resetDraftDetails())
+          dispatch(listRemoveDraft({ threadId: draftDetails.message.threadId }))
+        } else {
+          setToError(true)
+        }
       } else {
         setToError(true)
       }
-    } else {
-      setToError(true)
-    }
-  }
+    },
+    [toValue, draftDetails, toError]
+  )
 
   const handleCancelButton = () => {
     if (isReplying) {
@@ -460,9 +472,9 @@ const ComposeEmailContainer = ({
   )
 }
 
-export default ComposeEmailContainer
+export default ComposeEmail
 
-ComposeEmailContainer.defaultProps = {
+ComposeEmail.defaultProps = {
   to: null,
   bcc: null,
   cc: null,
