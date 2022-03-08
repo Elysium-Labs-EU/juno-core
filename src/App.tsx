@@ -66,7 +66,7 @@ const App = () => {
   useEffect(() => {
     const token = fetchToken()
     if (token) {
-      dispatch(setIsAuthenticated(true))
+      if (!isAuthenticated) { dispatch(setIsAuthenticated(true)) }
       dispatch(push(RoutesConstants.HOME))
     }
   }, [])

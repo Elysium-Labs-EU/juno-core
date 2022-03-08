@@ -4,6 +4,8 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 import { store } from './Store/store'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
@@ -22,12 +24,16 @@ process.env.NODE_ENV !== 'development' &&
     tracesSampleRate: 1.0,
   })
 
+const persistor = persistStore(store)
+
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
       <GlobalStyle />
       <ThemeProvider theme={theme}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </ThemeProvider>
     </Provider>
   </StrictMode>,

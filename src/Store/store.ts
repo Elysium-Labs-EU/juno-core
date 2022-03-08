@@ -2,6 +2,9 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { createReduxHistoryContext } from 'redux-first-history'
 import { createMemoryHistory, createBrowserHistory } from 'history'
 import isElectron from 'is-electron'
+import { combineReducers } from 'redux'
+import { persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import contactsReducer from './contactsSlice'
@@ -16,21 +19,31 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
     history: isElectron() ? createMemoryHistory() : createBrowserHistory(),
   })
 
+const reducers = combineReducers({
+  base: baseReducer,
+  compose: composeReducer,
+  contacts: contactsReducer,
+  email: emailReducer,
+  emailDetail: emailDetailReducer,
+  drafts: draftsReducer,
+  labels: labelsReducer,
+  utils: utilsReducer,
+  router: routerReducer,
+})
+
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['compose', 'router', 'utils'],
+}
+
+const persistedReducer = persistReducer(persistConfig, reducers)
+
 export const store = configureStore({
-  reducer: {
-    base: baseReducer,
-    compose: composeReducer,
-    contacts: contactsReducer,
-    email: emailReducer,
-    emailDetail: emailDetailReducer,
-    drafts: draftsReducer,
-    labels: labelsReducer,
-    utils: utilsReducer,
-    router: routerReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(routerMiddleware),
-  // devTools: process.env.NODE_ENV !== 'production',
+  devTools: process.env.NODE_ENV !== 'production',
 })
 
 export const history = createReduxHistory(store)
