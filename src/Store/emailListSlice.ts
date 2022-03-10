@@ -541,7 +541,9 @@ export const refreshEmailFeed =
       )
       const { labelIds } = params
       const user = await userApi().fetchUser()
-      dispatch(setProfile(user?.data))
+      if (user.data) {
+        dispatch(setProfile(user.data))
+      }
       if (newEmailsIdx > -1) {
         const newSlice = threads.slice(0, newEmailsIdx)
         if (newSlice.length > 0) {

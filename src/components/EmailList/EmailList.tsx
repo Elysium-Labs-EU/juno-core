@@ -110,27 +110,27 @@ const EmailList = () => {
           mounted && dispatch(loadDraftList())
         }
       }
-      if (
-        !location.pathname.includes(Routes.INBOX) &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
-      ) {
-        if (
-          emailList.length > 0 &&
-          emailList.filter((emailSubList) =>
-            emailSubList.labels?.includes(labelIds[0])
-          ).length > 0
-        ) {
-          const params = {
-            labelIds,
-            maxResults: 500,
-            nextPageToken: null,
-          }
-          mounted && dispatch(refreshEmailFeed(params))
-          if (labelIds.includes(draft.DRAFT_LABEL)) {
-            mounted && dispatch(loadDraftList())
-          }
-        }
-      }
+      // if (
+      //   !location.pathname.includes(Routes.INBOX) &&
+      //   labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
+      // ) {
+      //   if (
+      //     emailList.length > 0 &&
+      //     emailList.filter((emailSubList) =>
+      //       emailSubList.labels?.includes(labelIds[0])
+      //     ).length > 0
+      //   ) {
+      //     const params = {
+      //       labelIds,
+      //       maxResults: 500,
+      //       nextPageToken: null,
+      //     }
+      //     mounted && dispatch(refreshEmailFeed(params))
+      //     if (labelIds.includes(draft.DRAFT_LABEL)) {
+      //       mounted && dispatch(loadDraftList())
+      //     }
+      //   }
+      // }
     }
     return () => {
       mounted = false
