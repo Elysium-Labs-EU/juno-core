@@ -1,5 +1,4 @@
 export interface UpdateRequest {
-  addLabelIds?: string[]
   removeLabelIds?: string[]
   delete?: boolean
 }

@@ -430,7 +430,7 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
   const {
     messageId,
     request,
-    request: { addLabelIds, removeLabelIds },
+    request: { removeLabelIds },
     labelIds,
   } = props
 
