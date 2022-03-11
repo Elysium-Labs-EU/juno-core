@@ -18,7 +18,7 @@
     "url": "https://github.com/Elysium-Labs-EU/juno-core/issues"
   },
   "dependencies": {
-    "@emotion/react": "^11.8.1",
+    "@emotion/react": "^11.8.2",
     "@mui/base": "^5.0.0-alpha.70",
     "@mui/material": "^5.5.0",
     "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
@@ -36,7 +36,7 @@
     "is-electron": "^2.2.1",
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.1",
-    "pretty-bytes": "^5.6.0",
+    "pretty-bytes": "^6.0.0",
     "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
