@@ -36,7 +36,7 @@
     "is-electron": "^2.2.1",
     "lodash": "^4.17.21",
     "match-sorter": "^6.3.1",
-    "pretty-bytes": "^5.6.0",
+    "pretty-bytes": "^6.0.0",
     "qs": "^6.10.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -128,7 +128,7 @@
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.4.12",
-    "@storybook/addon-essentials": "^6.4.12",
+    "@storybook/addon-essentials": "^6.4.19",
     "@storybook/addon-links": "^6.4.19",
     "@storybook/node-logger": "^6.4.12",
     "@storybook/preset-create-react-app": "^4.0.1",
