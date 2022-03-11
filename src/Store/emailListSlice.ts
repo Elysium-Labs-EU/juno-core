@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import threadApi from '../data/threadApi'
 import {
@@ -40,6 +40,7 @@ import { edgeLoadingNextPage } from '../utils/loadNextPage'
 
 const initialState: IEmailListState = Object.freeze({
   emailList: [],
+  selectedEmails: [],
   searchList: null,
   activeEmailListIndex: -1,
   coreStatus: null,
@@ -50,10 +51,23 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {
-    setCoreStatus: (state, action) => {
+    setCoreStatus: (state, action: PayloadAction<string | null>) => {
       state.coreStatus = action.payload
     },
-    setIsFetching: (state, action) => {
+    setSelectedEmails: (state, action: PayloadAction<any>) => {
+      const { event, id } = action.payload
+      if (event === 'add') {
+        const currentState = state.selectedEmails
+        currentState.push(id)
+        state.selectedEmails = currentState
+      }
+      if (event === 'remove') {
+        const currentState = state.selectedEmails
+        const filteredResult = currentState.filter((item) => item !== id)
+        state.selectedEmails = filteredResult
+      }
+    },
+    setIsFetching: (state, action: PayloadAction<boolean>) => {
       state.isFetching = action.payload
     },
     setActiveEmailListIndex: (state, action) => {
@@ -270,6 +284,7 @@ export const emailListSlice = createSlice({
 
 export const {
   setCoreStatus,
+  setSelectedEmails,
   setIsFetching,
   setActiveEmailListIndex,
   listAddEmailList,
@@ -600,5 +615,7 @@ export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
 export const selectNextPageToken = (state: any) =>
   state.email.emailList.nextPageToken
+export const selectSelectedEmails = (state: RootState) =>
+  state.email.selectedEmails
 
 export default emailListSlice.reducer

@@ -43,6 +43,7 @@ export interface IEmailListObjectSearch {
 
 export interface IEmailListState {
   emailList: IEmailListObject[]
+  selectedEmails: string[]
   searchList: IEmailListObjectSearch | null
   activeEmailListIndex: number
   coreStatus: string | null

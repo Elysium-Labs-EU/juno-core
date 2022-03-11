@@ -42,7 +42,22 @@ export const ThreadRow = styled.div<IThreadRow>`
   }
 `
 
-export const CellCheckbox = styled.div`
+interface ICellCheckbox {
+  inSelect: boolean
+}
+
+export const CellCheckbox = styled.div<ICellCheckbox>`
+  opacity: ${({ inSelect }) => (inSelect ? 100 : 0)};
+  margin-right: 16px;
+  display: flex;
+  place-items: center;
+
+  &:hover {
+    opacity: 100;
+  }
+`
+
+export const CelUnread = styled.div`
   display: flex;
   place-items: center;
 `
