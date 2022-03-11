@@ -153,7 +153,7 @@
     "babel-loader": "8.1.0",
     "concurrently": "^7.0.0",
     "cross-env": "^7.0.3",
-    "electron": "^16.0.7",
+    "electron": "^17.1.2",
     "electron-builder": "^22.14.5",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^19.0.4",
