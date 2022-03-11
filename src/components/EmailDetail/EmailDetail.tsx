@@ -58,13 +58,12 @@ const EmailDetail = () => {
   // This will set the activeEmailList when first opening the email.
   // It will also update the activeEmailList whenever an email is archived or removed.
   useEffect(() => {
+    setBaseState('loaded')
     if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
       setActiveEmailList(searchList)
-    }
-    if (emailList && emailList[activeEmailListIndex]) {
+    } else if (emailList && emailList[activeEmailListIndex]) {
       setActiveEmailList(emailList[activeEmailListIndex])
     }
-    setBaseState('loaded')
   }, [emailList, activeEmailListIndex, searchList])
 
   // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
