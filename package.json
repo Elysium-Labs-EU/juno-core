@@ -20,7 +20,7 @@
   "dependencies": {
     "@emotion/react": "^11.8.1",
     "@mui/base": "^5.0.0-alpha.70",
-    "@mui/material": "^5.2.8",
+    "@mui/material": "^5.5.0",
     "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
     "@mui/system": "^5.5.0",
     "@reduxjs/toolkit": "^1.8.0",
