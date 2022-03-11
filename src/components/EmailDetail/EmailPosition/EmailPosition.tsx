@@ -18,17 +18,21 @@ const EmailPosition = () => {
   const [loadingState, setLoadingState] = useState('idle')
 
   useEffect(() => {
+    let mounted = true
     const fetchLabel = async () => {
       const response = await labelApi().fetchSingleLabel(labelIds[0])
       try {
         if (response) {
-          setTotalThreads(response.threadsTotal)
+          mounted && setTotalThreads(response.threadsTotal)
         }
       } finally {
-        setLoadingState('loaded')
+        mounted && setLoadingState('loaded')
       }
     }
     fetchLabel()
+    return () => {
+      mounted = false
+    }
   }, [])
 
   return (
