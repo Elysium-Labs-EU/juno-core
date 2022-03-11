@@ -164,7 +164,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.5.1",
-    "wait-on": "^6.0.0",
+    "wait-on": "^6.0.1",
     "webpack": "4.44.2"
   }
 }
