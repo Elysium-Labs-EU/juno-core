@@ -141,7 +141,7 @@
     "@types/jest": "^27.4.0",
     "@types/lodash": "^4.14.178",
     "@types/material-ui": "^0.21.12",
-    "@types/node": "^17.0.13",
+    "@types/node": "^17.0.21",
     "@types/qs": "^6.9.7",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
