@@ -10,6 +10,9 @@ import NoMobileOverlay from '../NoMobileOverlay'
 import Search from '../Search/Search'
 import Settings from '../Settings/Settings'
 import Introduction from '../Introduction/Introduction'
+import { useAppSelector } from '../../Store/hooks'
+import { selectSelectedEmails } from '../../Store/emailListSlice'
+import SelectedOptions from './SelectedOptions/SelectedOptions'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -45,14 +48,20 @@ const ShowIntroduction = memo(() => {
   return null
 })
 
-const Header = () => (
-  <>
-    <ShowIntroduction />
-    <NoMobileOverlay />
-    <SetHeader />
-    <Search />
-    <Settings />
-  </>
-)
+const Header = () => {
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  return (
+    <>
+      <ShowIntroduction />
+      <NoMobileOverlay />
+      <SetHeader />
+      <Search />
+      <Settings />
+      {selectedEmails.length > 0 && (
+        <SelectedOptions />
+      )}
+    </>
+  )
+}
 
 export default Header

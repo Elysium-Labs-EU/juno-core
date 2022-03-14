@@ -14,6 +14,7 @@ import {
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from './More/NavigationMore'
 import * as S from './NavigationStyles'
+import * as GS from '../../../styles/globalStyles'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
@@ -70,11 +71,11 @@ const Navigation = () => {
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'navigation-more-menu' : undefined
 
   const NavControllers = useMemo(
@@ -124,18 +125,17 @@ const Navigation = () => {
           <S.NavItem>
             <CustomIconButton
               onClick={handleSpecificMenu('bottom-start')}
-              // aria-describedby={popperId}
               icon={<FiMoreHorizontal size={SIZE} />}
             />
           </S.NavItem>
-          <Popper
+          <GS.StyledPopper
             id={popperId}
             open={showMenu}
             anchorEl={anchorEl}
             placement={placement}
           >
             <SubMenuHeader />
-          </Popper>
+          </GS.StyledPopper>
         </S.NavList>
       </S.NavControls>
     ),

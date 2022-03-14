@@ -22,7 +22,8 @@ import {
 import {
   LoadEmailObject,
   MetaListThreadItem,
-  UpdateRequestParams,
+  UpdateRequestParamsBatch,
+  UpdateRequestParamsSingle,
 } from './metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
@@ -60,12 +61,15 @@ export const emailListSlice = createSlice({
         const currentState = state.selectedEmails
         currentState.push(id)
         state.selectedEmails = currentState
+        return
       }
       if (event === 'remove') {
         const currentState = state.selectedEmails
         const filteredResult = currentState.filter((item) => item !== id)
         state.selectedEmails = filteredResult
+        return
       }
+      state.selectedEmails = initialState.selectedEmails
     },
     setIsFetching: (state, action: PayloadAction<boolean>) => {
       state.isFetching = action.payload
@@ -194,6 +198,36 @@ export const emailListSlice = createSlice({
       ]
       state.emailList = updatedEmailList
     },
+    listRemoveItemDetailBatch: (state, action) => {
+      const {
+        messageIds,
+      }: {
+        messageIds: string[]
+      } = action.payload
+      const activeEmailListThreads =
+        state.emailList[state.activeEmailListIndex].threads
+
+      const filterArray = () => {
+        const filtered = activeEmailListThreads.filter(
+          (el) => messageIds.indexOf(el.id) === -1
+        )
+        return filtered
+      }
+      const newEmailListEntry: IEmailListObject = {
+        ...state.emailList[state.activeEmailListIndex],
+        threads: filterArray(),
+      }
+      const updatedEmailList: IEmailListObject[] = [
+        ...state.emailList.filter(
+          (threadList) =>
+            !threadList.labels.includes(
+              state.emailList[state.activeEmailListIndex].labels[0]
+            )
+        ),
+        newEmailListEntry,
+      ]
+      state.emailList = updatedEmailList
+    },
     listUpdateItemDetail: (state, action) => {
       const { responseEmail }: { responseEmail: any } = action.payload
 
@@ -290,6 +324,7 @@ export const {
   listAddEmailList,
   listAddItemDetail,
   listRemoveItemDetail,
+  listRemoveItemDetailBatch,
   listUpdateItemDetail,
   listUpdateSearchResults,
 } = emailListSlice.actions
@@ -441,7 +476,9 @@ export const loadEmails =
     }
   }
 
-export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
+export const updateEmailLabel = (
+  props: UpdateRequestParamsSingle
+): AppThunk => {
   const {
     messageId,
     request,
@@ -514,10 +551,18 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
         }
 
         if (!request.delete) {
-          messageApi().updateMessage({ messageId, request })
+          try {
+            await messageApi().updateMessage({ messageId, request })
+          } catch (err) {
+            dispatch(setServiceUnavailable('Error updating label.'))
+          }
         }
         if (request.delete) {
-          messageApi().thrashMessage({ messageId })
+          try {
+            await messageApi().thrashMessage({ messageId })
+          } catch (err) {
+            dispatch(setServiceUnavailable('Error updating label.'))
+          }
         }
         if (
           (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
@@ -534,6 +579,67 @@ export const updateEmailLabel = (props: UpdateRequestParams): AppThunk => {
         dispatch(setServiceUnavailable('Error updating label.'))
       }
       // }
+    } catch (err) {
+      console.error(err)
+      dispatch(setServiceUnavailable('Error updating label.'))
+    }
+  }
+}
+
+export const updateEmailLabelBatch = (
+  props: UpdateRequestParamsBatch
+): AppThunk => {
+  const {
+    request,
+    request: { removeLabelIds },
+  } = props
+
+  return async (dispatch, getState) => {
+    try {
+      const { emailList, selectedEmails, searchList } = getState().email
+
+      const staticIndexActiveEmailList = getState().email.activeEmailListIndex
+      const staticActiveEmailList =
+        staticIndexActiveEmailList === -1
+          ? searchList
+          : emailList[getState().email.activeEmailListIndex]
+
+      if (
+        staticActiveEmailList &&
+        Object.keys(staticActiveEmailList).length > 0
+      ) {
+        if (
+          (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
+          request.delete
+        ) {
+          dispatch(
+            listRemoveItemDetailBatch({
+              messageIds: selectedEmails,
+            })
+          )
+        }
+        for (let i = 0; i < selectedEmails.length; i += 1) {
+          if (!request.delete) {
+            try {
+              messageApi().updateMessage({
+                messageId: selectedEmails[i],
+                request,
+              })
+            } catch (err) {
+              dispatch(setServiceUnavailable('Error updating label.'))
+            }
+          }
+          if (request.delete) {
+            try {
+              messageApi().thrashMessage({ messageId: selectedEmails[i] })
+            } catch (err) {
+              dispatch(setServiceUnavailable('Error updating label.'))
+            }
+          }
+        }
+      } else {
+        dispatch(setServiceUnavailable('Error updating label.'))
+      }
     } catch (err) {
       console.error(err)
       dispatch(setServiceUnavailable('Error updating label.'))

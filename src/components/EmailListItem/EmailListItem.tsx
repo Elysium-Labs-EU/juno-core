@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import EmailHasAttachment from '../Elements/EmailHasAttachment'
@@ -77,9 +77,9 @@ const EmailListItem = memo(
       () =>
         RecipientName(
           staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
+          staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
           emailAddress
         ),
       []
@@ -88,9 +88,9 @@ const EmailListItem = memo(
       () =>
         SenderNamePartial(
           staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
+          staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
           emailAddress
         ),
       []
@@ -99,9 +99,9 @@ const EmailListItem = memo(
       () =>
         SenderNameFull(
           staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
+          staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
           emailAddress
         ),
       []
@@ -110,9 +110,9 @@ const EmailListItem = memo(
       () =>
         EmailSubject(
           staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ]
+          staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+          ]
         ),
       []
     )
@@ -122,9 +122,9 @@ const EmailListItem = memo(
       () =>
         EmailSnippet(
           staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ]
+          staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+          ]
         ),
       []
     )
