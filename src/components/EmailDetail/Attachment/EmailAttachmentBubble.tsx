@@ -21,6 +21,11 @@ const RenderAttachment = ({
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
+  const handleClick = () => {
+    dispatch(downloadAttachment({ messageId, attachmentData }))
+    setDownloaded(true)
+  }
+
   return (
     <S.Attachment key={attachmentData.partId}>
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
@@ -32,11 +37,7 @@ const RenderAttachment = ({
         </GS.TextMutedSmall>
       </S.AttachmentInner>
       <CustomIconButton
-        onClick={() =>
-          dispatch(downloadAttachment({ messageId, attachmentData })).then(
-            setDownloaded(true)
-          )
-        }
+        onClick={handleClick}
         icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
       />
     </S.Attachment>

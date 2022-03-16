@@ -14,6 +14,7 @@ import {
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import SubMenuHeader from './More/NavigationMore'
 import * as S from './NavigationStyles'
+import * as GS from '../../../styles/globalStyles'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
@@ -124,18 +125,17 @@ const Navigation = () => {
           <S.NavItem>
             <CustomIconButton
               onClick={handleSpecificMenu('bottom-start')}
-              // aria-describedby={popperId}
               icon={<FiMoreHorizontal size={SIZE} />}
             />
           </S.NavItem>
-          <Popper
+          <GS.StyledPopper
             id={popperId}
             open={showMenu}
             anchorEl={anchorEl}
             placement={placement}
           >
             <SubMenuHeader />
-          </Popper>
+          </GS.StyledPopper>
         </S.NavList>
       </S.NavControls>
     ),

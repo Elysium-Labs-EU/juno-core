@@ -39,6 +39,7 @@ const Button = styled.button<IButton>`
         ? `${theme.colorPurpleDark}`
         : `${theme.colorBlueDark}`};
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 
   &:disabled {

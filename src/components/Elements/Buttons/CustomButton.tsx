@@ -32,7 +32,7 @@ const Button = styled.button<IButton>`
   border-bottom-color: transparent;
   border-left-color: transparent;
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: 0.85rem;
   line-height: 1.5;
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
@@ -42,6 +42,8 @@ const Button = styled.button<IButton>`
 
   &:hover {
     color: ${theme.colorBlack};
+    border-color: ${theme.colorGrey};
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 
   &:disabled {

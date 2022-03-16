@@ -1,4 +1,5 @@
-import { memo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
+import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
@@ -23,6 +24,10 @@ import EmailLabel from '../Elements/EmailLabel'
 import { selectInSearch } from '../../Store/utilsSlice'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
+import {
+  selectSelectedEmails,
+  setSelectedEmails,
+} from '../../Store/emailListSlice'
 
 // If the user is on Draft list, show only draft emails.
 const shouldUseDraftOrRegular = (
@@ -53,53 +58,77 @@ const EmailListItem = memo(
   }) => {
     const { emailAddress } = useAppSelector(selectProfile)
     const inSearch = useAppSelector(selectInSearch)
+    const selectedEmails = useAppSelector(selectSelectedEmails)
     const storageLabels = useAppSelector(selectStorageLabels)
     const labelIds = useAppSelector(selectLabelIds)
     const { id } = email
     const dispatch = useAppDispatch()
 
-    const staticShouldUseDraftOrRegular = shouldUseDraftOrRegular(
-      labelIds,
-      email
+    const staticShouldUseDraftOrRegular = useMemo(
+      () => shouldUseDraftOrRegular(labelIds, email),
+      []
     )
-    const staticEmailLabels = emailLabels(staticShouldUseDraftOrRegular)
-    const staticRecipientName = RecipientName(
-      staticShouldUseDraftOrRegular.message ||
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
-      emailAddress
+    const staticEmailLabels = useMemo(
+      () => emailLabels(staticShouldUseDraftOrRegular),
+      []
     )
-    const staticSenderPartial = SenderNamePartial(
-      staticShouldUseDraftOrRegular.message ||
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
-      emailAddress
+    const staticRecipientName = useMemo(
+      () =>
+        RecipientName(
+          staticShouldUseDraftOrRegular.message ||
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
+          emailAddress
+        ),
+      []
     )
-    const staticSenderFull = SenderNameFull(
-      staticShouldUseDraftOrRegular.message ||
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
-      emailAddress
+    const staticSenderPartial = useMemo(
+      () =>
+        SenderNamePartial(
+          staticShouldUseDraftOrRegular.message ||
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
+          emailAddress
+        ),
+      []
     )
-    const staticSubjectFetch = EmailSubject(
-      staticShouldUseDraftOrRegular.message ||
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]
+    const staticSenderFull = useMemo(
+      () =>
+        SenderNameFull(
+          staticShouldUseDraftOrRegular.message ||
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
+          emailAddress
+        ),
+      []
+    )
+    const staticSubjectFetch = useMemo(
+      () =>
+        EmailSubject(
+          staticShouldUseDraftOrRegular.message ||
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ]
+        ),
+      []
     )
     const staticSubject =
       staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
-    const staticSnippet = EmailSnippet(
-      staticShouldUseDraftOrRegular.message ||
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]
+    const staticSnippet = useMemo(
+      () =>
+        EmailSnippet(
+          staticShouldUseDraftOrRegular.message ||
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ]
+        ),
+      []
     )
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
       openEmail({
         labelIds,
         id,
@@ -108,15 +137,32 @@ const EmailListItem = memo(
         inSearch,
         storageLabels,
       })
+    }, [])
+
+    const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+      dispatch(
+        setSelectedEmails([
+          {
+            id,
+            event: event.target.checked ? 'add' : 'remove',
+          },
+        ])
+      )
     }
 
     return (
       <S.ThreadBase emailLabels={staticEmailLabels}>
         <S.ThreadRow showLabel={showLabel}>
-          <div />
-          <S.CellCheckbox>
-            {staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />}
+          <S.CellCheckbox inSelect={selectedEmails.length > 0}>
+            <Checkbox
+              checked={selectedEmails.includes(id)}
+              onChange={handleCheckBox}
+              size="small"
+            />
           </S.CellCheckbox>
+          <S.CelUnread>
+            {staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />}
+          </S.CelUnread>
           <S.CellName onClick={handleClick} aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(draft.DRAFT_LABEL) ? (

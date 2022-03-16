@@ -2,13 +2,12 @@ import styled from 'styled-components'
 import * as themeConstants from '../../../../constants/themeConstants'
 
 export const Wrapper = styled.nav`
-  z-index: 10;
   position: absolute;
   padding: 0.5rem 0.75rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   background-color: ${themeConstants.colorWhite};
   border-radius: 5px;
-  z-index: 20;
+  z-index: 1200;
 `
 export const TopMenu = styled.ul`
   border-bottom: 1px solid ${themeConstants.colorGreyBorder};

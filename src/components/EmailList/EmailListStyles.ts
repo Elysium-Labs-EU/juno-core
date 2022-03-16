@@ -10,7 +10,7 @@ export const Scroll = styled.div`
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
+    display: none;
   }
 `
 

@@ -22,112 +22,110 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
 
-  const inlineImage = (attachmentData: IEmailAttachmentType) => {
-    dispatch(fetchAttachment({ attachmentData, messageId })).then(
-      (response: IInlineImageTypeResponse) => {
-        if (response) {
-          setBodyState((currState) => [...currState, response])
-        }
-      }
-    )
-  }
-
-  // This function recursively loops in the emailbody to find a body to decode.
-  const bodyDecoder = (inputObject: any) => {
-    const objectKeys = Object.keys(inputObject)
-    for (let i: number = 0; i < objectKeys.length; i += 1) {
-      if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
-        if (inputObject.body.size > 0) {
-          if (objectKeys[i] === 'body') {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                inputObject.body,
-                'attachmentId'
-              )
-            ) {
-              inlineImage(inputObject)
-            }
-            const str = decodeBase64(`${inputObject.body.data}`)
-            if (str) setBodyState((prevState) => [...prevState, str])
-          }
-        }
-        if (
-          inputObject.body.size === 0 ||
-          !Object.prototype.hasOwnProperty.call(inputObject, 'body')
-        ) {
-          if (objectKeys[i] === 'parts') {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[0],
-                'parts'
-              )
-            ) {
-              bodyDecoder(inputObject.parts[0])
-              if (inputObject.parts.length > 1) {
-                if (
-                  Object.prototype.hasOwnProperty.call(
-                    inputObject.parts[1],
-                    'body'
-                  ) &&
-                  Object.prototype.hasOwnProperty.call(
-                    inputObject.parts[1].body,
-                    'attachmentId'
-                  )
-                ) {
-                  bodyDecoder(inputObject.parts[1])
-                }
-              }
-              return
-            }
-            if (inputObject.parts.length > 1) {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1],
-                  'parts'
-                )
-              ) {
-                bodyDecoder(inputObject.parts[1])
-                return
-              }
-            }
-            if (inputObject.parts.length > 1) {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1],
-                  'body'
-                ) &&
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1].body,
-                  'attachmentId'
-                )
-              ) {
-                bodyDecoder(inputObject.parts[0])
-                bodyDecoder(inputObject.parts[1])
-                return
-              }
-            }
-            if (inputObject.parts.length > 1) {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1],
-                  'body'
-                )
-              ) {
-                bodyDecoder(inputObject.parts[1])
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
   useEffect(() => {
     let mounted = true
     if (messageId.length > 0) {
-      if (mounted) {
-        bodyDecoder(threadDetailBody)
+      const inlineImage = (attachmentData: IEmailAttachmentType) => {
+        dispatch(fetchAttachment({ attachmentData, messageId })).then(
+          (response: IInlineImageTypeResponse) => {
+            if (response && mounted) {
+              setBodyState((currState) => [...currState, response])
+            }
+          }
+        )
       }
+
+      // This function recursively loops in the emailbody to find a body to decode.
+      const bodyDecoder = (inputObject: any) => {
+        const objectKeys = Object.keys(inputObject)
+        for (let i: number = 0; i < objectKeys.length; i += 1) {
+          if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
+            if (inputObject.body.size > 0) {
+              if (objectKeys[i] === 'body') {
+                if (
+                  Object.prototype.hasOwnProperty.call(
+                    inputObject.body,
+                    'attachmentId'
+                  )
+                ) {
+                  inlineImage(inputObject)
+                }
+                const str = decodeBase64(`${inputObject.body.data}`)
+                if (str && mounted)
+                  setBodyState((prevState) => [...prevState, str])
+              }
+            }
+            if (
+              inputObject.body.size === 0 ||
+              !Object.prototype.hasOwnProperty.call(inputObject, 'body')
+            ) {
+              if (objectKeys[i] === 'parts') {
+                if (
+                  Object.prototype.hasOwnProperty.call(
+                    inputObject.parts[0],
+                    'parts'
+                  )
+                ) {
+                  bodyDecoder(inputObject.parts[0])
+                  if (inputObject.parts.length > 1) {
+                    if (
+                      Object.prototype.hasOwnProperty.call(
+                        inputObject.parts[1],
+                        'body'
+                      ) &&
+                      Object.prototype.hasOwnProperty.call(
+                        inputObject.parts[1].body,
+                        'attachmentId'
+                      )
+                    ) {
+                      bodyDecoder(inputObject.parts[1])
+                    }
+                  }
+                  return
+                }
+                if (inputObject.parts.length > 1) {
+                  if (
+                    Object.prototype.hasOwnProperty.call(
+                      inputObject.parts[1],
+                      'parts'
+                    )
+                  ) {
+                    bodyDecoder(inputObject.parts[1])
+                    return
+                  }
+                }
+                if (inputObject.parts.length > 1) {
+                  if (
+                    Object.prototype.hasOwnProperty.call(
+                      inputObject.parts[1],
+                      'body'
+                    ) &&
+                    Object.prototype.hasOwnProperty.call(
+                      inputObject.parts[1].body,
+                      'attachmentId'
+                    )
+                  ) {
+                    bodyDecoder(inputObject.parts[0])
+                    bodyDecoder(inputObject.parts[1])
+                    return
+                  }
+                }
+                if (inputObject.parts.length > 1) {
+                  if (
+                    Object.prototype.hasOwnProperty.call(
+                      inputObject.parts[1],
+                      'body'
+                    )
+                  ) {
+                    bodyDecoder(inputObject.parts[1])
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      bodyDecoder(threadDetailBody)
     }
     return () => {
       mounted = false

@@ -3,7 +3,10 @@ export interface UpdateRequest {
   delete?: boolean
 }
 
-export interface UpdateRequestParams {
+export interface UpdateRequestParamsBatch {
+  request: UpdateRequest
+}
+export interface UpdateRequestParamsSingle {
   location?: any
   messageId: string
   request: UpdateRequest

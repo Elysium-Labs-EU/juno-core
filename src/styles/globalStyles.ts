@@ -1,5 +1,6 @@
 import createTheme from '@mui/material/styles/createTheme'
 import styled, { createGlobalStyle } from 'styled-components'
+import { Popper } from '@mui/material'
 import * as themeConstants from '../constants/themeConstants'
 import UrbanistVariable from '../fonts/UrbanistVariableFontWght.ttf'
 import UrbanistVariableItalic from '../fonts/UrbanistItalicVariableFontWght.ttf'
@@ -53,13 +54,15 @@ export const OuterContainer = styled.div<IOuterContainer>`
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 
+export const StyledPopper = styled(Popper)`
+  z-index: 1200;
+`
+
 export const MenuPopper = styled.div`
-  z-index: 10;
   position: relative;
   padding: 0.5rem;
   box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
     0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07);
-  /* box-shadow: 0 0 10px 0 hsla(0, 0%, 0%, 0.01); */
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
 `
