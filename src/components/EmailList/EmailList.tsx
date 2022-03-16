@@ -8,7 +8,6 @@ import {
   resetValuesEmailDetail,
   selectActiveEmailListIndex,
   selectEmailList,
-  selectSelectedEmails,
   setActiveEmailListIndex,
 } from '../../Store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'

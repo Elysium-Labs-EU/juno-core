@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -21,8 +17,5 @@
     "allowJs": true
   },
   "baseUrl": "src/",
-  "include": [
-    "./src/**/*",
-    "./public"
-  ]
+  "include": ["./src/**/*", "./public", "globals.d.ts"]
 }

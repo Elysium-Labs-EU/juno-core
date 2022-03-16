@@ -466,6 +466,13 @@ export const loadEmails =
         getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       } else {
         dispatch(setLoadedInbox(labelIds))
+        dispatch(
+          listAddEmailList({
+            labels: labelIds,
+            threads: [],
+            nextPageToken: null,
+          })
+        )
         getState().utils.isLoading && dispatch(setIsLoading(false))
         getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       }
