@@ -1,11 +1,10 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
+import * as themeConstants from '../../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   width: 100%;
   position: absolute;
   z-index: 1100;
-  /* background: rgba(240, 240, 240, 0.7); */
   background: rgb(240, 240, 240);
   background: linear-gradient(
     180deg,
@@ -16,4 +15,16 @@ export const Wrapper = styled.div`
   backdrop-filter: blur(20px);
   padding: 5px 40px;
   box-sizing: border-box;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+`
+
+export const Inner = styled.div``
+
+export const SelectedLabelsText = styled.span`
+  font-size: 13px;
+  user-select: none;
+  color: ${themeConstants.colorLightGrey};
+  margin-right: 16px;
 `

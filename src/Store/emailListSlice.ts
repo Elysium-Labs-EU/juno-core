@@ -56,17 +56,20 @@ export const emailListSlice = createSlice({
       state.coreStatus = action.payload
     },
     setSelectedEmails: (state, action: PayloadAction<any>) => {
-      const { event, id } = action.payload
-      if (event === 'add') {
-        const currentState = state.selectedEmails
-        currentState.push(id)
-        state.selectedEmails = currentState
-        return
-      }
-      if (event === 'remove') {
-        const currentState = state.selectedEmails
-        const filteredResult = currentState.filter((item) => item !== id)
-        state.selectedEmails = filteredResult
+      if (action.payload.length > 0) {
+        for (let i = 0; i < action.payload.length; i += 1) {
+          const { event, id } = action.payload[i]
+          if (event === 'add') {
+            const currentState = state.selectedEmails
+            currentState.push(id)
+            state.selectedEmails = currentState
+          }
+          if (event === 'remove') {
+            const currentState = state.selectedEmails
+            const filteredResult = currentState.filter((item) => item !== id)
+            state.selectedEmails = filteredResult
+          }
+        }
         return
       }
       state.selectedEmails = initialState.selectedEmails
