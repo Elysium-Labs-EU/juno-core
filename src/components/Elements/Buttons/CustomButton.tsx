@@ -20,8 +20,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${ (props) =>
-    props.suppressed ? `${ theme.colorGrey } ` : `${ theme.colorBlack } ` };
+  color: ${(props) =>
+    props.suppressed ? `${theme.colorGrey} ` : `${theme.colorBlack} `};
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -41,9 +41,9 @@ const Button = styled.button<IButton>`
   font-family: 'Raleway Variable', sans-serif;
 
   &:hover {
-    color: ${ theme.colorBlack };
-    border-color: ${ theme.colorGrey };
-    box-shadow: rgba(0,0,0,0.1) 0px 0px 10px;
+    color: ${theme.colorBlack};
+    border-color: ${theme.colorGrey};
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 
   &:disabled {

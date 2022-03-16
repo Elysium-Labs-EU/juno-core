@@ -57,9 +57,7 @@ const Header = () => {
       <SetHeader />
       <Search />
       <Settings />
-      {selectedEmails.length > 0 && (
-        <SelectedOptions />
-      )}
+      {selectedEmails.length > 0 && <SelectedOptions />}
     </>
   )
 }

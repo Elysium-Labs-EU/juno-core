@@ -76,9 +76,9 @@ const EmailListItem = memo(
       () =>
         RecipientName(
           staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
           emailAddress
         ),
       []
@@ -87,9 +87,9 @@ const EmailListItem = memo(
       () =>
         SenderNamePartial(
           staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
           emailAddress
         ),
       []
@@ -98,9 +98,9 @@ const EmailListItem = memo(
       () =>
         SenderNameFull(
           staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ],
           emailAddress
         ),
       []
@@ -109,9 +109,9 @@ const EmailListItem = memo(
       () =>
         EmailSubject(
           staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ]
         ),
       []
     )
@@ -121,9 +121,9 @@ const EmailListItem = memo(
       () =>
         EmailSnippet(
           staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
+            staticShouldUseDraftOrRegular.messages![
+              staticShouldUseDraftOrRegular.messages!.length - 1
+            ]
         ),
       []
     )
@@ -141,10 +141,12 @@ const EmailListItem = memo(
 
     const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
       dispatch(
-        setSelectedEmails([{
-          id,
-          event: event.target.checked ? 'add' : 'remove',
-        }])
+        setSelectedEmails([
+          {
+            id,
+            event: event.target.checked ? 'add' : 'remove',
+          },
+        ])
       )
     }
 
