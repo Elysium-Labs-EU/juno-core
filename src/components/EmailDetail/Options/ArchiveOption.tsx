@@ -6,7 +6,7 @@ import { selectLabelIds } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
-import ArchiveMail from '../../EmailOptions/ArchiveMail'
+import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 
 const ArchiveOption = ({
@@ -19,7 +19,7 @@ const ArchiveOption = ({
   const keysPressed = useMultiKeyPress()
 
   const handleEvent = useCallback(() => {
-    ArchiveMail({
+    archiveMail({
       messageId: threadDetail.id,
       labelIds,
       dispatch,

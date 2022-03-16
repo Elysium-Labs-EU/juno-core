@@ -43,6 +43,7 @@ const Button = styled.button<IButton>`
   &:hover {
     color: ${ theme.colorBlack };
     border-color: ${ theme.colorGrey };
+    box-shadow: rgba(0,0,0,0.1) 0px 0px 10px;
   }
 
   &:disabled {

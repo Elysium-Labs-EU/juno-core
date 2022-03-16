@@ -21,32 +21,33 @@ const Button = styled.button<IButton>`
   font-family: 'Raleway Variable', sans-serif;
   border-radius: 20px;
   border: none;
-  background-color: ${({ variant }) =>
-    variant === 'primary' ? `${theme.colorPurple}` : `${theme.colorBlue}`};
+  background-color: ${ ({ variant }) =>
+    variant === 'primary' ? `${ theme.colorPurple }` : `${ theme.colorBlue }` };
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 0.4rem 0.8rem;
     span {
-      color: ${theme.colorWhite};
+      color: ${ theme.colorWhite };
       font-size: 1rem;
     }
   }
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `${theme.colorPurpleDark}`
-        : `${theme.colorBlueDark}`};
+    background-color: ${ ({ variant }) =>
+    variant === 'primary'
+      ? `${ theme.colorPurpleDark }`
+      : `${ theme.colorBlueDark }` };
     cursor: pointer;
+    box-shadow: rgba(0,0,0,0.1) 0px 0px 10px;
   }
 
   &:disabled {
-    background-color: ${theme.colorGreyHover};
+    background-color: ${ theme.colorGreyHover };
     opacity: 38%;
     div {
       span {
-        color: ${theme.colorBlack};
+        color: ${ theme.colorBlack };
       }
     }
   }

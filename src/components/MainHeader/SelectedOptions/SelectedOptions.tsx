@@ -1,6 +1,10 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { selectSelectedEmails, setSelectedEmails, updateEmailLabelBatch } from '../../../Store/emailListSlice'
+import {
+    selectSelectedEmails,
+    setSelectedEmails,
+    updateEmailLabelBatch,
+} from '../../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import CustomButton from '../../Elements/Buttons/CustomButton'
@@ -14,24 +18,30 @@ const SelectedOptions = () => {
     const dispatch = useAppDispatch()
     const selectedEmails = useAppSelector(selectSelectedEmails)
     const location = useLocation()
-    const request = {
-        removeLabelIds: [
-            ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
-        ],
-    }
+    const [currentLocation, setCurrentLocation] = useState<string | null>(null)
 
-    // TODO: On navigation, clean up the selectedEmail list
+    useEffect(() => {
+        if (location.pathname !== currentLocation) {
+            setCurrentLocation(location.pathname)
+        }
+        if (currentLocation !== null && currentLocation !== location.pathname) {
+            if (selectedEmails.length > 0) {
+                dispatch(setSelectedEmails([]))
+            }
+        }
+    }, [location])
 
-    // useEffect(() => {
-    //     if (selectedEmails.length > 0) {
-    //         setSelectedEmails([])
-    //     }
-    // }, [location])
 
-    const handleArchiveAll = () => {
+    const handleArchiveAll = useCallback(() => {
+        const request = {
+            removeLabelIds: [
+                ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
+            ],
+        }
+
         dispatch(updateEmailLabelBatch({ request }))
         dispatch(setSelectedEmails([]))
-    }
+    }, [labelIds])
 
     return (
         <S.Wrapper>
