@@ -35,14 +35,24 @@ export const draftsSlice = createSlice({
       }
     },
     listRemoveDraft: (state, action) => {
-      const { threadId } = action.payload
+      const { threadId }: { threadId: string } = action.payload
       const copyCurrentDraftList = state.draftList
-      if (!Array.isArray(threadId)) {
-        const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
-          (item) => item.message.threadId !== threadId
+      const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
+        (item) => item.message.threadId !== threadId
+      )
+      state.draftList = newDraftList
+    },
+    listRemoveDraftBatch: (state, action) => {
+      const { threadIds }: { threadIds: string[] } = action.payload
+      const copyCurrentDraftList = state.draftList
+
+      const filterArray = () => {
+        const filtered = copyCurrentDraftList.filter(
+          (el) => threadIds.indexOf(el.message.threadId) === -1
         )
-        state.draftList = newDraftList
+        return filtered
       }
+      state.draftList = filterArray()
     },
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
@@ -60,6 +70,7 @@ export const {
   listAddDraft,
   listUpdateDraft,
   listRemoveDraft,
+  listRemoveDraftBatch,
   setDraftListLoaded,
   resetDraftDetails,
 } = draftsSlice.actions
