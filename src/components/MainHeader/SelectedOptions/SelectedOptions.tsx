@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
-  listRemoveItemDetailBatch,
   selectActiveEmailListIndex,
   selectEmailList,
   selectSelectedEmails,
@@ -14,7 +13,7 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as S from './SelectedOptionsStyles'
 import * as draft from '../../../constants/draftConstants'
 import * as global from '../../../constants/globalConstants'
-import { listRemoveDraftBatch } from '../../../Store/draftsSlice'
+import { deleteDraftBatch } from '../../../Store/draftsSlice'
 
 const ARCHIVE_BUTTON_LABEL = 'Archive'
 const DISCARD_BUTTON_LABEL = 'Discard'
@@ -68,14 +67,7 @@ const SelectedOptions = () => {
   }, [labelIds])
 
   const handleDiscardAll = useCallback(() => {
-    dispatch(
-      listRemoveItemDetailBatch({
-        messageIds: selectedEmails,
-      })
-    )
-    dispatch(listRemoveDraftBatch({ threadIds: selectedEmails }))
-    // dispatch(updateEmailLabelBatch({ request }))
-    dispatch(setSelectedEmails([]))
+    dispatch(deleteDraftBatch())
   }, [labelIds])
 
   return (

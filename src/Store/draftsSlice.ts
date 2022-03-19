@@ -18,6 +18,7 @@ import {
 import bodyDecoder from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
+import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
 
 const initialState: DraftsState = Object.freeze({
   draftListLoaded: false,
@@ -218,6 +219,35 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
     } catch (err) {
       console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
+    }
+  }
+}
+
+export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
+  const { selectedEmails } = getState().email
+  const { draftList } = getState().drafts
+  dispatch(
+    listRemoveItemDetailBatch({
+      messageIds: selectedEmails,
+    })
+  )
+  dispatch(setSelectedEmails([]))
+  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails }))
+  for (let i = 0; selectedEmails.length > i; i += 1) {
+    try {
+      const draftId =
+        draftList.length > 0 &&
+        draftList.find((draft) => draft.message.threadId === selectedEmails[i])
+      if (
+        typeof draftId === 'object' &&
+        !Array.isArray(draftId) &&
+        draftId !== null
+      ) {
+        draftApi().deleteDraft(draftId.id)
+      }
+    } catch (err) {
+      console.error(err)
+      dispatch(setServiceUnavailable('Error deleting draft.'))
     }
   }
 }
