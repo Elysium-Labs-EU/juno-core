@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchEmails } from './emailListSlice'
 import type { RootState } from './store'
 
 interface IUtilsState {
@@ -47,6 +48,26 @@ export const utilsSlice = createSlice({
     setEmailFetchSize(state, action: PayloadAction<number>) {
       state.emailFetchSize = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchEmails.pending, (state, { meta: { arg } }) => {
+      const { silentLoading } = arg
+      if (!state.isLoading && !silentLoading) {
+        state.isLoading = true
+      }
+      if (!state.isSilentLoading && silentLoading) {
+        state.isSilentLoading = true
+      }
+    })
+    builder.addCase(fetchEmails.fulfilled, (state) => {
+      state.isLoading = false
+      state.isSilentLoading = false
+    })
+    builder.addCase(fetchEmails.rejected, (state) => {
+      state.isLoading = false
+      state.isSilentLoading = false
+      state.serviceUnavailable = 'Something went wrong whilst loading data.'
+    })
   },
 })
 

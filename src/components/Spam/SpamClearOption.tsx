@@ -36,7 +36,6 @@ const Spamclearoption = () => {
 
   const archiveAllSpam = () => {
     setOpen(false)
-    console.log('remove spam')
   }
 
   return (

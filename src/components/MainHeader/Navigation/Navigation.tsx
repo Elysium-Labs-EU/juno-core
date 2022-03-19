@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import Popper, { PopperPlacementType } from '@mui/material/Popper'
+import { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import {
   FiCheckSquare,

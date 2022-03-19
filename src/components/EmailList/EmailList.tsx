@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { loadDraftList } from '../../Store/draftsSlice'
 import {
-  loadEmails,
+  fetchEmails,
   refreshEmailFeed,
   resetValuesEmailDetail,
   selectActiveEmailListIndex,
@@ -105,7 +105,7 @@ const EmailList = () => {
           nextPageToken: null,
         }
 
-        mounted && dispatch(loadEmails(params))
+        mounted && dispatch(fetchEmails(params))
         if (labelIds.includes(draft.DRAFT_LABEL)) {
           mounted && dispatch(loadDraftList())
         }

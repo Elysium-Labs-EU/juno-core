@@ -17,5 +17,5 @@ export default {
     return [`eslint --max-warnings=10 ${filesToLint}`]
   },
   '*.{js,jsx,ts,tsx,json,css}': ['prettier --write'],
-  '*.{ts,tsx}': ['tsc-files --noEmit'],
+  // '*.{ts,tsx}': ['tsc-files --noEmit'],
 }

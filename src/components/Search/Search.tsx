@@ -154,7 +154,7 @@ const Search = () => {
 
   const fetchSearchThreads = async (searchBody: any) => {
     try {
-      const response: IEmailListObject = await threadApi().getThreads(
+      const response: IEmailListObject = await threadApi({}).getThreads(
         searchBody
       )
       if ((response?.resultSizeEstimate ?? 0) > 0) {
@@ -162,7 +162,7 @@ const Search = () => {
         const loadCount = response.threads.length
 
         response.threads.forEach(async (item) => {
-          const threadDetail = await threadApi().getThreadDetail(item.id)
+          const threadDetail = await threadApi({}).getThreadDetail(item.id)
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {
             if (searchValueRef.current !== searchValue) {
