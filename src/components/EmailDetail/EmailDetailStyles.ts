@@ -160,8 +160,18 @@ interface IFromCCContainer {
   multipleComponents: boolean
 }
 
-export const FromCCContainer = styled.div<IFromCCContainer>`
-  margin-top: 0.5rem;
+export const FromContainer = styled.div<IFromCCContainer>`
+  align-items: center;
+  display: flex;
+  border-bottom: ${({ multipleComponents }) =>
+    multipleComponents
+      ? 'none'
+      : `1px solid ${themeConstants.colorGreyBorder}`};
+  padding-top: 16px;
+  padding-bottom: 8px;
+`
+
+export const ToBCCContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
   div {
@@ -171,10 +181,11 @@ export const FromCCContainer = styled.div<IFromCCContainer>`
       multipleComponents ? '2rem' : 0};
   }
   border-bottom: 1px solid ${themeConstants.colorGreyBorder};
-  padding-bottom: 1rem;
+  padding-top: 8px;
+  padding-bottom: 16px;
 `
 
-export const FromBCCInner = styled.div`
+export const ToFromBCCInner = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -232,6 +243,7 @@ export const SmallTextTruncated = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: ${themeConstants.smallFontSize};
+  padding-right: 6px;
 `
 
 export const ComposeWrapper = styled.div`

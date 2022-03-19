@@ -1,4 +1,5 @@
-export const FROM = 'From'
+export const FROM_LABEL = 'From'
+export const TO_LABEL = 'To'
 export const MESSAGE_ID_LABEL = 'Message ID:'
 export const ERROR_EMAIL = 'Error loading email'
 export const BUTTON_REPLY = 'Reply'
