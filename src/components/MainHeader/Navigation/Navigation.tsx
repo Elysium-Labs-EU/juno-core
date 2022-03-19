@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import { PopperPlacementType } from '@mui/material/Popper'
 import Tooltip from '@mui/material/Tooltip'
 import {
   FiCheckSquare,
@@ -12,25 +11,23 @@ import {
   FiSearch,
 } from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import SubMenuHeader from './More/NavigationMore'
 import * as S from './NavigationStyles'
-import * as GS from '../../../styles/globalStyles'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
 import { setInSearch } from '../../../Store/utilsSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import NavigationMore from './More/NavigationMore'
 
 const SIZE = 16
 
 const Navigation = () => {
   const [active, setActive] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [placement, setPlacement] = useState<PopperPlacementType>()
-  const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
+  const open = Boolean(anchorEl)
 
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
@@ -69,14 +66,13 @@ const Navigation = () => {
     }
   }, [keysPressed])
 
-  const handleSpecificMenu =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
-  const popperId = showMenu ? 'navigation-more-menu' : undefined
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   const NavControllers = useMemo(
     () => (
@@ -124,22 +120,19 @@ const Navigation = () => {
 
           <S.NavItem>
             <CustomIconButton
-              onClick={handleSpecificMenu('bottom-start')}
+              onClick={handleClick}
               icon={<FiMoreHorizontal size={SIZE} />}
             />
           </S.NavItem>
-          <GS.StyledPopper
-            id={popperId}
-            open={showMenu}
+          <NavigationMore
+            open={open}
             anchorEl={anchorEl}
-            placement={placement}
-          >
-            <SubMenuHeader />
-          </GS.StyledPopper>
+            handleClose={handleClose}
+          />
         </S.NavList>
       </S.NavControls>
     ),
-    [active, showMenu]
+    [active, open]
   )
 
   return NavControllers

@@ -2,25 +2,24 @@ import styled from 'styled-components'
 import * as themeConstants from '../../../../constants/themeConstants'
 
 export const Wrapper = styled.nav`
-  position: absolute;
-  padding: 0.5rem 0.75rem;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  padding: 0.5rem;
   background-color: ${themeConstants.colorWhite};
   border-radius: 5px;
-  z-index: 1200;
+  .MuiMenuItem-root {
+    height: 32px !important;
+  }
 `
 export const TopMenu = styled.ul`
-  border-bottom: 1px solid ${themeConstants.colorGreyBorder};
   margin: 0;
-  padding: 0 0 0.3rem 0;
+  padding: 0;
 `
 
-export const InnerMenu = styled.li`
-  display: flex;
-  flex-flow: column;
-  a {
-    margin: 0.3rem 0;
-  }
+export const TopMenuSectionWrapper = styled.div`
+  padding-bottom: 8px;
+`
+
+export const BottomMenuSectionWrapper = styled.div`
+  padding-top: 8px;
 `
 
 export const MenuItemButton = styled.button`
@@ -42,7 +41,7 @@ export const MenuItemButton = styled.button`
   &:active {
     color: ${themeConstants.colorBlack};
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 400;
   }
 
   &:disabled {
