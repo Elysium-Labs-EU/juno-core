@@ -66,7 +66,6 @@ export const getAllContacts =
         dispatch(setContactsLoaded(true))
       }
     } catch (err) {
-      console.log(err)
       dispatch(setServiceUnavailable('Error fetching contacts.'))
     }
   }
@@ -100,7 +99,6 @@ export const querySpecificContacts =
         dispatch(setContactsLoaded(true))
       }
     } catch (err) {
-      console.log(err)
       dispatch(setServiceUnavailable('Error fetching contacts.'))
     }
   }

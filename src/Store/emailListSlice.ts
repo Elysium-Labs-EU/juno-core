@@ -588,7 +588,6 @@ export const updateEmailLabel = (
       } else {
         dispatch(setServiceUnavailable('Error updating label.'))
       }
-      // }
     } catch (err) {
       console.error(err)
       dispatch(setServiceUnavailable('Error updating label.'))

@@ -18,9 +18,7 @@ export const fetchToken = () => {
 }
 
 export const errorHandling = (err: any) => {
-  console.log(err)
   if (process.env.NODE_ENV === 'development') {
-    console.error(err)
     if (err.response) {
       return err.response.data
     }

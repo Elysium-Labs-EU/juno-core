@@ -75,7 +75,6 @@ export const createLabel =
         dispatch(setServiceUnavailable('Error creating label.'))
       }
     } catch (err) {
-      console.log(err)
       dispatch(setServiceUnavailable('Error creating label.'))
     }
     return null
@@ -100,7 +99,6 @@ export const fetchLabelIds =
         dispatch(setServiceUnavailable('Error fetching label.'))
       }
     } catch (err) {
-      console.log(err)
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
     // TO-DO: What if multiple labels are used

@@ -7,6 +7,7 @@ import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
 import { EmailDetailState } from './emailDetailTypes'
 import type { AppThunk, RootState } from './store'
+import { setServiceUnavailable } from './utilsSlice'
 
 const initialState: EmailDetailState = Object.freeze({
   currEmail: '',
@@ -83,7 +84,6 @@ export const fetchAttachment = ({
       }
       return null
     } catch (err) {
-      console.log(err)
       return null
     }
   }
@@ -101,7 +101,7 @@ export const downloadAttachment = ({
     filename,
     mimeType,
   } = attachmentData
-  return async () => {
+  return async (dispatch) => {
     try {
       const fetchedAttachment = await messageApi().getAttachment({
         messageId,
@@ -113,7 +113,7 @@ export const downloadAttachment = ({
         fileSaver(blobData, filename)
       }
     } catch (err) {
-      console.log(err)
+      dispatch(setServiceUnavailable('Cannot download attachment'))
     }
   }
 }
