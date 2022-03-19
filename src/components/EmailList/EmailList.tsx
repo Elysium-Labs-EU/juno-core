@@ -28,6 +28,7 @@ import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
+import isPromise from '../../utils/isPromise'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -97,6 +98,7 @@ const EmailList = () => {
 
   useEffect(() => {
     let mounted = true
+    let promise: any = {}
     if (labelIds && !labelIds.includes(global.ARCHIVE_LABEL)) {
       if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
         const params = {
@@ -105,7 +107,9 @@ const EmailList = () => {
           nextPageToken: null,
         }
 
-        mounted && dispatch(fetchEmails(params))
+        if (mounted) {
+          promise = dispatch(fetchEmails(params))
+        }
         if (labelIds.includes(draft.DRAFT_LABEL)) {
           mounted && dispatch(loadDraftList())
         }
@@ -134,6 +138,9 @@ const EmailList = () => {
     }
     return () => {
       mounted = false
+      if (isPromise(promise)) {
+        promise.abort()
+      }
     }
   }, [labelIds])
 
