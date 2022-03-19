@@ -72,7 +72,6 @@ const DetailDisplaySelector = ({
         <ReadUnreadMessage
           message={message}
           threadDetail={threadDetail}
-          FROM={local.FROM}
           messageIndex={index}
         />
       )
@@ -83,7 +82,6 @@ const DetailDisplaySelector = ({
     <ReadUnreadMessage
       message={message}
       threadDetail={threadDetail}
-      FROM={local.FROM}
       messageIndex={index}
     />
   )

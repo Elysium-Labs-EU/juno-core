@@ -2,6 +2,7 @@ import { Contact } from '../../../Store/contactsTypes'
 import { IEmailMessage } from '../../../Store/emailListTypes'
 import convertToContact from '../../../utils/convertToContact'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
+import * as global from '../../../constants/globalConstants'
 
 export const NO_SENDER = '(No sender)'
 
@@ -14,7 +15,7 @@ const SenderNamePartial = (
     const from = findPayloadHeadersData(query, message)
     if (from.length > 0) {
       if (from.includes(emailAddress)) {
-        return { name: 'me', emailAddress }
+        return { name: global.ME_LABEL, emailAddress }
       }
       return convertToContact(from)
     }
