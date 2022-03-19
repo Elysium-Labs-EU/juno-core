@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
@@ -20,8 +20,15 @@ import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
 
+export const fetchDrafts = createAsyncThunk(
+  'drafts/fetchDrafts',
+  async (obj, { signal }) => {
+    const response = await draftApi(signal).getDrafts()
+    return response.drafts
+  }
+)
+
 const initialState: DraftsState = Object.freeze({
-  draftListLoaded: false,
   draftList: [],
   draftDetails: {},
 })
@@ -30,11 +37,6 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {
-    listAddDraft: (state, action) => {
-      if (Array.isArray(action.payload)) {
-        state.draftList = action.payload
-      }
-    },
     listRemoveDraft: (state, action) => {
       const { threadId }: { threadId: string } = action.payload
       const copyCurrentDraftList = state.draftList
@@ -58,36 +60,23 @@ export const draftsSlice = createSlice({
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
     },
-    setDraftListLoaded: (state, action) => {
-      state.draftListLoaded = action.payload
-    },
     resetDraftDetails: (state) => {
       state.draftDetails = {}
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchDrafts.fulfilled, (state, { payload }) => {
+      state.draftList = payload
+    })
+  },
 })
 
 export const {
-  listAddDraft,
   listUpdateDraft,
   listRemoveDraft,
   listRemoveDraftBatch,
-  setDraftListLoaded,
   resetDraftDetails,
 } = draftsSlice.actions
-
-export const loadDraftList = (): AppThunk => async (dispatch) => {
-  try {
-    const draftList = await draftApi().getDrafts()
-    if (draftList.resultSizeEstimate > 0) {
-      dispatch(listAddDraft(draftList.drafts))
-    }
-  } catch (err) {
-    dispatch(setServiceUnavailable('Error getting Draft list.'))
-  } finally {
-    dispatch(setDraftListLoaded(true))
-  }
-}
 
 export const createUpdateDraft = (): AppThunk => async (dispatch, getState) => {
   try {
@@ -257,8 +246,6 @@ export const deleteDraft =
   }
 
 export const selectDraft = (state: RootState) => state.drafts.draftList
-export const selectDraftListLoaded = (state: RootState) =>
-  state.drafts.draftListLoaded
 export const selectDraftDetails = (state: RootState) =>
   state.drafts.draftDetails
 

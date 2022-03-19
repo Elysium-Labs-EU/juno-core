@@ -57,7 +57,6 @@ export const TrackComposeEmail =
       }
       dispatch(updateComposeEmail(props))
     } catch (err) {
-      console.error(err)
       dispatch(setServiceUnavailable('Error updating compose email.'))
     }
   }
@@ -110,7 +109,6 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
       }
     }
   } catch (err) {
-    console.error(err)
     dispatch(setServiceUnavailable('Error sending email.'))
   }
   return null

@@ -326,8 +326,7 @@ export const emailListSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchEmails.fulfilled,
-      (state, { payload, payload: { labels, response } }) => {
-        console.log(payload)
+      (state, { payload: { labels, response } }) => {
         if (labels && response.threads) {
           // Find emailList sub-array index
           const arrayIndex: number = state.emailList

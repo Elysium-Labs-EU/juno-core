@@ -1,7 +1,7 @@
 import { memo, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
-import { loadDraftList } from '../../Store/draftsSlice'
+import { fetchDrafts } from '../../Store/draftsSlice'
 import {
   fetchEmails,
   refreshEmailFeed,
@@ -98,7 +98,8 @@ const EmailList = () => {
 
   useEffect(() => {
     let mounted = true
-    let promise: any = {}
+    let emailPromise: any = {}
+    let draftPromise: any = {}
     if (labelIds && !labelIds.includes(global.ARCHIVE_LABEL)) {
       if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
         const params = {
@@ -108,10 +109,10 @@ const EmailList = () => {
         }
 
         if (mounted) {
-          promise = dispatch(fetchEmails(params))
+          emailPromise = dispatch(fetchEmails(params))
         }
-        if (labelIds.includes(draft.DRAFT_LABEL)) {
-          mounted && dispatch(loadDraftList())
+        if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+          draftPromise = dispatch(fetchDrafts())
         }
       }
       if (
@@ -130,16 +131,19 @@ const EmailList = () => {
             nextPageToken: null,
           }
           mounted && dispatch(refreshEmailFeed(params))
-          if (labelIds.includes(draft.DRAFT_LABEL)) {
-            mounted && dispatch(loadDraftList())
+          if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+            draftPromise = dispatch(fetchDrafts())
           }
         }
       }
     }
     return () => {
       mounted = false
-      if (isPromise(promise)) {
-        promise.abort()
+      if (isPromise(emailPromise)) {
+        emailPromise.abort()
+      }
+      if (isPromise(draftPromise)) {
+        draftPromise.abort()
       }
     }
   }, [labelIds])

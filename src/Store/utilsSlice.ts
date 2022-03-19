@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { fetchDrafts } from './draftsSlice'
 import { fetchEmails } from './emailListSlice'
 import type { RootState } from './store'
 
@@ -50,6 +51,11 @@ export const utilsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchDrafts.rejected, (state, { meta }) => {
+      if (!meta.aborted) {
+        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+      }
+    })
     builder.addCase(fetchEmails.pending, (state, { meta: { arg } }) => {
       const { silentLoading } = arg
       if (!state.isLoading && !silentLoading) {
@@ -63,10 +69,12 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
     })
-    builder.addCase(fetchEmails.rejected, (state) => {
+    builder.addCase(fetchEmails.rejected, (state, { meta }) => {
       state.isLoading = false
       state.isSilentLoading = false
-      state.serviceUnavailable = 'Something went wrong whilst loading data.'
+      if (!meta.aborted) {
+        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+      }
     })
   },
 })

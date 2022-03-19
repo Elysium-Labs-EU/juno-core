@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios'
 import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
-const draftApi = () => ({
+const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: any) => {
     try {
       const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data, {
@@ -41,6 +41,7 @@ const draftApi = () => ({
           headers: {
             Authorization: fetchToken(),
           },
+          signal,
         }
       )
       return res.data
