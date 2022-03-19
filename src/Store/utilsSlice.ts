@@ -91,7 +91,7 @@ export const {
 
 export const selectIsSettingsOpen = (state: RootState) =>
   state.utils.isSettingsOpen
-export const setAvatarVisibility = (state: RootState) =>
+export const selectAvatarVisibility = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
 export const selectIsLoading = (state: RootState) => state.utils.isLoading

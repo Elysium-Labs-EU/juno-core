@@ -2,7 +2,7 @@ import { FormControlLabel, Switch } from '@mui/material'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import {
-  setAvatarVisibility,
+  selectAvatarVisibility,
   setShowAvatar,
 } from '../../../../Store/utilsSlice'
 
@@ -11,7 +11,7 @@ const SWITCH_LABEL = 'Show avatars'
 
 const showAvatar = () => {
   const dispatch = useAppDispatch()
-  const avatarVisible = useAppSelector(setAvatarVisibility)
+  const avatarVisible = useAppSelector(selectAvatarVisibility)
 
   useEffect(() => {
     if (
