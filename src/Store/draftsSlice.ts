@@ -18,6 +18,7 @@ import {
 import bodyDecoder from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
+import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
 
 const initialState: DraftsState = Object.freeze({
   draftListLoaded: false,
@@ -35,14 +36,24 @@ export const draftsSlice = createSlice({
       }
     },
     listRemoveDraft: (state, action) => {
-      const { threadId } = action.payload
+      const { threadId }: { threadId: string } = action.payload
       const copyCurrentDraftList = state.draftList
-      if (!Array.isArray(threadId)) {
-        const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
-          (item) => item.message.threadId !== threadId
+      const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
+        (item) => item.message.threadId !== threadId
+      )
+      state.draftList = newDraftList
+    },
+    listRemoveDraftBatch: (state, action) => {
+      const { threadIds }: { threadIds: string[] } = action.payload
+      const copyCurrentDraftList = state.draftList
+
+      const filterArray = () => {
+        const filtered = copyCurrentDraftList.filter(
+          (el) => threadIds.indexOf(el.message.threadId) === -1
         )
-        state.draftList = newDraftList
+        return filtered
       }
+      state.draftList = filterArray()
     },
     listUpdateDraft: (state, action) => {
       state.draftDetails = action.payload
@@ -60,6 +71,7 @@ export const {
   listAddDraft,
   listUpdateDraft,
   listRemoveDraft,
+  listRemoveDraftBatch,
   setDraftListLoaded,
   resetDraftDetails,
 } = draftsSlice.actions
@@ -71,7 +83,6 @@ export const loadDraftList = (): AppThunk => async (dispatch) => {
       dispatch(listAddDraft(draftList.drafts))
     }
   } catch (err) {
-    console.error(err)
     dispatch(setServiceUnavailable('Error getting Draft list.'))
   } finally {
     dispatch(setDraftListLoaded(true))
@@ -109,7 +120,6 @@ export const createUpdateDraft = (): AppThunk => async (dispatch, getState) => {
       dispatch(setServiceUnavailable('Cannot create or update draft.'))
     }
   } catch (err) {
-    console.error(err)
     dispatch(setServiceUnavailable('Cannot create or update draft.'))
   }
 }
@@ -151,7 +161,6 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         dispatch(push(`/compose/`))
       }
     } catch (err) {
-      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
@@ -166,7 +175,6 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
         dispatch(pushDraftDetails({ draft: response.data }))
       }
     } catch (err) {
-      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
@@ -205,8 +213,35 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
         dispatch(loadDraftDetails({ draftId }))
       }
     } catch (err) {
-      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
+    }
+  }
+}
+
+export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
+  const { selectedEmails } = getState().email
+  const { draftList } = getState().drafts
+  dispatch(
+    listRemoveItemDetailBatch({
+      messageIds: selectedEmails,
+    })
+  )
+  dispatch(setSelectedEmails([]))
+  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails }))
+  for (let i = 0; selectedEmails.length > i; i += 1) {
+    try {
+      const draftObject =
+        draftList.length > 0 &&
+        draftList.find((draft) => draft.message.threadId === selectedEmails[i])
+      if (
+        typeof draftObject === 'object' &&
+        !Array.isArray(draftObject) &&
+        draftObject !== null
+      ) {
+        draftApi().deleteDraft(draftObject.id)
+      }
+    } catch (err) {
+      dispatch(setServiceUnavailable('Error deleting draft.'))
     }
   }
 }
@@ -217,7 +252,6 @@ export const deleteDraft =
     try {
       await draftApi().deleteDraft(id)
     } catch (err) {
-      console.error(err)
       dispatch(setServiceUnavailable('Error deleting draft.'))
     }
   }

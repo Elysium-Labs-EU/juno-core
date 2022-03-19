@@ -89,7 +89,6 @@ export const checkBase = (): AppThunk => async (dispatch) => {
       dispatch(setServiceUnavailable('Network Error. Please try again later'))
     }
   } catch (err) {
-    console.log(err)
     dispatch(setServiceUnavailable('An error occured during loading the base.'))
   }
 }

@@ -8,7 +8,7 @@ interface IDeleteDraft {
 }
 
 const DeleteDraft = ({ threadId, dispatch, draftId }: IDeleteDraft) => {
-  const RemoveDraft = () => {
+  const removeDraft = () => {
     dispatch(listRemoveDraft({ threadId }))
     dispatch(
       listRemoveItemDetail({
@@ -20,7 +20,7 @@ const DeleteDraft = ({ threadId, dispatch, draftId }: IDeleteDraft) => {
     }
   }
 
-  return RemoveDraft()
+  return removeDraft()
 }
 
 export default DeleteDraft
