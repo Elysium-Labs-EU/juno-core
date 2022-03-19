@@ -133,7 +133,8 @@ const EmailList = () => {
           }
           if (
             mounted &&
-            Date.now() - emailList[activeEmailListIndex].timestamp! > 5000 &&
+            Date.now() - emailList[activeEmailListIndex].timestamp! >
+              global.MIN_DELAY_REFRESH &&
             !isRefreshing
           ) {
             setIsRefreshing(true)
