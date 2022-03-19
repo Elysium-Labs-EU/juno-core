@@ -44,7 +44,10 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
-  if (getState().labels.storageLabels.length === BASE_ARRAY.length) {
+  if (
+    getState().labels.storageLabels.length === BASE_ARRAY.length &&
+    !getState().base.baseLoaded
+  ) {
     dispatch(setBaseLoaded(true))
   }
 }

@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../Store/draftsSlice'
@@ -86,6 +86,7 @@ const RenderEmailList = ({
 }
 
 const EmailList = () => {
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const emailList = useAppSelector(selectEmailList)
   const isLoading = useAppSelector(selectIsLoading)
   const emailFetchSize = useAppSelector(selectEmailListSize)
@@ -130,7 +131,14 @@ const EmailList = () => {
             maxResults: 500,
             nextPageToken: null,
           }
-          mounted && dispatch(refreshEmailFeed(params))
+          if (
+            mounted &&
+            Date.now() - emailList[activeEmailListIndex].timestamp! > 5000 &&
+            !isRefreshing
+          ) {
+            setIsRefreshing(true)
+            dispatch(refreshEmailFeed(params))
+          }
           if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
             draftPromise = dispatch(fetchDrafts())
           }
