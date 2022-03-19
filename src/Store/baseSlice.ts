@@ -25,16 +25,16 @@ export const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
-    setBaseLoaded: (state, action) => {
+    setBaseLoaded: (state, { payload }) => {
       if (!state.baseLoaded) {
-        state.baseLoaded = action.payload
+        state.baseLoaded = payload
       }
     },
-    setIsAuthenticated: (state, action) => {
-      state.isAuthenticated = action.payload
+    setIsAuthenticated: (state, { payload }) => {
+      state.isAuthenticated = payload
     },
-    setProfile: (state, action) => {
-      state.profile = action.payload
+    setProfile: (state, { payload }) => {
+      state.profile = payload
     },
   },
 })

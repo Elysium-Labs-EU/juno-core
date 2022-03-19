@@ -1,9 +1,9 @@
 import { memo, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
-import { loadDraftList } from '../../Store/draftsSlice'
+import { fetchDrafts } from '../../Store/draftsSlice'
 import {
-  loadEmails,
+  fetchEmails,
   refreshEmailFeed,
   resetValuesEmailDetail,
   selectActiveEmailListIndex,
@@ -28,6 +28,7 @@ import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
+import isPromise from '../../utils/isPromise'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -97,6 +98,8 @@ const EmailList = () => {
 
   useEffect(() => {
     let mounted = true
+    let emailPromise: any = {}
+    let draftPromise: any = {}
     if (labelIds && !labelIds.includes(global.ARCHIVE_LABEL)) {
       if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
         const params = {
@@ -105,9 +108,11 @@ const EmailList = () => {
           nextPageToken: null,
         }
 
-        mounted && dispatch(loadEmails(params))
-        if (labelIds.includes(draft.DRAFT_LABEL)) {
-          mounted && dispatch(loadDraftList())
+        if (mounted) {
+          emailPromise = dispatch(fetchEmails(params))
+        }
+        if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+          draftPromise = dispatch(fetchDrafts())
         }
       }
       if (
@@ -126,14 +131,20 @@ const EmailList = () => {
             nextPageToken: null,
           }
           mounted && dispatch(refreshEmailFeed(params))
-          if (labelIds.includes(draft.DRAFT_LABEL)) {
-            mounted && dispatch(loadDraftList())
+          if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+            draftPromise = dispatch(fetchDrafts())
           }
         }
       }
     }
     return () => {
       mounted = false
+      if (isPromise(emailPromise)) {
+        emailPromise.abort()
+      }
+      if (isPromise(draftPromise)) {
+        draftPromise.abort()
+      }
     }
   }, [labelIds])
 

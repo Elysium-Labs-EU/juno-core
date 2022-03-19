@@ -63,7 +63,6 @@ export interface DraftListObject {
 }
 
 export interface DraftsState {
-  draftListLoaded: boolean
   draftList: DraftListObject[]
   draftDetails: any
 }
