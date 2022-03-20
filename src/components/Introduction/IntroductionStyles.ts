@@ -1,6 +1,4 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 export const DialogHeader = styled.h2`
   text-align: center;
@@ -9,7 +7,7 @@ export const DialogHeader = styled.h2`
 
 export const DialogContent = styled.div`
   padding: 24px 36px;
-  background-color: ${themeConstants.colorOffWhite};
+  background-color: var(--color-white-off);
 `
 
 export const InnerContent = styled.div`

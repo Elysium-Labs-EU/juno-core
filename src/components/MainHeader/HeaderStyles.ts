@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   padding: 0 1rem;
@@ -43,5 +42,5 @@ export const PageTitle = styled.h2`
   font-size: 2.441rem;
   font-family: 'Raleway Variable', serif;
   line-height: 1.3;
-  color: ${themeConstants.colorBlack} !important;
+  color: var(--color-black) !important;
 `

@@ -1,10 +1,9 @@
 import TextField from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
-import * as themeConstants from '../../../../constants/themeConstants'
 
 const StyledTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: `${themeConstants.colorGreyBorder}`,
+    color: `var(--color-grey-border)`,
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'transparant',
@@ -17,13 +16,13 @@ const StyledTextField = styled(TextField)({
       borderColor: 'transparent',
     },
     '&.Mui-focused fieldset': {
-      borderColor: `${themeConstants.colorPurpleSoft}`,
+      borderColor: `var(--color-purple-soft)`,
     },
     '&.MuiInputBase-sizeSmall': {
       padding: '0 6px',
     },
     '&.MuiInputBase-root': {
-      background: `${themeConstants.colorSlightWhite}`,
+      background: `var(--color-white-slight)`,
     },
   },
 })

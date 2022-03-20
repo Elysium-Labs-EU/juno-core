@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../../constants/themeConstants'
 
 export const TabContainer = styled.nav`
   position: relative;
@@ -32,9 +31,7 @@ export const StyedListItem = styled.li<StyledListItem>`
   letter-spacing: normal;
   text-align: left;
   color: ${(props) =>
-    props.isActive
-      ? `${themeConstants.colorBlack}`
-      : `${themeConstants.colorGrey}`};
+    props.isActive ? `var(--color-black)` : `var(--color-grey)`};
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -44,17 +41,17 @@ export const StyedListItem = styled.li<StyledListItem>`
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
   &:hover {
-    color: ${themeConstants.colorBlack};
+    color: var(--color-black);
     text-decoration: none;
   }
 
   &:active {
-    color: ${themeConstants.colorBlack};
+    color: var(--color-black);
     text-decoration: none;
   }
 
   &:disabled {
-    color: ${themeConstants.colorUltraLightGrey};
+    color: var(--color-grey-ultra-light);
     cursor: not-allowed;
   }
 `

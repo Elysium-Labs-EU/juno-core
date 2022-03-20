@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -14,7 +13,7 @@ export const Wrapper = styled.div`
 export const LoginContainer = styled.div`
   padding: 0.5rem 0.75rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  background-color: ${themeConstants.colorWhite};
+  background-color: var(--color-white);
   border-radius: 5px;
 `
 
@@ -31,7 +30,7 @@ export const Header = styled.div`
 `
 
 export const ErrorBox = styled.div`
-  background-color: ${themeConstants.colorPurpleSoft};
+  background-color: var(--color-purple-soft);
   padding: 1rem;
   border-radius: 5px;
   text-align: center;

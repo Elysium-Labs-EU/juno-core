@@ -1,9 +1,8 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../../../constants/themeConstants'
 
 export const Wrapper = styled.nav`
   padding: 0.5rem;
-  background-color: ${themeConstants.colorWhite};
+  background-color: var(--color-white);
   border-radius: 5px;
   .MuiMenuItem-root {
     height: 32px !important;
@@ -25,7 +24,7 @@ export const BottomMenuSectionWrapper = styled.div`
 export const MenuItemButton = styled.button`
   background-color: transparent;
   border: none;
-  color: ${themeConstants.colorGrey};
+  color: var(--color-grey);
   font-size: 1rem;
   text-align: left;
   font-weight: normal;
@@ -39,13 +38,13 @@ export const MenuItemButton = styled.button`
 
   &:hover,
   &:active {
-    color: ${themeConstants.colorBlack};
+    color: var(--color-black);
     text-decoration: none;
     font-weight: 400;
   }
 
   &:disabled {
-    color: ${themeConstants.colorUltraLightGrey};
+    color: var(--color-grey-ultra-light);
     cursor: not-allowed;
   }
 `

@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 import * as global from '../../constants/globalConstants'
 
 interface IThreadBaseProps {
@@ -36,7 +35,7 @@ export const ThreadRow = styled.div<IThreadRow>`
   transition: background-color ease-in 0.125s;
 
   &:hover {
-    background-color: ${themeConstants.colorGreyHover};
+    background-color: var(--color-grey-hover);
     z-index: 2;
     border-radius: 5px;
   }

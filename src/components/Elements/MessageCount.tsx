@@ -1,11 +1,10 @@
 import { memo } from 'react'
 import styled from 'styled-components'
 import { IEmailMessage } from '../../Store/emailListTypes'
-import * as theme from '../../constants/themeConstants'
 
 const StyledMessageCount = styled.span`
   margin-left: 4px;
-  color: ${theme.colorLightGrey};
+  color: var(--color-grey-light);
 `
 
 const MessageCount = ({

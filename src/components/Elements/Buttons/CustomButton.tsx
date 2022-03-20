@@ -1,7 +1,6 @@
 /* eslint-disable react/button-has-type */
 import * as React from 'react'
 import styled from 'styled-components'
-import * as theme from '../../../constants/themeConstants'
 
 interface ICustomButton {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -21,7 +20,7 @@ const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
   color: ${(props) =>
-    props.suppressed ? `${theme.colorGrey} ` : `${theme.colorBlack} `};
+    props.suppressed ? `var(--color-grey) ` : `var(--color-black) `};
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -41,8 +40,8 @@ const Button = styled.button<IButton>`
   font-family: 'Raleway Variable', sans-serif;
 
   &:hover {
-    color: ${theme.colorBlack};
-    border-color: ${theme.colorGrey};
+    color: var(--color-black);
+    border-color: var(--color-grey);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 

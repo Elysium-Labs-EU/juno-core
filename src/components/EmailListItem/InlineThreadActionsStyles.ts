@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as theme from '../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   opacity: 0;
@@ -16,7 +15,7 @@ export const Wrapper = styled.div`
 
   &:hover {
     opacity: 1;
-    background: ${theme.colorGreyHover};
+    background: var(--color-grey-hover);
     background: linear-gradient(
       90deg,
       rgba(2, 0, 36, 0) 0%,

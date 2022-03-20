@@ -25,9 +25,31 @@ export const GlobalStyle = createGlobalStyle`
     }
   html {
     font-size: 100%;
+    --color-white: ${themeConstants.colorWhite};
+    --color-white-off: ${themeConstants.colorOffWhite};
+    --color-white-slight: ${themeConstants.colorSlightWhite};
+    --color-grey-ultra-light: ${themeConstants.colorUltraLightGrey};
+    --color-grey-light: ${themeConstants.colorLightGrey};
+    --color-grey: ${themeConstants.colorGrey};
+    --color-grey-dark: ${themeConstants.colorDarkGrey};
+    --color-grey-hover: ${themeConstants.colorGreyHover};
+    --color-grey-border: ${themeConstants.colorGreyBorder};
+    --color-black: ${themeConstants.colorBlack};
+    --color-purple-dark: ${themeConstants.colorPurpleDark};
+    --color-purple: ${themeConstants.colorPurple};
+    --color-purple-soft: ${themeConstants.colorPurpleSoft};
+    --color-red: ${themeConstants.colorRed};
+    --color-blue: ${themeConstants.colorBlue};
+    --color-blue-dark: ${themeConstants.colorBlueDark};
+    --h1: ${themeConstants.h1FontSize};
+    --h2: ${themeConstants.h2FontSize};
+    --h3: ${themeConstants.h3FontSize};
+    --h4: ${themeConstants.h4FontSize};
+    --h5: ${themeConstants.h5FontSize};
+    --small-size: ${themeConstants.smallFontSize};
   }
   body {
-    background-color: ${themeConstants.colorOffWhite} !important;
+    background-color: var(--color-white-off) !important;
     margin: 0;
     font-family: 'Urbanist Variable', sans-serif !important;
   }
@@ -92,14 +114,14 @@ export const theme = createTheme({
 })
 
 export const TextMutedSmall = styled.p`
-  color: ${themeConstants.colorGrey};
-  font-size: ${themeConstants.smallFontSize};
+  color: var(--color-grey);
+  font-size: var(--small-size);
 `
 
 export const TextMutedSpan = styled.span`
-  color: ${themeConstants.colorGrey};
+  color: var(--color-grey);
 `
 
 export const TextMutedParagraph = styled.p`
-  color: ${themeConstants.colorGrey};
+  color: var(--color-grey);
 `
