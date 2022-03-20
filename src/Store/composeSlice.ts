@@ -20,20 +20,20 @@ export const composeSlice = createSlice({
   name: 'compose',
   initialState,
   reducers: {
-    setComposeEmail: (state, action: PayloadAction<ComposePayload>) => {
-      if (action.payload.id && action.payload.value) {
+    setComposeEmail: (state, { payload }: PayloadAction<ComposePayload>) => {
+      if (payload.id && payload.value) {
         const currentState: any = state.composeEmail
-        currentState[action.payload.id] = action.payload.value
+        currentState[payload.id] = payload.value
         state.composeEmail = currentState
       }
-      if (!action.payload.id && !action.payload.value) {
-        state.composeEmail = action.payload
+      if (!payload.id && !payload.value) {
+        state.composeEmail = payload
       }
     },
-    updateComposeEmail: (state, action) => {
-      if (action.payload.id && action.payload.value) {
+    updateComposeEmail: (state, { payload }) => {
+      if (payload.id && payload.value) {
         const currentState: any = state.composeEmail
-        currentState[action.payload.id] = action.payload.value
+        currentState[payload.id] = payload.value
         state.composeEmail = currentState
       }
     },

@@ -8,6 +8,7 @@ export interface ComposePayload {
   to?: Contact[]
   cc?: Contact[]
   bcc?: Contact[]
+  attachment?: any
 }
 
 export interface ComposeEmail {
@@ -16,6 +17,7 @@ export interface ComposeEmail {
   bcc: Contact[]
   subject: string
   body: string
+  attachment: any
 }
 
 export interface ComposeState {

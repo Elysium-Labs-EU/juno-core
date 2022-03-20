@@ -1,22 +1,31 @@
 import styled from 'styled-components'
+import * as themeConstants from '../../../constants/themeConstants'
 
 export const Attachment = styled.div`
   border-radius: 6px;
-  background-color: hsl(0, 0%, 94%);
+  border: 1px solid ${themeConstants.colorGreyHover};
+  background-color: ${themeConstants.colorOffWhite};
   cursor: pointer;
   display: flex;
   flex-flow: row;
   max-width: max-content;
   padding: 0.2rem 0.5rem;
   align-items: center;
-  margin-left: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  transition: background-color 0.2s ease 0s, border-color 0.2s ease 0s,
+    color 0.2s ease 0s;
+
+  &:hover {
+    background-color: ${themeConstants.colorWhite};
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  }
 `
 
 export const AttachmentInner = styled.div`
   display: flex;
   flex-flow: column;
-  margin: 0.3rem;
+  margin: 10px;
   span {
     font-size: 12px;
     font-weight: normal;
@@ -25,6 +34,6 @@ export const AttachmentInner = styled.div`
     line-height: 1.17;
     letter-spacing: normal;
     text-align: left;
-    color: hsl(0, 0%, 11%);
+    color: ${themeConstants.colorBlack};
   }
 `

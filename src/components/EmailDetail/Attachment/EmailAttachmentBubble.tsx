@@ -3,13 +3,14 @@ import { FiCheck, FiDownload } from 'react-icons/fi'
 import prettyBytes from 'pretty-bytes'
 import * as S from './EmailAttachmentBubbleStyles'
 import * as GS from '../../../styles/globalStyles'
+import * as global from '../../../constants/globalConstants'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { downloadAttachment } from '../../../Store/emailDetailSlice'
 import EmailAttachmentIcon from './EmailAttachmentIcon'
 import { useAppDispatch } from '../../../Store/hooks'
 import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
-const FILE = 'File - '
+const ICON_SIZE = 20
 
 const RenderAttachment = ({
   attachmentData,
@@ -32,13 +33,19 @@ const RenderAttachment = ({
       <S.AttachmentInner>
         <span>{attachmentData.filename}</span>
         <GS.TextMutedSmall style={{ margin: 0 }}>
-          {FILE}
+          {global.FILE}
           {prettyBytes(attachmentData.body.size)}
         </GS.TextMutedSmall>
       </S.AttachmentInner>
       <CustomIconButton
         onClick={handleClick}
-        icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
+        icon={
+          !downloaded ? (
+            <FiDownload size={ICON_SIZE} />
+          ) : (
+            <FiCheck size={ICON_SIZE} />
+          )
+        }
       />
     </S.Attachment>
   )

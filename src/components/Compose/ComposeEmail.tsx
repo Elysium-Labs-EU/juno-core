@@ -34,6 +34,7 @@ import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import Attachments from './ComposeFields/Attachments/Attachments'
 
 const handleContactConversion = (contactValue: string): Contact[] =>
   contactValue.split(',').map((item) => convertToContact(item))
@@ -466,6 +467,7 @@ const ComposeEmail = ({
               />
             )}
           </form>
+          <Attachments />
         </GS.Base>
       </S.ComposerContainer>
     </S.Wrapper>
