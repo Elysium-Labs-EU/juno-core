@@ -1,9 +1,8 @@
 import { format, isSameDay, isThisYear } from 'date-fns'
 import styled from 'styled-components'
-import * as theme from '../../../constants/themeConstants'
 
 const StyledTimeStamp = styled.span`
-  color: ${theme.colorLightGrey};
+  color: var(--color-grey-light);
   white-space: nowrap;
 `
 

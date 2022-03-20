@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -21,5 +20,5 @@ export const PageHeaderText = styled.h1`
   font-size: 2.441rem;
   font-family: 'Raleway Variable', serif;
   line-height: 1.3;
-  color: ${themeConstants.colorBlack} !important;
+  color: var(--color-black) !important;
 `

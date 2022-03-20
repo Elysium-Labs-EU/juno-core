@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../../constants/themeConstants'
 
 export const Wrapper = styled.div`
   width: 100%;
@@ -25,6 +24,6 @@ export const Inner = styled.div``
 export const SelectedLabelsText = styled.span`
   font-size: 13px;
   user-select: none;
-  color: ${themeConstants.colorLightGrey};
+  color: var(--color-grey-light);
   margin-right: 16px;
 `

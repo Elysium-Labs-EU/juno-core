@@ -1,7 +1,6 @@
 /* eslint-disable react/button-has-type */
 import * as React from 'react'
 import styled from 'styled-components'
-import * as theme from '../../../constants/themeConstants'
 
 interface ICustomButton {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
@@ -22,13 +21,13 @@ const Button = styled.button<IButton>`
   border-radius: 20px;
   border: none;
   background-color: ${({ variant }) =>
-    variant === 'primary' ? `${theme.colorPurple}` : `${theme.colorBlue}`};
+    variant === 'primary' ? `var(--color-purple)` : `var(--color-blue)`};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 0.4rem 0.8rem;
     span {
-      color: ${theme.colorWhite};
+      color: var(--color-white);
       font-size: 1rem;
     }
   }
@@ -36,18 +35,18 @@ const Button = styled.button<IButton>`
   &:hover {
     background-color: ${({ variant }) =>
       variant === 'primary'
-        ? `${theme.colorPurpleDark}`
-        : `${theme.colorBlueDark}`};
+        ? `var(--color-purple-dark)`
+        : `var(--color-blue-dark)`};
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 
   &:disabled {
-    background-color: ${theme.colorGreyHover};
+    background-color: var(--color-grey-hover);
     opacity: 38%;
     div {
       span {
-        color: ${theme.colorBlack};
+        color: var(--color-black);
       }
     }
   }

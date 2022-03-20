@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 interface EmailWrapperProps {
   labelIds?: string[]
@@ -38,7 +37,7 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
   background-color: ${(props) =>
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
   margin-bottom: 0.5rem;
-  border: 1px solid ${themeConstants.colorGreyBorder};
+  border: 1px solid var(--color-grey-border);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
 `
 
@@ -47,7 +46,7 @@ export const EmailClosedWrapper = styled.div`
   transition: background-color ease-in 0.125s;
   cursor: pointer;
   &:hover {
-    background-color: ${themeConstants.colorGreyHover};
+    background-color: var(--color-grey-hover);
   }
 `
 
@@ -164,9 +163,7 @@ export const FromContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
   border-bottom: ${({ multipleComponents }) =>
-    multipleComponents
-      ? 'none'
-      : `1px solid ${themeConstants.colorGreyBorder}`};
+    multipleComponents ? 'none' : `1px solid var(--color-grey-border)`};
   padding-top: 16px;
   padding-bottom: 8px;
 `
@@ -180,7 +177,7 @@ export const ToBCCContainer = styled.div<IFromCCContainer>`
     margin-right: ${({ multipleComponents }) =>
       multipleComponents ? '2rem' : 0};
   }
-  border-bottom: 1px solid ${themeConstants.colorGreyBorder};
+  border-bottom: 1px solid var(--color-grey-border);
   padding-top: 8px;
   padding-bottom: 16px;
 `
@@ -225,7 +222,7 @@ export const EmailDetailTitle = styled.span`
   font-size: 1.2rem;
   font-weight: bold;
   line-height: 1.21;
-  color: ${themeConstants.colorBlack};
+  color: var(--color-black);
   margin-left: 0.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -233,8 +230,8 @@ export const EmailDetailTitle = styled.span`
 `
 
 export const SmallTextMuted = styled.span`
-  color: ${themeConstants.colorGrey};
-  font-size: ${themeConstants.smallFontSize};
+  color: var(--color-grey);
+  font-size: var(--small-size);
   margin-right: 4px;
 `
 
@@ -242,7 +239,7 @@ export const SmallTextTruncated = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: ${themeConstants.smallFontSize};
+  font-size: var(--small-size);
   padding-right: 6px;
 `
 

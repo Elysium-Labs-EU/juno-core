@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import * as themeConstants from '../../../constants/themeConstants'
 
 interface ICustomLink {
   to: string
@@ -15,7 +14,7 @@ const Wrapper = styled(Link)`
   line-height: 1.13;
   letter-spacing: normal;
   text-align: left;
-  color: ${themeConstants.colorGrey};
+  color: var(--color-grey);
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -24,13 +23,13 @@ const Wrapper = styled(Link)`
 
   &:hover,
   &:active {
-    color: ${themeConstants.colorBlack};
+    color: var(--color-black);
     text-decoration: none;
     font-weight: 500;
   }
 
   &:disabled {
-    color: ${themeConstants.colorUltraLightGrey};
+    color: var(--color-grey-ultra-light);
     cursor: not-allowed;
   }
 `

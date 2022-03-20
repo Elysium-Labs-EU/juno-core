@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as themeConstants from '../../constants/themeConstants'
 
 export const Dialog = styled.div`
   position: absolute;
@@ -11,7 +10,7 @@ export const Dialog = styled.div`
   width: 825px;
   max-height: calc(100vh - 225px);
   min-height: 400px;
-  background-color: ${themeConstants.colorWhite};
+  background-color: var(--color-white);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   border-radius: 5px;
   overflow: hidden;
@@ -41,7 +40,7 @@ export const SearchResults = styled.div`
   -webkit-box-flex: 1;
   flex-grow: 1;
   overflow-y: auto;
-  border-top: 1px solid ${themeConstants.colorUltraLightGrey};
+  border-top: 1px solid var(--color-grey-ultra-light);
 `
 
 export const FooterRow = styled.div`

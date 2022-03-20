@@ -1,15 +1,14 @@
 import Chip from '@mui/material/Chip'
 import { styled } from '@mui/material/styles'
-import * as themeConstants from '../../../constants/themeConstants'
 
 const StyledChip = styled(Chip)({
   borderRadius: '0.5rem',
-  backgroundColor: `${themeConstants.colorGreyHover}`,
-  border: `1px solid ${themeConstants.colorGreyBorder}`,
+  backgroundColor: `var(--color-grey-hover)`,
+  border: `1px solid var(--color-grey-border)`,
   fontSize: '0.95rem',
   '&:hover': {
-    borderColor: `${themeConstants.colorGreyHover}`,
-    backgroundColor: `${themeConstants.colorPurpleSoft}`,
+    borderColor: `var(--color-grey-hover)`,
+    backgroundColor: `var(--color-purple-soft)`,
   },
 })
 

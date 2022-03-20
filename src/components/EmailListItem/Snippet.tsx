@@ -1,8 +1,7 @@
 import styled from 'styled-components'
-import * as theme from '../../constants/themeConstants'
 
 const StyledSnippet = styled.span`
-  color: ${theme.colorLightGrey};
+  color: var(--color-grey-light)};
   font-weight: 400;
 `
 

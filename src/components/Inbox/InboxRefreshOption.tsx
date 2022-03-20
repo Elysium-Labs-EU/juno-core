@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
-import * as theme from '../../constants/themeConstants'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsLoading } from '../../Store/utilsSlice'
@@ -27,14 +26,14 @@ interface IRotatingButton {
 
 const RotatingButton = styled.button<IRotatingButton>`
   border: none;
-  color: ${theme.colorGrey};
+  color: var(--color-grey);
   outline: none;
   background-color: transparent;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
   padding: 0;
 
   &:hover {
-    color: ${theme.colorBlack};
+    color: var(--color-black);
     cursor: pointer;
   }
   ${(props) => (props.disableRefresh ? rotatingIcon : null)};
