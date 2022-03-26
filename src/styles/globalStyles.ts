@@ -35,6 +35,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-grey-hover: ${themeConstants.colorGreyHover};
     --color-grey-border: ${themeConstants.colorGreyBorder};
     --color-black: ${themeConstants.colorBlack};
+    --color-black-off: ${themeConstants.colorOffBlack};
     --color-purple-dark: ${themeConstants.colorPurpleDark};
     --color-purple: ${themeConstants.colorPurple};
     --color-purple-soft: ${themeConstants.colorPurpleSoft};

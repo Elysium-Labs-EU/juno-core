@@ -1,4 +1,3 @@
-import { LinearProgress } from '@mui/material'
 import { useSelector } from 'react-redux'
 import * as S from './BaseLoaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
@@ -20,7 +19,7 @@ const Baseloader = () => {
               />
             </S.Container>
             <S.LoaderContainer>
-              <LinearProgress />
+              <S.StyledLinearProgress />
             </S.LoaderContainer>
           </>
         )}

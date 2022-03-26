@@ -13,7 +13,7 @@ import {
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
-import LoadingState from './components/Elements/LoadingState'
+import LoadingState from './components/Elements/LoadingState/LoadingState'
 import * as GS from './styles/globalStyles'
 import * as global from './constants/globalConstants'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
