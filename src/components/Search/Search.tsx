@@ -19,7 +19,7 @@ import {
   IEmailListThreadItem,
 } from '../../Store/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
-import LoadingState from '../Elements/LoadingState'
+import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'

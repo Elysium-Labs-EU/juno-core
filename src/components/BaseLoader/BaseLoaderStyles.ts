@@ -1,3 +1,4 @@
+import { LinearProgress } from '@mui/material'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -22,8 +23,24 @@ export const Container = styled.div`
   display: flex;
   padding: 40px;
   margin-bottom: 40px;
+  img {
+    object-fit: none;
+    height: calc(100% - 10px);
+    width: calc(100% - 10px);
+  }
 `
 
 export const LoaderContainer = styled.div`
-  width: 300px;
+  max-width: 260px;
+  width: 100%;
+`
+
+export const StyledLinearProgress = styled(LinearProgress)`
+  background-color: var(--color-white-off) !important;
+  .MuiLinearProgress-bar1Indeterminate {
+    background-color: var(--color-black);
+  }
+  .MuiLinearProgress-bar2Indeterminate {
+    background-color: var(--color-black);
+  }
 `

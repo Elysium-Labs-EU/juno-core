@@ -17,7 +17,7 @@ import {
   selectServiceUnavailable,
 } from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
-import LoadingState from '../Elements/LoadingState'
+import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
 import * as draft from '../../constants/draftConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
