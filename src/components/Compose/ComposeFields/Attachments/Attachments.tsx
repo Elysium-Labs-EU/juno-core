@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react'
+
 import FileUpload from '../../../Elements/FileUpload/FileUpload'
 import AttachmentBubble from './AttachmentBubble'
 import * as S from './AttachmentsStyles'
@@ -13,6 +14,8 @@ export interface IFile {
   webkitRelativePath: string
 }
 
+const ATTACHMENTS = 'Attachments'
+
 const Attachments = () => {
   const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([])
 
@@ -24,10 +27,12 @@ const Attachments = () => {
 
   return (
     <S.Wrapper>
-      <FileUpload
-        setUploadedFiles={setUploadedFiles}
-        uploadedFiles={uploadedFiles}
-      />
+      <S.AttachmentHeaderContainer>
+        <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">
+          <S.AttachmentHeader>{ATTACHMENTS}</S.AttachmentHeader>
+        </S.StyledBadge>
+      </S.AttachmentHeaderContainer>
+      <FileUpload setUploadedFiles={setUploadedFiles} />
       {uploadedFiles.length > 0 && (
         <S.UploadedFiles>
           {uploadedFiles.map((file, index) => (
