@@ -180,7 +180,6 @@ const EmailListItem = memo(
                 {staticRecipientName.name}
               </S.TruncatedSpan>
             )}
-            {email.messages && <MessageCount countOfMessage={email.messages} />}
           </S.CellName>
           {showLabel && (
             <S.CellLabels>
@@ -193,6 +192,9 @@ const EmailListItem = memo(
                 <span style={{ fontWeight: 'bold' }}>
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </span>
+              )}
+              {email.messages && (
+                <MessageCount countOfMessage={email.messages} />
               )}
               <span>{staticSubject}</span>
               <Snippet snippet={staticSnippet} />

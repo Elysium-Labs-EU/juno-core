@@ -323,7 +323,9 @@ const ComposeEmail = ({
         if (emailValidation(toValue)) {
           dispatch(SendComposedEmail())
           dispatch(resetDraftDetails())
-          dispatch(listRemoveDraft({ threadId: draftDetails.message.threadId }))
+          dispatch(
+            listRemoveDraft({ threadId: draftDetails?.message?.threadId })
+          )
         } else {
           setToError(true)
         }
