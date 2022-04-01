@@ -71,7 +71,9 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     // TODO: TYPE THE DATA
-    const { data, status } = await userApi().fetchUser()
+    const response = await userApi().fetchUser()
+    process.env.NODE_ENV !== 'production' && console.log(response)
+    const { data, status } = response
     const { labels } = await labelApi().fetchLabels()
     if (labels && status === 200) {
       dispatch(setProfile(data))
@@ -109,7 +111,8 @@ export const checkBase = (): AppThunk => async (dispatch) => {
       }
     } else {
       dispatch(
-        setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
+        setServiceUnavailable(`Network Error. Please try again later.`)
+        // setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
       )
     }
   } catch (err) {
