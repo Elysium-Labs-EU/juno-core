@@ -71,9 +71,10 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     // TODO: TYPE THE DATA
-    const user = await userApi().fetchUser()
-    const { data, status } = user
-    const labels = await labelApi().fetchLabels()
+    const userResponse = await userApi().fetchUser()
+    const { data, status } = userResponse
+    const labelResponse = await labelApi().fetchLabels()
+    const { labels } = labelResponse
     if (data && status === 200) {
       dispatch(setProfile(data))
       if (Array.isArray(labels) && labels.length > 0) {
@@ -104,13 +105,15 @@ export const checkBase = (): AppThunk => async (dispatch) => {
       } else {
         dispatch(
           setServiceUnavailable(
-            `Network Error. ${labels}. Please try again later.`
+            `Network Error. ${labelResponse}. Please try again later.`
           )
         )
       }
     } else {
       dispatch(
-        setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
+        setServiceUnavailable(
+          `Network Error. ${userResponse}. Please try again later.`
+        )
       )
     }
   } catch (err) {
