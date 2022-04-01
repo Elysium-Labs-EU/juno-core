@@ -101,10 +101,16 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           dispatch(handleSettings(labels))
         }
       } else {
-        dispatch(setServiceUnavailable(global.NETWORK_ERROR))
+        dispatch(
+          setServiceUnavailable(
+            `Network Error. ${labels}. Please try again later.`
+          )
+        )
       }
     } else {
-      dispatch(setServiceUnavailable(global.NETWORK_ERROR))
+      dispatch(
+        setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
+      )
     }
   } catch (err) {
     dispatch(setServiceUnavailable('An error occured during loading the base.'))

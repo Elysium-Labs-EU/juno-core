@@ -31,8 +31,10 @@ const userApi = () => ({
           },
         }
       )
+      // console.log('res', res)
       return res
-    } catch (err) {
+    } catch (err: any) {
+      // console.log(err.message)
       return errorHandling(err)
     }
   },

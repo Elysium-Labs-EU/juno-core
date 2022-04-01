@@ -13,6 +13,16 @@ export const Wrapper = styled.div<IWrapper>`
   ${({ tabbedView }) => tabbedView && 'top: 0px'};
 `
 
+export const InfoWarningContainer = styled.div`
+  background-color: var(--color-purple-soft);
+  padding: 6px 12px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  p {
+    margin: 2px;
+  }
+`
+
 export const UpdateContainer = styled.div`
   min-height: 2rem;
 `
