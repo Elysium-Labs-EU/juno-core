@@ -17,11 +17,10 @@ export const fetchToken = () => {
   return ''
 }
 
-export const errorHandling = (err: any) => {
-  if (process.env.NODE_ENV === 'development') {
-    if (err.response) {
-      return err.response.data
-    }
-  }
-  return err.response.data
-}
+export const errorHandling = (err: any) =>
+  // if (process.env.NODE_ENV === 'development') {
+  //   if (err.response) {
+  //     return err.response.data
+  //   }
+  // }
+  err.message
