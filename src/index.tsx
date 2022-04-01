@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
@@ -25,10 +26,12 @@ process.env.NODE_ENV !== 'development' &&
 ReactDOM.render(
   <StrictMode>
     <Provider store={store}>
-      <GlobalStyle />
-      <ThemeProvider theme={theme}>
-        <App />
-      </ThemeProvider>
+      <HelmetProvider>
+        <GlobalStyle />
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </HelmetProvider>
     </Provider>
   </StrictMode>,
   document.getElementById('root')

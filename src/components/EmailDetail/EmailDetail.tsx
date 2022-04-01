@@ -34,6 +34,7 @@ import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
+import Seo from '../Elements/Seo'
 
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
