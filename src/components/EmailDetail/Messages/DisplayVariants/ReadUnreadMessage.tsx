@@ -26,6 +26,7 @@ import EmailSnippet from '../../../Elements/EmailSnippet'
 import convertToContact from '../../../../utils/convertToContact'
 import { selectProfile } from '../../../../Store/baseSlice'
 import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
+import Seo from '../../../Elements/Seo'
 
 interface IReadMessage {
   message: IEmailMessage
@@ -109,6 +110,7 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
 
   return (
     <>
+      <Seo title={staticEmailSubject} />
       {open && (
         <S.EmailOpenWrapper>
           <S.TopContainer>

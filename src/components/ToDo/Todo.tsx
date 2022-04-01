@@ -8,8 +8,8 @@ import {
 } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-
-const LABEL = 'Juno/To Do'
+import Seo from '../Elements/Seo'
+import * as local from '../../constants/todoConstants'
 
 const Todo = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
@@ -17,21 +17,29 @@ const Todo = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (baseLoaded && !storageLabels.some((label) => label.name === LABEL)) {
-      dispatch(fetchLabelIds(LABEL))
+    if (
+      baseLoaded &&
+      !storageLabels.some((label) => label.name === local.LABEL)
+    ) {
+      dispatch(fetchLabelIds(local.LABEL))
     } else if (
       baseLoaded &&
-      storageLabels.some((label) => label.name === LABEL)
+      storageLabels.some((label) => label.name === local.LABEL)
     ) {
-      const labelId = storageLabels.filter((label) => label.name === LABEL)
+      const labelId = storageLabels.filter(
+        (label) => label.name === local.LABEL
+      )
       dispatch(setCurrentLabels([labelId[0].id]))
     }
   }, [baseLoaded])
 
   return (
-    <AnimatedMountUnmount>
-      <EmailList />
-    </AnimatedMountUnmount>
+    <>
+      <Seo title={local.HEADER_TODO} />
+      <AnimatedMountUnmount>
+        <EmailList />
+      </AnimatedMountUnmount>
+    </>
   )
 }
 

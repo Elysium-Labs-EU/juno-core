@@ -5,6 +5,7 @@ import { selectBaseLoaded } from '../../Store/baseSlice'
 import * as local from '../../constants/draftConstants'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
+import Seo from '../Elements/Seo'
 
 const DraftEmail = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
@@ -16,9 +17,12 @@ const DraftEmail = () => {
   }, [baseLoaded])
 
   return (
-    <AnimatedMountUnmount>
-      <EmailList />
-    </AnimatedMountUnmount>
+    <>
+      <Seo title={local.DRAFT_HEADER} />
+      <AnimatedMountUnmount>
+        <EmailList />
+      </AnimatedMountUnmount>
+    </>
   )
 }
 

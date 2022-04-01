@@ -4,8 +4,10 @@ import { setCurrentLabels } from '../../Store/labelsSlice'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
+import Seo from '../Elements/Seo'
 
 const LABEL = ['SENT']
+const SENT_HEADER = 'Sent'
 
 const Sent = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
@@ -17,9 +19,12 @@ const Sent = () => {
   }, [baseLoaded])
 
   return (
-    <AnimatedMountUnmount>
-      <EmailList />
-    </AnimatedMountUnmount>
+    <>
+      <Seo title={SENT_HEADER} />
+      <AnimatedMountUnmount>
+        <EmailList />
+      </AnimatedMountUnmount>
+    </>
   )
 }
 

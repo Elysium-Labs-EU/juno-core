@@ -34,6 +34,7 @@ import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import Seo from '../Elements/Seo'
 
 const handleContactConversion = (contactValue: string): Contact[] =>
   contactValue.split(',').map((item) => convertToContact(item))
@@ -415,66 +416,71 @@ const ComposeEmail = ({
   )
 
   return (
-    <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
-      <S.UpdateContainer>
-        {saveSuccess && (
-          <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
-        )}
-      </S.UpdateContainer>
-      <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
-        <GS.Base>
-          <form onSubmit={onSubmit} autoComplete="off">
-            <div style={{ marginBottom: `7px` }}>
-              <GS.Base>
-                <S.InfoWarningContainer>
-                  <p>{local.INFO_WARNING_1}</p>
-                  <p>{local.INFO_WARNING_2}</p>
-                </S.InfoWarningContainer>
-                <S.Row>
-                  {ToField}
-                  <S.CcBccContainer>
-                    {!showCC && (
-                      <CustomButton
-                        label={local.CC_LABEL}
-                        onClick={() => setShowCC(true)}
-                      />
-                    )}
-                    {!showBCC && (
-                      <CustomButton
-                        label={local.BCC_LABEL}
-                        onClick={() => setShowBCC(true)}
-                      />
-                    )}
-                  </S.CcBccContainer>
-                </S.Row>
-                {showCC && <S.Row>{CcField}</S.Row>}
-                {showBCC && <S.Row>{BccField}</S.Row>}
-                <S.Row>
-                  <S.Label hasValue={Boolean(subjectValue)}>
-                    <label htmlFor={local.SUBJECT}>{local.SUBJECT_LABEL}</label>
-                  </S.Label>
-                  {SubjectField}
-                </S.Row>
-                <S.Row>{BodyField}</S.Row>
-              </GS.Base>
-            </div>
-            <CustomButton
-              type="submit"
-              label={local.SEND_BUTTON}
-              icon={<FiSend />}
-              suppressed
-            />
-            {(isReplying || isForwarding) && (
+    <>
+      <Seo title={local.COMPOSE} />
+      <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
+        <S.UpdateContainer>
+          {saveSuccess && (
+            <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
+          )}
+        </S.UpdateContainer>
+        <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
+          <GS.Base>
+            <form onSubmit={onSubmit} autoComplete="off">
+              <div style={{ marginBottom: `7px` }}>
+                <GS.Base>
+                  <S.InfoWarningContainer>
+                    <p>{local.INFO_WARNING_1}</p>
+                    <p>{local.INFO_WARNING_2}</p>
+                  </S.InfoWarningContainer>
+                  <S.Row>
+                    {ToField}
+                    <S.CcBccContainer>
+                      {!showCC && (
+                        <CustomButton
+                          label={local.CC_LABEL}
+                          onClick={() => setShowCC(true)}
+                        />
+                      )}
+                      {!showBCC && (
+                        <CustomButton
+                          label={local.BCC_LABEL}
+                          onClick={() => setShowBCC(true)}
+                        />
+                      )}
+                    </S.CcBccContainer>
+                  </S.Row>
+                  {showCC && <S.Row>{CcField}</S.Row>}
+                  {showBCC && <S.Row>{BccField}</S.Row>}
+                  <S.Row>
+                    <S.Label hasValue={Boolean(subjectValue)}>
+                      <label htmlFor={local.SUBJECT}>
+                        {local.SUBJECT_LABEL}
+                      </label>
+                    </S.Label>
+                    {SubjectField}
+                  </S.Row>
+                  <S.Row>{BodyField}</S.Row>
+                </GS.Base>
+              </div>
               <CustomButton
-                label={local.CANCEL_BUTTON}
-                onClick={() => handleCancelButton()}
+                type="submit"
+                label={local.SEND_BUTTON}
+                icon={<FiSend />}
                 suppressed
               />
-            )}
-          </form>
-        </GS.Base>
-      </S.ComposerContainer>
-    </S.Wrapper>
+              {(isReplying || isForwarding) && (
+                <CustomButton
+                  label={local.CANCEL_BUTTON}
+                  onClick={() => handleCancelButton()}
+                  suppressed
+                />
+              )}
+            </form>
+          </GS.Base>
+        </S.ComposerContainer>
+      </S.Wrapper>
+    </>
   )
 }
 
