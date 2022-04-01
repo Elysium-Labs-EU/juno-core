@@ -56,9 +56,9 @@ export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const user = await userApi().fetchUser()
     const { labels } = await labelApi().fetchLabels()
-    if (labels && user && user.status === 200) {
+    if (user && user.status === 200) {
       dispatch(setProfile(user.data))
-      if (labels.length > 0) {
+      if (labels && labels.length > 0) {
         if (
           !multipleIncludes(
             BASE_ARRAY,
@@ -86,10 +86,16 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           dispatch(setBaseLoaded(true))
         }
       } else {
-        dispatch(setServiceUnavailable('Network Error. Please try again later'))
+        dispatch(
+          setServiceUnavailable(
+            `Network Error. ${labels}. Please try again later.`
+          )
+        )
       }
     } else {
-      dispatch(setServiceUnavailable('Network Error. Please try again later'))
+      dispatch(
+        setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
+      )
     }
   } catch (err) {
     dispatch(setServiceUnavailable('An error occured during loading the base.'))

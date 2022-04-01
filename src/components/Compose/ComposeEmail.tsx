@@ -426,6 +426,10 @@ const ComposeEmail = ({
           <form onSubmit={onSubmit} autoComplete="off">
             <div style={{ marginBottom: `7px` }}>
               <GS.Base>
+                <S.InfoWarningContainer>
+                  <p>{local.INFO_WARNING_1}</p>
+                  <p>{local.INFO_WARNING_2}</p>
+                </S.InfoWarningContainer>
                 <S.Row>
                   {ToField}
                   <S.CcBccContainer>
