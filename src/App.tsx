@@ -15,7 +15,6 @@ import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
 import LoadingState from './components/Elements/LoadingState/LoadingState'
 import * as GS from './styles/globalStyles'
-import * as global from './constants/globalConstants'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
@@ -32,8 +31,6 @@ const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
 const Login = lazy(() => import('./components/Login/Login'))
-
-const emailFetchSizeLS: string | null = localStorage.getItem('fetchSize')
 
 const ProtectedRoute = ({
   children,
@@ -70,26 +67,6 @@ const App = () => {
       dispatch(push(RoutesConstants.HOME))
     }
   }, [])
-
-  useEffect(() => {
-    if (
-      !emailFetchSizeLS ||
-      (emailFetchSizeLS &&
-        !global.POSSIBLE_FETCH_SIZES.includes(emailFetchSizeLS))
-    )
-      localStorage.setItem('fetchSize', '20')
-  }, [])
-
-  useEffect(() => {
-    const showAvatarLS: string | null = localStorage.getItem('showAvatar')
-
-    if (
-      !showAvatarLS ||
-      (showAvatarLS !== 'true' && showAvatarLS !== 'false')
-    ) {
-      localStorage.setItem('showAvatar', 'true')
-    }
-  })
 
   useEffect(() => {
     if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {

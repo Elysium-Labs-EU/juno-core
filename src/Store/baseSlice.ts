@@ -2,13 +2,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 import labelApi from '../data/labelApi'
 import userApi from '../data/userApi'
-import { setServiceUnavailable } from './utilsSlice'
+import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './labelsTypes'
 import { IBaseState } from './baseTypes'
 import multipleIncludes from '../utils/multipleIncludes'
+import * as global from '../constants/globalConstants'
+import findSettings from '../utils/Settings/findSettings'
+import parseSettings from '../utils/Settings/parseSettings'
+import createSettingsLabel from '../utils/Settings/createSettingsLabel'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -42,6 +46,18 @@ export const baseSlice = createSlice({
 export const { setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
+export const handleSettings =
+  (labels: GoogleLabel[]): AppThunk =>
+  async (dispatch) => {
+    const settingsLabel = findSettings(labels)
+    if (settingsLabel.length === 0) {
+      createSettingsLabel({ dispatch })
+      return
+    }
+    dispatch(setSettingsLabelId(settingsLabel[0].id))
+    parseSettings(dispatch, settingsLabel)
+  }
+
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
   if (
@@ -54,21 +70,18 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
-    const user = await userApi().fetchUser()
+    // TODO: TYPE THE DATA
+    const { data, status } = await userApi().fetchUser()
     const { labels } = await labelApi().fetchLabels()
-    if (user && user.status === 200) {
-      dispatch(setProfile(user.data))
-      if (labels && labels.length > 0) {
-        if (
-          !multipleIncludes(
-            BASE_ARRAY,
-            labels.map((item: GoogleLabel) => item.name)
-          )
-        ) {
+    if (labels && status === 200) {
+      dispatch(setProfile(data))
+      if (labels.length > 0) {
+        const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
+        if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
           const checkArray = BASE_ARRAY.map((item) =>
-            labels.map((label: GoogleLabel) => label.name).includes(item)
+            nameMapLabels.includes(item)
           )
-          checkArray.map(
+          checkArray.forEach(
             (checkValue, index) =>
               !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
           )
@@ -76,14 +89,16 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
             labels.filter((item: GoogleLabel) => item.name === baseLabel)
           ).filter((result) => result.length > 0)
-
           dispatch(setStorageLabels(prefetchedBoxes))
+          dispatch(handleSettings(labels))
         } else {
           const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
             labels.filter((item: GoogleLabel) => item.name === baseLabel)
           )
+
           dispatch(setStorageLabels(prefetchedBoxes))
           dispatch(setBaseLoaded(true))
+          dispatch(handleSettings(labels))
         }
       } else {
         dispatch(

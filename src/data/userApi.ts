@@ -2,10 +2,10 @@ import axios, { AxiosResponse } from 'axios'
 import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 interface UserType {
-  emailAddress: string
-  historyId: string
-  messagesTotal: number
-  threadsTotal: number
+  emailAddress?: string | null
+  historyId?: string | null
+  messagesTotal?: number | null
+  threadsTotal?: number | null
 }
 
 interface UserPromise {

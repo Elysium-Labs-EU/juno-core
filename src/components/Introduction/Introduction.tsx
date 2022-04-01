@@ -1,16 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { FiArrowRightCircle } from 'react-icons/fi'
-import { isEmpty } from 'lodash'
 import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
-import * as global from '../../constants/globalConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
-import setCookie from '../../utils/Cookie/setCookie'
-import getCookie from '../../utils/Cookie/getCookie'
-import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import { useAppSelector } from '../../Store/hooks'
-import { selectEmailList } from '../../Store/emailListSlice'
-import getEmailListIndex from '../../utils/getEmailListIndex'
+import updateSettingsLabel from '../../utils/Settings/updateSettingsLabel'
+import {
+  selectSettingsLabelId,
+  selectShowIntroduction,
+} from '../../Store/utilsSlice'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -27,30 +25,21 @@ const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
   const [open, setOpen] = useState(false)
-  const labelIds = useAppSelector(selectLabelIds)
-  const emailList = useAppSelector(selectEmailList)
-  const cookieValue = getCookie(global.INTRODUCTION_TOKEN)
-  const loadedInbox = useAppSelector(selectLoadedInbox)
-
-  const toDoBoxLoaded = labelIds.some(
-    (val) => loadedInbox.flat(1).indexOf(val) > -1
-  )
+  const settingsLabelId = useAppSelector(selectSettingsLabelId)
+  const showIntroduction = useAppSelector(selectShowIntroduction)
 
   useEffect(() => {
-    if (toDoBoxLoaded && emailList && labelIds) {
-      const toDoBox = emailList[getEmailListIndex({ labelIds, emailList })]
-      if (isEmpty(cookieValue) && isEmpty(toDoBox)) {
-        setOpen(true)
-      }
+    if (showIntroduction) {
+      setOpen(true)
     }
-  }, [toDoBoxLoaded, cookieValue, emailList, labelIds])
+  }, [showIntroduction])
 
   const handleCloseDefault = (event: ChangeEvent<{}>, reason: string) => {
     if (reason === 'backdropClick') {
       return null
     }
     if (reason === 'escapeKeyDown') {
-      setCookie(global.INTRODUCTION_TOKEN, { status: 'completed' }, 30)
+      updateSettingsLabel({ settingsLabelId, showIntroduction: false })
       setOpen(false)
       return null
     }
@@ -58,7 +47,7 @@ const Introduction = () => {
   }
 
   const handleClose = () => {
-    setCookie(global.INTRODUCTION_TOKEN, { status: 'completed' }, 30)
+    updateSettingsLabel({ settingsLabelId, showIntroduction: false })
     setOpen(false)
   }
 

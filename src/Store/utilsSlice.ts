@@ -12,6 +12,8 @@ interface IUtilsState {
   isSettingsOpen: boolean
   isAvatarVisible: boolean
   emailFetchSize: number
+  showIntroduction: boolean | null
+  settingsLabelId: string | null
 }
 
 const initialState: IUtilsState = Object.freeze({
@@ -20,34 +22,44 @@ const initialState: IUtilsState = Object.freeze({
   serviceUnavailable: '',
   isSilentLoading: false,
   isSettingsOpen: false,
-  isAvatarVisible: localStorage.getItem('showAvatar') !== 'false',
-  emailFetchSize: parseInt(localStorage.getItem('fetchSize') ?? '20', 10),
+  isAvatarVisible: true,
+  emailFetchSize: 20,
+  showIntroduction: null,
+  settingsLabelId: null,
 })
 
 export const utilsSlice = createSlice({
   name: 'utils',
   initialState,
   reducers: {
-    setInSearch: (state, action: PayloadAction<boolean>) => {
-      state.inSearch = action.payload
+    setInSearch: (state, { payload }: PayloadAction<boolean>) => {
+      state.inSearch = payload
     },
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload
+    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isLoading = payload
     },
-    setServiceUnavailable: (state, action: PayloadAction<string>) => {
-      state.serviceUnavailable = action.payload
+    setServiceUnavailable: (state, { payload }: PayloadAction<string>) => {
+      state.serviceUnavailable = payload
     },
-    setIsSilentLoading: (state, action: PayloadAction<boolean>) => {
-      state.isSilentLoading = action.payload
+    setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSilentLoading = payload
     },
-    setIsSettingsOpen: (state, action: PayloadAction<boolean>) => {
-      state.isSettingsOpen = action.payload
+    setIsSettingsOpen: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSettingsOpen = payload
     },
-    setShowAvatar: (state, action: PayloadAction<boolean>) => {
-      state.isAvatarVisible = action.payload
+    setSettings: (state, { payload }) => {
+      state.isAvatarVisible = payload.isAvatarVisible
+      state.emailFetchSize = payload.emailFetchSize
+      state.showIntroduction = payload.showIntroduction
     },
-    setEmailFetchSize(state, action: PayloadAction<number>) {
-      state.emailFetchSize = action.payload
+    setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
+      state.isAvatarVisible = payload
+    },
+    setEmailFetchSize(state, { payload }: PayloadAction<number>) {
+      state.emailFetchSize = payload
+    },
+    setSettingsLabelId(state, { payload }: PayloadAction<string>) {
+      state.settingsLabelId = payload
     },
   },
   extraReducers: (builder) => {
@@ -85,8 +97,10 @@ export const {
   setServiceUnavailable,
   setIsSilentLoading,
   setIsSettingsOpen,
+  setSettings,
   setShowAvatar,
   setEmailFetchSize,
+  setSettingsLabelId,
 } = utilsSlice.actions
 
 export const selectIsSettingsOpen = (state: RootState) =>
@@ -101,5 +115,9 @@ export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
 export const selectEmailListSize = (state: RootState) =>
   state.utils.emailFetchSize
+export const selectShowIntroduction = (state: RootState) =>
+  state.utils.showIntroduction
+export const selectSettingsLabelId = (state: RootState) =>
+  state.utils.settingsLabelId
 
 export default utilsSlice.reducer

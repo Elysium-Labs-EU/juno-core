@@ -1,35 +1,34 @@
 import { FormControlLabel, Switch } from '@mui/material'
-import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import {
   selectAvatarVisibility,
+  selectSettingsLabelId,
   setShowAvatar,
 } from '../../../../Store/utilsSlice'
+import updateSettingsLabel from '../../../../utils/Settings/updateSettingsLabel'
 
-const showAvatarLocalStorage = localStorage.getItem('showAvatar')
 const SWITCH_LABEL = 'Show avatars'
 
 const showAvatar = () => {
   const dispatch = useAppDispatch()
+  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const avatarVisible = useAppSelector(selectAvatarVisibility)
 
-  useEffect(() => {
-    if (
-      !showAvatarLocalStorage ||
-      (showAvatarLocalStorage !== 'true' && showAvatarLocalStorage !== 'false')
-    ) {
-      localStorage.setItem('showAvatar', 'true')
-      dispatch(setShowAvatar(true))
-    }
-  })
-
-  const switchAvatarView = () => {
-    if (localStorage.getItem('showAvatar') === 'true') {
+  const switchAvatarView = (event: any) => {
+    if (!event.target.checked) {
       localStorage.setItem('showAvatar', 'false')
       dispatch(setShowAvatar(false))
+      updateSettingsLabel({
+        settingsLabelId,
+        isAvatarVisible: false,
+      })
     } else {
       localStorage.setItem('showAvatar', 'true')
       dispatch(setShowAvatar(true))
+      updateSettingsLabel({
+        settingsLabelId,
+        isAvatarVisible: true,
+      })
     }
   }
 
@@ -38,7 +37,7 @@ const showAvatar = () => {
       label={SWITCH_LABEL}
       control={
         <Switch
-          onClick={() => switchAvatarView()}
+          onClick={switchAvatarView}
           checked={avatarVisible}
           color="secondary"
         />
