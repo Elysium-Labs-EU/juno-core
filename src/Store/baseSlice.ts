@@ -71,13 +71,12 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     // TODO: TYPE THE DATA
-    const response = await userApi().fetchUser()
-    process.env.NODE_ENV !== 'production' && console.log(response)
-    const { data, status } = response
-    const { labels } = await labelApi().fetchLabels()
-    if (labels && status === 200) {
+    const user = await userApi().fetchUser()
+    const { data, status } = user
+    const labels = await labelApi().fetchLabels()
+    if (data && status === 200) {
       dispatch(setProfile(data))
-      if (labels.length > 0) {
+      if (Array.isArray(labels) && labels.length > 0) {
         const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
         if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
           const checkArray = BASE_ARRAY.map((item) =>
@@ -111,8 +110,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
       }
     } else {
       dispatch(
-        setServiceUnavailable(`Network Error. Please try again later.`)
-        // setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
+        setServiceUnavailable(`Network Error. ${user}. Please try again later.`)
       )
     }
   } catch (err) {
