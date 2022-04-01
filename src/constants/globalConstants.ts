@@ -1,14 +1,14 @@
 export const GOOGLE_TOKEN = 'googleToken'
-export const INTRODUCTION_TOKEN = 'introToken'
+export const JUNO_SETTINGS_LOCAL = 'junoSettings'
 export const LOADING_TEXT = 'Loading'
 export const BUTTON_BACK = 'Back'
 export const ME_LABEL = 'me'
 export const NOTHING_TO_SEE = 'Nothing to see here'
+export const NETWORK_ERROR = 'Network Error. Please try again later'
 export const NO_SUBJECT = '(No subject)'
 export const LOAD_MORE = 'Load more messages'
 export const MIN_DELAY_REFRESH = 5000
 export const MAX_RESULTS = 20
-export const POSSIBLE_FETCH_SIZES: string[] = ['20', '25', '30', '35']
 export const NO_MORE_RESULTS = "You've reached the end."
 export const UNREAD_LABEL = 'UNREAD'
 export const ARCHIVE_LABEL = 'ARCHIVE'

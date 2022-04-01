@@ -2,8 +2,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { AppThunk, RootState } from './store'
 import labelApi from '../data/labelApi'
-import { setServiceUnavailable } from './utilsSlice'
+import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
 import { GoogleLabel, LabelIdName, LabelState } from './labelsTypes'
+import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],
@@ -69,8 +70,15 @@ export const createLabel =
 
       const response = await labelApi().createLabel(body)
 
-      if (response && response.status === 200) {
+      if (response?.status === 200) {
         dispatch(setStorageLabels(response.data))
+        if (
+          response?.data?.data?.name.startsWith(
+            `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
+          )
+        ) {
+          dispatch(setSettingsLabelId(response.data.data.id))
+        }
       } else {
         dispatch(setServiceUnavailable('Error creating label.'))
       }
