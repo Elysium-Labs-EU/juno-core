@@ -74,6 +74,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
     const userResponse = await userApi().fetchUser()
     const { data, status } = userResponse
     const labelResponse = await labelApi().fetchLabels()
+    console.log(labelResponse)
     const { labels } = labelResponse
     if (data && status === 200) {
       dispatch(setProfile(data))
