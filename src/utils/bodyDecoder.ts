@@ -63,6 +63,8 @@ const bodyDecoder = ({
             ) {
               return bodyDecoder({ inputObject: inputObject.parts[1] })
             }
+          } else {
+            return bodyDecoder({ inputObject: inputObject.parts[0] })
           }
           if (inputObject.parts.length > 1) {
             if (
