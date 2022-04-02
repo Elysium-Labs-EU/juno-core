@@ -21,6 +21,8 @@ import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
 import { fetchToken } from './data/api'
 import EmailDetail from './components/EmailDetail/EmailDetail'
+import HelpButton from './components/Help/HelpButton'
+import { selectShowKeyboardCombos } from './Store/utilsSlice'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
@@ -53,6 +55,7 @@ const App = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
   const storageLabels = useAppSelector(selectStorageLabels)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const showKeyBoardCombos = useAppSelector(selectShowKeyboardCombos)
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
@@ -78,9 +81,13 @@ const App = () => {
     <HistoryRouter history={history}>
       <GS.Base>
         {baseLoaded && (
-          <GS.OuterContainer>
-            <Header />
-          </GS.OuterContainer>
+          <>
+            {' '}
+            <GS.OuterContainer>
+              <Header />
+            </GS.OuterContainer>
+            {!showKeyBoardCombos && <HelpButton />}
+          </>
         )}
 
         <AnimatePresence exitBeforeEnter>
