@@ -8,6 +8,7 @@ import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../Store/utilsSlice'
 
 const ArchiveOption = ({
   threadDetail,
@@ -17,6 +18,7 @@ const ArchiveOption = ({
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
+  const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
     archiveMail({
@@ -31,14 +33,15 @@ const ArchiveOption = ({
     if (
       mounted &&
       keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_BACKSPACE)
+      keysPressed.includes(global.KEY_BACKSPACE) &&
+      !inSearch
     ) {
       handleEvent()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <CustomButton

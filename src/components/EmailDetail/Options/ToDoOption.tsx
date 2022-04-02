@@ -8,6 +8,7 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../Store/utilsSlice'
 
 const ToDoOption = ({
   threadDetail,
@@ -18,6 +19,7 @@ const ToDoOption = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
+  const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
     SetToDoMail({
@@ -33,14 +35,15 @@ const ToDoOption = ({
     if (
       mounted &&
       keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E)
+      keysPressed.includes(global.KEY_E) &&
+      !inSearch
     ) {
       handleEvent()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <CustomButton

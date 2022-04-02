@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
-import { selectIsLoading } from '../../Store/utilsSlice'
+import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import * as global from '../../constants/globalConstants'
@@ -19,6 +19,7 @@ import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
+  const inSearch = useAppSelector(selectInSearch)
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
@@ -43,14 +44,15 @@ const TodoFocusOption = () => {
     if (
       mounted &&
       keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E)
+      keysPressed.includes(global.KEY_E) &&
+      !inSearch
     ) {
       activateFocusMode()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <S.SortContainer>
