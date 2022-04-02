@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import * as global from '../../constants/globalConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
-import { selectIsLoading } from '../../Store/utilsSlice'
+import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
 import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
@@ -20,6 +20,7 @@ const SortInbox = () => {
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
+  const inSearch = useAppSelector(selectInSearch)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
@@ -43,14 +44,15 @@ const SortInbox = () => {
     if (
       mounted &&
       keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E)
+      keysPressed.includes(global.KEY_E) &&
+      !inSearch
     ) {
       activateSortMode()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <CustomAttentionButton

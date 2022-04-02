@@ -17,6 +17,7 @@ import {
 } from '../../../Store/emailListSlice'
 import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../Store/utilsSlice'
 
 const SkipOption = () => {
   const dispatch = useAppDispatch()
@@ -24,6 +25,7 @@ const SkipOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const emailList = useAppSelector(selectEmailList)
   const sessionViewIndex = useAppSelector(selectViewIndex)
+  const inSearch = useAppSelector(selectInSearch)
   const coreStatus = useAppSelector(selectCoreStatus)
   const composeEmail = useAppSelector(selectComposeEmail)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -55,14 +57,15 @@ const SkipOption = () => {
       mounted &&
       keysPressed.includes(global.KEY_SHIFT) &&
       keysPressed.includes(global.KEY_K) &&
-      keysPressed.includes(global.KEY_OS)
+      keysPressed.includes(global.KEY_OS) &&
+      !inSearch
     ) {
       handleEvent()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <CustomButton

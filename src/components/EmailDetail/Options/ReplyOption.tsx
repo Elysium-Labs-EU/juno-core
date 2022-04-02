@@ -5,8 +5,9 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import isReplyingListener from '../../EmailOptions/IsReplyingListener'
-import { useAppDispatch } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../Store/utilsSlice'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -17,6 +18,7 @@ const messageIndex = 0
 const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
+  const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
     if (threadDetail.messages) {
@@ -33,14 +35,15 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
     if (
       mounted &&
       keysPressed.includes(global.KEY_ENTER) &&
-      keysPressed.includes(global.KEY_OS)
+      keysPressed.includes(global.KEY_OS) &&
+      !inSearch
     ) {
       handleEvent()
     }
     return () => {
       mounted = false
     }
-  }, [keysPressed])
+  }, [keysPressed, inSearch])
 
   return (
     <CustomButton
