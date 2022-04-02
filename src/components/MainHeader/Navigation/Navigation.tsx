@@ -12,11 +12,11 @@ import {
 } from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import * as S from './NavigationStyles'
-import * as global from '../../../constants/globalConstants'
+// import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch } from '../../../Store/hooks'
 import { setInSearch } from '../../../Store/utilsSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+// import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
 
 const SIZE = 16
@@ -26,7 +26,7 @@ const Navigation = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
+  // const keysPressed = useMultiKeyPress()
   const open = Boolean(anchorEl)
 
   useEffect(() => {
@@ -45,26 +45,26 @@ const Navigation = () => {
     dispatch(push(destination))
   }
 
-  useEffect(() => {
-    let mounted = true
-    if (mounted && keysPressed.includes(global.KEY_ALT_LEFT)) {
-      if (keysPressed.includes(global.KEY_DIGIT_1)) {
-        navigateTo(Routes.HOME)
-      }
-      if (keysPressed.includes(global.KEY_DIGIT_2)) {
-        navigateTo(Routes.INBOX)
-      }
-      if (keysPressed.includes(global.KEY_DIGIT_3)) {
-        dispatch(setInSearch(true))
-      }
-      if (keysPressed.includes(global.KEY_DIGIT_4)) {
-        navigateTo('/compose')
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed])
+  // useEffect(() => {
+  //   let mounted = true
+  //   if (mounted && keysPressed.includes(global.KEY_SHIFT)) {
+  //     if (keysPressed.includes(global.KEY_DIGIT_1)) {
+  //       navigateTo(Routes.HOME)
+  //     }
+  //     if (keysPressed.includes(global.KEY_DIGIT_2)) {
+  //       navigateTo(Routes.INBOX)
+  //     }
+  //     if (keysPressed.includes(global.KEY_DIGIT_3)) {
+  //       dispatch(setInSearch(true))
+  //     }
+  //     if (keysPressed.includes(global.KEY_DIGIT_4)) {
+  //       navigateTo('/compose')
+  //     }
+  //   }
+  //   return () => {
+  //     mounted = false
+  //   }
+  // }, [keysPressed])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)

@@ -32,7 +32,7 @@ const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
     let mounted = true
     if (
       mounted &&
-      keysPressed.includes(global.KEY_SHIFT_LEFT) &&
+      keysPressed.includes(global.KEY_SHIFT) &&
       keysPressed.includes(global.KEY_ENTER)
     ) {
       handleEvent()

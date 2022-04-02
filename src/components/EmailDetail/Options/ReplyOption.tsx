@@ -33,7 +33,7 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
     if (
       mounted &&
       keysPressed.includes(global.KEY_ENTER) &&
-      keysPressed.includes(global.KEY_OSLEFT)
+      keysPressed.includes(global.KEY_OS)
     ) {
       handleEvent()
     }
