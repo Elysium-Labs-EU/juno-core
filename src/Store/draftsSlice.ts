@@ -120,7 +120,7 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   } = props
   return (dispatch) => {
     try {
-      const body = bodyDecoder(message.payload).map((item) =>
+      const body = bodyDecoder({ inputObject: message.payload }).map((item) =>
         item.replace(/<[^>]*>/g, '')
       )[0]
       const subject = findPayloadHeadersData('Subject', message)

@@ -3,22 +3,31 @@ import { decodeBase64 } from './decodeBase64'
 const decodedBody: string[] = []
 
 // This function recursively loops in the emailbody to find a body to decode.
-const bodyDecoder = (inputObject: any): string[] => {
+const bodyDecoder = ({
+  inputObject,
+  inlineImage,
+}: {
+  inputObject: any
+  inlineImage?: Function
+}): string[] => {
   const objectKeys = Object.keys(inputObject)
   for (let i: number = 0; i < objectKeys.length; i += 1) {
     if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
       if (inputObject.body.size > 0) {
         if (objectKeys[i] === 'body') {
-          //   if (
-          //     Object.prototype.hasOwnProperty.call(
-          //       inputObject.body,
-          //       'attachmentId'
-          //     )
-          //   ) {
-          //     inlineImage(inputObject)
-          //   }
+          if (
+            Object.prototype.hasOwnProperty.call(
+              inputObject.body,
+              'attachmentId'
+            ) &&
+            inlineImage
+          ) {
+            inlineImage(inputObject)
+          }
           const str = decodeBase64(`${inputObject.body.data}`)
-          if (str) return [...decodedBody, str]
+          if (str) {
+            return [...decodedBody, str]
+          }
         }
       }
       if (
@@ -40,9 +49,9 @@ const bodyDecoder = (inputObject: any): string[] => {
                   'attachmentId'
                 )
               ) {
-                bodyDecoder(inputObject.parts[1])
+                bodyDecoder({ inputObject: inputObject.parts[1] })
               }
-              return bodyDecoder(inputObject.parts[0])
+              return bodyDecoder({ inputObject: inputObject.parts[0] })
             }
           }
           if (inputObject.parts.length > 1) {
@@ -52,8 +61,10 @@ const bodyDecoder = (inputObject: any): string[] => {
                 'parts'
               )
             ) {
-              return bodyDecoder(inputObject.parts[1])
+              return bodyDecoder({ inputObject: inputObject.parts[1] })
             }
+          } else {
+            return bodyDecoder({ inputObject: inputObject.parts[0] })
           }
           if (inputObject.parts.length > 1) {
             if (
@@ -66,15 +77,15 @@ const bodyDecoder = (inputObject: any): string[] => {
                 'attachmentId'
               )
             ) {
-              bodyDecoder(inputObject.parts[0])
-              return bodyDecoder(inputObject.parts[1])
+              bodyDecoder({ inputObject: inputObject.parts[0] })
+              return bodyDecoder({ inputObject: inputObject.parts[1] })
             }
           }
           if (inputObject.parts.length > 1) {
             if (
               Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')
             ) {
-              return bodyDecoder(inputObject.parts[1])
+              return bodyDecoder({ inputObject: inputObject.parts[1] })
             }
           }
         }
