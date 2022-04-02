@@ -42,7 +42,7 @@ const SortInbox = () => {
     let mounted = true
     if (
       mounted &&
-      keysPressed.includes(global.KEY_OSLEFT) &&
+      keysPressed.includes(global.KEY_OS) &&
       keysPressed.includes(global.KEY_E)
     ) {
       activateSortMode()

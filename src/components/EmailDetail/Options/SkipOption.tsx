@@ -53,9 +53,9 @@ const SkipOption = () => {
     let mounted = true
     if (
       mounted &&
-      keysPressed.includes(global.KEY_SHIFT_LEFT) &&
+      keysPressed.includes(global.KEY_SHIFT) &&
       keysPressed.includes(global.KEY_K) &&
-      keysPressed.includes(global.KEY_OSLEFT)
+      keysPressed.includes(global.KEY_OS)
     ) {
       handleEvent()
     }
