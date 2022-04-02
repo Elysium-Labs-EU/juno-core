@@ -8,9 +8,9 @@ const EmailSubject = (message: IEmailMessage): string => {
     if (from.length > 0) {
       return from
     }
-    return ''
+    return '(no subject)'
   }
-  return ''
+  return '(no subject)'
 }
 
 export default EmailSubject
