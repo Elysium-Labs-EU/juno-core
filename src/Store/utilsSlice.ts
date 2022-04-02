@@ -14,6 +14,7 @@ interface IUtilsState {
   emailFetchSize: number
   showIntroduction: boolean | null
   settingsLabelId: string | null
+  showKeyboardCombos: boolean
 }
 
 const initialState: IUtilsState = Object.freeze({
@@ -26,6 +27,7 @@ const initialState: IUtilsState = Object.freeze({
   emailFetchSize: 20,
   showIntroduction: null,
   settingsLabelId: null,
+  showKeyboardCombos: false,
 })
 
 export const utilsSlice = createSlice({
@@ -60,6 +62,9 @@ export const utilsSlice = createSlice({
     },
     setSettingsLabelId(state, { payload }: PayloadAction<string>) {
       state.settingsLabelId = payload
+    },
+    setShowKeyboardCombos(state, { payload }: PayloadAction<boolean>) {
+      state.showKeyboardCombos = payload
     },
   },
   extraReducers: (builder) => {
@@ -101,6 +106,7 @@ export const {
   setShowAvatar,
   setEmailFetchSize,
   setSettingsLabelId,
+  setShowKeyboardCombos,
 } = utilsSlice.actions
 
 export const selectIsSettingsOpen = (state: RootState) =>
@@ -119,5 +125,7 @@ export const selectShowIntroduction = (state: RootState) =>
   state.utils.showIntroduction
 export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
+export const selectShowKeyboardCombos = (state: RootState) =>
+  state.utils.showKeyboardCombos
 
 export default utilsSlice.reducer

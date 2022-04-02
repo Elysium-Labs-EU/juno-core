@@ -13,6 +13,7 @@ import Introduction from '../Introduction/Introduction'
 import { useAppSelector } from '../../Store/hooks'
 import { selectSelectedEmails } from '../../Store/emailListSlice'
 import SelectedOptions from './SelectedOptions/SelectedOptions'
+import Help from '../Help/Help'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -50,6 +51,7 @@ const ShowIntroduction = memo(() => {
 
 const Header = () => {
   const selectedEmails = useAppSelector(selectSelectedEmails)
+
   return (
     <>
       <ShowIntroduction />
@@ -57,6 +59,7 @@ const Header = () => {
       <SetHeader />
       <Search />
       <Settings />
+      <Help />
       {selectedEmails.length > 0 && <SelectedOptions />}
     </>
   )
