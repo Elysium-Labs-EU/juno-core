@@ -15,6 +15,7 @@ export const Dialog = styled.div`
   border-radius: 5px;
   overflow: hidden;
   z-index: 1;
+  outline: 0;
 `
 
 export const SettingsContainer = styled.div`

@@ -11,6 +11,7 @@ export const Dialog = styled.div`
   background-color: var(--color-white);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   margin: 100px 0px 0px 0px;
+  outline: 0;
 `
 
 export const HeaderRow = styled.div`
