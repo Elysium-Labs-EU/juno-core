@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiSkipForward } from 'react-icons/fi'
 import navigateNextMail from '../../../utils/navigateNextEmail'
 import CustomButton from '../../Elements/Buttons/CustomButton'
@@ -19,6 +19,8 @@ import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
 
+const actionKeys = [global.KEY_SHIFT, global.KEY_K, global.KEY_OS]
+
 const SkipOption = () => {
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)
@@ -29,9 +31,8 @@ const SkipOption = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const composeEmail = useAppSelector(selectComposeEmail)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
-  const keysPressed = useMultiKeyPress()
 
-  const handleEvent = useCallback(() => {
+  const handleEvent = () => {
     dispatch(setSessionViewIndex(sessionViewIndex + 1))
     navigateNextMail({
       dispatch,
@@ -41,31 +42,8 @@ const SkipOption = () => {
       coreStatus,
       composeEmail,
     })
-  }, [
-    dispatch,
-    viewIndex,
-    labelIds,
-    emailList,
-    activeEmailListIndex,
-    composeEmail,
-    coreStatus,
-  ])
-
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_SHIFT) &&
-      keysPressed.includes(global.KEY_K) &&
-      keysPressed.includes(global.KEY_OS) &&
-      !inSearch
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  }
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

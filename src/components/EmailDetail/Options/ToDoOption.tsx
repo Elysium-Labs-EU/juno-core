@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiCheckCircle } from 'react-icons/fi'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
@@ -10,6 +10,8 @@ import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
 
+const actionKeys = [global.KEY_OS, global.KEY_E]
+
 const ToDoOption = ({
   threadDetail,
 }: {
@@ -18,7 +20,6 @@ const ToDoOption = ({
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
@@ -30,20 +31,7 @@ const ToDoOption = ({
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E) &&
-      !inSearch
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

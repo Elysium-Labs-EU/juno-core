@@ -77,7 +77,7 @@ const DetailNavigationContainer = ({
   useEffect(() => {
     let mounted = true
     if (viewIndex > -1 && !isSilentLoading) {
-      if (activeEmailList.threads.length - 1 === viewIndex) {
+      if (activeEmailList.threads.length - 1 === viewIndex && mounted) {
         const { nextPageToken } = activeEmailList
         const silentLoading = true
         if (
@@ -85,7 +85,7 @@ const DetailNavigationContainer = ({
           activeEmailList.threads[viewIndex + 1] === undefined &&
           mounted
         ) {
-          if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+          if (!labelIds.includes(global.ARCHIVE_LABEL) && mounted) {
             return loadNextPage({
               nextPageToken,
               labelIds,

@@ -25,6 +25,8 @@ import sortThreads from '../../utils/sortThreads'
 import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
+const ENTER_TO_SEARCH = 'Enter to Search'
+
 interface IShouldClearOutPreviousResults {
   searchValueRef: any
   searchValue: string
@@ -303,9 +305,12 @@ const Search = () => {
               {loadState === SEARCH_STATE.LOADING ? (
                 <LoadingState />
               ) : (
-                <GS.TextMutedParagraph>
-                  {global.NOTHING_TO_SEE}
-                </GS.TextMutedParagraph>
+                <div>
+                  <span>{ENTER_TO_SEARCH}</span>
+                  <GS.TextMutedParagraph>
+                    {global.NOTHING_TO_SEE}
+                  </GS.TextMutedParagraph>
+                </div>
               )}
             </S.NoSearchResults>
           )}

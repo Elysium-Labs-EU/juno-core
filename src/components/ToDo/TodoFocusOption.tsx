@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
@@ -16,6 +16,8 @@ import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 
+const actionKeys = [global.KEY_OS, global.KEY_E]
+
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
@@ -23,9 +25,8 @@ const TodoFocusOption = () => {
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
 
-  const activateFocusMode = () => {
+  const handleEvent = useCallback(() => {
     const staticLabelURL = labelURL(labelIds)
     if (staticLabelURL) {
       startSort({
@@ -37,27 +38,14 @@ const TodoFocusOption = () => {
       dispatch(setCoreStatus(global.CORE_STATUS_FOCUSED))
       dispatch(setSessionViewIndex(0))
     }
-  }
+  }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E) &&
-      !inSearch
-    ) {
-      activateFocusMode()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <S.SortContainer>
       <CustomAttentionButton
-        onClick={activateFocusMode}
+        onClick={handleEvent}
         disabled={
           isLoading ||
           activeEmailListIndex < 0 ||

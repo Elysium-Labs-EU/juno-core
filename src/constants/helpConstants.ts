@@ -10,6 +10,7 @@ export const GLOBAL_KEY_COMBOS = [
   { title: 'Open Compose', keys: ['4'] },
   { title: 'Open Help', keys: ['CMD', '/'] },
   { title: 'Focus Mode / Sort Inbox', keys: ['CMD', 'E'] },
+  { title: 'Close Window / Back', keys: ['ESCAPE'] },
 ]
 
 export const EMAIL_KEY_TITLE = 'Email'

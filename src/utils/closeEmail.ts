@@ -17,7 +17,7 @@ const labelMap: { [key: string]: string } = {
   SENT: `${Routes.SENT}`,
 }
 
-const CloseMail = (props: CloseMailProps) => {
+const closeMail = (props: CloseMailProps) => {
   const { dispatch, labelIds, storageLabels } = props
   const foundLabel = FindLabelById({ storageLabels, labelIds })
   if (foundLabel.length > 0) {
@@ -29,4 +29,4 @@ const CloseMail = (props: CloseMailProps) => {
   return null
 }
 
-export default CloseMail
+export default closeMail

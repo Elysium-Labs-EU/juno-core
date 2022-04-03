@@ -1,18 +1,15 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiInfo } from 'react-icons/fi'
 import { Tooltip } from '@mui/material'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import {
-  selectInSearch,
-  selectShowKeyboardCombos,
-  setShowKeyboardCombos,
-} from '../../Store/utilsSlice'
+import { selectInSearch, setShowKeyboardCombos } from '../../Store/utilsSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import * as global from '../../constants/globalConstants'
 import * as S from './HelpStyles'
 
 const SIZE = 16
+const actionKeys = [global.KEY_OS, global.KEY_FORWARD_SLASH]
 
 const customStyles = {
   background: 'var(--color-white-off',
@@ -22,30 +19,14 @@ const customStyles = {
 }
 
 const HelpButton = () => {
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
-  const showKeyBoardCombos = useAppSelector(selectShowKeyboardCombos)
   const dispatch = useAppDispatch()
 
   const handleEvent = useCallback(() => {
     dispatch(setShowKeyboardCombos(true))
   }, [dispatch])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_FORWARD_SLASH) &&
-      !inSearch &&
-      !showKeyBoardCombos
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch, showKeyBoardCombos])
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <Tooltip title="Keyboard combos">
