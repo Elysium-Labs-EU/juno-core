@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { FiSkipForward } from 'react-icons/fi'
 import navigateNextMail from '../../../utils/navigateNextEmail'
 import CustomButton from '../../Elements/Buttons/CustomButton'
