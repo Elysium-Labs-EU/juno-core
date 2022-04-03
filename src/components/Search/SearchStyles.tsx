@@ -31,9 +31,20 @@ export const InputRow = styled.div`
   padding: 1rem 2rem;
 `
 
+export const InfoAndButton = styled.div`
+  display: flex;
+  flex-flow: row;
+`
+
 export const NoSearchResults = styled.div`
   display: flex;
-  place-content: center;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  div {
+    margin-top: 20px;
+    text-align: center;
+  }
 `
 
 export const SearchResults = styled.div`
