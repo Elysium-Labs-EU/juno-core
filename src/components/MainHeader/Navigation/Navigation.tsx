@@ -48,7 +48,7 @@ const Navigation = () => {
 
   useEffect(() => {
     let mounted = true
-    if (mounted && !inSearch) {
+    if (mounted && !inSearch && !location.pathname.includes('/compose')) {
       if (keysPressed.includes(global.KEY_DIGIT_1)) {
         navigateTo(Routes.HOME)
       }
@@ -65,7 +65,7 @@ const Navigation = () => {
     return () => {
       mounted = false
     }
-  }, [keysPressed, inSearch])
+  }, [keysPressed, inSearch, location])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)

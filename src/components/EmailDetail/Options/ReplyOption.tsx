@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiCornerUpLeft } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
@@ -8,12 +8,14 @@ import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import useKeyCombo from '../../../Hooks/useKeyCombo'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
 }
 
 const messageIndex = 0
+const actionKeys = [global.KEY_ENTER, global.KEY_OS]
 
 const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -30,20 +32,7 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, messageIndex, dispatch])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_ENTER) &&
-      keysPressed.includes(global.KEY_OS) &&
-      !inSearch
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
 
   return (
     <CustomButton

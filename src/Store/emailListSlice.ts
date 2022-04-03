@@ -349,9 +349,9 @@ export const loadEmailDetails =
         const buffer: any = []
 
         if (threads.length > 0) {
-          for (const thread of threads) {
+          threads.forEach((thread) =>
             buffer.push(threadApi({}).getThreadDetail(thread.id))
-          }
+          )
           dispatch(
             listAddEmailList({
               labels,

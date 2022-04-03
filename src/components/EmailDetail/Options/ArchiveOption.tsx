@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiArchive } from 'react-icons/fi'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
@@ -9,6 +9,9 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import useKeyCombo from '../../../Hooks/useKeyCombo'
+
+const actionKeys = [global.KEY_OS, global.KEY_BACKSPACE]
 
 const ArchiveOption = ({
   threadDetail,
@@ -28,20 +31,7 @@ const ArchiveOption = ({
     })
   }, [threadDetail, labelIds, dispatch])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_BACKSPACE) &&
-      !inSearch
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
 
   return (
     <CustomButton

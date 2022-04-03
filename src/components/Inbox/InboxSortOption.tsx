@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback } from 'react'
 import * as global from '../../constants/globalConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../Store/labelsSlice'
@@ -13,8 +13,10 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import useKeyCombo from '../../Hooks/useKeyCombo'
 
 const INBOX_BUTTON = 'Sort inbox'
+const actionKeys = [global.KEY_OS, global.KEY_E]
 
 const SortInbox = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -25,7 +27,7 @@ const SortInbox = () => {
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
 
-  const activateSortMode = () => {
+  const handleEvent = useCallback(() => {
     const staticLabelURL = labelURL(labelIds)
     if (staticLabelURL) {
       startSort({
@@ -37,26 +39,13 @@ const SortInbox = () => {
       dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
       dispatch(setSessionViewIndex(0))
     }
-  }
+  }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_OS) &&
-      keysPressed.includes(global.KEY_E) &&
-      !inSearch
-    ) {
-      activateSortMode()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
 
   return (
     <CustomAttentionButton
-      onClick={activateSortMode}
+      onClick={handleEvent}
       disabled={
         isLoading ||
         activeEmailListIndex < 0 ||

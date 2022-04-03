@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FiSkipForward } from 'react-icons/fi'
 import navigateNextMail from '../../../utils/navigateNextEmail'
 import CustomButton from '../../Elements/Buttons/CustomButton'
@@ -18,6 +18,9 @@ import {
 import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import useKeyCombo from '../../../Hooks/useKeyCombo'
+
+const actionKeys = [global.KEY_SHIFT, global.KEY_K, global.KEY_OS]
 
 const SkipOption = () => {
   const dispatch = useAppDispatch()
@@ -51,21 +54,7 @@ const SkipOption = () => {
     coreStatus,
   ])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      keysPressed.includes(global.KEY_SHIFT) &&
-      keysPressed.includes(global.KEY_K) &&
-      keysPressed.includes(global.KEY_OS) &&
-      !inSearch
-    ) {
-      handleEvent()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [keysPressed, inSearch])
+  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
 
   return (
     <CustomButton
