@@ -62,7 +62,6 @@ const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
           {staticOnlyLegalLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} />
           )}
-          {console.log('rerender')}
           {coreStatus === global.CORE_STATUS_FOCUSED && <SkipOption />}
           {staticOnlyLegalLabels.length > 0 && (
             <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />

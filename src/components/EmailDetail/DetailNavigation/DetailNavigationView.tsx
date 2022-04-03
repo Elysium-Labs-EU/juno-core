@@ -13,8 +13,7 @@ import {
   IEmailListObject,
   IEmailListObjectSearch,
 } from '../../../Store/emailListTypes'
-// import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-// import useKeyCombo from '../../../Hooks/useKeyCombo'
+import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 
 const ICON_SIZE = 20
 const actionKeys = [global.KEY_ESCAPE]
@@ -39,13 +38,12 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(selectIsLoading)
   const storageLabels = useAppSelector(selectStorageLabels)
-  // const keysPressed = useMultiKeyPress()
 
   const handleCloseEvent = useCallback(() => {
     closeMail({ labelIds, storageLabels, dispatch })
   }, [labelIds, storageLabels, dispatch])
 
-  // useKeyCombo({ handleEvent: handleCloseEvent, keysPressed, actionKeys })
+  useMultiKeyPress(handleCloseEvent, actionKeys)
 
   const handleNavPrevEvent = useCallback(() => {
     navigatePreviousMail({
