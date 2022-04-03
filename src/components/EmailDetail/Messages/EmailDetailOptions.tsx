@@ -32,7 +32,9 @@ const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
   const location = useLocation()
 
   useEffect(() => {
-    setShowMenu(false)
+    if (showMenu) {
+      setShowMenu(false)
+    }
   }, [location])
 
   // Use on legal labels - if there is at least 1 legal label, the item can be archived still.
@@ -60,6 +62,7 @@ const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
           {staticOnlyLegalLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} />
           )}
+          {console.log('rerender')}
           {coreStatus === global.CORE_STATUS_FOCUSED && <SkipOption />}
           {staticOnlyLegalLabels.length > 0 && (
             <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />

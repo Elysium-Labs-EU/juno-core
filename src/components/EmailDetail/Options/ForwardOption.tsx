@@ -7,7 +7,6 @@ import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import useKeyCombo from '../../../Hooks/useKeyCombo'
 import { selectInSearch } from '../../../Store/utilsSlice'
 
 interface IEmailDetailOptions {
@@ -19,7 +18,6 @@ const actionKeys = [global.KEY_SHIFT, global.KEY_ENTER]
 
 const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
@@ -32,7 +30,7 @@ const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, messageIndex, dispatch])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

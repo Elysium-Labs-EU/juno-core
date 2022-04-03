@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
-import useKeyCombo from '../../Hooks/useKeyCombo'
 
 const actionKeys = [global.KEY_OS, global.KEY_E]
 
@@ -26,7 +25,6 @@ const TodoFocusOption = () => {
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
 
   const handleEvent = useCallback(() => {
     const staticLabelURL = labelURL(labelIds)
@@ -42,7 +40,7 @@ const TodoFocusOption = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <S.SortContainer>

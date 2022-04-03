@@ -8,7 +8,6 @@ import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import useKeyCombo from '../../../Hooks/useKeyCombo'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -19,7 +18,6 @@ const actionKeys = [global.KEY_ENTER, global.KEY_OS]
 
 const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
@@ -32,7 +30,7 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, messageIndex, dispatch])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

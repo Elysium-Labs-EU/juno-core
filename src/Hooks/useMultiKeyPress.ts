@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
+import multipleIncludes from '../utils/multipleIncludes'
 
-export default function useMultiKeyPress() {
+export default function useMultiKeyPress(
+  handleEvent?: Function,
+  actionKeys?: string[],
+  inSearch?: boolean
+) {
   const [keysPressed, setKeyPressed] = useState<string[]>([])
 
   // To ensure that the array is clean.
@@ -9,7 +14,7 @@ export default function useMultiKeyPress() {
     if (keysPressed.length > 0) {
       timer = setTimeout(() => {
         setKeyPressed([])
-      }, 800)
+      }, 250)
     }
     return () => {
       if (timer) {
@@ -17,6 +22,19 @@ export default function useMultiKeyPress() {
       }
     }
   }, [keysPressed])
+
+  useEffect(() => {
+    if (handleEvent) {
+      if (
+        keysPressed.length > 0 &&
+        multipleIncludes(actionKeys, keysPressed) &&
+        (!inSearch ?? true)
+      ) {
+        handleEvent()
+        setKeyPressed([])
+      }
+    }
+  }, [keysPressed, handleEvent])
 
   useEffect(() => {
     let mounted = true

@@ -9,7 +9,6 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import useKeyCombo from '../../../Hooks/useKeyCombo'
 
 const actionKeys = [global.KEY_OS, global.KEY_BACKSPACE]
 
@@ -20,7 +19,6 @@ const ArchiveOption = ({
 }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
@@ -31,7 +29,7 @@ const ArchiveOption = ({
     })
   }, [threadDetail, labelIds, dispatch])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

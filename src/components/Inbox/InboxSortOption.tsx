@@ -13,7 +13,6 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
-import useKeyCombo from '../../Hooks/useKeyCombo'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [global.KEY_OS, global.KEY_E]
@@ -25,7 +24,6 @@ const SortInbox = () => {
   const inSearch = useAppSelector(selectInSearch)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
 
   const handleEvent = useCallback(() => {
     const staticLabelURL = labelURL(labelIds)
@@ -41,7 +39,7 @@ const SortInbox = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomAttentionButton

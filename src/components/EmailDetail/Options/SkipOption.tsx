@@ -18,7 +18,6 @@ import {
 import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import useKeyCombo from '../../../Hooks/useKeyCombo'
 
 const actionKeys = [global.KEY_SHIFT, global.KEY_K, global.KEY_OS]
 
@@ -32,9 +31,8 @@ const SkipOption = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const composeEmail = useAppSelector(selectComposeEmail)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
-  const keysPressed = useMultiKeyPress()
 
-  const handleEvent = useCallback(() => {
+  const handleEvent = () => {
     dispatch(setSessionViewIndex(sessionViewIndex + 1))
     navigateNextMail({
       dispatch,
@@ -44,17 +42,8 @@ const SkipOption = () => {
       coreStatus,
       composeEmail,
     })
-  }, [
-    dispatch,
-    viewIndex,
-    labelIds,
-    emailList,
-    activeEmailListIndex,
-    composeEmail,
-    coreStatus,
-  ])
-
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  }
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton

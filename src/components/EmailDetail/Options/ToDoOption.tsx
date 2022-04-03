@@ -9,7 +9,6 @@ import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import useKeyCombo from '../../../Hooks/useKeyCombo'
 
 const actionKeys = [global.KEY_OS, global.KEY_E]
 
@@ -21,7 +20,6 @@ const ToDoOption = ({
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
@@ -33,7 +31,7 @@ const ToDoOption = ({
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 
-  useKeyCombo({ handleEvent, keysPressed, actionKeys, inSearch })
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
     <CustomButton
