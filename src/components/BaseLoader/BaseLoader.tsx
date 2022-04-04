@@ -32,7 +32,9 @@ const Baseloader = () => {
             {serviceUnavailable.includes(ERROR_CODE_UNAUTHORIZED) && (
               <HS.PageTitle>{LOG_OUT_IN}</HS.PageTitle>
             )}
-            <p>{serviceUnavailable}</p>
+            <S.ServiceUnavailableParagraph>
+              {serviceUnavailable}
+            </S.ServiceUnavailableParagraph>
             <LogoutOption />
           </>
         )}
