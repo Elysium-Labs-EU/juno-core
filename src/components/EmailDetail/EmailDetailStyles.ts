@@ -63,6 +63,7 @@ export const EmailOptionsContainer = styled.div`
 export const EmailOptionsPlaceholder = styled.div`
   width: 170px;
   padding: 30px;
+  box-sizing: border-box;
 `
 
 export const StickyOptions = styled.div`

@@ -18,3 +18,7 @@ export const INVALID_HEADER = ''
 export const MESSAGES = 'messages'
 export const FILES = 'files'
 export const INFORMATION = 'information'
+export const STATUS_STATUS_MAP = {
+  idle: 'idle',
+  loaded: 'loaded',
+}

@@ -15,7 +15,7 @@ const getRandomColor = (senderName: string) => {
   const g = (num >> 8) & 100
   const b = num & 255
 
-  return `rgb(${r}, ${g}, ${b}, 0.4)`
+  return `rgb(${r}, ${g}, ${b}, 0.2)`
 }
 
 export default getRandomColor

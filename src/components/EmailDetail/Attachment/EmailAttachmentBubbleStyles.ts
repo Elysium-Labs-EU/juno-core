@@ -1,22 +1,26 @@
 import styled from 'styled-components'
 
-export const Attachment = styled.div`
+interface IAttachment {
+  index: number | undefined
+}
+
+export const Attachment = styled.div<IAttachment>`
   border-radius: 6px;
   background-color: hsl(0, 0%, 94%);
   cursor: pointer;
   display: flex;
   flex-flow: row;
   max-width: max-content;
-  padding: 0.2rem 0.5rem;
+  padding: 4px 8px;
   align-items: center;
-  margin-left: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-left: ${({ index }) => (index !== 0 ? '0.5rem' : 0)};
+  margin-bottom: 8px;
 `
 
 export const AttachmentInner = styled.div`
   display: flex;
   flex-flow: column;
-  margin: 0.3rem;
+  margin: 8px;
   span {
     font-size: 12px;
     font-weight: normal;

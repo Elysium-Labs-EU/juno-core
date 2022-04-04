@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { Badge } from '@mui/material'
 
 export const TabContainer = styled.nav`
   position: relative;
@@ -53,5 +54,13 @@ export const StyedListItem = styled.li<StyledListItem>`
   &:disabled {
     color: var(--color-grey-ultra-light);
     cursor: not-allowed;
+  }
+`
+
+export const StyledBadge = styled(Badge)`
+  .MuiBadge-badge {
+    background-color: var(--color-black);
+    top: 10px;
+    right: -16px;
   }
 `
