@@ -1,8 +1,12 @@
 import { useSelector } from 'react-redux'
 import * as S from './BaseLoaderStyles'
+import * as HS from '../MainHeader/HeaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
 import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
+
+const ERROR_CODE_UNAUTHORIZED = '401'
+const LOG_OUT_IN = 'Log out, log back in'
 
 const Baseloader = () => {
   const serviceUnavailable = useSelector(selectServiceUnavailable)
@@ -25,6 +29,9 @@ const Baseloader = () => {
         )}
         {serviceUnavailable && (
           <>
+            {serviceUnavailable.includes(ERROR_CODE_UNAUTHORIZED) && (
+              <HS.PageTitle>{LOG_OUT_IN}</HS.PageTitle>
+            )}
             <p>{serviceUnavailable}</p>
             <LogoutOption />
           </>
