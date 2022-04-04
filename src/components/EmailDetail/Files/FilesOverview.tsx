@@ -54,14 +54,20 @@ const FilesOverview = (props: IFilesOverview) => {
           return null
         })
     }
-    return <span>{local.NO_FILES}</span>
+    return null
   }
+
+  const staticFiles = files()?.filter((item) => item !== null)
 
   return (
     <ES.DetailRow>
       <ES.EmailDetailContainer>
         <S.FilesWrapper>
-          {!isLoading && files()}
+          {!isLoading && staticFiles && staticFiles.length > 0 ? (
+            staticFiles
+          ) : (
+            <span>{local.NO_FILES}</span>
+          )}
           {isLoading && <CircularProgress />}
         </S.FilesWrapper>
       </ES.EmailDetailContainer>
