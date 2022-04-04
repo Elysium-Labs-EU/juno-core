@@ -14,9 +14,11 @@ const FILE = 'File - '
 const RenderAttachment = ({
   attachmentData,
   messageId,
+  index,
 }: {
   attachmentData: IEmailAttachmentType
   messageId: string
+  index: number | undefined
 }) => {
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
@@ -27,7 +29,7 @@ const RenderAttachment = ({
   }
 
   return (
-    <S.Attachment key={attachmentData.partId}>
+    <S.Attachment index={index}>
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
       <S.AttachmentInner>
         <span>{attachmentData.filename}</span>
@@ -47,12 +49,22 @@ const RenderAttachment = ({
 const EmailAttachmentBubble = ({
   attachmentData,
   messageId,
+  index,
 }: {
   attachmentData: IEmailAttachmentType
   messageId: string
+  index?: number
 }) =>
   attachmentData.filename.length > 0 && messageId.length > 0 ? (
-    <RenderAttachment attachmentData={attachmentData} messageId={messageId} />
+    <RenderAttachment
+      attachmentData={attachmentData}
+      messageId={messageId}
+      index={index}
+    />
   ) : null
 
 export default EmailAttachmentBubble
+
+EmailAttachmentBubble.defaultProps = {
+  index: undefined,
+}

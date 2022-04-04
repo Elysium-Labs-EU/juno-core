@@ -76,7 +76,7 @@ const EmailDetailHeader = ({
           </S.HeaderCenter>
           <Navigation />
           <S.InnerMenu>
-            <Tabs />
+            <Tabs activeEmailList={activeEmailList} />
             <DetailNavigationContainer activeEmailList={activeEmailList} />
           </S.InnerMenu>
         </S.Wrapper>

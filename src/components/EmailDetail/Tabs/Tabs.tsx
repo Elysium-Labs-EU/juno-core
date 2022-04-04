@@ -2,17 +2,28 @@ import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import * as S from './TabsStyles'
-import * as local from '../../../constants/menuConstants'
-import { useAppDispatch } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../Store/emailListTypes'
+import { selectViewIndex } from '../../../Store/emailDetailSlice'
+import MessagesTab from './MessagesTab'
+import FilesTab from './FilesTab'
 
 interface ITabItem {
   name: string
   link: string
 }
 
-const Tabs = () => {
-  const dispatch = useAppDispatch()
+const Tabs = ({
+  activeEmailList,
+}: {
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
+}) => {
   const [activeLink, setActiveLink] = useState('')
+  const dispatch = useAppDispatch()
+  const viewIndex = useAppSelector(selectViewIndex)
   const location = useLocation()
 
   const navigateTo = (item: ITabItem) => {
@@ -29,23 +40,22 @@ const Tabs = () => {
     }
   }, [location])
 
-  const mappedMenu = local.MENU_OPTIONS && (
-    <S.ItemsContainer>
-      {local.MENU_OPTIONS.map((item, index) => (
-        <S.StyedListItem
-          key={`${item.name + index}`}
-          style={{ cursor: 'pointer' }}
-          onClick={() => navigateTo(item)}
-          aria-hidden="true"
-          isActive={activeLink === item.name}
-        >
-          {item.name}
-        </S.StyedListItem>
-      ))}
-    </S.ItemsContainer>
+  return (
+    <S.TabContainer>
+      <S.ItemsContainer>
+        <MessagesTab
+          activeLink={activeLink}
+          navigateTo={navigateTo}
+          activeThread={activeEmailList.threads[viewIndex]}
+        />
+        <FilesTab
+          activeLink={activeLink}
+          navigateTo={navigateTo}
+          activeThread={activeEmailList.threads[viewIndex]}
+        />
+      </S.ItemsContainer>
+    </S.TabContainer>
   )
-
-  return <S.TabContainer>{mappedMenu}</S.TabContainer>
 }
 
 export default Tabs

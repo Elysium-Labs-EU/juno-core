@@ -1,6 +1,2 @@
-/* eslint-disable import/prefer-default-export */
-export const MENU_OPTIONS = [
-  { link: 'messages', name: 'Messages' },
-  { link: 'files', name: 'Files' },
-  // { link: 'information', name: 'Information' },
-]
+export const MESSAGE_MENU_ITEM = { link: 'messages', name: 'Messages' }
+export const FILES_MENU_ITEM = { link: 'files', name: 'Files' }

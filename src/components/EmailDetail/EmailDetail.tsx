@@ -47,7 +47,7 @@ const EmailDetail = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const [baseState, setBaseState] = useState('idle')
+  const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
   const { threadId, overviewId } =
     useParams<{ threadId: string; overviewId: string }>()
@@ -58,7 +58,7 @@ const EmailDetail = () => {
   // This will set the activeEmailList when first opening the email.
   // It will also update the activeEmailList whenever an email is archived or removed.
   useEffect(() => {
-    setBaseState('loaded')
+    setBaseState(local.STATUS_STATUS_MAP.loaded)
     if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
       setActiveEmailList(searchList)
     } else if (emailList && emailList[activeEmailListIndex]) {
@@ -68,7 +68,10 @@ const EmailDetail = () => {
 
   // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
   useEffect(() => {
-    if (currentEmail !== currentLocal && baseState === 'loaded') {
+    if (
+      currentEmail !== currentLocal &&
+      baseState === local.STATUS_STATUS_MAP.loaded
+    ) {
       if (activeEmailList) {
         setCurrentLocal(currentEmail)
       } else {

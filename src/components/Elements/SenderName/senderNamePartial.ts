@@ -6,7 +6,7 @@ import * as global from '../../../constants/globalConstants'
 
 export const NO_SENDER = '(No sender)'
 
-const SenderNamePartial = (
+const senderNamePartial = (
   message: IEmailMessage,
   emailAddress: string
 ): Contact => {
@@ -24,4 +24,4 @@ const SenderNamePartial = (
   return { name: NO_SENDER, emailAddress: NO_SENDER }
 }
 
-export default SenderNamePartial
+export default senderNamePartial
