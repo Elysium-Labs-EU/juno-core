@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import EmailHasAttachment from '../Elements/EmailHasAttachment'
@@ -28,6 +28,7 @@ import {
   selectSelectedEmails,
   setSelectedEmails,
 } from '../../Store/emailListSlice'
+import useKeyPress from '../../Hooks/useKeyPress'
 
 // If the user is on Draft list, show only draft emails.
 const shouldUseDraftOrRegular = (
@@ -48,111 +49,133 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
-const EmailListItem = memo(
-  ({
-    email,
-    showLabel,
-  }: {
-    email: IEmailListThreadItem
-    showLabel: boolean
-  }) => {
-    const { emailAddress } = useAppSelector(selectProfile)
-    const inSearch = useAppSelector(selectInSearch)
-    const selectedEmails = useAppSelector(selectSelectedEmails)
-    const storageLabels = useAppSelector(selectStorageLabels)
-    const labelIds = useAppSelector(selectLabelIds)
-    const { id } = email
-    const dispatch = useAppDispatch()
+const EmailListItem = ({
+  email,
+  showLabel,
+  index,
+  activeIndex,
+}: {
+  email: IEmailListThreadItem
+  showLabel: boolean
+  index: number
+  activeIndex: number
+}) => {
+  const [isFocused, setIsFocused] = useState(false)
+  const { emailAddress } = useAppSelector(selectProfile)
+  const inSearch = useAppSelector(selectInSearch)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const storageLabels = useAppSelector(selectStorageLabels)
+  const labelIds = useAppSelector(selectLabelIds)
+  const { id } = email
+  const dispatch = useAppDispatch()
+  const EnterKeyListener = useKeyPress(global.KEY_ENTER)
 
-    const staticShouldUseDraftOrRegular = useMemo(
-      () => shouldUseDraftOrRegular(labelIds, email),
-      []
-    )
-    const staticEmailLabels = useMemo(
-      () => emailLabels(staticShouldUseDraftOrRegular),
-      []
-    )
-    const staticRecipientName = useMemo(
-      () =>
-        RecipientName(
-          staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
-          emailAddress
-        ),
-      []
-    )
-    const staticSenderPartial = useMemo(
-      () =>
-        SenderNamePartial(
-          staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
-          emailAddress
-        ),
-      []
-    )
-    const staticSenderFull = useMemo(
-      () =>
-        SenderNameFull(
-          staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ],
-          emailAddress
-        ),
-      []
-    )
-    const staticSubjectFetch = useMemo(
-      () =>
-        EmailSubject(
-          staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ]
-        ),
-      []
-    )
-    const staticSubject =
-      staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
-    const staticSnippet = useMemo(
-      () =>
-        EmailSnippet(
-          staticShouldUseDraftOrRegular.message ||
-            staticShouldUseDraftOrRegular.messages![
-              staticShouldUseDraftOrRegular.messages!.length - 1
-            ]
-        ),
-      []
-    )
-
-    const handleClick = useCallback(() => {
-      openEmail({
-        labelIds,
-        id,
-        email: staticShouldUseDraftOrRegular,
-        dispatch,
-        inSearch,
-        storageLabels,
-      })
-    }, [])
-
-    const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
-      dispatch(
-        setSelectedEmails([
-          {
-            id,
-            event: event.target.checked ? 'add' : 'remove',
-          },
-        ])
-      )
+  useEffect(() => {
+    if (!isFocused && activeIndex === index) {
+      setIsFocused(true)
     }
+    if (isFocused && activeIndex !== index) {
+      setIsFocused(false)
+    }
+  }, [activeIndex, index, isFocused])
 
-    return (
+  const staticShouldUseDraftOrRegular = useMemo(
+    () => shouldUseDraftOrRegular(labelIds, email),
+    []
+  )
+  const staticEmailLabels = useMemo(
+    () => emailLabels(staticShouldUseDraftOrRegular),
+    []
+  )
+  const staticRecipientName = useMemo(
+    () =>
+      RecipientName(
+        staticShouldUseDraftOrRegular.message ||
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
+        emailAddress
+      ),
+    []
+  )
+  const staticSenderPartial = useMemo(
+    () =>
+      SenderNamePartial(
+        staticShouldUseDraftOrRegular.message ||
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
+        emailAddress
+      ),
+    []
+  )
+  const staticSenderFull = useMemo(
+    () =>
+      SenderNameFull(
+        staticShouldUseDraftOrRegular.message ||
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ],
+        emailAddress
+      ),
+    []
+  )
+  const staticSubjectFetch = useMemo(
+    () =>
+      EmailSubject(
+        staticShouldUseDraftOrRegular.message ||
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ]
+      ),
+    []
+  )
+  const staticSubject =
+    staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
+  const staticSnippet = useMemo(
+    () =>
+      EmailSnippet(
+        staticShouldUseDraftOrRegular.message ||
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ]
+      ),
+    []
+  )
+
+  const handleOpenEvent = useCallback(() => {
+    openEmail({
+      labelIds,
+      id,
+      email: staticShouldUseDraftOrRegular,
+      dispatch,
+      inSearch,
+      storageLabels,
+    })
+  }, [])
+
+  useEffect(() => {
+    // This is not triggered in search mode.
+    if (EnterKeyListener && isFocused && !inSearch) {
+      handleOpenEvent()
+    }
+  }, [EnterKeyListener, isFocused, inSearch])
+
+  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(
+      setSelectedEmails([
+        {
+          id,
+          event: event.target.checked ? 'add' : 'remove',
+        },
+      ])
+    )
+  }
+
+  const memoizedEmailListItem = useMemo(
+    () => (
       <S.ThreadBase emailLabels={staticEmailLabels}>
-        <S.ThreadRow showLabel={showLabel}>
+        <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
           <S.CellCheckbox inSelect={selectedEmails.length > 0}>
             <Checkbox
               checked={selectedEmails.includes(id)}
@@ -163,7 +186,7 @@ const EmailListItem = memo(
           <S.CelUnread>
             {staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />}
           </S.CelUnread>
-          <S.CellName onClick={handleClick} aria-hidden="true">
+          <S.CellName onClick={handleOpenEvent} aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(draft.DRAFT_LABEL) ? (
                 <EmailAvatar avatarURL={staticSenderFull} />
@@ -186,7 +209,7 @@ const EmailListItem = memo(
               <EmailLabel labelNames={staticEmailLabels} />
             </S.CellLabels>
           )}
-          <S.CellMessage onClick={handleClick} aria-hidden="true">
+          <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
               {labelIds.includes(draft.DRAFT_LABEL) && (
                 <span style={{ fontWeight: 'bold' }}>
@@ -218,8 +241,11 @@ const EmailListItem = memo(
           )}
         </S.ThreadRow>
       </S.ThreadBase>
-    )
-  }
-)
+    ),
+    [isFocused]
+  )
+
+  return memoizedEmailListItem
+}
 
 export default EmailListItem

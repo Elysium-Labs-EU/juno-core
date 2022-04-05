@@ -24,6 +24,7 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
+import useKeyPress from '../../Hooks/useKeyPress'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 
@@ -119,6 +120,7 @@ const openDetail = ({
 const handleClose = (dispatch: Function) => dispatch(setInSearch(false))
 
 const Search = () => {
+  const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const [searchValue, setSearchValue] = useState('')
   const searchValueRef = useRef('')
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -127,6 +129,27 @@ const Search = () => {
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
+  const ArrowDownListener = useKeyPress(global.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(global.KEY_ARROW_UP)
+  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+
+  useEffect(() => {
+    if (EscapeListener) {
+      setFocusedItemIndex(-1)
+    }
+  }, [EscapeListener])
+
+  useEffect(() => {
+    if (ArrowDownListener) {
+      setFocusedItemIndex((prevState) => prevState + 1)
+    }
+  }, [ArrowDownListener])
+
+  useEffect(() => {
+    if (ArrowUpListener) {
+      setFocusedItemIndex((prevState) => prevState - 1)
+    }
+  }, [ArrowUpListener])
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
@@ -195,8 +218,18 @@ const Search = () => {
     }
   }
 
+  const handleOpenEvent = (threadId: string) => {
+    if (searchResults) {
+      openDetail({
+        dispatch,
+        searchResults,
+        currentEmail: threadId,
+      })
+    }
+  }
+
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === 'Enter') {
+    if (event.code.toUpperCase() === global.KEY_ENTER) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
           searchValue,
@@ -206,6 +239,8 @@ const Search = () => {
           setSearchResults,
           dispatch,
         })
+      } else if (searchResults && focusedItemIndex > -1) {
+        handleOpenEvent(searchResults.threads[focusedItemIndex].id)
       }
     }
   }
@@ -259,19 +294,20 @@ const Search = () => {
         <S.SearchResults>
           {searchResults && searchResults.threads ? (
             <>
-              {searchResults.threads.map((thread) => (
+              {searchResults.threads.map((thread, index) => (
                 <div
                   key={`${thread.id}-search`}
-                  onClick={() =>
-                    openDetail({
-                      dispatch,
-                      searchResults,
-                      currentEmail: thread.id,
-                    })
-                  }
+                  onClick={() => handleOpenEvent(thread.id)}
+                  onFocus={() => setFocusedItemIndex(index)}
+                  onMouseOver={() => setFocusedItemIndex(index)}
                   aria-hidden="true"
                 >
-                  <EmailListItem email={thread} showLabel />
+                  <EmailListItem
+                    email={thread}
+                    showLabel
+                    index={index}
+                    activeIndex={focusedItemIndex}
+                  />
                 </div>
               ))}
               {searchResults.nextPageToken ? (
