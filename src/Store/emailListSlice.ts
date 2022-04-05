@@ -338,6 +338,7 @@ export const useSearchResults =
       )
     )
     dispatch(setCurrentEmail(currentEmail))
+    dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${currentEmail}/messages`))
   }
 
 export const loadEmailDetails =

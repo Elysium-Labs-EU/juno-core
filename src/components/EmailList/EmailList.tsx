@@ -13,6 +13,7 @@ import {
 import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
 import {
   selectEmailListSize,
+  selectInSearch,
   selectIsLoading,
   selectServiceUnavailable,
 } from '../../Store/utilsSlice'
@@ -29,16 +30,40 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
+import useKeyPress from '../../Hooks/useKeyPress'
 
 const RenderEmailList = ({
   filteredOnLabel,
 }: {
   filteredOnLabel: IEmailListObject
 }) => {
+  const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const emailFetchSize = useAppSelector(selectEmailListSize)
+  const inSearch = useAppSelector(selectInSearch)
+  const ArrowDownListener = useKeyPress(global.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(global.KEY_ARROW_UP)
+  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+
+  useEffect(() => {
+    if (EscapeListener && !inSearch) {
+      setFocusedItemIndex(-1)
+    }
+  }, [EscapeListener, inSearch])
+
+  useEffect(() => {
+    if (ArrowDownListener && !inSearch) {
+      setFocusedItemIndex((prevState) => prevState + 1)
+    }
+  }, [ArrowDownListener, inSearch])
+
+  useEffect(() => {
+    if (ArrowUpListener && !inSearch) {
+      setFocusedItemIndex((prevState) => prevState - 1)
+    }
+  }, [ArrowUpListener, inSearch])
 
   const { threads, nextPageToken } = filteredOnLabel
   return (
@@ -47,8 +72,20 @@ const RenderEmailList = ({
         <S.ThreadList>
           {threads.length > 0 && (
             <GS.Base>
-              {threads.map((email) => (
-                <EmailListItem key={email.id} email={email} showLabel={false} />
+              {threads.map((email, index) => (
+                <div
+                  key={email.id}
+                  onFocus={() => setFocusedItemIndex(index)}
+                  onMouseOver={() => setFocusedItemIndex(index)}
+                  aria-hidden="true"
+                >
+                  <EmailListItem
+                    email={email}
+                    showLabel={false}
+                    index={index}
+                    activeIndex={focusedItemIndex}
+                  />
+                </div>
               ))}
             </GS.Base>
           )}

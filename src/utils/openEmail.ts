@@ -1,7 +1,6 @@
 import { push } from 'redux-first-history'
 import { openDraftEmail } from '../Store/draftsSlice'
 import * as draft from '../constants/draftConstants'
-import * as global from '../constants/globalConstants'
 import labelURL from './createLabelURL'
 import { LabelIdName } from '../Store/labelsTypes'
 import filterIllegalLabels from './filterIllegalLabels'
@@ -19,14 +18,9 @@ interface IOpenEmailProps {
 const openEmail = (props: IOpenEmailProps) => {
   const { labelIds, id, email, dispatch, inSearch, storageLabels } = props
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
-  const staticLabelURL = labelURL(onlyLegalLabels)
 
   if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && !inSearch) {
-    dispatch(push(`/mail/${staticLabelURL}/${id}/messages`))
-    return
-  }
-  if (!onlyLegalLabels.includes(draft.DRAFT_LABEL) && inSearch) {
-    dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${id}/messages`))
+    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
     return
   }
   if (onlyLegalLabels.includes(draft.DRAFT_LABEL)) {

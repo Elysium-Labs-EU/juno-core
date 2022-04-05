@@ -6,10 +6,8 @@ interface IThreadBaseProps {
 }
 
 export const ThreadBase = styled.div<IThreadBaseProps>`
-  font-weight: ${(props) =>
-    props.emailLabels && props.emailLabels.includes(global.UNREAD_LABEL)
-      ? '550'
-      : '400'};
+  font-weight: ${({ emailLabels }) =>
+    emailLabels && emailLabels.includes(global.UNREAD_LABEL) ? '550' : '400'};
   position: relative;
   user-select: none;
   &:hover {
@@ -20,19 +18,23 @@ export const ThreadBase = styled.div<IThreadBaseProps>`
 
 interface IThreadRow {
   showLabel: boolean
+  isFocused: boolean
 }
 
 export const ThreadRow = styled.div<IThreadRow>`
   position: relative;
   display: grid;
-  grid-template-columns: ${(props) =>
-    !props.showLabel
+  grid-template-columns: ${({ showLabel }) =>
+    !showLabel
       ? '30px 20px 215px auto max-content 105px 20px 30px'
       : '30px 20px 215px fit-content(450px) auto max-content 105px 20px 30px'};
   font-size: 13px;
   height: 56px;
-  background-color: transparent;
+  background-color: ${({ isFocused }) =>
+    isFocused ? `var(--color-grey-hover)` : 'transparent'};
   transition: background-color ease-in 0.125s;
+  z-index: 2;
+  border-radius: 5px;
 
   &:hover {
     background-color: var(--color-grey-hover);
