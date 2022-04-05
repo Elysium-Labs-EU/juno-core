@@ -54,7 +54,11 @@ const RenderEmailList = ({
   }, [EscapeListener, inSearch])
 
   useEffect(() => {
-    if (ArrowDownListener && !inSearch) {
+    if (
+      ArrowDownListener &&
+      !inSearch &&
+      focusedItemIndex < filteredOnLabel.threads.length - 1
+    ) {
       setFocusedItemIndex((prevState) => prevState + 1)
     }
   }, [ArrowDownListener, inSearch])
