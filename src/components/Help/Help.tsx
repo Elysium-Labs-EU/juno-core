@@ -15,7 +15,7 @@ const handleClose = (dispatch: Function) =>
 
 interface IKeyCombos {
   title: string
-  keys: string[]
+  keys: string[] | {}[]
 }
 
 const CreateSectionWithKeys = ({
@@ -37,7 +37,7 @@ const CreateSectionWithKeys = ({
         <div>{combo.title}</div>
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
-            <span key={oneKey}>{oneKey}</span>
+            <span key={JSON.stringify(oneKey)}>{oneKey}</span>
           ))}
         </S.KeyBindShortcut>
       </S.KeyComboContainer>

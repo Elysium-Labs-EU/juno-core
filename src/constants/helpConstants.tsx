@@ -1,3 +1,5 @@
+import { FiArrowDown, FiArrowUp } from 'react-icons/fi'
+
 export const MODAL_TITLE = 'Keyboard Combos'
 
 export const GLOBAL_KEY_TITLE = 'Global'
@@ -11,8 +13,9 @@ export const GLOBAL_KEY_COMBOS = [
   { title: 'Open Help', keys: ['CMD', '/'] },
   { title: 'Focus Mode / Sort Inbox', keys: ['CMD', 'E'] },
   { title: 'Close Window / Back', keys: ['ESCAPE'] },
-  { title: 'Highlight Email', keys: ['UP', 'DOWN'] },
-  { title: 'Open Email', keys: ['ENTER'] },
+  { title: 'Highlight Previous', keys: [<FiArrowUp />] },
+  { title: 'Highlight Next', keys: [<FiArrowDown />] },
+  { title: 'Open Highlighted Email', keys: ['ENTER'] },
 ]
 
 export const EMAIL_KEY_TITLE = 'Email'
