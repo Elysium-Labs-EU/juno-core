@@ -23,6 +23,7 @@ export const LoadMoreContainer = styled.div`
 export const UnavailableContainer = styled.div`
   display: flex;
   justify-content: center;
+  padding: 100px 0;
 `
 
 export const ThreadList = styled.div`

@@ -35,7 +35,6 @@ const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
 const PostLogin = lazy(() => import('./components/Login/PostLogin'))
-const Login = lazy(() => import('./components/Login/Login'))
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -79,14 +78,6 @@ const App = () => {
         <AnimatePresence exitBeforeEnter>
           <Routes>
             {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
-            {/* <Route
-              path={RoutesConstants.LOGIN}
-              element={
-                <Suspense fallback={<LoadingState />}>
-                  <Login />
-                </Suspense>
-              }
-            /> */}
             <Route
               path={RoutesConstants.LOGIN_SUCCESS}
               element={
