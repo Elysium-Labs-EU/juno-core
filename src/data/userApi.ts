@@ -1,5 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import Session from 'supertokens-auth-react/recipe/session'
+import { BASE_API_URL, errorHandling } from './api'
+
+Session.addAxiosInterceptors(axios)
 
 interface UserType {
   emailAddress?: string | null
@@ -24,12 +27,7 @@ const userApi = () => ({
   fetchUser: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await axios.get(
-        `${BASE_API_URL}/api/user`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `${BASE_API_URL}/api/user`
       )
       return res
     } catch (err: any) {

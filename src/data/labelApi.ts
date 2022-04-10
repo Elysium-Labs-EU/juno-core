@@ -1,16 +1,14 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import Session from 'supertokens-auth-react/recipe/session'
+import { BASE_API_URL, errorHandling } from './api'
+
+Session.addAxiosInterceptors(axios)
 
 const labelApi = () => ({
   fetchLabels: async () => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/labels`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `${BASE_API_URL}/api/labels`
       )
       return res.data
     } catch (err) {
@@ -20,12 +18,7 @@ const labelApi = () => ({
   fetchSingleLabel: async (id: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/label/${id}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `${BASE_API_URL}/api/label/${id}`
       )
       return res.data
     } catch (err) {
@@ -36,12 +29,7 @@ const labelApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.patch(
         `${BASE_API_URL}/api/labels`,
-        body,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        body
       )
       return res.data
     } catch (err) {
@@ -54,9 +42,6 @@ const labelApi = () => ({
         `${BASE_API_URL}/api/labels`,
         {
           data: { id },
-          headers: {
-            Authorization: fetchToken(),
-          },
         }
       )
       return res.data
@@ -68,12 +53,7 @@ const labelApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/labels`,
-        body,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        body
       )
       return res
     } catch (err) {

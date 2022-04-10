@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { BASE_API_URL, errorHandling } from './api'
 
 export interface EmailQueryObject {
   labelIds?: string[]
@@ -30,9 +30,6 @@ const threadApi = ({
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
-          headers: {
-            Authorization: fetchToken(),
-          },
         }
       )
       return res.data
@@ -53,9 +50,6 @@ const threadApi = ({
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
 
-        headers: {
-          Authorization: fetchToken(),
-        },
         signal: controller?.signal || signal,
       }
     )
@@ -65,12 +59,7 @@ const threadApi = ({
   getThreadDetail: async (messageId: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/thread/${messageId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `${BASE_API_URL}/api/thread/${messageId}`
       )
       return res.data
     } catch (err) {

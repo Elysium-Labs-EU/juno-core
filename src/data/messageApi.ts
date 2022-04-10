@@ -1,5 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import Session from 'supertokens-auth-react/recipe/session'
+import { BASE_API_URL, errorHandling } from './api'
+
+Session.addAxiosInterceptors(axios)
 
 const messageApi = () => ({
   getMessageDetail: async (messageId: string) => {
@@ -22,12 +25,7 @@ const messageApi = () => ({
   }) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`
       )
       return res
     } catch (err) {
@@ -39,12 +37,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/send-message`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -56,12 +49,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.patch(
         `${BASE_API_URL}/api/message/${messageId}`,
-        request,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        request
       )
       return res
     } catch (err) {
@@ -73,12 +61,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/message/thrash/${messageId}`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -98,9 +81,6 @@ const messageApi = () => ({
         `${BASE_API_URL}/api/message/`,
         {
           data: { id: messageId },
-          headers: {
-            Authorization: fetchToken(),
-          },
         }
       )
       return res.data

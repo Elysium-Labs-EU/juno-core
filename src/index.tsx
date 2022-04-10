@@ -5,10 +5,42 @@ import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
+import Session from 'supertokens-auth-react/recipe/session'
+import SuperTokens from 'supertokens-auth-react'
+import ThirdParty, { Google } from 'supertokens-auth-react/recipe/thirdparty'
 import { store } from './Store/store'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { GlobalStyle, theme } from './styles/globalStyles'
+import RoutesConstants from './constants/routes.json'
+
+SuperTokens.init({
+  appInfo: {
+    appName: 'Juno',
+    apiDomain: 'http://localhost:5001',
+    websiteDomain: 'http://localhost:3000',
+    apiBasePath: '/auth',
+    websiteBasePath: '/auth',
+  },
+  recipeList: [
+    ThirdParty.init({
+      getRedirectionURL: async (context) => {
+        if (context.action === 'SUCCESS') {
+          if (context.redirectToPath !== undefined) {
+            // we are navigating back to where the user was before they authenticated
+            return RoutesConstants.LOGIN_SUCCESS
+          }
+          return RoutesConstants.LOGIN_SUCCESS
+        }
+        return undefined
+      },
+      signInAndUpFeature: {
+        providers: [Google.init()],
+      },
+    }),
+    Session.init(),
+  ],
+})
 
 // Don't run Sentry when developing.
 process.env.NODE_ENV !== 'development' &&

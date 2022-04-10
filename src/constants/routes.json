@@ -6,6 +6,7 @@
   "SENT": "/sent",
   "SPAM": "/spam",
   "LOGIN": "/login",
+  "LOGIN_SUCCESS": "/login_success",
   "INBOX": "/inbox",
   "WILDCARD": "*"
 }
