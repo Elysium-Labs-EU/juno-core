@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+// import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 import EmailList from '../EmailList/EmailList'
 import { selectBaseLoaded } from '../../Store/baseSlice'
 import {
@@ -15,6 +16,9 @@ const Todo = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
+
+  // const response = useSessionContext()
+  // console.log(response)
 
   useEffect(() => {
     if (

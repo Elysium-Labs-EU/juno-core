@@ -1,11 +1,10 @@
+import { signOut } from 'supertokens-auth-react/recipe/thirdparty'
 import * as S from '../NavigationMoreStyles'
 import * as local from '../../../../../constants/subMenuHeaderConstants'
-import * as global from '../../../../../constants/globalConstants'
-import removeCookie from '../../../../../utils/Cookie/removeCookie'
 
 const LogoutOption = () => {
-  const handleLogout = () => {
-    removeCookie(global.GOOGLE_TOKEN)
+  const handleLogout = async () => {
+    await signOut()
     window.location.reload()
   }
 

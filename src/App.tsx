@@ -2,7 +2,10 @@ import { lazy, useEffect, Suspense } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
+import * as reactRouterDom from 'react-router-dom'
+import { getSuperTokensRoutesForReactRouterDom } from 'supertokens-auth-react'
+import { ThirdPartyAuth } from 'supertokens-auth-react/recipe/thirdparty'
 import {
   checkBase,
   recheckBase,
@@ -10,7 +13,6 @@ import {
   selectIsAuthenticated,
   setIsAuthenticated,
 } from './Store/baseSlice'
-import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
 import LoadingState from './components/Elements/LoadingState/LoadingState'
@@ -32,23 +34,7 @@ const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
 const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
-const Login = lazy(() => import('./components/Login/Login'))
-
-const ProtectedRoute = ({
-  children,
-  isAuthenticated,
-  baseLoaded,
-}: {
-  children: JSX.Element
-  isAuthenticated: boolean
-  baseLoaded: boolean
-}) => {
-  if (!isAuthenticated) {
-    return <Navigate to={RoutesConstants.LOGIN} replace />
-  }
-
-  return baseLoaded ? children : <BaseLoader />
-}
+const PostLogin = lazy(() => import('./components/Login/PostLogin'))
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -82,7 +68,6 @@ const App = () => {
       <GS.Base>
         {baseLoaded && (
           <>
-            {' '}
             <GS.OuterContainer>
               <Header />
             </GS.OuterContainer>
@@ -92,11 +77,14 @@ const App = () => {
 
         <AnimatePresence exitBeforeEnter>
           <Routes>
+            {getSuperTokensRoutesForReactRouterDom(reactRouterDom)}
             <Route
-              path={RoutesConstants.LOGIN}
+              path={RoutesConstants.LOGIN_SUCCESS}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <Login />
+                  <ThirdPartyAuth>
+                    <PostLogin />
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -104,12 +92,9 @@ const App = () => {
               path={RoutesConstants.HOME}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <ToDo />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -117,12 +102,9 @@ const App = () => {
               path={RoutesConstants.EMAIL_DETAIL}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <EmailDetail />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -130,12 +112,9 @@ const App = () => {
               path={RoutesConstants.COMPOSE_EMAIL}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <ComposeEmail />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -143,12 +122,9 @@ const App = () => {
               path={RoutesConstants.DRAFTS}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <DraftEmail />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -156,12 +132,9 @@ const App = () => {
               path={RoutesConstants.SENT}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <SentEmail />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />
@@ -169,12 +142,9 @@ const App = () => {
               path={RoutesConstants.INBOX}
               element={
                 <Suspense fallback={<LoadingState />}>
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
+                  <ThirdPartyAuth>
                     <Inbox />
-                  </ProtectedRoute>
+                  </ThirdPartyAuth>
                 </Suspense>
               }
             />

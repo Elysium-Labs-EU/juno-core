@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { BASE_API_URL, errorHandling } from './api'
 
 const historyApi = () => ({
   listHistory: async (startHistoryId: string) => {
@@ -9,9 +9,6 @@ const historyApi = () => ({
         {
           params: {
             startHistoryId,
-          },
-          headers: {
-            Authorization: fetchToken(),
           },
         }
       )
