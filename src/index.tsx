@@ -29,7 +29,6 @@ SuperTokens.init({
         BRANDING_POWERED_BY_START: 'Juno ❤️ ',
         // If you added a custom label or placeholder you can also provide translation for them if necessary
         // You can also use these to provide translations for your component overrides
-        MY_CUSTOM_LABEL: 'Age',
       },
     },
   },

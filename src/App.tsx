@@ -25,6 +25,7 @@ import { fetchToken } from './data/api'
 import EmailDetail from './components/EmailDetail/EmailDetail'
 import HelpButton from './components/Help/HelpButton'
 import { selectShowKeyboardCombos } from './Store/utilsSlice'
+import PostLogin from './components/Login/PostLogin'
 
 const ToDo = lazy(() => import('./components/ToDo/Todo'))
 const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
@@ -34,7 +35,7 @@ const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
 const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
-const PostLogin = lazy(() => import('./components/Login/PostLogin'))
+// const PostLogin = lazy(() => import('./components/Login/PostLogin'))
 
 const App = () => {
   const dispatch = useAppDispatch()
