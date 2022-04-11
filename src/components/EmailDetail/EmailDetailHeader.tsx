@@ -23,7 +23,6 @@ import {
   selectEmailListSize,
   selectIsSilentLoading,
 } from '../../Store/utilsSlice'
-import openLinkInNewTab from '../../utils/openLinkInNewTab'
 
 const EmailDetailHeader = ({
   activeEmailList,
@@ -39,8 +38,6 @@ const EmailDetailHeader = ({
   const dispatch = useAppDispatch()
   const location = useLocation()
   const [detailHeader, setDetailHeader] = useState<string>('')
-
-  openLinkInNewTab()
 
   useEffect(() => {
     if (storageLabels.length > 0 && labelIds.length > 0) {

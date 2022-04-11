@@ -10,6 +10,7 @@ import * as local from '../../../../constants/unreadConstants'
 import * as compose from '../../../../constants/composeEmailConstants'
 import * as emailDetail from '../../../../constants/emailDetailConstants'
 import * as S from '../../EmailDetailStyles'
+import * as global from '../../../../constants/globalConstants'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import {
   IEmailMessage,
@@ -200,6 +201,7 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
               <EmailDetailBody
                 threadDetailBody={message.payload}
                 messageId={message.id}
+                detailBodyCSS={global.EMAIL_BODY_VISIBLE}
               />
             )}
           </S.EmailBody>

@@ -6,6 +6,8 @@ import { useAppDispatch } from '../../../Store/hooks'
 import { IEmailMessagePayload } from '../../../Store/emailListTypes'
 import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 import bodyDecoder from '../../../utils/bodyDecoder'
+import openLinkInNewTab from '../../../utils/openLinkInNewTab'
+import cleanLink from '../../../utils/cleanLink'
 
 interface IInlineImageTypeResponse {
   mimeType: string
@@ -16,11 +18,38 @@ interface IInlineImageTypeResponse {
 interface IEmailDetailBody {
   threadDetailBody: IEmailMessagePayload
   messageId: string
+  detailBodyCSS: 'visible' | 'invisible'
 }
 
-const EmailDetailBody = ({ threadDetailBody, messageId }: IEmailDetailBody) => {
+const EmailDetailBody = ({
+  threadDetailBody,
+  messageId,
+  detailBodyCSS,
+}: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
+  const [transformedLinks, setTransformedLinks] = useState(false)
   const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    let mounted = true
+    if (bodyState.length > 0) {
+      mounted && cleanLink()
+    }
+    return () => {
+      mounted = false
+    }
+  }, [bodyState])
+
+  useEffect(() => {
+    let mounted = true
+    if (bodyState.length > 0 && !transformedLinks) {
+      mounted && openLinkInNewTab()
+      setTransformedLinks(true)
+    }
+    return () => {
+      mounted = false
+    }
+  }, [bodyState, transformedLinks])
 
   useEffect(() => {
     let mounted = true
@@ -48,7 +77,7 @@ const EmailDetailBody = ({ threadDetailBody, messageId }: IEmailDetailBody) => {
   }, [messageId])
 
   return (
-    <div>
+    <div className={detailBodyCSS}>
       {!isEmpty(bodyState) &&
         bodyState[0] &&
         bodyState.map((item, itemIdx) =>
