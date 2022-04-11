@@ -13765,7 +13765,7 @@ sumchecker@^3.0.1:
   dependencies:
     debug "^4.1.0"
 
-supertokens-auth-react@^0.20.0:
+supertokens-auth-react@^0.20.4:
   version "0.20.4"
   resolved "https://registry.yarnpkg.com/supertokens-auth-react/-/supertokens-auth-react-0.20.4.tgz#fc32d4058b3c4965b142039843f4aebf6495acdc"
   integrity sha512-NY+vJRQ3RpMdQzXu0wkBIbHBO4W2kzYPS2gOSRnvIOKiiR5whMJXHgFj5BAyTiQxRMzsb7NjaKlQfPuOs1mCDA==
