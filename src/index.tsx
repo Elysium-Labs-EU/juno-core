@@ -41,35 +41,35 @@ SuperTokens.init({
   },
   recipeList: [
     ThirdParty.init({
-      style: {
-        container: {
-          fontFamily: 'Raleway Variable',
-          marginTop: '40vh',
-          marginRight: 'auto',
-          marginLeft: 'auto',
-          padding: '40px 0',
-        },
-        headerTitle: {
-          fontWeight: 200,
-          userSelect: 'none',
-          fontSize: '2.441rem',
-        },
-        divider: {
-          display: 'none',
-        },
-        providerContainer: {
-          paddingTop: '40px',
-          paddingBottom: '40px',
-        },
-        providerButton: {
-          backgroundColor: 'var(--color-black) !important',
-          borderColor: 'var(--color-black) !important',
-          boxShadow: 'rgba(0, 0, 0, 0.1) 0px 0px 10px',
-        },
-        superTokensBranding: {
-          borderRadius: '6px',
-        },
-      },
+      // style: {
+      //   container: {
+      //     fontFamily: 'Raleway Variable',
+      //     marginTop: '40vh',
+      //     marginRight: 'auto',
+      //     marginLeft: 'auto',
+      //     padding: '40px 0',
+      //   },
+      //   headerTitle: {
+      //     fontWeight: 200,
+      //     userSelect: 'none',
+      //     fontSize: '2.441rem',
+      //   },
+      //   divider: {
+      //     display: 'none',
+      //   },
+      //   providerContainer: {
+      //     paddingTop: '40px',
+      //     paddingBottom: '40px',
+      //   },
+      //   providerButton: {
+      //     backgroundColor: 'var(--color-black) !important',
+      //     borderColor: 'var(--color-black) !important',
+      //     boxShadow: 'rgba(0, 0, 0, 0.1) 0px 0px 10px',
+      //   },
+      //   superTokensBranding: {
+      //     borderRadius: '6px',
+      //   },
+      // },
       getRedirectionURL: async (context) => {
         if (context.action === 'SUCCESS') {
           if (context.redirectToPath !== undefined) {
