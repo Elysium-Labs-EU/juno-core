@@ -26,15 +26,21 @@ import EmailDetail from './components/EmailDetail/EmailDetail'
 import HelpButton from './components/Help/HelpButton'
 import { selectShowKeyboardCombos } from './Store/utilsSlice'
 import PostLogin from './components/Login/PostLogin'
+import ComposeEmail from './components/Compose/ComposeEmail'
+import DraftEmail from './components/Draft/DraftEmail'
+import PageNotFound from './components/PageNotFound/PageNotFound'
+import Inbox from './components/Inbox/Inbox'
+import SentEmail from './components/Sent/Sent'
+import ToDo from './components/ToDo/Todo'
 
-const ToDo = lazy(() => import('./components/ToDo/Todo'))
-const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
-const Inbox = lazy(() => import('./components/Inbox/Inbox'))
-const SentEmail = lazy(() => import('./components/Sent/Sent'))
-const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
-const PageNotFound = lazy(
-  () => import('./components/PageNotFound/PageNotFound')
-)
+// const ToDo = lazy(() => import('./components/ToDo/Todo'))
+// const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
+// const Inbox = lazy(() => import('./components/Inbox/Inbox'))
+// const SentEmail = lazy(() => import('./components/Sent/Sent'))
+// const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
+// const PageNotFound = lazy(
+//   () => import('./components/PageNotFound/PageNotFound')
+// )
 // const PostLogin = lazy(() => import('./components/Login/PostLogin'))
 
 const App = () => {
@@ -82,71 +88,71 @@ const App = () => {
             <Route
               path={RoutesConstants.LOGIN_SUCCESS}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <PostLogin />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <PostLogin />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.HOME}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <ToDo />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <ToDo />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.EMAIL_DETAIL}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <EmailDetail />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <EmailDetail />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.COMPOSE_EMAIL}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <ComposeEmail />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <ComposeEmail />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.DRAFTS}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <DraftEmail />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <DraftEmail />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.SENT}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <SentEmail />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <SentEmail />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route
               path={RoutesConstants.INBOX}
               element={
-                <Suspense fallback={<LoadingState />}>
-                  <ThirdPartyAuth>
-                    <Inbox />
-                  </ThirdPartyAuth>
-                </Suspense>
+                // <Suspense fallback={<LoadingState />}>
+                <ThirdPartyAuth>
+                  <Inbox />
+                </ThirdPartyAuth>
+                // </Suspense>
               }
             />
             <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
