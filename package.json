@@ -19,10 +19,10 @@
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
-    "@mui/base": "^5.0.0-alpha.70",
-    "@mui/material": "^5.5.2",
-    "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
-    "@mui/system": "^5.5.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/base": "^5.0.0-alpha.76",
+    "@mui/material": "^5.6.1",
+    "@mui/system": "^5.6.1",
     "@reduxjs/toolkit": "^1.8.0",
     "@sentry/react": "^6.19.2",
     "@sentry/tracing": "^6.19.2",
@@ -42,7 +42,6 @@
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
     "react-helmet-async": "^1.2.3",
-    "react-hook-form": "^7.28.1",
     "react-icons": "^4.3.1",
     "react-quill": "^2.0.0-beta.4",
     "react-redux": "^7.2.6",
@@ -51,7 +50,7 @@
     "redux": "^4.1.2",
     "redux-first-history": "^5.0.8",
     "styled-components": "^5.3.5",
-    "supertokens-auth-react": "^0.20.1",
+    "supertokens-auth-react": "^0.20.4",
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"
   },
@@ -127,17 +126,10 @@
     ]
   },
   "resolutions": {
-    "@mui/styled-engine": "yarn:@mui/styled-engine-sc@latest",
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "6.4.19",
-    "@storybook/addon-essentials": "6.4.19",
-    "@storybook/addon-links": "6.4.19",
-    "@storybook/node-logger": "6.4.19",
-    "@storybook/preset-create-react-app": "4.1.0",
-    "@storybook/react": "6.4.19",
     "@testing-library/jest-dom": "5.16.3",
     "@testing-library/react": "12.1.4",
     "@testing-library/user-event": "13.5.0",
