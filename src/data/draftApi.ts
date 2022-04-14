@@ -1,13 +1,14 @@
 import axios, { AxiosResponse } from 'axios'
-import Session from 'supertokens-auth-react/recipe/session'
-import { BASE_API_URL, errorHandling } from './api'
-
-Session.addAxiosInterceptors(axios)
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data)
+      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
       return errorHandling(err)
@@ -19,7 +20,12 @@ const draftApi = (signal?: AbortSignal) => ({
     try {
       const res: AxiosResponse<any> = await axios.put(
         `${BASE_API_URL}/api/update-draft/${draftId}`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
@@ -32,6 +38,9 @@ const draftApi = (signal?: AbortSignal) => ({
       const res: AxiosResponse<any> = await axios.get(
         `${BASE_API_URL}/api/drafts/`,
         {
+          headers: {
+            Authorization: fetchToken(),
+          },
           signal,
         }
       )
@@ -44,7 +53,12 @@ const draftApi = (signal?: AbortSignal) => ({
   getDraftDetail: async (draftId: string) => {
     try {
       const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/draft/${draftId}`
+        `${BASE_API_URL}/api/draft/${draftId}`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
@@ -56,7 +70,12 @@ const draftApi = (signal?: AbortSignal) => ({
     try {
       const res: AxiosResponse<any> = await axios.post(
         `${BASE_API_URL}/api/send-draft`,
-        data
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
       )
       return res
     } catch (err) {
@@ -70,6 +89,9 @@ const draftApi = (signal?: AbortSignal) => ({
         `${BASE_API_URL}/api/draft`,
         {
           data: { id },
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
