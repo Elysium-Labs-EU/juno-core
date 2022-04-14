@@ -10,8 +10,7 @@ assertNonNullish(
 export const BASE_API_URL = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
-  const token = getCookie(global.FRONT_TOKEN)
-  // const token = getCookie(global.GOOGLE_TOKEN)
+  const token = getCookie(global.GOOGLE_TOKEN)
   if (token) {
     return token
   }
