@@ -1,9 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import qs from 'qs'
-import Session from 'supertokens-auth-react/recipe/session'
-import { BASE_API_URL, errorHandling } from './api'
-
-Session.addAxiosInterceptors(axios)
+import { BASE_API_URL, errorHandling, fetchToken } from './api'
 
 interface AllContactsQueryObject {
   readMask: string
@@ -29,6 +26,10 @@ const contactApi = () => ({
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
+
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
@@ -47,6 +48,9 @@ const contactApi = () => ({
           },
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
+          headers: {
+            Authorization: fetchToken(),
+          },
         }
       )
       return res
