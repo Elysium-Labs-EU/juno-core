@@ -82,7 +82,6 @@ const App = () => {
       <GS.Base>
         {baseLoaded && (
           <>
-            {' '}
             <GS.OuterContainer>
               <Header />
             </GS.OuterContainer>
@@ -178,7 +177,14 @@ const App = () => {
                 </Suspense>
               }
             />
-            <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
+            <Route
+              path={RoutesConstants.WILDCARD}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <PageNotFound />
+                </Suspense>
+              }
+            />
           </Routes>
         </AnimatePresence>
       </GS.Base>

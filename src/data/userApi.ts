@@ -21,6 +21,17 @@ interface UserPromise {
 }
 
 const userApi = () => ({
+  authenticateUser: async () => {
+    try {
+      const res: AxiosResponse<UserPromise> = await axios.post(
+        `${BASE_API_URL}/api/auth`
+      )
+      return res
+    } catch (err: any) {
+      // console.log(err.message)
+      return errorHandling(err)
+    }
+  },
   fetchUser: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await axios.get(

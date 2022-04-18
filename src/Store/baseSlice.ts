@@ -72,42 +72,42 @@ export const checkBase = (): AppThunk => async (dispatch) => {
     // TODO: TYPE THE DATA
     const userResponse = await userApi().fetchUser()
     const { data, status } = userResponse
-    const labelResponse = await labelApi().fetchLabels()
-    const { labels } = labelResponse
+    // const labelResponse = await labelApi().fetchLabels()
+    // const { labels } = labelResponse
     if (data && status === 200) {
       dispatch(setProfile(data))
-      if (Array.isArray(labels) && labels.length > 0) {
-        const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
-        if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
-          const checkArray = BASE_ARRAY.map((item) =>
-            nameMapLabels.includes(item)
-          )
-          checkArray.forEach(
-            (checkValue, index) =>
-              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-          )
+      // if (Array.isArray(labels) && labels.length > 0) {
+      //   const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
+      //   if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
+      //     const checkArray = BASE_ARRAY.map((item) =>
+      //       nameMapLabels.includes(item)
+      //     )
+      //     checkArray.forEach(
+      //       (checkValue, index) =>
+      //         !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
+      //     )
 
-          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labels.filter((item: GoogleLabel) => item.name === baseLabel)
-          ).filter((result) => result.length > 0)
-          dispatch(setStorageLabels(prefetchedBoxes))
-          dispatch(handleSettings(labels))
-        } else {
-          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labels.filter((item: GoogleLabel) => item.name === baseLabel)
-          )
+      //     const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      //       labels.filter((item: GoogleLabel) => item.name === baseLabel)
+      //     ).filter((result) => result.length > 0)
+      //     dispatch(setStorageLabels(prefetchedBoxes))
+      //     dispatch(handleSettings(labels))
+      //   } else {
+      //     const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      //       labels.filter((item: GoogleLabel) => item.name === baseLabel)
+      //     )
 
-          dispatch(setStorageLabels(prefetchedBoxes))
-          dispatch(setBaseLoaded(true))
-          dispatch(handleSettings(labels))
-        }
-      } else {
-        dispatch(
-          setServiceUnavailable(
-            `Network Error. ${labelResponse}. Please try again later.`
-          )
-        )
-      }
+      // dispatch(setStorageLabels(prefetchedBoxes))
+      dispatch(setBaseLoaded(true))
+      // dispatch(handleSettings(labels))
+      // }
+      // } else {
+      //   dispatch(
+      //     setServiceUnavailable(
+      //       `Network Error. ${labelResponse}. Please try again later.`
+      //     )
+      //   )
+      // }
     } else {
       dispatch(
         setServiceUnavailable(

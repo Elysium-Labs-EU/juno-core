@@ -17,7 +17,11 @@ import {
   setServiceUnavailable,
 } from '../../Store/utilsSlice'
 import setCookie from '../../utils/Cookie/setCookie'
-import GoogleButton from './GoogleButton/GoogleButton'
+// import GoogleButton from './GoogleButton/GoogleButton'
+import userApi from '../../data/userApi'
+import handleUserTokens from '../../utils/handleUserTokens'
+// import { signInWithGoogle } from '../../Firebase/firebase'
+// import { signInWithGoogle2 } from '../../Firebase/firebaseManual'
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
@@ -62,6 +66,17 @@ const Login = () => {
     dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
   }
 
+  const signInWithGoogle = () => {
+    const fetchData = async () => {
+      const response = await userApi().authenticateUser()
+      handleUserTokens(response).setBothTokens()
+      dispatch(setIsAuthenticated(true))
+      dispatch(push(RouteConstants.HOME))
+      console.log(response)
+    }
+    fetchData()
+  }
+
   return (
     <S.Wrapper>
       <AnimatedMountUnmount>
@@ -71,30 +86,10 @@ const Login = () => {
               <HS.PageTitle>{TITLE}</HS.PageTitle>
               <p>{SUB_HEADER}</p>
             </S.Header>
-            {CLIENT_ID && serviceUnavailable.length === 0 ? (
-              thisIsElectron ? (
-                <p>{ELECTRON_WARNING}</p>
-              ) : (
-                <GoogleLogin
-                  clientId={CLIENT_ID}
-                  onSuccess={(
-                    response: GoogleLoginResponse | GoogleLoginResponseOffline
-                  ) => handleSuccess(response)}
-                  onFailure={handleFailure}
-                  cookiePolicy="single_host_origin"
-                  scope={SCOPES.join(' ')}
-                  render={(renderProps) => (
-                    <GoogleButton renderProps={renderProps} />
-                  )}
-                  prompt="consent"
-                />
-              )
-            ) : (
-              <S.ErrorBox>
-                <p>{ERROR_LOADING}</p>
-                {serviceUnavailable.length > 0 && <p>{serviceUnavailable}</p>}
-              </S.ErrorBox>
-            )}
+            <button type="button" onClick={signInWithGoogle}>
+              Sign in with google
+            </button>{' '}
+            :
           </S.Inner>
         </S.LoginContainer>
       </AnimatedMountUnmount>

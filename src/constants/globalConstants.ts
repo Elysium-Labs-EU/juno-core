@@ -1,5 +1,6 @@
 export const GOOGLE_TOKEN = 'googleToken'
-export const FRONT_TOKEN = 'sFrontToken'
+export const SESSION_TOKEN = 'sessionToken'
+export const REFRESH_TOKEN = 'refreshToken'
 export const JUNO_SETTINGS_LOCAL = 'junoSettings'
 export const LOADING_TEXT = 'Loading'
 export const BUTTON_BACK = 'Back'

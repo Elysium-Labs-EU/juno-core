@@ -1,11 +1,11 @@
 import * as S from '../NavigationMoreStyles'
 import * as local from '../../../../../constants/subMenuHeaderConstants'
-import * as global from '../../../../../constants/globalConstants'
-import removeCookie from '../../../../../utils/Cookie/removeCookie'
+
+import handleUserTokens from '../../../../../utils/handleUserTokens'
 
 const LogoutOption = () => {
   const handleLogout = () => {
-    removeCookie(global.GOOGLE_TOKEN)
+    handleUserTokens().removeBothTokens()
     window.location.reload()
   }
 
