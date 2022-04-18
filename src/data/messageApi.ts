@@ -1,11 +1,11 @@
-import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { AxiosResponse } from 'axios'
+import { errorHandling, fetchToken, instance } from './api'
 
 const messageApi = () => ({
   getMessageDetail: async (messageId: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/message/${messageId}`
+      const res: AxiosResponse<any> = await instance.get(
+        `/api/message/${messageId}`
       )
       return res.data
     } catch (err) {
@@ -21,8 +21,8 @@ const messageApi = () => ({
     attachmentId: string
   }) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/message/attachment/${messageId}/${attachmentId}`,
+      const res: AxiosResponse<any> = await instance.get(
+        `/api/message/attachment/${messageId}/${attachmentId}`,
         {
           headers: {
             Authorization: fetchToken(),
@@ -37,8 +37,8 @@ const messageApi = () => ({
 
   sendMessage: async (data: any) => {
     try {
-      const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/send-message`,
+      const res: AxiosResponse<any> = await instance.post(
+        `/api/send-message`,
         data,
         {
           headers: {
@@ -54,8 +54,8 @@ const messageApi = () => ({
   updateMessage: async (props: any) => {
     const { messageId, request } = props
     try {
-      const res: AxiosResponse<any> = await axios.patch(
-        `${BASE_API_URL}/api/message/${messageId}`,
+      const res: AxiosResponse<any> = await instance.patch(
+        `/api/message/${messageId}`,
         request,
         {
           headers: {
@@ -71,8 +71,8 @@ const messageApi = () => ({
   thrashMessage: async ({ messageId }: { messageId: string }) => {
     const data = {}
     try {
-      const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/message/thrash/${messageId}`,
+      const res: AxiosResponse<any> = await instance.post(
+        `/api/message/thrash/${messageId}`,
         data,
         {
           headers: {
@@ -94,15 +94,12 @@ const messageApi = () => ({
   // },
   deleteMessage: async (messageId: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.delete(
-        `${BASE_API_URL}/api/message/`,
-        {
-          data: { id: messageId },
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.delete(`/api/message/`, {
+        data: { id: messageId },
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)

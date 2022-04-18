@@ -5,7 +5,7 @@ import handleUserTokens from '../../../../../utils/handleUserTokens'
 
 const LogoutOption = () => {
   const handleLogout = () => {
-    handleUserTokens().removeBothTokens()
+    handleUserTokens().removeAllTokens()
     window.location.reload()
   }
 

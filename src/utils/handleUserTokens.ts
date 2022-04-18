@@ -10,7 +10,7 @@ const handleUserTokens = (response?: any) => ({
   setAccessToken: () => {
     setCookie(global.SESSION_TOKEN, response.data.access_token, 30)
   },
-  removeBothTokens: () => {
+  removeAllTokens: () => {
     removeCookie(global.SESSION_TOKEN)
     localStorage.clear()
   },

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import * as global from '../constants/globalConstants'
 import assertNonNullish from '../utils/assertNonNullish'
 import getCookie from '../utils/Cookie/getCookie'
@@ -8,6 +9,11 @@ assertNonNullish(
 )
 
 export const BASE_API_URL = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, '')
+
+export const instance = axios.create({
+  withCredentials: true,
+  baseURL: BASE_API_URL,
+})
 
 export const fetchToken = () => {
   const token = getCookie(global.SESSION_TOKEN)

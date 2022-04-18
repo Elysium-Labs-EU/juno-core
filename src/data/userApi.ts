@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { AxiosResponse } from 'axios'
+import { errorHandling, fetchToken, instance } from './api'
 
 interface UserType {
   emailAddress?: string | null
@@ -23,28 +23,21 @@ interface UserPromise {
 const userApi = () => ({
   authenticateUser: async () => {
     try {
-      const res: AxiosResponse<UserPromise> = await axios.post(
-        `${BASE_API_URL}/api/auth`
-      )
+      const res: AxiosResponse<UserPromise> = await instance.get(`/api/auth`)
       return res
     } catch (err: any) {
-      // console.log(err.message)
       return errorHandling(err)
     }
   },
   fetchUser: async () => {
     try {
-      const res: AxiosResponse<UserPromise> = await axios.get(
-        `${BASE_API_URL}/api/user`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<UserPromise> = await instance.get(`/api/user`, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err: any) {
-      // console.log(err.message)
       return errorHandling(err)
     }
   },

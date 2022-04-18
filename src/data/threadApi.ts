@@ -1,6 +1,6 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { errorHandling, fetchToken, instance } from './api'
 
 export interface EmailQueryObject {
   labelIds?: string[]
@@ -19,31 +19,7 @@ const threadApi = ({
 }) => ({
   getThreads: async (query: EmailQueryObject) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/threads/`,
-        {
-          params: {
-            labelIds: query.labelIds ?? [''],
-            maxResults: query.maxResults ?? 20,
-            pageToken: query.nextPageToken ?? undefined,
-            q: query.q ?? undefined,
-          },
-          paramsSerializer: (params) =>
-            qs.stringify(params, { arrayFormat: 'repeat' }),
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
-      return res.data
-    } catch (err) {
-      return errorHandling(err)
-    }
-  },
-  getFullThreads: async (query: EmailQueryObject) => {
-    const res: AxiosResponse<any> = await axios.get(
-      `${BASE_API_URL}/api/threads_full/`,
-      {
+      const res: AxiosResponse<any> = await instance.get(`/api/threads/`, {
         params: {
           labelIds: query.labelIds ?? [''],
           maxResults: query.maxResults ?? 20,
@@ -52,20 +28,38 @@ const threadApi = ({
         },
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
-
         headers: {
           Authorization: fetchToken(),
         },
-        signal: controller?.signal || signal,
-      }
-    )
+      })
+      return res.data
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  getFullThreads: async (query: EmailQueryObject) => {
+    const res: AxiosResponse<any> = await instance.get(`/api/threads_full/`, {
+      params: {
+        labelIds: query.labelIds ?? [''],
+        maxResults: query.maxResults ?? 20,
+        pageToken: query.nextPageToken ?? undefined,
+        q: query.q ?? undefined,
+      },
+      paramsSerializer: (params) =>
+        qs.stringify(params, { arrayFormat: 'repeat' }),
+
+      headers: {
+        Authorization: fetchToken(),
+      },
+      signal: controller?.signal || signal,
+    })
     return res
   },
 
   getThreadDetail: async (messageId: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/thread/${messageId}`,
+      const res: AxiosResponse<any> = await instance.get(
+        `/api/thread/${messageId}`,
         {
           headers: {
             Authorization: fetchToken(),
