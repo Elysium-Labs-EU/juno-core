@@ -38,7 +38,7 @@ export const SettingsHeader = styled.h2`
 
 export const StyledSelect = styled(Select)<SelectProps>`
   border: 0;
-  width: 3.5rem;
+  width: 4rem;
   height: 2rem;
   font-size: 0.9rem;
   color: var(--color-black)

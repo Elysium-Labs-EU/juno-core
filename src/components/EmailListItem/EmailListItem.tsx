@@ -242,7 +242,7 @@ const EmailListItem = ({
         </S.ThreadRow>
       </S.ThreadBase>
     ),
-    [isFocused]
+    [isFocused, selectedEmails]
   )
 
   return memoizedEmailListItem
