@@ -7,9 +7,10 @@ jobs:
       - checkout
       - heroku/install
       - run:
-          command: >
-            echo "The command above installs Heroku, the command below deploys.
-            What you do inbetween is up to you!"
+          heroku login
+          heroku git:clone -a juno-core 
+          cd juno-core
+          
       - heroku/deploy-via-git
 
 
