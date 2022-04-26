@@ -8,7 +8,7 @@ jobs:
       - heroku/install
       - run:
           heroku login
-          heroku git:clone -a juno-core 
+          heroku git:clone -a juno-core
           cd juno-core
           heroku git:remote -a juno-core
           git push heroku main
