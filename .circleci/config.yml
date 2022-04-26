@@ -10,7 +10,8 @@ jobs:
           heroku login
           heroku git:clone -a juno-core 
           cd juno-core
-          
+          heroku git:remote -a juno-core
+          git push heroku main
       - heroku/deploy-via-git
 
 
