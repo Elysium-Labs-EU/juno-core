@@ -9,10 +9,8 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import getUserAgent from '../../../utils/getUserAgent'
+import modifierKey from '../../../utils/setModifierKey'
 
-const modifierKey =
-  getUserAgent() === global.MAC_OS ? global.KEY_OS : global.KEY_CONTROL
 const actionKeys = [modifierKey, global.KEY_BACKSPACE]
 
 const ArchiveOption = ({

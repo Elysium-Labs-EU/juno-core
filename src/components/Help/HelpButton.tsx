@@ -7,11 +7,10 @@ import { selectInSearch, setShowKeyboardCombos } from '../../Store/utilsSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import * as global from '../../constants/globalConstants'
 import * as S from './HelpStyles'
-import getUserAgent from '../../utils/getUserAgent'
+import modifierKey from '../../utils/setModifierKey'
 
 const SIZE = 16
-const modifierKey =
-  getUserAgent() === global.MAC_OS ? global.KEY_OS : global.KEY_CONTROL
+
 const actionKeys = [modifierKey, global.KEY_FORWARD_SLASH]
 
 const customStyles = {

@@ -17,10 +17,8 @@ import {
 import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
-import getUserAgent from '../../../utils/getUserAgent'
+import modifierKey from '../../../utils/setModifierKey'
 
-const modifierKey =
-  getUserAgent() === global.MAC_OS ? global.KEY_OS : global.KEY_CONTROL
 const actionKeys = [modifierKey, global.KEY_SHIFT, global.KEY_K]
 
 const SkipOption = () => {
