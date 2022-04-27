@@ -7,9 +7,11 @@ import { selectInSearch, setShowKeyboardCombos } from '../../Store/utilsSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import * as global from '../../constants/globalConstants'
 import * as S from './HelpStyles'
+import modifierKey from '../../utils/setModifierKey'
 
 const SIZE = 16
-const actionKeys = [global.KEY_OS, global.KEY_FORWARD_SLASH]
+
+const actionKeys = [modifierKey, global.KEY_FORWARD_SLASH]
 
 const customStyles = {
   background: 'var(--color-white-off',

@@ -8,13 +8,14 @@ import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import modifierKey from '../../../utils/setModifierKey'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
 }
 
 const messageIndex = 0
-const actionKeys = [global.KEY_ENTER, global.KEY_OS]
+const actionKeys = [modifierKey, global.KEY_ENTER]
 
 const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()

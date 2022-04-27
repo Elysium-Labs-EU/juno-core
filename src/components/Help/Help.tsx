@@ -9,6 +9,7 @@ import * as S from './HelpStyles'
 import * as local from '../../constants/helpConstants'
 import * as HS from '../MainHeader/HeaderStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
+import getUserAgent from '../../utils/getUserAgent'
 
 const handleClose = (dispatch: Function) =>
   dispatch(setShowKeyboardCombos(false))
@@ -66,6 +67,9 @@ const Help = () => {
               icon={<FiX size={16} />}
             />
           </S.HeaderRow>
+          <p>
+            {local.MODAL_OS_SUB} {getUserAgent()}
+          </p>
           <S.Columns>
             <CreateSectionWithKeys
               title={local.GLOBAL_KEY_TITLE}
