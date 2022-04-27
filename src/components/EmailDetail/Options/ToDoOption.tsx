@@ -9,8 +9,9 @@ import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../Store/emailListTypes'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import modifierKey from '../../../utils/setModifierKey'
 
-const actionKeys = [global.KEY_OS, global.KEY_E]
+const actionKeys = [modifierKey, global.KEY_E]
 
 const ToDoOption = ({
   threadDetail,

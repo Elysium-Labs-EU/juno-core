@@ -17,8 +17,9 @@ import {
 import { selectComposeEmail } from '../../../Store/composeSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../Store/utilsSlice'
+import modifierKey from '../../../utils/setModifierKey'
 
-const actionKeys = [global.KEY_SHIFT, global.KEY_K, global.KEY_OS]
+const actionKeys = [modifierKey, global.KEY_SHIFT, global.KEY_K]
 
 const SkipOption = () => {
   const dispatch = useAppDispatch()
