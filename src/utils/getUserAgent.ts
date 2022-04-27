@@ -16,5 +16,6 @@ export default function getUserAgent() {
       return global.LINUX_OS
     }
   }
+  // MacOS is the preferred OS :) .
   return 'MacOS'
 }
