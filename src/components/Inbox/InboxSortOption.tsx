@@ -13,9 +13,12 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import { setSessionViewIndex } from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import getUserAgent from '../../utils/getUserAgent'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeys = [global.KEY_OS, global.KEY_E]
+const modifierKey =
+  getUserAgent() === global.MAC_OS ? global.KEY_OS : global.KEY_CONTROL
+const actionKeys = [modifierKey, global.KEY_E]
 
 const SortInbox = () => {
   const emailList = useAppSelector(selectEmailList)
