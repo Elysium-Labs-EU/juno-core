@@ -1,10 +1,40 @@
 version: 2.1
+
+orbs:
+  node: circleci/node@5.0.0
+  heroku: circleci/heroku@1.2.6
+
+commands:
+  deploy-command:
+    parameters:
+      BRANCH:
+        type: string
+      HEROKU_APP_NAME:
+        type: string
+    steps:
+      - run: heroku config:set YARN_PRODUCTION=false -a <<parameters.HEROKU_APP_NAME>>
+      - heroku/deploy-via-git:
+          app-name: <<parameters.HEROKU_APP_NAME>>
+          branch: <<parameters.BRANCH>>
+
+jobs:
+  deploy:
+    executor: heroku/default
+    steps:
+      - checkout
+      - heroku/install
+      - deploy-command:
+          HEROKU_APP_NAME: juno-core
+          BRANCH: main
+
+
 workflows:
-  build:
+  heroku_deploy:
     jobs:
       - node/run:
           pkg-manager: yarn
           yarn-run: lint:prettier
-
-orbs:
-  node: circleci/node@5.0.0
+      - deploy:
+        filters:
+            branches:
+              only: main
