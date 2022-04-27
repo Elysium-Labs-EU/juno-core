@@ -25,7 +25,7 @@ jobs:
       - heroku/install
       - deploy-command:
           HEROKU_APP_NAME: juno-core
-          BRANCH: master
+          BRANCH: main
 
 
 workflows:
