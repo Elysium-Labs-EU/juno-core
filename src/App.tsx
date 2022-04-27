@@ -33,6 +33,9 @@ const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
 const Login = lazy(() => import('./components/Login/Login'))
+const GoogleCallback = lazy(
+  () => import('./components/Login/Callback/GoogleCallBack')
+)
 
 const ProtectedRoute = ({
   children,
@@ -93,6 +96,22 @@ const App = () => {
           <Routes>
             <Route
               path={RoutesConstants.LOGIN}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <Login />
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.GOOGLE_CALLBACK}
+              element={
+                <Suspense fallback={<LoadingState />}>
+                  <GoogleCallback />
+                </Suspense>
+              }
+            />
+            <Route
+              path={RoutesConstants.LOGIN_SUCCESS}
               element={
                 <Suspense fallback={<LoadingState />}>
                   <Login />

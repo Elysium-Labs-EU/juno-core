@@ -21,9 +21,23 @@ interface UserPromise {
 }
 
 const userApi = () => ({
-  authenticateUser: async () => {
+  // TODO: Convert to axios
+  authGoogle: async () => {
     try {
-      const res: AxiosResponse<UserPromise> = await instance.get(`/api/auth`)
+      const res: AxiosResponse<UserPromise> = await instance.get(
+        `/api/auth/oauth/google/`
+      )
+      return res
+    } catch (err: any) {
+      return errorHandling(err)
+    }
+  },
+  authGoogleCallback: async (body: any) => {
+    try {
+      const res: AxiosResponse<UserPromise> = await instance.post(
+        `/api/auth/oauth/google/callback/`,
+        body
+      )
       return res
     } catch (err: any) {
       return errorHandling(err)
