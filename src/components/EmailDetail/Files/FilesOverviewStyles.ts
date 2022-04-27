@@ -33,4 +33,5 @@ export const AvatarName = styled.div`
 export const BubbleWrapper = styled.div`
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
 `

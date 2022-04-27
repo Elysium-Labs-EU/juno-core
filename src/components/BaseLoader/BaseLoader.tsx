@@ -4,6 +4,7 @@ import * as HS from '../MainHeader/HeaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
 import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 
 const ERROR_CODE_UNAUTHORIZED = '401'
 const LOG_OUT_IN = 'Log out, log back in'
@@ -15,13 +16,15 @@ const Baseloader = () => {
       <S.Inner>
         {!serviceUnavailable && (
           <>
-            <S.Container>
-              <img
-                style={{ marginBottom: '1rem' }}
-                src={Logo}
-                alt="Juno's Logo"
-              />
-            </S.Container>
+            <AnimatedMountUnmount>
+              <S.Container>
+                <img
+                  style={{ marginBottom: '1rem' }}
+                  src={Logo}
+                  alt="Juno's Logo"
+                />
+              </S.Container>
+            </AnimatedMountUnmount>
             <S.LoaderContainer>
               <S.StyledLinearProgress />
             </S.LoaderContainer>
