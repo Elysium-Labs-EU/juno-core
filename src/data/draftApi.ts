@@ -1,10 +1,10 @@
-import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { AxiosResponse } from 'axios'
+import { errorHandling, fetchToken, instance } from './api'
 
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: any) => {
     try {
-      const res = await axios.post(`${BASE_API_URL}/api/create-draft`, data, {
+      const res = await instance.post(`/api/create-draft`, data, {
         headers: {
           Authorization: fetchToken(),
         },
@@ -18,8 +18,8 @@ const draftApi = (signal?: AbortSignal) => ({
   updateDrafts: async (data: any) => {
     const { draftId } = data
     try {
-      const res: AxiosResponse<any> = await axios.put(
-        `${BASE_API_URL}/api/update-draft/${draftId}`,
+      const res: AxiosResponse<any> = await instance.put(
+        `/api/update-draft/${draftId}`,
         data,
         {
           headers: {
@@ -35,15 +35,12 @@ const draftApi = (signal?: AbortSignal) => ({
 
   getDrafts: async () => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/drafts/`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-          signal,
-        }
-      )
+      const res: AxiosResponse<any> = await instance.get(`/api/drafts/`, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+        signal,
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)
@@ -52,8 +49,8 @@ const draftApi = (signal?: AbortSignal) => ({
 
   getDraftDetail: async (draftId: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/draft/${draftId}`,
+      const res: AxiosResponse<any> = await instance.get(
+        `/api/draft/${draftId}`,
         {
           headers: {
             Authorization: fetchToken(),
@@ -68,8 +65,8 @@ const draftApi = (signal?: AbortSignal) => ({
 
   sendDraft: async (data: any) => {
     try {
-      const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/send-draft`,
+      const res: AxiosResponse<any> = await instance.post(
+        `/api/send-draft`,
         data,
         {
           headers: {
@@ -85,15 +82,12 @@ const draftApi = (signal?: AbortSignal) => ({
 
   deleteDraft: async (id: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.delete(
-        `${BASE_API_URL}/api/draft`,
-        {
-          data: { id },
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.delete(`/api/draft`, {
+        data: { id },
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
       return errorHandling(err)

@@ -1,66 +1,37 @@
-/* eslint-disable no-nested-ternary */
-import GoogleLogin, {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login'
+import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
-import isElectron from 'is-electron'
-import RouteConstants from '../../constants/routes.json'
-import { setIsAuthenticated } from '../../Store/baseSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import * as global from '../../constants/globalConstants'
+// import isElectron from 'is-electron'
+import { useAppDispatch } from '../../Store/hooks'
 import * as S from './LoginStyles'
 import * as HS from '../MainHeader/HeaderStyles'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import {
-  selectServiceUnavailable,
-  setServiceUnavailable,
-} from '../../Store/utilsSlice'
-import setCookie from '../../utils/Cookie/setCookie'
 import GoogleButton from './GoogleButton/GoogleButton'
+import userApi from '../../data/userApi'
 
-const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno, log in with Google'
-const ERROR_LOADING = 'Cannot load login. Try again later.'
-const ELECTRON_WARNING =
-  "The current login doesn't work yet with the Electron app. Please use the web version."
-
-const SCOPES = [
-  'openid',
-  'profile',
-  'https://mail.google.com',
-  'https://www.googleapis.com/auth/gmail.addons.current.message.action',
-  'https://www.googleapis.com/auth/gmail.addons.current.message.readonly',
-  'https://www.googleapis.com/auth/gmail.modify',
-  'https://www.googleapis.com/auth/gmail.readonly',
-  'https://www.googleapis.com/auth/gmail.compose',
-  'https://www.googleapis.com/auth/gmail.send',
-  'https://www.googleapis.com/auth/contacts.other.readonly',
-]
-
-interface IOnFailure {
-  error: string
-}
-
-const thisIsElectron = isElectron()
 
 const Login = () => {
   const dispatch = useAppDispatch()
-  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const [loginUrl, setLoginUrl] = useState<string | null>(null)
 
-  const handleSuccess = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) => {
-    const onlineGoogleResponse = response as GoogleLoginResponse
-    setCookie(global.GOOGLE_TOKEN, onlineGoogleResponse.tokenObj, 30)
-    dispatch(setIsAuthenticated(true))
-    dispatch(push(RouteConstants.HOME))
+  const signInWithGoogle = () => {
+    if (loginUrl) {
+      // return isElectron()  :
+      dispatch(push(loginUrl))
+    }
+    // return null
   }
 
-  const handleFailure = (data: IOnFailure) => {
-    dispatch(setServiceUnavailable(`Unable to login - ${data.error}`))
-  }
+  useEffect(() => {
+    const fetchUrl = async () => {
+      const response = await userApi().authGoogle()
+      if (response?.status === 200) {
+        setLoginUrl(response.data)
+      }
+    }
+    fetchUrl()
+  }, [])
 
   return (
     <S.Wrapper>
@@ -71,30 +42,12 @@ const Login = () => {
               <HS.PageTitle>{TITLE}</HS.PageTitle>
               <p>{SUB_HEADER}</p>
             </S.Header>
-            {CLIENT_ID && serviceUnavailable.length === 0 ? (
-              thisIsElectron ? (
-                <p>{ELECTRON_WARNING}</p>
-              ) : (
-                <GoogleLogin
-                  clientId={CLIENT_ID}
-                  onSuccess={(
-                    response: GoogleLoginResponse | GoogleLoginResponseOffline
-                  ) => handleSuccess(response)}
-                  onFailure={handleFailure}
-                  cookiePolicy="single_host_origin"
-                  scope={SCOPES.join(' ')}
-                  render={(renderProps) => (
-                    <GoogleButton renderProps={renderProps} />
-                  )}
-                  prompt="consent"
-                />
-              )
-            ) : (
-              <S.ErrorBox>
-                <p>{ERROR_LOADING}</p>
-                {serviceUnavailable.length > 0 && <p>{serviceUnavailable}</p>}
-              </S.ErrorBox>
-            )}
+            <GoogleButton
+              renderProps={{
+                onClick: signInWithGoogle,
+                disabled: loginUrl === null,
+              }}
+            />
           </S.Inner>
         </S.LoginContainer>
       </AnimatedMountUnmount>
