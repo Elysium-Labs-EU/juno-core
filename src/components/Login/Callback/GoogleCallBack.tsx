@@ -4,16 +4,13 @@ import { push } from 'redux-first-history'
 import * as RouteConstants from '../../../constants/routes.json'
 import userApi from '../../../data/userApi'
 import { setIsAuthenticated } from '../../../Store/baseSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import {
-  selectServiceUnavailable,
-  setServiceUnavailable,
-} from '../../../Store/utilsSlice'
+import { useAppDispatch } from '../../../Store/hooks'
+import { setServiceUnavailable } from '../../../Store/utilsSlice'
 import handleUserTokens from '../../../utils/handleUserTokens'
+import Baseloader from '../../BaseLoader/BaseLoader'
 
 const GoogleCallBack = () => {
   const dispatch = useAppDispatch()
-  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
   useEffect(() => {
     const getTokens = async () => {
@@ -35,11 +32,7 @@ const GoogleCallBack = () => {
     getTokens()
   }, [])
 
-  return (
-    <div>
-      {!serviceUnavailable ? <p>Loading</p> : <p>{serviceUnavailable}</p>}
-    </div>
-  )
+  return <Baseloader />
 }
 
 export default GoogleCallBack

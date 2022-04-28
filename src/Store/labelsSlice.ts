@@ -16,33 +16,33 @@ export const labelsSlice = createSlice({
   name: 'labels',
   initialState,
   reducers: {
-    setCurrentLabels: (state, action) => {
-      state.labelIds = action.payload
+    setCurrentLabels: (state, { payload }) => {
+      state.labelIds = payload
     },
-    setLoadedInbox: (state, action) => {
+    setLoadedInbox: (state, { payload }) => {
       const doesLabelAlreadyExist =
         state.loadedInbox.length > 0 &&
         state.loadedInbox
-          .map((item) => item.includes(action.payload[0]))
+          .map((item) => item.includes(payload[0]))
           .filter((result) => result === false)
 
       if (!doesLabelAlreadyExist) {
-        state.loadedInbox.push(action.payload)
+        state.loadedInbox.push(payload)
       }
       if (doesLabelAlreadyExist && doesLabelAlreadyExist.length > 0) {
-        state.loadedInbox = [...state.loadedInbox, action.payload]
+        state.loadedInbox = [...state.loadedInbox, payload]
       }
     },
-    setStorageLabels: (state, action) => {
-      if (!Array.isArray(action.payload)) {
+    setStorageLabels: (state, { payload }) => {
+      if (!Array.isArray(payload)) {
         const labelIdName: LabelIdName = {
-          id: action.payload.id,
-          name: action.payload.name,
+          id: payload.id,
+          name: payload.name,
         }
         state.storageLabels = [...state.storageLabels, labelIdName]
       }
-      if (Array.isArray(action.payload)) {
-        const labelIdNameArray = action.payload.map((label: GoogleLabel[]) => ({
+      if (Array.isArray(payload)) {
+        const labelIdNameArray = payload.map((label: GoogleLabel[]) => ({
           id: label[0].id,
           name: label[0].name,
         }))

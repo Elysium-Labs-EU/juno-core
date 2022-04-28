@@ -21,7 +21,6 @@ interface UserPromise {
 }
 
 const userApi = () => ({
-  // TODO: Convert to axios
   authGoogle: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await instance.get(
