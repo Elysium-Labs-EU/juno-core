@@ -23,9 +23,22 @@ jobs:
     steps:
       - checkout
       - heroku/install
-      - deploy-command:
-          HEROKU_APP_NAME: juno-core
-          BRANCH: main
+
+      - when:
+          condition:
+            equal: [main, << pipeline.git.branch >>]
+          steps:
+          - deploy-command:
+              HEROKU_APP_NAME: juno-core
+              BRANCH: main
+
+      - when:
+          condition:
+            equal: [dev, << pipeline.git.branch >>]
+          steps:
+          - deploy-command:
+              HEROKU_APP_NAME: juno-core-dev
+              BRANCH: dev
 
 
 workflows:
@@ -35,6 +48,8 @@ workflows:
           pkg-manager: yarn
           yarn-run: lint:prettier
       - deploy:
-        filters:
-            branches:
-              only: main
+          filters:
+              branches:
+                only: 
+                  - main
+                  - dev
