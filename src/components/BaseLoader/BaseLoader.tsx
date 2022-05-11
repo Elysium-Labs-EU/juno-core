@@ -1,13 +1,28 @@
+import { motion } from 'framer-motion'
 import { useSelector } from 'react-redux'
 import * as S from './BaseLoaderStyles'
 import * as HS from '../MainHeader/HeaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
 import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 
-const ERROR_CODE_UNAUTHORIZED = '401'
+const ERROR_CODE_UNAUTHORIZED = 'Invalid'
 const LOG_OUT_IN = 'Log out, log back in'
+const LOGO_ALT = "Juno's Logo"
+
+const AnimatedMountUnmount = ({
+  children,
+}: {
+  children: JSX.Element | JSX.Element[] | any
+}) => (
+  <motion.div
+    exit={{ opacity: 0.7, scale: 0.9 }}
+    initial={{ opacity: 0.7, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+  >
+    {children}
+  </motion.div>
+)
 
 const Baseloader = () => {
   const serviceUnavailable = useSelector(selectServiceUnavailable)
@@ -21,7 +36,7 @@ const Baseloader = () => {
                 <img
                   style={{ marginBottom: '1rem' }}
                   src={Logo}
-                  alt="Juno's Logo"
+                  alt={LOGO_ALT}
                 />
               </S.Container>
             </AnimatedMountUnmount>

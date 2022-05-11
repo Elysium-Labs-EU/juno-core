@@ -123,13 +123,19 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
                 </S.EmailDetailTitle>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
-                <EmailHasAttachment messages={message} />
-                <TimeStamp threadTimeStamp={message.internalDate} />
-                <CustomIconButton
-                  onClick={handleSpecificMenu('bottom-start')}
-                  icon={<FiChevronDown />}
-                  aria-describedby={popperId}
-                />
+                <S.ChildDiv>
+                  <EmailHasAttachment messages={message} />
+                </S.ChildDiv>
+                <S.ChildDiv>
+                  <TimeStamp threadTimeStamp={message.internalDate} />
+                </S.ChildDiv>
+                <S.ChildDiv>
+                  <CustomIconButton
+                    onClick={handleSpecificMenu('bottom-start')}
+                    icon={<FiChevronDown />}
+                    aria-describedby={popperId}
+                  />
+                </S.ChildDiv>
                 <Popper
                   id={popperId}
                   open={showMenu}
@@ -225,8 +231,12 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
             <S.TimeAttachmentContainer>
-              <EmailHasAttachment messages={message} />
-              <TimeStamp threadTimeStamp={message.internalDate} />
+              <S.ChildDiv>
+                <EmailHasAttachment messages={message} />
+              </S.ChildDiv>
+              <S.ChildDiv>
+                <TimeStamp threadTimeStamp={message.internalDate} />
+              </S.ChildDiv>
             </S.TimeAttachmentContainer>
           </S.ClosedMessageWrapper>
         </S.EmailClosedWrapper>

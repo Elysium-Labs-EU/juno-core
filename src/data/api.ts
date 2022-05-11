@@ -27,8 +27,8 @@ export const errorHandling = async (err: any) => {
   // console.log(err)
   const originalRequest = err.config
   if (
-    err.response.data === global.INVALID_TOKEN &&
-    !err.response.request.responseURL.includes('/refresh') &&
+    err?.response?.data === global.INVALID_TOKEN &&
+    !err?.response?.request?.responseURL.includes('/refresh') &&
     !originalRequest.isRetry
   ) {
     originalRequest.isRetry = true
@@ -41,14 +41,16 @@ export const errorHandling = async (err: any) => {
     //   return axios(originalRequest)
     // }
   }
-  if (
-    err.response.data === global.INVALID_TOKEN &&
-    err.response.request.responseURL.includes('/refresh')
-  ) {
-    handleLogout()
-  }
-  if (err.response.data === global.INVALID_SESSION) {
-    handleLogout()
-  }
-  return err.response.data ?? err.message
+  // if (
+  //   err.response.data === global.INVALID_TOKEN &&
+  //   err.response.request.responseURL.includes('/refresh')
+  // ) {
+  //   console.log(global.INVALID_TOKEN)
+  //   // handleLogout()
+  // }
+  // if (err.response.data === global.INVALID_SESSION) {
+  //   console.log(global.INVALID_SESSION)
+  //   // handleLogout()
+  // }
+  return err?.response?.data ?? err?.message
 }

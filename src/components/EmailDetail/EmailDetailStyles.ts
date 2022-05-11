@@ -36,22 +36,22 @@ export const EmailWrapper = styled.div<EmailWrapperProps>`
   border-radius: 6px;
   background-color: ${(props) =>
     props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
-  margin-bottom: 0.5rem;
-  border: 1px solid var(--color-grey-border);
+  margin-bottom: 8px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
 `
 
 export const EmailClosedWrapper = styled.div`
-  padding: 1rem;
+  padding: 16px;
   transition: background-color ease-in 0.125s;
   cursor: pointer;
   &:hover {
     background-color: var(--color-grey-hover);
+    border-radius: 6px;
   }
 `
 
 export const EmailOpenWrapper = styled.div`
-  padding: 1rem;
+  padding: 16px;
 `
 
 export const EmailOptionsContainer = styled.div`
@@ -118,7 +118,7 @@ export const EmailDetailContainer = styled.div<EmailContainerProps>`
   min-width: 60%;
   max-width: ${({ tabbedView }) => (tabbedView ? '40vw' : '60%')};
   padding-bottom: 1.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
   width: 100%;
   overflow: hidden;
 `
@@ -130,7 +130,9 @@ export const TopContainer = styled.div`
 
 export const ClickHeader = styled.div`
   align-items: center;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-right: 20px;
 `
 
 export const SpecificMenuContainer = styled.div`
@@ -145,12 +147,17 @@ export const TimeAttachmentContainer = styled.div`
   flex-direction: row;
   align-items: center;
   margin-left: auto;
+  div:not(:first-child) {
+    margin-left: 10px;
+  }
+`
+
+export const ChildDiv = styled.div`
+  line-height: 16px;
 `
 
 export const HeaderFullWidth = styled.div`
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   width: 100%;
   display: flex;
   place-items: center;
@@ -195,8 +202,8 @@ export const ToFromBCCInner = styled.div`
 `
 
 export const EmailBody = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `
 
 export const ClosedAvatarSender = styled.div`

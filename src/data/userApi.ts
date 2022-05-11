@@ -54,6 +54,21 @@ const userApi = () => ({
       return errorHandling(err)
     }
   },
+  logoutUser: async () => {
+    try {
+      const res: AxiosResponse<UserPromise> = await instance.get(
+        `/api/user/logout`,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
+      )
+      return res
+    } catch (err: any) {
+      return errorHandling(err)
+    }
+  },
 })
 
 export default userApi
