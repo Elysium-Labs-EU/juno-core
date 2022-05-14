@@ -205,8 +205,8 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
           <S.EmailBody>
             {message && message.payload && message.id && (
               <EmailDetailBody
-                threadDetailBody={message.payload}
-                messageId={message.id}
+                threadDetailBody={message?.payload}
+                messageId={message?.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
               />
             )}
@@ -223,9 +223,9 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
               <S.ClosedSender>
                 <span
                   style={{ fontWeight: 'bold' }}
-                  title={staticSenderNamePartial.emailAddress}
+                  title={staticSenderNamePartial?.emailAddress}
                 >
-                  {staticSenderNamePartial.name}
+                  {staticSenderNamePartial?.name}
                 </span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
