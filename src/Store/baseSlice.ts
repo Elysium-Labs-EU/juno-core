@@ -28,12 +28,12 @@ export const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
-    setBaseLoaded: (state, { payload }) => {
+    setBaseLoaded: (state, { payload }: { payload: boolean }) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
       }
     },
-    setIsAuthenticated: (state, { payload }) => {
+    setIsAuthenticated: (state, { payload }: { payload: boolean }) => {
       state.isAuthenticated = payload
     },
     setProfile: (state, { payload }) => {
