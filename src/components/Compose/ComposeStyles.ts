@@ -24,7 +24,7 @@ export const InfoWarningContainer = styled.div`
 `
 
 export const UpdateContainer = styled.div`
-  min-height: 2rem;
+  min-height: 32px;
 `
 
 interface IComposerContainer {
