@@ -1,4 +1,4 @@
-export const SESSION_TOKEN = 'sessionToken'
+export const ACCESS_TOKEN = 'accessToken'
 export const REFRESH_TOKEN = 'refreshToken'
 export const INVALID_TOKEN = 'Invalid token'
 export const INVALID_SESSION = 'Invalid session'
