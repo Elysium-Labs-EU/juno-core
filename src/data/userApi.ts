@@ -37,7 +37,6 @@ const userApi = () => ({
         `/api/auth/oauth/google/callback/`,
         body
       )
-      console.log(res)
       return res
     } catch (err: any) {
       return errorHandling(err)
