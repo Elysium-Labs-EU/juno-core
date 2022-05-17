@@ -4,7 +4,9 @@ const setCookie = (cName: string, cValue: {} | string, expDays: number) => {
   const expires = `expires=${date.toUTCString()}`
   document.cookie = `${cName}=${JSON.stringify(
     cValue
-  )}; ${expires}; path=/; SameSite=Lax`
+  )}; ${expires}; path=/; SameSite=${
+    process.env.NODE_ENV === 'development' ? `Lax` : `None`
+  }; Secure=${process.env.NODE_ENV !== 'development'}`
 }
 
 export default setCookie
