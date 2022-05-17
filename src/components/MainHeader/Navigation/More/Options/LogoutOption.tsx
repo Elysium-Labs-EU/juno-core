@@ -1,19 +1,20 @@
 import * as S from '../NavigationMoreStyles'
 import * as local from '../../../../../constants/subMenuHeaderConstants'
-import * as global from '../../../../../constants/globalConstants'
-import removeCookie from '../../../../../utils/Cookie/removeCookie'
+import handleUserTokens from '../../../../../utils/handleUserTokens'
+import userApi from '../../../../../data/userApi'
 
-const LogoutOption = () => {
-  const handleLogout = () => {
-    removeCookie(global.GOOGLE_TOKEN)
+export const handleLogout = async () => {
+  const response = await userApi().logoutUser()
+  if (response?.status === 205) {
+    handleUserTokens().removeAllTokens()
     window.location.reload()
   }
-
-  return (
-    <S.MenuItemButton onClick={handleLogout} type="button">
-      {local.LOGOUT}
-    </S.MenuItemButton>
-  )
 }
+
+const LogoutOption = () => (
+  <S.MenuItemButton onClick={handleLogout} type="button">
+    {local.LOGOUT}
+  </S.MenuItemButton>
+)
 
 export default LogoutOption

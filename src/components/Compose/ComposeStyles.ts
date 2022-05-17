@@ -24,7 +24,7 @@ export const InfoWarningContainer = styled.div`
 `
 
 export const UpdateContainer = styled.div`
-  min-height: 2rem;
+  min-height: 32px;
 `
 
 interface IComposerContainer {
@@ -50,8 +50,8 @@ export const Label = styled.div<ILabel>`
     cursor: default;
     user-select: none;
     transition: opacity 0.3s ease 0s, color 0.3s ease 0s;
-    color: ${(props) => (props.hasValue ? 'rgb(83, 83, 88)' : 'default')};
-    opacity: ${(props) => (props.hasValue ? '0.3' : '1')};
+    color: ${({ hasValue }) => (hasValue ? 'rgb(83, 83, 88)' : 'default')};
+    opacity: ${({ hasValue }) => (hasValue ? '0.3' : '1')};
     &:hover {
       opacity: 1;
       color: default;

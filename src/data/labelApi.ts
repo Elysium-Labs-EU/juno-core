@@ -1,17 +1,14 @@
-import axios, { AxiosResponse } from 'axios'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { AxiosResponse } from 'axios'
+import { errorHandling, fetchToken, instance } from './api'
 
 const labelApi = () => ({
   fetchLabels: async () => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/labels`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.get(`/api/labels`, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)
@@ -19,14 +16,11 @@ const labelApi = () => ({
   },
   fetchSingleLabel: async (id: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/label/${id}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.get(`/api/label/${id}`, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)
@@ -34,8 +28,8 @@ const labelApi = () => ({
   },
   updateLabel: async (body: any) => {
     try {
-      const res: AxiosResponse<any> = await axios.patch(
-        `${BASE_API_URL}/api/labels`,
+      const res: AxiosResponse<any> = await instance.patch(
+        `/api/labels`,
         body,
         {
           headers: {
@@ -50,15 +44,12 @@ const labelApi = () => ({
   },
   deleteLabel: async (id: string) => {
     try {
-      const res: AxiosResponse<any> = await axios.delete(
-        `${BASE_API_URL}/api/labels`,
-        {
-          data: { id },
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.delete(`/api/labels`, {
+        data: { id },
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)
@@ -66,15 +57,11 @@ const labelApi = () => ({
   },
   createLabel: async (body: any) => {
     try {
-      const res: AxiosResponse<any> = await axios.post(
-        `${BASE_API_URL}/api/labels`,
-        body,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+      const res: AxiosResponse<any> = await instance.post(`/api/labels`, body, {
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
       return errorHandling(err)

@@ -627,8 +627,8 @@ export const selectActiveEmailListIndex = (state: RootState) =>
   state.email.activeEmailListIndex
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
-export const selectNextPageToken = (state: any) =>
-  state.email.emailList.nextPageToken
+export const selectNextPageToken = (state: RootState) =>
+  state.email.emailList[0].nextPageToken
 export const selectSelectedEmails = (state: RootState) =>
   state.email.selectedEmails
 

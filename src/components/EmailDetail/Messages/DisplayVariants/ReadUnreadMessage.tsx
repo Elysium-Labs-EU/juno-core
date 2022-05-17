@@ -123,13 +123,19 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
                 </S.EmailDetailTitle>
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
-                <EmailHasAttachment messages={message} />
-                <TimeStamp threadTimeStamp={message.internalDate} />
-                <CustomIconButton
-                  onClick={handleSpecificMenu('bottom-start')}
-                  icon={<FiChevronDown />}
-                  aria-describedby={popperId}
-                />
+                <S.ChildDiv>
+                  <EmailHasAttachment messages={message} />
+                </S.ChildDiv>
+                <S.ChildDiv>
+                  <TimeStamp threadTimeStamp={message.internalDate} />
+                </S.ChildDiv>
+                <S.ChildDiv>
+                  <CustomIconButton
+                    onClick={handleSpecificMenu('bottom-start')}
+                    icon={<FiChevronDown />}
+                    aria-describedby={popperId}
+                  />
+                </S.ChildDiv>
                 <Popper
                   id={popperId}
                   open={showMenu}
@@ -199,8 +205,8 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
           <S.EmailBody>
             {message && message.payload && message.id && (
               <EmailDetailBody
-                threadDetailBody={message.payload}
-                messageId={message.id}
+                threadDetailBody={message?.payload}
+                messageId={message?.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
               />
             )}
@@ -217,16 +223,20 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
               <S.ClosedSender>
                 <span
                   style={{ fontWeight: 'bold' }}
-                  title={staticSenderNamePartial.emailAddress}
+                  title={staticSenderNamePartial?.emailAddress}
                 >
-                  {staticSenderNamePartial.name}
+                  {staticSenderNamePartial?.name}
                 </span>
               </S.ClosedSender>
             </S.ClosedAvatarSender>
             <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
             <S.TimeAttachmentContainer>
-              <EmailHasAttachment messages={message} />
-              <TimeStamp threadTimeStamp={message.internalDate} />
+              <S.ChildDiv>
+                <EmailHasAttachment messages={message} />
+              </S.ChildDiv>
+              <S.ChildDiv>
+                <TimeStamp threadTimeStamp={message.internalDate} />
+              </S.ChildDiv>
             </S.TimeAttachmentContainer>
           </S.ClosedMessageWrapper>
         </S.EmailClosedWrapper>

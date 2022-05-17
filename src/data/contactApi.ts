@@ -1,6 +1,6 @@
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { BASE_API_URL, errorHandling, fetchToken } from './api'
+import { errorHandling, fetchToken, instance } from './api'
 
 interface AllContactsQueryObject {
   readMask: string
@@ -16,22 +16,19 @@ interface QueryContactObject {
 const contactApi = () => ({
   getAllContacts: async (query: AllContactsQueryObject) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/contacts/`,
-        {
-          params: {
-            readMask: query.readMask,
-            pageSize: query.pageSize ?? 1000,
-            pageToken: query.nextPageToken ?? undefined,
-          },
-          paramsSerializer: (params) =>
-            qs.stringify(params, { arrayFormat: 'repeat' }),
+      const res: AxiosResponse<any> = await instance.get(`/api/contacts/`, {
+        params: {
+          readMask: query.readMask,
+          pageSize: query.pageSize ?? 1000,
+          pageToken: query.nextPageToken ?? undefined,
+        },
+        paramsSerializer: (params) =>
+          qs.stringify(params, { arrayFormat: 'repeat' }),
 
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
-      )
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
       return res
     } catch (err) {
       return errorHandling(err)
@@ -39,8 +36,8 @@ const contactApi = () => ({
   },
   queryContacts: async (query: QueryContactObject) => {
     try {
-      const res: AxiosResponse<any> = await axios.get(
-        `${BASE_API_URL}/api/contact/search/`,
+      const res: AxiosResponse<any> = await instance.get(
+        `/api/contact/search/`,
         {
           params: {
             readMask: query.readMask,
