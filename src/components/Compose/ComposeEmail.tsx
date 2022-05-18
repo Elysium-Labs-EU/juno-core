@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
+import qs from 'qs'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import {
@@ -255,6 +256,12 @@ const ComposeEmail = ({
   useEffect(() => {
     let mounted = true
     if (mounted) {
+      const { mailto }: { mailto?: string } = qs.parse(window.location.search, {
+        ignoreQueryPrefix: true,
+      })
+      if (mailto && isEmpty(composeEmail)) {
+        setToValue(handleContactConversion(mailto))
+      }
       // composeEmail object coming ??
       if (!isEmpty(composeEmail)) {
         setToValue(handleContactConversion(composeEmail.to))
@@ -269,18 +276,20 @@ const ComposeEmail = ({
         setSubjectValue(composeEmail.subject)
         setBodyValue(composeEmail.body)
       }
-      // Form values coming from a new reply via MessagesOverview (EmailDetail)
-      if (to) {
-        setToValue([to])
-      }
-      if (cc) {
-        setCCValue([cc])
-      }
-      if (bcc) {
-        setBCCValue([bcc])
-      }
-      if (subject) {
-        setSubjectValue(subject)
+      if (!mailto && isEmpty(composeEmail)) {
+        // Form values coming from a new reply via MessagesOverview (EmailDetail)
+        if (to) {
+          setToValue([to])
+        }
+        if (cc) {
+          setCCValue([cc])
+        }
+        if (bcc) {
+          setBCCValue([bcc])
+        }
+        if (subject) {
+          setSubjectValue(subject)
+        }
       }
     }
     return () => {
