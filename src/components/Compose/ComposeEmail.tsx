@@ -256,11 +256,22 @@ const ComposeEmail = ({
   useEffect(() => {
     let mounted = true
     if (mounted) {
-      const { mailto }: { mailto?: string } = qs.parse(window.location.search, {
-        ignoreQueryPrefix: true,
-      })
-      if (mailto && isEmpty(composeEmail)) {
-        setToValue(handleContactConversion(mailto))
+      const { mailto, body }: { mailto?: string; body?: string } = qs.parse(
+        window.location.search,
+        {
+          ignoreQueryPrefix: true,
+        }
+      )
+      if (mailto || (body && isEmpty(composeEmail))) {
+        if (mailto?.includes('@')) {
+          setToValue(handleContactConversion(mailto))
+        }
+        if (mailto?.includes('subject')) {
+          setSubjectValue(mailto.replace('?subject=', ''))
+        }
+        if (body) {
+          setBodyValue(body)
+        }
       }
       // composeEmail object coming ??
       if (!isEmpty(composeEmail)) {

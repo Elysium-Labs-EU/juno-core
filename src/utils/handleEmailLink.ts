@@ -15,6 +15,8 @@ const createCompose = ({
   )
 }
 
+const CLICK_EMAIL = 'Click to start new mail'
+
 export default function handleEmailLink({ dispatch }: { dispatch: Function }) {
   const elements = document.querySelectorAll('.visible a')
   if (elements.length > 0) {
@@ -28,8 +30,9 @@ export default function handleEmailLink({ dispatch }: { dispatch: Function }) {
           )
           element.setAttribute(
             'style',
-            'font-weight: bold; text-decoration: underline; cursor: pointer; color: var(--color-blue)'
+            'cursor: pointer; background: var(--color-grey-border); border-radius: 5px; padding: 3px 6px; border: 1px solid var(--color-grey-ultra-light)'
           )
+          element.setAttribute('title', CLICK_EMAIL)
           return element
         }
       }
