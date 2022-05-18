@@ -22,10 +22,10 @@ const DetailNavigationContainer = ({
 }: {
   activeEmailList: IEmailListObject | IEmailListObjectSearch
 }) => {
+  const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const viewIndex = useAppSelector(selectViewIndex)
-  const dispatch = useAppDispatch()
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const coreStatus = useAppSelector(selectCoreStatus)
   const composeEmail = useAppSelector(selectComposeEmail)

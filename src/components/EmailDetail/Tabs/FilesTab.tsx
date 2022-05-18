@@ -12,13 +12,16 @@ const FilesTab = ({
   activeLink: string
   navigateTo: Function
 }) => {
-  const countValue = [
+  let filesCount = 0
+  const uniqueFilesArray = [
     ...new Set(
-      activeThread?.messages?.filter(
-        (message) => checkAttachment(message).length > 0
-      )
+      activeThread?.messages?.map((message) => checkAttachment(message))
     ),
-  ].length
+  ]
+
+  for (let i = 0; i < uniqueFilesArray.length; i += 1) {
+    filesCount += uniqueFilesArray[i].length
+  }
 
   return (
     <S.StyedListItem
@@ -29,7 +32,7 @@ const FilesTab = ({
     >
       <S.StyledBadge
         badgeContent={
-          activeLink === local.FILES_MENU_ITEM.name ? 0 : countValue
+          activeLink === local.FILES_MENU_ITEM.name ? 0 : filesCount
         }
         color="primary"
       >
