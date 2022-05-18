@@ -72,8 +72,6 @@ const App = () => {
     if (token) {
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.HOME))
-    } else {
-      dispatch(push(RoutesConstants.LOGIN))
     }
   }, [])
 
