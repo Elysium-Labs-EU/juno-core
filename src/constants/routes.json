@@ -2,6 +2,7 @@
   "HOME": "/",
   "EMAIL_DETAIL": "/mail/:labelId/:threadId/:overviewId",
   "COMPOSE_EMAIL": "/compose/*",
+  "COMPOSE_EMAIL_BASE": "/compose/",
   "DRAFTS": "/drafts",
   "SENT": "/sent",
   "SPAM": "/spam",

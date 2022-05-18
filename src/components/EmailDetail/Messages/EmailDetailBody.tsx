@@ -8,6 +8,7 @@ import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 import bodyDecoder from '../../../utils/bodyDecoder'
 import openLinkInNewTab from '../../../utils/openLinkInNewTab'
 import cleanLink from '../../../utils/cleanLink'
+import handleEmailLink from '../../../utils/handleEmailLink'
 
 interface IInlineImageTypeResponse {
   mimeType: string
@@ -21,35 +22,32 @@ interface IEmailDetailBody {
   detailBodyCSS: 'visible' | 'invisible'
 }
 
+let hasRan = false
+
 const EmailDetailBody = ({
   threadDetailBody,
   messageId,
   detailBodyCSS,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
-  const [transformedLinks, setTransformedLinks] = useState(false)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    hasRan = false
+  }, [window.location])
+
+  useEffect(() => {
     let mounted = true
-    if (bodyState.length > 0) {
-      mounted && cleanLink()
+    if (mounted && !hasRan && bodyState.length > 0) {
+      openLinkInNewTab()
+      handleEmailLink({ dispatch })
+      cleanLink()
+      hasRan = true
     }
     return () => {
       mounted = false
     }
   }, [bodyState])
-
-  useEffect(() => {
-    let mounted = true
-    if (bodyState.length > 0 && !transformedLinks) {
-      mounted && openLinkInNewTab()
-      setTransformedLinks(true)
-    }
-    return () => {
-      mounted = false
-    }
-  }, [bodyState, transformedLinks])
 
   useEffect(() => {
     let mounted = true
