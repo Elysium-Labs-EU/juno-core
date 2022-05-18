@@ -8,6 +8,7 @@ import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 import bodyDecoder from '../../../utils/bodyDecoder'
 import openLinkInNewTab from '../../../utils/openLinkInNewTab'
 import cleanLink from '../../../utils/cleanLink'
+import handleEmailLink from '../../../utils/handleEmailLink'
 
 interface IInlineImageTypeResponse {
   mimeType: string
@@ -44,6 +45,7 @@ const EmailDetailBody = ({
     let mounted = true
     if (bodyState.length > 0 && !transformedLinks) {
       mounted && openLinkInNewTab()
+      mounted && handleEmailLink()
       setTransformedLinks(true)
     }
     return () => {
