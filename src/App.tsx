@@ -20,7 +20,7 @@ import { selectStorageLabels } from './Store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
 import { fetchToken } from './data/api'
-// import EmailDetail from './components/EmailDetail/EmailDetail'
+import EmailDetail from './components/EmailDetail/EmailDetail'
 import HelpButton from './components/Help/HelpButton'
 import { selectShowKeyboardCombos } from './Store/utilsSlice'
 
@@ -29,7 +29,6 @@ const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
 const Inbox = lazy(() => import('./components/Inbox/Inbox'))
 const SentEmail = lazy(() => import('./components/Sent/Sent'))
 const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
-const EmailDetail = lazy(() => import('./components/EmailDetail/EmailDetail'))
 const PageNotFound = lazy(
   () => import('./components/PageNotFound/PageNotFound')
 )
