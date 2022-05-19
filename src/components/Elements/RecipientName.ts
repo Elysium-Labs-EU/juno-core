@@ -7,7 +7,7 @@ const NO_RECIPIENT = '(No recipient)'
 
 const RecipientName = (email: any, emailAddress: string): Contact => {
   const query = 'To'
-  if (email) {
+  if (email && emailAddress) {
     const to = findPayloadHeadersData(query, email)
     if (to.length > 0) {
       if (to.includes(emailAddress)) {
