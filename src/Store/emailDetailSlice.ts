@@ -22,23 +22,23 @@ export const emailDetailSlice = createSlice({
   name: 'emailDetail',
   initialState,
   reducers: {
-    setCurrentEmail: (state, action) => {
-      state.currEmail = action.payload
+    setCurrentEmail: (state, { payload }) => {
+      state.currEmail = payload
     },
-    setCurrentMessage: (state, action) => {
-      state.currMessage = action.payload
+    setCurrentMessage: (state, { payload }) => {
+      state.currMessage = payload
     },
-    setViewIndex: (state, action: PayloadAction<number>) => {
-      state.viewIndex = action.payload
+    setViewIndex: (state, { payload }: PayloadAction<number>) => {
+      state.viewIndex = payload
     },
-    setSessionViewIndex: (state, action: PayloadAction<number>) => {
-      state.sessionViewIndex = action.payload
+    setSessionViewIndex: (state, { payload }: PayloadAction<number>) => {
+      state.sessionViewIndex = payload
     },
-    setIsReplying: (state, action: PayloadAction<boolean>) => {
-      state.isReplying = action.payload
+    setIsReplying: (state, { payload }: PayloadAction<boolean>) => {
+      state.isReplying = payload
     },
-    setIsForwarding: (state, action: PayloadAction<boolean>) => {
-      state.isForwarding = action.payload
+    setIsForwarding: (state, { payload }: PayloadAction<boolean>) => {
+      state.isForwarding = payload
     },
   },
 })

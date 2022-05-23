@@ -9,6 +9,7 @@ import bodyDecoder from '../../../utils/bodyDecoder'
 import openLinkInNewTab from '../../../utils/openLinkInNewTab'
 import cleanLink from '../../../utils/cleanLink'
 import handleEmailLink from '../../../utils/handleEmailLink'
+import fetchUnsubscribeLink from '../../../utils/fetchUnsubscribeLink'
 
 interface IInlineImageTypeResponse {
   mimeType: string
@@ -20,6 +21,7 @@ interface IEmailDetailBody {
   threadDetailBody: IEmailMessagePayload
   messageId: string
   detailBodyCSS: 'visible' | 'invisible'
+  setUnsubscribeLink?: Function
 }
 
 let hasRan = false
@@ -28,6 +30,7 @@ const EmailDetailBody = ({
   threadDetailBody,
   messageId,
   detailBodyCSS,
+  setUnsubscribeLink,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
@@ -42,6 +45,7 @@ const EmailDetailBody = ({
       openLinkInNewTab()
       handleEmailLink({ dispatch })
       cleanLink()
+      setUnsubscribeLink && fetchUnsubscribeLink({ setUnsubscribeLink })
       hasRan = true
     }
     return () => {
@@ -102,6 +106,10 @@ const EmailDetailBody = ({
         )}
     </div>
   )
+}
+
+EmailDetailBody.defaultProps = {
+  setUnsubscribeLink: null,
 }
 
 export default EmailDetailBody

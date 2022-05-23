@@ -19,12 +19,17 @@ import MoreOption from '../Options/MoreOption'
 import { selectCoreStatus } from '../../../Store/emailListSlice'
 import SkipOption from '../Options/SkipOption'
 import ForwardOption from '../Options/ForwardOption'
+import UnsubscribeOption from '../Options/UnsubscribeOption'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
+  unsubscribeLink: string | null
 }
 
-const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
+const EmailDetailOptions = ({
+  threadDetail,
+  unsubscribeLink,
+}: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -57,7 +62,7 @@ const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
                 FindLabelByName({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
-                })[0].id
+                })[0]?.id
             ) && <ToDoOption threadDetail={threadDetail} />}
           {staticOnlyLegalLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} />
@@ -74,6 +79,12 @@ const EmailDetailOptions = ({ threadDetail }: IEmailDetailOptions) => {
             />
           )}
           {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}
+          {unsubscribeLink && (
+            <>
+              <S.Spacer />
+              <UnsubscribeOption unsubscribeLink={unsubscribeLink} />
+            </>
+          )}
         </S.InnerOptionsContainer>
       </S.StickyOptions>
     </S.EmailOptionsContainer>
