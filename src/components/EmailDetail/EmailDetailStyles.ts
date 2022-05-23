@@ -259,3 +259,7 @@ export const ComposeWrapper = styled.div`
   max-width: 50%;
   margin-left: 45px;
 `
+
+export const Spacer = styled.div`
+  margin: 10px 0;
+`
