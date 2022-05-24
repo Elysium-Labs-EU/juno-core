@@ -36,7 +36,7 @@ const RotatingButton = styled.button<IRotatingButton>`
     color: var(--color-black);
     cursor: pointer;
   }
-  ${(props) => (props.disableRefresh ? rotatingIcon : null)};
+  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
 const refreshFeed = (dispatch: Function) => {

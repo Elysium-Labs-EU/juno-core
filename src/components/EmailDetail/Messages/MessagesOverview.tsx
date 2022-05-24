@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -56,12 +56,14 @@ interface IDetailDisplaySelector {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   index: number
+  setUnsubscribeLink: Function
 }
 
 const DetailDisplaySelector = ({
   message,
   threadDetail,
   index,
+  setUnsubscribeLink,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
     if (message.labelIds.includes(draft.DRAFT_LABEL)) {
@@ -73,6 +75,7 @@ const DetailDisplaySelector = ({
           message={message}
           threadDetail={threadDetail}
           messageIndex={index}
+          setUnsubscribeLink={setUnsubscribeLink}
         />
       )
     }
@@ -83,14 +86,17 @@ const DetailDisplaySelector = ({
       message={message}
       threadDetail={threadDetail}
       messageIndex={index}
+      setUnsubscribeLink={setUnsubscribeLink}
     />
   )
 }
 
 const MappedMessages = ({
   threadDetail,
+  setUnsubscribeLink,
 }: {
   threadDetail: IEmailListThreadItem
+  setUnsubscribeLink: Function
 }) =>
   threadDetail.messages ? (
     <>
@@ -103,6 +109,7 @@ const MappedMessages = ({
               message={message}
               threadDetail={threadDetail}
               index={index}
+              setUnsubscribeLink={setUnsubscribeLink}
             />
           </ES.EmailWrapper>
         ))}
@@ -128,6 +135,7 @@ const MessagesOverview = memo(
     labelIds,
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
+    const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
 
     useEffect(() => {
       if (threadDetail && Object.keys(threadDetail).length > 0) {
@@ -152,7 +160,10 @@ const MessagesOverview = memo(
             <ES.DetailBase>
               <ES.CardFullWidth>
                 {threadDetail && !isLoading ? (
-                  <MappedMessages threadDetail={threadDetail} />
+                  <MappedMessages
+                    threadDetail={threadDetail}
+                    setUnsubscribeLink={setUnsubscribeLink}
+                  />
                 ) : (
                   <ES.LoadingErrorWrapper>
                     <CircularProgress />
@@ -171,7 +182,10 @@ const MessagesOverview = memo(
             !isReplying &&
             !isForwarding &&
             threadDetail.messages && (
-              <EmailDetailOptions threadDetail={threadDetail} />
+              <EmailDetailOptions
+                threadDetail={threadDetail}
+                unsubscribeLink={unsubscribeLink}
+              />
             )}
         </ES.DetailRow>
         {isReplying && threadDetail && threadDetail.messages && (

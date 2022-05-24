@@ -40,16 +40,21 @@ const EmailDetailHeader = ({
   const [detailHeader, setDetailHeader] = useState<string>('')
 
   useEffect(() => {
+    let mounted = true
     if (storageLabels.length > 0 && labelIds.length > 0) {
       if (location.pathname.includes(labelIds[0])) {
         const matchedLabel = FindLabelById({ storageLabels, labelIds })
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
-          setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
+          mounted &&
+            setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
         } else {
-          setDetailHeader(global.SEARCH_LABEL.toLowerCase())
+          mounted && setDetailHeader(global.SEARCH_LABEL.toLowerCase())
         }
       }
+    }
+    return () => {
+      mounted = false
     }
   }, [storageLabels, labelIds])
 
@@ -76,8 +81,12 @@ const EmailDetailHeader = ({
           </S.HeaderCenter>
           <Navigation />
           <S.InnerMenu>
-            <Tabs activeEmailList={activeEmailList} />
-            <DetailNavigationContainer activeEmailList={activeEmailList} />
+            {activeEmailList && (
+              <>
+                <Tabs activeEmailList={activeEmailList} />
+                <DetailNavigationContainer activeEmailList={activeEmailList} />
+              </>
+            )}
           </S.InnerMenu>
         </S.Wrapper>
       ) : (

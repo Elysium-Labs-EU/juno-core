@@ -14,7 +14,7 @@ const SIZE = 16
 const actionKeys = [modifierKey, global.KEY_FORWARD_SLASH]
 
 const customStyles = {
-  background: 'var(--color-white-off',
+  background: 'var(--color-white',
   padding: '0.375rem 0.75rem',
   borderRadius: '0.25rem',
   boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,

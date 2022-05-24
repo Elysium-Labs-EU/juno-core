@@ -33,9 +33,15 @@ interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   messageIndex: number
+  setUnsubscribeLink: Function
 }
 
-const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
+const ReadMessage = ({
+  message,
+  threadDetail,
+  messageIndex,
+  setUnsubscribeLink,
+}: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
@@ -203,11 +209,12 @@ const ReadMessage = ({ message, threadDetail, messageIndex }: IReadMessage) => {
           </S.ToBCCContainer>
 
           <S.EmailBody>
-            {message && message.payload && message.id && (
+            {message && message?.payload && message?.id && (
               <EmailDetailBody
-                threadDetailBody={message?.payload}
-                messageId={message?.id}
+                threadDetailBody={message.payload}
+                messageId={message.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
+                setUnsubscribeLink={setUnsubscribeLink}
               />
             )}
           </S.EmailBody>
