@@ -1,5 +1,4 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../Store/draftsSlice'
 import {
@@ -25,7 +24,6 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
-import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
@@ -136,7 +134,6 @@ const EmailList = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const location = useLocation()
 
   useEffect(() => {
     let mounted = true
@@ -157,10 +154,7 @@ const EmailList = () => {
           draftPromise = dispatch(fetchDrafts())
         }
       }
-      if (
-        !location.pathname.includes(Routes.INBOX) &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
-      ) {
+      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)) {
         if (
           emailList.length > 0 &&
           emailList.filter((emailSubList) =>
