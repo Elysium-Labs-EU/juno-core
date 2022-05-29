@@ -5,7 +5,7 @@ import messageApi from '../data/messageApi'
 import base64toBlob from '../utils/base64toBlob'
 import { baseBase64 } from '../utils/decodeBase64'
 import fileSaver from '../utils/fileSaver'
-import { EmailDetailState } from './emailDetailTypes'
+import { EmailDetailState } from './storeTypes/emailDetailTypes'
 import type { AppThunk, RootState } from './store'
 import { setServiceUnavailable } from './utilsSlice'
 

@@ -1,4 +1,4 @@
-import { IEmailListObject } from '../Store/emailListTypes'
+import { IEmailListObject } from '../Store/storeTypes/emailListTypes'
 
 interface IEmailListFilteredByLabel {
   emailList: IEmailListObject[]

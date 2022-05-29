@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from '../../../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../../../Store/storeTypes/emailListTypes'
 import PreLoadMessage from './PreLoadMessage'
 
 const PreLoadMessages = ({

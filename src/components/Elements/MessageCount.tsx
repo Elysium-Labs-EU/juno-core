@@ -1,6 +1,5 @@
-import { memo } from 'react'
 import styled from 'styled-components'
-import { IEmailMessage } from '../../Store/emailListTypes'
+import { IEmailMessage } from '../../Store/storeTypes/emailListTypes'
 
 const StyledMessageCount = styled.span`
   margin-left: 4px;
@@ -10,24 +9,19 @@ const StyledMessageCount = styled.span`
 
 const THREADS = 'threads'
 
+const LengthMessageCount = ({ length }: { length: number }) => (
+  <StyledMessageCount>
+    {length} {THREADS} &nbsp;&nbsp;—&nbsp;&nbsp;
+  </StyledMessageCount>
+)
+
 const MessageCount = ({
   countOfMessage,
 }: {
   countOfMessage: IEmailMessage[]
-}) => {
-  const LengthMessageCount = memo(() => {
-    const length = countOfMessage && countOfMessage.length
-    if (length > 1) {
-      return (
-        <StyledMessageCount>
-          {length} {THREADS} &nbsp;&nbsp;—&nbsp;&nbsp;
-        </StyledMessageCount>
-      )
-    }
-    return null
-  })
-
-  return <LengthMessageCount />
-}
+}) =>
+  countOfMessage.length > 1 ? (
+    <LengthMessageCount length={countOfMessage.length} />
+  ) : null
 
 export default MessageCount

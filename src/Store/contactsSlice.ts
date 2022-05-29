@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import { Contact } from './contactsTypes'
+import { Contact } from './storeTypes/contactsTypes'
 import { setServiceUnavailable } from './utilsSlice'
 import type { AppThunk, RootState } from './store'
 import contactApi from '../data/contactApi'

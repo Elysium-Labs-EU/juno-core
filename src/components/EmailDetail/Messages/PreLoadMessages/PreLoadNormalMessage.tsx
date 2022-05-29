@@ -1,4 +1,4 @@
-import { IEmailMessage } from '../../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../../Store/storeTypes/emailListTypes'
 import EmailDetailBody from '../EmailDetailBody'
 import * as global from '../../../../constants/globalConstants'
 

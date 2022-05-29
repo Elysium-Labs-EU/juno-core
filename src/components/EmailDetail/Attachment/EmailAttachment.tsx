@@ -1,6 +1,6 @@
 import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as S from './EmailAttachmentStyles'
-import { IEmailMessage } from '../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
 import checkAttachment from '../../../utils/checkAttachment'
 
 const EmailAttachment = ({ message }: { message: IEmailMessage }) => {

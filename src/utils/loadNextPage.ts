@@ -2,7 +2,7 @@ import { fetchEmails } from '../Store/emailListSlice'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../Store/emailListTypes'
+} from '../Store/storeTypes/emailListTypes'
 import * as global from '../constants/globalConstants'
 
 interface ILoadNextPage {

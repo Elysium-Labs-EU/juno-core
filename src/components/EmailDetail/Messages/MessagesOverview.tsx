@@ -6,12 +6,11 @@ import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
-import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../../../Store/emailListTypes'
+} from '../../../Store/storeTypes/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
@@ -66,10 +65,10 @@ const DetailDisplaySelector = ({
   setUnsubscribeLink,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
-    if (message.labelIds.includes(draft.DRAFT_LABEL)) {
+    if (message.labelIds.includes(global.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
-    if (!message.labelIds.includes(draft.DRAFT_LABEL)) {
+    if (!message.labelIds.includes(global.DRAFT_LABEL)) {
       return (
         <ReadUnreadMessage
           message={message}

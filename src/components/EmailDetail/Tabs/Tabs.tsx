@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../../Store/emailListTypes'
+} from '../../../Store/storeTypes/emailListTypes'
 import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import MessagesTab from './MessagesTab'
 import FilesTab from './FilesTab'

@@ -1,5 +1,5 @@
-import { Contact } from '../../../Store/contactsTypes'
-import { IEmailMessage } from '../../../Store/emailListTypes'
+import { Contact } from '../../../Store/storeTypes/contactsTypes'
+import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
 import convertToContact from '../../../utils/convertToContact'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import * as global from '../../../constants/globalConstants'

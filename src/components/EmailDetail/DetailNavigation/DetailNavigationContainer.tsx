@@ -13,7 +13,7 @@ import DetailNavigationView from './DetailNavigationView'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../../Store/emailListTypes'
+} from '../../../Store/storeTypes/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,

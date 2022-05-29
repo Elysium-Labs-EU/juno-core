@@ -11,7 +11,6 @@ import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as S from './SelectedOptionsStyles'
-import * as draft from '../../../constants/draftConstants'
 import * as global from '../../../constants/globalConstants'
 import { deleteDraftBatch } from '../../../Store/draftsSlice'
 
@@ -82,7 +81,7 @@ const SelectedOptions = () => {
             ? EMAILS_SELECTED_SINGLE
             : EMAILS_SELECTED_PLURAL
         }`}</S.SelectedLabelsText>
-        {!labelIds.includes(draft.DRAFT_LABEL) ? (
+        {!labelIds.includes(global.DRAFT_LABEL) ? (
           <CustomButton
             label={ARCHIVE_BUTTON_LABEL}
             onClick={handleArchiveAll}

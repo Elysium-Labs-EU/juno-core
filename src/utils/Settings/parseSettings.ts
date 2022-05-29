@@ -6,7 +6,7 @@ import {
 } from '../../constants/baseConstants'
 import { setSettings } from '../../Store/utilsSlice'
 import * as global from '../../constants/globalConstants'
-import { GoogleLabel } from '../../Store/labelsTypes'
+import { GoogleLabel } from '../../Store/storeTypes/labelsTypes'
 
 const parseSettings = (dispatch: Function, settingsLabel: GoogleLabel[]) => {
   const parsedSettings = settingsLabel[0].name.split(SETTINGS_DELIMITER)

@@ -28,7 +28,7 @@ import {
   setIsReplying,
 } from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { Contact } from '../../Store/contactsTypes'
+import { Contact } from '../../Store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
