@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../Store/draftsSlice'
 import {
@@ -125,6 +125,20 @@ const RenderEmailList = ({
   )
 }
 
+const LabeledInbox = ({
+  emailList,
+  activeEmailListIndex,
+}: {
+  emailList: IEmailListObject[]
+  activeEmailListIndex: number
+}) => {
+  if (emailList && activeEmailListIndex > -1) {
+    // Show the list of emails that are connected to the labelId mailbox.
+    return <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
+  }
+  return <EmptyState />
+}
+
 const EmailList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const emailList = useAppSelector(selectEmailList)
@@ -208,20 +222,13 @@ const EmailList = () => {
     }
   }, [emailListIndex])
 
-  const LabeledInbox = memo(() => {
-    if (emailList && activeEmailListIndex > -1) {
-      // Show the list of emails that are connected to the labelId mailbox.
-      return (
-        <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
-      )
-    }
-    return <EmptyState />
-  })
-
   return (
     <>
       {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
-        <LabeledInbox />
+        <LabeledInbox
+          emailList={emailList}
+          activeEmailListIndex={activeEmailListIndex}
+        />
       )}
       {isLoading &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
