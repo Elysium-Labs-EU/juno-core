@@ -56,10 +56,10 @@ const threadApi = ({
     return res
   },
 
-  getThreadDetail: async (messageId: string) => {
+  getThreadDetail: async (threadId: string) => {
     try {
       const res: AxiosResponse<any> = await instance.get(
-        `/api/thread/${messageId}`,
+        `/api/thread/${threadId}`,
         {
           headers: {
             Authorization: fetchToken(),

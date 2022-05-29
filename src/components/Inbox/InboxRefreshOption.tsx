@@ -4,7 +4,6 @@ import styled, { css, keyframes } from 'styled-components'
 import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { selectIsLoading } from '../../Store/utilsSlice'
-import { INBOX_LABEL } from './Inbox'
 
 const rotate = keyframes`
   from {
@@ -40,12 +39,7 @@ const RotatingButton = styled.button<IRotatingButton>`
 `
 
 const refreshFeed = (dispatch: Function) => {
-  const params = {
-    maxResults: 500,
-    nextPageToken: null,
-    labelIds: INBOX_LABEL,
-  }
-  dispatch(refreshEmailFeed(params))
+  dispatch(refreshEmailFeed())
 }
 
 const InboxRefresh = () => {

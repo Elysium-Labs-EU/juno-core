@@ -146,8 +146,7 @@ const MessagesOverview = memo(
                 message.labelIds?.includes(global.UNREAD_LABEL) === true
             ).length > 0
           ) {
-            const messageId = threadDetail.id
-            markEmailAsRead({ messageId, dispatch, labelIds })
+            markEmailAsRead({ messageId: threadDetail.id, dispatch, labelIds })
           }
         }
       }

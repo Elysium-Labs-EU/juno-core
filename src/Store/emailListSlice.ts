@@ -20,8 +20,6 @@ import {
   IEmailListObjectSearch,
 } from './emailListTypes'
 import {
-  LoadEmailObject,
-  MetaListThreadItem,
   UpdateRequestParamsBatch,
   UpdateRequestParamsSingle,
 } from './metaEmailListTypes'
@@ -34,10 +32,13 @@ import {
   setViewIndex,
 } from './emailDetailSlice'
 import userApi from '../data/userApi'
+import historyApi from '../data/historyApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
 import navigateBack from '../utils/navigateBack'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
+import handleHistoryObject from '../utils/handleHistoryObject'
+import handleSessionStorage from '../utils/handleSessionStorage'
 
 export const fetchEmails = createAsyncThunk(
   'email/fetchEmails',
@@ -420,10 +421,9 @@ export const updateEmailLabel = (
         ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
           if (
-            (request &&
-              request.removeLabelIds &&
-              !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-            request.delete
+            (request?.removeLabelIds &&
+              !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+            request?.delete
           ) {
             const { viewIndex, sessionViewIndex } = getState().emailDetail
 
@@ -558,46 +558,30 @@ export const updateEmailLabelBatch = (
 }
 
 // Use profile history id, compare this to the received history id. If the received history id is higher than stored version. Refetch the email list for inbox only.
-export const refreshEmailFeed =
-  (params: LoadEmailObject): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      dispatch(setIsFetching(true))
-      const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
-      const { threads, nextPageToken } = await threadApi({}).getThreads(params)
-      const newEmailsIdx = threads?.findIndex(
-        (thread: MetaListThreadItem) =>
-          parseInt(thread.historyId, 10) < savedHistoryId
-      )
-      const { labelIds } = params
+export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
+  try {
+    dispatch(setIsFetching(true))
+    const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+    const response = await historyApi().listHistory(savedHistoryId)
+    if (response?.status === 200) {
+      const { history } = response.data
+      if (history) {
+        const { storageLabels } = getState().labels
+        const sortedFeeds = handleHistoryObject({ history, storageLabels })
+        sortedFeeds.forEach((feed) => dispatch(loadEmailDetails(feed)))
+      }
       const { data } = await userApi().fetchUser()
       dispatch(setProfile(data))
-      if (newEmailsIdx > -1) {
-        const newSlice = threads.slice(0, newEmailsIdx)
-        if (newSlice.length > 0) {
-          const labeledThreads = {
-            labels: labelIds,
-            threads: newSlice,
-            nextPageToken,
-          }
-          dispatch(loadEmailDetails(labeledThreads))
-        }
-      } else {
-        // Attempt a fresh feed fetch when the inbox is empty.
-        const { emailFetchSize } = getState().utils
-        const freshInboxParams = {
-          labelIds,
-          maxResults: emailFetchSize,
-          nextPageToken: null,
-        }
-        dispatch(fetchEmails(freshInboxParams))
-      }
-    } catch (err) {
+      handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
+    } else {
       dispatch(setServiceUnavailable('Cannot refresh feed'))
-    } finally {
-      dispatch(setIsFetching(false))
     }
+  } catch (err) {
+    dispatch(setServiceUnavailable('Cannot refresh feed'))
+  } finally {
+    dispatch(setIsFetching(false))
   }
+}
 
 export const resetValuesEmailDetail =
   (): AppThunk => async (dispatch, getState) => {

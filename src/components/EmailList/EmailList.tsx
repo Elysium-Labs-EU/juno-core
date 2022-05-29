@@ -1,5 +1,4 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../Store/draftsSlice'
 import {
@@ -25,12 +24,12 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
-import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
+import handleSessionStorage from '../../utils/handleSessionStorage'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -136,7 +135,6 @@ const EmailList = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const location = useLocation()
 
   useEffect(() => {
     let mounted = true
@@ -157,29 +155,24 @@ const EmailList = () => {
           draftPromise = dispatch(fetchDrafts())
         }
       }
-      if (
-        !location.pathname.includes(Routes.INBOX) &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
-      ) {
+      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)) {
         if (
           emailList.length > 0 &&
           emailList.filter((emailSubList) =>
             emailSubList.labels?.includes(labelIds[0])
           ).length > 0
         ) {
-          const params = {
-            labelIds,
-            maxResults: 500,
-            nextPageToken: null,
-          }
           if (
             mounted &&
-            Date.now() - emailList[activeEmailListIndex].timestamp! >
+            Date.now() -
+              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                : 0) >
               global.MIN_DELAY_REFRESH &&
             !isRefreshing
           ) {
             setIsRefreshing(true)
-            dispatch(refreshEmailFeed(params))
+            dispatch(refreshEmailFeed())
           }
           if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
             draftPromise = dispatch(fetchDrafts())
@@ -196,7 +189,7 @@ const EmailList = () => {
         draftPromise.abort()
       }
     }
-  }, [labelIds])
+  }, [labelIds, window.location])
 
   // Run a clean up function to ensure that the email detail values are always back to base.
   useEffect(() => {
