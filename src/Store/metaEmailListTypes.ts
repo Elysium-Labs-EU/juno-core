@@ -19,12 +19,3 @@ export interface MetaListThreadItem {
   snippet: string
   historyId: string
 }
-
-export interface LoadEmailObject {
-  q?: string
-  labelIds: string[]
-  maxResults: number
-  nextPageToken: string | null
-  silentLoading?: boolean
-  activeMetaObjArray?: MetaListThreadItem[]
-}

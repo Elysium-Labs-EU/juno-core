@@ -29,6 +29,7 @@ import { IEmailListObject } from '../../Store/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
+import handleSessionStorage from '../../utils/handleSessionStorage'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -161,19 +162,17 @@ const EmailList = () => {
             emailSubList.labels?.includes(labelIds[0])
           ).length > 0
         ) {
-          const params = {
-            labelIds,
-            maxResults: 500,
-            nextPageToken: null,
-          }
           if (
             mounted &&
-            Date.now() - emailList[activeEmailListIndex].timestamp! >
+            Date.now() -
+              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                : 0) >
               global.MIN_DELAY_REFRESH &&
             !isRefreshing
           ) {
             setIsRefreshing(true)
-            dispatch(refreshEmailFeed(params))
+            dispatch(refreshEmailFeed())
           }
           if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
             draftPromise = dispatch(fetchDrafts())
@@ -190,7 +189,7 @@ const EmailList = () => {
         draftPromise.abort()
       }
     }
-  }, [labelIds])
+  }, [labelIds, window.location])
 
   // Run a clean up function to ensure that the email detail values are always back to base.
   useEffect(() => {
