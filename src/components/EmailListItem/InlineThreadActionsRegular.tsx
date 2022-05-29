@@ -9,7 +9,6 @@ import SetToDoMail from '../EmailOptions/SetToDoMail'
 import { FindLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectInSearch } from '../../Store/utilsSlice'
 import thrashMail from '../EmailOptions/ThrashMail'
 import * as themeConstants from '../../constants/themeConstants'
 
@@ -25,7 +24,6 @@ const InlineThreadActionsRegular = ({
   labelIds,
 }: IInlineThreadActionsRegular) => {
   const storageLabels = useAppSelector(selectStorageLabels)
-  const inSearch = useAppSelector(selectInSearch)
   const dispatch = useAppDispatch()
 
   return (
@@ -36,11 +34,8 @@ const InlineThreadActionsRegular = ({
             icon={<FiCornerUpLeft size={SIZE} />}
             onClick={() =>
               ReplyOverview({
-                labelIds,
                 id,
                 dispatch,
-                inSearch,
-                storageLabels,
               })
             }
             title="Reply"

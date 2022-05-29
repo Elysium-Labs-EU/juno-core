@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
-import { fetchDrafts } from './draftsSlice'
+import { fetchDrafts, openDraftEmail } from './draftsSlice'
 import { fetchEmails, setCoreStatus } from './emailListSlice'
 import type { AppThunk, RootState } from './store'
 import RouteConstants from '../constants/routes.json'
@@ -11,6 +11,7 @@ import { setSessionViewIndex, setViewIndex } from './emailDetailSlice'
 import labelURL from '../utils/createLabelURL'
 import labelMap from '../constants/labelMapConstant'
 import { FindLabelById } from '../utils/findLabel'
+import filterIllegalLabels from '../utils/filterIllegalLabels'
 
 interface IUtilsState {
   inSearch: boolean
@@ -126,6 +127,24 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   }
   dispatch(push(RouteConstants.HOME))
 }
+
+export const openEmail =
+  ({ email, id }: { email?: any; id: string }): AppThunk =>
+  (dispatch, getState) => {
+    const { labelIds, storageLabels } = getState().labels
+    const { inSearch } = getState().utils
+
+    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+
+    if (!onlyLegalLabels.includes(global.DRAFT_LABEL) && !inSearch) {
+      dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+      return
+    }
+    if (onlyLegalLabels.includes(global.DRAFT_LABEL) && email) {
+      const messageId = email.messages[email.messages.length - 1].id
+      dispatch(openDraftEmail({ id, messageId }))
+    }
+  }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().email

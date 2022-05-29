@@ -1,4 +1,4 @@
-import { IEmailMessage } from '../../../Store/emailListTypes'
+import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import { NO_SENDER } from './senderNamePartial'
 import * as global from '../../../constants/globalConstants'

@@ -19,13 +19,12 @@ import {
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
-import * as draft from '../../constants/draftConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/storeTypes/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
@@ -167,7 +166,7 @@ const EmailList = () => {
         if (mounted) {
           emailPromise = dispatch(fetchEmails(params))
         }
-        if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
           draftPromise = dispatch(fetchDrafts())
         }
       }
@@ -191,7 +190,7 @@ const EmailList = () => {
             setIsRefreshing(true)
             dispatch(refreshEmailFeed())
           }
-          if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+          if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
             draftPromise = dispatch(fetchDrafts())
           }
         }

@@ -28,7 +28,7 @@ import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../Store/emailListTypes'
+} from '../../Store/storeTypes/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'

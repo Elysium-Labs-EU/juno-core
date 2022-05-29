@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from '../Store/emailListTypes'
+import { IEmailListThreadItem } from '../Store/storeTypes/emailListTypes'
 
 const undoubleThreads = (undoubleObject: IEmailListThreadItem[]) => {
   if (undoubleObject && undoubleObject.length > 0) {

@@ -10,7 +10,6 @@ import {
 } from './utilsSlice'
 import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
 import messageApi from '../data/messageApi'
-import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
 import type { AppThunk, RootState } from './store'
 import {
@@ -18,11 +17,11 @@ import {
   IEmailListObject,
   IEmailListState,
   IEmailListObjectSearch,
-} from './emailListTypes'
+} from './storeTypes/emailListTypes'
 import {
   UpdateRequestParamsBatch,
   UpdateRequestParamsSingle,
-} from './metaEmailListTypes'
+} from './storeTypes/metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
 import {
@@ -416,7 +415,7 @@ export const updateEmailLabel = (
       ) {
         if (
           getState().router.location?.pathname.includes('/mail/') &&
-          !getState().labels.labelIds.includes(draft.DRAFT_LABEL)
+          !getState().labels.labelIds.includes(global.DRAFT_LABEL)
         ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
           if (

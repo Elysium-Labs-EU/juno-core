@@ -16,7 +16,7 @@ import EmailPosition from './EmailPosition/EmailPosition'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../Store/emailListTypes'
+} from '../../Store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
 import { selectViewIndex } from '../../Store/emailDetailSlice'
 import {

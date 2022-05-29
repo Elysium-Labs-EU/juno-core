@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { FiArchive } from 'react-icons/fi'
-import { IEmailListThreadItem } from '../../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'

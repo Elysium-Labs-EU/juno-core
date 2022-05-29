@@ -17,7 +17,7 @@ import {
   IEmailListObject,
   IEmailListObjectSearch,
   IEmailListThreadItem,
-} from '../../Store/emailListTypes'
+} from '../../Store/storeTypes/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'

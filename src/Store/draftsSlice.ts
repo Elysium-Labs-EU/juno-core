@@ -14,7 +14,7 @@ import {
   EnhancedDraftDetails,
   OpenDraftEmailType,
   DraftListObject,
-} from './draftsTypes'
+} from './storeTypes/draftsTypes'
 import bodyDecoder from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'

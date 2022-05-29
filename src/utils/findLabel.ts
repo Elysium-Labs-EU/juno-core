@@ -1,4 +1,4 @@
-import { LabelIdName } from '../Store/labelsTypes'
+import { LabelIdName } from '../Store/storeTypes/labelsTypes'
 
 interface FindLabelByNameType {
   storageLabels: LabelIdName[]
