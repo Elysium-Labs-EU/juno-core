@@ -17,9 +17,6 @@ const Todo = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
-  // const response = useSessionContext()
-  // console.log(response)
-
   useEffect(() => {
     if (
       baseLoaded &&
