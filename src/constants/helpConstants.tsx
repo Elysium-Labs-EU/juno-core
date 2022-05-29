@@ -32,6 +32,10 @@ export const EMAIL_KEY_SUB_TITLE =
 export const EMAIL_DETAIL_COMBOS = [
   { title: 'Mark Email as To Do', keys: [modifierKey, 'E'] },
   { title: 'Archive Email', keys: [modifierKey, 'BACKSPACE'] },
+  {
+    title: 'Delete Email (when no Archive Email)',
+    keys: [modifierKey, 'BACKSPACE'],
+  },
   { title: 'Reply to Email', keys: ['ENTER'] },
   { title: 'Forward Email', keys: ['SHIFT', 'ENTER'] },
   { title: 'Skip Email', keys: [modifierKey, 'SHIFT', 'K'] },

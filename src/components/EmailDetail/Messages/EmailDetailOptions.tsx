@@ -77,6 +77,7 @@ const EmailDetailOptions = ({
               messageId={threadDetail.id}
               icon={<FiDelete />}
               suppressed
+              noArchive
             />
           )}
           {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}
