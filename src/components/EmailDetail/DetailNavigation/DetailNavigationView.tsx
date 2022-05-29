@@ -3,56 +3,37 @@ import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import * as global from '../../../constants/globalConstants'
-import closeMail from '../../../utils/closeEmail'
-import navigatePreviousMail from '../../../utils/navigatePreviousEmail'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectIsLoading } from '../../../Store/utilsSlice'
-import { selectStorageLabels } from '../../../Store/labelsSlice'
 import {
-  IEmailListObject,
-  IEmailListObjectSearch,
-} from '../../../Store/emailListTypes'
+  closeMail,
+  navigatePreviousMail,
+  selectIsLoading,
+} from '../../../Store/utilsSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 
 const ICON_SIZE = 20
 const actionKeys = [global.KEY_ESCAPE]
 interface IDetailNavigationView {
-  labelIds: string[]
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
-  viewIndex: number
   isDisabledPrev: boolean
   isDisabledNext: boolean
   nextButtonSelector: Function
 }
 
 const DetailNavigationView = (props: IDetailNavigationView) => {
-  const {
-    labelIds,
-    activeEmailList,
-    viewIndex,
-    isDisabledPrev,
-    isDisabledNext,
-    nextButtonSelector,
-  } = props
+  const { isDisabledPrev, isDisabledNext, nextButtonSelector } = props
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(selectIsLoading)
-  const storageLabels = useAppSelector(selectStorageLabels)
 
   const handleCloseEvent = useCallback(() => {
-    closeMail({ labelIds, storageLabels, dispatch })
-  }, [labelIds, storageLabels, dispatch])
+    dispatch(closeMail())
+  }, [])
 
   useMultiKeyPress(handleCloseEvent, actionKeys)
 
   const handleNavPrevEvent = useCallback(() => {
-    navigatePreviousMail({
-      labelIds,
-      activeEmailList,
-      viewIndex,
-      dispatch,
-    })
-  }, [labelIds, activeEmailList, viewIndex, dispatch])
+    dispatch(navigatePreviousMail())
+  }, [])
 
   const NavigationView = useMemo(
     () => (

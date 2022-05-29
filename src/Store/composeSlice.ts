@@ -3,14 +3,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import isEmpty from 'lodash/isEmpty'
 import messageApi from '../data/messageApi'
-import { setServiceUnavailable } from './utilsSlice'
+import { closeMail, setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail } from './emailDetailSlice'
 import draftApi from '../data/draftApi'
-import CloseMail from '../utils/closeEmail'
 import type { AppThunk, RootState } from './store'
 import { ComposePayload, ComposeState } from './composeTypes'
 import { listRemoveItemDetail } from './emailListSlice'
 import getEmailListIndex from '../utils/getEmailListIndex'
+import { resetDraftDetails } from './draftsSlice'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
@@ -46,6 +46,11 @@ export const composeSlice = createSlice({
 export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
   composeSlice.actions
 
+export const cleanUpComposerAndDraft = (): AppThunk => (dispatch) => {
+  dispatch(resetComposeEmail())
+  dispatch(resetDraftDetails())
+}
+
 export const TrackComposeEmail =
   (props: ComposePayload): AppThunk =>
   async (dispatch, getState) => {
@@ -70,16 +75,14 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
       message: { threadId },
     } = getState().drafts.draftDetails
     const { emailList } = getState().email
-    const { labelIds } = getState().labels
-    const { storageLabels } = getState().labels
     const completeEmail = { ...composeEmail, sender }
 
     if (Object.keys(completeEmail).length >= 4) {
       if (id) {
         const body = { id }
         const response = await draftApi().sendDraft(body)
-        if (response && response.status === 200) {
-          CloseMail({ dispatch, labelIds, storageLabels })
+        if (response?.status === 200) {
+          dispatch(closeMail())
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
           const staticIndexActiveEmailList: number = getEmailListIndex({
@@ -99,7 +102,7 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
       }
       if (id === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
-        if (response && response.status === 200) {
+        if (response?.status === 200) {
           dispatch(push(`/`))
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))

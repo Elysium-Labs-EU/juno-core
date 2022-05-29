@@ -5,8 +5,8 @@ import * as global from '../../../constants/globalConstants'
 import { selectCoreStatus } from '../../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectComposeEmail } from '../../../Store/composeSlice'
-import navigateBack from '../../../utils/navigateBack'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import { navigateBack } from '../../../Store/utilsSlice'
 
 const actionKeys = [global.KEY_ESCAPE]
 
@@ -16,7 +16,7 @@ const BackButton = () => {
   const composeEmail = useAppSelector(selectComposeEmail)
 
   const handleEvent = useCallback(() => {
-    navigateBack({ dispatch, coreStatus, composeEmail })
+    dispatch(navigateBack())
   }, [coreStatus, composeEmail, dispatch])
 
   useMultiKeyPress(handleEvent, actionKeys)
