@@ -67,8 +67,8 @@ const EmailDetailOptions = ({
           {staticOnlyLegalLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} />
           )}
-          {coreStatus === global.CORE_STATUS_FOCUSED ||
-            (coreStatus === global.CORE_STATUS_SORTING && <SkipOption />)}
+          {(coreStatus === global.CORE_STATUS_FOCUSED ||
+            coreStatus === global.CORE_STATUS_SORTING) && <SkipOption />}
           {staticOnlyLegalLabels.length > 0 && (
             <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
           )}

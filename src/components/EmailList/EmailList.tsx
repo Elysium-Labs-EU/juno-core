@@ -30,6 +30,7 @@ import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
 import handleSessionStorage from '../../utils/handleSessionStorage'
+import { selectViewIndex } from '../../Store/emailDetailSlice'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -148,6 +149,7 @@ const EmailList = () => {
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -174,7 +176,8 @@ const EmailList = () => {
           emailList.length > 0 &&
           emailList.filter((emailSubList) =>
             emailSubList.labels?.includes(labelIds[0])
-          ).length > 0
+          ).length > 0 &&
+          viewIndex === -1
         ) {
           if (
             mounted &&
@@ -203,7 +206,7 @@ const EmailList = () => {
         draftPromise.abort()
       }
     }
-  }, [labelIds, window.location])
+  }, [labelIds, window.location, viewIndex])
 
   // Run a clean up function to ensure that the email detail values are always back to base.
   useEffect(() => {

@@ -1,8 +1,16 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
 import { fetchDrafts } from './draftsSlice'
-import { fetchEmails } from './emailListSlice'
-import type { RootState } from './store'
+import { fetchEmails, setCoreStatus } from './emailListSlice'
+import type { AppThunk, RootState } from './store'
+import RouteConstants from '../constants/routes.json'
+import * as global from '../constants/globalConstants'
+import { cleanUpComposerAndDraft } from './composeSlice'
+import { setSessionViewIndex, setViewIndex } from './emailDetailSlice'
+import labelURL from '../utils/createLabelURL'
+import labelMap from '../constants/labelMapConstant'
+import { FindLabelById } from '../utils/findLabel'
 
 interface IUtilsState {
   inSearch: boolean
@@ -108,6 +116,75 @@ export const {
   setSettingsLabelId,
   setShowKeyboardCombos,
 } = utilsSlice.actions
+
+export const closeMail = (): AppThunk => (dispatch, getState) => {
+  const { labelIds, storageLabels } = getState().labels
+  const foundLabel = FindLabelById({ storageLabels, labelIds })
+  if (foundLabel.length > 0) {
+    dispatch(push(labelMap[foundLabel[0].name]))
+    return
+  }
+  dispatch(push(RouteConstants.HOME))
+}
+
+export const navigateBack = (): AppThunk => (dispatch, getState) => {
+  const { coreStatus } = getState().email
+  const { composeEmail } = getState().compose
+  const { labelIds } = getState().labels
+  if (!coreStatus) {
+    if (Object.keys(composeEmail).length > 0) {
+      dispatch(cleanUpComposerAndDraft())
+    }
+    if (labelIds.includes(global.INBOX_LABEL)) {
+      dispatch(push(RouteConstants.INBOX))
+    } else {
+      dispatch(push(RouteConstants.HOME))
+    }
+    return
+  }
+  if (coreStatus === global.CORE_STATUS_FOCUSED) {
+    dispatch(push(RouteConstants.HOME))
+    return
+  }
+  if (coreStatus === global.CORE_STATUS_SORTING) {
+    dispatch(push(RouteConstants.INBOX))
+    return
+  }
+  if (coreStatus) {
+    dispatch(setCoreStatus(null))
+  }
+}
+
+export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
+  const { coreStatus, emailList, activeEmailListIndex } = getState().email
+  const { sessionViewIndex, viewIndex } = getState().emailDetail
+  const { labelIds } = getState().labels
+
+  dispatch(setViewIndex(viewIndex + 1))
+  if (coreStatus) {
+    dispatch(setSessionViewIndex(sessionViewIndex + 1))
+  }
+
+  const nextID = emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
+  if (nextID) {
+    return dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
+  }
+  return dispatch(navigateBack())
+}
+
+export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
+  const { emailList, activeEmailListIndex } = getState().email
+  const { viewIndex } = getState().emailDetail
+  const { labelIds } = getState().labels
+
+  dispatch(setViewIndex(viewIndex + 1))
+
+  const prevID = emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
+  if (prevID) {
+    return dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
+  }
+  return dispatch(navigateBack())
+}
 
 export const selectIsSettingsOpen = (state: RootState) =>
   state.utils.isSettingsOpen

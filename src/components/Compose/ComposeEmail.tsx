@@ -6,7 +6,7 @@ import qs from 'qs'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
 import {
-  resetComposeEmail,
+  cleanUpComposerAndDraft,
   selectComposeEmail,
   SendComposedEmail,
   TrackComposeEmail,
@@ -247,11 +247,6 @@ const ComposeEmail = ({
     }
   }, [debouncedSubjectValue])
 
-  const cleanUpComposerAndDraft = () => {
-    dispatch(resetComposeEmail())
-    dispatch(resetDraftDetails())
-  }
-
   // Set the form values
   useEffect(() => {
     let mounted = true
@@ -305,7 +300,7 @@ const ComposeEmail = ({
     }
     return () => {
       mounted = false
-      cleanUpComposerAndDraft()
+      dispatch(cleanUpComposerAndDraft())
     }
   }, [])
 

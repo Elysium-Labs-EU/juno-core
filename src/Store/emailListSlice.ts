@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
+  navigateBack,
   setIsLoading,
   setIsSilentLoading,
   setServiceUnavailable,
@@ -11,7 +12,6 @@ import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
 import messageApi from '../data/messageApi'
 import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
-import RouteConstants from '../constants/routes.json'
 import type { AppThunk, RootState } from './store'
 import {
   IEmailListThreadItem,
@@ -35,7 +35,6 @@ import userApi from '../data/userApi'
 import historyApi from '../data/historyApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
-import navigateBack from '../utils/navigateBack'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
 import handleHistoryObject from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
@@ -449,16 +448,8 @@ export const updateEmailLabel = (
                 })
               }
             }
-            if (coreStatus && !staticNextID) {
-              const { composeEmail } = getState().compose
-              navigateBack({ coreStatus, composeEmail, dispatch })
-            }
-            if (!coreStatus) {
-              if (labelIds.includes(global.INBOX_LABEL)) {
-                dispatch(push(RouteConstants.INBOX))
-              } else {
-                dispatch(push(RouteConstants.HOME))
-              }
+            if (!coreStatus || (coreStatus && !staticNextID)) {
+              dispatch(navigateBack())
             }
           }
         }
