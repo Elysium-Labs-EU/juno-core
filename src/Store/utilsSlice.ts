@@ -196,7 +196,7 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   const { viewIndex } = getState().emailDetail
   const { labelIds } = getState().labels
 
-  dispatch(setViewIndex(viewIndex + 1))
+  dispatch(setViewIndex(viewIndex - 1))
 
   const prevID = emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
   if (prevID) {
