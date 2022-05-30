@@ -40,3 +40,10 @@ export const EMAIL_DETAIL_COMBOS = [
   { title: 'Forward Email', keys: ['SHIFT', 'ENTER'] },
   { title: 'Skip Email', keys: [modifierKey, 'SHIFT', 'K'] },
 ]
+
+export const COMPOSE_KEY_TITLE = 'Compose'
+export const COMPOSE_KEY_SUB_TITLE = 'Use these shortcuts when composing.'
+
+export const COMPOSE_KEY_COMBOS = [
+  { title: 'Send Email', keys: [modifierKey, 'ENTER'] },
+]
