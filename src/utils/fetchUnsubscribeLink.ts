@@ -14,6 +14,9 @@ export default function fetchUnsubscribeLink({
       if (element.textContent?.includes('nsubscribe') && elementHref) {
         matchedElements.push(elementHref)
       }
+      if (element.className?.includes('nsubscribe') && elementHref) {
+        matchedElements.push(elementHref)
+      }
     })
   }
   if (matchedElements.length > 0) {
