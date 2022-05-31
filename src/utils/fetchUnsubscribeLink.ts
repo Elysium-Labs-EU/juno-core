@@ -5,6 +5,7 @@ const CHECK_WORDS = [
   'subscription',
   'uit te schrijven',
   'turn them off',
+  'uitschrijven',
 ]
 
 export default function fetchUnsubscribeLink({
