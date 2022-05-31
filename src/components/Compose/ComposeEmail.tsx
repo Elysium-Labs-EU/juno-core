@@ -33,6 +33,7 @@ import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
 import QuillBody from './ComposeFields/QuillBody/QuillBody'
+import TipTap from './ComposeFields/TipTap/Tiptap'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
@@ -426,7 +427,8 @@ const ComposeEmail = ({
   )
 
   const BodyField = useMemo(
-    () => <QuillBody fetchedBodyValue={bodyValue} />,
+    () => <TipTap fetchedBodyValue={bodyValue} />,
+    // () => <QuillBody fetchedBodyValue={bodyValue} />,
     [bodyValue]
   )
 
