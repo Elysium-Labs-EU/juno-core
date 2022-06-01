@@ -191,7 +191,6 @@ const Search = () => {
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {
             if (searchValueRef.current !== searchValue) {
-              setLoadState(SEARCH_STATE.LOADED)
               searchValueRef.current = searchValue
               const newStateObject = {
                 q: searchBody.q,
@@ -199,6 +198,7 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(SEARCH_STATE.LOADED)
               return
             }
             if (searchResults && searchResults.threads.length > 0) {
@@ -207,6 +207,7 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(SEARCH_STATE.LOADED)
             }
           }
         })
