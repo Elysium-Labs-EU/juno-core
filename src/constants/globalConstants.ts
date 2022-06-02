@@ -26,6 +26,12 @@ export const CORE_STATUS_FOCUSED = 'isFocused'
 export const ERROR_MESSAGE = 'Something went wrong, try again.'
 export const EMAIL_BODY_VISIBLE = 'visible'
 export const EMAIL_BODY_INVISIBLE = 'invisible'
+export const LOAD_STATE_MAP = {
+  idle: 'idle',
+  loading: 'loading',
+  loaded: 'loaded',
+  error: 'error',
+}
 export const WINDOWS_OS = 'Windows OS'
 export const MAC_OS = 'MacOS'
 export const UNIX_OS = 'UNIX OS'

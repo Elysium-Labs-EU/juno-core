@@ -9,6 +9,7 @@ import useDebounce from '../../../../Hooks/useDebounce'
 import { TrackComposeEmail } from '../../../../Store/composeSlice'
 import { useAppDispatch } from '../../../../Store/hooks'
 import * as local from '../../../../constants/composeEmailConstants'
+import * as global from '../../../../constants/globalConstants'
 import * as S from './TipTapBodyStyles'
 import * as Compose from '../../ComposeStyles'
 
@@ -166,7 +167,7 @@ const Tiptap = ({
   isReplying?: boolean
 }) => {
   const [bodyValue, setBodyValue] = useState('')
-  const [loadState, setLoadState] = useState('idle')
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [isFocused, setIsFocused] = useState(false)
   const debouncedBodyValue = useDebounce(bodyValue, 500)
   const dispatch = useAppDispatch()
@@ -186,10 +187,10 @@ const Tiptap = ({
 
   const handleBodyChange = (value: string) => {
     console.log(value)
-    if (loadState === 'loading') {
-      setLoadState('finished')
+    if (loadState === global.LOAD_STATE_MAP.loading) {
+      setLoadState(global.LOAD_STATE_MAP.loaded)
     }
-    if (loadState === 'finished') {
+    if (loadState === global.LOAD_STATE_MAP.loaded) {
       setBodyValue(value)
     }
   }
@@ -220,7 +221,7 @@ const Tiptap = ({
     let mounted = true
     if (mounted) {
       setBodyValue(fetchedBodyValue)
-      setLoadState('loading')
+      setLoadState(global.LOAD_STATE_MAP.loading)
     }
     return () => {
       mounted = false
