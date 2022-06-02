@@ -7,7 +7,6 @@ const CHECK_WORDS = [
   'turn them off',
   'uitschrijven',
 ]
-
 export default function fetchUnsubscribeLink({
   setUnsubscribeLink,
 }: {
@@ -59,7 +58,7 @@ export default function fetchUnsubscribeLink({
     })
   }
   if (matchedElements.length > 0) {
-    setUnsubscribeLink(matchedElements[0])
+    setUnsubscribeLink(matchedElements[matchedElements.length - 1])
   } else {
     setUnsubscribeLink(null)
   }
