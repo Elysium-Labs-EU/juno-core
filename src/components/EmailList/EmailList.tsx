@@ -77,7 +77,7 @@ const RenderEmailList = ({
             <GS.Base>
               {threads.map((email, index) => (
                 <div
-                  key={email.id}
+                  key={email?.id}
                   onFocus={() => setFocusedItemIndex(index)}
                   onMouseOver={() => setFocusedItemIndex(index)}
                   aria-hidden="true"
@@ -151,6 +151,8 @@ const EmailList = () => {
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
 
+  // If the box is empty, and the history feed is adding the item to the feed - there is no next page token and the feed is only that shallow item.
+
   useEffect(() => {
     let mounted = true
     let emailPromise: any = {}
@@ -207,10 +209,10 @@ const EmailList = () => {
     }
   }, [labelIds, window.location, viewIndex])
 
-  // Run a clean up function to ensure that the email detail values are always back to base.
+  // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {
     dispatch(resetValuesEmailDetail())
-  }, [])
+  }, [dispatch])
 
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),

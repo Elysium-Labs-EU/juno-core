@@ -38,6 +38,7 @@ export default function handleHistoryObject({ history, storageLabels }: any) {
     const cleanHistoryArray = history.filter(
       (item) => Object.keys(item).length > 2
     )
+    // If item has been marked as read and is also archived, the item is coming up twice in the feed. Make sure that the end feed doesn't include these items for the labelsRemoved
     for (let i = 0; i < cleanHistoryArray.length; i += 1) {
       const item = cleanHistoryArray[i]
       if (Object.prototype.hasOwnProperty.call(item, 'labelsRemoved')) {
@@ -64,6 +65,20 @@ export default function handleHistoryObject({ history, storageLabels }: any) {
               restructureObject(item.labelsRemoved[0].message)
             )
           }
+        }
+        if (item.labelsRemoved[0].labelIds.includes(global.INBOX_LABEL)) {
+          const output = inboxFeed.threads.filter(
+            (filterItem) =>
+              filterItem.id !== item.labelsRemoved[0].message.threadId
+          )
+          inboxFeed.threads = output
+        }
+        if (item.labelsRemoved[0].labelIds.includes(toDoLabelId)) {
+          const output = todoFeed.threads.filter(
+            (filterItem) =>
+              filterItem.id !== item.labelsRemoved[0].message.threadId
+          )
+          todoFeed.threads = output
         }
       }
       if (Object.prototype.hasOwnProperty.call(item, 'labelsAdded')) {
