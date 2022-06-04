@@ -32,7 +32,6 @@ import { Contact } from '../../Store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
-import QuillBody from './ComposeFields/QuillBody/QuillBody'
 import TipTap from './ComposeFields/TipTap/Tiptap'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
@@ -269,9 +268,11 @@ const ComposeEmail = ({
           setBodyValue(body)
         }
       }
-      // composeEmail object coming ??
+      // composeEmail object coming from a draft item on the draft list
       if (!isEmpty(composeEmail)) {
-        setToValue(handleContactConversion(composeEmail.to))
+        if (composeEmail.to.length > 0) {
+          setToValue(handleContactConversion(composeEmail.to))
+        }
         if (composeEmail.cc && composeEmail.cc.length > 0) {
           setShowCC(true)
           setCCValue(handleContactConversion(composeEmail.cc))
@@ -428,7 +429,6 @@ const ComposeEmail = ({
 
   const BodyField = useMemo(
     () => <TipTap fetchedBodyValue={bodyValue} />,
-    // () => <QuillBody fetchedBodyValue={bodyValue} />,
     [bodyValue]
   )
 
@@ -446,10 +446,6 @@ const ComposeEmail = ({
             <form onSubmit={onSubmit} autoComplete="off">
               <div style={{ marginBottom: `7px` }}>
                 <GS.Base>
-                  <S.InfoWarningContainer>
-                    <p>{local.INFO_WARNING_1}</p>
-                    <p>{local.INFO_WARNING_2}</p>
-                  </S.InfoWarningContainer>
                   <S.Row>
                     {ToField}
                     <S.CcBccContainer>

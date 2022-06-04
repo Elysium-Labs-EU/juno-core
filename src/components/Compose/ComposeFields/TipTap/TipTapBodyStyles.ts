@@ -7,36 +7,45 @@ interface IWrapper {
 export const Wrapper = styled.div<IWrapper>`
   background: var(--color-white-slight);
   width: 100%;
-  border: ${(props) =>
-    props.isFocused
-      ? `2px var(--color-purple-soft) solid`
-      : '2px solid transparent'};
-
-  .quill {
-    border: none;
-    position: relative;
-    min-height: 375px;
-
-    .ql-toolbar.ql-snow {
-      border: none;
-      position: absolute;
-      box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-      width: calc(100% - 32px);
-      background: var(--color-white);
-      top: 12px;
-      left: 16px;
-      border-radius: 4px;
-      z-index: 10;
-    }
-    .ql-container.ql-snow {
-      border: none;
-      padding-top: 3rem;
-      font-family: 'Urbanist Variable', sans-serif;
-      font-size: 1rem;
+  border: ${({ isFocused }) =>
+    isFocused ? `2px var(--color-purple-soft) solid` : '2px solid transparent'};
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  min-height: 375px;
+  height: 100%;
+  border-radius: 4px;
+  div {
+    .ProseMirror {
+      min-height: 375px;
+      height: 100%;
+      outline: 0;
+      padding: 0 12px;
     }
   }
 `
 
-export const ContentArea = styled.div`
-  min-height: 375px;
+export const MenuBar = styled.div`
+  display: initial !important;
+  flex: 0 !important;
+  border: none;
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  background: var(--color-white);
+  top: 12px;
+  left: 16px;
+  border-radius: 4px;
+  z-index: 10;
+`
+
+export const Button = styled.button`
+  background-color: var(--color-white);
+  border: 0;
+  height: 32px;
+  padding: 8px;
+  line-height: 16px;
+  border-radius: 4px;
+  &:hover {
+    background-color: var(--color-white-off);
+  }
 `

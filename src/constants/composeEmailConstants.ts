@@ -13,6 +13,3 @@ export const CANCEL_BUTTON = 'Cancel'
 export const COMPOSE = 'Compose'
 export const EMAIL_WARNING = 'Please enter a valid email'
 export const DRAFT_SAVED = 'Draft saved'
-export const INFO_WARNING_1 =
-  'Caution! The composer is not stable yet and will not always handle your styling, especially if you reopen a draft.'
-export const INFO_WARNING_2 = 'Please temporarily use Gmail instead.'
