@@ -194,6 +194,7 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(SEARCH_STATE.LOADED)
               return
             }
             if (searchResults && searchResults.threads.length > 0) {
@@ -202,6 +203,7 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(SEARCH_STATE.LOADED)
             }
           }
         })
