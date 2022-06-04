@@ -556,9 +556,17 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     if (response?.status === 200) {
       const { history } = response.data
       if (history) {
-        const { storageLabels } = getState().labels
+        const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-        sortedFeeds.forEach((feed) => dispatch(loadEmailDetails(feed)))
+
+        // Skip the feed, if the feed hasn't loaded yet.
+        for (let i = 0; i < sortedFeeds.length; i += 1) {
+          for (let j = 0; j < loadedInbox.length; j += 1) {
+            if (sortedFeeds[i].labels.includes(loadedInbox[j][0])) {
+              dispatch(loadEmailDetails(sortedFeeds[i]))
+            }
+          }
+        }
       }
       const { data } = await userApi().fetchUser()
       dispatch(setProfile(data))
