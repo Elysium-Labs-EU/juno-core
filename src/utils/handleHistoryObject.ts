@@ -1,6 +1,8 @@
 import * as global from '../constants/globalConstants'
 import onlyLegalLabelObjects from './onlyLegalLabelObjects'
 
+export const HISTORY_NEXT_PAGETOKEN = 'history'
+
 const restructureObject = (message: any) => {
   const newObject = { ...message, id: message.threadId }
   delete newObject.threadId
@@ -18,7 +20,7 @@ export default function handleHistoryObject({ history, storageLabels }: any) {
   const inboxFeed: IFeedModel = {
     labels: [global.INBOX_LABEL],
     threads: [],
-    nextPageToken: null,
+    nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
   const toDoLabelId = storageLabels.filter(
     (label: any) => label.name === 'Juno/To Do'
@@ -26,12 +28,12 @@ export default function handleHistoryObject({ history, storageLabels }: any) {
   const todoFeed: IFeedModel = {
     labels: [toDoLabelId],
     threads: [],
-    nextPageToken: null,
+    nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
   const sentFeed: IFeedModel = {
     labels: [global.SENT_LABEL],
     threads: [],
-    nextPageToken: null,
+    nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
   if (Array.isArray(history)) {
     // Remove all the entries that will not be used.

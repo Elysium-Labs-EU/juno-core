@@ -35,7 +35,9 @@ import historyApi from '../data/historyApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
-import handleHistoryObject from '../utils/handleHistoryObject'
+import handleHistoryObject, {
+  HISTORY_NEXT_PAGETOKEN,
+} from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
 
 export const fetchEmails = createAsyncThunk(
@@ -131,7 +133,10 @@ export const emailListSlice = createSlice({
               const newObject: IEmailListObject = {
                 labels: payload.labels,
                 threads: undoubleThreads(sortedThreads),
-                nextPageToken: payload.nextPageToken ?? null,
+                nextPageToken:
+                  payload.nextPageToken === HISTORY_NEXT_PAGETOKEN
+                    ? state.emailList[arrayIndex].nextPageToken
+                    : payload.nextPageToken,
               }
               currentState[arrayIndex] = newObject
               state.emailList = currentState
@@ -346,9 +351,8 @@ export const loadEmailDetails =
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
-        const buffer: any = []
-
         if (threads.length > 0) {
+          const buffer: any = []
           threads.forEach((thread) =>
             buffer.push(threadApi({}).getThreadDetail(thread.id))
           )
@@ -558,7 +562,6 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-
         // Skip the feed, if the feed hasn't loaded yet.
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {
