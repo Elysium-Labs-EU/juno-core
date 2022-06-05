@@ -49,8 +49,10 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
-  const { threadId, overviewId } =
-    useParams<{ threadId: string; overviewId: string }>()
+  const { threadId, overviewId } = useParams<{
+    threadId: string
+    overviewId: string
+  }>()
   const [activeEmailList, setActiveEmailList] = useState<
     IEmailListObject | IEmailListObjectSearch
   >()
