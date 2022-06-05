@@ -68,8 +68,6 @@ const RenderEmailList = ({
     }
   }, [ArrowUpListener, inSearch])
 
-  // console.log('filteredOnLabel', filteredOnLabel)
-
   const { threads, nextPageToken } = filteredOnLabel
   return (
     <S.Scroll>
