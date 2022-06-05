@@ -49,7 +49,7 @@ const EmailPosition = () => {
           </GS.TextMutedParagraph>
         </Tooltip>
       )}
-      {loadingState === global.LOAD_STATE_MAP.loaded && (
+      {loadingState === global.LOAD_STATE_MAP.loading && (
         <CircularProgress size={10} />
       )}
       {loadingState === global.LOAD_STATE_MAP.error && <FiAlertCircle />}
