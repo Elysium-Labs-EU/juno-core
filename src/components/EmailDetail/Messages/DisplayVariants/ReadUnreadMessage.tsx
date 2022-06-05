@@ -15,7 +15,7 @@ import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import {
   IEmailMessage,
   IEmailListThreadItem,
-} from '../../../../Store/emailListTypes'
+} from '../../../../Store/storeTypes/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import { useAppSelector } from '../../../../Store/hooks'

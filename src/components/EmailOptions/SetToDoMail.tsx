@@ -1,4 +1,4 @@
-import { LabelIdName } from '../../Store/labelsTypes'
+import { LabelIdName } from '../../Store/storeTypes/labelsTypes'
 import { updateEmailLabel } from '../../Store/emailListSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
 import { FindLabelByName } from '../../utils/findLabel'

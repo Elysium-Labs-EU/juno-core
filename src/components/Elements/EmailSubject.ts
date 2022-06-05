@@ -1,4 +1,4 @@
-import { IEmailMessage } from '../../Store/emailListTypes'
+import { IEmailMessage } from '../../Store/storeTypes/emailListTypes'
 import findPayloadHeadersData from '../../utils/findPayloadHeadersData'
 
 const EmailSubject = (message: IEmailMessage): string => {

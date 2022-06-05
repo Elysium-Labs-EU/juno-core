@@ -2,7 +2,7 @@ import {
   SETTINGS_DELIMITER,
   SETTINGS_LABEL,
 } from '../../constants/baseConstants'
-import { GoogleLabel } from '../../Store/labelsTypes'
+import { GoogleLabel } from '../../Store/storeTypes/labelsTypes'
 
 const findSettings = (labels: GoogleLabel[]) =>
   labels.filter((label) =>

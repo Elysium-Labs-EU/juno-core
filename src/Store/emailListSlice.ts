@@ -3,28 +3,25 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
+  navigateBack,
   setIsLoading,
   setIsSilentLoading,
   setServiceUnavailable,
 } from './utilsSlice'
 import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
 import messageApi from '../data/messageApi'
-import * as draft from '../constants/draftConstants'
 import * as global from '../constants/globalConstants'
-import RouteConstants from '../constants/routes.json'
 import type { AppThunk, RootState } from './store'
 import {
   IEmailListThreadItem,
   IEmailListObject,
   IEmailListState,
   IEmailListObjectSearch,
-} from './emailListTypes'
+} from './storeTypes/emailListTypes'
 import {
-  LoadEmailObject,
-  MetaListThreadItem,
   UpdateRequestParamsBatch,
   UpdateRequestParamsSingle,
-} from './metaEmailListTypes'
+} from './storeTypes/metaEmailListTypes'
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
 import {
@@ -34,10 +31,14 @@ import {
   setViewIndex,
 } from './emailDetailSlice'
 import userApi from '../data/userApi'
+import historyApi from '../data/historyApi'
 import { setProfile } from './baseSlice'
 import labelURL from '../utils/createLabelURL'
-import navigateBack from '../utils/navigateBack'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
+import handleHistoryObject, {
+  HISTORY_NEXT_PAGETOKEN,
+} from '../utils/handleHistoryObject'
+import handleSessionStorage from '../utils/handleSessionStorage'
 
 export const fetchEmails = createAsyncThunk(
   'email/fetchEmails',
@@ -132,7 +133,10 @@ export const emailListSlice = createSlice({
               const newObject: IEmailListObject = {
                 labels: payload.labels,
                 threads: undoubleThreads(sortedThreads),
-                nextPageToken: payload.nextPageToken ?? null,
+                nextPageToken:
+                  payload.nextPageToken === HISTORY_NEXT_PAGETOKEN
+                    ? state.emailList[arrayIndex].nextPageToken
+                    : payload.nextPageToken,
               }
               currentState[arrayIndex] = newObject
               state.emailList = currentState
@@ -347,9 +351,8 @@ export const loadEmailDetails =
     try {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
-        const buffer: any = []
-
         if (threads.length > 0) {
+          const buffer: any = []
           threads.forEach((thread) =>
             buffer.push(threadApi({}).getThreadDetail(thread.id))
           )
@@ -416,14 +419,13 @@ export const updateEmailLabel = (
       ) {
         if (
           getState().router.location?.pathname.includes('/mail/') &&
-          !getState().labels.labelIds.includes(draft.DRAFT_LABEL)
+          !getState().labels.labelIds.includes(global.DRAFT_LABEL)
         ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
           if (
-            (request &&
-              request.removeLabelIds &&
-              !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-            request.delete
+            (request?.removeLabelIds &&
+              !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+            request?.delete
           ) {
             const { viewIndex, sessionViewIndex } = getState().emailDetail
 
@@ -449,16 +451,8 @@ export const updateEmailLabel = (
                 })
               }
             }
-            if (coreStatus && !staticNextID) {
-              const { composeEmail } = getState().compose
-              navigateBack({ coreStatus, composeEmail, dispatch })
-            }
-            if (!coreStatus) {
-              if (labelIds.includes(global.INBOX_LABEL)) {
-                dispatch(push(RouteConstants.INBOX))
-              } else {
-                dispatch(push(RouteConstants.HOME))
-              }
+            if (!coreStatus || (coreStatus && !staticNextID)) {
+              dispatch(navigateBack())
             }
           }
         }
@@ -558,46 +552,37 @@ export const updateEmailLabelBatch = (
 }
 
 // Use profile history id, compare this to the received history id. If the received history id is higher than stored version. Refetch the email list for inbox only.
-export const refreshEmailFeed =
-  (params: LoadEmailObject): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      dispatch(setIsFetching(true))
-      const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
-      const { threads, nextPageToken } = await threadApi({}).getThreads(params)
-      const newEmailsIdx = threads?.findIndex(
-        (thread: MetaListThreadItem) =>
-          parseInt(thread.historyId, 10) < savedHistoryId
-      )
-      const { labelIds } = params
+export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
+  try {
+    dispatch(setIsFetching(true))
+    const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+    const response = await historyApi().listHistory(savedHistoryId)
+    if (response?.status === 200) {
+      const { history } = response.data
+      if (history) {
+        const { loadedInbox, storageLabels } = getState().labels
+        const sortedFeeds = handleHistoryObject({ history, storageLabels })
+        // Skip the feed, if the feed hasn't loaded yet.
+        for (let i = 0; i < sortedFeeds.length; i += 1) {
+          for (let j = 0; j < loadedInbox.length; j += 1) {
+            if (sortedFeeds[i].labels.includes(loadedInbox[j][0])) {
+              dispatch(loadEmailDetails(sortedFeeds[i]))
+            }
+          }
+        }
+      }
       const { data } = await userApi().fetchUser()
       dispatch(setProfile(data))
-      if (newEmailsIdx > -1) {
-        const newSlice = threads.slice(0, newEmailsIdx)
-        if (newSlice.length > 0) {
-          const labeledThreads = {
-            labels: labelIds,
-            threads: newSlice,
-            nextPageToken,
-          }
-          dispatch(loadEmailDetails(labeledThreads))
-        }
-      } else {
-        // Attempt a fresh feed fetch when the inbox is empty.
-        const { emailFetchSize } = getState().utils
-        const freshInboxParams = {
-          labelIds,
-          maxResults: emailFetchSize,
-          nextPageToken: null,
-        }
-        dispatch(fetchEmails(freshInboxParams))
-      }
-    } catch (err) {
+      handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
+    } else {
       dispatch(setServiceUnavailable('Cannot refresh feed'))
-    } finally {
-      dispatch(setIsFetching(false))
     }
+  } catch (err) {
+    dispatch(setServiceUnavailable('Cannot refresh feed'))
+  } finally {
+    dispatch(setIsFetching(false))
   }
+}
 
 export const resetValuesEmailDetail =
   (): AppThunk => async (dispatch, getState) => {

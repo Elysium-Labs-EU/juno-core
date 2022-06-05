@@ -7,7 +7,7 @@ export const Scroll = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
 
   &::-webkit-scrollbar {
     display: none;
@@ -15,7 +15,7 @@ export const Scroll = styled.div`
 `
 
 export const LoadMoreContainer = styled.div`
-  margin-bottom: 3rem;
+  margin-bottom: 48px;
   justify-content: center;
   display: flex;
 `

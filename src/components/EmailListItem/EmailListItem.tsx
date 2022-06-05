@@ -9,9 +9,9 @@ import InlineThreadActionsRegular from './InlineThreadActionsRegular'
 import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
-import openEmail from '../../utils/openEmail'
+
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListThreadItem } from '../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../Store/storeTypes/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
@@ -21,8 +21,8 @@ import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../Store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
-import { selectInSearch } from '../../Store/utilsSlice'
-import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
+import { openEmail, selectInSearch } from '../../Store/utilsSlice'
+import { selectLabelIds } from '../../Store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
   selectSelectedEmails,
@@ -35,12 +35,12 @@ const shouldUseDraftOrRegular = (
   labelIds: string[],
   email: IEmailListThreadItem
 ) => {
-  if (Array.isArray(labelIds) && labelIds.includes(draft.DRAFT_LABEL)) {
+  if (Array.isArray(labelIds) && labelIds.includes(global.DRAFT_LABEL)) {
     if (email?.messages) {
       return {
         ...email,
         messages: email.messages.filter((message) =>
-          message.labelIds.includes(draft.DRAFT_LABEL)
+          message.labelIds.includes(global.DRAFT_LABEL)
         ),
       }
     }
@@ -64,7 +64,6 @@ const EmailListItem = ({
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
   const selectedEmails = useAppSelector(selectSelectedEmails)
-  const storageLabels = useAppSelector(selectStorageLabels)
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const dispatch = useAppDispatch()
@@ -81,12 +80,13 @@ const EmailListItem = ({
 
   const staticShouldUseDraftOrRegular = useMemo(
     () => shouldUseDraftOrRegular(labelIds, email),
-    []
+    [email]
   )
   const staticEmailLabels = useMemo(
     () => emailLabels(staticShouldUseDraftOrRegular),
-    []
+    [email]
   )
+
   const staticRecipientName = useMemo(
     () =>
       RecipientName(
@@ -144,14 +144,12 @@ const EmailListItem = ({
   )
 
   const handleOpenEvent = useCallback(() => {
-    openEmail({
-      labelIds,
-      id,
-      email: staticShouldUseDraftOrRegular,
-      dispatch,
-      inSearch,
-      storageLabels,
-    })
+    dispatch(
+      openEmail({
+        id,
+        email: staticShouldUseDraftOrRegular,
+      })
+    )
   }, [])
 
   useEffect(() => {
@@ -188,13 +186,13 @@ const EmailListItem = ({
           </S.CelUnread>
           <S.CellName onClick={handleOpenEvent} aria-hidden="true">
             <S.Avatars>
-              {!labelIds.includes(draft.DRAFT_LABEL) ? (
+              {!labelIds.includes(global.DRAFT_LABEL) ? (
                 <EmailAvatar avatarURL={staticSenderFull} />
               ) : (
                 <EmailAvatar avatarURL={staticRecipientName.name} />
               )}
             </S.Avatars>
-            {!labelIds.includes(draft.DRAFT_LABEL) ? (
+            {!labelIds.includes(global.DRAFT_LABEL) ? (
               <S.TruncatedSpan title={staticSenderPartial.emailAddress}>
                 {staticSenderPartial.name ?? staticSenderPartial.emailAddress}
               </S.TruncatedSpan>
@@ -211,7 +209,7 @@ const EmailListItem = ({
           )}
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
-              {labelIds.includes(draft.DRAFT_LABEL) && (
+              {labelIds.includes(global.DRAFT_LABEL) && (
                 <span style={{ fontWeight: 'bold' }}>
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </span>
@@ -234,7 +232,7 @@ const EmailListItem = ({
           </S.CellDate>
           <div />
           <div />
-          {!labelIds.includes(draft.DRAFT_LABEL) ? (
+          {!labelIds.includes(global.DRAFT_LABEL) ? (
             <InlineThreadActionsRegular id={id} labelIds={labelIds} />
           ) : (
             <InlineThreadActionsDraft threadId={id} />
@@ -242,7 +240,7 @@ const EmailListItem = ({
         </S.ThreadRow>
       </S.ThreadBase>
     ),
-    [isFocused, selectedEmails]
+    [isFocused, selectedEmails, staticEmailLabels]
   )
 
   return memoizedEmailListItem

@@ -67,7 +67,7 @@ export const Row = styled.div`
   position: relative;
   min-height: 35px;
   display: flex;
-  padding: 0.25rem 0;
+  padding: 4px 0;
 `
 
 export const CcBccContainer = styled.div`

@@ -11,7 +11,7 @@ import { useAppSelector } from '../../../Store/hooks'
 import emailLabels from '../../../utils/emailLabels'
 import DeleteOption from '../Options/DeleteOption'
 import onlyLegalLabelObjects from '../../../utils/onlyLegalLabelObjects'
-import { IEmailListThreadItem } from '../../../Store/emailListTypes'
+import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
 import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
 import ArchiveOption from '../Options/ArchiveOption'
@@ -67,7 +67,8 @@ const EmailDetailOptions = ({
           {staticOnlyLegalLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} />
           )}
-          {coreStatus === global.CORE_STATUS_FOCUSED && <SkipOption />}
+          {(coreStatus === global.CORE_STATUS_FOCUSED ||
+            coreStatus === global.CORE_STATUS_SORTING) && <SkipOption />}
           {staticOnlyLegalLabels.length > 0 && (
             <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
           )}
@@ -76,6 +77,7 @@ const EmailDetailOptions = ({
               messageId={threadDetail.id}
               icon={<FiDelete />}
               suppressed
+              noArchive
             />
           )}
           {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}

@@ -1,5 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useMemo, useState } from 'react'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../Store/draftsSlice'
 import {
@@ -20,17 +19,17 @@ import {
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
-import * as draft from '../../constants/draftConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
-import Routes from '../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListObject } from '../../Store/emailListTypes'
+import { IEmailListObject } from '../../Store/storeTypes/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
+import handleSessionStorage from '../../utils/handleSessionStorage'
+import { selectViewIndex } from '../../Store/emailDetailSlice'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -78,7 +77,7 @@ const RenderEmailList = ({
             <GS.Base>
               {threads.map((email, index) => (
                 <div
-                  key={email.id}
+                  key={email?.id}
                   onFocus={() => setFocusedItemIndex(index)}
                   onMouseOver={() => setFocusedItemIndex(index)}
                   aria-hidden="true"
@@ -126,6 +125,20 @@ const RenderEmailList = ({
   )
 }
 
+const LabeledInbox = ({
+  emailList,
+  activeEmailListIndex,
+}: {
+  emailList: IEmailListObject[]
+  activeEmailListIndex: number
+}) => {
+  if (emailList && activeEmailListIndex > -1) {
+    // Show the list of emails that are connected to the labelId mailbox.
+    return <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
+  }
+  return <EmptyState />
+}
+
 const EmailList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const emailList = useAppSelector(selectEmailList)
@@ -135,8 +148,10 @@ const EmailList = () => {
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
-  const location = useLocation()
+
+  // If the box is empty, and the history feed is adding the item to the feed - there is no next page token and the feed is only that shallow item.
 
   useEffect(() => {
     let mounted = true
@@ -153,35 +168,31 @@ const EmailList = () => {
         if (mounted) {
           emailPromise = dispatch(fetchEmails(params))
         }
-        if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
           draftPromise = dispatch(fetchDrafts())
         }
       }
-      if (
-        !location.pathname.includes(Routes.INBOX) &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)
-      ) {
+      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)) {
         if (
           emailList.length > 0 &&
           emailList.filter((emailSubList) =>
             emailSubList.labels?.includes(labelIds[0])
-          ).length > 0
+          ).length > 0 &&
+          viewIndex === -1
         ) {
-          const params = {
-            labelIds,
-            maxResults: 500,
-            nextPageToken: null,
-          }
           if (
             mounted &&
-            Date.now() - emailList[activeEmailListIndex].timestamp! >
+            Date.now() -
+              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                : 0) >
               global.MIN_DELAY_REFRESH &&
             !isRefreshing
           ) {
             setIsRefreshing(true)
-            dispatch(refreshEmailFeed(params))
+            dispatch(refreshEmailFeed())
           }
-          if (labelIds.includes(draft.DRAFT_LABEL) && mounted) {
+          if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
             draftPromise = dispatch(fetchDrafts())
           }
         }
@@ -196,12 +207,12 @@ const EmailList = () => {
         draftPromise.abort()
       }
     }
-  }, [labelIds])
+  }, [labelIds, window.location, viewIndex])
 
-  // Run a clean up function to ensure that the email detail values are always back to base.
+  // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {
     dispatch(resetValuesEmailDetail())
-  }, [])
+  }, [dispatch])
 
   const emailListIndex = useMemo(
     () => getEmailListIndex({ emailList, labelIds }),
@@ -215,20 +226,13 @@ const EmailList = () => {
     }
   }, [emailListIndex])
 
-  const LabeledInbox = memo(() => {
-    if (emailList && activeEmailListIndex > -1) {
-      // Show the list of emails that are connected to the labelId mailbox.
-      return (
-        <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
-      )
-    }
-    return <EmptyState />
-  })
-
   return (
     <>
       {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
-        <LabeledInbox />
+        <LabeledInbox
+          emailList={emailList}
+          activeEmailListIndex={activeEmailListIndex}
+        />
       )}
       {isLoading &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (

@@ -2,14 +2,14 @@ import DraftMessage from '../DisplayVariants/DraftMessage'
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../../../../Store/emailListTypes'
-import * as draft from '../../../../constants/draftConstants'
+} from '../../../../Store/storeTypes/emailListTypes'
+import * as global from '../../../../constants/globalConstants'
 import PreLoadNormalMessage from './PreLoadNormalMessage'
 
-const detailDisplaySelector = (message: IEmailMessage) => {
+const DetailDisplaySelector = ({ message }: { message: IEmailMessage }) => {
   if (
     Object.prototype.hasOwnProperty.call(message, 'labelIds') &&
-    message.labelIds.includes(draft.DRAFT_LABEL)
+    message.labelIds.includes(global.DRAFT_LABEL)
   ) {
     return <DraftMessage message={message} />
   }
@@ -27,7 +27,9 @@ const PreLoadMessage = ({
         .slice(0)
         .reverse()
         .map((message) => (
-          <div key={message.id}>{detailDisplaySelector(message)}</div>
+          <div key={message.id}>
+            <DetailDisplaySelector message={message} />
+          </div>
         ))}
   </div>
 )

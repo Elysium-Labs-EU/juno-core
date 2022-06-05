@@ -3,11 +3,6 @@ import styled from 'styled-components'
 interface EmailWrapperProps {
   labelIds?: string[]
 }
-
-interface EmailContainerProps {
-  tabbedView?: boolean
-}
-
 interface IScroll {
   clientState: boolean
 }
@@ -99,7 +94,6 @@ export const DetailBase = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
-  min-width: 50%;
 `
 
 export const DetailRow = styled.article`
@@ -107,20 +101,24 @@ export const DetailRow = styled.article`
   flex-direction: row;
   justify-content: center;
   flex: 1 1;
-  min-width: 50%;
 `
 
 export const CardFullWidth = styled.div`
   width: 100%;
 `
 
-export const EmailDetailContainer = styled.div<EmailContainerProps>`
-  min-width: 60%;
-  max-width: ${({ tabbedView }) => (tabbedView ? '40vw' : '60%')};
+export const EmailDetailContainer = styled.div`
+  min-width: 665px;
+  max-width: min(100vw - 340px, 860px);
   padding-bottom: 1.5rem;
   margin-bottom: 16px;
   width: 100%;
-  overflow: hidden;
+  overflow: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
 `
 
 export const TopContainer = styled.div`

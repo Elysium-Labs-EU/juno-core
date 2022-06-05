@@ -2,9 +2,9 @@ import { useEffect } from 'react'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
-import navigateNextMail from '../../../utils/navigateNextEmail'
 import loadNextPage from '../../../utils/loadNextPage'
 import {
+  navigateNextMail,
   selectEmailListSize,
   selectIsSilentLoading,
 } from '../../../Store/utilsSlice'
@@ -13,9 +13,7 @@ import DetailNavigationView from './DetailNavigationView'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../../Store/emailListTypes'
-import { selectCoreStatus } from '../../../Store/emailListSlice'
-import { selectComposeEmail } from '../../../Store/composeSlice'
+} from '../../../Store/storeTypes/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,
@@ -27,8 +25,6 @@ const DetailNavigationContainer = ({
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const viewIndex = useAppSelector(selectViewIndex)
   const emailFetchSize = useAppSelector(selectEmailListSize)
-  const coreStatus = useAppSelector(selectCoreStatus)
-  const composeEmail = useAppSelector(selectComposeEmail)
 
   const isDisabledPrev = !!(
     activeEmailList.threads[viewIndex - 1] === undefined
@@ -44,14 +40,7 @@ const DetailNavigationContainer = ({
       activeEmailList.threads[viewIndex + 1] !== undefined &&
       labelIds
     ) {
-      navigateNextMail({
-        labelIds,
-        activeEmailList,
-        viewIndex,
-        dispatch,
-        coreStatus,
-        composeEmail,
-      })
+      dispatch(navigateNextMail())
     }
     if (!labelIds.includes(global.ARCHIVE_LABEL)) {
       // If loading isn't already happening, load the nextPage
@@ -104,9 +93,6 @@ const DetailNavigationContainer = ({
 
   return (
     <DetailNavigationView
-      labelIds={labelIds}
-      activeEmailList={activeEmailList}
-      viewIndex={viewIndex}
       isDisabledPrev={isDisabledPrev}
       isDisabledNext={isDisabledNext}
       nextButtonSelector={nextButtonSelector}

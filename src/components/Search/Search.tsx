@@ -17,7 +17,7 @@ import {
   IEmailListObject,
   IEmailListObjectSearch,
   IEmailListThreadItem,
-} from '../../Store/emailListTypes'
+} from '../../Store/storeTypes/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
@@ -50,11 +50,6 @@ interface ILoadMoreSearchResults {
 }
 
 const SEARCH = 'Search'
-const SEARCH_STATE = {
-  IDLE: 'Idle',
-  LOADING: 'Loading',
-  LOADED: 'Loaded',
-}
 
 const shouldClearOutPreviousResults = ({
   searchValueRef,
@@ -80,7 +75,7 @@ const intitialSearch = ({
   const searchBody = {
     q: searchValue,
   }
-  setLoadState(SEARCH_STATE.LOADING)
+  setLoadState(global.LOAD_STATE_MAP.loading)
   shouldClearOutPreviousResults({
     searchValueRef,
     searchValue,
@@ -100,7 +95,7 @@ export const loadMoreSearchResults = ({
     q: searchValue,
     nextPageToken: searchResults?.nextPageToken,
   }
-  setLoadState(SEARCH_STATE.LOADING)
+  setLoadState(global.LOAD_STATE_MAP.loading)
   fetchSearchThreads(searchBody)
 }
 
@@ -125,7 +120,7 @@ const Search = () => {
   const searchValueRef = useRef('')
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const [searchResults, setSearchResults] = useState<IEmailListObjectSearch>()
-  const [loadState, setLoadState] = useState(SEARCH_STATE.IDLE)
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
@@ -158,7 +153,7 @@ const Search = () => {
   const resetSearch = () => {
     setSearchValue('')
     setSearchResults(undefined)
-    setLoadState(SEARCH_STATE.IDLE)
+    setLoadState(global.LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
@@ -191,7 +186,7 @@ const Search = () => {
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {
             if (searchValueRef.current !== searchValue) {
-              setLoadState(SEARCH_STATE.LOADED)
+              setLoadState(global.LOAD_STATE_MAP.loaded)
               searchValueRef.current = searchValue
               const newStateObject = {
                 q: searchBody.q,
@@ -199,6 +194,7 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(global.LOAD_STATE_MAP.loaded)
               return
             }
             if (searchResults && searchResults.threads.length > 0) {
@@ -207,11 +203,12 @@ const Search = () => {
                 nextPageToken: response.nextPageToken ?? null,
               }
               setSearchResults(newStateObject)
+              setLoadState(global.LOAD_STATE_MAP.loaded)
             }
           }
         })
       } else {
-        setLoadState(SEARCH_STATE.LOADED)
+        setLoadState(global.LOAD_STATE_MAP.loaded)
       }
     } catch (err) {
       dispatch(setServiceUnavailable(global.ERROR_MESSAGE))
@@ -312,7 +309,7 @@ const Search = () => {
               ))}
               {searchResults.nextPageToken ? (
                 <S.FooterRow>
-                  {loadState !== SEARCH_STATE.LOADING && (
+                  {loadState !== global.LOAD_STATE_MAP.loading && (
                     <CustomButton
                       onClick={() =>
                         loadMoreSearchResults({
@@ -326,7 +323,9 @@ const Search = () => {
                       suppressed
                     />
                   )}
-                  {loadState === SEARCH_STATE.LOADING && <LoadingState />}
+                  {loadState === global.LOAD_STATE_MAP.loading && (
+                    <LoadingState />
+                  )}
                 </S.FooterRow>
               ) : (
                 <S.FooterRow>
@@ -338,7 +337,7 @@ const Search = () => {
             </>
           ) : (
             <S.NoSearchResults>
-              {loadState === SEARCH_STATE.LOADING ? (
+              {loadState === global.LOAD_STATE_MAP.loading ? (
                 <LoadingState />
               ) : (
                 <div>

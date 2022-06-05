@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { AppThunk, RootState } from './store'
 import labelApi from '../data/labelApi'
 import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
-import { GoogleLabel, LabelIdName, LabelState } from './labelsTypes'
+import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
 
 const initialState: LabelState = Object.freeze({

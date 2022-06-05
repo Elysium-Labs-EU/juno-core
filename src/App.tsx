@@ -1,8 +1,4 @@
-import {
-  // lazy,
-  useEffect,
-  // Suspense
-} from 'react'
+import { useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
@@ -17,7 +13,6 @@ import {
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
-// import LoadingState from './components/Elements/LoadingState/LoadingState'
 import * as GS from './styles/globalStyles'
 import { useAppDispatch, useAppSelector } from './Store/hooks'
 import { selectStorageLabels } from './Store/labelsSlice'
@@ -35,19 +30,6 @@ import SentEmail from './components/Sent/Sent'
 import Login from './components/Login/Login'
 import GoogleCallback from './components/Login/Callback/GoogleCallBack'
 import PageNotFound from './components/PageNotFound/PageNotFound'
-
-// const ToDo = lazy(() => import('./components/ToDo/Todo'))
-// const ComposeEmail = lazy(() => import('./components/Compose/ComposeEmail'))
-// const Inbox = lazy(() => import('./components/Inbox/Inbox'))
-// const SentEmail = lazy(() => import('./components/Sent/Sent'))
-// const DraftEmail = lazy(() => import('./components/Draft/DraftEmail'))
-// const PageNotFound = lazy(
-//   () => import('./components/PageNotFound/PageNotFound')
-// )
-// const Login = lazy(() => import('./components/Login/Login'))
-// const GoogleCallback = lazy(
-//   () => import('./components/Login/Callback/GoogleCallBack')
-// )
 
 const ProtectedRoute = ({
   children,

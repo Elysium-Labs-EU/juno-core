@@ -1,5 +1,5 @@
 import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { IEmailMessage } from '../Store/emailListTypes'
+import { IEmailMessage } from '../Store/storeTypes/emailListTypes'
 
 const checkAttachment = (message: IEmailMessage) => {
   const attachmentArray: IEmailAttachmentType[] = []

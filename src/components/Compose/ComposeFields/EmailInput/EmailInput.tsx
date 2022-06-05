@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
-import { Contact } from '../../../../Store/contactsTypes'
+import { Contact } from '../../../../Store/storeTypes/contactsTypes'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import {
   selectAllContacts,

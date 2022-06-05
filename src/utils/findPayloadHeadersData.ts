@@ -1,4 +1,4 @@
-import { MessagePayload } from '../Store/draftsTypes'
+import { MessagePayload } from '../Store/storeTypes/draftsTypes'
 
 const findPayloadHeadersData = (query: string, email: any) => {
   if (email && query) {

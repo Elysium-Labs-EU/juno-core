@@ -81,6 +81,11 @@ const Help = () => {
               subTitle={local.EMAIL_KEY_SUB_TITLE}
               keyCombos={local.EMAIL_DETAIL_COMBOS}
             />
+            <CreateSectionWithKeys
+              title={local.COMPOSE_KEY_TITLE}
+              subTitle={local.COMPOSE_KEY_SUB_TITLE}
+              keyCombos={local.COMPOSE_KEY_COMBOS}
+            />
           </S.Columns>
         </S.Inner>
       </S.Dialog>

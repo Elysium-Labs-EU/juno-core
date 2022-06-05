@@ -14,7 +14,7 @@ import {
   EnhancedDraftDetails,
   OpenDraftEmailType,
   DraftListObject,
-} from './draftsTypes'
+} from './storeTypes/draftsTypes'
 import bodyDecoder from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
@@ -89,11 +89,11 @@ export const createUpdateDraft = (): AppThunk => async (dispatch, getState) => {
       threadId: currEmail,
       messageId: message?.id,
       labelIds: message?.labelIds,
-      to: composeEmail.to ? convertToGmailEmail(composeEmail.to) : '',
-      cc: composeEmail.cc ? convertToGmailEmail(composeEmail.cc) : '',
-      bcc: composeEmail.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
-      subject: composeEmail.subject ?? '',
-      body: composeEmail.body ?? '',
+      to: composeEmail?.to ? convertToGmailEmail(composeEmail.to) : '',
+      cc: composeEmail?.cc ? convertToGmailEmail(composeEmail.cc) : '',
+      bcc: composeEmail?.bcc ? convertToGmailEmail(composeEmail.bcc) : '',
+      subject: composeEmail?.subject ?? '',
+      body: composeEmail?.body ?? '',
     }
 
     const response = isEmpty(getState().drafts.draftDetails)
@@ -120,9 +120,8 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   } = props
   return (dispatch) => {
     try {
-      const body = bodyDecoder({ inputObject: message.payload }).map((item) =>
-        item.replace(/<[^>]*>/g, '')
-      )[0]
+      // TODO: Check for sanitize option
+      const body = bodyDecoder({ inputObject: message.payload })[0]
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
       const cc = findPayloadHeadersData('Cc', message)
@@ -135,10 +134,10 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         body,
       }
       const draftDetails = {
-        id: draft.id,
+        id: draft?.id,
         message: {
-          id: message.id,
-          threadId: message.threadId,
+          id: message?.id,
+          threadId: message?.threadId,
         },
       }
       if (draft.id && message.threadId) {

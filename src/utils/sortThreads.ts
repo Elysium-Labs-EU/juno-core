@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from '../Store/emailListTypes'
+import { IEmailListThreadItem } from '../Store/storeTypes/emailListTypes'
 
 const sortThreads = (sortObject: IEmailListThreadItem[]) => {
   if (sortObject && sortObject.length > 0) {

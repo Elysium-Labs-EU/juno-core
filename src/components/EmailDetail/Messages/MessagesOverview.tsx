@@ -6,12 +6,11 @@ import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
-import * as draft from '../../../constants/draftConstants'
 import * as ES from '../EmailDetailStyles'
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../../../Store/emailListTypes'
+} from '../../../Store/storeTypes/emailListTypes'
 import { useAppDispatch } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
@@ -66,10 +65,10 @@ const DetailDisplaySelector = ({
   setUnsubscribeLink,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
-    if (message.labelIds.includes(draft.DRAFT_LABEL)) {
+    if (message.labelIds.includes(global.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
-    if (!message.labelIds.includes(draft.DRAFT_LABEL)) {
+    if (!message.labelIds.includes(global.DRAFT_LABEL)) {
       return (
         <ReadUnreadMessage
           message={message}
@@ -146,8 +145,7 @@ const MessagesOverview = memo(
                 message.labelIds?.includes(global.UNREAD_LABEL) === true
             ).length > 0
           ) {
-            const messageId = threadDetail.id
-            markEmailAsRead({ messageId, dispatch, labelIds })
+            markEmailAsRead({ messageId: threadDetail.id, dispatch, labelIds })
           }
         }
       }
@@ -156,7 +154,7 @@ const MessagesOverview = memo(
     return (
       <>
         <ES.DetailRow>
-          <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+          <ES.EmailDetailContainer>
             <ES.DetailBase>
               <ES.CardFullWidth>
                 {threadDetail && !isLoading ? (
