@@ -80,12 +80,13 @@ const EmailListItem = ({
 
   const staticShouldUseDraftOrRegular = useMemo(
     () => shouldUseDraftOrRegular(labelIds, email),
-    []
+    [email]
   )
   const staticEmailLabels = useMemo(
     () => emailLabels(staticShouldUseDraftOrRegular),
-    []
+    [email]
   )
+
   const staticRecipientName = useMemo(
     () =>
       RecipientName(
@@ -239,7 +240,7 @@ const EmailListItem = ({
         </S.ThreadRow>
       </S.ThreadBase>
     ),
-    [isFocused, selectedEmails]
+    [isFocused, selectedEmails, staticEmailLabels]
   )
 
   return memoizedEmailListItem
