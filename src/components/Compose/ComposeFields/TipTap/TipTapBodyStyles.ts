@@ -25,9 +25,11 @@ export const Wrapper = styled.div<IWrapper>`
   }
 `
 
-export const MenuBar = styled.div`
-  display: initial !important;
-  flex: 0 !important;
+interface IMenuBar {
+  isFocused: boolean
+}
+
+export const MenuBar = styled.div<IMenuBar>`
   border: none;
   margin: 0 auto;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
@@ -36,6 +38,8 @@ export const MenuBar = styled.div`
   left: 16px;
   border-radius: 4px;
   z-index: 10;
+  opacity: ${({ isFocused }) => (isFocused ? 1 : 0.4)};
+  transition: opacity 0.3s ease 0s;
 `
 
 export const Button = styled.button`

@@ -104,7 +104,7 @@ const Tiptap = ({
         <label htmlFor={local.BODY}>{local.BODY_LABEL}</label>
       </Compose.Label>
       <S.Wrapper isFocused={isFocused}>
-        <S.MenuBar>
+        <S.MenuBar isFocused={isFocused}>
           <MenuBar editor={editorInstance} />
         </S.MenuBar>
         <EditorContent editor={editorInstance} ref={tipTapRef} />
