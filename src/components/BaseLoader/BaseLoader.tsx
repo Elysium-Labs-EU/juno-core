@@ -1,14 +1,15 @@
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { useSelector } from 'react-redux'
 import * as S from './BaseLoaderStyles'
-import * as HS from '../MainHeader/HeaderStyles'
 import { selectServiceUnavailable } from '../../Store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
-import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
+import LogoutOption, {
+  handleLogout,
+} from '../MainHeader/Navigation/More/Options/LogoutOption'
+import { useAppSelector } from '../../Store/hooks'
 
-const ERROR_CODE_UNAUTHORIZED = 'Invalid'
-const LOG_OUT_IN = 'Log out, log back in'
 const LOGO_ALT = "Juno's Logo"
+const REDIRECTED = 'You will be redirected to the login page in 3 seconds'
 
 const AnimatedMountUnmount = ({
   children,
@@ -25,7 +26,19 @@ const AnimatedMountUnmount = ({
 )
 
 const Baseloader = () => {
-  const serviceUnavailable = useSelector(selectServiceUnavailable)
+  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+
+  useEffect(() => {
+    let mounted = true
+    const timer = setTimeout(() => {
+      mounted && handleLogout()
+    }, 3000)
+    return () => {
+      mounted = false
+      clearTimeout(timer)
+    }
+  }, [])
+
   return (
     <S.Wrapper>
       <S.Inner>
@@ -34,7 +47,7 @@ const Baseloader = () => {
             <AnimatedMountUnmount>
               <S.Container>
                 <img
-                  style={{ marginBottom: '1rem' }}
+                  style={{ marginBottom: '16px' }}
                   src={Logo}
                   alt={LOGO_ALT}
                 />
@@ -47,11 +60,11 @@ const Baseloader = () => {
         )}
         {serviceUnavailable && (
           <>
-            {serviceUnavailable.includes(ERROR_CODE_UNAUTHORIZED) && (
-              <HS.PageTitle>{LOG_OUT_IN}</HS.PageTitle>
-            )}
             <S.ServiceUnavailableParagraph>
               {serviceUnavailable}
+            </S.ServiceUnavailableParagraph>
+            <S.ServiceUnavailableParagraph>
+              {REDIRECTED}
             </S.ServiceUnavailableParagraph>
             <LogoutOption />
           </>
