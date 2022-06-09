@@ -25,6 +25,7 @@ interface IEmailDetailBody {
 }
 
 let hasRan = false
+let testString = ''
 
 const EmailDetailBody = ({
   threadDetailBody,
@@ -53,30 +54,51 @@ const EmailDetailBody = ({
     }
   }, [bodyState])
 
+  if (messageId === '180c94ea1812d4fa' && hasRan === false) {
+    console.log(messageId, threadDetailBody)
+  }
+
   useEffect(() => {
     let mounted = true
     if (messageId.length > 0) {
-      const inlineImage = (attachmentData: IEmailAttachmentType) => {
-        dispatch(fetchAttachment({ attachmentData, messageId })).then(
-          (response: IInlineImageTypeResponse) => {
-            if (response && mounted) {
-              setBodyState((currState) => [...currState, response])
-            }
-          }
-        )
-      }
-      const bodyResponse = bodyDecoder({
-        inputObject: threadDetailBody,
-        inlineImage,
-      })
       if (mounted) {
-        setBodyState(bodyResponse)
+        const inlineImageDecoder = (attachmentData: IEmailAttachmentType) => {
+          console.log('attachmentData', attachmentData)
+          dispatch(fetchAttachment({ attachmentData, messageId })).then(
+            (response: IInlineImageTypeResponse) => {
+              if (response && mounted) {
+                setBodyState((currState) => [...currState, response])
+              }
+            }
+          )
+        }
+        const bodyResponse = bodyDecoder({
+          inputObject: threadDetailBody,
+          inlineImageDecoder,
+        })
+        console.log(bodyResponse)
+        setBodyState((currState) => [...currState, bodyResponse])
       }
     }
     return () => {
       mounted = false
     }
   }, [messageId])
+
+  // TODO: Replace the cid values with the inline images that are found.
+  useEffect(() => {
+    for (let i = 0; i < bodyState.length; i += 1) {
+      if (Array.isArray(bodyState[i])) {
+        console.log('here', bodyState[i])
+        testString = bodyState[i]
+      } else {
+        console.log(
+          'NOT HERE',
+          bodyState.filter((item) => !Array.isArray(item))
+        )
+      }
+    }
+  }, [bodyState])
 
   return (
     <div className={detailBodyCSS}>

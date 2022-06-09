@@ -1,15 +1,18 @@
 import { decodeBase64 } from './decodeBase64'
 
-const decodedBody: string[] = []
-
-// This function recursively loops in the emailbody to find a body to decode.
+let localInlineImageDecoder: Function = () => {}
+let decodedString: string | null = ''
+// This function recursively loops in the emailbody to find a body to decode. If initially priotizes the last object in a parts array.
 const bodyDecoder = ({
   inputObject,
-  inlineImage,
+  inlineImageDecoder,
 }: {
   inputObject: any
-  inlineImage?: Function
+  inlineImageDecoder?: Function
 }): string[] => {
+  if (inlineImageDecoder) {
+    localInlineImageDecoder = inlineImageDecoder
+  }
   const objectKeys = Object.keys(inputObject)
   for (let i = 0; i < objectKeys.length; i += 1) {
     if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
@@ -20,30 +23,31 @@ const bodyDecoder = ({
               inputObject.body,
               'attachmentId'
             ) &&
-            inlineImage
+            localInlineImageDecoder
           ) {
             // If it is an image, use the imported function to continue line of operation.
-            inlineImage(inputObject)
-          }
-          const str = decodeBase64(`${inputObject.body.data}`)
-          if (inputObject.mimeType === 'text/plain' && str) {
-            const enhancedText = () => {
-              const urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g
-              const lineBreakRegex = /(?:\r\n|\r|\n)/g
-              return str
-                .replace(urlRegex, (url) => {
-                  let hyperlink = url
-                  if (!hyperlink.match('^https?://')) {
-                    hyperlink = `http://${hyperlink}`
-                  }
-                  return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`
-                })
-                .replace(lineBreakRegex, '<br>')
+            localInlineImageDecoder(inputObject)
+          } else {
+            decodedString = decodeBase64(`${inputObject.body.data}`)
+            if (inputObject.mimeType === 'text/plain' && decodedString) {
+              const localString = decodedString
+              const enhancedText = () => {
+                const urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g
+                const lineBreakRegex = /(?:\r\n|\r|\n)/g
+                return (
+                  localString
+                    ?.replace(urlRegex, (url) => {
+                      let hyperlink = url
+                      if (!hyperlink.match('^https?://')) {
+                        hyperlink = `https://${hyperlink}`
+                      }
+                      return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`
+                    })
+                    .replace(lineBreakRegex, '<br>') ?? ''
+                )
+              }
+              return [enhancedText()]
             }
-            return [...decodedBody, enhancedText()]
-          }
-          if (str) {
-            return [...decodedBody, str]
           }
         }
       }
@@ -60,7 +64,7 @@ const bodyDecoder = ({
                 Object.prototype.hasOwnProperty.call(
                   inputObject.parts[1],
                   'body'
-                ) &&
+                ) ||
                 Object.prototype.hasOwnProperty.call(
                   inputObject.parts[1].body,
                   'attachmentId'
@@ -72,6 +76,7 @@ const bodyDecoder = ({
             }
           }
           if (inputObject.parts.length > 1) {
+            // If the object has parts of its own, loop through those.
             if (
               Object.prototype.hasOwnProperty.call(
                 inputObject.parts[1],
@@ -80,36 +85,21 @@ const bodyDecoder = ({
             ) {
               return bodyDecoder({ inputObject: inputObject.parts[1] })
             }
+            // If the object has no parts of its own, loop through all of them to decode
+            inputObject.parts.forEach((part: any) => {
+              console.log(part)
+              bodyDecoder({
+                inputObject: part,
+              })
+            })
           } else {
             return bodyDecoder({ inputObject: inputObject.parts[0] })
-          }
-          if (inputObject.parts.length > 1) {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[1],
-                'body'
-              ) &&
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[1].body,
-                'attachmentId'
-              )
-            ) {
-              bodyDecoder({ inputObject: inputObject.parts[0] })
-              return bodyDecoder({ inputObject: inputObject.parts[1] })
-            }
-          }
-          if (inputObject.parts.length > 1) {
-            if (
-              Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')
-            ) {
-              return bodyDecoder({ inputObject: inputObject.parts[1] })
-            }
           }
         }
       }
     }
   }
-  return decodedBody
+  return [decodedString ?? '']
 }
 
 export default bodyDecoder
