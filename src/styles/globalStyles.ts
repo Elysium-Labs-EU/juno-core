@@ -9,7 +9,7 @@ import RalewayVariableItalic from '../fonts/RalewayItalicVariableFontWght.ttf'
 
 /* 16px */
 export const GlobalStyle = createGlobalStyle`
-    @font-face {
+    /* @font-face {
         font-family: 'Urbanist Variable';
         src: url(${UrbanistVariable}) format('truetype'),
         url(${UrbanistVariableItalic}) format('truetype');
@@ -22,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
         url(${RalewayVariableItalic}) format('truetype');
         font-weight: 100 1000;
         font-stretch: 25% 151%;
-    }
+    } */
   html {
     font-size: 100%;
     --color-white: ${themeConstants.colorWhite};
@@ -48,11 +48,12 @@ export const GlobalStyle = createGlobalStyle`
     --h4: ${themeConstants.h4FontSize};
     --h5: ${themeConstants.h5FontSize};
     --small-size: ${themeConstants.smallFontSize};
+    --font-family: ${themeConstants.fontFamily};
   }
   body {
     background-color: var(--color-white-off) !important;
     margin: 0;
-    font-family: 'Urbanist Variable', sans-serif !important;
+    font-family: var(--font-family) !important;
   }
 `
 

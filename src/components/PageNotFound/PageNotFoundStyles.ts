@@ -18,7 +18,7 @@ export const PageHeaderText = styled.h1`
   font-weight: 200;
   user-select: none;
   font-size: 2.441rem;
-  font-family: 'Raleway Variable', serif;
+  font-family: var(--font-family);
   line-height: 1.3;
   color: var(--color-black) !important;
 `

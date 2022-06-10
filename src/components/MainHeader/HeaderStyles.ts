@@ -40,7 +40,7 @@ export const PageTitle = styled.h2`
   user-select: none;
   text-transform: capitalize;
   font-size: 2.441rem;
-  font-family: 'Raleway Variable', serif;
+  font-family: var(--font-family) !important;
   line-height: 1.3;
   color: var(--color-black) !important;
 `

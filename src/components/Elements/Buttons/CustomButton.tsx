@@ -37,7 +37,7 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
-  font-family: 'Raleway Variable', sans-serif;
+  font-family: var(--font-family);
 
   &:hover {
     color: var(--color-black);

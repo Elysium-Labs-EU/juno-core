@@ -21,3 +21,4 @@ export const h3FontSize = '1.953rem'
 export const h4FontSize = '1.563rem'
 export const h5FontSize = '1.25rem'
 export const smallFontSize = '0.8rem'
+export const fontFamily = "'system-ui','Urbanist Variable', sans-serif"

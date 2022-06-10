@@ -37,7 +37,7 @@ export const StyedListItem = styled.li<StyledListItem>`
   align-items: center;
   text-decoration: none;
   cursor: pointer;
-  font-family: 'Urbanist Variable', sans-serif;
+  font-family: var(--font-family);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 

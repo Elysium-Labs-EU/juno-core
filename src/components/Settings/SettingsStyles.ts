@@ -29,7 +29,7 @@ export const SettingsHeader = styled.h2`
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;
-  font-family: 'Raleway Variable', serif;
+  font-family: var(--font-family);
   line-height: 1.3;
   color: var(--color-black);
   margin-left: 2rem;
