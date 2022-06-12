@@ -44,7 +44,7 @@ const EmailPosition = () => {
     <S.Wrapper>
       {loadingState === global.LOAD_STATE_MAP.loaded && (
         <Tooltip title={EXPLANATION}>
-          <GS.TextMutedParagraph>
+          <GS.TextMutedParagraph style={{ fontSize: 13 }}>
             {sessionViewIndex + 1} / {totalThreads}
           </GS.TextMutedParagraph>
         </Tooltip>

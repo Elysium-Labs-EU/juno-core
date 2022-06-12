@@ -31,7 +31,7 @@ const Button = styled.button<IButton>`
   border-bottom-color: transparent;
   border-left-color: transparent;
   padding: 0.375rem 0.75rem;
-  font-size: 0.85rem;
+  font-size: 13px;
   line-height: 1.5;
   border-radius: 4px;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
