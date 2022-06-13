@@ -15,7 +15,7 @@ import {
   OpenDraftEmailType,
   DraftListObject,
 } from './storeTypes/draftsTypes'
-import bodyDecoder from '../utils/bodyDecoder'
+import { loopThroughBodyParts } from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
@@ -118,10 +118,10 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
     draft,
     draft: { message },
   } = props
-  return (dispatch) => {
+  return async (dispatch) => {
     try {
-      // TODO: Check for sanitize option
-      const body = bodyDecoder({ inputObject: message.payload })[0]
+      // TODO: Check for sanitize option and reinstate the body decoding
+      const body = await loopThroughBodyParts({ inputObject: message.payload })
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
       const cc = findPayloadHeadersData('Cc', message)

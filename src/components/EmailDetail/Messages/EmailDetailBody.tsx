@@ -1,37 +1,29 @@
 import { useEffect, useState } from 'react'
-import isEmpty from 'lodash/isEmpty'
 import DOMPurify from 'dompurify'
-import { fetchAttachment } from '../../../Store/emailDetailSlice'
 import { useAppDispatch } from '../../../Store/hooks'
 import { IEmailMessagePayload } from '../../../Store/storeTypes/emailListTypes'
-import { IEmailAttachmentType } from '../Attachment/EmailAttachmentTypes'
 import bodyDecoder from '../../../utils/bodyDecoder'
 import openLinkInNewTab from '../../../utils/openLinkInNewTab'
 import cleanLink from '../../../utils/cleanLink'
 import handleEmailLink from '../../../utils/handleEmailLink'
 import fetchUnsubscribeLink from '../../../utils/fetchUnsubscribeLink'
 
-interface IInlineImageTypeResponse {
-  mimeType: string
-  decodeB64: string
-  filename: string
-}
-
 interface IEmailDetailBody {
   threadDetailBody: IEmailMessagePayload
   messageId: string
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: Function
+  setContentRendered?: (value: boolean) => void
 }
 
 let hasRan = false
-let testString = ''
 
 const EmailDetailBody = ({
   threadDetailBody,
   messageId,
   detailBodyCSS,
   setUnsubscribeLink,
+  setContentRendered,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<any[]>([])
   const dispatch = useAppDispatch()
@@ -54,30 +46,22 @@ const EmailDetailBody = ({
     }
   }, [bodyState])
 
-  if (messageId === '180c94ea1812d4fa' && hasRan === false) {
-    console.log(messageId, threadDetailBody)
-  }
-
   useEffect(() => {
     let mounted = true
     if (messageId.length > 0) {
       if (mounted) {
-        const inlineImageDecoder = (attachmentData: IEmailAttachmentType) => {
-          console.log('attachmentData', attachmentData)
-          dispatch(fetchAttachment({ attachmentData, messageId })).then(
-            (response: IInlineImageTypeResponse) => {
-              if (response && mounted) {
-                setBodyState((currState) => [...currState, response])
-              }
-            }
-          )
+        const decoding = async () => {
+          const bodyResponse = await bodyDecoder({
+            messageId,
+            inputObject: threadDetailBody,
+            decodeImage: true,
+          })
+          setBodyState(bodyResponse)
+          if (setContentRendered) {
+            setContentRendered(true)
+          }
         }
-        const bodyResponse = bodyDecoder({
-          inputObject: threadDetailBody,
-          inlineImageDecoder,
-        })
-        console.log(bodyResponse)
-        setBodyState((currState) => [...currState, bodyResponse])
+        decoding()
       }
     }
     return () => {
@@ -85,25 +69,9 @@ const EmailDetailBody = ({
     }
   }, [messageId])
 
-  // TODO: Replace the cid values with the inline images that are found.
-  useEffect(() => {
-    for (let i = 0; i < bodyState.length; i += 1) {
-      if (Array.isArray(bodyState[i])) {
-        console.log('here', bodyState[i])
-        testString = bodyState[i]
-      } else {
-        console.log(
-          'NOT HERE',
-          bodyState.filter((item) => !Array.isArray(item))
-        )
-      }
-    }
-  }, [bodyState])
-
   return (
     <div className={detailBodyCSS}>
-      {!isEmpty(bodyState) &&
-        bodyState[0] &&
+      {bodyState.length > 0 &&
         bodyState.map((item, itemIdx) =>
           Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
           Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
@@ -132,6 +100,7 @@ const EmailDetailBody = ({
 
 EmailDetailBody.defaultProps = {
   setUnsubscribeLink: null,
+  setContentRendered: null,
 }
 
 export default EmailDetailBody

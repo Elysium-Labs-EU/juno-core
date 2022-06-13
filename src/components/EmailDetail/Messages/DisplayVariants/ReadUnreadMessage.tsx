@@ -34,6 +34,7 @@ interface IReadMessage {
   threadDetail: IEmailListThreadItem
   messageIndex: number
   setUnsubscribeLink: Function
+  setContentRendered: (value: boolean) => void
 }
 
 const ReadMessage = ({
@@ -41,6 +42,7 @@ const ReadMessage = ({
   threadDetail,
   messageIndex,
   setUnsubscribeLink,
+  setContentRendered,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -215,6 +217,7 @@ const ReadMessage = ({
                 messageId={message.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
                 setUnsubscribeLink={setUnsubscribeLink}
+                setContentRendered={setContentRendered}
               />
             )}
           </S.EmailBody>
