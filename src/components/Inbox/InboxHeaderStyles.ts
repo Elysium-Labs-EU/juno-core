@@ -7,6 +7,7 @@ export const OptionsContainer = styled.div`
   display: grid;
   grid-template-columns: 60px auto 60px;
   align-items: center;
+  justify-items: center;
 `
 
 export const SortOptionWrapper = styled.div`
@@ -15,5 +16,5 @@ export const SortOptionWrapper = styled.div`
 `
 
 export const RefreshOptionWrapper = styled.div`
-  margin-right: 15px;
+  margin: 0;
 `
