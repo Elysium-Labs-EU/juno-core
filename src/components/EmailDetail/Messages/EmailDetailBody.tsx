@@ -14,6 +14,7 @@ interface IEmailDetailBody {
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: Function
   setContentRendered?: (value: boolean) => void
+  setBlockedTrackers?: (value: boolean) => void
 }
 
 let hasRan = false
@@ -24,8 +25,13 @@ const EmailDetailBody = ({
   detailBodyCSS,
   setUnsubscribeLink,
   setContentRendered,
+  setBlockedTrackers,
 }: IEmailDetailBody) => {
-  const [bodyState, setBodyState] = useState<any[]>([])
+  const [bodyState, setBodyState] = useState<null | {
+    emailHTML: HTMLElement
+    emailFileHTML: any[]
+    removedTrackers: boolean
+  }>(null)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -34,7 +40,8 @@ const EmailDetailBody = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted && !hasRan && bodyState.length > 0) {
+    if (mounted && !hasRan && bodyState) {
+      // TODO: Move functions into bodydecoder
       openLinkInNewTab()
       handleEmailLink({ dispatch })
       cleanLink()
@@ -60,6 +67,9 @@ const EmailDetailBody = ({
           if (setContentRendered) {
             setContentRendered(true)
           }
+          if (setBlockedTrackers && bodyResponse.removedTrackers) {
+            setBlockedTrackers(true)
+          }
         }
         decoding()
       }
@@ -71,29 +81,30 @@ const EmailDetailBody = ({
 
   return (
     <div className={detailBodyCSS}>
-      {bodyState.length > 0 &&
-        bodyState.map((item, itemIdx) =>
-          Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
-          Object.prototype.hasOwnProperty.call(item, 'decodedB64') ? (
-            <img
-              key={`${item.filename + itemIdx}`}
-              src={`data:${item.mimeType};base64,${item.decodedB64}`}
-              alt={item?.filename ?? 'embedded image'}
-              style={{ maxWidth: '100%', borderRadius: '5px' }}
-            />
-          ) : (
-            <div
-              // eslint-disable-next-line react/no-array-index-key
-              key={itemIdx}
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(item, {
-                  USE_PROFILES: { html: true },
-                }),
-              }}
-            />
-          )
+      {bodyState &&
+        bodyState.emailFileHTML.length > 0 &&
+        bodyState.emailFileHTML.map(
+          (item, itemIdx) =>
+            Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
+            Object.prototype.hasOwnProperty.call(item, 'decodedB64') && (
+              <img
+                key={`${item.filename + itemIdx}`}
+                src={`data:${item.mimeType};base64,${item.decodedB64}`}
+                alt={item?.filename ?? 'embedded image'}
+                style={{ maxWidth: '100%', borderRadius: '5px' }}
+              />
+            )
         )}
+      {bodyState && bodyState.emailHTML.childNodes.length > 0 && (
+        <div
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(bodyState.emailHTML, {
+              USE_PROFILES: { html: true },
+            }),
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -101,6 +112,7 @@ const EmailDetailBody = ({
 EmailDetailBody.defaultProps = {
   setUnsubscribeLink: null,
   setContentRendered: null,
+  setBlockedTrackers: null,
 }
 
 export default EmailDetailBody

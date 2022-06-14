@@ -1,17 +1,47 @@
-export default function removeTrackers(input: any): void {
-  const TRACKERS_SELECTORS = [
-    // TODO: Improve by looking at inline styles as well
-    'img[width="0"]',
-    'img[width="1"]',
-    'img[height="0"]',
-    'img[height="1"]',
-    'img[src*="http://mailstat.us"]',
-  ]
+// TODO: Improve by looking at inline styles as well
+const TRACKERS_SELECTORS = [
+  { attribute: 'width', value: '0' },
+  { attribute: 'width', value: '1' },
+  { attribute: 'height', value: '0' },
+  { attribute: 'height', value: '1' },
+]
+const TRACKERS_SELECTORS_INCLUDES = [
+  { attribute: 'src', value: 'http://mailstat.us' },
+]
 
-  const query = TRACKERS_SELECTORS.join(', ')
-  console.log(input, query)
+const convertStringToHTML = (str: string) => {
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(str, 'text/html')
+  return doc.body
+}
 
-  //   $(query).each((_, el) => {
-  //     $(el).remove()
-  //   })
+export default function removeTrackers(orderedObject: {
+  emailHTML: string
+  emailFileHTML: any[]
+}) {
+  const localCopyOrderedObject: {
+    emailHTML: string | HTMLElement
+    emailFileHTML: any[]
+    removedTrackers: boolean
+  } = { ...orderedObject, removedTrackers: false }
+
+  const converted = convertStringToHTML(orderedObject.emailHTML)
+  converted.querySelectorAll('img').forEach((foundImage) => {
+    if (
+      TRACKERS_SELECTORS.some(
+        (checkValue) =>
+          foundImage.getAttribute(checkValue.attribute) === checkValue.value
+      ) ||
+      TRACKERS_SELECTORS_INCLUDES.some((checkValueInclude) =>
+        foundImage
+          .getAttribute(checkValueInclude.attribute)
+          ?.includes(checkValueInclude.value)
+      )
+    ) {
+      foundImage.remove()
+      localCopyOrderedObject.removedTrackers = true
+    }
+  })
+  localCopyOrderedObject.emailHTML = converted
+  return localCopyOrderedObject
 }

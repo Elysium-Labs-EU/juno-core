@@ -124,6 +124,11 @@ export const TextMutedSpan = styled.span`
   color: var(--color-grey);
 `
 
+export const TextMutedSpanSmall = styled.span`
+  color: var(--color-grey);
+  font-size: var(--small-size);
+`
+
 export const TextMutedParagraph = styled.p`
   color: var(--color-grey);
 `

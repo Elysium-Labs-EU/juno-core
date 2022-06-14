@@ -70,18 +70,15 @@ const DetailDisplaySelector = ({
     if (message.labelIds.includes(global.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
-    if (!message.labelIds.includes(global.DRAFT_LABEL)) {
-      return (
-        <ReadUnreadMessage
-          message={message}
-          threadDetail={threadDetail}
-          messageIndex={index}
-          setUnsubscribeLink={setUnsubscribeLink}
-          setContentRendered={setContentRendered}
-        />
-      )
-    }
-    return <div />
+    return (
+      <ReadUnreadMessage
+        message={message}
+        threadDetail={threadDetail}
+        messageIndex={index}
+        setUnsubscribeLink={setUnsubscribeLink}
+        setContentRendered={setContentRendered}
+      />
+    )
   }
   return (
     <ReadUnreadMessage

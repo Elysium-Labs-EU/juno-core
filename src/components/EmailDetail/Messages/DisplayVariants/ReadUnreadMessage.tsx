@@ -28,6 +28,7 @@ import convertToContact from '../../../../utils/convertToContact'
 import { selectProfile } from '../../../../Store/baseSlice'
 import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
 import Seo from '../../../Elements/Seo'
+import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 
 interface IReadMessage {
   message: IEmailMessage
@@ -37,7 +38,7 @@ interface IReadMessage {
   setContentRendered: (value: boolean) => void
 }
 
-const ReadMessage = ({
+const ReadUnreadMessage = ({
   message,
   threadDetail,
   messageIndex,
@@ -48,6 +49,7 @@ const ReadMessage = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
+  const [blockedTrackers, setBlockedTrackers] = useState<boolean>(false)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
@@ -209,7 +211,8 @@ const ReadMessage = ({
               </S.ToFromBCCInner>
             )}
           </S.ToBCCContainer>
-
+          {blockedTrackers && <RemovedTrackers />}
+          <S.GreyDivider />
           <S.EmailBody>
             {message && message?.payload && message?.id && (
               <EmailDetailBody
@@ -218,6 +221,7 @@ const ReadMessage = ({
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
                 setUnsubscribeLink={setUnsubscribeLink}
                 setContentRendered={setContentRendered}
+                setBlockedTrackers={setBlockedTrackers}
               />
             )}
           </S.EmailBody>
@@ -255,4 +259,4 @@ const ReadMessage = ({
   )
 }
 
-export default ReadMessage
+export default ReadUnreadMessage

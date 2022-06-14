@@ -5,6 +5,7 @@ import {
 } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import { decodeBase64 } from './decodeBase64'
 import fetchAttachment from './fetchAttachment'
+import removeTrackers from './removeTrackers'
 
 let decodedString: string | null = ''
 let localMessageId: string | null = ''
@@ -131,67 +132,77 @@ export const loopThroughBodyParts = async ({
   return Promise.all(decodedResult)
 }
 
+const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
+  const stringOnly: string | undefined = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'string'
+  )[0]
+  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'object'
+  )
+  return { emailHTML: stringOnly, emailFileHTML: objectOnly }
+}
+
 // Prioritise the string object that has the HTML tag in it. Remove the others.
 // First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
 const prioritizeHTMLbodyObject = (response: any) => {
   const indexOfStringObjects: number[] = []
   for (let i = 0; i < response.length; i += 1) {
-    if (typeof response[i] === 'string' && !response[i].includes('html>')) {
+    // If the response is a string but doesn't have html, mark it for removal.
+    // We need to run this first to understand how many string objects the response has.
+    if (
+      typeof response[i] === 'string' &&
+      response[i].search('</html>') === -1
+    ) {
       indexOfStringObjects.push(i)
     }
   }
   if (indexOfStringObjects.length === 0) {
     return response
   }
-  if (indexOfStringObjects.length === 1) {
-    response.splice(indexOfStringObjects[0], 1)
-    return response
+
+  for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
+    response.splice(indexOfStringObjects[i], 1)
   }
-  // Filter out all the items that are a string, but do not have HTML
-  return response.filter(
-    (item: any) => typeof item === 'string' && !item.includes('html>')
-  )
+  return response
 }
 
 // Check the string body for CID (files) if there is a match, replace the img tag with the fetched file
-const placeInlineImage = (objectWithPriotizedHTML: any) => {
-  const stringOnly = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'string'
-  )[0]
-  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'object'
-  )
-  if (objectOnly.length > 0) {
+const placeInlineImage = (orderedObject: {
+  emailHTML: string
+  emailFileHTML: any[]
+}) => {
+  if (orderedObject.emailFileHTML.length > 0) {
+    const localCopyOrderedObject = orderedObject
     let outputString = ''
     const remainingObjectArray: IAttachment[] = []
-    for (let i = 0; i < objectOnly.length; i += 1) {
-      const matchString = `cid:${objectOnly[i].contentID}`
-      if (stringOnly.search(matchString) === -1) {
-        remainingObjectArray.push(objectOnly[i])
+    for (let i = 0; i < orderedObject.emailFileHTML.length; i += 1) {
+      const matchString = `cid:${orderedObject.emailFileHTML[i].contentID}`
+
+      // If the contentId of the object is not found in the string (emailbody) it should not be removed.
+      if (orderedObject.emailHTML.search(matchString) === -1) {
+        remainingObjectArray.push(orderedObject.emailFileHTML[i])
       }
+      // Of the first loop, instantiate the outputString. On next runs use that string.
       if (outputString.length === 0) {
-        outputString = stringOnly.replace(
+        outputString = orderedObject.emailHTML.replace(
           matchString,
-          `data:${objectOnly[i].mimeType};base64,${objectOnly[i].decodedB64}`
+          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
         )
       } else {
         outputString = outputString.replace(
           matchString,
-          `data:${objectOnly[i].mimeType};base64,${objectOnly[i].decodedB64}`
+          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
         )
       }
     }
-    if (remainingObjectArray.length > 0) {
-      return [
-        ...remainingObjectArray.filter(
-          (item) => item.mimeType !== 'application/octet-stream'
-        ),
-        outputString,
-      ]
-    }
-    return [outputString]
+    localCopyOrderedObject.emailHTML = outputString
+    // If there are attachment objects left, filter out the ones that cannot be displayed in html.
+    localCopyOrderedObject.emailFileHTML = remainingObjectArray.filter(
+      (item) => item.mimeType !== 'application/octet-stream'
+    )
+    return localCopyOrderedObject
   }
-  return objectWithPriotizedHTML
+  return orderedObject
 }
 
 const bodyDecoder = async ({
@@ -202,24 +213,37 @@ const bodyDecoder = async ({
   messageId?: string
   inputObject: any
   decodeImage: boolean
-}) => {
+}): Promise<{
+  emailHTML: HTMLElement
+  emailFileHTML: any[]
+  removedTrackers: boolean
+}> => {
   if (decodeImage) {
     localDecodeImage = decodeImage
   }
+
   if (messageId) {
     localMessageId = messageId
   }
-  const response = await loopThroughBodyParts({
+  let response = await loopThroughBodyParts({
     inputObject,
   })
 
-  console.log(response)
-
+  // Reset the local variable for the next decode
   decodedResult = []
   if (response.length === 1 && typeof response[0] !== 'object') {
     return response
   }
-  return placeInlineImage(prioritizeHTMLbodyObject(response))
+
+  // TODO: Return a value if a tracker is blocked. To display on the body detail
+
+  response = prioritizeHTMLbodyObject(response)
+  // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
+  response = orderArrayPerType(response)
+  response = placeInlineImage(response)
+  response = removeTrackers(response)
+  console.log(response)
+  return response
 }
 
 export default bodyDecoder
