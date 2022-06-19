@@ -168,8 +168,6 @@ interface IFromCCContainer {
 export const FromContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
-  border-bottom: ${({ multipleComponents }) =>
-    multipleComponents ? 'none' : `1px solid var(--color-grey-border)`};
   padding-top: 16px;
   padding-bottom: 8px;
 `
@@ -183,7 +181,6 @@ export const ToBCCContainer = styled.div<IFromCCContainer>`
     margin-right: ${({ multipleComponents }) =>
       multipleComponents ? '2rem' : 0};
   }
-  border-bottom: 1px solid var(--color-grey-border);
   padding-top: 8px;
   padding-bottom: 16px;
 `
@@ -197,6 +194,17 @@ export const ToFromBCCInner = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+`
+
+export const BlockedTrackersContainer = styled.div<IFromCCContainer>`
+  align-items: center;
+  display: flex;
+  padding-top: 16px;
+  padding-bottom: 8px;
+`
+
+export const GreyDivider = styled.div`
+  border-bottom: 1px solid var(--color-grey-border);
 `
 
 export const EmailBody = styled.div`

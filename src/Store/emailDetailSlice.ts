@@ -1,13 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import messageApi from '../data/messageApi'
-import base64toBlob from '../utils/base64toBlob'
-import { baseBase64 } from '../utils/decodeBase64'
-import fileSaver from '../utils/fileSaver'
 import { EmailDetailState } from './storeTypes/emailDetailTypes'
-import type { AppThunk, RootState } from './store'
-import { setServiceUnavailable } from './utilsSlice'
+import type { RootState } from './store'
 
 const initialState: EmailDetailState = Object.freeze({
   currEmail: '',
@@ -51,72 +45,6 @@ export const {
   setIsReplying,
   setIsForwarding,
 } = emailDetailSlice.actions
-
-export const fetchAttachment = ({
-  attachmentData,
-  messageId,
-}: {
-  attachmentData: IEmailAttachmentType
-  messageId: string
-}): AppThunk => {
-  const {
-    body: { attachmentId },
-    filename,
-    mimeType,
-  } = attachmentData
-  return async () => {
-    try {
-      if (attachmentId && messageId) {
-        const fetchedAttachment = await messageApi().getAttachment({
-          messageId,
-          attachmentId,
-        })
-        if (fetchedAttachment) {
-          const decodedB64 = baseBase64(fetchedAttachment.data.data)
-          const attachment = {
-            mimeType,
-            decodedB64,
-            filename,
-          }
-          return attachment
-        }
-        return null
-      }
-      return null
-    } catch (err) {
-      return null
-    }
-  }
-}
-
-export const downloadAttachment = ({
-  attachmentData,
-  messageId,
-}: {
-  attachmentData: IEmailAttachmentType
-  messageId: string
-}): AppThunk => {
-  const {
-    body: { attachmentId },
-    filename,
-    mimeType,
-  } = attachmentData
-  return async (dispatch) => {
-    try {
-      const fetchedAttachment = await messageApi().getAttachment({
-        messageId,
-        attachmentId,
-      })
-      if (fetchedAttachment) {
-        const base64Data = fetchedAttachment.data.data
-        const blobData = base64toBlob({ base64Data, mimeType })
-        fileSaver(blobData, filename)
-      }
-    } catch (err) {
-      dispatch(setServiceUnavailable('Cannot download attachment'))
-    }
-  }
-}
 
 export const selectCurrentEmail = (state: RootState) =>
   state.emailDetail.currEmail

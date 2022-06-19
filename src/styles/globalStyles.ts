@@ -115,6 +115,10 @@ export const theme = createTheme({
   },
 })
 
+export const TextSmall = styled.p`
+  font-size: var(--small-size);
+`
+
 export const TextMutedSmall = styled.p`
   color: var(--color-grey);
   font-size: var(--small-size);
@@ -122,6 +126,14 @@ export const TextMutedSmall = styled.p`
 
 export const TextMutedSpan = styled.span`
   color: var(--color-grey);
+`
+export const TextSpanSmall = styled.span`
+  font-size: var(--small-size);
+`
+
+export const TextMutedSpanSmall = styled.span`
+  color: var(--color-grey);
+  font-size: var(--small-size);
 `
 
 export const TextMutedParagraph = styled.p`

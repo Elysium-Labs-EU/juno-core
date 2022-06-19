@@ -1,5 +1,5 @@
 import { IEmailMessage } from '../../../../Store/storeTypes/emailListTypes'
-import EmailDetailBody from '../EmailDetailBody'
+import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import * as global from '../../../../constants/globalConstants'
 
 const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>

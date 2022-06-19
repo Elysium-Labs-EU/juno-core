@@ -4,9 +4,11 @@ import PreLoadMessage from './PreLoadMessage'
 const PreLoadMessages = ({
   threadDetailList,
   viewIndex,
+  contentRendered,
 }: {
   threadDetailList: IEmailListThreadItem[]
   viewIndex: number
+  contentRendered: boolean
 }) => {
   // Only preload the messages 3 before and 3 after the current message.
   // If a message has been preloaded before, and the user is still on the detail view, do not remove this message from the feed. So extend the range of the view.
@@ -26,7 +28,7 @@ const PreLoadMessages = ({
 
   const preLoadMarginsStatic = preLoadMargins()
 
-  if (preLoadMarginsStatic.length > 0) {
+  if (contentRendered && preLoadMarginsStatic.length > 0) {
     return (
       <>
         {preLoadMarginsStatic.map((item) => (

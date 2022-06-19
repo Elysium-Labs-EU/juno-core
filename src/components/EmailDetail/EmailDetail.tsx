@@ -48,6 +48,7 @@ const EmailDetail = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
+  const [contentRendered, setContentRendered] = useState(false)
   const [currentLocal, setCurrentLocal] = useState<string>('')
   const { threadId, overviewId } = useParams<{
     threadId: string
@@ -138,11 +139,13 @@ const EmailDetail = () => {
                     isReplying={isReplying}
                     isForwarding={isForwarding}
                     labelIds={labelIds}
+                    setContentRendered={setContentRendered}
                   />
                   <S.HiddenMessagesFeed>
                     <PreLoadMessages
                       threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}
+                      contentRendered={contentRendered}
                     />
                   </S.HiddenMessagesFeed>
                 </>

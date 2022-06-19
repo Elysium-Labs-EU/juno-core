@@ -1,15 +1,51 @@
+import AutoLinker from 'autolinker'
+import {
+  IAttachment,
+  IEmailAttachmentType,
+} from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import { decodeBase64 } from './decodeBase64'
+import fetchAttachment from './fetchAttachment'
+import removeScripts from './removeScripts'
+import removeTrackers from './removeTrackers'
 
-const decodedBody: string[] = []
+let decodedString: string | null = ''
+let localMessageId: string | null = ''
+let localDecodeImage: boolean | undefined = false
+let decodedResult: any[] = []
 
-// This function recursively loops in the emailbody to find a body to decode.
-const bodyDecoder = ({
+const enhancePlainText = (localString: string) => {
+  const enhancedText = () => {
+    const lineBreakRegex = /(?:\r\n|\r|\n)/g
+    return (
+      AutoLinker.link(localString, { email: false }).replace(
+        lineBreakRegex,
+        '<br>'
+      ) ?? ''
+    )
+  }
+  return enhancedText()
+}
+
+const inlineImageDecoder = async ({
+  attachmentData,
+  messageId,
+}: {
+  messageId: string
+  attachmentData: IEmailAttachmentType
+}) => {
+  const response = await fetchAttachment({ attachmentData, messageId })
+  if (response) {
+    return response
+  }
+  return null
+}
+
+// This function recursively loops in the emailbody to find a body to decode. If initially priotizes the last object in a parts array.
+export const loopThroughBodyParts = async ({
   inputObject,
-  inlineImage,
 }: {
   inputObject: any
-  inlineImage?: Function
-}): string[] => {
+}): Promise<any> => {
   const objectKeys = Object.keys(inputObject)
   for (let i = 0; i < objectKeys.length; i += 1) {
     if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
@@ -20,30 +56,22 @@ const bodyDecoder = ({
               inputObject.body,
               'attachmentId'
             ) &&
-            inlineImage
+            localDecodeImage &&
+            localMessageId
           ) {
-            // If it is an image, use the imported function to continue line of operation.
-            inlineImage(inputObject)
+            // If it is an image, use the image decoder
+            const imageObjectPromise = inlineImageDecoder({
+              attachmentData: inputObject,
+              messageId: localMessageId,
+            })
+            decodedResult.push(imageObjectPromise)
           }
-          const str = decodeBase64(`${inputObject.body.data}`)
-          if (inputObject.mimeType === 'text/plain' && str) {
-            const enhancedText = () => {
-              const urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g
-              const lineBreakRegex = /(?:\r\n|\r|\n)/g
-              return str
-                .replace(urlRegex, (url) => {
-                  let hyperlink = url
-                  if (!hyperlink.match('^https?://')) {
-                    hyperlink = `http://${hyperlink}`
-                  }
-                  return `<a href="${hyperlink}" target="_blank" rel="noopener noreferrer">${url}</a>`
-                })
-                .replace(lineBreakRegex, '<br>')
-            }
-            return [...decodedBody, enhancedText()]
-          }
-          if (str) {
-            return [...decodedBody, str]
+          decodedString = decodeBase64(`${inputObject.body.data}`)
+          if (inputObject.mimeType !== 'text/plain' && decodedString) {
+            decodedResult.push(decodedString)
+          } else if (inputObject.mimeType === 'text/plain' && decodedString) {
+            const localString = decodedString
+            decodedResult.push(enhancePlainText(localString))
           }
         }
       }
@@ -60,56 +88,162 @@ const bodyDecoder = ({
                 Object.prototype.hasOwnProperty.call(
                   inputObject.parts[1],
                   'body'
-                ) &&
+                ) ||
                 Object.prototype.hasOwnProperty.call(
                   inputObject.parts[1].body,
                   'attachmentId'
+                ) ||
+                Object.prototype.hasOwnProperty.call(
+                  inputObject.parts[1],
+                  'parts'
                 )
               ) {
-                bodyDecoder({ inputObject: inputObject.parts[1] })
+                loopThroughBodyParts({
+                  inputObject: inputObject.parts[1],
+                })
               }
-              return bodyDecoder({ inputObject: inputObject.parts[0] })
+              return loopThroughBodyParts({
+                inputObject: inputObject.parts[0],
+              })
             }
           }
           if (inputObject.parts.length > 1) {
+            // If the object has parts of its own, loop through those.
             if (
               Object.prototype.hasOwnProperty.call(
                 inputObject.parts[1],
                 'parts'
               )
             ) {
-              return bodyDecoder({ inputObject: inputObject.parts[1] })
+              return loopThroughBodyParts({
+                inputObject: inputObject.parts[1],
+              })
             }
+            // If the object has no parts of its own, loop through all of them to decode
+            inputObject.parts.forEach((part: any) => {
+              loopThroughBodyParts({
+                inputObject: part,
+              })
+            })
           } else {
-            return bodyDecoder({ inputObject: inputObject.parts[0] })
-          }
-          if (inputObject.parts.length > 1) {
-            if (
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[1],
-                'body'
-              ) &&
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[1].body,
-                'attachmentId'
-              )
-            ) {
-              bodyDecoder({ inputObject: inputObject.parts[0] })
-              return bodyDecoder({ inputObject: inputObject.parts[1] })
-            }
-          }
-          if (inputObject.parts.length > 1) {
-            if (
-              Object.prototype.hasOwnProperty.call(inputObject.parts[1], 'body')
-            ) {
-              return bodyDecoder({ inputObject: inputObject.parts[1] })
-            }
+            return loopThroughBodyParts({
+              inputObject: inputObject.parts[0],
+            })
           }
         }
       }
     }
   }
-  return decodedBody
+  return Promise.all(decodedResult)
+}
+
+const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
+  const stringOnly: string | undefined = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'string'
+  )[0]
+  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'object'
+  )
+  return { emailHTML: stringOnly, emailFileHTML: objectOnly }
+}
+
+// Prioritise the string object that has the HTML tag in it. Remove the others.
+// First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
+const prioritizeHTMLbodyObject = (response: any) => {
+  const indexOfStringObjects: number[] = []
+  for (let i = 0; i < response.length; i += 1) {
+    // If the response is a string but doesn't have html, mark it for removal.
+    // We need to run this first to understand how many string objects the response has.
+    if (
+      typeof response[i] === 'string' &&
+      response[i].search('</html>') === -1
+    ) {
+      indexOfStringObjects.push(i)
+    }
+  }
+  if (indexOfStringObjects.length === 0) {
+    return response
+  }
+
+  for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
+    response.splice(indexOfStringObjects[i], 1)
+  }
+  return response
+}
+
+// Check the string body for CID (files) if there is a match, replace the img tag with the fetched file
+const placeInlineImage = (orderedObject: {
+  emailHTML: string
+  emailFileHTML: any[]
+}) => {
+  if (orderedObject.emailFileHTML.length > 0) {
+    const localCopyOrderedObject = orderedObject
+    let outputString = ''
+    const remainingObjectArray: IAttachment[] = []
+    for (let i = 0; i < orderedObject.emailFileHTML.length; i += 1) {
+      const matchString = `cid:${orderedObject.emailFileHTML[i].contentID}`
+
+      // If the contentId of the object is not found in the string (emailbody) it should not be removed.
+      if (orderedObject.emailHTML.search(matchString) === -1) {
+        remainingObjectArray.push(orderedObject.emailFileHTML[i])
+      }
+      // Of the first loop, instantiate the outputString. On next runs use that string.
+      if (outputString.length === 0) {
+        outputString = orderedObject.emailHTML.replace(
+          matchString,
+          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
+        )
+      } else {
+        outputString = outputString.replace(
+          matchString,
+          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
+        )
+      }
+    }
+    localCopyOrderedObject.emailHTML = outputString
+    // If there are attachment objects left, filter out the ones that cannot be displayed in html.
+    localCopyOrderedObject.emailFileHTML = remainingObjectArray.filter(
+      (item) => item.mimeType !== 'application/octet-stream'
+    )
+    return localCopyOrderedObject
+  }
+  return orderedObject
+}
+
+const bodyDecoder = async ({
+  messageId,
+  inputObject,
+  decodeImage,
+}: {
+  messageId?: string
+  inputObject: any
+  decodeImage: boolean
+}): Promise<{
+  emailHTML: HTMLElement
+  emailFileHTML: any[]
+  removedTrackers: boolean
+}> => {
+  if (decodeImage) {
+    localDecodeImage = decodeImage
+  }
+
+  if (messageId) {
+    localMessageId = messageId
+  }
+  let response = await loopThroughBodyParts({
+    inputObject,
+  })
+
+  // Reset the local variable for the next decode
+  decodedResult = []
+
+  response = prioritizeHTMLbodyObject(response)
+  // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
+  response = orderArrayPerType(response)
+  response = placeInlineImage(response)
+  response = removeTrackers(response)
+  response = removeScripts(response)
+  return response
 }
 
 export default bodyDecoder
