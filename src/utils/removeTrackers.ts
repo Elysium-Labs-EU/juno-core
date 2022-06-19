@@ -9,6 +9,7 @@ const TRACKERS_SELECTORS = [
 ]
 const TRACKERS_SELECTORS_INCLUDES = [
   { attribute: 'src', value: 'http://mailstat.us' },
+  { attribute: 'src', value: 'https://open.convertkit-' },
 ]
 
 export default function removeTrackers(orderedObject: {
