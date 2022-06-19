@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
@@ -16,11 +17,10 @@ interface IFilesOverview {
   isLoading: boolean
 }
 
-const FilesOverview = (props: IFilesOverview) => {
-  const { threadDetail, isLoading } = props
+const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
   const { emailAddress } = useAppSelector(selectProfile)
 
-  const files = () => {
+  const files = useCallback(() => {
     if (threadDetail?.messages) {
       return threadDetail.messages
         .slice(0)
@@ -55,7 +55,7 @@ const FilesOverview = (props: IFilesOverview) => {
         })
     }
     return null
-  }
+  }, [threadDetail])
 
   const staticFiles = files()?.filter((item) => item !== null)
 

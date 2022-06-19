@@ -23,7 +23,7 @@ export default async function fetchAttachment({
         messageId,
         attachmentId,
       })
-      if (fetchedAttachment) {
+      if (fetchedAttachment?.status === 200) {
         const decodedB64 = baseBase64(fetchedAttachment.data.data)
         const contentID: string = headers
           .find((e: any) => e.name === 'Content-ID')

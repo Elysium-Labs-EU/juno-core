@@ -1,3 +1,5 @@
+import convertStringToHTML from './convertStringToHTML'
+
 // TODO: Improve by looking at inline styles as well
 const TRACKERS_SELECTORS = [
   { attribute: 'width', value: '0' },
@@ -8,12 +10,6 @@ const TRACKERS_SELECTORS = [
 const TRACKERS_SELECTORS_INCLUDES = [
   { attribute: 'src', value: 'http://mailstat.us' },
 ]
-
-const convertStringToHTML = (str: string) => {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(str, 'text/html')
-  return doc.body
-}
 
 export default function removeTrackers(orderedObject: {
   emailHTML: string

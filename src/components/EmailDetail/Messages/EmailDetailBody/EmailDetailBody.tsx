@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import DOMPurify from 'dompurify'
-import { useAppDispatch } from '../../../Store/hooks'
-import { IEmailMessagePayload } from '../../../Store/storeTypes/emailListTypes'
-import bodyDecoder from '../../../utils/bodyDecoder'
-import openLinkInNewTab from '../../../utils/openLinkInNewTab'
-import cleanLink from '../../../utils/cleanLink'
-import handleEmailLink from '../../../utils/handleEmailLink'
-import fetchUnsubscribeLink from '../../../utils/fetchUnsubscribeLink'
+import { useAppDispatch } from '../../../../Store/hooks'
+import { IEmailMessagePayload } from '../../../../Store/storeTypes/emailListTypes'
+import bodyDecoder from '../../../../utils/bodyDecoder'
+import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
+import cleanLink from '../../../../utils/cleanLink'
+import handleEmailLink from '../../../../utils/handleEmailLink'
+import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
+import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
+import Wrapper from './EmailDetailBodyStyles'
 
 interface IEmailDetailBody {
   threadDetailBody: IEmailMessagePayload
@@ -33,6 +35,7 @@ const EmailDetailBody = ({
     removedTrackers: boolean
   }>(null)
   const dispatch = useAppDispatch()
+  const [isDecoding, setIsDecoding] = useState(true)
 
   useEffect(() => {
     hasRan = false
@@ -66,6 +69,7 @@ const EmailDetailBody = ({
           setBodyState(bodyResponse)
           if (setContentRendered) {
             setContentRendered(true)
+            setIsDecoding(false)
           }
           if (setBlockedTrackers && bodyResponse.removedTrackers) {
             setBlockedTrackers(true)
@@ -81,7 +85,14 @@ const EmailDetailBody = ({
 
   return (
     <div className={detailBodyCSS}>
-      {bodyState &&
+      {isDecoding && (
+        <Wrapper>
+          <StyledCircularProgress size={20} />
+        </Wrapper>
+      )}
+      {!isDecoding &&
+        bodyState &&
+        bodyState.emailFileHTML &&
         bodyState.emailFileHTML.length > 0 &&
         bodyState.emailFileHTML.map(
           (item, itemIdx) =>
@@ -95,16 +106,19 @@ const EmailDetailBody = ({
               />
             )
         )}
-      {bodyState && bodyState.emailHTML.childNodes.length > 0 && (
-        <div
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(bodyState.emailHTML, {
-              USE_PROFILES: { html: true },
-            }),
-          }}
-        />
-      )}
+      {!isDecoding &&
+        bodyState &&
+        bodyState.emailHTML &&
+        bodyState.emailHTML.childNodes.length > 0 && (
+          <div
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(bodyState.emailHTML, {
+                USE_PROFILES: { html: true },
+              }),
+            }}
+          />
+        )}
     </div>
   )
 }

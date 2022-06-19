@@ -5,6 +5,7 @@ import {
 } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import { decodeBase64 } from './decodeBase64'
 import fetchAttachment from './fetchAttachment'
+import removeScripts from './removeScripts'
 import removeTrackers from './removeTrackers'
 
 let decodedString: string | null = ''
@@ -91,6 +92,10 @@ export const loopThroughBodyParts = async ({
                 Object.prototype.hasOwnProperty.call(
                   inputObject.parts[1].body,
                   'attachmentId'
+                ) ||
+                Object.prototype.hasOwnProperty.call(
+                  inputObject.parts[1],
+                  'parts'
                 )
               ) {
                 loopThroughBodyParts({
@@ -231,18 +236,13 @@ const bodyDecoder = async ({
 
   // Reset the local variable for the next decode
   decodedResult = []
-  if (response.length === 1 && typeof response[0] !== 'object') {
-    return response
-  }
-
-  // TODO: Return a value if a tracker is blocked. To display on the body detail
 
   response = prioritizeHTMLbodyObject(response)
   // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
   response = orderArrayPerType(response)
   response = placeInlineImage(response)
   response = removeTrackers(response)
-  console.log(response)
+  response = removeScripts(response)
   return response
 }
 
