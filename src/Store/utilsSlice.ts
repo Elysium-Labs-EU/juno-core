@@ -156,10 +156,13 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
     }
     if (labelIds.includes(global.INBOX_LABEL)) {
       dispatch(push(RouteConstants.INBOX))
-    } else {
-      dispatch(push(RouteConstants.HOME))
+      return
     }
-    return
+    if (labelIds.includes(global.DRAFT_LABEL)) {
+      dispatch(push(RouteConstants.DRAFTS))
+      return
+    }
+    dispatch(push(RouteConstants.HOME))
   }
   if (coreStatus === global.CORE_STATUS_FOCUSED) {
     dispatch(push(RouteConstants.HOME))
