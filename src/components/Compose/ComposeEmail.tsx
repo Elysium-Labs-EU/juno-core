@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
+import { useParams } from 'react-router-dom'
 import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
 import qs from 'qs'
@@ -36,6 +37,7 @@ import TipTap from './ComposeFields/TipTap/Tiptap'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
+import DiscardDraft from './DiscardDraft'
 
 const handleContactConversion = (contactValue: string): Contact[] =>
   contactValue.split(',').map((item) => convertToContact(item))
@@ -78,6 +80,7 @@ const ComposeEmail = ({
   const [bodyValue, setBodyValue] = useState('')
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+  const { draftId } = useParams()
   const keysPressed = useMultiKeyPress()
   const userInteractedRef = useRef(false)
 
@@ -489,6 +492,8 @@ const ComposeEmail = ({
                   suppressed
                 />
               )}
+
+              {draftId && <DiscardDraft draftId={draftId} />}
             </form>
           </GS.Base>
         </S.ComposerContainer>
