@@ -26,20 +26,24 @@ export default async function fetchAttachment({
       if (fetchedAttachment?.status === 200) {
         const decodedB64 = baseBase64(fetchedAttachment.data.data)
         const contentID: string = headers
-          .find((e: any) => e.name === 'Content-ID')
-          .value.replace(/<|>/gi, '')
-        const attachment = {
-          mimeType,
-          decodedB64,
-          filename,
-          contentID,
+          .find((e: any) => e.name === 'Content-ID' || e.name === 'Content-Id')
+          ?.value.replace(/<|>/gi, '')
+        if (contentID) {
+          const attachment = {
+            mimeType,
+            decodedB64,
+            filename,
+            contentID,
+          }
+          return attachment
         }
-        return attachment
+        return NO_ATTACHMENT_FOUND
       }
       return NO_ATTACHMENT_FOUND
     }
     return NO_ATTACHMENT_FOUND
   } catch (err) {
+    process.env.NODE_ENV !== 'production' && console.error(err)
     return NO_ATTACHMENT_FOUND
   }
 }

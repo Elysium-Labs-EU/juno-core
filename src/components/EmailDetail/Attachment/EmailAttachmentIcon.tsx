@@ -1,4 +1,5 @@
 import { FiFile, FiFilm, FiFileText, FiImage } from 'react-icons/fi'
+import * as S from './EmailAttachmentBubbleStyles'
 
 export default function EmailAttachmentIcon({
   mimeType,
@@ -13,5 +14,9 @@ export default function EmailAttachmentIcon({
     default: <FiFile size={20} />,
   }
 
-  return <div>{(mimeType && iconMap[mimeType]) || iconMap.default}</div>
+  return (
+    <S.IconContainer>
+      {(mimeType && iconMap[mimeType]) || iconMap.default}
+    </S.IconContainer>
+  )
 }

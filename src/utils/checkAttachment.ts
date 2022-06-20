@@ -20,8 +20,11 @@ const loopThroughParts = ({
       !Object.prototype.hasOwnProperty.call(input[i], 'parts') &&
       Object.prototype.hasOwnProperty.call(input[i], 'filename') &&
       input[i].filename.length > 0 &&
-      input[i].headers.find((header: any) => header.name === 'Content-ID') ===
-        undefined
+      input[i].headers.find(
+        (header: any) =>
+          header.name === 'Content-ID' || header.name === 'Content-Id'
+      ) === undefined &&
+      input[i].mimeType !== 'application/ics'
     ) {
       foundAttachments.push(input[i])
     }

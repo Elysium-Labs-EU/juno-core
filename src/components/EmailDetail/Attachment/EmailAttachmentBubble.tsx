@@ -40,7 +40,7 @@ const RenderAttachment = ({
   }
 
   return (
-    <S.Attachment index={index}>
+    <S.Attachment index={index ?? 0}>
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
       <S.AttachmentInner>
         <span>{attachmentData.filename}</span>
