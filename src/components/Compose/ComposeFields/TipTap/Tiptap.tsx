@@ -12,6 +12,7 @@ import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
+import DOMPurify from 'dompurify'
 import useDebounce from '../../../../Hooks/useDebounce'
 import { TrackComposeEmail } from '../../../../Store/composeSlice'
 import { useAppDispatch } from '../../../../Store/hooks'
@@ -44,7 +45,11 @@ const Tiptap = ({
   }, [isReplying])
 
   const handleBodyChange = (value: string) => {
-    setBodyValue(value)
+    setBodyValue(
+      DOMPurify.sanitize(value, {
+        USE_PROFILES: { html: true },
+      })
+    )
   }
 
   const editorInstance = useEditor({
