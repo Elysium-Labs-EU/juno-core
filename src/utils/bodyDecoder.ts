@@ -80,56 +80,12 @@ export const loopThroughBodyParts = async ({
         !Object.prototype.hasOwnProperty.call(inputObject, 'body')
       ) {
         if (objectKeys[i] === 'parts') {
-          if (
-            Object.prototype.hasOwnProperty.call(inputObject.parts[0], 'parts')
-          ) {
-            if (inputObject.parts.length > 1) {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1],
-                  'body'
-                ) ||
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1].body,
-                  'attachmentId'
-                ) ||
-                Object.prototype.hasOwnProperty.call(
-                  inputObject.parts[1],
-                  'parts'
-                )
-              ) {
-                loopThroughBodyParts({
-                  inputObject: inputObject.parts[1],
-                })
-              }
-              return loopThroughBodyParts({
-                inputObject: inputObject.parts[0],
-              })
-            }
-          }
-          if (inputObject.parts.length > 1) {
-            // If the object has parts of its own, loop through those.
-            if (
-              Object.prototype.hasOwnProperty.call(
-                inputObject.parts[1],
-                'parts'
-              )
-            ) {
-              return loopThroughBodyParts({
-                inputObject: inputObject.parts[1],
-              })
-            }
-            // If the object has no parts of its own, loop through all of them to decode
-            inputObject.parts.forEach((part: any) => {
-              loopThroughBodyParts({
-                inputObject: part,
-              })
+          // If the object has no parts of its own, loop through all of them to decode
+          inputObject.parts.forEach((part: any) => {
+            loopThroughBodyParts({
+              inputObject: part,
             })
-          } else {
-            return loopThroughBodyParts({
-              inputObject: inputObject.parts[0],
-            })
-          }
+          })
         }
       }
     }
@@ -164,11 +120,20 @@ const prioritizeHTMLbodyObject = (response: any) => {
   if (indexOfStringObjects.length === 0) {
     return response
   }
-
-  for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
-    response.splice(indexOfStringObjects[i], 1)
+  if (response.length !== indexOfStringObjects.length) {
+    for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
+      response.splice(indexOfStringObjects[i], 1)
+    }
+    return response
   }
-  return response
+  // If none items are found, guess which item is the most valuable.
+  const estimatedMostValuableItem: string[] = []
+  for (let i = 0; response.length > i; i += 1) {
+    if (response[i].startsWith('<')) {
+      estimatedMostValuableItem.push(response[i])
+    }
+  }
+  return estimatedMostValuableItem
 }
 
 // Check the string body for CID (files) if there is a match, replace the img tag with the fetched file
@@ -181,15 +146,16 @@ const placeInlineImage = (orderedObject: {
     let outputString = ''
     const remainingObjectArray: IAttachment[] = []
     for (let i = 0; i < orderedObject.emailFileHTML.length; i += 1) {
+      // console.log(orderedObject.emailFileHTML[i].contentID)
       const matchString = `cid:${orderedObject.emailFileHTML[i].contentID}`
 
       // If the contentId of the object is not found in the string (emailbody) it should not be removed.
-      if (orderedObject.emailHTML.search(matchString) === -1) {
+      if (orderedObject.emailHTML?.search(matchString) === -1) {
         remainingObjectArray.push(orderedObject.emailFileHTML[i])
       }
       // Of the first loop, instantiate the outputString. On next runs use that string.
       if (outputString.length === 0) {
-        outputString = orderedObject.emailHTML.replace(
+        outputString = orderedObject.emailHTML?.replace(
           matchString,
           `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
         )

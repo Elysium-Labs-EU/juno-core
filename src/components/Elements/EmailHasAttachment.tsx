@@ -22,7 +22,7 @@ const EmailHasAttachment = ({
   }
   if (!Array.isArray(messages)) {
     const verdict = checkAttachment(messages)
-    if (verdict) {
+    if (verdict.length > 0) {
       return <FiPaperclip />
     }
   }
