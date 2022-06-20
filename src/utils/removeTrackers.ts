@@ -19,8 +19,8 @@ export default function removeTrackers(orderedObject: {
   const localCopyOrderedObject: {
     emailHTML: string | HTMLElement
     emailFileHTML: any[]
-    removedTrackers: boolean
-  } = { ...orderedObject, removedTrackers: false }
+    removedTrackers: Attr[]
+  } = { ...orderedObject, removedTrackers: [] }
 
   const converted = convertStringToHTML(orderedObject.emailHTML)
   converted.querySelectorAll('img').forEach((foundImage) => {
@@ -36,7 +36,10 @@ export default function removeTrackers(orderedObject: {
       )
     ) {
       foundImage.remove()
-      localCopyOrderedObject.removedTrackers = true
+      const srcOfTracker = foundImage?.attributes?.getNamedItem('src')
+      if (srcOfTracker) {
+        localCopyOrderedObject.removedTrackers.push(srcOfTracker)
+      }
     }
   })
   localCopyOrderedObject.emailHTML = converted

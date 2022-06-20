@@ -49,7 +49,7 @@ const ReadUnreadMessage = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [blockedTrackers, setBlockedTrackers] = useState<boolean>(false)
+  const [blockedTrackers, setBlockedTrackers] = useState<Attr[] | []>([])
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
@@ -211,7 +211,9 @@ const ReadUnreadMessage = ({
               </S.ToFromBCCInner>
             )}
           </S.ToBCCContainer>
-          {blockedTrackers && <RemovedTrackers />}
+          {blockedTrackers.length > 0 && (
+            <RemovedTrackers blockedTrackers={blockedTrackers} />
+          )}
           <S.GreyDivider />
           <S.EmailBody>
             {message && message?.payload && message?.id && (
