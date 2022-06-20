@@ -21,6 +21,20 @@ interface IEmailDetailBody {
 
 let hasRan = false
 
+const postTreatmentBody = ({
+  dispatch,
+  setUnsubscribeLink,
+}: {
+  dispatch: Function
+  setUnsubscribeLink: Function
+}) => {
+  openLinkInNewTab()
+  handleEmailLink({ dispatch })
+  cleanLink()
+  fetchUnsubscribeLink({ setUnsubscribeLink })
+  hasRan = true
+}
+
 const EmailDetailBody = ({
   threadDetailBody,
   messageId,
@@ -43,21 +57,6 @@ const EmailDetailBody = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted && !hasRan && bodyState) {
-      // TODO: Move functions into bodydecoder
-      openLinkInNewTab()
-      handleEmailLink({ dispatch })
-      cleanLink()
-      setUnsubscribeLink && fetchUnsubscribeLink({ setUnsubscribeLink })
-      hasRan = true
-    }
-    return () => {
-      mounted = false
-    }
-  }, [bodyState])
-
-  useEffect(() => {
-    let mounted = true
     if (messageId.length > 0) {
       if (mounted) {
         const decoding = async () => {
@@ -67,9 +66,10 @@ const EmailDetailBody = ({
             decodeImage: true,
           })
           setBodyState(bodyResponse)
-          if (setContentRendered) {
+          if (setContentRendered && setUnsubscribeLink && !hasRan) {
             setContentRendered(true)
             setIsDecoding(false)
+            postTreatmentBody({ dispatch, setUnsubscribeLink })
           }
           if (setBlockedTrackers && bodyResponse.removedTrackers) {
             setBlockedTrackers(true)
