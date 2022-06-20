@@ -116,17 +116,30 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path={RoutesConstants.COMPOSE_EMAIL}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <ComposeEmail />
-                </ProtectedRoute>
-              }
-            />
+            <Route path={RoutesConstants.COMPOSE_EMAIL}>
+              <Route
+                path=""
+                element={
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
+                    <ComposeEmail />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path=":draftId"
+                element={
+                  <ProtectedRoute
+                    isAuthenticated={isAuthenticated}
+                    baseLoaded={baseLoaded}
+                  >
+                    <ComposeEmail />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
             <Route
               path={RoutesConstants.DRAFTS}
               element={

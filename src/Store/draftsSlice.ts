@@ -120,8 +120,10 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   } = props
   return async (dispatch) => {
     try {
-      // TODO: Check for sanitize option and reinstate the body decoding
-      const body = await loopThroughBodyParts({ inputObject: message.payload })
+      const decodedBody = await loopThroughBodyParts({
+        inputObject: message.payload,
+      })
+      const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
       const cc = findPayloadHeadersData('Cc', message)

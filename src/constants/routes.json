@@ -1,8 +1,7 @@
 {
   "HOME": "/",
   "EMAIL_DETAIL": "/mail/:labelId/:threadId/:overviewId",
-  "COMPOSE_EMAIL": "/compose/:draftId",
-  "COMPOSE_EMAIL_BASE": "/compose/",
+  "COMPOSE_EMAIL": "/compose/",
   "DRAFTS": "/drafts",
   "SENT": "/sent",
   "SPAM": "/spam",
