@@ -221,7 +221,7 @@ const bodyDecoder = async ({
 }): Promise<{
   emailHTML: HTMLElement
   emailFileHTML: any[]
-  removedTrackers: boolean
+  removedTrackers: Attr[] | []
 }> => {
   if (decodeImage) {
     localDecodeImage = decodeImage

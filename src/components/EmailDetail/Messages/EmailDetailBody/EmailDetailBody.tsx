@@ -16,7 +16,7 @@ interface IEmailDetailBody {
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: Function
   setContentRendered?: (value: boolean) => void
-  setBlockedTrackers?: (value: boolean) => void
+  setBlockedTrackers?: (value: Attr[] | []) => void
 }
 
 let hasRan = false
@@ -46,7 +46,7 @@ const EmailDetailBody = ({
   const [bodyState, setBodyState] = useState<null | {
     emailHTML: HTMLElement
     emailFileHTML: any[]
-    removedTrackers: boolean
+    removedTrackers: Attr[] | []
   }>(null)
   const dispatch = useAppDispatch()
   const [isDecoding, setIsDecoding] = useState(true)
@@ -72,7 +72,7 @@ const EmailDetailBody = ({
             postTreatmentBody({ dispatch, setUnsubscribeLink })
           }
           if (setBlockedTrackers && bodyResponse.removedTrackers) {
-            setBlockedTrackers(true)
+            setBlockedTrackers(bodyResponse.removedTrackers)
           }
         }
         decoding()
