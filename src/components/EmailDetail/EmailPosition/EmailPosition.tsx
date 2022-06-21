@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import Tooltip from '@mui/material/Tooltip'
 import { FiAlertCircle } from 'react-icons/fi'
 import { selectSessionViewIndex } from '../../../Store/emailDetailSlice'
 import { useAppSelector } from '../../../Store/hooks'
@@ -9,6 +8,7 @@ import * as global from '../../../constants/globalConstants'
 import labelApi from '../../../data/labelApi'
 import { selectLabelIds } from '../../../Store/labelsSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import StyledTooltip from '../../Elements/StyledTooltip'
 
 const EXPLANATION =
   'This shows on what email you are of all the emails in this GMail box.'
@@ -43,11 +43,11 @@ const EmailPosition = () => {
   return (
     <S.Wrapper>
       {loadingState === global.LOAD_STATE_MAP.loaded && (
-        <Tooltip title={EXPLANATION}>
+        <StyledTooltip title={EXPLANATION}>
           <GS.TextMutedParagraph style={{ fontSize: 13 }}>
             {sessionViewIndex + 1} / {totalThreads}
           </GS.TextMutedParagraph>
-        </Tooltip>
+        </StyledTooltip>
       )}
       {loadingState === global.LOAD_STATE_MAP.loading && (
         <StyledCircularProgress size={10} />

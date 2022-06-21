@@ -4,12 +4,14 @@ import { push } from 'redux-first-history'
 import { useAppDispatch } from '../../Store/hooks'
 import * as S from './LoginStyles'
 import * as HS from '../MainHeader/HeaderStyles'
+import * as GS from '../../styles/globalStyles'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import GoogleButton from './GoogleButton/GoogleButton'
 import userApi from '../../data/userApi'
 
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno, log in with Google'
+const ENTER_HINT = 'use Enter to start'
 
 const Login = () => {
   const dispatch = useAppDispatch()
@@ -41,6 +43,7 @@ const Login = () => {
             <S.Header>
               <HS.PageTitle>{TITLE}</HS.PageTitle>
               <p>{SUB_HEADER}</p>
+              <GS.TextMutedSmall>{ENTER_HINT}</GS.TextMutedSmall>
             </S.Header>
             <GoogleButton
               renderProps={{

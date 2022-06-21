@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import Tooltip from '@mui/material/Tooltip'
 import {
   FiCheckSquare,
   FiMoreHorizontal,
@@ -18,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
 import { selectInSearch, setInSearch } from '../../../Store/utilsSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
+import StyledTooltip from '../../Elements/StyledTooltip'
 
 const SIZE = 16
 
@@ -79,7 +79,7 @@ const Navigation = () => {
     () => (
       <S.NavControls>
         <S.NavList>
-          <Tooltip title="To Do">
+          <StyledTooltip title="To Do">
             <S.NavItem>
               <CustomIconButton
                 icon={<FiCheckSquare size={SIZE} />}
@@ -87,9 +87,9 @@ const Navigation = () => {
                 isActive={active === 'todo'}
               />
             </S.NavItem>
-          </Tooltip>
+          </StyledTooltip>
 
-          <Tooltip title="Inbox">
+          <StyledTooltip title="Inbox">
             <S.NavItem>
               <CustomIconButton
                 icon={<FiInbox size={SIZE} />}
@@ -97,9 +97,9 @@ const Navigation = () => {
                 isActive={active === 'inbox'}
               />
             </S.NavItem>
-          </Tooltip>
+          </StyledTooltip>
 
-          <Tooltip title="Search">
+          <StyledTooltip title="Search">
             <S.NavItem>
               <CustomIconButton
                 icon={<FiSearch size={SIZE} />}
@@ -107,9 +107,9 @@ const Navigation = () => {
                 onClick={() => dispatch(setInSearch(true))}
               />
             </S.NavItem>
-          </Tooltip>
+          </StyledTooltip>
 
-          <Tooltip title="Compose">
+          <StyledTooltip title="Compose">
             <S.NavItem>
               <CustomIconButton
                 icon={<FiEdit size={SIZE} />}
@@ -117,7 +117,7 @@ const Navigation = () => {
                 onClick={() => navigateTo('/compose')}
               />
             </S.NavItem>
-          </Tooltip>
+          </StyledTooltip>
 
           <S.NavItem>
             <CustomIconButton

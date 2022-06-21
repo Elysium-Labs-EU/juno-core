@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { FiShield } from 'react-icons/fi'
-import { Modal, Tooltip } from '@mui/material'
+import { Modal } from '@mui/material'
 import * as S from './RemovedTrackersStyles'
 import * as GS from '../../../../styles/globalStyles'
 import * as themeConstants from '../../../../constants/themeConstants'
+import StyledTooltip from '../../../Elements/StyledTooltip'
 
 const REMOVED_TRACKERS = 'Trackers removed'
 const REMOVED_TRACKER = 'Tracker removed'
@@ -35,7 +36,7 @@ const DetailModal = ({
             const convertedToString = new URL(item.nodeValue)
             return (
               <S.BlockedItemInformation key={convertedToString.href}>
-                <p>{convertedToString.hostname}</p>
+                <p>{convertedToString.host}</p>
                 <GS.TextMutedSpan>{convertedToString.href}</GS.TextMutedSpan>
               </S.BlockedItemInformation>
             )
@@ -54,18 +55,16 @@ const RemovedTrackers = ({ blockedTrackers }: { blockedTrackers: Attr[] }) => {
     <>
       <S.Wrapper>
         <S.Inner>
-          <Tooltip title={JUNO_TRACKERS}>
+          <StyledTooltip title={JUNO_TRACKERS}>
             <S.StyledButton onClick={() => setShowDialog(true)}>
-              {' '}
               <S.InnerButton>
-                {' '}
                 <div className="icon">
                   <FiShield size={10} color={themeConstants.colorGrey} />
                 </div>
                 <GS.TextSpanSmall>{REMOVED_TRACKERS}</GS.TextSpanSmall>
               </S.InnerButton>
             </S.StyledButton>
-          </Tooltip>
+          </StyledTooltip>
         </S.Inner>
       </S.Wrapper>
       {showDialog && (

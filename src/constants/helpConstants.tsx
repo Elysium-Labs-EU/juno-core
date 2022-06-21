@@ -23,6 +23,7 @@ export const GLOBAL_KEY_COMBOS = [
   { title: 'Highlight Previous', keys: [<FiArrowUp />] },
   { title: 'Highlight Next', keys: [<FiArrowDown />] },
   { title: 'Open Highlighted Email', keys: ['ENTER'] },
+  { title: 'Refresh Inbox', keys: ['R'] },
 ]
 
 export const EMAIL_KEY_TITLE = 'Email'

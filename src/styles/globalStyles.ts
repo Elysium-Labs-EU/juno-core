@@ -2,27 +2,9 @@ import createTheme from '@mui/material/styles/createTheme'
 import styled, { createGlobalStyle } from 'styled-components'
 import { Menu } from '@mui/material'
 import * as themeConstants from '../constants/themeConstants'
-import UrbanistVariable from '../fonts/UrbanistVariableFontWght.ttf'
-import UrbanistVariableItalic from '../fonts/UrbanistItalicVariableFontWght.ttf'
-import RalewayVariable from '../fonts/RalewayVariableFontWght.ttf'
-import RalewayVariableItalic from '../fonts/RalewayItalicVariableFontWght.ttf'
 
 /* 16px */
 export const GlobalStyle = createGlobalStyle`
-    /* @font-face {
-        font-family: 'Urbanist Variable';
-        src: url(${UrbanistVariable}) format('truetype'),
-        url(${UrbanistVariableItalic}) format('truetype');
-        font-weight: 100 1000;
-        font-stretch: 25% 151%;
-    }
-    @font-face {
-        font-family: 'Raleway Variable';
-        src: url(${RalewayVariable}) format('truetype'),
-        url(${RalewayVariableItalic}) format('truetype');
-        font-weight: 100 1000;
-        font-stretch: 25% 151%;
-    } */
   html {
     font-size: 100%;
     --color-white: ${themeConstants.colorWhite};
@@ -103,7 +85,7 @@ export const theme = createTheme({
   // },
   typography: {
     fontFamily: [
-      'Urbanist Variable',
+      'system-ui',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',

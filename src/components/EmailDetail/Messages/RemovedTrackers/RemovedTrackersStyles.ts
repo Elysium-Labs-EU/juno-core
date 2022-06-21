@@ -85,4 +85,5 @@ export const DialogInner = styled.div`
 export const BlockedItemInformation = styled.div`
   display: flex;
   flex-flow: column;
+  overflow-wrap: anywhere;
 `
