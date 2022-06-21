@@ -11,6 +11,21 @@ export const HiddenMessagesFeed = styled.div`
   display: none;
 `
 
+interface IEmailDetailWrapper {
+  tabbedView?: boolean
+}
+
+export const EmailDetailWrapper = styled.div<IEmailDetailWrapper>`
+  max-width: 1480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1 1 0%;
+  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
+  position: relative;
+  left: 75px;
+`
+
 export const Scroll = styled.div<IScroll>`
   position: relative;
   width: 100%;
@@ -110,8 +125,8 @@ export const CardFullWidth = styled.div`
 export const EmailDetailContainer = styled.div`
   min-width: 665px;
   max-width: min(100vw - 340px, 860px);
-  padding-bottom: 1.5rem;
-  margin-bottom: 16px;
+  padding-bottom: 320px;
+  margin-bottom: 20px;
   width: 100%;
   overflow: scroll;
   scrollbar-width: none;

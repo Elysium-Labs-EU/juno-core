@@ -21,7 +21,6 @@ import {
 } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
-import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
@@ -128,7 +127,7 @@ const EmailDetail = () => {
       <EmailDetailHeader activeEmailList={activeEmailList} />
       <AnimatedMountUnmount>
         <S.Scroll clientState={Boolean(coreStatus)}>
-          <GS.OuterContainer tabbedView={isReplying || isForwarding}>
+          <S.EmailDetailWrapper tabbedView={isReplying || isForwarding}>
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
@@ -157,7 +156,7 @@ const EmailDetail = () => {
                   isLoading={isLoading}
                 />
               )}
-          </GS.OuterContainer>
+          </S.EmailDetailWrapper>
         </S.Scroll>
       </AnimatedMountUnmount>
     </>

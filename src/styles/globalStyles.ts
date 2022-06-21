@@ -56,7 +56,6 @@ export const OuterContainer = styled.div<IOuterContainer>`
   margin-right: auto;
   position: relative;
   flex: 1 1 0%;
-  display: flex;
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 

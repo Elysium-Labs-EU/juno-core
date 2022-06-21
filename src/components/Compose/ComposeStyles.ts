@@ -45,7 +45,7 @@ export const Label = styled.div<ILabel>`
   left: -120px;
   width: 100px;
   text-align: right;
-  top: 16px;
+  top: 25px;
   label {
     cursor: default;
     user-select: none;

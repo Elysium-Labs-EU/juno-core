@@ -58,6 +58,7 @@ const EmailDetailHeader = ({
     }
   }, [storageLabels, labelIds])
 
+  // TODO: Double check amount of rerenders on this function
   // Attempt to load the next emails on the background when approaching the edge
   if (
     activeEmailList.threads.length - 1 - viewIndex <= 4 &&
@@ -79,7 +80,10 @@ const EmailDetailHeader = ({
           <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
           </S.HeaderCenter>
-          <Navigation />
+          <S.BackButtonWithNavgationContainer>
+            <BackButton />
+            <Navigation />
+          </S.BackButtonWithNavgationContainer>
           <S.InnerMenu>
             {activeEmailList && (
               <>
@@ -98,10 +102,10 @@ const EmailDetailHeader = ({
               <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>
             )}
           </S.FocusSortHeaderWrapper>
-          <S.InnerMenu>
+          <S.BackButtonWithNavgationContainer>
             <BackButton />
             <EmailPosition />
-          </S.InnerMenu>
+          </S.BackButtonWithNavgationContainer>
         </S.Wrapper>
       )}
     </GS.OuterContainer>
