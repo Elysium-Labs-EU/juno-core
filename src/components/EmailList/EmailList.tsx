@@ -4,7 +4,6 @@ import { fetchDrafts } from '../../Store/draftsSlice'
 import {
   fetchEmails,
   refreshEmailFeed,
-  resetValuesEmailDetail,
   selectActiveEmailListIndex,
   selectEmailList,
   setActiveEmailListIndex,
@@ -29,7 +28,7 @@ import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
 import handleSessionStorage from '../../utils/handleSessionStorage'
-import { selectViewIndex } from '../../Store/emailDetailSlice'
+import { resetEmailDetail, selectViewIndex } from '../../Store/emailDetailSlice'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -211,7 +210,7 @@ const EmailList = () => {
 
   // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {
-    dispatch(resetValuesEmailDetail())
+    dispatch(resetEmailDetail())
   }, [dispatch])
 
   const emailListIndex = useMemo(

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
+  selectCoreStatus,
   selectCurrentEmail,
   selectIsForwarding,
   selectIsReplying,
@@ -15,7 +16,6 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import {
   selectEmailList,
-  selectCoreStatus,
   selectSearchList,
   selectActiveEmailListIndex,
 } from '../../Store/emailListSlice'

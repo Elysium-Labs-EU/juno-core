@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { EmailDetailState } from './storeTypes/emailDetailTypes'
+import { IEmailDetailState } from './storeTypes/emailDetailTypes'
 import type { RootState } from './store'
 
-const initialState: EmailDetailState = Object.freeze({
+const initialState: IEmailDetailState = Object.freeze({
+  coreStatus: null,
   currEmail: '',
   currMessage: '',
   viewIndex: -1,
@@ -16,6 +17,10 @@ export const emailDetailSlice = createSlice({
   name: 'emailDetail',
   initialState,
   reducers: {
+    resetEmailDetail: () => initialState,
+    setCoreStatus: (state, { payload }: PayloadAction<string | null>) => {
+      state.coreStatus = payload
+    },
     setCurrentEmail: (state, { payload }) => {
       state.currEmail = payload
     },
@@ -38,6 +43,8 @@ export const emailDetailSlice = createSlice({
 })
 
 export const {
+  resetEmailDetail,
+  setCoreStatus,
   setCurrentEmail,
   setCurrentMessage,
   setViewIndex,
@@ -46,6 +53,8 @@ export const {
   setIsForwarding,
 } = emailDetailSlice.actions
 
+export const selectCoreStatus = (state: RootState) =>
+  state.emailDetail.coreStatus
 export const selectCurrentEmail = (state: RootState) =>
   state.emailDetail.currEmail
 export const selectCurrentMessage = (state: RootState) =>

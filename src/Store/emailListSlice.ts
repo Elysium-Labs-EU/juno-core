@@ -25,8 +25,8 @@ import {
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
 import {
+  setCoreStatus,
   setCurrentEmail,
-  setCurrentMessage,
   setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
@@ -54,7 +54,6 @@ const initialState: IEmailListState = Object.freeze({
   selectedEmails: [],
   searchList: null,
   activeEmailListIndex: -1,
-  coreStatus: null,
   isFetching: false,
 })
 
@@ -62,9 +61,6 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {
-    setCoreStatus: (state, { payload }: PayloadAction<string | null>) => {
-      state.coreStatus = payload
-    },
     setSelectedEmails: (state, { payload }: PayloadAction<any>) => {
       if (payload.length > 0) {
         for (let i = 0; i < payload.length; i += 1) {
@@ -214,6 +210,7 @@ export const emailListSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(
       fetchEmails.fulfilled,
+      // TODO: Refactor code to remove duplication
       (state, { payload: { labels, response } }) => {
         if (labels && response.threads) {
           // Find emailList sub-array index
@@ -290,7 +287,6 @@ export const emailListSlice = createSlice({
 })
 
 export const {
-  setCoreStatus,
   setSelectedEmails,
   setIsFetching,
   setActiveEmailListIndex,
@@ -328,7 +324,8 @@ export const useSearchResults =
     currentEmail: string
   }): AppThunk =>
   (dispatch, getState) => {
-    const { coreStatus, searchList } = getState().email
+    const { searchList } = getState().email
+    const { coreStatus } = getState().emailDetail
     if (searchList !== searchResults) {
       dispatch(storeSearchResults(searchResults))
     }
@@ -404,7 +401,8 @@ export const updateEmailLabel = (
 
   return async (dispatch, getState) => {
     try {
-      const { emailList, searchList, coreStatus } = getState().email
+      const { coreStatus } = getState().emailDetail
+      const { emailList, searchList } = getState().email
       const { isSilentLoading } = getState().utils
 
       const staticIndexActiveEmailList = getState().email.activeEmailListIndex
@@ -584,34 +582,12 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
   }
 }
 
-export const resetValuesEmailDetail =
-  (): AppThunk => async (dispatch, getState) => {
-    const { currEmail, currMessage, viewIndex, sessionViewIndex } =
-      getState().emailDetail
-    const { coreStatus } = getState().email
-    if (currEmail.length > 0) {
-      dispatch(setCurrentEmail(''))
-    }
-    if (currMessage.length > 0) {
-      dispatch(setCurrentMessage(''))
-    }
-    if (viewIndex > -1) {
-      dispatch(setViewIndex(-1))
-    }
-    if (sessionViewIndex > -1) {
-      dispatch(setSessionViewIndex(-1))
-    }
-    if (coreStatus) {
-      dispatch(setCoreStatus(null))
-    }
-  }
-
 export const selectIsFetching = (state: RootState) => state.email.isFetching
-export const selectCoreStatus = (state: RootState) => state.email.coreStatus
 export const selectActiveEmailListIndex = (state: RootState) =>
   state.email.activeEmailListIndex
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
+// TODO: Refactor this to be from in the function inside the emailList
 export const selectNextPageToken = (state: RootState) =>
   state.email.emailList[0].nextPageToken
 export const selectSelectedEmails = (state: RootState) =>
