@@ -29,7 +29,7 @@ import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
 import handleSessionStorage from '../../utils/handleSessionStorage'
 import { resetEmailDetail, selectViewIndex } from '../../Store/emailDetailSlice'
-import EmailListEmptyStates from './EmailListEmptyStates'
+import EmailListEmptyStates from './EmptyStates/EmailListEmptyStates'
 
 const RenderEmailList = ({
   filteredOnLabel,
