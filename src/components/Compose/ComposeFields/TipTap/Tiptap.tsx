@@ -34,16 +34,6 @@ const Tiptap = ({
   const dispatch = useAppDispatch()
   const tipTapRef = useRef<any | null>(null)
 
-  useEffect(() => {
-    let mounted = true
-    if (isReplying && tipTapRef.current !== null && mounted) {
-      tipTapRef.current.focus()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [isReplying])
-
   const handleBodyChange = (value: string) => {
     setBodyValue(
       DOMPurify.sanitize(value, {
@@ -54,6 +44,7 @@ const Tiptap = ({
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
+    autofocus: isReplying,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
       const htlmlOutput = generateHTML(json, [

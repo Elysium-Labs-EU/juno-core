@@ -20,7 +20,7 @@ const DIALOG_CONTENT_INTRODUCTION_2 =
   'On top of the Inbox and To Do, there is a special button you should give it a shot. Also, you can navigate between pages via the top-right menu.'
 const DIALOG_HEADER_PRIVACY = 'Privacy'
 const DIALOG_CONTENT_PRIVACY =
-  'Juno does not store any of your information - nada! It only serves as an interaction layer between you and your Gmail.'
+  'Juno does not store any of your personal information - nada! It only serves as an interaction layer between you and your Gmail.'
 const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {

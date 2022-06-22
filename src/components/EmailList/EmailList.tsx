@@ -29,6 +29,7 @@ import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
 import handleSessionStorage from '../../utils/handleSessionStorage'
 import { resetEmailDetail, selectViewIndex } from '../../Store/emailDetailSlice'
+import EmailListEmptyStates from './EmailListEmptyStates'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -91,7 +92,11 @@ const RenderEmailList = ({
               ))}
             </GS.Base>
           )}
-          {threads.length === 0 && <EmptyState />}
+          {threads.length === 0 && (
+            <EmptyState>
+              <EmailListEmptyStates />
+            </EmptyState>
+          )}
         </S.ThreadList>
 
         {nextPageToken && (
@@ -227,13 +232,14 @@ const EmailList = () => {
 
   return (
     <>
-      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) && (
-        <LabeledInbox
-          emailList={emailList}
-          activeEmailListIndex={activeEmailListIndex}
-        />
-      )}
-      {isLoading &&
+      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
+        activeEmailListIndex > -1 && (
+          <LabeledInbox
+            emailList={emailList}
+            activeEmailListIndex={activeEmailListIndex}
+          />
+        )}
+      {(isLoading || activeEmailListIndex === -1) &&
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
           <LoadingState />
         )}

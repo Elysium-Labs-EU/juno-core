@@ -37,7 +37,7 @@ export const EMAIL_DETAIL_COMBOS = [
     title: 'Delete Email (when no Archive Email)',
     keys: [modifierKey, 'BACKSPACE'],
   },
-  { title: 'Reply to Email', keys: ['ENTER'] },
+  { title: 'Reply to Email', keys: [modifierKey, 'ENTER'] },
   { title: 'Forward Email', keys: ['SHIFT', 'ENTER'] },
   { title: 'Skip Email', keys: [modifierKey, 'SHIFT', 'K'] },
   { title: 'Unsubscribe Email', keys: [modifierKey, 'SHIFT', 'U'] },
