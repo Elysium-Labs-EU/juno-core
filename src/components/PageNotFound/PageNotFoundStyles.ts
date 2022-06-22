@@ -14,7 +14,7 @@ export const Inner = styled.div`
 `
 
 export const PageHeaderText = styled.h1`
-  margin: 2rem 0 0;
+  margin: 40px 0 0;
   font-weight: 200;
   user-select: none;
   font-size: 2.441rem;

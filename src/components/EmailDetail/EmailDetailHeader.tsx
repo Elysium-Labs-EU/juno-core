@@ -4,7 +4,6 @@ import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import Tabs from './Tabs/Tabs'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
-import { selectCoreStatus } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/Buttons/BackButton'
@@ -18,7 +17,7 @@ import {
   IEmailListObjectSearch,
 } from '../../Store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
-import { selectViewIndex } from '../../Store/emailDetailSlice'
+import { selectCoreStatus, selectViewIndex } from '../../Store/emailDetailSlice'
 import {
   selectEmailListSize,
   selectIsSilentLoading,

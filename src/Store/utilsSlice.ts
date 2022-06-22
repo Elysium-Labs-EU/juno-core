@@ -2,12 +2,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import { fetchDrafts, openDraftEmail } from './draftsSlice'
-import { fetchEmails, setCoreStatus } from './emailListSlice'
+import { fetchEmails } from './emailListSlice'
 import type { AppThunk, RootState } from './store'
 import RouteConstants from '../constants/routes.json'
 import * as global from '../constants/globalConstants'
 import { cleanUpComposerAndDraft } from './composeSlice'
-import { setSessionViewIndex, setViewIndex } from './emailDetailSlice'
+import {
+  setCoreStatus,
+  setSessionViewIndex,
+  setViewIndex,
+} from './emailDetailSlice'
 import labelURL from '../utils/createLabelURL'
 import labelMap from '../constants/labelMapConstant'
 import { FindLabelById } from '../utils/findLabel'
@@ -147,7 +151,7 @@ export const openEmail =
   }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
-  const { coreStatus } = getState().email
+  const { coreStatus } = getState().emailDetail
   const { composeEmail } = getState().compose
   const { labelIds } = getState().labels
   if (!coreStatus) {
@@ -178,8 +182,8 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
 }
 
 export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
-  const { coreStatus, emailList, activeEmailListIndex } = getState().email
-  const { sessionViewIndex, viewIndex } = getState().emailDetail
+  const { emailList, activeEmailListIndex } = getState().email
+  const { coreStatus, sessionViewIndex, viewIndex } = getState().emailDetail
   const { labelIds } = getState().labels
 
   dispatch(setViewIndex(viewIndex + 1))

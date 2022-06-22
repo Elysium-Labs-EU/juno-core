@@ -18,6 +18,10 @@ import { selectInSearch, setInSearch } from '../../../Store/utilsSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
 import StyledTooltip from '../../Elements/StyledTooltip'
+import {
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../Store/emailDetailSlice'
 
 const SIZE = 16
 
@@ -25,6 +29,8 @@ const Navigation = () => {
   const [active, setActive] = useState('')
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const inSearch = useAppSelector(selectInSearch)
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
   const location = useLocation()
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
@@ -48,7 +54,13 @@ const Navigation = () => {
 
   useEffect(() => {
     let mounted = true
-    if (mounted && !inSearch && !location.pathname.includes('/compose')) {
+    if (
+      mounted &&
+      !inSearch &&
+      !location.pathname.includes('/compose') &&
+      !isReplying &&
+      !isForwarding
+    ) {
       if (keysPressed.includes(global.KEY_DIGIT_1)) {
         navigateTo(Routes.HOME)
       }
@@ -65,7 +77,7 @@ const Navigation = () => {
     return () => {
       mounted = false
     }
-  }, [keysPressed, inSearch, location])
+  }, [keysPressed, inSearch, location, isReplying, isForwarding])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)

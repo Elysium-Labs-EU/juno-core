@@ -5,7 +5,7 @@ export const SortContainer = styled.div`
   position: relative;
   text-align: center;
   display: flex;
-  margin: 2rem 0;
-  padding: 0 1rem;
+  margin: 40px 0;
+  padding: 0 20px;
   place-content: center;
 `

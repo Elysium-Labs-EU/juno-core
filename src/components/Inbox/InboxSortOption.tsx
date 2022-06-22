@@ -7,11 +7,13 @@ import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
-  setCoreStatus,
 } from '../../Store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import labelURL from '../../utils/createLabelURL'
-import { setSessionViewIndex } from '../../Store/emailDetailSlice'
+import {
+  setCoreStatus,
+  setSessionViewIndex,
+} from '../../Store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import modifierKey from '../../utils/setModifierKey'
 
