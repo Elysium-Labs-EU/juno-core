@@ -44,7 +44,7 @@ const Tiptap = ({
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
-    autofocus: isReplying,
+    autofocus: isReplying ?? false,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
       const htlmlOutput = generateHTML(json, [
