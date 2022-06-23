@@ -576,6 +576,8 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       dispatch(setServiceUnavailable('Cannot refresh feed'))
     }
   } catch (err) {
+    const typedError: any = err
+    console.log(typedError.response.message)
     dispatch(setServiceUnavailable('Cannot refresh feed'))
   } finally {
     dispatch(setIsFetching(false))
@@ -587,9 +589,6 @@ export const selectActiveEmailListIndex = (state: RootState) =>
   state.email.activeEmailListIndex
 export const selectEmailList = (state: RootState) => state.email.emailList
 export const selectSearchList = (state: RootState) => state.email.searchList
-// TODO: Refactor this to be from in the function inside the emailList
-export const selectNextPageToken = (state: RootState) =>
-  state.email.emailList[0].nextPageToken
 export const selectSelectedEmails = (state: RootState) =>
   state.email.selectedEmails
 
