@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
-import { setCurrentEmail } from './emailDetailSlice'
+import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
   DraftDetails,
@@ -19,6 +19,7 @@ import { loopThroughBodyParts } from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
+import * as global from '../constants/globalConstants'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
@@ -118,7 +119,7 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
     draft,
     draft: { message },
   } = props
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
       const decodedBody = await loopThroughBodyParts({
         inputObject: message.payload,
@@ -146,7 +147,11 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         dispatch(listUpdateDraft(draftDetails))
         dispatch(setComposeEmail(loadEmail))
         dispatch(setCurrentEmail(message.threadId))
-        dispatch(push(`/compose/${draft.id}`))
+        if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
+          dispatch(setIsReplying(true))
+        } else {
+          dispatch(push(`/compose/${draft.id}`))
+        }
       } else {
         dispatch(push(`/compose/`))
       }

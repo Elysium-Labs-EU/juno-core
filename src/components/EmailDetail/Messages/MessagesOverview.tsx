@@ -106,7 +106,7 @@ const MappedMessages = ({
         .slice(0)
         .reverse()
         .map((message, index) => (
-          <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
+          <div key={message.id}>
             <DetailDisplaySelector
               message={message}
               threadDetail={threadDetail}
@@ -114,7 +114,7 @@ const MappedMessages = ({
               setUnsubscribeLink={setUnsubscribeLink}
               setContentRendered={setContentRendered}
             />
-          </ES.EmailWrapper>
+          </div>
         ))}
     </>
   ) : (
