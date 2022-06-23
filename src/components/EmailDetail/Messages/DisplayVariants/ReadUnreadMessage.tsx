@@ -54,11 +54,11 @@ const ReadUnreadMessage = ({
   const { emailAddress } = useAppSelector(selectProfile)
 
   useEffect(() => {
+    let mounted = true
     if (threadDetail && threadDetail.messages) {
-      if (threadDetail.messages.length > 1) {
+      if (threadDetail.messages.length > 1 && mounted) {
         if (message && message.labelIds?.includes(local.UNREAD)) {
           setOpen(true)
-          return
         }
         if (
           message &&
@@ -66,14 +66,46 @@ const ReadUnreadMessage = ({
           messageIndex === 0
         ) {
           setOpen(true)
-          return
         }
       }
       if (threadDetail.messages.length === 1) {
         setOpen(true)
       }
+      if (
+        threadDetail.messages.length === 2 &&
+        threadDetail.messages.some((item) =>
+          item.labelIds.includes(global.DRAFT_LABEL)
+        )
+      ) {
+        setOpen(true)
+      }
+    }
+    return () => {
+      mounted = false
     }
   }, [])
+
+  /**
+   * In case the only other email in this thread isn't visible during opening a Draft in tab view, open it.
+   */
+  useEffect(() => {
+    let mounted = true
+    if (threadDetail && threadDetail.messages && !open) {
+      if (
+        isReplying &&
+        threadDetail.messages.length === 2 &&
+        threadDetail.messages.some((item) =>
+          item.labelIds.includes(global.DRAFT_LABEL)
+        ) &&
+        mounted
+      ) {
+        setOpen(true)
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [isReplying, open])
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
