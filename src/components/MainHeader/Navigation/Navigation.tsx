@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
-import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import {
   FiCheckSquare,
@@ -14,7 +13,11 @@ import * as S from './NavigationStyles'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectInSearch, setInSearch } from '../../../Store/utilsSlice'
+import {
+  navigateTo,
+  selectInSearch,
+  setInSearch,
+} from '../../../Store/utilsSlice'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
 import StyledTooltip from '../../Elements/StyledTooltip'
@@ -48,10 +51,6 @@ const Navigation = () => {
     }
   }, [location])
 
-  const navigateTo = (destination: string) => {
-    dispatch(push(destination))
-  }
-
   useEffect(() => {
     let mounted = true
     if (
@@ -62,16 +61,16 @@ const Navigation = () => {
       !isForwarding
     ) {
       if (keysPressed.includes(global.KEY_DIGIT_1)) {
-        navigateTo(Routes.HOME)
+        dispatch(navigateTo(Routes.HOME))
       }
       if (keysPressed.includes(global.KEY_DIGIT_2)) {
-        navigateTo(Routes.INBOX)
+        dispatch(navigateTo(Routes.INBOX))
       }
       if (keysPressed.includes(global.KEY_DIGIT_3)) {
         dispatch(setInSearch(true))
       }
       if (keysPressed.includes(global.KEY_DIGIT_4)) {
-        navigateTo('/compose')
+        dispatch(navigateTo('/compose'))
       }
     }
     return () => {
@@ -95,7 +94,7 @@ const Navigation = () => {
             <S.NavItem>
               <CustomIconButton
                 icon={<FiCheckSquare size={SIZE} />}
-                onClick={() => navigateTo(Routes.HOME)}
+                onClick={() => dispatch(navigateTo(Routes.HOME))}
                 isActive={active === 'todo'}
               />
             </S.NavItem>
@@ -105,7 +104,7 @@ const Navigation = () => {
             <S.NavItem>
               <CustomIconButton
                 icon={<FiInbox size={SIZE} />}
-                onClick={() => navigateTo(Routes.INBOX)}
+                onClick={() => dispatch(navigateTo(Routes.INBOX))}
                 isActive={active === 'inbox'}
               />
             </S.NavItem>
@@ -126,7 +125,7 @@ const Navigation = () => {
               <CustomIconButton
                 icon={<FiEdit size={SIZE} />}
                 isActive={active === 'compose'}
-                onClick={() => navigateTo('/compose')}
+                onClick={() => dispatch(navigateTo('/compose'))}
               />
             </S.NavItem>
           </StyledTooltip>

@@ -6,7 +6,7 @@ import * as todo from '../../constants/todoConstants'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
 import SetToDoMail from '../EmailOptions/SetToDoMail'
-import { FindLabelByName } from '../../utils/findLabel'
+import { findLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../Store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import thrashMail from '../EmailOptions/ThrashMail'
@@ -44,7 +44,7 @@ const InlineThreadActionsRegular = ({
             !labelIds.some(
               (item) =>
                 item ===
-                FindLabelByName({
+                findLabelByName({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
                 })[0]?.id
