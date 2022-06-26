@@ -7,6 +7,7 @@ import { decodeBase64 } from './decodeBase64'
 import fetchAttachment from './fetchAttachment'
 import removeScripts from './removeScripts'
 import removeTrackers from './removeTrackers'
+import * as global from '../constants/globalConstants'
 
 let decodedString: string | null = ''
 let localMessageId: string | null = ''
@@ -107,6 +108,7 @@ const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
 // First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
 const prioritizeHTMLbodyObject = (response: any) => {
   const indexOfStringObjects: number[] = []
+  const indexOfRemovalObjects: number[] = []
   for (let i = 0; i < response.length; i += 1) {
     // If the response is a string but doesn't have html, mark it for removal.
     // We need to run this first to understand how many string objects the response has.
@@ -114,15 +116,18 @@ const prioritizeHTMLbodyObject = (response: any) => {
       typeof response[i] === 'string' &&
       response[i].search('</html>') === -1
     ) {
+      indexOfRemovalObjects.push(i)
+    }
+    if (typeof response[i] === 'string') {
       indexOfStringObjects.push(i)
     }
   }
-  if (response.length === indexOfStringObjects.length) {
+  if (indexOfStringObjects.length === indexOfRemovalObjects.length) {
     return response
   }
-  if (response.length > indexOfStringObjects.length) {
-    for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
-      response.splice(indexOfStringObjects[i], 1)
+  if (indexOfStringObjects.length > indexOfRemovalObjects.length) {
+    for (let i = indexOfRemovalObjects.length - 1; i >= 0; i -= 1) {
+      response.splice(indexOfRemovalObjects[i], 1)
     }
     return response
   }
@@ -146,7 +151,6 @@ const placeInlineImage = (orderedObject: {
     let outputString = ''
     const remainingObjectArray: IAttachment[] = []
     for (let i = 0; i < orderedObject.emailFileHTML.length; i += 1) {
-      // console.log(orderedObject.emailFileHTML[i].contentID)
       const matchString = `cid:${orderedObject.emailFileHTML[i].contentID}`
 
       // If the contentId of the object is not found in the string (emailbody) it should not be removed.
@@ -154,7 +158,7 @@ const placeInlineImage = (orderedObject: {
         remainingObjectArray.push(orderedObject.emailFileHTML[i])
       }
       // Of the first loop, instantiate the outputString. On next runs use that string.
-      if (outputString.length === 0) {
+      if (outputString !== undefined && outputString.length === 0) {
         outputString = orderedObject.emailHTML?.replace(
           matchString,
           `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
@@ -166,10 +170,13 @@ const placeInlineImage = (orderedObject: {
         )
       }
     }
-    localCopyOrderedObject.emailHTML = outputString
+    // Only set the output string, if the code above has ran for it.
+    if (outputString && outputString.length > 0) {
+      localCopyOrderedObject.emailHTML = outputString
+    }
     // If there are attachment objects left, filter out the ones that cannot be displayed in html.
     localCopyOrderedObject.emailFileHTML = remainingObjectArray.filter(
-      (item) => item.mimeType !== 'application/octet-stream'
+      (item) => item.mimeType !== global.MIME_TYPE_NO_INLINE
     )
     return localCopyOrderedObject
   }
@@ -192,7 +199,6 @@ const bodyDecoder = async ({
   if (decodeImage) {
     localDecodeImage = decodeImage
   }
-
   if (messageId) {
     localMessageId = messageId
   }

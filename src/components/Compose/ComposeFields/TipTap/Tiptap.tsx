@@ -72,7 +72,7 @@ const Tiptap = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted && fetchedBodyValue.length > 0) {
+    if (mounted && fetchedBodyValue && fetchedBodyValue.length > 0) {
       setBodyValue(fetchedBodyValue)
       if (bodyValue.length < 1 && editorInstance) {
         editorInstance.commands.setContent(fetchedBodyValue)

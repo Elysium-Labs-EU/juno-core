@@ -13,8 +13,6 @@ import modifierKey from '../../../utils/setModifierKey'
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
 }
-
-const messageIndex = 0
 const actionKeys = [modifierKey, global.KEY_ENTER]
 
 const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
@@ -24,12 +22,12 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
   const handleEvent = useCallback(() => {
     if (threadDetail.messages) {
       return isReplyingListener({
-        messageIndex,
+        messageIndex: threadDetail.messages.length - 1,
         dispatch,
       })
     }
     return null
-  }, [threadDetail, messageIndex, dispatch])
+  }, [threadDetail, dispatch])
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 

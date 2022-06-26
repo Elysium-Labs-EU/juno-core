@@ -1,5 +1,6 @@
 import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
 import { IEmailMessage } from '../Store/storeTypes/emailListTypes'
+import * as global from '../constants/globalConstants'
 
 let foundAttachments: IEmailAttachmentType[] = []
 const loopThroughParts = ({
@@ -15,6 +16,16 @@ const loopThroughParts = ({
   for (let i = 0; input.length > i; i += 1) {
     if (Object.prototype.hasOwnProperty.call(input[i], 'parts')) {
       loopThroughParts({ input: input[i].parts })
+    }
+
+    // Don't allow certain attachments. If it has an ContentID but it type is application/octet-stream, allow it. Otherwise, don't show it.
+    if (
+      !Object.prototype.hasOwnProperty.call(input[i], 'parts') &&
+      Object.prototype.hasOwnProperty.call(input[i], 'filename') &&
+      input[i].filename.length > 0 &&
+      input[i].mimeType === global.MIME_TYPE_NO_INLINE
+    ) {
+      foundAttachments.push(input[i])
     }
     if (
       !Object.prototype.hasOwnProperty.call(input[i], 'parts') &&
