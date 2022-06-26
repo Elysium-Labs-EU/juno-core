@@ -68,12 +68,12 @@ const EmailDetailBody = ({
           setBodyState(bodyResponse)
           if (setContentRendered && setUnsubscribeLink && !hasRan) {
             setContentRendered(true)
-            setIsDecoding(false)
             postTreatmentBody({ dispatch, setUnsubscribeLink })
           }
           if (setBlockedTrackers && bodyResponse.removedTrackers) {
             setBlockedTrackers(bodyResponse.removedTrackers)
           }
+          setIsDecoding(false)
         }
         decoding()
       }

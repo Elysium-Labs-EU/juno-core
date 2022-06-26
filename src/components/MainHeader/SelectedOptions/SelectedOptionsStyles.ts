@@ -4,11 +4,11 @@ export const Wrapper = styled.div`
   width: 100%;
   position: absolute;
   z-index: 1100;
-  background: rgb(240, 240, 240);
+  background: rgb(246, 246, 246);
   background: linear-gradient(
     180deg,
-    rgba(240, 240, 240, 1) 34%,
-    rgba(240, 240, 240, 0.7) 81%
+    rgba(246, 246, 246, 1) 34%,
+    rgba(246, 246, 246, 0.7) 81%
   );
   box-shadow: none;
   backdrop-filter: blur(20px);

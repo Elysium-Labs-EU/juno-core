@@ -577,7 +577,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     }
   } catch (err) {
     const typedError: any = err
-    console.log(typedError.response.message)
+    console.error(typedError.response.message)
     dispatch(setServiceUnavailable('Cannot refresh feed'))
   } finally {
     dispatch(setIsFetching(false))
