@@ -39,8 +39,12 @@ import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
 import DiscardDraft from './DiscardDraft'
 
-const handleContactConversion = (contactValue: string): Contact[] =>
-  contactValue.split(',').map((item) => convertToContact(item))
+const handleContactConversion = (contactValue: string): Contact[] => {
+  if (contactValue.length > 0) {
+    return contactValue.split(',').map((item) => convertToContact(item))
+  }
+  return []
+}
 
 // Props are coming from MessageOverview
 interface IComposeEmailProps {
