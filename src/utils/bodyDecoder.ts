@@ -117,10 +117,10 @@ const prioritizeHTMLbodyObject = (response: any) => {
       indexOfStringObjects.push(i)
     }
   }
-  if (indexOfStringObjects.length === 0) {
+  if (response.length === indexOfStringObjects.length) {
     return response
   }
-  if (response.length !== indexOfStringObjects.length) {
+  if (response.length > indexOfStringObjects.length) {
     for (let i = indexOfStringObjects.length - 1; i >= 0; i -= 1) {
       response.splice(indexOfStringObjects[i], 1)
     }
