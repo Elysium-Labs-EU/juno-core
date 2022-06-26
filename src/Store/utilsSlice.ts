@@ -9,12 +9,14 @@ import * as global from '../constants/globalConstants'
 import { cleanUpComposerAndDraft } from './composeSlice'
 import {
   setCoreStatus,
+  setIsForwarding,
+  setIsReplying,
   setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
 import labelURL from '../utils/createLabelURL'
 import labelMap from '../constants/labelMapConstant'
-import { FindLabelById } from '../utils/findLabel'
+import { findLabelById } from '../utils/findLabel'
 import filterIllegalLabels from '../utils/filterIllegalLabels'
 
 interface IUtilsState {
@@ -124,7 +126,7 @@ export const {
 
 export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
-  const foundLabel = FindLabelById({ storageLabels, labelIds })
+  const foundLabel = findLabelById({ storageLabels, labelIds })
   if (foundLabel.length > 0) {
     dispatch(push(labelMap[foundLabel[0].name]))
     return
@@ -148,6 +150,22 @@ export const openEmail =
       const messageId = email.messages[email.messages.length - 1].id
       dispatch(openDraftEmail({ id, messageId }))
     }
+  }
+
+export const navigateTo =
+  (destination: string): AppThunk =>
+  (dispatch, getState) => {
+    const { composeEmail } = getState().compose
+    if (Object.keys(composeEmail).length > 0) {
+      dispatch(cleanUpComposerAndDraft())
+      if (getState().emailDetail.isReplying) {
+        dispatch(setIsReplying(false))
+      }
+      if (getState().emailDetail.isForwarding) {
+        dispatch(setIsForwarding(false))
+      }
+    }
+    dispatch(push(destination))
   }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {

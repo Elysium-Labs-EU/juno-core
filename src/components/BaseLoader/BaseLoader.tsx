@@ -32,14 +32,13 @@ const Baseloader = () => {
 
   useEffect(() => {
     let mounted = true
-    const timer = setTimeout(() => {
-      mounted && handleLogout()
-    }, 3000)
+    if (mounted && countDown === 0) {
+      handleLogout()
+    }
     return () => {
       mounted = false
-      clearTimeout(timer)
     }
-  }, [])
+  }, [countDown])
 
   useEffect(() => {
     let mounted = true

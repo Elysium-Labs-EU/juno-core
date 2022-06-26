@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { FiDelete } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
-import { FindLabelByName } from '../../../utils/findLabel'
+import { findLabelByName } from '../../../utils/findLabel'
 import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
 import * as todo from '../../../constants/todoConstants'
 import * as global from '../../../constants/globalConstants'
@@ -59,7 +59,7 @@ const EmailDetailOptions = ({
             !labelIds.some(
               (item) =>
                 item ===
-                FindLabelByName({
+                findLabelByName({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
                 })[0]?.id
