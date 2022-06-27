@@ -41,13 +41,6 @@ export const errorHandling = async (err: any) => {
     //   return axios(originalRequest)
     // }
   }
-  // if (
-  //   err.response.data === global.INVALID_TOKEN &&
-  //   err.response.request.responseURL.includes('/refresh')
-  // ) {
-  //   console.log(global.INVALID_TOKEN)
-  //   // handleLogout()
-  // }
   // if (err.response.data === global.INVALID_SESSION) {
   //   console.log(global.INVALID_SESSION)
   //   // handleLogout()
