@@ -64,8 +64,9 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "vite build",
+    "build": "tsc && vite build",
     "test": "vite test",
+    "preview": "vite preview",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
