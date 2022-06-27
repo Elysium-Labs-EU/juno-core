@@ -65,7 +65,8 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
+    "type": "tsc && vite",
     "test": "vite test",
     "preview": "vite preview",
     "lint": "eslint ./",
