@@ -17,6 +17,7 @@ interface IFeedModel {
 
 // End result will be that the function returns multiple arrays. One for each inbox.
 export default function handleHistoryObject({ history, storageLabels }: any) {
+  console.log(history)
   const inboxFeed: IFeedModel = {
     labels: [global.INBOX_LABEL],
     threads: [],
