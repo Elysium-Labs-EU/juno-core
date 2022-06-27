@@ -12,6 +12,7 @@ import { listRemoveItemDetail } from './emailListSlice'
 import getEmailListIndex from '../utils/getEmailListIndex'
 import { resetDraftDetails } from './draftsSlice'
 import archiveMail from '../components/EmailOptions/ArchiveMail'
+import * as global from '../constants/globalConstants'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
