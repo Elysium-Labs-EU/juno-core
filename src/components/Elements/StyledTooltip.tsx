@@ -1,9 +1,8 @@
 import { Tooltip } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-const CustomTooltip = styled(({ className, ...props }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <Tooltip {...props} classes={{ popper: className }} />
+const CustomTooltip = styled(({ title, children }: { title: string, children: JSX.Element }) => (
+  <Tooltip title={title}>{children}</Tooltip>
 ))(() => ({
   [`& .MuiTooltip-tooltip`]: {
     backgroundColor: `var(--color-black)`,
