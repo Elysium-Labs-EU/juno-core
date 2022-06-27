@@ -12,7 +12,7 @@ commands:
       HEROKU_APP_NAME:
         type: string
     steps:
-      - run: heroku config:set YARN_PRODUCTION=true USE_YARN_CACHE=false -a <<parameters.HEROKU_APP_NAME>>
+      - run: heroku config:set YARN_PRODUCTION=false -a <<parameters.HEROKU_APP_NAME>>
       - heroku/deploy-via-git:
           app-name: <<parameters.HEROKU_APP_NAME>>
           branch: <<parameters.BRANCH>>
