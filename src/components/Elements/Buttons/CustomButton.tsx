@@ -7,7 +7,7 @@ interface ICustomButton {
   className?: string
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
-  icon?: {}
+  icon?: JSX.Element
   label: string
   suppressed?: boolean
 }
@@ -19,8 +19,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
+  color: ${ ({ suppressed }) =>
+    suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
   text-align: center;
   vertical-align: middle;
   user-select: none;

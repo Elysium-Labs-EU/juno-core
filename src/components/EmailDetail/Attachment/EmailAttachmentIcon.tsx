@@ -6,7 +6,7 @@ export default function EmailAttachmentIcon({
 }: {
   mimeType: string
 }) {
-  const iconMap: { [key: string]: {} } = {
+  const iconMap: { [key: string]: JSX.Element } = {
     'image/png': <FiImage size={20} />,
     'text/plain': <FiFileText size={20} />,
     'video/mp4': <FiFilm size={20} />,
@@ -16,7 +16,7 @@ export default function EmailAttachmentIcon({
 
   return (
     <S.IconContainer>
-      {(mimeType && iconMap[mimeType]) || iconMap.default}
+      {mimeType ? iconMap[mimeType] : iconMap.default}
     </S.IconContainer>
   )
 }

@@ -6,7 +6,7 @@ interface ICustomIconButton {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
-  icon: {}
+  icon: JSX.Element
   style?: React.CSSProperties
   title?: string
   className?: string
@@ -22,14 +22,14 @@ interface IButton {
 
 const Button = styled.button<IButton>`
   border: none;
-  color: ${({ isActive }) =>
-    isActive ? `var(--color-black) ` : `var(--color-grey) `};
+  color: ${ ({ isActive }) =>
+    isActive ? `var(--color-black) ` : `var(--color-grey) ` };
   outline: none;
   background-color: transparent;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${({ hoverColor }) => hoverColor || `var(--color-black)`};
+    color: ${ ({ hoverColor }) => hoverColor || `var(--color-black)` };
     cursor: pointer;
   }
 
