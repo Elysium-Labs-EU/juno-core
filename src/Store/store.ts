@@ -1,7 +1,6 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { createReduxHistoryContext } from 'redux-first-history'
-import { createMemoryHistory, createBrowserHistory } from 'history'
-import isElectron from 'is-electron'
+import { createBrowserHistory } from 'history'
 import baseReducer from './baseSlice'
 import composeReducer from './composeSlice'
 import contactsReducer from './contactsSlice'
@@ -13,7 +12,7 @@ import utilsReducer from './utilsSlice'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
-    history: isElectron() ? createMemoryHistory() : createBrowserHistory(),
+    history: createBrowserHistory(),
   })
 
 export const store = configureStore({
