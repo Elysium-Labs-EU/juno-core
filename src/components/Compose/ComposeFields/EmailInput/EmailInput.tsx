@@ -57,16 +57,16 @@ const fetchContacts = async ({
       const mappedResults =
         results && results.length > 0
           ? results.map(
-            (contact: any): Contact => ({
-              name: Object.prototype.hasOwnProperty.call(
-                contact.person,
-                'names'
-              )
-                ? contact.person.names[0].displayName
-                : contact.person.emailAddresses[0].value,
-              emailAddress: contact.person.emailAddresses[0].value,
-            })
-          )
+              (contact: any): Contact => ({
+                name: Object.prototype.hasOwnProperty.call(
+                  contact.person,
+                  'names'
+                )
+                  ? contact.person.names[0].displayName
+                  : contact.person.emailAddresses[0].value,
+                emailAddress: contact.person.emailAddresses[0].value,
+              })
+            )
           : []
 
       dispatch(setAllContacts(mappedResults))
@@ -109,7 +109,7 @@ const emailInput = (props: IEmailInputProps) => {
       debouncedInputValue.length > 1 &&
       !completedSearch
     ) {
-      ; (async () => {
+      ;(async () => {
         const foundResults = filterOptions(availableContacts, {
           inputValue: debouncedInputValue,
         })
@@ -186,7 +186,9 @@ const emailInput = (props: IEmailInputProps) => {
       isOptionEqualToValue={(option, value) =>
         option.emailAddress === value.emailAddress
       }
-      getOptionLabel={(option: any) => `${ option.name } <${ option.emailAddress }>`}
+      getOptionLabel={(option: any) =>
+        `${option.name} <${option.emailAddress}>`
+      }
       options={options}
       freeSolo
       onChange={(event: any, newValue: any) =>
