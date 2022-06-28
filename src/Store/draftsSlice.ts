@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
 import { setComposeEmail } from './composeSlice'
-import { setCurrentEmail } from './emailDetailSlice'
+import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
   DraftDetails,
@@ -15,10 +15,11 @@ import {
   OpenDraftEmailType,
   DraftListObject,
 } from './storeTypes/draftsTypes'
-import bodyDecoder from '../utils/bodyDecoder'
+import { loopThroughBodyParts } from '../utils/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import { listRemoveItemDetailBatch, setSelectedEmails } from './emailListSlice'
+import * as global from '../constants/globalConstants'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
@@ -118,10 +119,12 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
     draft,
     draft: { message },
   } = props
-  return (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      // TODO: Check for sanitize option
-      const body = bodyDecoder({ inputObject: message.payload })[0]
+      const decodedBody = await loopThroughBodyParts({
+        inputObject: message.payload,
+      })
+      const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
       const cc = findPayloadHeadersData('Cc', message)
@@ -144,7 +147,11 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         dispatch(listUpdateDraft(draftDetails))
         dispatch(setComposeEmail(loadEmail))
         dispatch(setCurrentEmail(message.threadId))
-        dispatch(push(`/compose/${draft.id}`))
+        if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
+          dispatch(setIsReplying(true))
+        } else {
+          dispatch(push(`/compose/${draft.id}`))
+        }
       } else {
         dispatch(push(`/compose/`))
       }

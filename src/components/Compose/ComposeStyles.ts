@@ -5,8 +5,9 @@ interface IWrapper {
 }
 
 export const Wrapper = styled.div<IWrapper>`
-  max-width: 850px;
-  width: 100%;
+  min-width: 665px;
+  max-width: min(100vw - 340px, 860px);
+  width: ${({ tabbedView }) => (tabbedView ? 'auto' : '100%')};
   margin-left: ${({ tabbedView }) => (tabbedView ? '10%' : 'auto')};
   margin-right: auto;
   position: ${({ tabbedView }) => (tabbedView ? 'sticky' : 'static')};
@@ -32,7 +33,7 @@ interface IComposerContainer {
 }
 
 export const ComposerContainer = styled.div<IComposerContainer>`
-  padding-top: ${({ tabbedView }) => (tabbedView ? '0' : '120px')};
+  padding-top: ${({ tabbedView }) => (tabbedView ? '0' : '40px')};
   padding-bottom: ${({ tabbedView }) => (tabbedView ? '0' : '120px')};
 `
 
@@ -45,7 +46,7 @@ export const Label = styled.div<ILabel>`
   left: -120px;
   width: 100px;
   text-align: right;
-  top: 16px;
+  top: 25px;
   label {
     cursor: default;
     user-select: none;

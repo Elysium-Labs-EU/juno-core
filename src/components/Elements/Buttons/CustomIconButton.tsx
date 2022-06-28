@@ -6,7 +6,7 @@ interface ICustomIconButton {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
-  icon: {}
+  icon: JSX.Element
   style?: React.CSSProperties
   title?: string
   className?: string

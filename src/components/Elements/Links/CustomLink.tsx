@@ -19,7 +19,7 @@ const Wrapper = styled(Link)`
   align-items: center;
   text-decoration: none;
   cursor: pointer;
-  font-family: 'Urbanist Variable', sans-serif;
+  font-family: var(--font-family);
 
   &:hover,
   &:active {

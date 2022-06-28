@@ -56,6 +56,7 @@ interface IDetailDisplaySelector {
   threadDetail: IEmailListThreadItem
   index: number
   setUnsubscribeLink: Function
+  setContentRendered: (value: boolean) => void
 }
 
 const DetailDisplaySelector = ({
@@ -63,22 +64,21 @@ const DetailDisplaySelector = ({
   threadDetail,
   index,
   setUnsubscribeLink,
+  setContentRendered,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
     if (message.labelIds.includes(global.DRAFT_LABEL)) {
       return <DraftMessage message={message} />
     }
-    if (!message.labelIds.includes(global.DRAFT_LABEL)) {
-      return (
-        <ReadUnreadMessage
-          message={message}
-          threadDetail={threadDetail}
-          messageIndex={index}
-          setUnsubscribeLink={setUnsubscribeLink}
-        />
-      )
-    }
-    return <div />
+    return (
+      <ReadUnreadMessage
+        message={message}
+        threadDetail={threadDetail}
+        messageIndex={index}
+        setUnsubscribeLink={setUnsubscribeLink}
+        setContentRendered={setContentRendered}
+      />
+    )
   }
   return (
     <ReadUnreadMessage
@@ -86,6 +86,7 @@ const DetailDisplaySelector = ({
       threadDetail={threadDetail}
       messageIndex={index}
       setUnsubscribeLink={setUnsubscribeLink}
+      setContentRendered={setContentRendered}
     />
   )
 }
@@ -93,9 +94,11 @@ const DetailDisplaySelector = ({
 const MappedMessages = ({
   threadDetail,
   setUnsubscribeLink,
+  setContentRendered,
 }: {
   threadDetail: IEmailListThreadItem
   setUnsubscribeLink: Function
+  setContentRendered: (value: boolean) => void
 }) =>
   threadDetail.messages ? (
     <>
@@ -103,14 +106,15 @@ const MappedMessages = ({
         .slice(0)
         .reverse()
         .map((message, index) => (
-          <ES.EmailWrapper key={message.id} labelIds={message.labelIds}>
+          <div key={message.id}>
             <DetailDisplaySelector
               message={message}
               threadDetail={threadDetail}
               index={index}
               setUnsubscribeLink={setUnsubscribeLink}
+              setContentRendered={setContentRendered}
             />
-          </ES.EmailWrapper>
+          </div>
         ))}
     </>
   ) : (
@@ -123,6 +127,7 @@ interface IMessagesOverview {
   isReplying: boolean
   isForwarding: boolean
   labelIds: string[]
+  setContentRendered: (value: boolean) => void
 }
 
 const MessagesOverview = memo(
@@ -132,6 +137,7 @@ const MessagesOverview = memo(
     isReplying,
     isForwarding,
     labelIds,
+    setContentRendered,
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
     const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
@@ -161,6 +167,7 @@ const MessagesOverview = memo(
                   <MappedMessages
                     threadDetail={threadDetail}
                     setUnsubscribeLink={setUnsubscribeLink}
+                    setContentRendered={setContentRendered}
                   />
                 ) : (
                   <ES.LoadingErrorWrapper>

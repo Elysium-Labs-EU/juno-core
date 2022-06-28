@@ -1,9 +1,13 @@
+import { useEffect, useMemo, useState } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import { openDraftEmail } from '../../../../Store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
-import { selectCurrentEmail } from '../../../../Store/emailDetailSlice'
+import {
+  selectCurrentEmail,
+  selectIsReplying,
+} from '../../../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
 import { IEmailMessage } from '../../../../Store/storeTypes/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
@@ -11,7 +15,10 @@ import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import { selectProfile } from '../../../../Store/baseSlice'
 
 const DraftMessage = ({ message }: { message: IEmailMessage }) => {
+  const [draftOpened, setDraftOpened] = useState(false)
+  const [hideDraft, setHideDraft] = useState(false)
   const dispatch = useAppDispatch()
+  const isReplying = useAppSelector(selectIsReplying)
   const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
   const messageId = message && message.id
@@ -19,15 +26,43 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const EmailSnippet =
     message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
-  const staticSenderNameFull = SenderNameFull(message, emailAddress)
-  const staticSenderNamePartial = SenderNamePartial(message, emailAddress)
+  const staticSenderNameFull = useMemo(
+    () => SenderNameFull(message, emailAddress),
+    []
+  )
+  const staticSenderNamePartial = useMemo(
+    () => SenderNamePartial(message, emailAddress),
+    []
+  )
 
   const handleClick = () => {
     dispatch(openDraftEmail({ id, messageId }))
+    setDraftOpened(true)
   }
 
+  /**
+   * This function only hides the draft whenever the replying mode is set active.
+   */
+  useEffect(() => {
+    let mounted = true
+    if (isReplying && draftOpened && mounted) {
+      setHideDraft(true)
+    }
+    if (!isReplying && draftOpened && mounted) {
+      setHideDraft(false)
+    }
+    return () => {
+      mounted = false
+    }
+  }, [isReplying, draftOpened])
+
   return (
-    <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
+    <S.EmailClosedWrapper
+      onClick={handleClick}
+      aria-hidden="true"
+      hideDraft={hideDraft}
+      isDraft
+    >
       <S.ClosedMessageWrapper>
         <S.TopContainer>
           <S.ClosedAvatarSender>

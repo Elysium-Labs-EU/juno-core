@@ -32,7 +32,7 @@ export const MenuItemButton = styled.button`
   font-style: normal;
   line-height: 1.13;
   margin: 0.3rem 0;
-  font-family: 'Urbanist Variable', sans-serif;
+  font-family: var(--font-family);
   padding: 0;
   cursor: pointer;
 

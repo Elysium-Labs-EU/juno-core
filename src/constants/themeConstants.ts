@@ -1,5 +1,6 @@
 export const colorWhite = '#ffffff'
-export const colorOffWhite = '#f0f0f0'
+export const colorOffWhite = '#F6F6F6'
+// export const colorOffWhite = '#f0f0f0'
 export const colorSlightWhite = '#f7f7f7'
 export const colorUltraLightGrey = '#d9d9d9'
 export const colorLightGrey = '#aeaeb4'
@@ -21,3 +22,4 @@ export const h3FontSize = '1.953rem'
 export const h4FontSize = '1.563rem'
 export const h5FontSize = '1.25rem'
 export const smallFontSize = '0.8rem'
+export const fontFamily = "'system-ui', sans-serif"

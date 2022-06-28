@@ -12,7 +12,7 @@ import { selectInSearch } from '../../../Store/utilsSlice'
 
 interface IDeleteOption {
   messageId: string
-  icon?: {}
+  icon?: JSX.Element
   suppressed?: boolean
   noArchive?: boolean
 }

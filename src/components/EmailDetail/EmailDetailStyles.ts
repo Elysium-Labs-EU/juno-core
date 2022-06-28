@@ -1,14 +1,27 @@
 import styled from 'styled-components'
 
-interface EmailWrapperProps {
-  labelIds?: string[]
-}
 interface IScroll {
   clientState: boolean
 }
 
 export const HiddenMessagesFeed = styled.div`
   display: none;
+`
+
+interface IEmailDetailWrapper {
+  tabbedView?: boolean
+}
+
+export const EmailDetailWrapper = styled.div<IEmailDetailWrapper>`
+  max-width: 1480px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  flex: 1 1 0%;
+  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
+  position: relative;
+  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
+  transition: all 0.2s ease-in-out;
 `
 
 export const Scroll = styled.div<IScroll>`
@@ -27,26 +40,33 @@ export const Scroll = styled.div<IScroll>`
 
 export const MessageFeedViewContainer = styled.div``
 
-export const EmailWrapper = styled.div<EmailWrapperProps>`
-  border-radius: 6px;
-  background-color: ${(props) =>
-    props?.labelIds?.includes('DRAFT') ? '#c2a6ff17' : '#ffff'};
-  margin-bottom: 8px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-`
+interface IEmailClosedWrapper {
+  hideDraft?: boolean
+  isDraft?: boolean
+}
 
-export const EmailClosedWrapper = styled.div`
+export const EmailClosedWrapper = styled.div<IEmailClosedWrapper>`
   padding: 16px;
   transition: background-color ease-in 0.125s;
+  background-color: ${({ isDraft }) =>
+    isDraft ? '#c2a6ff17' : `var(--color-white)`};
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
+  margin-bottom: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  border-radius: 6px;
   &:hover {
     background-color: var(--color-grey-hover);
     border-radius: 6px;
   }
 `
-
 export const EmailOpenWrapper = styled.div`
   padding: 16px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  background-color: var(--color-white);
 `
 
 export const EmailOptionsContainer = styled.div`
@@ -110,8 +130,8 @@ export const CardFullWidth = styled.div`
 export const EmailDetailContainer = styled.div`
   min-width: 665px;
   max-width: min(100vw - 340px, 860px);
-  padding-bottom: 1.5rem;
-  margin-bottom: 16px;
+  padding-bottom: 320px;
+  margin-bottom: 20px;
   width: 100%;
   overflow: scroll;
   scrollbar-width: none;
@@ -168,8 +188,6 @@ interface IFromCCContainer {
 export const FromContainer = styled.div<IFromCCContainer>`
   align-items: center;
   display: flex;
-  border-bottom: ${({ multipleComponents }) =>
-    multipleComponents ? 'none' : `1px solid var(--color-grey-border)`};
   padding-top: 16px;
   padding-bottom: 8px;
 `
@@ -183,7 +201,6 @@ export const ToBCCContainer = styled.div<IFromCCContainer>`
     margin-right: ${({ multipleComponents }) =>
       multipleComponents ? '2rem' : 0};
   }
-  border-bottom: 1px solid var(--color-grey-border);
   padding-top: 8px;
   padding-bottom: 16px;
 `
@@ -197,6 +214,17 @@ export const ToFromBCCInner = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+`
+
+export const BlockedTrackersContainer = styled.div<IFromCCContainer>`
+  align-items: center;
+  display: flex;
+  padding-top: 16px;
+  padding-bottom: 8px;
+`
+
+export const GreyDivider = styled.div`
+  border-bottom: 1px solid var(--color-grey-border);
 `
 
 export const EmailBody = styled.div`
@@ -255,7 +283,7 @@ export const ComposeWrapper = styled.div`
   flex-flow: column;
   flex: 1 1 auto;
   max-width: 50%;
-  margin-left: 45px;
+  margin-left: 40px;
 `
 
 export const Spacer = styled.div`

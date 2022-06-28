@@ -12,8 +12,8 @@ Juno is an Open Source React based Gmail application.
 2.  Run `yarn` to install all packages
 3.  Create a file called `.env` in the root of the project
 4.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
-5.  Add `REACT_APP_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
-6.  Add `REACT_APP_GOOGLE_CLIENT_ID` to the `.env` file - the value is the client id from your frontend Google Credentials. Read here how to setup Google Credentials: https://developers.google.com/workspace/guides/create-credentials. The credential version is `Web application`.
+5.  Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
+6.  Add `VITE_GOOGLE_CLIENT_ID` to the `.env` file - the value is the client id from your frontend Google Credentials. Read here how to setup Google Credentials: https://developers.google.com/workspace/guides/create-credentials. The credential version is `Web application`.
 7.  For the Google Web Application credentials you created on step 6, as the `Authorised JavaScript origins` set `http://localhost` and `http://localhost:3000`. This is done via the Google Cloud Console, by clicking on the credentials' name under Credentials > OAuth 2.0 Client IDs , and enter the form.
 8.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
@@ -47,9 +47,3 @@ For the Roadmap of this project please check [this](https://github.com/Elysium-L
 The current focus is to stabilize the app and adding some core mail features, such as forwarding, cc/bcc options.
 
 ⚠️ The current codebase doesn't support tests yet. Looking for suggestions and contributions.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

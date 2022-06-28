@@ -25,26 +25,26 @@ export const SettingsContainer = styled.div`
   margin: 0 36px 16px;
 `
 export const SettingsHeader = styled.h2`
-  margin: 2rem 0 0;
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;
-  font-family: 'Raleway Variable', serif;
+  font-family: var(--font-family);
   line-height: 1.3;
   color: var(--color-black);
-  margin-left: 2rem;
-  margin-bottom: 2rem;
+  margin-top: 32px;
+  margin-left: 32px;
+  margin-bottom: 32px;
 `
 
 export const StyledSelect = styled(Select)<SelectProps>`
   border: 0;
-  width: 4rem;
-  height: 2rem;
+  width: 64px;
+  height: 32px;
   font-size: 0.9rem;
   color: var(--color-black)
   background-color: transparent;
-  margin-top: 1em;
-  margin-right: 0.5em;
+  margin-top: 16px;
+  margin-right: 8px;
 `
 
 export const SettingsSubHeader = styled.h3`

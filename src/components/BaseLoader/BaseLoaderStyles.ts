@@ -21,16 +21,11 @@ export const ServiceUnavailableParagraph = styled.p`
 `
 
 export const Container = styled.div`
-  box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
-    0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07);
-  border-radius: 5px;
-  display: flex;
-  padding: 40px;
-  margin-bottom: 40px;
   img {
     object-fit: none;
-    height: calc(100% - 10px);
-    width: calc(100% - 10px);
+    border-radius: 10px;
+    box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
+      0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07);
   }
 `
 

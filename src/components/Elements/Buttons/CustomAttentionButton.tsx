@@ -17,7 +17,7 @@ interface IButton {
 
 const Button = styled.button<IButton>`
   font-weight: 600;
-  font-family: 'Raleway Variable', sans-serif;
+  font-family: var(--font-family);
   border-radius: 20px;
   border: none;
   background-color: ${({ variant }) =>

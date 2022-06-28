@@ -5,7 +5,7 @@ interface IWrapper {
 }
 
 export const Wrapper = styled.div<IWrapper>`
-  background: var(--color-white-slight);
+  background: var(--color-white);
   width: 100%;
   border: ${({ isFocused }) =>
     isFocused ? `2px var(--color-purple-soft) solid` : '2px solid transparent'};
@@ -30,16 +30,15 @@ interface IMenuBar {
 }
 
 export const MenuBar = styled.div<IMenuBar>`
-  border: none;
   margin: 0 auto;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  border: 1px solid var(--color-grey-ultra-light);
   background: var(--color-white);
-  top: 12px;
-  left: 16px;
   border-radius: 4px;
   z-index: 10;
+  box-shadow: ${({ isFocused }) =>
+    isFocused ? `rgba(0, 0, 0, 0.1) 0px 0px 10px` : 'none'};
   opacity: ${({ isFocused }) => (isFocused ? 1 : 0.4)};
-  transition: opacity 0.3s ease 0s;
+  transition: opacity 0.3s ease 0s, box-shadow 0.3s ease 0s;
 `
 
 export const Button = styled.button`

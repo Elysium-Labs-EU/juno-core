@@ -16,7 +16,7 @@ const handleClose = (dispatch: Function) =>
 
 interface IKeyCombos {
   title: string
-  keys: string[] | {}[]
+  keys: string[] | JSX.Element[]
 }
 
 const CreateSectionWithKeys = ({

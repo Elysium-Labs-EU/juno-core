@@ -9,9 +9,7 @@ const createCompose = ({
   mailToLink: string
 }) => {
   dispatch(
-    push(
-      `${RoutesConstants.COMPOSE_EMAIL_BASE}?${mailToLink.replace(':', '=')}`
-    )
+    push(`${RoutesConstants.COMPOSE_EMAIL}?${mailToLink.replace(':', '=')}`)
   )
 }
 

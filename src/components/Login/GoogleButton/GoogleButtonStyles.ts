@@ -15,9 +15,12 @@ export const Inner = styled.div`
   box-shadow: 0 1px 2px 0 rgb(9 30 66 / 25%);
 `
 
-export const StyledButton = styled.button`
-  transition: background-color 0.3s, box-shadow 0.3s;
+interface IStyledButton {
+  isActive: boolean
+}
 
+export const StyledButton = styled.button<IStyledButton>`
+  transition: background-color 0.3s, box-shadow 0.3s;
   padding: 12px 16px;
   border: none;
   border-radius: 5px;
@@ -34,7 +37,8 @@ export const StyledButton = styled.button`
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 
   user-select: none;
-  background-color: var(--color-black);
+  background-color: ${({ isActive }) =>
+    isActive ? `var(--color-grey-dark)` : `var(--color-black)`};
   cursor: pointer;
 
   &:hover {
@@ -42,7 +46,7 @@ export const StyledButton = styled.button`
   }
 
   &:active {
-    background-color: #eeeeee;
+    background-color: var(--color-grey-dark);
   }
 
   &:focus {

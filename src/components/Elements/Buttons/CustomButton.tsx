@@ -7,7 +7,7 @@ interface ICustomButton {
   className?: string
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
-  icon?: {}
+  icon?: JSX.Element
   label: string
   suppressed?: boolean
 }
@@ -31,13 +31,13 @@ const Button = styled.button<IButton>`
   border-bottom-color: transparent;
   border-left-color: transparent;
   padding: 0.375rem 0.75rem;
-  font-size: 0.85rem;
+  font-size: 13px;
   line-height: 1.5;
   border-radius: 4px;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   cursor: pointer;
-  font-family: 'Raleway Variable', sans-serif;
+  font-family: var(--font-family);
 
   &:hover {
     color: var(--color-black);

@@ -21,23 +21,23 @@ const findPayloadHeadersData = (query: string, email: any) => {
       }
       return ''
     }
-    if (email.messages[0].internalDate) {
+    if (email.messages[email.messages.length - 1].internalDate) {
       if (
-        email.messages[0].payload.headers.find(
+        email.messages[email.messages.length - 1].payload.headers.find(
           (e: MessagePayload) => e.name === query
         )
       ) {
-        return email.messages[0].payload.headers.find(
+        return email.messages[email.messages.length - 1].payload.headers.find(
           (e: MessagePayload) => e.name === query
         ).value
       }
       if (
-        email.messages[0].payload.headers.find(
+        email.messages[email.messages.length - 1].payload.headers.find(
           (e: MessagePayload) =>
             e.name === `${query[0].toLowerCase() + query.slice(1)}`
         )
       ) {
-        return email.messages[0].payload.headers.find(
+        return email.messages[email.messages.length - 1].payload.headers.find(
           (e: MessagePayload) =>
             e.name === `${query[0].toLowerCase() + query.slice(1)}`
         ).value

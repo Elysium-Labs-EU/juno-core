@@ -12,6 +12,7 @@ import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
+import DOMPurify from 'dompurify'
 import useDebounce from '../../../../Hooks/useDebounce'
 import { TrackComposeEmail } from '../../../../Store/composeSlice'
 import { useAppDispatch } from '../../../../Store/hooks'
@@ -33,22 +34,17 @@ const Tiptap = ({
   const dispatch = useAppDispatch()
   const tipTapRef = useRef<any | null>(null)
 
-  useEffect(() => {
-    let mounted = true
-    if (isReplying && tipTapRef.current !== null && mounted) {
-      tipTapRef.current.focus()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [isReplying])
-
   const handleBodyChange = (value: string) => {
-    setBodyValue(value)
+    setBodyValue(
+      DOMPurify.sanitize(value, {
+        USE_PROFILES: { html: true },
+      })
+    )
   }
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
+    autofocus: isReplying ?? false,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
       const htlmlOutput = generateHTML(json, [
@@ -76,7 +72,7 @@ const Tiptap = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted && fetchedBodyValue.length > 0) {
+    if (mounted && fetchedBodyValue && fetchedBodyValue.length > 0) {
       setBodyValue(fetchedBodyValue)
       if (bodyValue.length < 1 && editorInstance) {
         editorInstance.commands.setContent(fetchedBodyValue)

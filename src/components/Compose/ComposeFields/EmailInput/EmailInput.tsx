@@ -78,7 +78,7 @@ const fetchContacts = async ({
   }
 }
 
-const filterOptions = (
+const filterOptions: any = (
   options: Contact[],
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
@@ -186,7 +186,9 @@ const emailInput = (props: IEmailInputProps) => {
       isOptionEqualToValue={(option, value) =>
         option.emailAddress === value.emailAddress
       }
-      getOptionLabel={(option) => `${option.name} <${option.emailAddress}>`}
+      getOptionLabel={(option: any) =>
+        `${option.name} <${option.emailAddress}>`
+      }
       options={options}
       freeSolo
       onChange={(event: any, newValue: any) =>

@@ -4,21 +4,20 @@ import Navigation from '../MainHeader/Navigation/Navigation'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import Tabs from './Tabs/Tabs'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
-import { selectCoreStatus } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/Buttons/BackButton'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
-import { FindLabelById } from '../../utils/findLabel'
+import { findLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
 } from '../../Store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
-import { selectViewIndex } from '../../Store/emailDetailSlice'
+import { selectCoreStatus, selectViewIndex } from '../../Store/emailDetailSlice'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
@@ -43,7 +42,7 @@ const EmailDetailHeader = ({
     let mounted = true
     if (storageLabels.length > 0 && labelIds.length > 0) {
       if (location.pathname.includes(labelIds[0])) {
-        const matchedLabel = FindLabelById({ storageLabels, labelIds })
+        const matchedLabel = findLabelById({ storageLabels, labelIds })
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')
           mounted &&
@@ -58,6 +57,7 @@ const EmailDetailHeader = ({
     }
   }, [storageLabels, labelIds])
 
+  // TODO: Double check amount of rerenders on this function
   // Attempt to load the next emails on the background when approaching the edge
   if (
     activeEmailList.threads.length - 1 - viewIndex <= 4 &&
@@ -79,7 +79,10 @@ const EmailDetailHeader = ({
           <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
           </S.HeaderCenter>
-          <Navigation />
+          <S.BackButtonWithNavgationContainer>
+            <BackButton />
+            <Navigation />
+          </S.BackButtonWithNavgationContainer>
           <S.InnerMenu>
             {activeEmailList && (
               <>
@@ -98,10 +101,10 @@ const EmailDetailHeader = ({
               <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>
             )}
           </S.FocusSortHeaderWrapper>
-          <S.InnerMenu>
+          <S.BackButtonWithNavgationContainer>
             <BackButton />
             <EmailPosition />
-          </S.InnerMenu>
+          </S.BackButtonWithNavgationContainer>
         </S.Wrapper>
       )}
     </GS.OuterContainer>

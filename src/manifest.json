@@ -1,0 +1,6 @@
+{
+  "name": "Juno - Gmail App",
+  "short_name": "Juno",
+  "display": "standalone",
+  "start_url": "/"
+}

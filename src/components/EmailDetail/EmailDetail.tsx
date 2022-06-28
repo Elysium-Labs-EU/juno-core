@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
+  selectCoreStatus,
   selectCurrentEmail,
   selectIsForwarding,
   selectIsReplying,
@@ -15,13 +16,11 @@ import { selectIsLoading } from '../../Store/utilsSlice'
 import { selectLabelIds } from '../../Store/labelsSlice'
 import {
   selectEmailList,
-  selectCoreStatus,
   selectSearchList,
   selectActiveEmailListIndex,
 } from '../../Store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
-import * as GS from '../../styles/globalStyles'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
@@ -48,9 +47,12 @@ const EmailDetail = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
+  const [contentRendered, setContentRendered] = useState(false)
   const [currentLocal, setCurrentLocal] = useState<string>('')
-  const { threadId, overviewId } =
-    useParams<{ threadId: string; overviewId: string }>()
+  const { threadId, overviewId } = useParams<{
+    threadId: string
+    overviewId: string
+  }>()
   const [activeEmailList, setActiveEmailList] = useState<
     IEmailListObject | IEmailListObjectSearch
   >()
@@ -125,7 +127,7 @@ const EmailDetail = () => {
       <EmailDetailHeader activeEmailList={activeEmailList} />
       <AnimatedMountUnmount>
         <S.Scroll clientState={Boolean(coreStatus)}>
-          <GS.OuterContainer tabbedView={isReplying || isForwarding}>
+          <S.EmailDetailWrapper tabbedView={isReplying || isForwarding}>
             {overviewId === local.MESSAGES &&
               activeEmailList.threads.length > 0 &&
               viewIndex > -1 && (
@@ -136,11 +138,13 @@ const EmailDetail = () => {
                     isReplying={isReplying}
                     isForwarding={isForwarding}
                     labelIds={labelIds}
+                    setContentRendered={setContentRendered}
                   />
                   <S.HiddenMessagesFeed>
                     <PreLoadMessages
                       threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}
+                      contentRendered={contentRendered}
                     />
                   </S.HiddenMessagesFeed>
                 </>
@@ -152,7 +156,7 @@ const EmailDetail = () => {
                   isLoading={isLoading}
                 />
               )}
-          </GS.OuterContainer>
+          </S.EmailDetailWrapper>
         </S.Scroll>
       </AnimatedMountUnmount>
     </>

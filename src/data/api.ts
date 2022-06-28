@@ -5,11 +5,11 @@ import assertNonNullish from '../utils/assertNonNullish'
 import getCookie from '../utils/Cookie/getCookie'
 
 assertNonNullish(
-  process.env.REACT_APP_BACKEND_URL,
+  import.meta.env.VITE_BACKEND_URL,
   'Unable to find API key in environment'
 )
 
-export const BASE_API_URL = process.env.REACT_APP_BACKEND_URL.replace(/\/$/, '')
+export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
   const token = getCookie(global.ACCESS_TOKEN)
@@ -41,13 +41,6 @@ export const errorHandling = async (err: any) => {
     //   return axios(originalRequest)
     // }
   }
-  // if (
-  //   err.response.data === global.INVALID_TOKEN &&
-  //   err.response.request.responseURL.includes('/refresh')
-  // ) {
-  //   console.log(global.INVALID_TOKEN)
-  //   // handleLogout()
-  // }
   // if (err.response.data === global.INVALID_SESSION) {
   //   console.log(global.INVALID_SESSION)
   //   // handleLogout()

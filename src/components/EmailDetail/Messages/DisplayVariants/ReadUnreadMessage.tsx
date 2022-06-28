@@ -4,7 +4,7 @@ import { FiChevronDown } from 'react-icons/fi'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import EmailAttachment from '../../Attachment/EmailAttachment'
-import EmailDetailBody from '../EmailDetailBody'
+import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import * as local from '../../../../constants/unreadConstants'
 import * as compose from '../../../../constants/composeEmailConstants'
@@ -28,33 +28,37 @@ import convertToContact from '../../../../utils/convertToContact'
 import { selectProfile } from '../../../../Store/baseSlice'
 import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
 import Seo from '../../../Elements/Seo'
+import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 
 interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   messageIndex: number
   setUnsubscribeLink: Function
+  setContentRendered: (value: boolean) => void
 }
 
-const ReadMessage = ({
+const ReadUnreadMessage = ({
   message,
   threadDetail,
   messageIndex,
   setUnsubscribeLink,
+  setContentRendered,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
+  const [blockedTrackers, setBlockedTrackers] = useState<Attr[] | []>([])
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
   useEffect(() => {
+    let mounted = true
     if (threadDetail && threadDetail.messages) {
-      if (threadDetail.messages.length > 1) {
+      if (threadDetail.messages.length > 1 && mounted) {
         if (message && message.labelIds?.includes(local.UNREAD)) {
           setOpen(true)
-          return
         }
         if (
           message &&
@@ -62,14 +66,46 @@ const ReadMessage = ({
           messageIndex === 0
         ) {
           setOpen(true)
-          return
         }
       }
       if (threadDetail.messages.length === 1) {
         setOpen(true)
       }
+      if (
+        threadDetail.messages.length === 2 &&
+        threadDetail.messages.some((item) =>
+          item.labelIds.includes(global.DRAFT_LABEL)
+        )
+      ) {
+        setOpen(true)
+      }
+    }
+    return () => {
+      mounted = false
     }
   }, [])
+
+  /**
+   * In case the only other email in this thread isn't visible during opening a Draft in tab view, open it.
+   */
+  useEffect(() => {
+    let mounted = true
+    if (threadDetail && threadDetail.messages && !open) {
+      if (
+        isReplying &&
+        threadDetail.messages.length === 2 &&
+        threadDetail.messages.some((item) =>
+          item.labelIds.includes(global.DRAFT_LABEL)
+        ) &&
+        mounted
+      ) {
+        setOpen(true)
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [isReplying, open])
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
@@ -207,7 +243,10 @@ const ReadMessage = ({
               </S.ToFromBCCInner>
             )}
           </S.ToBCCContainer>
-
+          {blockedTrackers.length > 0 && (
+            <RemovedTrackers blockedTrackers={blockedTrackers} />
+          )}
+          <S.GreyDivider />
           <S.EmailBody>
             {message && message?.payload && message?.id && (
               <EmailDetailBody
@@ -215,6 +254,8 @@ const ReadMessage = ({
                 messageId={message.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
                 setUnsubscribeLink={setUnsubscribeLink}
+                setContentRendered={setContentRendered}
+                setBlockedTrackers={setBlockedTrackers}
               />
             )}
           </S.EmailBody>
@@ -252,4 +293,4 @@ const ReadMessage = ({
   )
 }
 
-export default ReadMessage
+export default ReadUnreadMessage

@@ -1,18 +1,23 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  padding: 0 1rem;
+  padding: 0 20px;
   position: relative;
 `
 
 export const InnerMenu = styled.div`
   display: flex;
-  flex-flow: row;
-  margin-bottom: 1rem;
+  margin-bottom: 20px;
+  align-items: center;
+  min-width: 665px;
+  max-width: min(100vw - 340px, 860px);
+  justify-content: space-between;
+  flex: 1 1;
+  margin: 40px auto 20px;
 `
 
 export const NavContainer = styled.div`
-  padding: 0 1rem;
+  padding: 0 20px;
   position: relative;
 `
 
@@ -26,6 +31,7 @@ export const BackButtonWithNavgationContainer = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+  margin-bottom: 40px;
 `
 
 export const FocusSortHeaderWrapper = styled.div`
@@ -35,12 +41,12 @@ export const FocusSortHeaderWrapper = styled.div`
 `
 
 export const PageTitle = styled.h2`
-  margin: 2rem 0 0;
+  margin: 40px 0 0;
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;
   font-size: 2.441rem;
-  font-family: 'Raleway Variable', serif;
+  font-family: var(--font-family) !important;
   line-height: 1.3;
   color: var(--color-black) !important;
 `

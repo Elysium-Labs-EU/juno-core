@@ -1,7 +1,7 @@
 import { LabelIdName } from '../../Store/storeTypes/labelsTypes'
 import { updateEmailLabel } from '../../Store/emailListSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
-import { FindLabelByName } from '../../utils/findLabel'
+import { findLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
 
 interface SetToDoMailProps {
@@ -13,7 +13,7 @@ interface SetToDoMailProps {
 
 const SetToDoMail = (props: SetToDoMailProps) => {
   const { messageId, labelIds, dispatch, storageLabels } = props
-  const toDoLabel = FindLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
+  const toDoLabel = findLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
   const ToDoAction = () => {
