@@ -164,8 +164,9 @@ export const navigateTo =
       if (getState().emailDetail.isForwarding) {
         dispatch(setIsForwarding(false))
       }
+    } else {
+      dispatch(push(destination))
     }
-    dispatch(push(destination))
   }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
