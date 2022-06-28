@@ -11,6 +11,8 @@ import { ComposePayload, ComposeState } from './storeTypes/composeTypes'
 import { listRemoveItemDetail } from './emailListSlice'
 import getEmailListIndex from '../utils/getEmailListIndex'
 import { resetDraftDetails } from './draftsSlice'
+import archiveMail from '../components/EmailOptions/ArchiveMail'
+import * as global from '../constants/globalConstants'
 
 const initialState: ComposeState = Object.freeze({
   composeEmail: {},
@@ -51,7 +53,7 @@ export const cleanUpComposerAndDraft = (): AppThunk => (dispatch) => {
   dispatch(resetDraftDetails())
 }
 
-export const TrackComposeEmail =
+export const trackComposeEmail =
   (props: ComposePayload): AppThunk =>
   async (dispatch, getState) => {
     const composedEmail = getState().compose.composeEmail
@@ -66,7 +68,7 @@ export const TrackComposeEmail =
     }
   }
 
-export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
+export const sendComposedEmail = (): AppThunk => async (dispatch, getState) => {
   try {
     const { composeEmail } = getState().compose
     const sender = getState().base.profile.emailAddress
@@ -82,12 +84,14 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
         const body = { id }
         const response = await draftApi().sendDraft(body)
         if (response?.status === 200) {
-          dispatch(closeMail())
+          const { labelIds } = getState().labels
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
+          dispatch(resetDraftDetails())
+          archiveMail({ messageId: threadId, dispatch, labelIds })
           const staticIndexActiveEmailList: number = getEmailListIndex({
             emailList,
-            labelIds: ['DRAFT'],
+            labelIds: [global.DRAFT_LABEL],
           })
           if (staticIndexActiveEmailList > -1)
             dispatch(
@@ -96,6 +100,7 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
                 staticIndexActiveEmailList,
               })
             )
+          dispatch(closeMail())
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
@@ -103,9 +108,9 @@ export const SendComposedEmail = (): AppThunk => async (dispatch, getState) => {
       if (id === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response?.status === 200) {
-          dispatch(push(`/`))
           dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
+          dispatch(push(`/`))
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
