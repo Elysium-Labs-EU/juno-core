@@ -13,6 +13,7 @@ import {
   selectEmailListSize,
   selectInSearch,
   selectIsLoading,
+  selectIsProcessing,
   selectServiceUnavailable,
 } from '../../Store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
@@ -147,6 +148,7 @@ const EmailList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const emailList = useAppSelector(selectEmailList)
   const isLoading = useAppSelector(selectIsLoading)
+  const isProcessing = useAppSelector(selectIsProcessing)
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
@@ -187,11 +189,12 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
-            !isRefreshing
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
+            !isRefreshing &&
+            !isProcessing
           ) {
             setIsRefreshing(true)
             dispatch(refreshEmailFeed())
@@ -211,7 +214,7 @@ const EmailList = () => {
         draftPromise.abort()
       }
     }
-  }, [labelIds, window.location, viewIndex])
+  }, [labelIds, window.location, viewIndex, isProcessing])
 
   // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {

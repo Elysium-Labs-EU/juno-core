@@ -5,6 +5,7 @@ import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
   navigateBack,
   setIsLoading,
+  setIsProcessing,
   setIsSilentLoading,
   setServiceUnavailable,
 } from './utilsSlice'
@@ -457,7 +458,14 @@ export const updateEmailLabel = (
 
         if (!request.delete) {
           try {
-            await messageApi().updateMessage({ messageId, request })
+            dispatch(setIsProcessing(true))
+            const response = await messageApi().updateMessage({
+              messageId,
+              request,
+            })
+            if (response) {
+              dispatch(setIsProcessing(false))
+            }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }

@@ -9,18 +9,13 @@ import * as GS from '../../styles/globalStyles'
 import {
   cleanUpComposerAndDraft,
   selectComposeEmail,
-  SendComposedEmail,
-  TrackComposeEmail,
+  sendComposedEmail,
+  trackComposeEmail,
 } from '../../Store/composeSlice'
 import useDebounce from '../../Hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
-import {
-  createUpdateDraft,
-  listRemoveDraft,
-  resetDraftDetails,
-  selectDraftDetails,
-} from '../../Store/draftsSlice'
+import { createUpdateDraft, selectDraftDetails } from '../../Store/draftsSlice'
 import {
   selectCurrentMessage,
   selectIsForwarding,
@@ -206,7 +201,7 @@ const ComposeEmail = ({
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -219,7 +214,7 @@ const ComposeEmail = ({
     if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -232,7 +227,7 @@ const ComposeEmail = ({
     if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        mounted && dispatch(trackComposeEmail(updateEventObject))
       }
     }
     return () => {
@@ -247,7 +242,7 @@ const ComposeEmail = ({
         id: local.SUBJECT,
         value: debouncedSubjectValue,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -320,7 +315,7 @@ const ComposeEmail = ({
         id: 'id',
         value: currentMessage,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -334,7 +329,7 @@ const ComposeEmail = ({
         id: 'threadId',
         value: threadId,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
@@ -346,11 +341,16 @@ const ComposeEmail = ({
       e.preventDefault()
       if (toValue.length > 0) {
         if (emailValidation(toValue)) {
-          dispatch(SendComposedEmail())
-          dispatch(resetDraftDetails())
-          dispatch(
-            listRemoveDraft({ threadId: draftDetails?.message?.threadId })
-          )
+          dispatch(sendComposedEmail())
+          // dispatch(resetDraftDetails())
+          // dispatch(
+          //   listRemoveDraft({ threadId: draftDetails?.message?.threadId })
+          // )
+          // archiveMail({
+          //   messageId: threadDetail.id,
+          //   labelIds,
+          //   dispatch,
+          // })
         } else {
           setToError(true)
         }

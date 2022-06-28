@@ -22,6 +22,7 @@ import filterIllegalLabels from '../utils/filterIllegalLabels'
 interface IUtilsState {
   inSearch: boolean
   isLoading: boolean
+  isProcessing: boolean
   serviceUnavailable: string
   isSilentLoading: boolean
   isSettingsOpen: boolean
@@ -35,6 +36,7 @@ interface IUtilsState {
 const initialState: IUtilsState = Object.freeze({
   inSearch: false,
   isLoading: false,
+  isProcessing: false,
   serviceUnavailable: '',
   isSilentLoading: false,
   isSettingsOpen: false,
@@ -54,6 +56,9 @@ export const utilsSlice = createSlice({
     },
     setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isLoading = payload
+    },
+    setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
+      state.isProcessing = payload
     },
     setServiceUnavailable: (state, { payload }: PayloadAction<string>) => {
       state.serviceUnavailable = payload
@@ -114,6 +119,7 @@ export const utilsSlice = createSlice({
 export const {
   setInSearch,
   setIsLoading,
+  setIsProcessing,
   setServiceUnavailable,
   setIsSilentLoading,
   setIsSettingsOpen,
@@ -164,9 +170,8 @@ export const navigateTo =
       if (getState().emailDetail.isForwarding) {
         dispatch(setIsForwarding(false))
       }
-    } else {
-      dispatch(push(destination))
     }
+    dispatch(push(destination))
   }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
@@ -236,6 +241,7 @@ export const selectIsSettingsOpen = (state: RootState) =>
 export const selectAvatarVisibility = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
+export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable

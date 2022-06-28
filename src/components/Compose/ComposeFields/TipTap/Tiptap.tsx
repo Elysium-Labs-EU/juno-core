@@ -14,7 +14,7 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import DOMPurify from 'dompurify'
 import useDebounce from '../../../../Hooks/useDebounce'
-import { TrackComposeEmail } from '../../../../Store/composeSlice'
+import { trackComposeEmail } from '../../../../Store/composeSlice'
 import { useAppDispatch } from '../../../../Store/hooks'
 import * as local from '../../../../constants/composeEmailConstants'
 import * as S from './TipTapBodyStyles'
@@ -87,7 +87,7 @@ const Tiptap = ({
     let mounted = true
     if (debouncedBodyValue !== '') {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      mounted && dispatch(trackComposeEmail(updateEventObject))
     }
     return () => {
       mounted = false
