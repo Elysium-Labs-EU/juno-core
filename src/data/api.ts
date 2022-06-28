@@ -9,8 +9,6 @@ assertNonNullish(
   'Unable to find API key in environment'
 )
 
-// BLA
-
 export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
