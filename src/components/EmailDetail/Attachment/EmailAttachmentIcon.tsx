@@ -11,6 +11,7 @@ export default function EmailAttachmentIcon({
     'text/plain': <FiFileText size={20} />,
     'video/mp4': <FiFilm size={20} />,
     'application/pdf': <FiFile size={20} />,
+    'application/octet-stream': <FiFile size={20} />,
     default: <FiFile size={20} />,
   }
 
