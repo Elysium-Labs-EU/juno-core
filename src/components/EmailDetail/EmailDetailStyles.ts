@@ -8,20 +8,15 @@ export const HiddenMessagesFeed = styled.div`
   display: none;
 `
 
-interface IEmailDetailWrapper {
+interface IEmailDetail {
   tabbedView?: boolean
 }
 
-export const EmailDetailWrapper = styled.div<IEmailDetailWrapper>`
-  max-width: 1480px;
-  width: 100%;
+export const EmailDetailWrapper = styled.div<IEmailDetail>`
   margin-left: auto;
   margin-right: auto;
   flex: 1 1 0%;
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
-  position: relative;
-  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
-  transition: all 0.2s ease-in-out;
 `
 
 export const Scroll = styled.div<IScroll>`
@@ -69,10 +64,11 @@ export const EmailOpenWrapper = styled.div`
   background-color: var(--color-white);
 `
 
-export const EmailOptionsContainer = styled.div`
+export const EmailOptionsContainer = styled.div<IEmailDetail>`
   position: relative;
   min-height: 200px;
   padding: 30px;
+  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
 `
 
 export const EmailOptionsPlaceholder = styled.div`
@@ -127,14 +123,17 @@ export const CardFullWidth = styled.div`
   width: 100%;
 `
 
-export const EmailDetailContainer = styled.div`
+export const EmailDetailContainer = styled.div<IEmailDetail>`
+  width: 100vw;
   min-width: 665px;
   max-width: min(100vw - 340px, 860px);
   padding-bottom: 320px;
   margin-bottom: 20px;
-  width: 100%;
   overflow: scroll;
   scrollbar-width: none;
+  transition: all 0.2s ease-in-out;
+  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
+  position: relative;
 
   &::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */

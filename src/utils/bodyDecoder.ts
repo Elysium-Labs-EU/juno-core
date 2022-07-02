@@ -50,9 +50,7 @@ export const loopThroughBodyParts = async ({
   inputObject: any
   signal: AbortSignal
 }): Promise<any> => {
-  console.log(localMessageId, signal)
   if (signal.aborted) {
-    console.log(signal.aborted, signal.reason)
     throw new Error(signal.reason)
   }
   const loopingFunction = async ({ loopObject }: { loopObject: any }) => {
@@ -106,12 +104,10 @@ export const loopThroughBodyParts = async ({
       }
       if (!signal.aborted) {
         const result = await Promise.all(decodedResult)
-        console.log(result)
         return result
       }
       return null
     } catch (err) {
-      console.log(err)
       decodedResult = []
       const typedError: any = err
       return typedError
@@ -226,10 +222,6 @@ const bodyDecoder = async ({
   removedTrackers: Attr[] | []
 }> => {
   try {
-    console.log(localMessageId, signal)
-    if (signal.aborted) {
-      window.alert('Aborted')
-    }
     if (decodeImage) {
       localDecodeImage = decodeImage
     }
@@ -240,9 +232,6 @@ const bodyDecoder = async ({
       inputObject,
       signal,
     })
-
-    console.log(response)
-
     // Reset the local variable for the next decode
     decodedResult = []
 

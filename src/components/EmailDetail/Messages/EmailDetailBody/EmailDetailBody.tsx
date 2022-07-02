@@ -63,14 +63,12 @@ const EmailDetailBody = ({
       if (mounted && !hasRan) {
         const decoding = async () => {
           try {
-            console.log(signal)
             const bodyResponse = await bodyDecoder({
               messageId,
               inputObject: threadDetailBody,
               decodeImage: true,
               signal,
             })
-            // console.log(bodyResponse)
             mounted && setBodyState(bodyResponse)
             if (setContentRendered && mounted) {
               setContentRendered(true)
@@ -88,7 +86,6 @@ const EmailDetailBody = ({
                 removedTrackers: []
               })
             }
-            console.log(err)
           }
         }
         decoding()
@@ -96,9 +93,7 @@ const EmailDetailBody = ({
     }
     return () => {
       mounted = false
-      console.log(isDecoding)
       if (isDecoding) {
-        console.log('ABORT')
         controller.abort()
       }
     }

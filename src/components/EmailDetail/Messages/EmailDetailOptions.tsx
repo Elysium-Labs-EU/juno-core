@@ -16,7 +16,7 @@ import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
 import ArchiveOption from '../Options/ArchiveOption'
 import MoreOption from '../Options/MoreOption'
-import { selectCoreStatus } from '../../../Store/emailDetailSlice'
+import { selectCoreStatus, selectIsForwarding, selectIsReplying } from '../../../Store/emailDetailSlice'
 import SkipOption from '../Options/SkipOption'
 import ForwardOption from '../Options/ForwardOption'
 import UnsubscribeOption from '../Options/UnsubscribeOption'
@@ -33,6 +33,8 @@ const EmailDetailOptions = ({
   const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
 
@@ -50,7 +52,7 @@ const EmailDetailOptions = ({
   })
 
   return (
-    <S.EmailOptionsContainer>
+    <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           <ReplyOption threadDetail={threadDetail} />

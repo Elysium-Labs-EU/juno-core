@@ -4,7 +4,6 @@ import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
 import loadNextPage from '../../../utils/loadNextPage'
 import {
-  navigateNextMail,
   selectEmailListSize,
   selectIsSilentLoading,
 } from '../../../Store/utilsSlice'

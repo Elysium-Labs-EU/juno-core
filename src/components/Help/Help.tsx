@@ -8,6 +8,7 @@ import {
 import * as S from './HelpStyles'
 import * as local from '../../constants/helpConstants'
 import * as HS from '../MainHeader/HeaderStyles'
+import * as GS from '../../styles/globalStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import getUserAgent from '../../utils/getUserAgent'
 
@@ -16,6 +17,7 @@ const handleClose = (dispatch: Function) =>
 
 interface IKeyCombos {
   title: string
+  subTitle?: string
   keys: string[] | JSX.Element[]
 }
 
@@ -36,6 +38,7 @@ const CreateSectionWithKeys = ({
     {keyCombos.map((combo) => (
       <S.KeyComboContainer key={combo.title}>
         <div>{combo.title}</div>
+        {combo?.subTitle && <GS.TextMutedSpan>{combo?.subTitle}</GS.TextMutedSpan>}
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
             <span key={JSON.stringify(oneKey)}>{oneKey}</span>

@@ -160,7 +160,7 @@ const MessagesOverview = memo(
     return (
       <>
         <ES.DetailRow>
-          <ES.EmailDetailContainer>
+          <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
             <ES.DetailBase>
               <ES.CardFullWidth>
                 {threadDetail && !isLoading ? (
