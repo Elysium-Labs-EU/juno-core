@@ -38,7 +38,9 @@ const CreateSectionWithKeys = ({
     {keyCombos.map((combo) => (
       <S.KeyComboContainer key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && <GS.TextMutedSpan>{combo?.subTitle}</GS.TextMutedSpan>}
+        {combo?.subTitle && (
+          <GS.TextMutedSpan>{combo?.subTitle}</GS.TextMutedSpan>
+        )}
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
             <span key={JSON.stringify(oneKey)}>{oneKey}</span>

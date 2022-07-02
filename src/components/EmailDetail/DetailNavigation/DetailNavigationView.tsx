@@ -84,7 +84,6 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
         }
       }
 
-
       return null
     }
     nextButtonSelector()

@@ -11,7 +11,10 @@ import { useAppSelector } from '../../../Store/hooks'
 import checkAttachment from '../../../utils/checkAttachment'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
-import { selectIsReplying, selectIsForwarding } from '../../../Store/emailDetailSlice'
+import {
+  selectIsReplying,
+  selectIsForwarding,
+} from '../../../Store/emailDetailSlice'
 
 interface IFilesOverview {
   threadDetail: IEmailListThreadItem | null

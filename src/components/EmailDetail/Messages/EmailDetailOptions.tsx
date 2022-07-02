@@ -16,7 +16,11 @@ import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
 import ArchiveOption from '../Options/ArchiveOption'
 import MoreOption from '../Options/MoreOption'
-import { selectCoreStatus, selectIsForwarding, selectIsReplying } from '../../../Store/emailDetailSlice'
+import {
+  selectCoreStatus,
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../Store/emailDetailSlice'
 import SkipOption from '../Options/SkipOption'
 import ForwardOption from '../Options/ForwardOption'
 import UnsubscribeOption from '../Options/UnsubscribeOption'

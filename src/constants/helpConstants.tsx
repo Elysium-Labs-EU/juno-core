@@ -1,4 +1,9 @@
-import { FiArrowDown, FiArrowLeft, FiArrowRight, FiArrowUp } from 'react-icons/fi'
+import {
+  FiArrowDown,
+  FiArrowLeft,
+  FiArrowRight,
+  FiArrowUp,
+} from 'react-icons/fi'
 import getUserAgent from '../utils/getUserAgent'
 import * as global from './globalConstants'
 
@@ -34,15 +39,24 @@ export const EMAIL_DETAIL_COMBOS = [
   { title: 'Mark Email as To Do', keys: [modifierKey, 'E'] },
   { title: 'Archive Email', keys: [modifierKey, 'BACKSPACE'] },
   {
-    title: 'Delete Email', subTitle: 'When Archive Email is unavailable',
+    title: 'Delete Email',
+    subTitle: 'When Archive Email is unavailable',
     keys: [modifierKey, 'BACKSPACE'],
   },
   { title: 'Reply to Email', keys: [modifierKey, 'ENTER'] },
   { title: 'Forward Email', keys: ['SHIFT', 'ENTER'] },
   { title: 'Skip Email', keys: [modifierKey, 'SHIFT', 'K'] },
   { title: 'Unsubscribe Email', keys: [modifierKey, 'SHIFT', 'U'] },
-  { title: 'Next Email', subTitle: 'When option is available', keys: [<FiArrowRight />] },
-  { title: 'Previous Email', subTitle: 'When option is available', keys: [<FiArrowLeft />] },
+  {
+    title: 'Next Email',
+    subTitle: 'When option is available',
+    keys: [<FiArrowRight />],
+  },
+  {
+    title: 'Previous Email',
+    subTitle: 'When option is available',
+    keys: [<FiArrowLeft />],
+  },
 ]
 
 export const COMPOSE_KEY_TITLE = 'Compose'
