@@ -496,7 +496,7 @@ const ComposeEmail = ({
                   suppressed
                 />
               )}
-
+              {console.log(draftId)}
               {draftId && <DiscardDraft draftId={draftId} />}
             </form>
           </GS.Base>

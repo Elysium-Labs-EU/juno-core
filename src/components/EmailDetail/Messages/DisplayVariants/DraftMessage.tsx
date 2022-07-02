@@ -35,11 +35,6 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
     []
   )
 
-  const handleClick = () => {
-    dispatch(openDraftEmail({ id, messageId }))
-    setDraftOpened(true)
-  }
-
   /**
    * This function only hides the draft whenever the replying mode is set active.
    */
@@ -55,6 +50,12 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
       mounted = false
     }
   }, [isReplying, draftOpened])
+
+  const handleClick = () => {
+    console.log('HERE')
+    dispatch(openDraftEmail({ id, messageId }))
+    setDraftOpened(true)
+  }
 
   return (
     <S.EmailClosedWrapper

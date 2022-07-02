@@ -120,9 +120,11 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
     draft: { message },
   } = props
   return async (dispatch, getState) => {
+    const { signal } = new AbortController()
     try {
       const decodedBody = await loopThroughBodyParts({
         inputObject: message.payload,
+        // signal,
       })
       const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
@@ -208,6 +210,7 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
         dispatch(loadDraftDetails({ draftId }))
       }
     } catch (err) {
+      console.error(err)
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }

@@ -23,11 +23,17 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
     const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp)
       ? format(unixTimestamp, 'HH:mm')
       : format(unixTimestamp, 'dd LLL')
-    return <StyledTooltip title={format(unixTimestamp, 'PPpp')}><StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp></StyledTooltip>
+    return (
+      <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
+        <StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp>
+      </StyledTooltip>
+    )
   }
 
   return (
-    <StyledTooltip title={format(unixTimestamp, 'PPpp')}><StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp></StyledTooltip>
+    <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
+      <StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp>
+    </StyledTooltip>
   )
 }
 
