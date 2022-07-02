@@ -20,8 +20,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${ ({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
+  color: ${({ suppressed }) =>
+    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -91,5 +91,5 @@ CustomButton.defaultProps = {
   icon: null,
   className: null,
   suppressed: false,
-  style: undefined
+  style: undefined,
 }
