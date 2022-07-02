@@ -24,7 +24,7 @@ export const instance = axios.create({
 })
 
 export const errorHandling = async (err: any) => {
-  // console.log(err)
+  console.error(err)
   const originalRequest = err.config
   if (
     err?.response?.data === global.INVALID_TOKEN &&

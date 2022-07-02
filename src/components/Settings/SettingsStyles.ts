@@ -36,6 +36,13 @@ export const SettingsHeader = styled.h2`
   margin-bottom: 32px;
 `
 
+export const SettingsTop = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  margin-right: 20px;
+`
+
 export const StyledSelect = styled(Select)<SelectProps>`
   border: 0;
   width: 64px;

@@ -54,6 +54,7 @@
     "qs": "6.11.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-html-parser": "^2.0.2",
     "react-icons": "4.4.0",
     "react-is": "18.2.0",
     "react-redux": "8.0.2",
@@ -72,7 +73,8 @@
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
-    "lint:prettier": "prettier --check \"src/**/*.{js,jsx,json,md,tsx,ts}\""
+    "lint:prettier": "prettier --check \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
+    "yarn update-deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
     "@types/dompurify": "2.3.3",
@@ -82,6 +84,7 @@
     "@types/qs": "6.9.7",
     "@types/react": "18.0.14",
     "@types/react-dom": "18.0.5",
+    "@types/react-html-parser": "^2.0.2",
     "@types/react-redux": "7.1.24",
     "@types/react-router-dom": "5.3.3",
     "@types/styled-components": "5.1.25",

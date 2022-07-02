@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import * as React from 'react'
 import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
-import { FiSearch, FiX } from 'react-icons/fi'
+import { FiSearch, FiX, FiXCircle } from 'react-icons/fi'
 import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
@@ -36,7 +36,7 @@ interface IShouldClearOutPreviousResults {
 }
 interface IIntitialSearch {
   searchValue: string
-  setLoadState: Function
+  setLoadState: (value: string) => void
   fetchSearchThreads: Function
   searchValueRef: any
   setSearchResults: Function
@@ -268,7 +268,7 @@ const Search = () => {
             <CustomIconButton
               onClick={resetSearch}
               aria-label="clear-search"
-              icon={<FiX size={16} />}
+              icon={<FiXCircle size={16} />}
             />
           )}
           <CustomButton
@@ -286,6 +286,12 @@ const Search = () => {
               searchValue.length < 1 || searchValue === searchValueRef.current
             }
             label={SEARCH}
+            style={{ marginRight: '10px' }}
+          />
+          <CustomIconButton
+            onClick={() => handleClose(dispatch)}
+            aria-label="close-modal"
+            icon={<FiX size={16} />}
           />
         </S.InputRow>
         <S.SearchResults>

@@ -1,5 +1,48 @@
-import { IEmailListThreadItem } from '../../../../Store/storeTypes/emailListTypes'
-import PreLoadMessage from './PreLoadMessage'
+import {
+  IEmailListThreadItem,
+  IEmailMessage,
+} from '../../../../Store/storeTypes/emailListTypes'
+import * as global from '../../../../constants/globalConstants'
+import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
+
+// Only preload messages that are is not actively being shown on the window.
+
+const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
+  message &&
+  message.payload &&
+  message.id &&
+  !window.location.pathname.includes(message.id) ? (
+    <EmailDetailBody
+      threadDetailBody={message.payload}
+      messageId={message.id}
+      detailBodyCSS={global.EMAIL_BODY_INVISIBLE}
+    />
+  ) : (
+    <div>{global.NOTHING_TO_SEE}</div>
+  )
+
+const PreLoadMessage = ({
+  threadDetail,
+}: {
+  threadDetail: IEmailListThreadItem
+}) => (
+  <div>
+    {threadDetail?.messages &&
+      threadDetail.messages.map((message) => {
+        if (
+          Object.prototype.hasOwnProperty.call(message, 'labelIds') &&
+          !message.labelIds.includes(global.DRAFT_LABEL)
+        ) {
+          return (
+            <div key={message.id}>
+              <PreLoadNormalMessage message={message} />
+            </div>
+          )
+        }
+        return null
+      })}
+  </div>
+)
 
 const PreLoadMessages = ({
   threadDetailList,
