@@ -114,8 +114,8 @@ const EmailDetailBody = ({
             Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
             Object.prototype.hasOwnProperty.call(item, 'decodedB64') && (
               <img
-                key={`${ item.filename + itemIdx }`}
-                src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
+                key={`${item.filename + itemIdx}`}
+                src={`data:${item.mimeType};base64,${item.decodedB64}`}
                 alt={item?.filename ?? 'embedded image'}
                 style={{ maxWidth: '100%', borderRadius: '5px' }}
               />
