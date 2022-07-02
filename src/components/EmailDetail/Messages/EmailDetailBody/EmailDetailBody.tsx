@@ -57,30 +57,47 @@ const EmailDetailBody = ({
 
   useEffect(() => {
     let mounted = true
+    const controller = new AbortController()
+    const { signal } = controller
     if (messageId.length > 0) {
       if (mounted && !hasRan) {
         const decoding = async () => {
-          const bodyResponse = await bodyDecoder({
-            messageId,
-            inputObject: threadDetailBody,
-            decodeImage: true,
-          })
-          mounted && setBodyState(bodyResponse)
-          if (setContentRendered && mounted) {
-            setContentRendered(true)
+          try {
+            const bodyResponse = await bodyDecoder({
+              messageId,
+              inputObject: threadDetailBody,
+              decodeImage: true,
+              signal,
+            })
+            mounted && setBodyState(bodyResponse)
+            if (setContentRendered && mounted) {
+              setContentRendered(true)
+            }
+            if (setBlockedTrackers && bodyResponse.removedTrackers && mounted) {
+              setBlockedTrackers(bodyResponse.removedTrackers)
+            }
+            mounted && setIsDecoding(false)
+          } catch (err) {
+            if (setContentRendered) {
+              setContentRendered(true)
+              setBodyState({
+                emailHTML: '<p>Something went wrong during the decoding</p>',
+                emailFileHTML: [],
+                removedTrackers: [],
+              })
+            }
           }
-          if (setBlockedTrackers && bodyResponse.removedTrackers && mounted) {
-            setBlockedTrackers(bodyResponse.removedTrackers)
-          }
-          mounted && setIsDecoding(false)
         }
         decoding()
       }
     }
     return () => {
       mounted = false
+      if (isDecoding) {
+        controller.abort()
+      }
     }
-  }, [messageId, hasRan])
+  }, [messageId, isDecoding])
 
   useEffect(() => {
     if (

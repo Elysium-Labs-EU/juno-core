@@ -11,6 +11,10 @@ import { useAppSelector } from '../../../Store/hooks'
 import checkAttachment from '../../../utils/checkAttachment'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
+import {
+  selectIsReplying,
+  selectIsForwarding,
+} from '../../../Store/emailDetailSlice'
 
 interface IFilesOverview {
   threadDetail: IEmailListThreadItem | null
@@ -19,6 +23,8 @@ interface IFilesOverview {
 
 const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
   const { emailAddress } = useAppSelector(selectProfile)
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
 
   const files = useCallback(() => {
     if (threadDetail?.messages) {
@@ -61,7 +67,7 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
 
   return (
     <ES.DetailRow>
-      <ES.EmailDetailContainer>
+      <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
           {!isLoading && staticFiles && staticFiles.length > 0 ? (
             staticFiles

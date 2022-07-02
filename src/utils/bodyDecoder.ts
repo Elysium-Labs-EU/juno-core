@@ -45,54 +45,75 @@ const inlineImageDecoder = async ({
 // This function recursively loops in the emailbody to find a body to decode. If initially priotizes the last object in a parts array.
 export const loopThroughBodyParts = async ({
   inputObject,
+  signal,
 }: {
   inputObject: any
+  signal: AbortSignal
 }): Promise<any> => {
-  const objectKeys = Object.keys(inputObject)
-  for (let i = 0; i < objectKeys.length; i += 1) {
-    if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
-      if (inputObject.body.size > 0) {
-        if (objectKeys[i] === 'body') {
+  if (signal.aborted) {
+    throw new Error(signal.reason)
+  }
+  const loopingFunction = async ({ loopObject }: { loopObject: any }) => {
+    try {
+      const objectKeys = Object.keys(loopObject)
+      for (let i = 0; i < objectKeys.length; i += 1) {
+        if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
+          if (loopObject.body.size > 0) {
+            if (objectKeys[i] === 'body') {
+              if (
+                Object.prototype.hasOwnProperty.call(
+                  loopObject.body,
+                  'attachmentId'
+                ) &&
+                localDecodeImage &&
+                localMessageId
+              ) {
+                // If it is an image, use the image decoder
+                const imageObjectPromise = inlineImageDecoder({
+                  attachmentData: loopObject,
+                  messageId: localMessageId,
+                })
+                decodedResult.push(imageObjectPromise)
+              }
+              decodedString = decodeBase64(`${loopObject.body.data}`)
+              if (loopObject.mimeType !== 'text/plain' && decodedString) {
+                decodedResult.push(decodedString)
+              } else if (
+                loopObject.mimeType === 'text/plain' &&
+                decodedString
+              ) {
+                const localString = decodedString
+                decodedResult.push(enhancePlainText(localString))
+              }
+            }
+          }
           if (
-            Object.prototype.hasOwnProperty.call(
-              inputObject.body,
-              'attachmentId'
-            ) &&
-            localDecodeImage &&
-            localMessageId
+            loopObject.body.size === 0 ||
+            !Object.prototype.hasOwnProperty.call(loopObject, 'body')
           ) {
-            // If it is an image, use the image decoder
-            const imageObjectPromise = inlineImageDecoder({
-              attachmentData: inputObject,
-              messageId: localMessageId,
-            })
-            decodedResult.push(imageObjectPromise)
-          }
-          decodedString = decodeBase64(`${inputObject.body.data}`)
-          if (inputObject.mimeType !== 'text/plain' && decodedString) {
-            decodedResult.push(decodedString)
-          } else if (inputObject.mimeType === 'text/plain' && decodedString) {
-            const localString = decodedString
-            decodedResult.push(enhancePlainText(localString))
+            if (objectKeys[i] === 'parts') {
+              // If the object has no parts of its own, loop through all of them to decode
+              loopObject.parts.forEach((part: any) => {
+                loopingFunction({
+                  loopObject: part,
+                })
+              })
+            }
           }
         }
       }
-      if (
-        inputObject.body.size === 0 ||
-        !Object.prototype.hasOwnProperty.call(inputObject, 'body')
-      ) {
-        if (objectKeys[i] === 'parts') {
-          // If the object has no parts of its own, loop through all of them to decode
-          inputObject.parts.forEach((part: any) => {
-            loopThroughBodyParts({
-              inputObject: part,
-            })
-          })
-        }
+      if (!signal.aborted) {
+        const result = await Promise.all(decodedResult)
+        return result
       }
+      return null
+    } catch (err) {
+      decodedResult = []
+      const typedError: any = err
+      return typedError
     }
   }
-  return Promise.all(decodedResult)
+  return loopingFunction({ loopObject: inputObject })
 }
 
 const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
@@ -189,41 +210,48 @@ const bodyDecoder = async ({
   messageId,
   inputObject,
   decodeImage,
+  signal,
 }: {
   messageId?: string
   inputObject: any
   decodeImage: boolean
+  signal: AbortSignal
 }): Promise<{
   emailHTML: string
   emailFileHTML: any[]
   removedTrackers: Attr[] | []
 }> => {
-  if (decodeImage) {
-    localDecodeImage = decodeImage
-  }
-  if (messageId) {
-    localMessageId = messageId
-  }
-  let response = await loopThroughBodyParts({
-    inputObject,
-  })
+  try {
+    if (decodeImage) {
+      localDecodeImage = decodeImage
+    }
+    if (messageId) {
+      localMessageId = messageId
+    }
+    let response = await loopThroughBodyParts({
+      inputObject,
+      signal,
+    })
+    // Reset the local variable for the next decode
+    decodedResult = []
 
-  // Reset the local variable for the next decode
-  decodedResult = []
-
-  response = prioritizeHTMLbodyObject(response)
-  // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
-  response = orderArrayPerType(response)
-  response = placeInlineImage(response)
-  response = removeTrackers(response)
-  response = removeScripts(response)
-  response = {
-    ...response,
-    emailHTML: DOMPurify.sanitize(response.emailHTML, {
-      USE_PROFILES: { html: true },
-    }),
+    response = prioritizeHTMLbodyObject(response)
+    // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
+    response = orderArrayPerType(response)
+    response = placeInlineImage(response)
+    response = removeTrackers(response)
+    response = removeScripts(response)
+    response = {
+      ...response,
+      emailHTML: DOMPurify.sanitize(response.emailHTML, {
+        USE_PROFILES: { html: true },
+      }),
+    }
+    return response
+  } catch (err) {
+    const typedError: any = err
+    return typedError
   }
-  return response
 }
 
 export default bodyDecoder

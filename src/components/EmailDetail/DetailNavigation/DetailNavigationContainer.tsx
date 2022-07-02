@@ -4,7 +4,6 @@ import { selectViewIndex } from '../../../Store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
 import loadNextPage from '../../../utils/loadNextPage'
 import {
-  navigateNextMail,
   selectEmailListSize,
   selectIsSilentLoading,
 } from '../../../Store/utilsSlice'
@@ -33,34 +32,6 @@ const DetailNavigationContainer = ({
   const isDisabledNext =
     activeEmailList.nextPageToken === undefined &&
     activeEmailList.threads[viewIndex + 1] === undefined
-
-  const nextButtonSelector = () => {
-    if (
-      activeEmailList.threads.length > 0 &&
-      activeEmailList.threads[viewIndex + 1] !== undefined &&
-      labelIds
-    ) {
-      dispatch(navigateNextMail())
-    }
-    if (!labelIds.includes(global.ARCHIVE_LABEL)) {
-      // If loading isn't already happening, load the nextPage
-      const { nextPageToken } = activeEmailList as IEmailListObject
-      if (
-        activeEmailList.nextPageToken !== null &&
-        activeEmailList.threads[viewIndex + 1] === undefined &&
-        !isSilentLoading
-      ) {
-        return loadNextPage({
-          nextPageToken,
-          labelIds,
-          dispatch,
-          maxResults: emailFetchSize,
-        })
-      }
-    }
-
-    return null
-  }
 
   // Load additional emails when the first, current viewed email happens to be the last in the list
   useEffect(() => {
@@ -93,9 +64,9 @@ const DetailNavigationContainer = ({
 
   return (
     <DetailNavigationView
+      activeEmailList={activeEmailList}
       isDisabledPrev={isDisabledPrev}
       isDisabledNext={isDisabledNext}
-      nextButtonSelector={nextButtonSelector}
     />
   )
 }
