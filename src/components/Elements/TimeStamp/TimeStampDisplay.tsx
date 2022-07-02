@@ -1,5 +1,6 @@
 import { format, isSameDay, isThisYear } from 'date-fns'
 import styled from 'styled-components'
+import StyledTooltip from '../StyledTooltip'
 
 const StyledTimeStamp = styled.span`
   color: var(--color-grey-light);
@@ -22,11 +23,11 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
     const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp)
       ? format(unixTimestamp, 'HH:mm')
       : format(unixTimestamp, 'dd LLL')
-    return <StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp>
+    return <StyledTooltip title={format(unixTimestamp, 'PPpp')}><StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp></StyledTooltip>
   }
 
   return (
-    <StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp>
+    <StyledTooltip title={format(unixTimestamp, 'PPpp')}><StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp></StyledTooltip>
   )
 }
 
