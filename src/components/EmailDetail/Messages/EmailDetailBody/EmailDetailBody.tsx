@@ -65,7 +65,6 @@ const EmailDetailBody = ({
             inputObject: threadDetailBody,
             decodeImage: true,
           })
-          console.log(bodyResponse)
           mounted && setBodyState(bodyResponse)
           if (setContentRendered && mounted) {
             setContentRendered(true)

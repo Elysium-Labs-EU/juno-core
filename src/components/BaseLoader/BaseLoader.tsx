@@ -33,8 +33,7 @@ const Baseloader = () => {
   useEffect(() => {
     let mounted = true
     if (mounted && countDown === 0) {
-      // handleLogout()
-      console.log('boop')
+      handleLogout()
     }
     return () => {
       mounted = false
