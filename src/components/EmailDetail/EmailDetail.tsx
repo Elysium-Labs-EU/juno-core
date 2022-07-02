@@ -141,11 +141,11 @@ const EmailDetail = () => {
                     setContentRendered={setContentRendered}
                   />
                   <S.HiddenMessagesFeed>
-                    {/* <PreLoadMessages
+                    <PreLoadMessages
                       threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}
                       contentRendered={contentRendered}
-                    /> */}
+                    />
                   </S.HiddenMessagesFeed>
                 </>
               )}
