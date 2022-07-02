@@ -16,7 +16,7 @@ const createCompose = ({
 const CLICK_EMAIL = 'Click to start new mail'
 
 export default function handleEmailLink({ dispatch }: { dispatch: Function }) {
-  const elements = document.querySelectorAll('.visible a')
+  const elements = document.querySelectorAll('a')
   if (elements.length > 0) {
     elements.forEach((element) => {
       if (element.getAttribute('href')?.includes('mailto:')) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import DOMPurify from 'dompurify'
+import ReactHtmlParser from 'react-html-parser'
 import { useAppDispatch } from '../../../../Store/hooks'
 import { IEmailMessagePayload } from '../../../../Store/storeTypes/emailListTypes'
 import bodyDecoder from '../../../../utils/bodyDecoder'
@@ -44,7 +44,7 @@ const EmailDetailBody = ({
   setBlockedTrackers,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<null | {
-    emailHTML: HTMLElement
+    emailHTML: string
     emailFileHTML: any[]
     removedTrackers: Attr[] | []
   }>(null)
@@ -58,7 +58,7 @@ const EmailDetailBody = ({
   useEffect(() => {
     let mounted = true
     if (messageId.length > 0) {
-      if (mounted) {
+      if (mounted && !hasRan) {
         const decoding = async () => {
           const bodyResponse = await bodyDecoder({
             messageId,
@@ -66,9 +66,8 @@ const EmailDetailBody = ({
             decodeImage: true,
           })
           setBodyState(bodyResponse)
-          if (setContentRendered && setUnsubscribeLink && !hasRan) {
+          if (setContentRendered) {
             setContentRendered(true)
-            postTreatmentBody({ dispatch, setUnsubscribeLink })
           }
           if (setBlockedTrackers && bodyResponse.removedTrackers) {
             setBlockedTrackers(bodyResponse.removedTrackers)
@@ -81,7 +80,18 @@ const EmailDetailBody = ({
     return () => {
       mounted = false
     }
-  }, [messageId])
+  }, [messageId, hasRan])
+
+  useEffect(() => {
+    if (
+      !isDecoding &&
+      setUnsubscribeLink &&
+      !hasRan &&
+      detailBodyCSS === 'visible'
+    ) {
+      postTreatmentBody({ dispatch, setUnsubscribeLink })
+    }
+  }, [isDecoding, hasRan, setUnsubscribeLink, detailBodyCSS])
 
   return (
     <div className={detailBodyCSS}>
@@ -91,8 +101,12 @@ const EmailDetailBody = ({
         </Wrapper>
       )}
       {!isDecoding &&
-        bodyState &&
-        bodyState.emailFileHTML &&
+        bodyState?.emailHTML &&
+        bodyState.emailHTML.length > 0 && (
+          <div>{ReactHtmlParser(bodyState.emailHTML)}</div>
+        )}
+      {!isDecoding &&
+        bodyState?.emailFileHTML &&
         bodyState.emailFileHTML.length > 0 &&
         bodyState.emailFileHTML.map(
           (item, itemIdx) =>
@@ -105,19 +119,6 @@ const EmailDetailBody = ({
                 style={{ maxWidth: '100%', borderRadius: '5px' }}
               />
             )
-        )}
-      {!isDecoding &&
-        bodyState &&
-        bodyState.emailHTML &&
-        bodyState.emailHTML.childNodes.length > 0 && (
-          <div
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(bodyState.emailHTML, {
-                USE_PROFILES: { html: true },
-              }),
-            }}
-          />
         )}
     </div>
   )

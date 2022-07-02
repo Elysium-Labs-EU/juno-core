@@ -10,6 +10,7 @@ interface ICustomButton {
   icon?: JSX.Element
   label: string
   suppressed?: boolean
+  style: any
 }
 
 interface IButton {
@@ -63,7 +64,8 @@ const InnerButton = styled.div`
 `
 
 const CustomButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, icon, label, type, suppressed } = props
+  const { onClick, className, disabled, icon, label, type, suppressed, style } =
+    props
   return (
     <Button
       onClick={onClick ? (event) => onClick(event) : undefined}
@@ -71,6 +73,7 @@ const CustomButton = (props: ICustomButton) => {
       type={type ?? 'button'}
       disabled={disabled}
       suppressed={suppressed}
+      style={style}
     >
       <InnerButton>
         {icon && <div className="icon">{icon}</div>}

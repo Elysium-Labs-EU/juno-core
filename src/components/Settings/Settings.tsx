@@ -1,10 +1,12 @@
 import Modal from '@mui/material/Modal'
+import { FiX } from 'react-icons/fi'
 import { selectIsSettingsOpen, setIsSettingsOpen } from '../../Store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import * as S from './SettingsStyles'
 import ShowAvatar from './SettingsOptions/ShowAvatar/ShowAvatar'
 import EmailSize from './SettingsOptions/EmailSize/EmailSize'
 import Contributions from './Contributions/contributions'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 
 const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
 
@@ -23,7 +25,14 @@ const Settings = () => {
       aria-describedby="modal-settings-box"
     >
       <S.Dialog>
-        <S.SettingsHeader>{SETTINGS}</S.SettingsHeader>
+        <S.SettingsTop>
+          <S.SettingsHeader>{SETTINGS}</S.SettingsHeader>
+          <CustomIconButton
+            onClick={() => handleClose(dispatch)}
+            aria-label="close-modal"
+            icon={<FiX size={16} />}
+          />
+        </S.SettingsTop>
         <S.SettingsContainer>
           <ShowAvatar />
           <EmailSize />

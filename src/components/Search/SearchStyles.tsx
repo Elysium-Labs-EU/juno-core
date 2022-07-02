@@ -28,7 +28,7 @@ export const InputRow = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 15px 30px;
 `
 
 export const InfoAndButton = styled.div`

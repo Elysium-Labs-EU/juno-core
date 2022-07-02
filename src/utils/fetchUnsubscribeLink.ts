@@ -12,7 +12,7 @@ export default function fetchUnsubscribeLink({
 }: {
   setUnsubscribeLink: Function
 }) {
-  const elements = document.querySelectorAll('.visible a')
+  const elements = document.querySelectorAll('a')
   const matchedElements: string[] = []
   if (elements.length > 0) {
     elements.forEach((element) => {

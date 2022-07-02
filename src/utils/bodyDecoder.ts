@@ -1,4 +1,5 @@
 import AutoLinker from 'autolinker'
+import DOMPurify from 'dompurify'
 import {
   IAttachment,
   IEmailAttachmentType,
@@ -122,7 +123,8 @@ const prioritizeHTMLbodyObject = (response: any) => {
       indexOfStringObjects.push(i)
     }
   }
-  if (indexOfStringObjects.length === indexOfRemovalObjects.length) {
+  // If there is only 1 string item in the response, use that.
+  if (indexOfStringObjects.length === 1 && indexOfRemovalObjects.length === 1) {
     return response
   }
   if (indexOfStringObjects.length > indexOfRemovalObjects.length) {
@@ -192,7 +194,7 @@ const bodyDecoder = async ({
   inputObject: any
   decodeImage: boolean
 }): Promise<{
-  emailHTML: HTMLElement
+  emailHTML: string
   emailFileHTML: any[]
   removedTrackers: Attr[] | []
 }> => {
@@ -215,7 +217,15 @@ const bodyDecoder = async ({
   response = placeInlineImage(response)
   response = removeTrackers(response)
   response = removeScripts(response)
+  response = {
+    ...response,
+    emailHTML: DOMPurify.sanitize(response.emailHTML, {
+      USE_PROFILES: { html: true },
+    }),
+  }
   return response
 }
 
 export default bodyDecoder
+
+// TODO: Write a test for all of these functions.

@@ -56,7 +56,9 @@ export const Dialog = styled.div`
   display: flex;
   flex-direction: column;
   transform: translate(-50%, -50%);
-  width: 475px;
+  width: 60vw;
+  min-width: 300px;
+  min-width: 600px;
   min-height: 300px;
   background-color: var(--color-white);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
@@ -77,8 +79,15 @@ export const DialogHeader = styled.h2`
   margin-bottom: 32px;
 `
 
+export const DialogTop = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  margin-right: 20px;
+`
+
 export const DialogInner = styled.div`
-  margin-left: 32px;
+  margin: 0 32px;
   user-select: none;
 `
 
