@@ -74,7 +74,7 @@
     "lint-fix": "eslint ./ --fix",
     "format": "prettier --write \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
     "lint:prettier": "prettier --check \"src/**/*.{js,jsx,json,md,tsx,ts}\"",
-    "yarn update-deps": "yarn upgrade-interactive --latest"
+    "update-deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
     "@types/dompurify": "2.3.3",
