@@ -179,9 +179,9 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { composeEmail } = getState().compose
   const { labelIds } = getState().labels
   if (!coreStatus) {
-    if (Object.keys(composeEmail).length > 0) {
-      dispatch(cleanUpComposerAndDraft())
-    }
+    // if (Object.keys(composeEmail).length > 0) {
+    //   dispatch(cleanUpComposerAndDraft())
+    // }
     if (labelIds.includes(global.INBOX_LABEL)) {
       dispatch(push(RouteConstants.INBOX))
       return

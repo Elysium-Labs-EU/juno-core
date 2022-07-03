@@ -22,70 +22,69 @@ export const composeSlice = createSlice({
   name: 'compose',
   initialState,
   reducers: {
-    setComposeEmail: (state, action: PayloadAction<ComposePayload>) => {
-      if (action.payload.id && action.payload.value) {
-        const currentState: any = state.composeEmail
-        currentState[action.payload.id] = action.payload.value
-        state.composeEmail = currentState
-      }
-      if (!action.payload.id && !action.payload.value) {
-        state.composeEmail = action.payload
-      }
-    },
-    updateComposeEmail: (state, action) => {
-      if (action.payload.id && action.payload.value) {
-        const currentState: any = state.composeEmail
-        currentState[action.payload.id] = action.payload.value
-        state.composeEmail = currentState
-      }
-    },
-    resetComposeEmail: (state) => {
-      state.composeEmail = {}
-    },
+    // setComposeEmail: (state, action: PayloadAction<ComposePayload>) => {
+    //   if (action.payload.id && action.payload.value) {
+    //     const currentState: any = state.composeEmail
+    //     currentState[action.payload.id] = action.payload.value
+    //     state.composeEmail = currentState
+    //   }
+    //   if (!action.payload.id && !action.payload.value) {
+    //     state.composeEmail = action.payload
+    //   }
+    // },
+    // updateComposeEmail: (state, action) => {
+    //   if (action.payload.id && action.payload.value) {
+    //     const currentState: any = state.composeEmail
+    //     currentState[action.payload.id] = action.payload.value
+    //     state.composeEmail = currentState
+    //   }
+    // },
+    // resetComposeEmail: (state) => {
+    //   state.composeEmail = {}
+    // },
   },
 })
 
-export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
-  composeSlice.actions
+// export const { setComposeEmail, updateComposeEmail, resetComposeEmail } =
+//   composeSlice.actions
 
 export const cleanUpComposerAndDraft = (): AppThunk => (dispatch) => {
-  dispatch(resetComposeEmail())
+  // dispatch(resetComposeEmail())
   dispatch(resetDraftDetails())
 }
 
-export const trackComposeEmail =
-  (props: ComposePayload): AppThunk =>
+// export const trackComposeEmail =
+//   (props: ComposePayload): AppThunk =>
+//   async (dispatch, getState) => {
+//     const composedEmail = getState().compose.composeEmail
+//     try {
+//       if (isEmpty(composedEmail)) {
+//         dispatch(setComposeEmail(props))
+//         return
+//       }
+//       dispatch(updateComposeEmail(props))
+//     } catch (err) {
+//       dispatch(setServiceUnavailable('Error updating compose email.'))
+//     }
+//   }
+
+export const sendComposedEmail =
+  ({ composedEmail }: any): AppThunk =>
   async (dispatch, getState) => {
-    const composedEmail = getState().compose.composeEmail
+    console.log(composedEmail)
     try {
-      if (isEmpty(composedEmail)) {
-        dispatch(setComposeEmail(props))
-        return
-      }
-      dispatch(updateComposeEmail(props))
-    } catch (err) {
-      dispatch(setServiceUnavailable('Error updating compose email.'))
-    }
-  }
-
-export const sendComposedEmail = (): AppThunk => async (dispatch, getState) => {
-  try {
-    const { composeEmail } = getState().compose
-    const sender = getState().base.profile.emailAddress
-    const {
-      id,
-      message: { threadId },
-    } = getState().drafts.draftDetails
-    const { emailList } = getState().email
-    const completeEmail = { ...composeEmail, sender }
-
-    if (Object.keys(completeEmail).length >= 4) {
+      const sender = getState().base.profile.emailAddress
+      const {
+        id,
+        message: { threadId },
+      } = getState().drafts.draftDetails
+      const { emailList } = getState().email
+      const completeEmail = { ...composedEmail, sender }
       if (id) {
         const body = { id }
         const response = await draftApi().sendDraft(body)
         if (response?.status === 200) {
           const { labelIds } = getState().labels
-          dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
           dispatch(resetDraftDetails())
           archiveMail({ messageId: threadId, dispatch, labelIds })
@@ -108,21 +107,19 @@ export const sendComposedEmail = (): AppThunk => async (dispatch, getState) => {
       if (id === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response?.status === 200) {
-          dispatch(resetComposeEmail())
           dispatch(setCurrentEmail(''))
           dispatch(push(`/`))
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
       }
+    } catch (err) {
+      dispatch(setServiceUnavailable('Error sending email.'))
     }
-  } catch (err) {
-    dispatch(setServiceUnavailable('Error sending email.'))
+    return null
   }
-  return null
-}
 
-export const selectComposeEmail = (state: RootState) =>
-  state.compose.composeEmail
+// export const selectComposeEmail = (state: RootState) =>
+//   state.compose.composeEmail
 
 export default composeSlice.reducer

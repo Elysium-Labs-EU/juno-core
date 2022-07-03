@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import { setServiceUnavailable } from './utilsSlice'
-import { setComposeEmail } from './composeSlice'
+// import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
@@ -122,10 +122,12 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   return async (dispatch, getState) => {
     const { signal } = new AbortController()
     try {
+      // console.log(message.payload, signal)
       const decodedBody = await loopThroughBodyParts({
         inputObject: message.payload,
-        // signal,
+        signal,
       })
+      // console.log(decodedBody)
       const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
@@ -147,11 +149,12 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
       }
       if (draft.id && message.threadId) {
         dispatch(listUpdateDraft(draftDetails))
-        dispatch(setComposeEmail(loadEmail))
+        // dispatch(setComposeEmail(loadEmail))
         dispatch(setCurrentEmail(message.threadId))
         if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
           dispatch(setIsReplying(true))
         } else {
+          // TODO: Push loaded email as state to compose route
           dispatch(push(`/compose/${draft.id}`))
         }
       } else {
@@ -192,6 +195,8 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
           const draftId = draftIdFilter[0].id
           if (!isEmpty(draftId)) {
             dispatch(loadDraftDetails({ draftId }))
+          } else {
+            dispatch(setServiceUnavailable('Error setting up compose email.'))
           }
         } else {
           dispatch(setServiceUnavailable('Error setting up compose email.'))
@@ -207,7 +212,11 @@ export const openDraftEmail = (props: OpenDraftEmailType): AppThunk => {
 
       if (selectedEmail.length > 0) {
         const draftId = selectedEmail[0].id
-        dispatch(loadDraftDetails({ draftId }))
+        if (!isEmpty(draftId)) {
+          dispatch(loadDraftDetails({ draftId }))
+        } else {
+          dispatch(setServiceUnavailable('Error setting up compose email.'))
+        }
       }
     } catch (err) {
       console.error(err)
