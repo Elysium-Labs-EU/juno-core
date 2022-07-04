@@ -64,7 +64,6 @@ const draftApi = (signal?: AbortSignal) => ({
   },
 
   sendDraft: async (data: any) => {
-    console.log(data)
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/send-draft`,

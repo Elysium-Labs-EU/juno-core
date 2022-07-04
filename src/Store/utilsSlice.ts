@@ -6,7 +6,6 @@ import { fetchEmails } from './emailListSlice'
 import type { AppThunk, RootState } from './store'
 import RouteConstants from '../constants/routes.json'
 import * as global from '../constants/globalConstants'
-import { cleanUpComposerAndDraft } from './composeSlice'
 import {
   setCoreStatus,
   setIsForwarding,
@@ -161,27 +160,19 @@ export const openEmail =
 export const navigateTo =
   (destination: string): AppThunk =>
   (dispatch, getState) => {
-    const { composeEmail } = getState().compose
-    if (Object.keys(composeEmail).length > 0) {
-      dispatch(cleanUpComposerAndDraft())
-      if (getState().emailDetail.isReplying) {
-        dispatch(setIsReplying(false))
-      }
-      if (getState().emailDetail.isForwarding) {
-        dispatch(setIsForwarding(false))
-      }
+    if (getState().emailDetail.isReplying) {
+      dispatch(setIsReplying(false))
+    }
+    if (getState().emailDetail.isForwarding) {
+      dispatch(setIsForwarding(false))
     }
     dispatch(push(destination))
   }
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
-  const { composeEmail } = getState().compose
   const { labelIds } = getState().labels
   if (!coreStatus) {
-    // if (Object.keys(composeEmail).length > 0) {
-    //   dispatch(cleanUpComposerAndDraft())
-    // }
     if (labelIds.includes(global.INBOX_LABEL)) {
       dispatch(push(RouteConstants.INBOX))
       return

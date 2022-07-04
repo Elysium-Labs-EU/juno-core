@@ -1,6 +1,6 @@
 import { Contact } from './contactsTypes'
 
-export interface ComposePayload {
+export interface IComposePayload {
   id?: string
   value?: string
   body?: string | string[]
@@ -10,14 +10,21 @@ export interface ComposePayload {
   bcc?: Contact[]
 }
 
-export interface ComposeEmail {
+export interface IComposeEmail {
   to: Contact[]
   cc: Contact[]
   bcc: Contact[]
   subject: string
   body: string
 }
+export interface IComposeEmailReceive {
+  to: string
+  cc: string
+  bcc: string
+  subject: string
+  body: string
+}
 
-export interface ComposeState {
+export interface IComposeState {
   composeEmail: any
 }

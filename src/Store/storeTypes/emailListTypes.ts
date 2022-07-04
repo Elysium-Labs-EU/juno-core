@@ -24,8 +24,7 @@ export interface IEmailMessage {
 export interface IEmailListThreadItem {
   id: string
   historyId: string
-  messages?: IEmailMessage[]
-  message?: IEmailMessage
+  messages: IEmailMessage[]
 }
 
 export interface IEmailListObject {

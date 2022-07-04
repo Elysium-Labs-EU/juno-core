@@ -104,20 +104,20 @@ export const emailListSlice = createSlice({
           const completeCount: number = payload.threads.length
 
           for (let i = 0; i < completeCount; i += 1) {
-            // Check if the object already exists on the Redux store.
-            const objectIndex = state.emailList[arrayIndex].threads.findIndex(
-              (item) => item.id === payload.threads[i].id
+            // Check if the thread already exists on the Redux store.
+            const threadIndex = state.emailList[arrayIndex].threads.findIndex(
+              (thread) => thread.id === payload.threads[i].id
             )
 
-            if (objectIndex === -1) {
+            if (threadIndex === -1) {
               activeCount += 1
               tempArray.push(payload.threads[i])
             }
 
-            if (objectIndex > -1) {
+            if (threadIndex > -1) {
               activeCount += 1
               const currentState = state.emailList
-              currentState[arrayIndex].threads[objectIndex] = payload.threads[i]
+              currentState[arrayIndex].threads[threadIndex] = payload.threads[i]
               state.emailList = currentState
             }
 
@@ -151,28 +151,60 @@ export const emailListSlice = createSlice({
         }
       }
     },
+    /**
+     * @function listRemoveItemDetail
+     * Takes in a the state and payload, to return a filtered version of an emailList.
+     * @param state
+     * @param {payload}
+     * @returns {void} returns an updated threads inside an emailListItem
+     */
     listRemoveItemDetail: (state, { payload }) => {
       const {
+        threadId,
+      }: {
+        threadId: string
+      } = payload
+      const currentState = state.emailList
+      currentState[state.activeEmailListIndex].threads = state.emailList[
+        state.activeEmailListIndex
+      ].threads.filter((item) => item.id !== threadId)
+      state.emailList = currentState
+    },
+    /**
+     * @function listRemoveItemMessage
+     * Takes in a the state and payload, to return a updated version of an emailList.
+     * @param state
+     * @param {payload}
+     * @returns {void} returns an updated message array inside an thread inside an emailListItem
+     */
+    listRemoveItemMessage: (state, { payload }) => {
+      const {
+        threadId,
         messageId,
       }: {
+        threadId: string
         messageId: string
       } = payload
-      const newEmailListEntry: IEmailListObject = {
-        ...state.emailList[state.activeEmailListIndex],
-        threads: state.emailList[state.activeEmailListIndex].threads.filter(
-          (item: IEmailListThreadItem) => item.id !== messageId
-        ),
+
+      const filteredMessages = () => {
+        const relevantThreads =
+          state.emailList[state.activeEmailListIndex].threads
+        const relevantMessagesFeed =
+          relevantThreads[
+            relevantThreads.findIndex((thread) => thread.id === threadId)
+          ].messages
+        return relevantMessagesFeed.filter(
+          (message) => message.id !== messageId
+        )
       }
-      const updatedEmailList: IEmailListObject[] = [
-        ...state.emailList.filter(
-          (threadList) =>
-            !threadList.labels.includes(
-              state.emailList[state.activeEmailListIndex].labels[0]
-            )
-        ),
-        newEmailListEntry,
-      ]
-      state.emailList = updatedEmailList
+      const threadIndex = state.emailList[
+        state.activeEmailListIndex
+      ].threads.findIndex((thread) => thread.id === threadId)
+
+      const currentState = state.emailList
+      currentState[state.activeEmailListIndex].threads[threadIndex].messages =
+        filteredMessages()
+      state.emailList = currentState
     },
     listRemoveItemDetailBatch: (state, action) => {
       const {
@@ -180,29 +212,17 @@ export const emailListSlice = createSlice({
       }: {
         messageIds: string[]
       } = action.payload
-      const activeEmailListThreads =
-        state.emailList[state.activeEmailListIndex].threads
-
       const filterArray = () => {
+        const activeEmailListThreads =
+          state.emailList[state.activeEmailListIndex].threads
         const filtered = activeEmailListThreads.filter(
           (el) => messageIds.indexOf(el.id) === -1
         )
         return filtered
       }
-      const newEmailListEntry: IEmailListObject = {
-        ...state.emailList[state.activeEmailListIndex],
-        threads: filterArray(),
-      }
-      const updatedEmailList: IEmailListObject[] = [
-        ...state.emailList.filter(
-          (threadList) =>
-            !threadList.labels.includes(
-              state.emailList[state.activeEmailListIndex].labels[0]
-            )
-        ),
-        newEmailListEntry,
-      ]
-      state.emailList = updatedEmailList
+      const currentState = state.emailList
+      currentState[state.activeEmailListIndex].threads = filterArray()
+      state.emailList = currentState
     },
     listUpdateSearchResults: (state, action) => {
       state.searchList = action.payload
@@ -230,19 +250,19 @@ export const emailListSlice = createSlice({
 
             for (let i = 0; i < completeCount; i += 1) {
               // Check if the object already exists on the Redux store.
-              const objectIndex = state.emailList[arrayIndex].threads.findIndex(
-                (item) => item.id === response.threads[i].id
+              const threadIndex = state.emailList[arrayIndex].threads.findIndex(
+                (thread) => thread.id === response.threads[i].id
               )
 
-              if (objectIndex === -1) {
+              if (threadIndex === -1) {
                 activeCount += 1
                 tempArray.push(response.threads[i])
               }
 
-              if (objectIndex > -1) {
+              if (threadIndex > -1) {
                 activeCount += 1
                 const currentState = state.emailList
-                currentState[arrayIndex].threads[objectIndex] =
+                currentState[arrayIndex].threads[threadIndex] =
                   response.threads[i]
                 state.emailList = currentState
               }
@@ -293,6 +313,7 @@ export const {
   setActiveEmailListIndex,
   listAddEmailList,
   listRemoveItemDetail,
+  listRemoveItemMessage,
   listRemoveItemDetailBatch,
   listUpdateSearchResults,
 } = emailListSlice.actions
@@ -569,6 +590,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
         // Skip the feed, if the feed hasn't loaded yet.
+        console.log(sortedFeeds)
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {
             if (sortedFeeds[i].labels.includes(loadedInbox[j][0])) {

@@ -26,7 +26,7 @@ const Tiptap = ({
 }: {
   fetchedBodyValue: string
   isReplying?: boolean
-  updateComposeEmail: (action: any) => void
+  updateComposeEmail: (action: any, mounted: boolean) => void
 }) => {
   const [bodyValue, setBodyValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
@@ -86,7 +86,7 @@ const Tiptap = ({
     let mounted = true
     if (debouncedBodyValue !== '') {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      mounted && updateComposeEmail(updateEventObject)
+      updateComposeEmail(updateEventObject, mounted)
     }
     return () => {
       mounted = false

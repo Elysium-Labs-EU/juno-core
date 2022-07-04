@@ -141,21 +141,33 @@ const MessagesOverview = memo(
   }: IMessagesOverview) => {
     const dispatch = useAppDispatch()
     const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
+    // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
+    const [localThreadDetail, setLocalThreadDetail] = useState<IEmailListThreadItem | null>(null)
 
     useEffect(() => {
-      if (threadDetail && Object.keys(threadDetail).length > 0) {
-        if (threadDetail.messages && threadDetail.messages.length > 0) {
+      setLocalThreadDetail(threadDetail)
+    }, [threadDetail])
+
+    const messageOverviewListener = (messageId: string) => {
+      if (localThreadDetail && localThreadDetail.messages) {
+        setLocalThreadDetail({ ...localThreadDetail, messages: localThreadDetail.messages.filter((message) => message.id !== messageId) })
+      }
+    }
+
+    useEffect(() => {
+      if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
+        if (localThreadDetail.messages && localThreadDetail.messages.length > 0) {
           if (
-            threadDetail.messages.filter(
+            localThreadDetail.messages.filter(
               (message) =>
                 message.labelIds?.includes(global.UNREAD_LABEL) === true
             ).length > 0
           ) {
-            markEmailAsRead({ messageId: threadDetail.id, dispatch, labelIds })
+            markEmailAsRead({ messageId: localThreadDetail.id, dispatch, labelIds })
           }
         }
       }
-    }, [threadDetail])
+    }, [localThreadDetail])
 
     return (
       <>
@@ -163,9 +175,9 @@ const MessagesOverview = memo(
           <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
             <ES.DetailBase>
               <ES.CardFullWidth>
-                {threadDetail && !isLoading ? (
+                {localThreadDetail && !isLoading ? (
                   <MappedMessages
-                    threadDetail={threadDetail}
+                    threadDetail={localThreadDetail}
                     setUnsubscribeLink={setUnsubscribeLink}
                     setContentRendered={setContentRendered}
                   />
@@ -174,7 +186,7 @@ const MessagesOverview = memo(
                     <CircularProgress />
                   </ES.LoadingErrorWrapper>
                 )}
-                {!threadDetail && (
+                {!localThreadDetail && (
                   <ES.LoadingErrorWrapper>
                     {isLoading && <CircularProgress />}
                     {!isLoading && <p>{local.ERROR_EMAIL}</p>}
@@ -183,32 +195,34 @@ const MessagesOverview = memo(
               </ES.CardFullWidth>
             </ES.DetailBase>
           </ES.EmailDetailContainer>
-          {threadDetail &&
+          {localThreadDetail &&
             !isReplying &&
             !isForwarding &&
-            threadDetail.messages && (
+            localThreadDetail.messages && (
               <EmailDetailOptions
-                threadDetail={threadDetail}
+                threadDetail={localThreadDetail}
                 unsubscribeLink={unsubscribeLink}
               />
             )}
         </ES.DetailRow>
-        {isReplying && threadDetail && threadDetail.messages && (
+        {isReplying && localThreadDetail && localThreadDetail.messages && (
           <ES.ComposeWrapper>
             <ComposeEmail
-              to={fromEmail(threadDetail)}
-              cc={ccEmail(threadDetail)}
-              bcc={bccEmail(threadDetail)}
-              subject={emailSubject(threadDetail)}
-              threadId={threadDetail.id}
+              to={fromEmail(localThreadDetail)}
+              cc={ccEmail(localThreadDetail)}
+              bcc={bccEmail(localThreadDetail)}
+              subject={emailSubject(localThreadDetail)}
+              threadId={localThreadDetail.id}
+              messageOverviewListener={messageOverviewListener}
             />
           </ES.ComposeWrapper>
         )}
-        {isForwarding && threadDetail && threadDetail.messages && (
+        {isForwarding && localThreadDetail && localThreadDetail.messages && (
           <ES.ComposeWrapper>
             <ComposeEmail
-              subject={emailSubject(threadDetail)}
-              threadId={threadDetail.id}
+              subject={emailSubject(localThreadDetail)}
+              threadId={localThreadDetail.id}
+              messageOverviewListener={messageOverviewListener}
             />
           </ES.ComposeWrapper>
         )}

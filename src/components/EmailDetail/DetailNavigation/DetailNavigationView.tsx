@@ -54,7 +54,6 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
   useEffect(() => {
     if (ArrowLeftListener) {
       handleNavPrevEvent()
-      // console.clear()
     }
   }, [ArrowLeftListener])
 
@@ -91,7 +90,6 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
   useEffect(() => {
     if (ArrowRightListener) {
       handleNavNextEvent()
-      // console.clear()
     }
   }, [ArrowRightListener])
 

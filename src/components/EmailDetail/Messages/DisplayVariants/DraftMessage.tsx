@@ -24,7 +24,7 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const messageId = message && message.id
 
   const EmailSnippet =
-    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
+    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message, emailAddress),
@@ -52,7 +52,6 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   }, [isReplying, draftOpened])
 
   const handleClick = () => {
-    console.log('HERE')
     dispatch(openDraftEmail({ id, messageId }))
     setDraftOpened(true)
   }

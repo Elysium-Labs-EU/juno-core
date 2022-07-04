@@ -2,7 +2,7 @@ import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import DeleteDraft from '../EmailOptions/DeleteDraft'
+import discardDraft from '../EmailOptions/DiscardDraft'
 import { selectDraft } from '../../Store/draftsSlice'
 
 const SIZE = 16
@@ -20,7 +20,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
       <S.Inner>
         <CustomIconButton
           onClick={() =>
-            DeleteDraft({
+            discardDraft({
               threadId,
               dispatch,
               draftId,
