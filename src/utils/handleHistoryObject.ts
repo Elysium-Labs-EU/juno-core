@@ -41,21 +41,6 @@ const restructureObject = (message: IHistoryMessage) => {
  * @returns {IFeedModel[]} - End result will be that the function returns multiple arrays. One for each inbox.
  * */
 
-// TODO: Write logic that handles emails with DRAFT Label.
-// The api removes the older draft and sets a newer one - all of these events are listed in the history.
-// So the draftFeed object should overwrite an entry if the loop finds another one with the same threadId
-// "messagesAdded": [
-//         {
-//           "message": {
-//             "id": "181c63158067409a",
-//             "threadId": "180b99f42bbc8a2f",
-//             "labelIds": [
-//               "DRAFT"
-//             ]
-//           }
-//         }
-//       ]
-
 export default function handleHistoryObject({
   history,
   storageLabels,
@@ -63,6 +48,7 @@ export default function handleHistoryObject({
   history: IHistoryObject[]
   storageLabels: LabelIdName[]
 }): IFeedModel[] {
+  console.log(history)
   const inboxFeed: IFeedModel = {
     labels: [global.INBOX_LABEL],
     threads: [],
@@ -190,9 +176,24 @@ export default function handleHistoryObject({
         if (
           item.messagesAdded[0].message.labelIds.includes(global.DRAFT_LABEL)
         ) {
-          draftFeed.threads.push(
-            restructureObject(item.messagesAdded[0].message)
-          )
+          const draftThreadIndex = draftFeed.threads.findIndex((thread) => {
+            if (item?.messagesAdded) {
+              return thread.threadId === item.messagesAdded[0].message.threadId
+            }
+            return -1
+          })
+          // The api removes the older draft and sets a newer one - all of these events are listed in the history.
+          // So the draftFeed object should overwrite an entry if the loop finds another one with the same threadId
+          if (draftThreadIndex > -1) {
+            draftFeed.threads.splice(draftThreadIndex, 1)
+            draftFeed.threads.push(
+              restructureObject(item.messagesAdded[0].message)
+            )
+          } else {
+            draftFeed.threads.push(
+              restructureObject(item.messagesAdded[0].message)
+            )
+          }
         }
       }
     }

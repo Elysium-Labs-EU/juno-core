@@ -49,6 +49,7 @@ interface IComposeEmailProps {
   cc?: Contact | null
   subject?: string
   threadId?: string
+  foundBody?: string
   messageOverviewListener?: (value: string) => void
 }
 
@@ -58,6 +59,7 @@ const ComposeEmail = ({
   cc,
   subject,
   threadId,
+  foundBody,
   messageOverviewListener,
 }: IComposeEmailProps) => {
   const location = useLocation()
@@ -315,6 +317,7 @@ const ComposeEmail = ({
         setBodyValue(state.body)
       }
       if (!mailto && isEmpty(composedEmail)) {
+        console.log(foundBody)
         // Form values coming from a new reply via MessagesOverview (EmailDetail)
         if (to) {
           setToValue([to])
@@ -327,6 +330,9 @@ const ComposeEmail = ({
         }
         if (subject) {
           setSubjectValue(subject)
+        }
+        if (foundBody) {
+          setBodyValue(foundBody)
         }
       }
     }
@@ -533,7 +539,10 @@ const ComposeEmail = ({
                 )}
                 {draftDetails?.id && (
                   <S.DiscardContainer>
-                    <DiscardDraftButton draftId={draftDetails.id} messageOverviewListener={messageOverviewListener} />
+                    <DiscardDraftButton
+                      draftId={draftDetails.id}
+                      messageOverviewListener={messageOverviewListener}
+                    />
                   </S.DiscardContainer>
                 )}
               </S.ButtonContainer>
@@ -553,5 +562,6 @@ ComposeEmail.defaultProps = {
   cc: null,
   subject: null,
   threadId: null,
-  messageOverviewListener: undefined
+  foundBody: null,
+  messageOverviewListener: undefined,
 }

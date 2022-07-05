@@ -45,7 +45,7 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {
-    listRemoveDraftThread: (state, {payload}) => {
+    listRemoveDraftThread: (state, { payload }) => {
       const { threadId }: { threadId: string } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
@@ -53,7 +53,7 @@ export const draftsSlice = createSlice({
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftMessage: (state, {payload}) => {
+    listRemoveDraftMessage: (state, { payload }) => {
       const { messageId }: { messageId: string } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
@@ -61,7 +61,7 @@ export const draftsSlice = createSlice({
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftBatch: (state, {payload}) => {
+    listRemoveDraftBatch: (state, { payload }) => {
       const { threadIds }: { threadIds: string[] } = payload
       const copyCurrentDraftList = state.draftList
 
@@ -73,7 +73,7 @@ export const draftsSlice = createSlice({
       }
       state.draftList = filterArray()
     },
-    listUpdateDraft: (state, {payload}) => {
+    listUpdateDraft: (state, { payload }) => {
       state.draftDetails = payload
     },
     resetDraftDetails: (state) => {
@@ -195,6 +195,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   }
 }
 
+const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 export const openDraftEmail =
   ({ messageId, id }: OpenDraftEmailType): AppThunk =>
   async (dispatch, getState) => {
@@ -212,10 +213,10 @@ export const openDraftEmail =
           if (!isEmpty(draftId)) {
             dispatch(loadDraftDetails({ draftId }))
           } else {
-            dispatch(setServiceUnavailable('Error setting up compose email.'))
+            dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
           }
         } else {
-          dispatch(setServiceUnavailable('Error setting up compose email.'))
+          dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
         }
       } else {
         const { draftList } = getState().drafts
@@ -231,12 +232,12 @@ export const openDraftEmail =
           if (!isEmpty(draftId)) {
             dispatch(loadDraftDetails({ draftId }))
           } else {
-            dispatch(setServiceUnavailable('Error setting up compose email.'))
+            dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
           }
         }
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error setting up compose email.'))
+      dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
     }
   }
 

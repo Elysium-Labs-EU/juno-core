@@ -1,6 +1,18 @@
 import { MessagePayload } from '../Store/storeTypes/draftsTypes'
 
-const findPayloadHeadersData = (query: string, email: any) => {
+/**
+ * This function will fetch the payload header from the requested message
+ * @param query - the header to look for
+ * @param email - the object where to query the messages from
+ * @param requestedIndex - optional requested index, if not present it will pick the headers from the last message
+ * @returns either a the requested header's value or an empty string.
+ */
+
+export default function findPayloadHeadersData(
+  query: string,
+  email: any,
+  requestedIndex?: number
+) {
   if (email && query) {
     if (email.internalDate) {
       if (email.payload.headers.find((e: MessagePayload) => e.name === query)) {
@@ -10,36 +22,38 @@ const findPayloadHeadersData = (query: string, email: any) => {
       }
       if (
         email.payload.headers.find(
-          (e: MessagePayload) =>
-            e.name === `${query[0].toLowerCase() + query.slice(1)}`
+          (e: MessagePayload) => e.name === query.toLowerCase()
         )
       ) {
         return email.payload.headers.find(
-          (e: MessagePayload) =>
-            e.name === `${query[0].toLowerCase() + query.slice(1)}`
+          (e: MessagePayload) => e.name === query.toLowerCase()
         ).value
       }
       return ''
     }
-    if (email.messages[email.messages.length - 1].internalDate) {
+    if (
+      email.messages[requestedIndex || email.messages.length - 1].internalDate
+    ) {
       if (
-        email.messages[email.messages.length - 1].payload.headers.find(
-          (e: MessagePayload) => e.name === query
-        )
+        email.messages[
+          requestedIndex || email.messages.length - 1
+        ].payload.headers.find((e: MessagePayload) => e.name === query)
       ) {
-        return email.messages[email.messages.length - 1].payload.headers.find(
-          (e: MessagePayload) => e.name === query
-        ).value
+        return email.messages[
+          requestedIndex || email.messages.length - 1
+        ].payload.headers.find((e: MessagePayload) => e.name === query).value
       }
       if (
-        email.messages[email.messages.length - 1].payload.headers.find(
-          (e: MessagePayload) =>
-            e.name === `${query[0].toLowerCase() + query.slice(1)}`
+        email.messages[
+          requestedIndex || email.messages.length - 1
+        ].payload.headers.find(
+          (e: MessagePayload) => e.name === query.toLowerCase()
         )
       ) {
-        return email.messages[email.messages.length - 1].payload.headers.find(
-          (e: MessagePayload) =>
-            e.name === `${query[0].toLowerCase() + query.slice(1)}`
+        return email.messages[
+          requestedIndex || email.messages.length - 1
+        ].payload.headers.find(
+          (e: MessagePayload) => e.name === query.toLowerCase()
         ).value
       }
       return ''
@@ -47,5 +61,3 @@ const findPayloadHeadersData = (query: string, email: any) => {
   }
   return ''
 }
-
-export default findPayloadHeadersData

@@ -33,7 +33,9 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
 
     return (
       <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
-        <StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp>
+        <StyledTimeStamp>
+          {format(unixTimestamp, 'dd LLL yyyy')}
+        </StyledTimeStamp>
       </StyledTooltip>
     )
   }

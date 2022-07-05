@@ -15,6 +15,8 @@ import { useAppDispatch } from '../../../Store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
+import findPayloadData from '../../../utils/findPayloadBodyData'
+import { decodeBase64 } from '../../../utils/decodeBase64'
 
 const fromEmail = (threadDetail: IEmailListThreadItem) => {
   const query = 'From'
@@ -51,12 +53,30 @@ const emailSubject = (threadDetail: IEmailListThreadItem) => {
   return null
 }
 
+const emailBody = (
+  threadDetail: IEmailListThreadItem,
+  selectedIndex: number
+) => {
+  const query = 'Body'
+  if (threadDetail) {
+    console.log(threadDetail)
+
+    const test2 = decodeBase64(
+      findPayloadData(query, threadDetail, selectedIndex)
+    )
+    console.log(test2)
+    return test2
+  }
+  return null
+}
+
 interface IDetailDisplaySelector {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   index: number
   setUnsubscribeLink: Function
   setContentRendered: (value: boolean) => void
+  indexMessageListener: (value: number) => void
 }
 
 const DetailDisplaySelector = ({
@@ -65,10 +85,17 @@ const DetailDisplaySelector = ({
   index,
   setUnsubscribeLink,
   setContentRendered,
+  indexMessageListener,
 }: IDetailDisplaySelector) => {
   if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
     if (message.labelIds.includes(global.DRAFT_LABEL)) {
-      return <DraftMessage message={message} />
+      return (
+        <DraftMessage
+          message={message}
+          draftIndex={index}
+          indexMessageListener={indexMessageListener}
+        />
+      )
     }
     return (
       <ReadUnreadMessage
@@ -95,10 +122,12 @@ const MappedMessages = ({
   threadDetail,
   setUnsubscribeLink,
   setContentRendered,
+  indexMessageListener,
 }: {
   threadDetail: IEmailListThreadItem
   setUnsubscribeLink: Function
   setContentRendered: (value: boolean) => void
+  indexMessageListener: (value: number) => void
 }) =>
   threadDetail.messages ? (
     <>
@@ -113,6 +142,7 @@ const MappedMessages = ({
               index={index}
               setUnsubscribeLink={setUnsubscribeLink}
               setContentRendered={setContentRendered}
+              indexMessageListener={indexMessageListener}
             />
           </div>
         ))}
@@ -142,7 +172,11 @@ const MessagesOverview = memo(
     const dispatch = useAppDispatch()
     const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
     // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
-    const [localThreadDetail, setLocalThreadDetail] = useState<IEmailListThreadItem | null>(null)
+    const [localThreadDetail, setLocalThreadDetail] =
+      useState<IEmailListThreadItem | null>(null)
+    const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
+      undefined
+    )
 
     useEffect(() => {
       setLocalThreadDetail(threadDetail)
@@ -150,24 +184,53 @@ const MessagesOverview = memo(
 
     const messageOverviewListener = (messageId: string) => {
       if (localThreadDetail && localThreadDetail.messages) {
-        setLocalThreadDetail({ ...localThreadDetail, messages: localThreadDetail.messages.filter((message) => message.id !== messageId) })
+        setLocalThreadDetail({
+          ...localThreadDetail,
+          messages: localThreadDetail.messages.filter(
+            (message) => message.id !== messageId
+          ),
+        })
       }
     }
 
     useEffect(() => {
       if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
-        if (localThreadDetail.messages && localThreadDetail.messages.length > 0) {
+        if (
+          localThreadDetail.messages &&
+          localThreadDetail.messages.length > 0
+        ) {
           if (
             localThreadDetail.messages.filter(
               (message) =>
                 message.labelIds?.includes(global.UNREAD_LABEL) === true
             ).length > 0
           ) {
-            markEmailAsRead({ messageId: localThreadDetail.id, dispatch, labelIds })
+            markEmailAsRead({
+              messageId: localThreadDetail.id,
+              dispatch,
+              labelIds,
+            })
           }
         }
       }
     }, [localThreadDetail])
+
+    /**
+     * @function indexMessageListener
+     * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
+     * @param value - number of the index of the selected Draft Message
+     * @returns {void} - returns the found object or undefined if not found as a change on the state.
+     */
+    const indexMessageListener = (value: number) => {
+      console.log(value)
+      console.log(
+        localThreadDetail?.messages &&
+          localThreadDetail.messages[
+            localThreadDetail.messages.length - 1 - value
+          ]
+      )
+      setSelectedIndex(value)
+    }
 
     return (
       <>
@@ -175,11 +238,12 @@ const MessagesOverview = memo(
           <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
             <ES.DetailBase>
               <ES.CardFullWidth>
-                {localThreadDetail && !isLoading ? (
+                {localThreadDetail?.messages && !isLoading ? (
                   <MappedMessages
                     threadDetail={localThreadDetail}
                     setUnsubscribeLink={setUnsubscribeLink}
                     setContentRendered={setContentRendered}
+                    indexMessageListener={indexMessageListener}
                   />
                 ) : (
                   <ES.LoadingErrorWrapper>
@@ -212,6 +276,14 @@ const MessagesOverview = memo(
               cc={ccEmail(localThreadDetail)}
               bcc={bccEmail(localThreadDetail)}
               subject={emailSubject(localThreadDetail)}
+              foundBody={
+                selectedIndex !== undefined
+                  ? emailBody(
+                      localThreadDetail,
+                      localThreadDetail.messages.length - 1 - selectedIndex
+                    )
+                  : undefined
+              }
               threadId={localThreadDetail.id}
               messageOverviewListener={messageOverviewListener}
             />

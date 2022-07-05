@@ -14,7 +14,15 @@ import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import { selectProfile } from '../../../../Store/baseSlice'
 
-const DraftMessage = ({ message }: { message: IEmailMessage }) => {
+const DraftMessage = ({
+  message,
+  draftIndex,
+  indexMessageListener,
+}: {
+  message: IEmailMessage
+  draftIndex: number
+  indexMessageListener: (value: number) => void
+}) => {
   const [draftOpened, setDraftOpened] = useState(false)
   const [hideDraft, setHideDraft] = useState(false)
   const dispatch = useAppDispatch()
@@ -24,7 +32,7 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const messageId = message && message.id
 
   const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message, emailAddress),
@@ -54,6 +62,7 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
   const handleClick = () => {
     dispatch(openDraftEmail({ id, messageId }))
     setDraftOpened(true)
+    indexMessageListener(draftIndex)
   }
 
   return (

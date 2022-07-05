@@ -40,6 +40,7 @@ import handleHistoryObject, {
   HISTORY_NEXT_PAGETOKEN,
 } from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
+import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
 
 export const fetchEmails = createAsyncThunk(
   'email/fetchEmails',
@@ -364,6 +365,12 @@ export const useSearchResults =
     dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${currentEmail}/messages`))
   }
 
+/**
+ * @function loadEmailDetails
+ * @param labeledThreads - takes in an object with threads which only contain meta data.
+ * @returns - the function updates the Redux state with the found email details.
+ */
+
 export const loadEmailDetails =
   (labeledThreads: IEmailListObject): AppThunk =>
   async (dispatch, getState) => {
@@ -373,16 +380,39 @@ export const loadEmailDetails =
         if (threads.length > 0) {
           const buffer: any = []
           threads.forEach((thread) =>
+            // TODO: Alter all input to have the threadId as input
             buffer.push(threadApi({}).getThreadDetail(thread.id))
           )
-          dispatch(
-            listAddEmailList({
-              labels,
-              threads: await Promise.all(buffer),
-              nextPageToken: nextPageToken ?? null,
-            })
-          )
-          dispatch(setLoadedInbox(labels))
+          const resolvedThreads = await Promise.all(buffer)
+          // If the object is only of length 1, then it could mean that it is an update from draft.
+          // If that is the case, attempt to find the original label id of the thread to store the object.
+          if (
+            resolvedThreads[0].messages[
+              resolvedThreads[0].messages.length - 1
+            ].labelIds.includes(global.DRAFT_LABEL)
+          ) {
+            const { storageLabels } = getState().labels
+            const labelNames = resolvedThreads[0].messages[0].labelIds
+            const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
+            if (legalLabels.length > 0) {
+              dispatch(
+                listAddEmailList({
+                  labels: legalLabels[0].id,
+                  threads: resolvedThreads,
+                  nextPageToken: nextPageToken ?? null,
+                })
+              )
+            }
+          } else {
+            dispatch(
+              listAddEmailList({
+                labels,
+                threads: resolvedThreads,
+                nextPageToken: nextPageToken ?? null,
+              })
+            )
+            dispatch(setLoadedInbox(labels))
+          }
           getState().utils.isLoading && dispatch(setIsLoading(false))
           getState().utils.isSilentLoading &&
             dispatch(setIsSilentLoading(false))
@@ -589,11 +619,14 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-        // Skip the feed, if the feed hasn't loaded yet.
+        // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
         console.log(sortedFeeds)
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {
-            if (sortedFeeds[i].labels.includes(loadedInbox[j][0])) {
+            if (
+              sortedFeeds[i].labels.includes(loadedInbox[j][0]) ||
+              sortedFeeds[i].labels.includes(global.DRAFT_LABEL)
+            ) {
               dispatch(loadEmailDetails(sortedFeeds[i]))
             }
           }

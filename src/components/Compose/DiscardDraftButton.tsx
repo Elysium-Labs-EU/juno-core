@@ -2,13 +2,24 @@ import { useCallback } from 'react'
 import { FiDelete } from 'react-icons/fi'
 import * as local from '../../constants/composeEmailConstants'
 import { selectDraft } from '../../Store/draftsSlice'
-import { selectIsReplying, selectIsForwarding, setIsReplying, setIsForwarding } from '../../Store/emailDetailSlice'
+import {
+  selectIsReplying,
+  selectIsForwarding,
+  setIsReplying,
+  setIsForwarding,
+} from '../../Store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../Store/hooks'
 import { navigateBack } from '../../Store/utilsSlice'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import discardDraft from '../EmailOptions/DiscardDraft'
 
-const DiscardDraftButton = ({ draftId, messageOverviewListener }: { draftId: string, messageOverviewListener?: (value: string) => void }) => {
+const DiscardDraftButton = ({
+  draftId,
+  messageOverviewListener,
+}: {
+  draftId: string
+  messageOverviewListener?: (value: string) => void
+}) => {
   const dispatch = useAppDispatch()
   const draftList = useAppSelector(selectDraft)
   const isReplying = useAppSelector(selectIsReplying)
@@ -23,7 +34,7 @@ const DiscardDraftButton = ({ draftId, messageOverviewListener }: { draftId: str
     if (foundDraft) {
       const { id, threadId } = foundDraft
       discardDraft({
-        messageId: (isReplying || isForwarding) ? id : undefined,
+        messageId: isReplying || isForwarding ? id : undefined,
         threadId,
         dispatch,
         draftId,
@@ -54,7 +65,7 @@ const DiscardDraftButton = ({ draftId, messageOverviewListener }: { draftId: str
 }
 
 DiscardDraftButton.defaultProps = {
-  messageOverviewListener: undefined
+  messageOverviewListener: undefined,
 }
 
 export default DiscardDraftButton
