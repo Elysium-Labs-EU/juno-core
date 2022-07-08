@@ -101,7 +101,7 @@
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
     "prettier": "2.7.1",
-    "vite": "2.9.13",
+    "vite": "2.9.14",
     "wait-on": "6.0.1"
   }
 }
