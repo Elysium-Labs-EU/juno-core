@@ -5,7 +5,7 @@ import { setServiceUnavailable } from '../../../Store/utilsSlice'
 
 const SIX_SECONDS = 6000
 
-const SnackbarNotification = ({ text }: any) => {
+const SnackbarNotification = ({ text }: { text: string }) => {
   const [open, setOpen] = useState(true)
   const dispatch = useAppDispatch()
 
@@ -21,11 +21,11 @@ const SnackbarNotification = ({ text }: any) => {
   }
 
   return (
-    <Snackbar open={open} autoHideDuration={SIX_SECONDS} onClose={handleClose}>
+    text ? <Snackbar open={open} autoHideDuration={SIX_SECONDS} onClose={handleClose}>
       <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
         {text}
       </Alert>
-    </Snackbar>
+    </Snackbar> : null
   )
 }
 

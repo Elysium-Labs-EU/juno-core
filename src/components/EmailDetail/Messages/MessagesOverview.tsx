@@ -59,13 +59,9 @@ const emailBody = (
 ) => {
   const query = 'Body'
   if (threadDetail) {
-    console.log(threadDetail)
-
-    const test2 = decodeBase64(
+    return decodeBase64(
       findPayloadData(query, threadDetail, selectedIndex)
     )
-    console.log(test2)
-    return test2
   }
   return null
 }
@@ -225,9 +221,9 @@ const MessagesOverview = memo(
       console.log(value)
       console.log(
         localThreadDetail?.messages &&
-          localThreadDetail.messages[
-            localThreadDetail.messages.length - 1 - value
-          ]
+        localThreadDetail.messages[
+        localThreadDetail.messages.length - 1 - value
+        ]
       )
       setSelectedIndex(value)
     }
@@ -279,9 +275,9 @@ const MessagesOverview = memo(
               foundBody={
                 selectedIndex !== undefined
                   ? emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.length - 1 - selectedIndex
-                    )
+                    localThreadDetail,
+                    localThreadDetail.messages.length - 1 - selectedIndex
+                  )
                   : undefined
               }
               threadId={localThreadDetail.id}

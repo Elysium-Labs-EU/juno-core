@@ -11,6 +11,7 @@ import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import {
   createUpdateDraft,
+  fetchDrafts,
   resetDraftDetails,
   selectDraftDetails,
   sendComposedEmail,
@@ -402,6 +403,7 @@ const ComposeEmail = ({
       dispatch(setIsForwarding(false))
     }
     dispatch(refreshEmailFeed())
+    dispatch(fetchDrafts())
     dispatch(resetDraftDetails())
   }
 
