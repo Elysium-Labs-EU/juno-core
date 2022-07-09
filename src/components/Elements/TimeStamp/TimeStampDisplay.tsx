@@ -19,7 +19,6 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
     // If the timestamp is of today - send hours,
     // If timestamp is not of today send date without year,
     // If timestamp if from another year, show full date.
-
     if (isThisYear(unixTimestamp)) {
       const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp)
         ? format(unixTimestamp, 'HH:mm')
