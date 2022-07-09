@@ -216,13 +216,6 @@ const MessagesOverview = memo(
      * @returns {void} - returns the found object or undefined if not found as a change on the state.
      */
     const indexMessageListener = (value: number) => {
-      console.log(value)
-      console.log(
-        localThreadDetail?.messages &&
-          localThreadDetail.messages[
-            localThreadDetail.messages.length - 1 - value
-          ]
-      )
       setSelectedIndex(value)
     }
 

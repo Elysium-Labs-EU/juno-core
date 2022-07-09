@@ -33,8 +33,6 @@ const Tiptap = ({
   const debouncedBodyValue = useDebounce(bodyValue, 500)
   const tipTapRef = useRef<any | null>(null)
 
-  console.log('fetchedBodyValue', fetchedBodyValue)
-
   const handleBodyChange = (value: string) => {
     setBodyValue(
       DOMPurify.sanitize(value, {

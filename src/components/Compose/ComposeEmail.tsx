@@ -318,7 +318,6 @@ const ComposeEmail = ({
         setBodyValue(state.body)
       }
       if (!mailto && isEmpty(composedEmail)) {
-        console.log(foundBody)
         // Form values coming from a new reply via MessagesOverview (EmailDetail)
         if (to) {
           setToValue([to])

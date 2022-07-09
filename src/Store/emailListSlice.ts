@@ -620,7 +620,6 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
         // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
-        console.log(sortedFeeds)
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {
             if (

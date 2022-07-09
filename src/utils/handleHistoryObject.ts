@@ -48,7 +48,6 @@ export default function handleHistoryObject({
   history: IHistoryObject[]
   storageLabels: LabelIdName[]
 }): IFeedModel[] {
-  console.log(history)
   const inboxFeed: IFeedModel = {
     labels: [global.INBOX_LABEL],
     threads: [],
