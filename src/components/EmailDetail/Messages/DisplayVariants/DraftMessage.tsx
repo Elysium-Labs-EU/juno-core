@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import { openDraftEmail } from '../../../../Store/draftsSlice'
@@ -32,7 +32,7 @@ const DraftMessage = ({
   const messageId = message && message.id
 
   const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message, emailAddress),
@@ -59,12 +59,11 @@ const DraftMessage = ({
     }
   }, [isReplying, draftOpened])
 
-  const handleClick = () => {
-    console.log(id, messageId)
+  const handleClick = useCallback(() => {
     dispatch(openDraftEmail({ id, messageId }))
     setDraftOpened(true)
     indexMessageListener(draftIndex)
-  }
+  }, [])
 
   return (
     <S.EmailClosedWrapper

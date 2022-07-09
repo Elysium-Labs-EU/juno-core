@@ -20,13 +20,13 @@ const SnackbarNotification = ({ text }: { text: string }) => {
     setOpen(false)
   }
 
-  return (
-    text ? <Snackbar open={open} autoHideDuration={SIX_SECONDS} onClose={handleClose}>
+  return text ? (
+    <Snackbar open={open} autoHideDuration={SIX_SECONDS} onClose={handleClose}>
       <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
         {text}
       </Alert>
-    </Snackbar> : null
-  )
+    </Snackbar>
+  ) : null
 }
 
 export default SnackbarNotification
