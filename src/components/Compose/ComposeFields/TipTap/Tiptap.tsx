@@ -14,8 +14,6 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
 import DOMPurify from 'dompurify'
 import useDebounce from '../../../../Hooks/useDebounce'
-import { trackComposeEmail } from '../../../../Store/composeSlice'
-import { useAppDispatch } from '../../../../Store/hooks'
 import * as local from '../../../../constants/composeEmailConstants'
 import * as S from './TipTapBodyStyles'
 import * as Compose from '../../ComposeStyles'
@@ -24,15 +22,18 @@ import MenuBar from './TipTapMenubar'
 const Tiptap = ({
   fetchedBodyValue,
   isReplying,
+  updateComposeEmail,
 }: {
   fetchedBodyValue: string
   isReplying?: boolean
+  updateComposeEmail: (action: any, mounted: boolean) => void
 }) => {
   const [bodyValue, setBodyValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedBodyValue = useDebounce(bodyValue, 500)
-  const dispatch = useAppDispatch()
   const tipTapRef = useRef<any | null>(null)
+
+  console.log('fetchedBodyValue', fetchedBodyValue)
 
   const handleBodyChange = (value: string) => {
     setBodyValue(
@@ -87,7 +88,7 @@ const Tiptap = ({
     let mounted = true
     if (debouncedBodyValue !== '') {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      mounted && dispatch(trackComposeEmail(updateEventObject))
+      updateComposeEmail(updateEventObject, mounted)
     }
     return () => {
       mounted = false

@@ -20,7 +20,10 @@ import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './Store/store'
 import { fetchToken } from './data/api'
 import HelpButton from './components/Help/HelpButton'
-import { selectShowKeyboardCombos } from './Store/utilsSlice'
+import {
+  selectServiceUnavailable,
+  selectShowKeyboardCombos,
+} from './Store/utilsSlice'
 import ComposeEmail from './components/Compose/ComposeEmail'
 import DraftEmail from './components/Draft/DraftEmail'
 import ToDo from './components/ToDo/Todo'
@@ -30,6 +33,7 @@ import SentEmail from './components/Sent/Sent'
 import Login from './components/Login/Login'
 import GoogleCallback from './components/Login/Callback/GoogleCallBack'
 import PageNotFound from './components/PageNotFound/PageNotFound'
+import SnackbarNotification from './components/Elements/SnackbarNotification/SnackbarNotification'
 
 const ProtectedRoute = ({
   children,
@@ -53,6 +57,7 @@ const App = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const showKeyBoardCombos = useAppSelector(selectShowKeyboardCombos)
+  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
@@ -176,6 +181,9 @@ const App = () => {
             <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
           </Routes>
         </AnimatePresence>
+        {serviceUnavailable && (
+          <SnackbarNotification text={serviceUnavailable} />
+        )}
       </GS.Base>
     </HistoryRouter>
   )

@@ -2,7 +2,6 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { createReduxHistoryContext } from 'redux-first-history'
 import { createBrowserHistory } from 'history'
 import baseReducer from './baseSlice'
-import composeReducer from './composeSlice'
 import contactsReducer from './contactsSlice'
 import emailReducer from './emailListSlice'
 import emailDetailReducer from './emailDetailSlice'
@@ -18,7 +17,6 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
 export const store = configureStore({
   reducer: {
     base: baseReducer,
-    compose: composeReducer,
     contacts: contactsReducer,
     drafts: draftsReducer,
     email: emailReducer,

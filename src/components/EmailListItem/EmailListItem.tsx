@@ -90,10 +90,9 @@ const EmailListItem = ({
   const staticRecipientName = useMemo(
     () =>
       RecipientName(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
         emailAddress
       ),
     []
@@ -101,10 +100,9 @@ const EmailListItem = ({
   const staticSenderPartial = useMemo(
     () =>
       SenderNamePartial(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
         emailAddress
       ),
     []
@@ -112,10 +110,9 @@ const EmailListItem = ({
   const staticSenderFull = useMemo(
     () =>
       SenderNameFull(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ],
         emailAddress
       ),
     []
@@ -123,10 +120,9 @@ const EmailListItem = ({
   const staticSubjectFetch = useMemo(
     () =>
       EmailSubject(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]
       ),
     []
   )
@@ -135,10 +131,9 @@ const EmailListItem = ({
   const staticSnippet = useMemo(
     () =>
       EmailSnippet(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]
       ),
     []
   )
@@ -214,9 +209,7 @@ const EmailListItem = ({
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </span>
               )}
-              {email.messages && (
-                <MessageCount countOfMessage={email.messages} />
-              )}
+              {email.messages && <MessageCount messages={email.messages} />}
               <span>{staticSubject}</span>
               <Snippet snippet={staticSnippet} />
             </S.TruncatedDiv>

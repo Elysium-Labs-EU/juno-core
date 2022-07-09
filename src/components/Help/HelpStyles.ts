@@ -69,9 +69,7 @@ export const KeyBindShortcut = styled.div`
 
 export const ButtonWrapper = styled.div`
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 26px;
+  right: 40px;
   z-index: 1100;
-  margin-bottom: 40px;
-  margin-right: 40px;
 `

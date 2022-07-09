@@ -75,3 +75,13 @@ export const CcBccContainer = styled.div`
   display: flex;
   flex-flow: row;
 `
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+`
+
+export const DiscardContainer = styled.div`
+  margin-left: auto;
+`

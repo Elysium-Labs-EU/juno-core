@@ -12,29 +12,33 @@ interface IThreadTimeStamp {
 }
 
 const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
-  const unixTimestamp = parseInt(threadTimeStamp.toString(), 10)
-  const currentTimestamp = Date.now()
+  if (threadTimeStamp) {
+    const unixTimestamp = parseInt(threadTimeStamp.toString(), 10)
+    const currentTimestamp = Date.now()
 
-  // If the timestamp is of today - send hours,
-  // If timestamp is not of today send date without year,
-  // If timestamp if from another year, show full date.
+    // If the timestamp is of today - send hours,
+    // If timestamp is not of today send date without year,
+    // If timestamp if from another year, show full date.
+    if (isThisYear(unixTimestamp)) {
+      const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp)
+        ? format(unixTimestamp, 'HH:mm')
+        : format(unixTimestamp, 'dd LLL')
+      return (
+        <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
+          <StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp>
+        </StyledTooltip>
+      )
+    }
 
-  if (isThisYear(unixTimestamp)) {
-    const isSameDayCheck = isSameDay(currentTimestamp, unixTimestamp)
-      ? format(unixTimestamp, 'HH:mm')
-      : format(unixTimestamp, 'dd LLL')
     return (
       <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
-        <StyledTimeStamp>{isSameDayCheck}</StyledTimeStamp>
+        <StyledTimeStamp>
+          {format(unixTimestamp, 'dd LLL yyyy')}
+        </StyledTimeStamp>
       </StyledTooltip>
     )
   }
-
-  return (
-    <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
-      <StyledTimeStamp>{format(unixTimestamp, 'dd LLL yyyy')}</StyledTimeStamp>
-    </StyledTooltip>
-  )
+  return <div />
 }
 
 export default TimeStampDisplay

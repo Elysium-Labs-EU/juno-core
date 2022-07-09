@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import { openDraftEmail } from '../../../../Store/draftsSlice'
@@ -14,7 +14,15 @@ import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import { selectProfile } from '../../../../Store/baseSlice'
 
-const DraftMessage = ({ message }: { message: IEmailMessage }) => {
+const DraftMessage = ({
+  message,
+  draftIndex,
+  indexMessageListener,
+}: {
+  message: IEmailMessage
+  draftIndex: number
+  indexMessageListener: (value: number) => void
+}) => {
   const [draftOpened, setDraftOpened] = useState(false)
   const [hideDraft, setHideDraft] = useState(false)
   const dispatch = useAppDispatch()
@@ -35,11 +43,6 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
     []
   )
 
-  const handleClick = () => {
-    dispatch(openDraftEmail({ id, messageId }))
-    setDraftOpened(true)
-  }
-
   /**
    * This function only hides the draft whenever the replying mode is set active.
    */
@@ -55,6 +58,12 @@ const DraftMessage = ({ message }: { message: IEmailMessage }) => {
       mounted = false
     }
   }, [isReplying, draftOpened])
+
+  const handleClick = useCallback(() => {
+    dispatch(openDraftEmail({ id, messageId }))
+    setDraftOpened(true)
+    indexMessageListener(draftIndex)
+  }, [])
 
   return (
     <S.EmailClosedWrapper

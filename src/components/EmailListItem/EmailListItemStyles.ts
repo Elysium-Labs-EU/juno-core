@@ -143,4 +143,5 @@ export const TruncatedDiv = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
 `
