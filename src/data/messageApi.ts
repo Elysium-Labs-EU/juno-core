@@ -51,9 +51,7 @@ const messageApi = () => ({
       return errorHandling(err)
     }
   },
-  updateMessage: async (props: any) => {
-    console.log(props)
-    const { messageId, request } = props
+  updateMessage: async ({ messageId, request }: any) => {
     try {
       const res: AxiosResponse<any> = await instance.patch(
         `/api/message/${messageId}`,
@@ -86,13 +84,6 @@ const messageApi = () => ({
       return errorHandling(err)
     }
   },
-  // unThrashMessage: (messageId) => {
-  //   console.log('trashed')
-  //   return axios
-  //     .post(`/api/message/thrash/${messageId}`)
-  //     .then((res) => res.data)
-  //     .catch((err) => console.log(err))
-  // },
   deleteMessage: async (messageId: string) => {
     try {
       const res: AxiosResponse<any> = await instance.delete(`/api/message/`, {
