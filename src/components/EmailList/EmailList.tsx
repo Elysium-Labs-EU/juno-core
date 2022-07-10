@@ -189,10 +189,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {
@@ -246,7 +246,7 @@ const EmailList = () => {
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
           <LoadingState />
         )}
-      {serviceUnavailable.length > 0 && (
+      {serviceUnavailable && serviceUnavailable.length > 0 && (
         <S.UnavailableContainer>
           <span>{serviceUnavailable}</span>
         </S.UnavailableContainer>

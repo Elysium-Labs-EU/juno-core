@@ -445,6 +445,7 @@ export const updateEmailLabel = (
   props: UpdateRequestParamsSingle
 ): AppThunk => {
   const {
+    threadId,
     messageId,
     request,
     request: { removeLabelIds },
@@ -510,10 +511,19 @@ export const updateEmailLabel = (
         if (!request.delete) {
           try {
             dispatch(setIsProcessing(true))
-            const response = await messageApi().updateMessage({
-              messageId,
-              request,
-            })
+            let response = null
+            if (threadId) {
+              response = await threadApi({}).updateThread({
+                threadId,
+                request,
+              })
+            }
+            if (messageId) {
+              response = await messageApi().updateMessage({
+                messageId,
+                request,
+              })
+            }
             if (response) {
               dispatch(setIsProcessing(false))
             }
@@ -523,7 +533,14 @@ export const updateEmailLabel = (
         }
         if (request.delete) {
           try {
-            await messageApi().thrashMessage({ messageId })
+            if (threadId) {
+              await threadApi({}).thrashThread({
+                threadId,
+              })
+            }
+            if (messageId) {
+              await messageApi().thrashMessage({ messageId })
+            }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }
@@ -534,7 +551,7 @@ export const updateEmailLabel = (
         ) {
           dispatch(
             listRemoveItemDetail({
-              messageId,
+              threadId,
               staticIndexActiveEmailList,
             })
           )
@@ -583,8 +600,8 @@ export const updateEmailLabelBatch = (
         for (let i = 0; i < selectedEmails.length; i += 1) {
           if (!request.delete) {
             try {
-              messageApi().updateMessage({
-                messageId: selectedEmails[i],
+              threadApi({}).updateThread({
+                threadId: selectedEmails[i],
                 request,
               })
             } catch (err) {
@@ -593,7 +610,7 @@ export const updateEmailLabelBatch = (
           }
           if (request.delete) {
             try {
-              messageApi().thrashMessage({ messageId: selectedEmails[i] })
+              threadApi({}).thrashThread({ threadId: selectedEmails[i] })
             } catch (err) {
               dispatch(setServiceUnavailable('Error updating label.'))
             }

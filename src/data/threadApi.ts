@@ -71,6 +71,52 @@ const threadApi = ({
       return errorHandling(err)
     }
   },
+  updateThread: async ({ threadId, request }: any) => {
+    try {
+      const res: AxiosResponse<any> = await instance.patch(
+        `/api/thread/${threadId}`,
+        request,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
+      )
+      return res
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  thrashThread: async ({ threadId }: { threadId: string }) => {
+    const data = {}
+    try {
+      const res: AxiosResponse<any> = await instance.post(
+        `/api/thread/thrash/${threadId}`,
+        data,
+        {
+          headers: {
+            Authorization: fetchToken(),
+          },
+        }
+      )
+      return res
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  deleteThread: async (threadId: string) => {
+    try {
+      const res: AxiosResponse<any> = await instance.delete(`/api/thread/`, {
+        data: { id: threadId },
+        headers: {
+          Authorization: fetchToken(),
+        },
+      })
+      return res.data
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
 })
 
 export default threadApi

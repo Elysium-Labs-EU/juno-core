@@ -8,7 +8,9 @@ export default function useMultiKeyPress(
 ) {
   const [keysPressed, setKeyPressed] = useState<string[]>([])
 
-  // To ensure that the array is clean.
+  /**
+   * A timeout based function to ensure that the array of the pressed keys is always clean.
+   */
   useEffect(() => {
     let timer: undefined | ReturnType<typeof setTimeout>
     if (keysPressed.length > 0) {
@@ -23,28 +25,50 @@ export default function useMultiKeyPress(
     }
   }, [keysPressed])
 
+  /**
+   * If there is an event handler registered, the system will check wether there are keys pressed.
+   * If the pressed keys are list in the in action keys, and if the system is not inSearch mode.
+   * If all checks pass, the event is handled and the pressed key array is reset.
+   */
   useEffect(() => {
+    let mounted = true
     if (handleEvent) {
       if (
         keysPressed.length > 0 &&
         multipleIncludes(actionKeys, keysPressed) &&
-        (!inSearch ?? true)
+        (!inSearch ?? true) &&
+        mounted
       ) {
-        handleEvent()
         setKeyPressed([])
+        handleEvent()
       }
+    }
+    return () => {
+      mounted = false
     }
   }, [keysPressed, handleEvent])
 
   useEffect(() => {
     let mounted = true
-    const keyUpHandler = (event: KeyboardEvent) => {
+
+    /**
+     * @function keyUpHandler
+     * @param event - takes in a keyboard event
+     * @returns {void} - removes the event key from the array of pressed keys
+     */
+    const keyUpHandler = (event: KeyboardEvent): void => {
       mounted &&
         setKeyPressed((prevState) =>
           prevState.filter((item) => item !== event.key)
         )
     }
-    const keyDownHandler = (event: KeyboardEvent) => {
+    /**
+     * @function keyDownHandler
+     * @param event - takes in a keyboard event
+     * @returns {void} - add the event key from the array of pressed keys,
+     * ensures that there is only one version of it on the array.
+     */
+    const keyDownHandler = (event: KeyboardEvent): void => {
       mounted &&
         setKeyPressed((prevState) => [
           ...new Set([...prevState, event.key.toUpperCase()]),

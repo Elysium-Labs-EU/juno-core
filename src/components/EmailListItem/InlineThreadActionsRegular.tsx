@@ -1,6 +1,6 @@
 import { FiArchive, FiCheckCircle, FiCornerUpLeft } from 'react-icons/fi'
 import { AiOutlineDelete } from 'react-icons/ai'
-import ArchiveMail from '../EmailOptions/ArchiveMail'
+import archiveMail from '../EmailOptions/ArchiveMail'
 import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
@@ -63,7 +63,7 @@ const InlineThreadActionsRegular = ({
               />
             )}
           <CustomIconButton
-            onClick={() => ArchiveMail({ messageId: id, dispatch, labelIds })}
+            onClick={() => archiveMail({ threadId: id, dispatch, labelIds })}
             icon={<FiArchive size={SIZE} />}
             title="Archive"
           />

@@ -23,5 +23,5 @@ export function decodeBase64(base64Data: string) {
     const b64 = base64url.decode(checkedString)
     return b64
   }
-  return null
+  return undefined
 }

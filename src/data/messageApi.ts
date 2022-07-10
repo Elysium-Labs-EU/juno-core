@@ -52,6 +52,7 @@ const messageApi = () => ({
     }
   },
   updateMessage: async (props: any) => {
+    console.log(props)
     const { messageId, request } = props
     try {
       const res: AxiosResponse<any> = await instance.patch(

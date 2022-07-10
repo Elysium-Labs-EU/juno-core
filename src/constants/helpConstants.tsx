@@ -45,7 +45,7 @@ export const EMAIL_DETAIL_COMBOS = [
   },
   { title: 'Reply to Email', keys: [modifierKey, 'ENTER'] },
   { title: 'Forward Email', keys: ['SHIFT', 'ENTER'] },
-  { title: 'Skip Email', keys: [modifierKey, 'SHIFT', 'K'] },
+  { title: 'Skip Email', keys: ['SHIFT', 'K'] },
   { title: 'Unsubscribe Email', keys: [modifierKey, 'SHIFT', 'U'] },
   {
     title: 'Next Email',

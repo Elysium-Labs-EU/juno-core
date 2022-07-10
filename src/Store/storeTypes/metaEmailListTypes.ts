@@ -9,7 +9,8 @@ export interface UpdateRequestParamsBatch {
 }
 export interface UpdateRequestParamsSingle {
   location?: any
-  messageId: string
+  threadId?: string
+  messageId?: string
   request: UpdateRequest
   labelIds: string[]
 }

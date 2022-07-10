@@ -4,18 +4,24 @@ import * as global from '../constants/globalConstants'
 interface IMarkEmailAsRead {
   dispatch: Function
   labelIds: string[]
-  messageId: string
+  threadId: string
 }
+
+/**
+ * @function markEmailAsRead
+ * @param IMarkEmailAsRead - takes in labelIds and threadId to update the message's labels.
+ * The output of the function is to remove the unread label.
+ */
 
 const markEmailAsRead = ({
   dispatch,
   labelIds,
-  messageId,
+  threadId,
 }: IMarkEmailAsRead) => {
-  if (messageId.length > 0 && dispatch) {
+  if (threadId.length > 0 && dispatch) {
     dispatch(
       updateEmailLabel({
-        messageId,
+        threadId,
         request: {
           removeLabelIds: [global.UNREAD_LABEL],
         },
