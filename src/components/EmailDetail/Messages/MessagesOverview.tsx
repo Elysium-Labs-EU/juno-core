@@ -225,74 +225,77 @@ const MessagesOverview = memo(
       setSelectedIndex(value)
     }
 
-    const memoizedMessagesOverview = useMemo(() =>
-    (<>
-      <ES.DetailRow>
-        <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
-          <ES.DetailBase>
-            <ES.CardFullWidth>
-              {localThreadDetail?.messages && !isLoading ? (
-                <MappedMessages
+    const memoizedMessagesOverview = useMemo(
+      () => (
+        <>
+          <ES.DetailRow>
+            <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+              <ES.DetailBase>
+                <ES.CardFullWidth>
+                  {localThreadDetail?.messages && !isLoading ? (
+                    <MappedMessages
+                      threadDetail={localThreadDetail}
+                      setUnsubscribeLink={setUnsubscribeLink}
+                      setContentRendered={setContentRendered}
+                      indexMessageListener={indexMessageListener}
+                    />
+                  ) : (
+                    <ES.LoadingErrorWrapper>
+                      <CircularProgress />
+                    </ES.LoadingErrorWrapper>
+                  )}
+                  {!localThreadDetail && (
+                    <ES.LoadingErrorWrapper>
+                      {isLoading && <CircularProgress />}
+                      {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+                    </ES.LoadingErrorWrapper>
+                  )}
+                </ES.CardFullWidth>
+              </ES.DetailBase>
+            </ES.EmailDetailContainer>
+            {localThreadDetail &&
+              !isReplying &&
+              !isForwarding &&
+              localThreadDetail.messages && (
+                <EmailDetailOptions
                   threadDetail={localThreadDetail}
-                  setUnsubscribeLink={setUnsubscribeLink}
-                  setContentRendered={setContentRendered}
-                  indexMessageListener={indexMessageListener}
+                  unsubscribeLink={unsubscribeLink}
                 />
-              ) : (
-                <ES.LoadingErrorWrapper>
-                  <CircularProgress />
-                </ES.LoadingErrorWrapper>
               )}
-              {!localThreadDetail && (
-                <ES.LoadingErrorWrapper>
-                  {isLoading && <CircularProgress />}
-                  {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                </ES.LoadingErrorWrapper>
-              )}
-            </ES.CardFullWidth>
-          </ES.DetailBase>
-        </ES.EmailDetailContainer>
-        {localThreadDetail &&
-          !isReplying &&
-          !isForwarding &&
-          localThreadDetail.messages && (
-            <EmailDetailOptions
-              threadDetail={localThreadDetail}
-              unsubscribeLink={unsubscribeLink}
-            />
+          </ES.DetailRow>
+          {isReplying && localThreadDetail && localThreadDetail.messages && (
+            <ES.ComposeWrapper>
+              <ComposeEmail
+                to={fromEmail(localThreadDetail)}
+                cc={ccEmail(localThreadDetail)}
+                bcc={bccEmail(localThreadDetail)}
+                subject={emailSubject(localThreadDetail)}
+                foundBody={
+                  selectedIndex !== undefined
+                    ? emailBody(
+                        localThreadDetail,
+                        localThreadDetail.messages.length - 1 - selectedIndex
+                      )
+                    : undefined
+                }
+                threadId={localThreadDetail.id}
+                messageOverviewListener={messageOverviewListener}
+              />
+            </ES.ComposeWrapper>
           )}
-      </ES.DetailRow>
-      {isReplying && localThreadDetail && localThreadDetail.messages && (
-        <ES.ComposeWrapper>
-          <ComposeEmail
-            to={fromEmail(localThreadDetail)}
-            cc={ccEmail(localThreadDetail)}
-            bcc={bccEmail(localThreadDetail)}
-            subject={emailSubject(localThreadDetail)}
-            foundBody={
-              selectedIndex !== undefined
-                ? emailBody(
-                  localThreadDetail,
-                  localThreadDetail.messages.length - 1 - selectedIndex
-                )
-                : undefined
-            }
-            threadId={localThreadDetail.id}
-            messageOverviewListener={messageOverviewListener}
-          />
-        </ES.ComposeWrapper>
-      )}
-      {isForwarding && localThreadDetail && localThreadDetail.messages && (
-        <ES.ComposeWrapper>
-          <ComposeEmail
-            subject={emailSubject(localThreadDetail)}
-            threadId={localThreadDetail.id}
-            messageOverviewListener={messageOverviewListener}
-          />
-        </ES.ComposeWrapper>
-      )}
-    </>
-    ), [localThreadDetail])
+          {isForwarding && localThreadDetail && localThreadDetail.messages && (
+            <ES.ComposeWrapper>
+              <ComposeEmail
+                subject={emailSubject(localThreadDetail)}
+                threadId={localThreadDetail.id}
+                messageOverviewListener={messageOverviewListener}
+              />
+            </ES.ComposeWrapper>
+          )}
+        </>
+      ),
+      [localThreadDetail]
+    )
 
     return memoizedMessagesOverview
   }
