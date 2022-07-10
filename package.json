@@ -72,7 +72,9 @@
     "preview": "vite preview",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
+    "lint-staged": "lint-staged --config lint-staged.config.mjs",
     "format": "dprint check",
+    "husky-install": "husky install",
     "update-deps": "yarn upgrade-interactive --latest"
   },
   "devDependencies": {
@@ -101,6 +103,8 @@
     "eslint-plugin-jsx-a11y": "6.6.0",
     "eslint-plugin-react": "7.30.1",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "vite": "2.9.14",
     "wait-on": "6.0.1"
   }
