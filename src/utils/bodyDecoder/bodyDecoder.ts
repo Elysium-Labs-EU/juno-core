@@ -128,16 +128,6 @@ export const loopThroughBodyParts = async ({
   return loopingFunction({ loopObject: inputObject })
 }
 
-const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
-  const stringOnly: string | undefined = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'string'
-  )[0]
-  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'object'
-  )
-  return { emailHTML: stringOnly, emailFileHTML: objectOnly }
-}
-
 // Prioritise the string object that has the HTML tag in it. Remove the others.
 // First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
 /**
@@ -179,6 +169,16 @@ const prioritizeHTMLbodyObject = (response: Array<string | IAttachment>) => {
     }
   }
   return estimatedMostValuableItem
+}
+
+const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
+  const stringOnly: string | undefined = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'string'
+  )[0]
+  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
+    (item: any) => typeof item === 'object'
+  )
+  return { emailHTML: stringOnly, emailFileHTML: objectOnly }
 }
 
 /**
@@ -228,6 +228,16 @@ export const placeInlineImage = (orderedObject: {
   }
   return orderedObject
 }
+
+/**
+ * @function bodyDecoder
+ * @property {object} - object can contain messageId and should contain inputObject, decodeImage, and signals
+ * @param messageId - takes in messageId to understand which message is being decoded
+ * @param inputObject -  an object from the Gmail API, that is the message object
+ * @param decodeImage - a boolean, to see if the the input object should be decoded with the decodeImage function
+ * @param signal - an abort signal object to cancel the decoding process, if needed
+ * @returns a promise that resolves with the decoded email object, sorted on emailHTML and emailFileHTML, and showing which trackers have been removed from the email.
+ */
 
 const bodyDecoder = async ({
   messageId,
