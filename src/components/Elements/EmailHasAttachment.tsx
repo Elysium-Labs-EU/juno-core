@@ -1,5 +1,5 @@
 import { FiPaperclip } from 'react-icons/fi'
-import { IEmailMessage } from '../../Store/storeTypes/emailListTypes'
+import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
 import checkAttachment from '../../utils/checkAttachment'
 
 const EmailHasAttachment = ({

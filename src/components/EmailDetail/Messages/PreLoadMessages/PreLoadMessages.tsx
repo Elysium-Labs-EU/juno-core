@@ -1,7 +1,7 @@
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../../../../Store/storeTypes/emailListTypes'
+} from '../../../../store/storeTypes/emailListTypes'
 import * as global from '../../../../constants/globalConstants'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 
@@ -9,9 +9,9 @@ import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 
 const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
   message &&
-  message.payload &&
-  message.id &&
-  !window.location.pathname.includes(message.id) ? (
+    message.payload &&
+    message.id &&
+    !window.location.pathname.includes(message.id) ? (
     <EmailDetailBody
       threadDetailBody={message.payload}
       messageId={message.id}

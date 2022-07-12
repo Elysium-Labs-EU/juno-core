@@ -1,4 +1,4 @@
-import { IEmailMessage } from '../../Store/storeTypes/emailListTypes'
+import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
 
 const EmailSnippet = (message: IEmailMessage): string => {
   if (message?.snippet) {

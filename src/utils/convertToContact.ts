@@ -1,5 +1,5 @@
 // Takes the string email format from Gmail, and converts it to object email format for this app.
-import { Contact } from '../Store/storeTypes/contactsTypes'
+import { Contact } from '../store/storeTypes/contactsTypes'
 
 const convertToContact = (data: string): Contact => {
   const splitted = data.split('<')

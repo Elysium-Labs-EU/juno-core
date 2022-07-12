@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import { FiDelete } from 'react-icons/fi'
 import * as local from '../../constants/composeEmailConstants'
-import { selectDraft } from '../../Store/draftsSlice'
+import { selectDraft } from '../../store/draftsSlice'
 import {
   selectIsReplying,
   selectIsForwarding,
   setIsReplying,
   setIsForwarding,
-} from '../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { navigateBack } from '../../Store/utilsSlice'
+} from '../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { navigateBack } from '../../store/utilsSlice'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import discardDraft from '../EmailOptions/DiscardDraft'
 

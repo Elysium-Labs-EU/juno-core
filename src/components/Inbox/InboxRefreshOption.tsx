@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
 import useKeyPress from '../../Hooks/useKeyPress'
-import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
+import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
 import * as global from '../../constants/globalConstants'
 
 const rotate = keyframes`
@@ -18,7 +18,7 @@ const rotate = keyframes`
 `
 
 const rotatingIcon = css`
-  animation: ${rotate} 1s ease infinite;
+  animation: ${ rotate } 1s ease infinite;
 `
 
 interface IRotatingButton {
@@ -38,7 +38,7 @@ const RotatingButton = styled.button<IRotatingButton>`
     color: var(--color-black);
     cursor: pointer;
   }
-  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
+  ${ ({ disableRefresh }) => (disableRefresh ? rotatingIcon : null) };
 `
 
 const refreshFeed = (dispatch: Function) => {

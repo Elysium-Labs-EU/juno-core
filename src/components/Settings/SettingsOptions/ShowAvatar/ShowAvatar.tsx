@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
   selectAvatarVisibility,
   selectSettingsLabelId,

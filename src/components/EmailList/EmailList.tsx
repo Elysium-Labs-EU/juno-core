@@ -1,21 +1,21 @@
 import { useEffect, useMemo, useState } from 'react'
 import EmailListItem from '../EmailListItem/EmailListItem'
-import { fetchDrafts } from '../../Store/draftsSlice'
+import { fetchDrafts } from '../../store/draftsSlice'
 import {
   fetchEmails,
   refreshEmailFeed,
   selectActiveEmailListIndex,
   selectEmailList,
   setActiveEmailListIndex,
-} from '../../Store/emailListSlice'
-import { selectLabelIds, selectLoadedInbox } from '../../Store/labelsSlice'
+} from '../../store/emailListSlice'
+import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
 import {
   selectEmailListSize,
   selectInSearch,
   selectIsLoading,
   selectIsProcessing,
   selectServiceUnavailable,
-} from '../../Store/utilsSlice'
+} from '../../store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
@@ -23,13 +23,13 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListObject } from '../../Store/storeTypes/emailListTypes'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import useKeyPress from '../../Hooks/useKeyPress'
 import handleSessionStorage from '../../utils/handleSessionStorage'
-import { resetEmailDetail, selectViewIndex } from '../../Store/emailDetailSlice'
+import { resetEmailDetail, selectViewIndex } from '../../store/emailDetailSlice'
 import EmailListEmptyStates from './EmptyStates/EmailListEmptyStates'
 
 const RenderEmailList = ({
@@ -189,10 +189,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {

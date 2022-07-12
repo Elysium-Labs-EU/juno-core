@@ -3,9 +3,9 @@ import { FiSkipForward } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { navigateNextMail, selectInSearch } from '../../../Store/utilsSlice'
+import { navigateNextMail, selectInSearch } from '../../../store/utilsSlice'
 
 const actionKeys = [global.KEY_SHIFT, global.KEY_K]
 

@@ -10,8 +10,8 @@ import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
 
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListThreadItem } from '../../Store/storeTypes/emailListTypes'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
@@ -19,15 +19,15 @@ import SenderNameFull from '../Elements/SenderName/senderNameFull'
 import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
-import { selectProfile } from '../../Store/baseSlice'
+import { selectProfile } from '../../store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
-import { openEmail, selectInSearch } from '../../Store/utilsSlice'
-import { selectLabelIds } from '../../Store/labelsSlice'
+import { openEmail, selectInSearch } from '../../store/utilsSlice'
+import { selectLabelIds } from '../../store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
   selectSelectedEmails,
   setSelectedEmails,
-} from '../../Store/emailListSlice'
+} from '../../store/emailListSlice'
 import useKeyPress from '../../Hooks/useKeyPress'
 
 // If the user is on Draft list, show only draft emails.
@@ -91,7 +91,7 @@ const EmailListItem = ({
     () =>
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -101,7 +101,7 @@ const EmailListItem = ({
     () =>
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -111,7 +111,7 @@ const EmailListItem = ({
     () =>
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -121,7 +121,7 @@ const EmailListItem = ({
     () =>
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
@@ -132,7 +132,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []

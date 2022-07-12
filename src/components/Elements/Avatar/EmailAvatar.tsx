@@ -1,6 +1,6 @@
 import React from 'react'
-import { useAppSelector } from '../../../Store/hooks'
-import { selectAvatarVisibility } from '../../../Store/utilsSlice'
+import { useAppSelector } from '../../../store/hooks'
+import { selectAvatarVisibility } from '../../../store/utilsSlice'
 import getRandomColor from '../../../utils/getRandomColor'
 import * as S from './EmailAvatarStyles'
 

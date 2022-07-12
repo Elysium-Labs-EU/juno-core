@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { push } from 'redux-first-history'
-import { selectBaseLoaded, setIsAuthenticated } from '../../Store/baseSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { selectBaseLoaded, setIsAuthenticated } from '../../store/baseSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import Baseloader from '../BaseLoader/BaseLoader'
 import RoutesConstants from '../../constants/routes.json'
 

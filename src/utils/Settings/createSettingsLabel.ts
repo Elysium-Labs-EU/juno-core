@@ -5,7 +5,7 @@ import {
   fetchSizeKeyMap,
   showIntroductionKeyMap,
 } from '../../constants/baseConstants'
-import { createLabel } from '../../Store/labelsSlice'
+import { createLabel } from '../../store/labelsSlice'
 
 const createSettingsLabel = ({ dispatch }: { dispatch: Function }) =>
   dispatch(

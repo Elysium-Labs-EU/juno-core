@@ -11,23 +11,23 @@ import {
   setIsForwarding,
   setIsReplying,
   setViewIndex,
-} from '../../Store/emailDetailSlice'
-import { selectIsLoading } from '../../Store/utilsSlice'
-import { selectLabelIds } from '../../Store/labelsSlice'
+} from '../../store/emailDetailSlice'
+import { selectIsLoading } from '../../store/utilsSlice'
+import { selectLabelIds } from '../../store/labelsSlice'
 import {
   selectEmailList,
   selectSearchList,
   selectActiveEmailListIndex,
-} from '../../Store/emailListSlice'
+} from '../../store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../Store/storeTypes/emailListTypes'
+} from '../../store/storeTypes/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'

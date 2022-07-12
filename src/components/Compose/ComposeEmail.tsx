@@ -15,16 +15,16 @@ import {
   resetDraftDetails,
   selectDraftDetails,
   sendComposedEmail,
-} from '../../Store/draftsSlice'
+} from '../../store/draftsSlice'
 import {
   selectCurrentMessage,
   selectIsForwarding,
   selectIsReplying,
   setIsForwarding,
   setIsReplying,
-} from '../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { Contact } from '../../Store/storeTypes/contactsTypes'
+} from '../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Contact } from '../../store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
@@ -33,8 +33,8 @@ import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
 import DiscardDraftButton from './DiscardDraftButton'
-import { IComposeEmailReceive } from '../../Store/storeTypes/composeTypes'
-import { refreshEmailFeed } from '../../Store/emailListSlice'
+import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
+import { refreshEmailFeed } from '../../store/emailListSlice'
 
 const handleContactConversion = (contactValue: string): Contact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {

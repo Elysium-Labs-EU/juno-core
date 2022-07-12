@@ -6,13 +6,13 @@ import {
   selectSelectedEmails,
   setSelectedEmails,
   updateEmailLabelBatch,
-} from '../../../Store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectLabelIds } from '../../../Store/labelsSlice'
+} from '../../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { selectLabelIds } from '../../../store/labelsSlice'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as S from './SelectedOptionsStyles'
 import * as global from '../../../constants/globalConstants'
-import { deleteDraftBatch } from '../../../Store/draftsSlice'
+import { deleteDraftBatch } from '../../../store/draftsSlice'
 
 const ARCHIVE_BUTTON_LABEL = 'Archive'
 const DISCARD_BUTTON_LABEL = 'Discard'
@@ -76,11 +76,10 @@ const SelectedOptions = () => {
         <CustomButton label="Select all" onClick={handleSelectAll} />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${selectedEmails.length} ${
-          selectedEmails.length > 1
+        <S.SelectedLabelsText>{`${ selectedEmails.length } ${ selectedEmails.length > 1
             ? EMAILS_SELECTED_SINGLE
             : EMAILS_SELECTED_PLURAL
-        }`}</S.SelectedLabelsText>
+          }`}</S.SelectedLabelsText>
         {!labelIds.includes(global.DRAFT_LABEL) ? (
           <CustomButton
             label={ARCHIVE_BUTTON_LABEL}

@@ -11,7 +11,7 @@ import {
   IEmailListThreadItem,
   IEmailMessage,
 } from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch } from '../../../Store/hooks'
+import { useAppDispatch } from '../../../store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import convertToContact from '../../../utils/convertToContact'
@@ -273,9 +273,9 @@ const MessagesOverview = memo(
                 foundBody={
                   selectedIndex !== undefined
                     ? emailBody(
-                        localThreadDetail,
-                        localThreadDetail.messages.length - 1 - selectedIndex
-                      )
+                      localThreadDetail,
+                      localThreadDetail.messages.length - 1 - selectedIndex
+                    )
                     : undefined
                 }
                 threadId={localThreadDetail.id}

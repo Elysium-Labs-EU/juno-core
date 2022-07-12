@@ -1,6 +1,6 @@
 import { Box, FormControlLabel, MenuItem } from '@mui/material'
 import * as S from '../../SettingsStyles'
-import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
   setEmailFetchSize,
   selectEmailListSize,

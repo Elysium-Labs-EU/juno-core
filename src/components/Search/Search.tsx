@@ -6,23 +6,23 @@ import { FiSearch, FiX, FiXCircle } from 'react-icons/fi'
 import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   selectInSearch,
   setInSearch,
   setServiceUnavailable,
-} from '../../Store/utilsSlice'
+} from '../../store/utilsSlice'
 import threadApi from '../../data/threadApi'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
   IEmailListThreadItem,
-} from '../../Store/storeTypes/emailListTypes'
+} from '../../store/storeTypes/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
-import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'
+import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import useKeyPress from '../../Hooks/useKeyPress'
 
@@ -299,7 +299,7 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread, index) => (
                 <div
-                  key={`${thread.id}-search`}
+                  key={`${ thread.id }-search`}
                   onClick={() => handleOpenEvent(thread.id)}
                   onFocus={() => setFocusedItemIndex(index)}
                   onMouseOver={() => setFocusedItemIndex(index)}

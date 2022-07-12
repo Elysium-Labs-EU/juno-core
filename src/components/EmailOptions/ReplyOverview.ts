@@ -1,6 +1,6 @@
-import { resetDraftDetails } from '../../Store/draftsSlice'
-import { setIsReplying } from '../../Store/emailDetailSlice'
-import { openEmail } from '../../Store/utilsSlice'
+import { resetDraftDetails } from '../../store/draftsSlice'
+import { setIsReplying } from '../../store/emailDetailSlice'
+import { openEmail } from '../../store/utilsSlice'
 
 interface IReplyOverview {
   id: string

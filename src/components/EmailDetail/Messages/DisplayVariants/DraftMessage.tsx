@@ -1,18 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import { openDraftEmail } from '../../../../Store/draftsSlice'
+import { openDraftEmail } from '../../../../store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
 import {
   selectCurrentEmail,
   selectIsReplying,
-} from '../../../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
-import { IEmailMessage } from '../../../../Store/storeTypes/emailListTypes'
+} from '../../../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
-import { selectProfile } from '../../../../Store/baseSlice'
+import { selectProfile } from '../../../../store/baseSlice'
 
 const DraftMessage = ({
   message,
@@ -32,7 +32,7 @@ const DraftMessage = ({
   const messageId = message && message.id
 
   const EmailSnippet =
-    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
+    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message, emailAddress),

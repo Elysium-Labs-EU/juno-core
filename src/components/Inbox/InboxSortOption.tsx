@@ -1,19 +1,19 @@
 import { useCallback } from 'react'
 import * as global from '../../constants/globalConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { selectLabelIds } from '../../Store/labelsSlice'
-import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
+import { selectLabelIds } from '../../store/labelsSlice'
+import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
 import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
-} from '../../Store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+} from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import {
   setCoreStatus,
   setSessionViewIndex,
-} from '../../Store/emailDetailSlice'
+} from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
 import modifierKey from '../../utils/setModifierKey'
 

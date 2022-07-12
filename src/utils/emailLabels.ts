@@ -1,5 +1,5 @@
 import * as global from '../constants/globalConstants'
-import { IEmailListThreadItem } from '../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
 
 const emailLabels = (emailListThreadItem: IEmailListThreadItem) => {
   if (emailListThreadItem?.messages)
