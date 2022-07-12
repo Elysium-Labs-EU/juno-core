@@ -1,4 +1,4 @@
-import { updateEmailLabel } from '../../Store/emailListSlice'
+import { updateEmailLabel } from '../../store/emailListSlice'
 
 interface IThrashMailProps {
   messageId: string

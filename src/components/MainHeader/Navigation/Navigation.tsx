@@ -12,19 +12,19 @@ import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import * as S from './NavigationStyles'
 import * as global from '../../../constants/globalConstants'
 import Routes from '../../../constants/routes.json'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   navigateTo,
   selectInSearch,
   setInSearch,
-} from '../../../Store/utilsSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+} from '../../../store/utilsSlice'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import {
   selectIsForwarding,
   selectIsReplying,
-} from '../../../Store/emailDetailSlice'
+} from '../../../store/emailDetailSlice'
 
 const SIZE = 16
 

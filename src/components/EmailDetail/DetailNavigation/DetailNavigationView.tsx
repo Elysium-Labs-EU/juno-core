@@ -4,7 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import * as global from '../../../constants/globalConstants'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   closeMail,
   navigateNextMail,
@@ -12,12 +12,12 @@ import {
   selectEmailListSize,
   selectIsLoading,
   selectIsSilentLoading,
-} from '../../../Store/utilsSlice'
-import { selectViewIndex } from '../../../Store/emailDetailSlice'
-import { selectLabelIds } from '../../../Store/labelsSlice'
-import { IEmailListObject } from '../../../Store/storeTypes/emailListTypes'
+} from '../../../store/utilsSlice'
+import { selectViewIndex } from '../../../store/emailDetailSlice'
+import { selectLabelIds } from '../../../store/labelsSlice'
+import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import loadNextPage from '../../../utils/loadNextPage'
-import useKeyPress from '../../../Hooks/useKeyPress'
+import useKeyPress from '../../../hooks/useKeyPress'
 
 const ICON_SIZE = 20
 interface IDetailNavigationView {

@@ -15,17 +15,17 @@ import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import {
   IEmailMessage,
   IEmailListThreadItem,
-} from '../../../../Store/storeTypes/emailListTypes'
+} from '../../../../store/storeTypes/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import { useAppSelector } from '../../../../Store/hooks'
-import { selectIsReplying } from '../../../../Store/emailDetailSlice'
+import { useAppSelector } from '../../../../store/hooks'
+import { selectIsReplying } from '../../../../store/emailDetailSlice'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import EmailSubject from '../../../Elements/EmailSubject'
 import EmailSnippet from '../../../Elements/EmailSnippet'
 import convertToContact from '../../../../utils/convertToContact'
-import { selectProfile } from '../../../../Store/baseSlice'
+import { selectProfile } from '../../../../store/baseSlice'
 import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
 import Seo from '../../../Elements/Seo'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
@@ -109,11 +109,11 @@ const ReadUnreadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   const handleClick = () => {

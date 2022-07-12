@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 // import isElectron from 'is-electron'
-import { useAppDispatch } from '../../Store/hooks'
+import { useAppDispatch } from '../../store/hooks'
 import * as S from './LoginStyles'
 import * as HS from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'

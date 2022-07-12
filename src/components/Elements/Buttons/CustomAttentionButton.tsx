@@ -9,6 +9,7 @@ interface ICustomButton {
   disabled?: boolean
   label: string
   variant?: 'primary' | 'secondary'
+  title: string
 }
 
 interface IButton {
@@ -16,27 +17,28 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  font-weight: 600;
+  font-weight: 500;
   font-family: var(--font-family);
   border-radius: 20px;
   border: none;
-  background-color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)`};
+  background-color: ${ ({ variant }) =>
+    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)` };
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
-    margin: 0.4rem 0.8rem;
+    margin: 10px 14px;
     span {
       color: var(--color-white);
       font-size: 1rem;
+      line-height: 1rem;
     }
   }
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `var(--color-black-off)`
-        : `var(--color-purple-dark)`};
+    background-color: ${ ({ variant }) =>
+    variant === 'primary'
+      ? `var(--color-black-off)`
+      : `var(--color-purple-dark)` };
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
@@ -58,7 +60,7 @@ const InnerButton = styled.div`
 `
 
 const CustomAttentionButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, label, type, variant } = props
+  const { onClick, className, disabled, label, type, variant, title } = props
   return (
     <Button
       onClick={onClick ? (event) => onClick(event) : undefined}
@@ -66,6 +68,7 @@ const CustomAttentionButton = (props: ICustomButton) => {
       type={type ?? 'button'}
       disabled={disabled}
       variant={variant ?? 'primary'}
+      title={title}
     >
       <InnerButton>
         <span>{label}</span>

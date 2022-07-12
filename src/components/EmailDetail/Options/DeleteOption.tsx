@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
-import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
 import modifierKey from '../../../utils/setModifierKey'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../Store/utilsSlice'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IDeleteOption {
   messageId: string

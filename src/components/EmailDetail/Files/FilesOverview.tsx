@@ -3,18 +3,18 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import * as local from '../../../constants/filesOverviewConstants'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
 import SenderNameFull from '../../Elements/SenderName/senderNameFull'
-import { selectProfile } from '../../../Store/baseSlice'
-import { useAppSelector } from '../../../Store/hooks'
+import { selectProfile } from '../../../store/baseSlice'
+import { useAppSelector } from '../../../store/hooks'
 import checkAttachment from '../../../utils/checkAttachment'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
 import {
   selectIsReplying,
   selectIsForwarding,
-} from '../../../Store/emailDetailSlice'
+} from '../../../store/emailDetailSlice'
 
 interface IFilesOverview {
   threadDetail: IEmailListThreadItem | null

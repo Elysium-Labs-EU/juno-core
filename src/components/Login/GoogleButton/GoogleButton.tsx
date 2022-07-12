@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import * as S from './GoogleButtonStyles'
-import useKeyPress from '../../../Hooks/useKeyPress'
+import useKeyPress from '../../../hooks/useKeyPress'
 import * as global from '../../../constants/globalConstants'
 
 const GOOGLE = 'Login with Google'

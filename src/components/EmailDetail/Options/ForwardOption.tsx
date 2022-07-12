@@ -3,11 +3,11 @@ import { FiArrowRight } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../Store/utilsSlice'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem

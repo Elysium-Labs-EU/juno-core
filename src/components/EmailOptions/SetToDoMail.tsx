@@ -1,5 +1,5 @@
-import { LabelIdName } from '../../Store/storeTypes/labelsTypes'
-import { updateEmailLabel } from '../../Store/emailListSlice'
+import { LabelIdName } from '../../store/storeTypes/labelsTypes'
+import { updateEmailLabel } from '../../store/emailListSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
 import { findLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'

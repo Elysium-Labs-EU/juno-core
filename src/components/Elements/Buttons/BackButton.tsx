@@ -2,10 +2,10 @@ import { useCallback } from 'react'
 import { FiChevronLeft } from 'react-icons/fi'
 import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { navigateBack } from '../../../Store/utilsSlice'
-import { selectCoreStatus } from '../../../Store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { navigateBack } from '../../../store/utilsSlice'
+import { selectCoreStatus } from '../../../store/emailDetailSlice'
 
 const actionKeys = [global.KEY_ESCAPE]
 

@@ -3,14 +3,14 @@ import DOMPurify from 'dompurify'
 import {
   IAttachment,
   IEmailAttachmentType,
-} from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { decodeBase64 } from './decodeBase64'
-import fetchAttachment from './fetchAttachment'
-import removeScripts from './removeScripts'
-import removeTrackers from './removeTrackers'
-import * as global from '../constants/globalConstants'
+} from '../../components/EmailDetail/Attachment/EmailAttachmentTypes'
+import { decodeBase64 } from '../decodeBase64'
+import fetchAttachment from '../fetchAttachment'
+import removeScripts from '../removeScripts'
+import removeTrackers from '../removeTrackers'
+import * as global from '../../constants/globalConstants'
 
-let decodedString: string | null = ''
+let decodedString: string | undefined = ''
 let localMessageId: string | null = ''
 let localDecodeImage: boolean | undefined = false
 let decodedResult: any[] = []
@@ -128,16 +128,20 @@ const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
 
 // Prioritise the string object that has the HTML tag in it. Remove the others.
 // First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
-const prioritizeHTMLbodyObject = (response: any) => {
+/**
+ * @function prioritizeHTMLbodyObject
+ * @param response - takes in the response, as a string
+ * @returns if the param object only contains one string
+ */
+const prioritizeHTMLbodyObject = (response: Array<string | IAttachment>) => {
   const indexOfStringObjects: number[] = []
   const indexOfRemovalObjects: number[] = []
   for (let i = 0; i < response.length; i += 1) {
     // If the response is a string but doesn't have html, mark it for removal.
     // We need to run this first to understand how many string objects the response has.
-    if (
-      typeof response[i] === 'string' &&
-      response[i].search('</html>') === -1
-    ) {
+
+    const r = response[i]
+    if (typeof r === 'string' && !r.includes('</html>')) {
       indexOfRemovalObjects.push(i)
     }
     if (typeof response[i] === 'string') {
@@ -157,18 +161,25 @@ const prioritizeHTMLbodyObject = (response: any) => {
   // If none items are found, guess which item is the most valuable.
   const estimatedMostValuableItem: string[] = []
   for (let i = 0; response.length > i; i += 1) {
-    if (response[i].startsWith('<')) {
-      estimatedMostValuableItem.push(response[i])
+    const r = response[i]
+    if (typeof r === 'string' && r.startsWith('<')) {
+      estimatedMostValuableItem.push(r)
     }
   }
   return estimatedMostValuableItem
 }
 
+/**
+ * @function placeInlineImage
+ * @param orderedObject - check the string body for CID (files) if there is a match, replace the img tag with the fetched file.
+ * @returns {Object} - an object with emailHTML and emailFileHTML
+ */
+
 // Check the string body for CID (files) if there is a match, replace the img tag with the fetched file
-const placeInlineImage = (orderedObject: {
+export const placeInlineImage = (orderedObject: {
   emailHTML: string
-  emailFileHTML: any[]
-}) => {
+  emailFileHTML: IAttachment[]
+}): { emailHTML: string; emailFileHTML: IAttachment[] } => {
   if (orderedObject.emailFileHTML.length > 0) {
     const localCopyOrderedObject = orderedObject
     let outputString = ''
@@ -255,5 +266,3 @@ const bodyDecoder = async ({
 }
 
 export default bodyDecoder
-
-// TODO: Write a test for all of these functions.

@@ -2,7 +2,7 @@ import {
   setCurrentMessage,
   setIsForwarding,
   setIsReplying,
-} from '../../Store/emailDetailSlice'
+} from '../../store/emailDetailSlice'
 
 interface IIsReplyingListener {
   dispatch: Function

@@ -1,10 +1,10 @@
 import Modal from '@mui/material/Modal'
 import { FiX } from 'react-icons/fi'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   selectShowKeyboardCombos,
   setShowKeyboardCombos,
-} from '../../Store/utilsSlice'
+} from '../../store/utilsSlice'
 import * as S from './HelpStyles'
 import * as local from '../../constants/helpConstants'
 import * as HS from '../MainHeader/HeaderStyles'

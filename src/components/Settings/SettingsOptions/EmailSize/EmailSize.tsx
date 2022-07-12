@@ -1,11 +1,11 @@
 import { Box, FormControlLabel, MenuItem } from '@mui/material'
 import * as S from '../../SettingsStyles'
-import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
   setEmailFetchSize,
   selectEmailListSize,
   selectSettingsLabelId,
-} from '../../../../Store/utilsSlice'
+} from '../../../../store/utilsSlice'
 import updateSettingsLabel from '../../../../utils/Settings/updateSettingsLabel'
 import { fetchSizeKeyMap } from '../../../../constants/baseConstants'
 

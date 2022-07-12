@@ -1,4 +1,4 @@
-import { MessagePayload } from '../Store/storeTypes/draftsTypes'
+import { MessagePayload } from '../store/storeTypes/draftsTypes'
 
 /**
  * This function will fetch the payload header from the requested message

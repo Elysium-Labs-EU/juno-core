@@ -15,7 +15,7 @@ import {
   OpenDraftEmailType,
   DraftListObject,
 } from './storeTypes/draftsTypes'
-import { loopThroughBodyParts } from '../utils/bodyDecoder'
+import { loopThroughBodyParts } from '../utils/bodyDecoder/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
@@ -297,7 +297,7 @@ export const sendComposedEmail =
           const { labelIds } = getState().labels
           dispatch(setCurrentEmail(''))
           dispatch(resetDraftDetails())
-          archiveMail({ messageId: threadId, dispatch, labelIds })
+          archiveMail({ threadId, dispatch, labelIds })
           const staticIndexActiveEmailList: number = getEmailListIndex({
             emailList,
             labelIds: [global.DRAFT_LABEL],

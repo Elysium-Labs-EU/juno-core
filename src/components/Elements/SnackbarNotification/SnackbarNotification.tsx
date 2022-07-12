@@ -1,7 +1,7 @@
 import { Snackbar, Alert } from '@mui/material'
 import React, { useState } from 'react'
-import { useAppDispatch } from '../../../Store/hooks'
-import { setServiceUnavailable } from '../../../Store/utilsSlice'
+import { useAppDispatch } from '../../../store/hooks'
+import { setServiceUnavailable } from '../../../store/utilsSlice'
 
 const SIX_SECONDS = 6000
 

@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-import { selectServiceUnavailable } from '../../../Store/utilsSlice'
+import { selectServiceUnavailable } from '../../../store/utilsSlice'
 import StyledCircularProgress from '../StyledCircularProgress'
 import * as S from './LoadingStateStyles'
 

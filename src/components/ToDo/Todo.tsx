@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 // import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 import EmailList from '../EmailList/EmailList'
-import { selectBaseLoaded } from '../../Store/baseSlice'
+import { selectBaseLoaded } from '../../store/baseSlice'
 import {
   fetchLabelIds,
   setCurrentLabels,
   selectStorageLabels,
-} from '../../Store/labelsSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+} from '../../store/labelsSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Seo from '../Elements/Seo'
 import * as local from '../../constants/todoConstants'

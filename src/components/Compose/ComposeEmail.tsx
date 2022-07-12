@@ -6,7 +6,7 @@ import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
-import useDebounce from '../../Hooks/useDebounce'
+import useDebounce from '../../hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
 import {
@@ -15,26 +15,26 @@ import {
   resetDraftDetails,
   selectDraftDetails,
   sendComposedEmail,
-} from '../../Store/draftsSlice'
+} from '../../store/draftsSlice'
 import {
   selectCurrentMessage,
   selectIsForwarding,
   selectIsReplying,
   setIsForwarding,
   setIsReplying,
-} from '../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { Contact } from '../../Store/storeTypes/contactsTypes'
+} from '../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Contact } from '../../store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
 import TipTap from './ComposeFields/TipTap/Tiptap'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
-import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
 import DiscardDraftButton from './DiscardDraftButton'
-import { IComposeEmailReceive } from '../../Store/storeTypes/composeTypes'
-import { refreshEmailFeed } from '../../Store/emailListSlice'
+import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
+import { refreshEmailFeed } from '../../store/emailListSlice'
 
 const handleContactConversion = (contactValue: string): Contact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {

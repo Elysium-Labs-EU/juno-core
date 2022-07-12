@@ -11,6 +11,7 @@ interface ICustomButton {
   label: string
   suppressed?: boolean
   style?: any
+  title: string
 }
 
 interface IButton {
@@ -20,8 +21,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
+  color: ${ ({ suppressed }) =>
+    suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -64,7 +65,7 @@ const InnerButton = styled.div`
 `
 
 const CustomButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, icon, label, type, suppressed, style } =
+  const { onClick, className, disabled, icon, label, type, suppressed, style, title } =
     props
   return (
     <Button
@@ -74,6 +75,7 @@ const CustomButton = (props: ICustomButton) => {
       disabled={disabled}
       suppressed={suppressed}
       style={style}
+      title={title}
     >
       <InnerButton>
         {icon && <div className="icon">{icon}</div>}

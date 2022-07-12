@@ -1,8 +1,8 @@
 import {
   selectIsForwarding,
   selectIsReplying,
-} from '../../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+} from '../../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as GS from '../../../styles/globalStyles'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'

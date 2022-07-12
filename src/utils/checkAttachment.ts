@@ -1,5 +1,5 @@
 import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { IEmailMessage } from '../Store/storeTypes/emailListTypes'
+import { IEmailMessage } from '../store/storeTypes/emailListTypes'
 import * as global from '../constants/globalConstants'
 
 let foundAttachments: IEmailAttachmentType[] = []

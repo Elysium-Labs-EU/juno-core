@@ -1,7 +1,7 @@
 import * as S from '../NavigationMoreStyles'
 import * as local from '../../../../../constants/subMenuHeaderConstants'
-import { useAppDispatch } from '../../../../../Store/hooks'
-import { setIsSettingsOpen } from '../../../../../Store/utilsSlice'
+import { useAppDispatch } from '../../../../../store/hooks'
+import { setIsSettingsOpen } from '../../../../../store/utilsSlice'
 
 const SettingsOption = () => {
   const dispatch = useAppDispatch()

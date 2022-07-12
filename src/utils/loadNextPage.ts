@@ -1,8 +1,8 @@
-import { fetchEmails } from '../Store/emailListSlice'
+import { fetchEmails } from '../store/emailListSlice'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../Store/storeTypes/emailListTypes'
+} from '../store/storeTypes/emailListTypes'
 import * as global from '../constants/globalConstants'
 
 interface ILoadNextPage {

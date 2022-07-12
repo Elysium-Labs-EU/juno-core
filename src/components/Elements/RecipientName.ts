@@ -1,4 +1,4 @@
-import { Contact } from '../../Store/storeTypes/contactsTypes'
+import { Contact } from '../../store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import findPayloadHeadersData from '../../utils/findPayloadHeadersData'
 import * as global from '../../constants/globalConstants'

@@ -1,18 +1,18 @@
 import { useEffect } from 'react'
-import { selectLabelIds } from '../../../Store/labelsSlice'
-import { selectViewIndex } from '../../../Store/emailDetailSlice'
+import { selectLabelIds } from '../../../store/labelsSlice'
+import { selectViewIndex } from '../../../store/emailDetailSlice'
 import * as global from '../../../constants/globalConstants'
 import loadNextPage from '../../../utils/loadNextPage'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
-} from '../../../Store/utilsSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+} from '../../../store/utilsSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import DetailNavigationView from './DetailNavigationView'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../../Store/storeTypes/emailListTypes'
+} from '../../../store/storeTypes/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,

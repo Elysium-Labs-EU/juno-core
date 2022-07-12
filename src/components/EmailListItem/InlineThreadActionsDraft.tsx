@@ -1,9 +1,9 @@
 import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import discardDraft from '../EmailOptions/DiscardDraft'
-import { selectDraft } from '../../Store/draftsSlice'
+import { selectDraft } from '../../store/draftsSlice'
 
 const SIZE = 16
 
