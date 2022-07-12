@@ -10,7 +10,7 @@ import removeScripts from './removeScripts'
 import removeTrackers from './removeTrackers'
 import * as global from '../constants/globalConstants'
 
-let decodedString: string | null = ''
+let decodedString: string | undefined = ''
 let localMessageId: string | null = ''
 let localDecodeImage: boolean | undefined = false
 let decodedResult: any[] = []

@@ -297,7 +297,7 @@ export const sendComposedEmail =
           const { labelIds } = getState().labels
           dispatch(setCurrentEmail(''))
           dispatch(resetDraftDetails())
-          archiveMail({ messageId: threadId, dispatch, labelIds })
+          archiveMail({ threadId, dispatch, labelIds })
           const staticIndexActiveEmailList: number = getEmailListIndex({
             emailList,
             labelIds: [global.DRAFT_LABEL],
