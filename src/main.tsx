@@ -5,7 +5,7 @@ import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { Buffer } from 'buffer'
-import { store } from './Store/store'
+import { store } from './store/store'
 import App from './App'
 import { GlobalStyle, theme } from './styles/globalStyles'
 

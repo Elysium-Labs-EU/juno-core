@@ -3,7 +3,7 @@ import { FiArrowRightCircle } from 'react-icons/fi'
 import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
 import CustomButton from '../Elements/Buttons/CustomButton'
-import { useAppSelector } from '../../Store/hooks'
+import { useAppSelector } from '../../store/hooks'
 import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import {
   selectSettingsLabelId,

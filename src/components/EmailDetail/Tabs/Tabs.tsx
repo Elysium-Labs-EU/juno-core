@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import * as S from './TabsStyles'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../../Store/storeTypes/emailListTypes'
-import { selectViewIndex } from '../../../Store/emailDetailSlice'
+} from '../../../store/storeTypes/emailListTypes'
+import { selectViewIndex } from '../../../store/emailDetailSlice'
 import MessagesTab from './MessagesTab'
 import FilesTab from './FilesTab'
 

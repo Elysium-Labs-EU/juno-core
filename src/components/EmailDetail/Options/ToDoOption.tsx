@@ -1,14 +1,14 @@
 import { useCallback } from 'react'
 import { FiCheckCircle } from 'react-icons/fi'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../Store/utilsSlice'
+import { selectInSearch } from '../../../store/utilsSlice'
 import modifierKey from '../../../utils/setModifierKey'
 
 const actionKeys = [modifierKey, global.KEY_E]

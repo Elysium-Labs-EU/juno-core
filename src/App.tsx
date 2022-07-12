@@ -9,21 +9,21 @@ import {
   selectBaseLoaded,
   selectIsAuthenticated,
   setIsAuthenticated,
-} from './Store/baseSlice'
+} from './store/baseSlice'
 import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
 import * as GS from './styles/globalStyles'
-import { useAppDispatch, useAppSelector } from './Store/hooks'
-import { selectStorageLabels } from './Store/labelsSlice'
+import { useAppDispatch, useAppSelector } from './store/hooks'
+import { selectStorageLabels } from './store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
-import { history } from './Store/store'
+import { history } from './store/store'
 import { fetchToken } from './data/api'
 import HelpButton from './components/Help/HelpButton'
 import {
   selectServiceUnavailable,
   selectShowKeyboardCombos,
-} from './Store/utilsSlice'
+} from './store/utilsSlice'
 import ComposeEmail from './components/Compose/ComposeEmail'
 import DraftEmail from './components/Draft/DraftEmail'
 import ToDo from './components/ToDo/Todo'
