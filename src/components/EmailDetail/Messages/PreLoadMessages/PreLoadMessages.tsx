@@ -9,9 +9,9 @@ import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 
 const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
   message &&
-    message.payload &&
-    message.id &&
-    !window.location.pathname.includes(message.id) ? (
+  message.payload &&
+  message.id &&
+  !window.location.pathname.includes(message.id) ? (
     <EmailDetailBody
       threadDetailBody={message.payload}
       messageId={message.id}
