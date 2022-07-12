@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import AutoLinker from 'autolinker'
 import DOMPurify from 'dompurify'
 import {
@@ -9,6 +10,10 @@ import fetchAttachment from '../fetchAttachment'
 import removeScripts from '../removeScripts'
 import removeTrackers from '../removeTrackers'
 import * as global from '../../constants/globalConstants'
+import {
+  IEmailListThreadItem,
+  IEmailMessagePayload,
+} from '../../store/storeTypes/emailListTypes'
 
 let decodedString: string | undefined = ''
 let localMessageId: string | null = ''
@@ -55,62 +60,65 @@ const inlineImageDecoder = async ({
 }
 
 // This function recursively loops in the emailbody to find a body to decode. If initially priotizes the last object in a parts array.
+/**
+ * @function loopThroughBodyParts
+ * @param {object} params - parameter object that contains an inputObject and an abort signal. The inputObject can be of type IEmailMessage or IEmailMessagePayload
+ * @returns
+ */
 export const loopThroughBodyParts = async ({
   inputObject,
   signal,
 }: {
-  inputObject: any
+  inputObject: IEmailMessagePayload
   signal: AbortSignal
 }): Promise<any> => {
   if (signal.aborted) {
     throw new Error(signal.reason)
   }
-  const loopingFunction = async ({ loopObject }: { loopObject: any }) => {
+  console.log(inputObject)
+  const loopingFunction = async ({
+    loopObject,
+  }: {
+    loopObject: IEmailMessagePayload
+  }) => {
     try {
       const objectKeys = Object.keys(loopObject)
-      for (let i = 0; i < objectKeys.length; i += 1) {
-        if (objectKeys[i] === 'body' || objectKeys[i] === 'parts') {
+      for (const objectKey of objectKeys) {
+        if (objectKey === 'body') {
           if (loopObject.body.size > 0) {
-            if (objectKeys[i] === 'body') {
-              if (
-                Object.prototype.hasOwnProperty.call(
-                  loopObject.body,
-                  'attachmentId'
-                ) &&
-                localDecodeImage &&
-                localMessageId
-              ) {
-                // If it is an image, use the image decoder
-                const imageObjectPromise = inlineImageDecoder({
-                  attachmentData: loopObject,
-                  messageId: localMessageId,
-                })
-                decodedResult.push(imageObjectPromise)
-              }
-              decodedString = decodeBase64(`${loopObject.body.data}`)
-              if (loopObject.mimeType !== 'text/plain' && decodedString) {
-                decodedResult.push(decodedString)
-              } else if (
-                loopObject.mimeType === 'text/plain' &&
-                decodedString
-              ) {
-                const localString = decodedString
-                decodedResult.push(enhancePlainText(localString))
-              }
+            if (
+              loopObject.body?.attachmentId &&
+              loopObject.body?.data &&
+              localDecodeImage &&
+              localMessageId
+            ) {
+              // If it is an image, use the image decoder
+              const imageObjectPromise = inlineImageDecoder({
+                attachmentData: loopObject,
+                messageId: localMessageId,
+              })
+              decodedResult.push(imageObjectPromise)
+            }
+            decodedString = decodeBase64(`${loopObject.body.data}`)
+            if (loopObject.mimeType !== 'text/plain' && decodedString) {
+              decodedResult.push(decodedString)
+            } else if (loopObject.mimeType === 'text/plain' && decodedString) {
+              const localString = decodedString
+              decodedResult.push(enhancePlainText(localString))
             }
           }
+        }
+        if (objectKey === 'parts') {
           if (
             loopObject.body.size === 0 ||
             !Object.prototype.hasOwnProperty.call(loopObject, 'body')
           ) {
-            if (objectKeys[i] === 'parts') {
-              // If the object has no parts of its own, loop through all of them to decode
-              loopObject.parts.forEach((part: any) => {
-                loopingFunction({
-                  loopObject: part,
-                })
+            // If the object has no parts of its own, loop through all of them to decode
+            loopObject.parts.forEach((part) => {
+              loopingFunction({
+                loopObject: part,
               })
-            }
+            })
           }
         }
       }
@@ -128,13 +136,15 @@ export const loopThroughBodyParts = async ({
   return loopingFunction({ loopObject: inputObject })
 }
 
-// Prioritise the string object that has the HTML tag in it. Remove the others.
-// First understand how many string objects there are, if more than 1, than filter out the lesser valued ones.
 /**
  * @function prioritizeHTMLbodyObject
- * @param response - takes in the response, as a string
- * @returns if the param object only contains one string
+ * Prioritise the string object that has the HTML tag in it. Remove the others.
+ * First understand how many string objects there are, if more than 1, than filter out the lesser valued ones
+ * @param response - takes in the response, as an array of objects and strings
+ * @returns if the param object only contains one string, return that. If not, it attempts to find the most html rich string.
  */
+
+// TODO: Refactor code to intake the orderedObject, and loop only over the string array
 const prioritizeHTMLbodyObject = (response: Array<string | IAttachment>) => {
   const indexOfStringObjects: number[] = []
   const indexOfRemovalObjects: number[] = []
@@ -162,23 +172,34 @@ const prioritizeHTMLbodyObject = (response: Array<string | IAttachment>) => {
   }
   // If none items are found, guess which item is the most valuable.
   const estimatedMostValuableItem: string[] = []
-  for (let i = 0; response.length > i; i += 1) {
-    const r = response[i]
-    if (typeof r === 'string' && r.startsWith('<')) {
-      estimatedMostValuableItem.push(r)
+  for (const item in response) {
+    if (typeof item === 'string' && item.startsWith('<')) {
+      estimatedMostValuableItem.push(item)
     }
   }
   return estimatedMostValuableItem
 }
 
-const orderArrayPerType = (objectWithPriotizedHTML: any[]) => {
-  const stringOnly: string | undefined = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'string'
-  )[0]
-  const objectOnly: IAttachment[] = objectWithPriotizedHTML.filter(
-    (item: any) => typeof item === 'object'
-  )
-  return { emailHTML: stringOnly, emailFileHTML: objectOnly }
+/**
+ * @function orderArrayPerType
+ * @param objectWithPriotizedHTML - an array that can contain objects and only one string (via prioritizeHTMLbodyObject function)
+ * @returns {object} that contains the first matched string as the emailHTML, and all the objects in the array as emailFileHTML
+ */
+
+export const orderArrayPerType = (
+  objectWithPriotizedHTML: Array<string | IAttachment>
+) => {
+  const firstStringOnly: string[] = []
+  const objectOnly: IAttachment[] = []
+  for (const item of objectWithPriotizedHTML) {
+    if (typeof item === 'string') {
+      firstStringOnly.push(item)
+    }
+    if (typeof item === 'object') {
+      objectOnly.push(item)
+    }
+  }
+  return { emailHTML: [firstStringOnly[0]], emailFileHTML: objectOnly }
 }
 
 /**
@@ -196,23 +217,23 @@ export const placeInlineImage = (orderedObject: {
     const localCopyOrderedObject = orderedObject
     let outputString = ''
     const remainingObjectArray: IAttachment[] = []
-    for (let i = 0; i < orderedObject.emailFileHTML.length; i += 1) {
-      const matchString = `cid:${orderedObject.emailFileHTML[i].contentID}`
+    for (const emailFileHTML of orderedObject.emailFileHTML) {
+      const matchString = `cid:${emailFileHTML.contentID}`
 
       // If the contentId of the object is not found in the string (emailbody) it should not be removed.
       if (orderedObject.emailHTML?.search(matchString) === -1) {
-        remainingObjectArray.push(orderedObject.emailFileHTML[i])
+        remainingObjectArray.push(emailFileHTML)
       }
       // Of the first loop, instantiate the outputString. On next runs use that string.
       if (outputString !== undefined && outputString.length === 0) {
         outputString = orderedObject.emailHTML?.replace(
           matchString,
-          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
+          `data:${emailFileHTML.mimeType};base64,${emailFileHTML.decodedB64}`
         )
       } else {
         outputString = outputString.replace(
           matchString,
-          `data:${orderedObject.emailFileHTML[i].mimeType};base64,${orderedObject.emailFileHTML[i].decodedB64}`
+          `data:${emailFileHTML.mimeType};base64,${emailFileHTML.decodedB64}`
         )
       }
     }

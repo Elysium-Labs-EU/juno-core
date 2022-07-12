@@ -165,6 +165,8 @@ const EmailListItem = ({
     )
   }
 
+  // console.log(email)
+
   const memoizedEmailListItem = useMemo(
     () => (
       <S.ThreadBase emailLabels={staticEmailLabels}>

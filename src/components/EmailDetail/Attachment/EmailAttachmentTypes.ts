@@ -8,8 +8,8 @@ export interface IAttachment {
 export interface IEmailAttachmentType {
   body: {
     size: number
-    data: string
-    attachmentId: string
+    data?: string
+    attachmentId?: string
   }
   filename: string
   headers: any
