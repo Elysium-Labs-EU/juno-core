@@ -15,6 +15,12 @@ let localMessageId: string | null = ''
 let localDecodeImage: boolean | undefined = false
 let decodedResult: any[] = []
 
+/**
+ * @function enhancePlainText
+ * @param localString a plain text string that needs to be enhanced.
+ * @returns it will return a string that has been line "breaked" and has activated links.
+ */
+
 const enhancePlainText = (localString: string) => {
   const enhancedText = () => {
     const lineBreakRegex = /(?:\r\n|\r|\n)/g
@@ -27,6 +33,12 @@ const enhancePlainText = (localString: string) => {
   }
   return enhancedText()
 }
+
+/**
+ * @function inlineImageDecoder
+ * @property {object} params - parameter object that contains the relevant id of the message and the object with attachment data.
+ * @returns returns a response based on an API call to fetch the attachment base64 data, or null if the response is not available.
+ */
 
 const inlineImageDecoder = async ({
   attachmentData,
