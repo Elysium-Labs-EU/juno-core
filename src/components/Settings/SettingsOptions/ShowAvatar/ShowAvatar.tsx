@@ -4,8 +4,8 @@ import {
   selectAvatarVisibility,
   selectSettingsLabelId,
   setShowAvatar,
-} from '../../../../Store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/Settings/updateSettingsLabel'
+} from '../../../../store/utilsSlice'
+import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 
 const SWITCH_LABEL = 'Show avatars'
 

@@ -2,7 +2,7 @@ import axios from 'axios'
 // import { handleLogout } from '../components/MainHeader/Navigation/More/Options/LogoutOption'
 import * as global from '../constants/globalConstants'
 import assertNonNullish from '../utils/assertNonNullish'
-import getCookie from '../utils/Cookie/getCookie'
+import getCookie from '../utils/cookie/getCookie'
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
