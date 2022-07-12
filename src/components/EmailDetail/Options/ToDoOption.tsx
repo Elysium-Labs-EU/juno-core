@@ -7,7 +7,7 @@ import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import SetToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import modifierKey from '../../../utils/setModifierKey'
 

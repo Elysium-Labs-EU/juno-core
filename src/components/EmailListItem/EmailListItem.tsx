@@ -28,7 +28,7 @@ import {
   selectSelectedEmails,
   setSelectedEmails,
 } from '../../store/emailListSlice'
-import useKeyPress from '../../Hooks/useKeyPress'
+import useKeyPress from '../../hooks/useKeyPress'
 
 // If the user is on Draft list, show only draft emails.
 const shouldUseDraftOrRegular = (

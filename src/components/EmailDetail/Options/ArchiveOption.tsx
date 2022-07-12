@@ -7,7 +7,7 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import modifierKey from '../../../utils/setModifierKey'
 

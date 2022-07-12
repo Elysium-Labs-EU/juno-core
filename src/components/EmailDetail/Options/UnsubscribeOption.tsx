@@ -5,7 +5,7 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as global from '../../../constants/globalConstants'
 import { useAppSelector } from '../../../store/hooks'
 import { selectInSearch } from '../../../store/utilsSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 
 const handleUnsubscribe = (link: string) => {
   window.open(link)

@@ -18,7 +18,7 @@ import {
   selectInSearch,
   setInSearch,
 } from '../../../store/utilsSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import NavigationMore from './More/NavigationMore'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import {

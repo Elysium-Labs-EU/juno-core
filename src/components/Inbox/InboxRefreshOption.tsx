@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
-import useKeyPress from '../../Hooks/useKeyPress'
+import useKeyPress from '../../hooks/useKeyPress'
 import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'

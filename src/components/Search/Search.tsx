@@ -24,7 +24,7 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
 import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import useKeyPress from '../../Hooks/useKeyPress'
+import useKeyPress from '../../hooks/useKeyPress'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 

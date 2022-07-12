@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { FiInfo } from 'react-icons/fi'
-import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectInSearch, setShowKeyboardCombos } from '../../store/utilsSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'

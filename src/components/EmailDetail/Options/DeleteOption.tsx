@@ -7,7 +7,7 @@ import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
 import modifierKey from '../../../utils/setModifierKey'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IDeleteOption {

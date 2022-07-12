@@ -14,7 +14,7 @@ import {
   setCoreStatus,
   setSessionViewIndex,
 } from '../../store/emailDetailSlice'
-import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import modifierKey from '../../utils/setModifierKey'
 
 const INBOX_BUTTON = 'Sort inbox'

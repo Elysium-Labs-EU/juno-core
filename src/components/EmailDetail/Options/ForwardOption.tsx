@@ -6,7 +6,7 @@ import * as global from '../../../constants/globalConstants'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IEmailDetailOptions {

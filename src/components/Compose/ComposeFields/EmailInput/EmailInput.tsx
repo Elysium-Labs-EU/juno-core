@@ -14,7 +14,7 @@ import {
 } from '../../../../store/contactsSlice'
 import contactApi from '../../../../data/contactApi'
 import { setServiceUnavailable } from '../../../../store/utilsSlice'
-import useDebounce from '../../../../Hooks/useDebounce'
+import useDebounce from '../../../../hooks/useDebounce'
 import emailValidation from '../../../../utils/emailValidation'
 
 interface IEmailInputProps {

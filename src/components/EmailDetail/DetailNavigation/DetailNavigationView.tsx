@@ -17,7 +17,7 @@ import { selectViewIndex } from '../../../store/emailDetailSlice'
 import { selectLabelIds } from '../../../store/labelsSlice'
 import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import loadNextPage from '../../../utils/loadNextPage'
-import useKeyPress from '../../../Hooks/useKeyPress'
+import useKeyPress from '../../../hooks/useKeyPress'
 
 const ICON_SIZE = 20
 interface IDetailNavigationView {
