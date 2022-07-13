@@ -1,8 +1,9 @@
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect } from 'vitest'
 import {
   loopThroughBodyParts,
   orderArrayPerType,
   placeInlineImage,
+  prioritizeHTMLbodyObject,
 } from '../bodyDecoder'
 
 describe('placeInlineImage', () => {
@@ -102,17 +103,25 @@ describe('orderArrayPerType', () => {
     }
     expect(orderArrayPerType(testInputObject)).toStrictEqual(testOutputObject)
   })
-  test('the function should only return the first matched string', () => {
-    const testInputObject = [
-      '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
-      '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
-      {
-        mimeType: 'test',
-        decodedB64: 'test',
-        filename: 'test',
-        contentID: 'test123',
-      },
-    ]
+})
+
+describe('prioritizeHTMLbodyObject', () => {
+  test('the function will return the highest value string', () => {
+    const testInputObject = {
+      emailHTML: [
+        '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
+        '<b>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</b>',
+        'Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</b>',
+      ],
+      emailFileHTML: [
+        {
+          mimeType: 'test',
+          decodedB64: 'test',
+          filename: 'test',
+          contentID: 'test123',
+        },
+      ],
+    }
 
     const testOutputObject = {
       emailHTML: [
@@ -127,38 +136,11 @@ describe('orderArrayPerType', () => {
         },
       ],
     }
-    expect(orderArrayPerType(testInputObject)).toStrictEqual(testOutputObject)
+    expect(prioritizeHTMLbodyObject(testInputObject)).toStrictEqual(
+      testOutputObject
+    )
   })
 })
-
-// describe('prioritizeHTMLbodyObject', () => {
-//   test('the function will return the object as an ordered object', () => {
-//     const testInputObject = [
-//       '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
-//       {
-//         mimeType: 'test',
-//         decodedB64: 'test',
-//         filename: 'test',
-//         contentID: 'test123',
-//       },
-//     ]
-
-//     const testOutputObject = {
-//       emailHTML: [
-//         '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
-//       ],
-//       emailFileHTML: [
-//         {
-//           mimeType: 'test',
-//           decodedB64: 'test',
-//           filename: 'test',
-//           contentID: 'test123',
-//         },
-//       ],
-//     }
-//     expect(orderArrayPerType(testInputObject)).toStrictEqual(testOutputObject)
-//   })
-// })
 
 describe('loopThroughBodyParts', () => {
   test('the function will loop over all the body and parts of the Gmail email message payload ', () => {
@@ -213,13 +195,11 @@ describe('loopThroughBodyParts', () => {
         },
       ],
     }
-
-    const testOutputObject = {}
     expect(
       loopThroughBodyParts({
         inputObject: testInputObject,
         signal,
       })
-    ).toStrictEqual(testOutputObject)
+    ).toMatchSnapshot()
   })
 })

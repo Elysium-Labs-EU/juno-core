@@ -8,7 +8,7 @@ export interface IEmailMessagePayload {
     attachmentId?: string
     size: number
   }
-  parts: IEmailMessagePayload[]
+  parts?: IEmailMessagePayload[]
 }
 
 export interface IEmailMessage {

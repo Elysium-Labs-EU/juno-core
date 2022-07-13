@@ -1,0 +1,3 @@
+// Vitest Snapshot v1
+
+exports[`loopThroughBodyParts > the function will loop over all the body and parts of the Gmail email message payload  1`] = `Promise {}`;

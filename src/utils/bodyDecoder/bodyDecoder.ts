@@ -10,10 +10,7 @@ import fetchAttachment from '../fetchAttachment'
 import removeScripts from '../removeScripts'
 import removeTrackers from '../removeTrackers'
 import * as global from '../../constants/globalConstants'
-import {
-  IEmailListThreadItem,
-  IEmailMessagePayload,
-} from '../../store/storeTypes/emailListTypes'
+import { IEmailMessagePayload } from '../../store/storeTypes/emailListTypes'
 
 let decodedString: string | undefined = ''
 let localMessageId: string | null = ''
@@ -75,7 +72,6 @@ export const loopThroughBodyParts = async ({
   if (signal.aborted) {
     throw new Error(signal.reason)
   }
-  console.log(inputObject)
   const loopingFunction = async ({
     loopObject,
   }: {
@@ -110,10 +106,11 @@ export const loopThroughBodyParts = async ({
         }
         if (objectKey === 'parts') {
           if (
-            loopObject.body.size === 0 ||
-            !Object.prototype.hasOwnProperty.call(loopObject, 'body')
+            (loopObject.body.size === 0 ||
+              !Object.prototype.hasOwnProperty.call(loopObject, 'body')) &&
+            loopObject?.parts
           ) {
-            // If the object has no parts of its own, loop through all of them to decode
+            // If the object has parts of its own, loop through all of them to decode
             loopObject.parts.forEach((part) => {
               loopingFunction({
                 loopObject: part,
@@ -137,61 +134,17 @@ export const loopThroughBodyParts = async ({
 }
 
 /**
- * @function prioritizeHTMLbodyObject
- * Prioritise the string object that has the HTML tag in it. Remove the others.
- * First understand how many string objects there are, if more than 1, than filter out the lesser valued ones
- * @param response - takes in the response, as an array of objects and strings
- * @returns if the param object only contains one string, return that. If not, it attempts to find the most html rich string.
- */
-
-// TODO: Refactor code to intake the orderedObject, and loop only over the string array
-const prioritizeHTMLbodyObject = (response: Array<string | IAttachment>) => {
-  const indexOfStringObjects: number[] = []
-  const indexOfRemovalObjects: number[] = []
-  for (let i = 0; i < response.length; i += 1) {
-    // If the response is a string but doesn't have html, mark it for removal.
-    // We need to run this first to understand how many string objects the response has.
-
-    const r = response[i]
-    if (typeof r === 'string' && !r.includes('</html>')) {
-      indexOfRemovalObjects.push(i)
-    }
-    if (typeof response[i] === 'string') {
-      indexOfStringObjects.push(i)
-    }
-  }
-  // If there is only 1 string item in the response, use that.
-  if (indexOfStringObjects.length === 1 && indexOfRemovalObjects.length === 1) {
-    return response
-  }
-  if (indexOfStringObjects.length > indexOfRemovalObjects.length) {
-    for (let i = indexOfRemovalObjects.length - 1; i >= 0; i -= 1) {
-      response.splice(indexOfRemovalObjects[i], 1)
-    }
-    return response
-  }
-  // If none items are found, guess which item is the most valuable.
-  const estimatedMostValuableItem: string[] = []
-  for (const item in response) {
-    if (typeof item === 'string' && item.startsWith('<')) {
-      estimatedMostValuableItem.push(item)
-    }
-  }
-  return estimatedMostValuableItem
-}
-
-/**
  * @function orderArrayPerType
- * @param objectWithPriotizedHTML - an array that can contain objects and only one string (via prioritizeHTMLbodyObject function)
- * @returns {object} that contains the first matched string as the emailHTML, and all the objects in the array as emailFileHTML
+ * @param response - an array that can contain objects and strings
+ * @returns {object} that contains the all the strings in an array as the emailHTML, and all the objects in the array as emailFileHTML
  */
 
 export const orderArrayPerType = (
-  objectWithPriotizedHTML: Array<string | IAttachment>
-) => {
+  response: Array<string | IAttachment>
+): { emailHTML: string[]; emailFileHTML: IAttachment[] } => {
   const firstStringOnly: string[] = []
   const objectOnly: IAttachment[] = []
-  for (const item of objectWithPriotizedHTML) {
+  for (const item of response) {
     if (typeof item === 'string') {
       firstStringOnly.push(item)
     }
@@ -199,7 +152,48 @@ export const orderArrayPerType = (
       objectOnly.push(item)
     }
   }
-  return { emailHTML: [firstStringOnly[0]], emailFileHTML: objectOnly }
+  return { emailHTML: firstStringOnly, emailFileHTML: objectOnly }
+}
+
+/**
+ * @function prioritizeHTMLbodyObject
+ * Prioritise the string object that has the HTML tag in it, ignore the others.
+ * @param response - takes in the response, as an array of objects and strings
+ * @returns if the param object only contains one string, return that. If not, it attempts to find the most html rich string.
+ */
+
+export const prioritizeHTMLbodyObject = (response: {
+  emailHTML: string[]
+  emailFileHTML: IAttachment[]
+}) => {
+  const htmlObjects: string[] = []
+  const noHtmlObjects: string[] = []
+
+  if (response.emailHTML.length === 1) {
+    return response
+  }
+  if (response.emailHTML.length > 1) {
+    for (const item of response.emailHTML) {
+      if (item.includes('</html>')) {
+        htmlObjects.push(item)
+        break
+      }
+      if (htmlObjects.length === 0) {
+        htmlObjects.push(item)
+        break
+      }
+      if (item.startsWith('<')) {
+        noHtmlObjects.push(item)
+        break
+      }
+      noHtmlObjects.push(item)
+    }
+  }
+
+  if (htmlObjects.length > 0) {
+    return { ...response, emailHTML: htmlObjects }
+  }
+  return { ...response, emailHTML: noHtmlObjects }
 }
 
 /**
@@ -289,9 +283,9 @@ const bodyDecoder = async ({
     // Reset the local variable for the next decode
     decodedResult = []
 
-    response = prioritizeHTMLbodyObject(response)
     // orderArrayPerType changes the response object into an object that can hold two objects: emailHTML[], emailFileHTML[]
     response = orderArrayPerType(response)
+    response = prioritizeHTMLbodyObject(response)
     response = placeInlineImage(response)
     response = removeTrackers(response)
     response = removeScripts(response)
