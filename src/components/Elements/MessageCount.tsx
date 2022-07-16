@@ -18,11 +18,13 @@ const StyledMessageCount = styled.div`
 
 const CountWrapper = styled.div`
   display: flex;
+  align-items: center;
 `
 
 const IconWrapper = styled.div`
   display: flex;
   margin: 0 4px;
+  height: var(--small-size);
 `
 
 const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
