@@ -16,7 +16,8 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  font-weight: 600;
+  line-height: 1rem;
+  font-weight: 400;
   font-family: var(--font-family);
   border-radius: 20px;
   border: none;
