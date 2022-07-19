@@ -8,7 +8,7 @@ import {
 
 describe('placeInlineImage', () => {
   test('the function will return the same object structure as received', () => {
-    const testObject = {
+    const input = {
       emailHTML: '',
       emailFileHTML: [
         {
@@ -19,10 +19,10 @@ describe('placeInlineImage', () => {
         },
       ],
     }
-    expect(placeInlineImage(testObject)).toStrictEqual(testObject)
+    expect(placeInlineImage(input)).toStrictEqual(input)
   })
   test('the function will replace the inline img tag with a fetched file', () => {
-    const testInputObject = {
+    const input = {
       emailHTML:
         '<img src="cid:525828e8-b3b0-48a2-819d-b7acee49451b" alt="Test Alt" width="120" height="120" />',
       emailFileHTML: [
@@ -34,15 +34,15 @@ describe('placeInlineImage', () => {
         },
       ],
     }
-    const testOutputObject = {
+    const output = {
       emailHTML:
         '<img src="data:image/png;base64,testDecodedB64" alt="Test Alt" width="120" height="120" />',
       emailFileHTML: [],
     }
-    expect(placeInlineImage(testInputObject)).toEqual(testOutputObject)
+    expect(placeInlineImage(input)).toEqual(output)
   })
   test('the function will skip attachments that cannot be matched with inline images, and filter out unusable mime types', () => {
-    const testInputObject = {
+    const input = {
       emailHTML:
         '<img src="cid:525828e8-b3b0-48a2-819d-b7acee49451b" alt="Test Alt" width="120" height="120" />',
       emailFileHTML: [
@@ -60,7 +60,7 @@ describe('placeInlineImage', () => {
         },
       ],
     }
-    const testOutputObject = {
+    const output = {
       emailHTML:
         '<img src="cid:525828e8-b3b0-48a2-819d-b7acee49451b" alt="Test Alt" width="120" height="120" />',
       emailFileHTML: [
@@ -72,13 +72,13 @@ describe('placeInlineImage', () => {
         },
       ],
     }
-    expect(placeInlineImage(testInputObject)).toEqual(testOutputObject)
+    expect(placeInlineImage(input)).toEqual(output)
   })
 })
 
 describe('orderArrayPerType', () => {
   test('the function will return the object as an ordered object', () => {
-    const testInputObject = [
+    const input = [
       '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
       {
         mimeType: 'test',
@@ -88,7 +88,7 @@ describe('orderArrayPerType', () => {
       },
     ]
 
-    const testOutputObject = {
+    const output = {
       emailHTML: [
         '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
       ],
@@ -101,17 +101,17 @@ describe('orderArrayPerType', () => {
         },
       ],
     }
-    expect(orderArrayPerType(testInputObject)).toStrictEqual(testOutputObject)
+    expect(orderArrayPerType(input)).toStrictEqual(output)
   })
 })
 
 describe('prioritizeHTMLbodyObject', () => {
   test('the function will return the highest value string', () => {
-    const testInputObject = {
+    const input = {
       emailHTML: [
-        '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
-        '<b>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</b>',
         'Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</b>',
+        '<b>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</b>',
+        '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
       ],
       emailFileHTML: [
         {
@@ -123,7 +123,7 @@ describe('prioritizeHTMLbodyObject', () => {
       ],
     }
 
-    const testOutputObject = {
+    const output = {
       emailHTML: [
         '<html>Hej.<br />Bifogat finner ni lite resultat fr&aring;n div t&auml;vlingar och information om klubben.<br /><br />Jag &ouml;nskar er alla en trevlig midsommar och en fortsatt fin sommar!<br />Mvh Jens Maartmann<br /><br /><hr>Från <b>Boo KFUM IA</b> på <a href="http://www.sportadmin.se">www.sportadmin.se</a> - Föreningens bästa vän</html>',
       ],
@@ -136,9 +136,7 @@ describe('prioritizeHTMLbodyObject', () => {
         },
       ],
     }
-    expect(prioritizeHTMLbodyObject(testInputObject)).toStrictEqual(
-      testOutputObject
-    )
+    expect(prioritizeHTMLbodyObject(input)).toStrictEqual(output)
   })
 })
 
@@ -146,7 +144,7 @@ describe('loopThroughBodyParts', () => {
   test('the function will loop over all the body and parts of the Gmail email message payload ', () => {
     const controller = new AbortController()
     const { signal } = controller
-    const testInputObject = {
+    const input = {
       partId: '',
       mimeType: 'multipart/alternative',
       filename: '',
@@ -197,7 +195,7 @@ describe('loopThroughBodyParts', () => {
     }
     expect(
       loopThroughBodyParts({
-        inputObject: testInputObject,
+        inputObject: input,
         signal,
       })
     ).toMatchSnapshot()

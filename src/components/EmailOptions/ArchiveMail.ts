@@ -1,10 +1,11 @@
 import { updateEmailLabel } from '../../store/emailListSlice'
 import * as global from '../../constants/globalConstants'
+import { AppDispatch } from '../../store/store'
 
 interface IArchiveEmail {
   threadId: string
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
 }
 
 const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
@@ -14,17 +15,13 @@ const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
     ],
   }
 
-  const markEmailArchived = () => {
-    dispatch(
-      updateEmailLabel({
-        threadId,
-        request,
-        labelIds,
-      })
-    )
-  }
-
-  return markEmailArchived()
+  dispatch(
+    updateEmailLabel({
+      threadId,
+      request,
+      labelIds,
+    })
+  )
 }
 
 export default archiveMail

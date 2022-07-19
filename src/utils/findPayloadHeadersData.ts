@@ -1,6 +1,7 @@
 import { MessagePayload } from '../store/storeTypes/draftsTypes'
 
 /**
+ * @function findPayloadHeadersData
  * This function will fetch the payload header from the requested message
  * @param query - the header to look for
  * @param email - the object where to query the messages from

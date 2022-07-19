@@ -5,7 +5,7 @@ import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
-import SetToDoMail from '../EmailOptions/SetToDoMail'
+import setToDoMail from '../EmailOptions/SetToDoMail'
 import { findLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -27,7 +27,7 @@ const InlineThreadActionsRegular = ({
   const dispatch = useAppDispatch()
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-testid="email-regular-inline-actions">
       {id && labelIds && (
         <S.Inner>
           <CustomIconButton
@@ -51,7 +51,7 @@ const InlineThreadActionsRegular = ({
             ) && (
               <CustomIconButton
                 onClick={() =>
-                  SetToDoMail({
+                  setToDoMail({
                     messageId: id,
                     labelIds,
                     dispatch,

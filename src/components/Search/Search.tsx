@@ -25,6 +25,7 @@ import sortThreads from '../../utils/sortThreads'
 import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import useKeyPress from '../../hooks/useKeyPress'
+import { AppDispatch } from '../../store/store'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 
@@ -32,7 +33,7 @@ interface IShouldClearOutPreviousResults {
   searchValueRef: any
   searchValue: string
   setSearchResults: Function
-  dispatch: Function
+  dispatch: AppDispatch
 }
 interface IIntitialSearch {
   searchValue: string
@@ -40,12 +41,12 @@ interface IIntitialSearch {
   fetchSearchThreads: Function
   searchValueRef: any
   setSearchResults: Function
-  dispatch: Function
+  dispatch: AppDispatch
 }
 interface ILoadMoreSearchResults {
   searchValue: string
   searchResults: IEmailListObjectSearch
-  setLoadState: Function
+  setLoadState: (value: string) => void
   fetchSearchThreads: Function
 }
 
@@ -104,7 +105,7 @@ const openDetail = ({
   searchResults,
   currentEmail,
 }: {
-  dispatch: Function
+  dispatch: AppDispatch
   searchResults: IEmailListObjectSearch
   currentEmail: string
 }) => {
@@ -112,7 +113,7 @@ const openDetail = ({
   dispatch(setInSearch(false))
 }
 
-const handleClose = (dispatch: Function) => dispatch(setInSearch(false))
+const handleClose = (dispatch: AppDispatch) => dispatch(setInSearch(false))
 
 const Search = () => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
@@ -269,6 +270,7 @@ const Search = () => {
               onClick={resetSearch}
               aria-label="clear-search"
               icon={<FiXCircle size={16} />}
+              title="Clear search input"
             />
           )}
           <CustomButton
@@ -287,11 +289,13 @@ const Search = () => {
             }
             label={SEARCH}
             style={{ marginRight: '10px' }}
+            title="Search"
           />
           <CustomIconButton
             onClick={() => handleClose(dispatch)}
             aria-label="close-modal"
             icon={<FiX size={16} />}
+            title="Close"
           />
         </S.InputRow>
         <S.SearchResults>
@@ -327,6 +331,7 @@ const Search = () => {
                       }
                       label={global.LOAD_MORE}
                       suppressed
+                      title="Load more results"
                     />
                   )}
                   {loadState === global.LOAD_STATE_MAP.loading && (

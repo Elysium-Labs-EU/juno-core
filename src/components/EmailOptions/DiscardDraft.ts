@@ -7,11 +7,12 @@ import {
   listRemoveItemDetail,
   listRemoveItemMessage,
 } from '../../store/emailListSlice'
+import { AppDispatch } from '../../store/store'
 
 interface IDiscardDraft {
   threadId?: string
   messageId?: string
-  dispatch: Function
+  dispatch: AppDispatch
   draftId: string | undefined | false
 }
 

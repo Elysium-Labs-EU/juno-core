@@ -65,5 +65,5 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
 }
 
 const MessageCount = ({ messages }: { messages: IEmailMessage[] }) =>
-  messages.length > 1 ? <LengthMessageCount messages={messages} /> : null
+  messages.length > 1 ? <LengthMessageCount messages={messages} data-testid="email-message-count" /> : null
 export default MessageCount

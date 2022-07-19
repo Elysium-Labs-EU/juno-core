@@ -1,13 +1,17 @@
-import { Contact } from '../store/storeTypes/contactsTypes'
+import { IContact } from '../store/storeTypes/contactsTypes'
 
 const regexTest =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
-// Test the input if the content are valid emails.
+/**
+ * @function emailValidation
+ * @param email - takes in an array of Contact objects and checks the validity of the email address.
+ * @returns - the input if validation is succesful, otherwise returns false.
+ */
 
-const emailValidation = (email: Contact[]) => {
+const emailValidation = (email: IContact[]) => {
   if (Array.isArray(email)) {
-    const isValidEmail = (emailEntry: Contact) =>
+    const isValidEmail = (emailEntry: IContact) =>
       regexTest.test(emailEntry.emailAddress)
     const arrayTestResult = email.every(isValidEmail)
     if (arrayTestResult) {

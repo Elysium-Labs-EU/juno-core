@@ -1,7 +1,12 @@
-// Takes the string email format from Gmail, and converts it to object email format for this app.
-import { Contact } from '../store/storeTypes/contactsTypes'
+import { IContact } from '../store/storeTypes/contactsTypes'
 
-const convertToContact = (data: string): Contact => {
+/**
+ * @function convertToContact
+ * @param data - takes in a string, a potential email address, coming from the email list item.
+ * @returns - returns a Contact object
+ */
+
+export default function convertToContact(data: string): IContact {
   const splitted = data.split('<')
 
   if (splitted.length > 1) {
@@ -20,5 +25,3 @@ const convertToContact = (data: string): Contact => {
   splitted[0].replace(/(")+/g, '')
   return { name: splitted[0], emailAddress: splitted[0] }
 }
-
-export default convertToContact

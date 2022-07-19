@@ -176,17 +176,11 @@ export const prioritizeHTMLbodyObject = (response: {
     for (const item of response.emailHTML) {
       if (item.includes('</html>')) {
         htmlObjects.push(item)
-        break
-      }
-      if (htmlObjects.length === 0) {
-        htmlObjects.push(item)
-        break
-      }
-      if (item.startsWith('<')) {
+      } else if (item.startsWith('<')) {
         noHtmlObjects.push(item)
-        break
+      } else {
+        noHtmlObjects.push(item)
       }
-      noHtmlObjects.push(item)
     }
   }
 

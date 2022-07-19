@@ -1,15 +1,20 @@
 import { push } from 'redux-first-history'
+import { AppDispatch } from '../store/store'
+import { setServiceUnavailable } from '../store/utilsSlice'
 
 interface IStartSort {
-  dispatch: Function
+  dispatch: AppDispatch
   labelURL: string
   emailList: any
   activeEmailListIndex: number
 }
 
-const startSort = (props: IStartSort) => {
-  const { dispatch, labelURL, emailList, activeEmailListIndex } = props
-
+const startSort = ({
+  dispatch,
+  labelURL,
+  emailList,
+  activeEmailListIndex,
+}: IStartSort) => {
   if (labelURL && emailList && activeEmailListIndex > -1) {
     return dispatch(
       push(
@@ -17,7 +22,7 @@ const startSort = (props: IStartSort) => {
       )
     )
   }
-  return null
+  return dispatch(setServiceUnavailable('Cannot start sorting'))
 }
 
 export default startSort

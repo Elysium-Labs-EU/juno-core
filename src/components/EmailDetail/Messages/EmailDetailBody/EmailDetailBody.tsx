@@ -9,25 +9,32 @@ import handleEmailLink from '../../../../utils/handleEmailLink'
 import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
 import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
 import Wrapper from './EmailDetailBodyStyles'
+import { AppDispatch } from '../../../../store/store'
 
 interface IEmailDetailBody {
   threadDetailBody: IEmailMessagePayload
   messageId: string
   detailBodyCSS: 'visible' | 'invisible'
-  setUnsubscribeLink?: Function
+  setUnsubscribeLink?: (value: string | null) => void
   setContentRendered?: (value: boolean) => void
   setBlockedTrackers?: (value: Attr[] | []) => void
 }
 
-let hasRan = false
 
+let hasRan = false
+/**
+ * @function postTreatmentBody
+ * @param {object} - takes in the dispatch function and setUnsubscribeLink function as callback functions
+ * The function will run on the visible document (email) and can only run once, due to the hasRan variable
+ * @return {void}
+ */
 const postTreatmentBody = ({
   dispatch,
   setUnsubscribeLink,
 }: {
-  dispatch: Function
-  setUnsubscribeLink: Function
-}) => {
+  dispatch: AppDispatch
+  setUnsubscribeLink: (value: string | null) => void
+}): void => {
   openLinkInNewTab()
   handleEmailLink({ dispatch })
   cleanLink()

@@ -7,8 +7,9 @@ import ShowAvatar from './SettingsOptions/ShowAvatar/ShowAvatar'
 import EmailSize from './SettingsOptions/EmailSize/EmailSize'
 import Contributions from './Contributions/contributions'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
+import { AppDispatch } from '../../store/store'
 
-const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
+const handleClose = (dispatch: AppDispatch) => dispatch(setIsSettingsOpen(false))
 
 const SETTINGS = 'Settings'
 const CONTRIBUTIONS = 'Contributions'
@@ -31,6 +32,7 @@ const Settings = () => {
             onClick={() => handleClose(dispatch)}
             aria-label="close-modal"
             icon={<FiX size={16} />}
+            title="Close"
           />
         </S.SettingsTop>
         <S.SettingsContainer>

@@ -1,10 +1,11 @@
 import { resetDraftDetails } from '../../store/draftsSlice'
 import { setIsReplying } from '../../store/emailDetailSlice'
+import { AppDispatch } from '../../store/store'
 import { openEmail } from '../../store/utilsSlice'
 
 interface IReplyOverview {
   id: string
-  dispatch: Function
+  dispatch: AppDispatch
 }
 
 const ReplyOverview = ({ id, dispatch }: IReplyOverview) => {

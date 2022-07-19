@@ -6,8 +6,15 @@ import {
   showIntroductionKeyMap,
 } from '../../constants/baseConstants'
 import { createLabel } from '../../store/labelsSlice'
+import { AppDispatch } from '../../store/store'
 
-const createSettingsLabel = ({ dispatch }: { dispatch: Function }) =>
+/**
+ * @function createSettingsLabel
+ * @param dispatch - takes in a callback function to store the result of the function to the Redux store.
+ * Creates a settings label to be stored as a label inside GMail.
+ * @returns {void}
+ */
+const createSettingsLabel = (dispatch: AppDispatch): void =>
   dispatch(
     createLabel(
       `${

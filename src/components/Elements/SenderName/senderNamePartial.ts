@@ -1,4 +1,4 @@
-import { Contact } from '../../../store/storeTypes/contactsTypes'
+import { IContact } from '../../../store/storeTypes/contactsTypes'
 import { IEmailMessage } from '../../../store/storeTypes/emailListTypes'
 import convertToContact from '../../../utils/convertToContact'
 import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
@@ -9,7 +9,7 @@ export const NO_SENDER = '(No sender)'
 const senderNamePartial = (
   message: IEmailMessage,
   emailAddress: string
-): Contact => {
+): IContact => {
   if (message) {
     const query = 'From'
     const from = findPayloadHeadersData(query, message)

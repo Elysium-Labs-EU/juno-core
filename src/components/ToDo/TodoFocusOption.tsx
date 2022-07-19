@@ -55,6 +55,7 @@ const TodoFocusOption = () => {
           emailList[activeEmailListIndex].threads.length === 0
         }
         label={local.BUTTON_FOCUS}
+        title="Start focus mode"
       />
     </S.SortContainer>
   )

@@ -34,7 +34,7 @@ interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   messageIndex: number
-  setUnsubscribeLink: Function
+  setUnsubscribeLink: (value: string | null) => void
   setContentRendered: (value: boolean) => void
 }
 
@@ -176,6 +176,7 @@ const ReadUnreadMessage = ({
                     onClick={handleSpecificMenu('bottom-start')}
                     icon={<FiChevronDown />}
                     aria-describedby={popperId}
+                    title="Show message options"
                   />
                 </S.ChildDiv>
                 <Popper

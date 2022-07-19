@@ -5,7 +5,7 @@ import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
-import SetToDoMail from '../../EmailOptions/SetToDoMail'
+import setToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
@@ -24,7 +24,7 @@ const ToDoOption = ({
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
-    SetToDoMail({
+    setToDoMail({
       messageId: threadDetail.id,
       labelIds,
       dispatch,
@@ -40,6 +40,7 @@ const ToDoOption = ({
       onClick={handleEvent}
       label={local.BUTTON_TODO}
       suppressed
+      title="Mark as To Do"
     />
   )
 }

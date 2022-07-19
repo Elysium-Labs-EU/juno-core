@@ -11,8 +11,9 @@ import * as HS from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import getUserAgent from '../../utils/getUserAgent'
+import { AppDispatch } from '../../store/store'
 
-const handleClose = (dispatch: Function) =>
+const handleClose = (dispatch: AppDispatch) =>
   dispatch(setShowKeyboardCombos(false))
 
 interface IKeyCombos {
@@ -70,6 +71,7 @@ const Help = () => {
               onClick={() => handleClose(dispatch)}
               aria-label="close-help-modal"
               icon={<FiX size={16} />}
+              title="Close"
             />
           </S.HeaderRow>
           <p>

@@ -1,9 +1,10 @@
 import { updateEmailLabel } from '../../store/emailListSlice'
+import { AppDispatch } from '../../store/store'
 
 interface IThrashMailProps {
   messageId: string
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
 }
 
 const thrashMail = (props: IThrashMailProps) => {
