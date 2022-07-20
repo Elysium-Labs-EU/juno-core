@@ -16,8 +16,11 @@ import {
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import modifierKey from '../../utils/setModifierKey'
+import StyledTooltip from '../Elements/StyledTooltip'
 
 const INBOX_BUTTON = 'Sort inbox'
+const TOOLTIP_ABLE = 'Start sorting the emails'
+const TOOLTIP_DISABLE = 'Cannot sort the inbox, no emails'
 const actionKeys = [modifierKey, global.KEY_E]
 
 const SortInbox = () => {
@@ -44,17 +47,23 @@ const SortInbox = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
+  const isDisabled = isLoading ||
+    activeEmailListIndex < 0 ||
+    emailList[activeEmailListIndex].threads.length === 0
+
   return (
-    <CustomAttentionButton
-      onClick={handleEvent}
-      disabled={
-        isLoading ||
-        activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex].threads.length === 0
-      }
-      label={INBOX_BUTTON}
-      variant="secondary"
-    />
+    <StyledTooltip title={isDisabled ? TOOLTIP_DISABLE : TOOLTIP_ABLE}>
+      <div>
+        <CustomAttentionButton
+          onClick={handleEvent}
+          disabled={
+            isDisabled
+          }
+          label={INBOX_BUTTON}
+          variant="secondary"
+        />
+      </div>
+    </StyledTooltip>
   )
 }
 

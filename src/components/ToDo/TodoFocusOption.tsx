@@ -18,6 +18,7 @@ import {
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import modifierKey from '../../utils/setModifierKey'
+import StyledTooltip from '../Elements/StyledTooltip'
 
 const actionKeys = [modifierKey, global.KEY_E]
 
@@ -45,18 +46,22 @@ const TodoFocusOption = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
+  const isDisabled =
+    isLoading ||
+    activeEmailListIndex < 0 ||
+    emailList[activeEmailListIndex].threads.length === 0
+
   return (
-    <S.SortContainer>
-      <CustomAttentionButton
-        onClick={handleEvent}
-        disabled={
-          isLoading ||
-          activeEmailListIndex < 0 ||
-          emailList[activeEmailListIndex].threads.length === 0
-        }
-        label={local.BUTTON_FOCUS}
-      />
-    </S.SortContainer>
+    <StyledTooltip title={isDisabled ? local.TOOLTIP_DISABLE : local.TOOLTIP_ABLE} >
+      <S.SortContainer>
+        <CustomAttentionButton
+          onClick={handleEvent}
+          disabled={isDisabled
+          }
+          label={local.BUTTON_FOCUS}
+        />
+      </S.SortContainer>
+    </StyledTooltip>
   )
 }
 
