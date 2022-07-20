@@ -9,7 +9,8 @@ import Contributions from './Contributions/contributions'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import { AppDispatch } from '../../store/store'
 
-const handleClose = (dispatch: AppDispatch) => dispatch(setIsSettingsOpen(false))
+const handleClose = (dispatch: AppDispatch) =>
+  dispatch(setIsSettingsOpen(false))
 
 const SETTINGS = 'Settings'
 const CONTRIBUTIONS = 'Contributions'

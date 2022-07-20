@@ -6,17 +6,17 @@ import { store } from '../../store/store'
 import { GlobalStyle, theme } from '../../styles/globalStyles'
 
 const AllTheProviders: FC<{ children: React.ReactNode }> = ({ children }) => (
-    <Provider store={store}>
-        <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            {children}
-        </ThemeProvider >
-    </Provider>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
+      {children}
+    </ThemeProvider>
+  </Provider>
 )
 
 const customRender = (
-    ui: ReactElement,
-    options?: Omit<RenderOptions, 'wrapper'>,
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
 ) => render(ui, { wrapper: AllTheProviders, ...options })
 
 export * from '@testing-library/react'

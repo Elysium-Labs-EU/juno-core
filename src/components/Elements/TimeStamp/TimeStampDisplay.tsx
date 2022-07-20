@@ -25,7 +25,9 @@ const TimeStampDisplay = ({ threadTimeStamp }: IThreadTimeStamp) => {
         : format(unixTimestamp, 'dd LLL')
       return (
         <StyledTooltip title={format(unixTimestamp, 'PPpp')}>
-          <StyledTimeStamp data-testid="email-timestamp">{isSameDayCheck}</StyledTimeStamp>
+          <StyledTimeStamp data-testid="email-timestamp">
+            {isSameDayCheck}
+          </StyledTimeStamp>
         </StyledTooltip>
       )
     }

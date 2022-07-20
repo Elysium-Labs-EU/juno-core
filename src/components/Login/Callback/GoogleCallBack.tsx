@@ -9,6 +9,12 @@ import { setServiceUnavailable } from '../../../store/utilsSlice'
 import handleUserTokens from '../../../utils/handleUserTokens'
 import Baseloader from '../../BaseLoader/BaseLoader'
 
+/**
+ * @component GoogleCallBack
+ * Parses the window location search parameters, and triggers the callback for Google. If succesful, the user is logged in, otherwise an error is thrown.
+ * @returns {JSX.Element} a BaseLoader JSX.Element
+ */
+
 const GoogleCallBack = () => {
   const dispatch = useAppDispatch()
 

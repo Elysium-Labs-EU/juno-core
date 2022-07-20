@@ -6,7 +6,7 @@ import CustomIconButton from '../CustomIconButton'
 
 test('Button renders with icon if provided', () => {
   const component = renderer.create(
-    <CustomIconButton icon={<FiMenu />} onClick={() => { }} title="Test" />
+    <CustomIconButton icon={<FiMenu />} onClick={() => {}} title="Test" />
   )
   const tree = toJson(component)
   expect(tree).toMatchSnapshot()
@@ -14,7 +14,13 @@ test('Button renders with icon if provided', () => {
 
 test('Button fires the onClick event when clicked', () => {
   const component = renderer.create(
-    <CustomIconButton icon={<FiMenu />} onClick={() => { console.log('testing') }} title="Test" />
+    <CustomIconButton
+      icon={<FiMenu />}
+      onClick={() => {
+        console.log('testing')
+      }}
+      title="Test"
+    />
   )
   let tree = toJson(component)
   expect(tree).toMatchSnapshot()

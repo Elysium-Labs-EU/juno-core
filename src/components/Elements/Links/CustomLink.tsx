@@ -34,6 +34,8 @@ const Wrapper = styled(Link)`
   }
 `
 
-const CustomLink = ({ to, label }: ICustomLink) => <Wrapper to={to}>{label}</Wrapper>
+const CustomLink = ({ to, label }: ICustomLink) => (
+  <Wrapper to={to}>{label}</Wrapper>
+)
 
 export default CustomLink

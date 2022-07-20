@@ -34,6 +34,11 @@ import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 
+/**
+ * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
+ * @returns Either a email detail view or a base loader.
+ */
+
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
@@ -58,12 +63,18 @@ const EmailDetail = () => {
   >()
 
   // This will set the activeEmailList when first opening the email.
-  // It will also update the activeEmailList whenever an email is archived or removed.
+  // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
     if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
       setActiveEmailList(searchList)
-    } else if (emailList && emailList[activeEmailListIndex]) {
+      return
+    }
+    if (
+      emailList &&
+      activeEmailListIndex > -1 &&
+      emailList[activeEmailListIndex]
+    ) {
       setActiveEmailList(emailList[activeEmailListIndex])
     }
   }, [emailList, activeEmailListIndex, searchList])

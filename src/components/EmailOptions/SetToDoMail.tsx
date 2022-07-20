@@ -12,7 +12,12 @@ interface ISetToDoMail {
   storageLabels: LabelIdName[]
 }
 
-const setToDoMail = ({ messageId, labelIds, dispatch, storageLabels }: ISetToDoMail) => {
+const setToDoMail = ({
+  messageId,
+  labelIds,
+  dispatch,
+  storageLabels,
+}: ISetToDoMail) => {
   const toDoLabel = findLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
   const request = {
@@ -20,9 +25,7 @@ const setToDoMail = ({ messageId, labelIds, dispatch, storageLabels }: ISetToDoM
     addLabelIds: [toDoLabel[0].id],
   }
 
-  dispatch(
-    updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels })
-  )
+  dispatch(updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels }))
 }
 
 export default setToDoMail

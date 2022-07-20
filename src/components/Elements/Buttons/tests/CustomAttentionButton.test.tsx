@@ -13,7 +13,12 @@ test('Button renders with text if label is provided', () => {
 
 test('Button fires the onClick event when clicked', () => {
   const component = renderer.create(
-    <CustomAttentionButton label="Test button" onClick={() => { console.log('testing') }} />
+    <CustomAttentionButton
+      label="Test button"
+      onClick={() => {
+        console.log('testing')
+      }}
+    />
   )
   let tree = toJson(component)
   expect(tree).toMatchSnapshot()

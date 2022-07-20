@@ -19,6 +19,13 @@ interface IInlineThreadActionsRegular {
 
 const SIZE = 16
 
+/**
+ * @component InlineThreadActionsRegular
+ * This component is visible on the email list item - if the most recent message of the thread item is a regular message.
+ * @param {object} - takes in an id (threadId) as string, and the labelIds from the relevant thread.
+ * @returns regular inline thread actions, based on the labelIds and id.
+ */
+
 const InlineThreadActionsRegular = ({
   id,
   labelIds,

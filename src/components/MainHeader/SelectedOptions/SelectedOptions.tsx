@@ -76,10 +76,11 @@ const SelectedOptions = () => {
         <CustomButton label="Select all" onClick={handleSelectAll} />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${ selectedEmails.length } ${ selectedEmails.length > 1
+        <S.SelectedLabelsText>{`${selectedEmails.length} ${
+          selectedEmails.length > 1
             ? EMAILS_SELECTED_SINGLE
             : EMAILS_SELECTED_PLURAL
-          }`}</S.SelectedLabelsText>
+        }`}</S.SelectedLabelsText>
         {!labelIds.includes(global.DRAFT_LABEL) ? (
           <CustomButton
             label={ARCHIVE_BUTTON_LABEL}

@@ -172,7 +172,9 @@ const MessagesOverview = memo(
       undefined
     )
 
-    useEffect(() => { console.log(unsubscribeLink) }, [unsubscribeLink])
+    useEffect(() => {
+      console.log(unsubscribeLink)
+    }, [unsubscribeLink])
 
     useEffect(() => {
       let mounted = true
@@ -275,9 +277,9 @@ const MessagesOverview = memo(
                 foundBody={
                   selectedIndex !== undefined
                     ? emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.length - 1 - selectedIndex
-                    )
+                        localThreadDetail,
+                        localThreadDetail.messages.length - 1 - selectedIndex
+                      )
                     : undefined
                 }
                 threadId={localThreadDetail.id}

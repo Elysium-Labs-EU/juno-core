@@ -73,7 +73,7 @@ const EmailDetailHeader = ({
   }
 
   return (
-    <GS.OuterContainer>
+    <GS.OuterContainer data-testid="email-detail-header">
       {!coreStatus || coreStatus === global.CORE_STATUS_SEARCHING ? (
         <S.Wrapper>
           <S.HeaderCenter>

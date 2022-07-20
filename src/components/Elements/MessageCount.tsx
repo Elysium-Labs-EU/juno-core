@@ -36,8 +36,9 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
   return (
     <StyledMessageCount>
       <StyledTooltip
-        title={`${ regularCount } ${ regularCount > 1 ? MULTI_THREAD : SINGLE_THREAD
-          }`}
+        title={`${regularCount} ${
+          regularCount > 1 ? MULTI_THREAD : SINGLE_THREAD
+        }`}
       >
         <CountWrapper>
           {regularCount}
@@ -48,7 +49,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
       </StyledTooltip>
       {draftCount > 0 && (
         <StyledTooltip
-          title={`${ draftCount } ${ draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT }`}
+          title={`${draftCount} ${draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT}`}
         >
           <CountWrapper>
             / {draftCount}
@@ -65,5 +66,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
 }
 
 const MessageCount = ({ messages }: { messages: IEmailMessage[] }) =>
-  messages.length > 1 ? <LengthMessageCount messages={messages} data-testid="email-message-count" /> : null
+  messages.length > 1 ? (
+    <LengthMessageCount messages={messages} data-testid="email-message-count" />
+  ) : null
 export default MessageCount

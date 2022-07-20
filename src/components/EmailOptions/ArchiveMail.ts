@@ -8,6 +8,12 @@ interface IArchiveEmail {
   dispatch: AppDispatch
 }
 
+/**
+ * @function archiveMail
+ * @param {object} - takes in a threadId, labelIds, and dispatch function to trigger the Redux thunk to update the email label.
+ * @returns {void}
+ */
+
 const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
   const request = {
     removeLabelIds: [

@@ -19,7 +19,7 @@ const rotate = keyframes`
 `
 
 const rotatingIcon = css`
-  animation: ${ rotate } 1s ease infinite;
+  animation: ${rotate} 1s ease infinite;
 `
 
 interface IRotatingButton {
@@ -39,7 +39,7 @@ const RotatingButton = styled.button<IRotatingButton>`
     color: var(--color-black);
     cursor: pointer;
   }
-  ${ ({ disableRefresh }) => (disableRefresh ? rotatingIcon : null) };
+  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
 const refreshFeed = (dispatch: AppDispatch) => {

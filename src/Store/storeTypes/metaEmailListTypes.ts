@@ -8,7 +8,6 @@ export interface UpdateRequestParamsBatch {
   request: UpdateRequest
 }
 export interface UpdateRequestParamsSingle {
-  location?: any
   threadId?: string
   messageId?: string
   request: UpdateRequest
