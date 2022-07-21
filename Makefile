@@ -1,4 +1,8 @@
 SHELL := /bin/bash
+run-vite:
+	yarn
+	yarn start
+
 run-vite-2:
 	rm -rf node_modules
 	yarn add vite@2.9.13
