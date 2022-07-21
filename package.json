@@ -44,7 +44,7 @@
     "base64url": "3.0.1",
     "buffer": "6.0.3",
     "date-fns": "2.28.0",
-    "dompurify": "2.3.9",
+    "dompurify": "2.3.10",
     "events": "^3.3.0",
     "file-saver": "2.0.5",
     "framer-motion": "6.5.0",
