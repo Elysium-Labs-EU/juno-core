@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-grey-hover: ${themeConstants.colorGreyHover};
     --color-grey-border: ${themeConstants.colorGreyBorder};
     --color-black: ${themeConstants.colorBlack};
+    --color-black-coral: ${themeConstants.colorBlackCoral};
     --color-black-off: ${themeConstants.colorOffBlack};
     --color-purple-dark: ${themeConstants.colorPurpleDark};
     --color-purple: ${themeConstants.colorPurple};
@@ -24,6 +25,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-red: ${themeConstants.colorRed};
     --color-blue: ${themeConstants.colorBlue};
     --color-blue-dark: ${themeConstants.colorBlueDark};
+    --color-blue-oxford: ${themeConstants.colorBlueOxford};
     --h1: ${themeConstants.h1FontSize};
     --h2: ${themeConstants.h2FontSize};
     --h3: ${themeConstants.h3FontSize};
@@ -31,11 +33,16 @@ export const GlobalStyle = createGlobalStyle`
     --h5: ${themeConstants.h5FontSize};
     --small-size: ${themeConstants.smallFontSize};
     --font-family: ${themeConstants.fontFamily};
+    color-scheme: light dark;
   }
+
   body {
     background-color: var(--color-white-off) !important;
     margin: 0;
     font-family: var(--font-family) !important;
+    @media (prefers-color-scheme: dark) {
+        background-color: var(--color-blue-oxford) !important;
+    }
   }
 `
 

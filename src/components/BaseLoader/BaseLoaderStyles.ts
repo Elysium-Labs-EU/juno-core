@@ -22,6 +22,9 @@ export const ServiceUnavailableParagraph = styled.p`
 
 export const Container = styled.div`
   img {
+    @media (prefers-color-scheme: dark) {
+      filter: invert(0);
+    }
     filter: invert(100%);
     object-fit: none;
     border-radius: 10px;
@@ -42,5 +45,14 @@ export const StyledLinearProgress = styled(LinearProgress)`
   }
   .MuiLinearProgress-bar2Indeterminate {
     background-color: var(--color-black);
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--color-blue-oxford) !important;
+    .MuiLinearProgress-bar1Indeterminate {
+      background-color: var(--color-black-coral);
+    }
+    .MuiLinearProgress-bar2Indeterminate {
+      background-color: var(--color-black-coral);
+    }
   }
 `
