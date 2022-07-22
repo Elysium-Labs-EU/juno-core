@@ -17,15 +17,15 @@ const HEADER = 'Inbox zero'
 const PARAGRAPH = 'You have reached it!'
 
 const InboxEmptyState = () => (
-    <Wrapper>
-        <img src={EmptyStateImage} alt="No more inbox" />
-        <p>
-            <strong>{HEADER}</strong>
-        </p>
-        <GS.TextMutedParagraph style={{ marginTop: 0 }}>
-            {PARAGRAPH}
-        </GS.TextMutedParagraph>
-    </Wrapper>
+  <Wrapper>
+    <img src={EmptyStateImage} alt="No more inbox" />
+    <p>
+      <strong>{HEADER}</strong>
+    </p>
+    <GS.TextMutedParagraph style={{ marginTop: 0 }}>
+      {PARAGRAPH}
+    </GS.TextMutedParagraph>
+  </Wrapper>
 )
 
 export default InboxEmptyState
