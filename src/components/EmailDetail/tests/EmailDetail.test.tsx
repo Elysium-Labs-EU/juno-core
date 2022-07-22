@@ -89,4 +89,57 @@ describe('EmailDetail tests', () => {
 
     expect(screen.getByTestId('email-detail-header')).toBeDefined()
   })
+
+  test('If there is no activeEmailList, it should display a base loader', () => {
+    const intialBaseState = {
+      baseLoaded: false,
+      profile: {
+        emailAddress: '',
+        messagesTotal: 0,
+        threadsTotal: 0,
+        historyId: '',
+      },
+      isAuthenticated: false,
+    }
+    const initialEmailListState = {
+      emailList: [],
+      selectedEmails: [],
+      searchList: null,
+      activeEmailListIndex: -1,
+      isFetching: false,
+    }
+    const initialEmailDetailState = {
+      coreStatus: null,
+      currEmail: '1821754d6ae59873',
+      currMessage: '',
+      viewIndex: 0,
+      sessionViewIndex: -1,
+      isReplying: false,
+      isForwarding: false,
+    }
+    const initialUtilsSlice = {
+      inSearch: false,
+      isLoading: false,
+      isProcessing: false,
+      serviceUnavailable: '',
+      isSilentLoading: false,
+      isSettingsOpen: false,
+      isAvatarVisible: true,
+      emailFetchSize: 20,
+      showIntroduction: null,
+      settingsLabelId: null,
+      showKeyboardCombos: false,
+    }
+
+    renderWithProviders(<EmailDetail />, {
+      preloadedState: {
+        base: intialBaseState,
+        email: initialEmailListState,
+        emailDetail: initialEmailDetailState,
+        utils: initialUtilsSlice,
+      },
+    })
+
+    expect(screen.findByTestId('base-loader')).toBeDefined()
+  })
 })

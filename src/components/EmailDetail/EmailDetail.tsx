@@ -151,7 +151,7 @@ const EmailDetail = () => {
                     labelIds={labelIds}
                     setContentRendered={setContentRendered}
                   />
-                  <S.HiddenMessagesFeed>
+                  <S.HiddenMessagesFeed test-dataid="email-hidden-message-feed">
                     <PreLoadMessages
                       threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}

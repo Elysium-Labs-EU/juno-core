@@ -22,7 +22,7 @@ interface IUtilsState {
   inSearch: boolean
   isLoading: boolean
   isProcessing: boolean
-  serviceUnavailable: string
+  serviceUnavailable: string | null
   isSilentLoading: boolean
   isSettingsOpen: boolean
   isAvatarVisible: boolean
@@ -36,7 +36,7 @@ const initialState: IUtilsState = Object.freeze({
   inSearch: false,
   isLoading: false,
   isProcessing: false,
-  serviceUnavailable: '',
+  serviceUnavailable: null,
   isSilentLoading: false,
   isSettingsOpen: false,
   isAvatarVisible: true,

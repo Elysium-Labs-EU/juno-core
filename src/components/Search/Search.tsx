@@ -299,11 +299,11 @@ const Search = () => {
           />
         </S.InputRow>
         <S.SearchResults>
-          {searchResults && searchResults.threads ? (
+          {searchResults && searchResults?.threads ? (
             <>
               {searchResults.threads.map((thread, index) => (
                 <div
-                  key={`${thread.id}-search`}
+                  key={`${ thread.id }-search`}
                   onClick={() => handleOpenEvent(thread.id)}
                   onFocus={() => setFocusedItemIndex(index)}
                   onMouseOver={() => setFocusedItemIndex(index)}
