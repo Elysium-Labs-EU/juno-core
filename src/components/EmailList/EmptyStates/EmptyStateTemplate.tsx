@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import EmptyStateImage from '../../../Juno-empty-state-1@150x.png'
 import * as GS from '../../../styles/globalStyles'
 
 const Wrapper = styled.div`
@@ -8,24 +7,26 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   user-select: none;
-  img {
-    max-width: 330px;
-  }
 `
 
-const HEADER = 'Inbox zero'
-const PARAGRAPH = 'You have reached it!'
+const SVGWrapper = styled.div`
+  min-width: 200px;
+  width: 100vw;
+  max-width: 400px;
+  height: auto;
+  
+`
 
-const InboxEmptyState = () => (
+const EmptyStateTemplate = ({ header, paragraph, SVG }: { header: string, paragraph: string, SVG: JSX.Element }) => (
   <Wrapper>
-    <img src={EmptyStateImage} alt="No more inbox" />
+    <SVGWrapper>{SVG}</SVGWrapper>
     <p>
-      <strong>{HEADER}</strong>
+      <strong>{header}</strong>
     </p>
     <GS.TextMutedParagraph style={{ marginTop: 0 }}>
-      {PARAGRAPH}
+      {paragraph}
     </GS.TextMutedParagraph>
   </Wrapper>
 )
 
-export default InboxEmptyState
+export default EmptyStateTemplate

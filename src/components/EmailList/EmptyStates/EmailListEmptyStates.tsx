@@ -1,12 +1,13 @@
 import { useLocation } from 'react-router-dom'
-import InboxEmptyState from './InboxEmptyState'
-import ToDoEmptyState from './ToDoEmptyState'
+import EmptyStateTemplate from './EmptyStateTemplate'
+import * as local from '../../../constants/emptyStateConstants'
+
 
 const emptyStateMap: { [key: string]: JSX.Element } = {
-  '/': <ToDoEmptyState />,
-  '/inbox': <InboxEmptyState />,
-  '/drafts': <p>No work left unsent</p>,
-  '/sent': <p>No one has seen an email from you yet!</p>,
+  '/': <EmptyStateTemplate header={local.TODO_HEADER} paragraph={local.TODO_PARAGRAPH} SVG={local.TODO_SVG} />,
+  '/inbox': <EmptyStateTemplate header={local.INBOX_HEADER} paragraph={local.INBOX_PARAGRAPH} SVG={local.INBOX_SVG} />,
+  '/drafts': <EmptyStateTemplate header={local.DRAFT_HEADER} paragraph={local.DRAFT_PARAGRAPH} SVG={local.DRAFT_SVG} />,
+  '/sent': <EmptyStateTemplate header={local.SENT_HEADER} paragraph={local.SENT_PARAGRAPH} SVG={local.SENT_SVG} />,
   default: <p>Nothing to see here</p>,
 }
 
