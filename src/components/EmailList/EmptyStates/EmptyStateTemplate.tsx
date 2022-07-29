@@ -14,10 +14,17 @@ const SVGWrapper = styled.div`
   width: 100vw;
   max-width: 400px;
   height: auto;
-  
 `
 
-const EmptyStateTemplate = ({ header, paragraph, SVG }: { header: string, paragraph: string, SVG: JSX.Element }) => (
+const EmptyStateTemplate = ({
+  header,
+  paragraph,
+  SVG,
+}: {
+  header: string
+  paragraph: string
+  SVG: JSX.Element
+}) => (
   <Wrapper>
     <SVGWrapper>{SVG}</SVGWrapper>
     <p>

@@ -1,6 +1,7 @@
-import EmptyStateOne from "../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateOne"
-import EmptyStateTwo from "../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateTwo"
-import EmptyStateThree from "../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateThree"
+import EmptyStateOne from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateOne'
+import EmptyStateTwo from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateTwo'
+import EmptyStateThree from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateThree'
+import EmptyStateFour from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateFour'
 
 export const INBOX_HEADER = 'Inbox zero'
 export const INBOX_PARAGRAPH = 'You have reached it!'
@@ -16,4 +17,4 @@ export const DRAFT_SVG = <EmptyStateThree />
 
 export const SENT_HEADER = 'Start sending emails'
 export const SENT_PARAGRAPH = 'No one has seen an email from you yet!'
-export const SENT_SVG = <EmptyStateThree />
+export const SENT_SVG = <EmptyStateFour />
