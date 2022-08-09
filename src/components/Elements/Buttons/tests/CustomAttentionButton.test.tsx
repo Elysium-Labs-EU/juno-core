@@ -5,7 +5,7 @@ import CustomAttentionButton from '../CustomAttentionButton'
 
 test('Button renders with text if label is provided', () => {
   const component = renderer.create(
-    <CustomAttentionButton label="Test button" />
+    <CustomAttentionButton label="Test button" title="Test" />
   )
   const tree = toJson(component)
   expect(tree).toMatchSnapshot()
@@ -18,6 +18,7 @@ test('Button fires the onClick event when clicked', () => {
       onClick={() => {
         console.log('testing')
       }}
+      title="Test"
     />
   )
   let tree = toJson(component)

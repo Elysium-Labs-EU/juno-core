@@ -1,7 +1,14 @@
 /* eslint-disable no-bitwise */
-const getRandomColor = (senderName: string) => {
+
+/**
+ * @function getRandomColor
+ * @param userName - takes in a userName (email) as string
+ * @returns {string} the random colorcode based on the user name
+ */
+
+const getRandomColor = (userName: string): string => {
   // get first alphabet in upper case
-  const firstAlphabet = senderName.charAt(0).toLowerCase()
+  const firstAlphabet = userName.charAt(0).toLowerCase()
 
   // get the ASCII code of the character
   const asciiCode = firstAlphabet.charCodeAt(0)

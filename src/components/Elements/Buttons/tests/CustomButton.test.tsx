@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import renderer from 'react-test-renderer'
 import toJson from '../../../../utils/toJSONforTest'
 import CustomButton from '../CustomButton'
@@ -12,11 +11,12 @@ test('Button renders with text if label is provided', () => {
 })
 
 test('Button fires the onClick event when clicked', () => {
+  const testFunction = <TValue,>(value: TValue) => value
   const component = renderer.create(
     <CustomButton
       label="Test button"
       onClick={() => {
-        console.log('testing')
+        testFunction('testing')
       }}
       title="test"
     />
