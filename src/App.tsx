@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
-import { Routes, Route, Navigate } from 'react-router-dom'
 import {
   checkBase,
   recheckBase,
@@ -10,7 +9,6 @@ import {
   selectIsAuthenticated,
   setIsAuthenticated,
 } from './store/baseSlice'
-import BaseLoader from './components/BaseLoader/BaseLoader'
 import Header from './components/MainHeader/Header'
 import RoutesConstants from './constants/routes.json'
 import * as GS from './styles/globalStyles'
@@ -24,32 +22,8 @@ import {
   selectServiceUnavailable,
   selectShowKeyboardCombos,
 } from './store/utilsSlice'
-import ComposeEmail from './components/Compose/ComposeEmail'
-import DraftEmail from './components/Draft/DraftEmail'
-import ToDo from './components/ToDo/Todo'
-import Inbox from './components/Inbox/Inbox'
-import EmailDetail from './components/EmailDetail/EmailDetail'
-import SentEmail from './components/Sent/Sent'
-import Login from './components/Login/Login'
-import GoogleCallback from './components/Login/Callback/GoogleCallBack'
-import PageNotFound from './components/PageNotFound/PageNotFound'
 import SnackbarNotification from './components/Elements/SnackbarNotification/SnackbarNotification'
-
-const ProtectedRoute = ({
-  children,
-  isAuthenticated,
-  baseLoaded,
-}: {
-  children: JSX.Element
-  isAuthenticated: boolean
-  baseLoaded: boolean
-}) => {
-  if (!isAuthenticated) {
-    return <Navigate to={RoutesConstants.LOGIN} replace />
-  }
-
-  return baseLoaded ? children : <BaseLoader />
-}
+import RoutesComponent from './Routes'
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -92,94 +66,7 @@ const App = () => {
         )}
 
         <AnimatePresence exitBeforeEnter>
-          <Routes>
-            <Route path={RoutesConstants.LOGIN} element={<Login />} />
-            <Route
-              path={RoutesConstants.GOOGLE_CALLBACK}
-              element={<GoogleCallback />}
-            />
-            <Route path={RoutesConstants.LOGIN_SUCCESS} element={<Login />} />
-            <Route
-              path={RoutesConstants.HOME}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <ToDo />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={RoutesConstants.EMAIL_DETAIL}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <EmailDetail />
-                </ProtectedRoute>
-              }
-            />
-            <Route path={RoutesConstants.COMPOSE_EMAIL}>
-              <Route
-                path=""
-                element={
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
-                    <ComposeEmail />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path=":draftId"
-                element={
-                  <ProtectedRoute
-                    isAuthenticated={isAuthenticated}
-                    baseLoaded={baseLoaded}
-                  >
-                    <ComposeEmail />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-            <Route
-              path={RoutesConstants.DRAFTS}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <DraftEmail />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={RoutesConstants.SENT}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <SentEmail />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={RoutesConstants.INBOX}
-              element={
-                <ProtectedRoute
-                  isAuthenticated={isAuthenticated}
-                  baseLoaded={baseLoaded}
-                >
-                  <Inbox />
-                </ProtectedRoute>
-              }
-            />
-            <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
-          </Routes>
+          <RoutesComponent />
         </AnimatePresence>
         {serviceUnavailable && (
           <SnackbarNotification text={serviceUnavailable} />
