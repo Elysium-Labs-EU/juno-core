@@ -93,7 +93,7 @@
     "@types/react-redux": "7.1.24",
     "@types/react-router-dom": "5.3.3",
     "@types/react-test-renderer": "^18.0.0",
-    "@types/styled-components": "5.1.25",
+    "@types/styled-components": "5.1.26",
     "@typescript-eslint/eslint-plugin": "5.31.0",
     "@typescript-eslint/parser": "5.31.0",
     "@vitejs/plugin-react": "^2.0.0",
