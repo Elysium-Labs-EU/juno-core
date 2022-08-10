@@ -1,28 +1,24 @@
 // Vitest Snapshot v1
 
-exports[`Avatar renders with text if content is provided 1`] = `
+exports[`Avatar renders with fallback if no usuable content is provided 1`] = `
 {
   "asFragment": [Function],
   "baseElement": <body>
     <div>
       <div
-        class="sc-bczRLJ guQQSh"
+        class="sc-bczRLJ kAIFAF"
         data-testid="avatar"
       >
-        <span>
-          TC
-        </span>
+        <span />
       </div>
     </div>
   </body>,
   "container": <div>
     <div
-      class="sc-bczRLJ guQQSh"
+      class="sc-bczRLJ kAIFAF"
       data-testid="avatar"
     >
-      <span>
-        TC
-      </span>
+      <span />
     </div>
   </div>,
   "debug": [Function],

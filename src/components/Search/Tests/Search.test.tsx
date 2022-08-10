@@ -1,4 +1,4 @@
-import { fireEvent, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import renderWithProviders from '../../../utils/ForTesting/testUtils'
 import Search from '../Search'
 
