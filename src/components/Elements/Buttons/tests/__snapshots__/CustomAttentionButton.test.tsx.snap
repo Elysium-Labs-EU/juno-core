@@ -5,6 +5,7 @@ exports[`Button fires the onClick event when clicked 1`] = `
   className="sc-bczRLJ juGkZa"
   disabled={false}
   onClick={[Function]}
+  title="Test"
   type="button"
 >
   <div
@@ -22,22 +23,7 @@ exports[`Button fires the onClick event when clicked 2`] = `
   className="sc-bczRLJ juGkZa"
   disabled={false}
   onClick={[Function]}
-  type="button"
->
-  <div
-    className="sc-gsnTZi iqncvO"
-  >
-    <span>
-      Test button
-    </span>
-  </div>
-</button>
-`;
-
-exports[`Button renders with text if label is provided 1`] = `
-<button
-  className="sc-bczRLJ juGkZa"
-  disabled={false}
+  title="Test"
   type="button"
 >
   <div
