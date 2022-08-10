@@ -1,4 +1,5 @@
 import { IContact } from '../store/storeTypes/contactsTypes'
+// Takes the string email format from Gmail, and converts it to object email format for this app.
 
 /**
  * @function convertToContact

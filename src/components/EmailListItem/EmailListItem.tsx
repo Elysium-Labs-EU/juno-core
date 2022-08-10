@@ -31,6 +31,13 @@ import {
 import useKeyPress from '../../hooks/useKeyPress'
 
 // If the user is on Draft list, show only draft emails.
+
+/**
+ * @function shouldUseDraftOrRegular
+ * @param labelIds - all the label ids stored in Redux
+ * @param email - the email list object
+ * @returns a filtered version of the emaillist object, if the draft label is found.
+ */
 const shouldUseDraftOrRegular = (
   labelIds: string[],
   email: IEmailListThreadItem

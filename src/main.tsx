@@ -9,6 +9,7 @@ import App from './App'
 import { GlobalStyle, theme } from './styles/globalStyles'
 import { setupStore } from './store/store'
 
+// Set a global variable for Buffer, this is used for decoding B64.
 globalThis.Buffer = Buffer
 
 // Don't run Sentry when developing.

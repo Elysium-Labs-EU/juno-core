@@ -24,7 +24,7 @@ const ArchiveOption = ({
 
   const handleEvent = useCallback(() => {
     archiveMail({
-      messageId: threadDetail.id,
+      threadId: threadDetail.id,
       labelIds,
       dispatch,
     })

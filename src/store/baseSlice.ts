@@ -9,9 +9,9 @@ import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './storeTypes/labelsTypes'
 import { IBaseState } from './storeTypes/baseTypes'
 import multipleIncludes from '../utils/multipleIncludes'
-import findSettings from '../utils/Settings/findSettings'
-import parseSettings from '../utils/Settings/parseSettings'
-import createSettingsLabel from '../utils/Settings/createSettingsLabel'
+import findSettings from '../utils/settings/findSettings'
+import parseSettings from '../utils/settings/parseSettings'
+import createSettingsLabel from '../utils/settings/createSettingsLabel'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,

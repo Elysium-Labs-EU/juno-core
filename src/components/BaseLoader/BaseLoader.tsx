@@ -28,7 +28,7 @@ const AnimatedMountUnmount = ({
 
 const Baseloader = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
-  const [countDown, setCountDown] = useState(3)
+  const [countDown, setCountDown] = useState(5)
 
   useEffect(() => {
     let mounted = true

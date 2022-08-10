@@ -22,6 +22,7 @@ export const ServiceUnavailableParagraph = styled.p`
 
 export const Container = styled.div`
   img {
+    filter: invert(100%);
     object-fit: none;
     border-radius: 10px;
     box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),

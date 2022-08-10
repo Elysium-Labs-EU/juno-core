@@ -1,5 +1,11 @@
 import * as global from '../constants/globalConstants'
 
+/**
+ * @function getUserAgent
+ * Checks the navigator on the userAgent strin
+ * @returns a matched result based on the detected userAgent string, MacOS is the default fallback.
+ */
+
 export default function getUserAgent() {
   const value = navigator.userAgent
   if (value) {

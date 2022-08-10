@@ -118,9 +118,9 @@ export default function handleHistoryObject({
           item.labelsRemoved[0].message.threadId &&
           item.labelsRemoved[0].labelIds.includes(global.INBOX_LABEL)
         ) {
+          const toHandleObject = item.labelsRemoved[0]
           const output = inboxFeed.threads.filter(
-            (filterItem) =>
-              filterItem.id !== item.labelsRemoved[0].message.threadId
+            (filterItem) => filterItem.id !== toHandleObject.message.threadId
           )
           inboxFeed.threads = output
         }
@@ -128,9 +128,9 @@ export default function handleHistoryObject({
           item.labelsRemoved[0].message.threadId &&
           item.labelsRemoved[0].labelIds.includes(toDoLabelId)
         ) {
+          const toHandleObject = item.labelsRemoved[0]
           const output = todoFeed.threads.filter(
-            (filterItem) =>
-              filterItem.id !== item.labelsRemoved[0].message.threadId
+            (filterItem) => filterItem.id !== toHandleObject.message.threadId
           )
           todoFeed.threads = output
         }

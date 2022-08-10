@@ -1,6 +1,6 @@
-import setCookie from './Cookie/setCookie'
+import setCookie from './cookie/setCookie'
 import * as global from '../constants/globalConstants'
-import removeCookie from './Cookie/removeCookie'
+import removeCookie from './cookie/removeCookie'
 
 const handleUserTokens = (response?: any) => ({
   setAccessToken: () => {
