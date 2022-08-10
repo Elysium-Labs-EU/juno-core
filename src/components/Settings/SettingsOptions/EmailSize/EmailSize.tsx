@@ -6,7 +6,7 @@ import {
   selectEmailListSize,
   selectSettingsLabelId,
 } from '../../../../store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/Settings/updateSettingsLabel'
+import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 import { fetchSizeKeyMap } from '../../../../constants/baseConstants'
 
 const LABEL = 'Emails fetched at a time'

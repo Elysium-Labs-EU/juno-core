@@ -5,7 +5,7 @@ import {
   selectSettingsLabelId,
   setShowAvatar,
 } from '../../../../store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/Settings/updateSettingsLabel'
+import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 
 const SWITCH_LABEL = 'Show avatars'
 
