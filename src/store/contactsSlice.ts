@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import { Contact } from './storeTypes/contactsTypes'
+import { IContact } from './storeTypes/contactsTypes'
 import { setServiceUnavailable } from './utilsSlice'
 import type { AppThunk, RootState } from './store'
 import contactApi from '../data/contactApi'
@@ -84,7 +84,7 @@ export const querySpecificContacts =
         dispatch(
           setAllContacts(
             results.map(
-              (contact: any): Contact => ({
+              (contact: any): IContact => ({
                 name: Object.prototype.hasOwnProperty.call(
                   contact.person,
                   'names'

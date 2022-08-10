@@ -30,7 +30,7 @@ const EmailLabel = ({ labelNames }: { labelNames: string[] }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="email-label">
       {legalLabel().map((label) => (
         <CustomLabel key={label} labelName={label} />
       ))}

@@ -29,6 +29,7 @@ import {
   setSelectedEmails,
 } from '../../store/emailListSlice'
 import useKeyPress from '../../hooks/useKeyPress'
+
 // If the user is on Draft list, show only draft emails.
 
 /**
@@ -171,6 +172,8 @@ const EmailListItem = ({
     )
   }
 
+  // console.log(email)
+
   const memoizedEmailListItem = useMemo(
     () => (
       <S.ThreadBase emailLabels={staticEmailLabels}>
@@ -194,11 +197,17 @@ const EmailListItem = ({
               )}
             </S.Avatars>
             {!labelIds.includes(global.DRAFT_LABEL) ? (
-              <S.TruncatedSpan title={staticSenderPartial.emailAddress}>
+              <S.TruncatedSpan
+                title={staticSenderPartial.emailAddress}
+                data-testid="email-sender"
+              >
                 {staticSenderPartial.name ?? staticSenderPartial.emailAddress}
               </S.TruncatedSpan>
             ) : (
-              <S.TruncatedSpan title={staticRecipientName.emailAddress}>
+              <S.TruncatedSpan
+                title={staticRecipientName.emailAddress}
+                data-testid="email-recipient"
+              >
                 {staticRecipientName.name}
               </S.TruncatedSpan>
             )}
@@ -211,7 +220,10 @@ const EmailListItem = ({
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
               {labelIds.includes(global.DRAFT_LABEL) && (
-                <span style={{ fontWeight: 'bold' }}>
+                <span
+                  style={{ fontWeight: 'bold' }}
+                  data-testid="email-draft-snippet-indicator"
+                >
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </span>
               )}

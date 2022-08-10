@@ -17,16 +17,16 @@ const EmailHasAttachment = ({
       }
     }
     if (verdict) {
-      return <FiPaperclip />
+      return <FiPaperclip data-testid="email-has-attachment" />
     }
   }
   if (!Array.isArray(messages)) {
     const verdict = checkAttachment(messages)
     if (verdict.length > 0) {
-      return <FiPaperclip />
+      return <FiPaperclip data-testid="email-has-attachment" />
     }
   }
-  return <div />
+  return <div data-testid="email-has-no-attachment" />
 }
 
 export default EmailHasAttachment

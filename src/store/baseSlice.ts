@@ -50,7 +50,7 @@ export const handleSettings =
   async (dispatch) => {
     const settingsLabel = findSettings(labels)
     if (settingsLabel.length === 0) {
-      createSettingsLabel({ dispatch })
+      createSettingsLabel(dispatch)
       return
     }
     dispatch(setSettingsLabelId(settingsLabel[0].id))

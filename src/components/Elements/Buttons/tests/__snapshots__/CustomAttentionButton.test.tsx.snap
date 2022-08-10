@@ -1,0 +1,51 @@
+// Vitest Snapshot v1
+
+exports[`Button fires the onClick event when clicked 1`] = `
+<button
+  className="sc-bczRLJ juGkZa"
+  disabled={false}
+  onClick={[Function]}
+  type="button"
+>
+  <div
+    className="sc-gsnTZi iqncvO"
+  >
+    <span>
+      Test button
+    </span>
+  </div>
+</button>
+`;
+
+exports[`Button fires the onClick event when clicked 2`] = `
+<button
+  className="sc-bczRLJ juGkZa"
+  disabled={false}
+  onClick={[Function]}
+  type="button"
+>
+  <div
+    className="sc-gsnTZi iqncvO"
+  >
+    <span>
+      Test button
+    </span>
+  </div>
+</button>
+`;
+
+exports[`Button renders with text if label is provided 1`] = `
+<button
+  className="sc-bczRLJ juGkZa"
+  disabled={false}
+  type="button"
+>
+  <div
+    className="sc-gsnTZi iqncvO"
+  >
+    <span>
+      Test button
+    </span>
+  </div>
+</button>
+`;

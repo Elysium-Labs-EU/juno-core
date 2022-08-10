@@ -1,19 +1,19 @@
-import { Contact } from './contactsTypes'
+import { IContact } from './contactsTypes'
 
 export interface IComposePayload {
   id?: string
   value?: string
   body?: string | string[]
   subject?: string
-  to?: Contact[]
-  cc?: Contact[]
-  bcc?: Contact[]
+  to?: IContact[]
+  cc?: IContact[]
+  bcc?: IContact[]
 }
 
 export interface IComposeEmail {
-  to: Contact[]
-  cc: Contact[]
-  bcc: Contact[]
+  to: IContact[]
+  cc: IContact[]
+  bcc: IContact[]
   subject: string
   body: string
 }

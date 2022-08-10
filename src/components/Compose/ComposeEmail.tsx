@@ -24,7 +24,7 @@ import {
   setIsReplying,
 } from '../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { Contact } from '../../store/storeTypes/contactsTypes'
+import { IContact } from '../../store/storeTypes/contactsTypes'
 import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
@@ -36,7 +36,7 @@ import DiscardDraftButton from './DiscardDraftButton'
 import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
 import { refreshEmailFeed } from '../../store/emailListSlice'
 
-const handleContactConversion = (contactValue: string): Contact[] => {
+const handleContactConversion = (contactValue: string): IContact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {
     return contactValue.split(',').map((item) => convertToContact(item))
   }
@@ -45,9 +45,9 @@ const handleContactConversion = (contactValue: string): Contact[] => {
 
 // Props are coming from MessageOverview
 interface IComposeEmailProps {
-  to?: Contact | null
-  bcc?: Contact | null
-  cc?: Contact | null
+  to?: IContact | null
+  bcc?: IContact | null
+  cc?: IContact | null
   subject?: string
   threadId?: string
   foundBody?: string
@@ -69,15 +69,15 @@ const ComposeEmail = ({
   const isForwarding = useAppSelector(selectIsForwarding)
   const currentMessage = useAppSelector(selectCurrentMessage)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [toValue, setToValue] = useState<Contact[]>([])
+  const [toValue, setToValue] = useState<IContact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [inputToValue, setInputToValue] = useState<string>('')
   const [showCC, setShowCC] = useState<boolean>(false)
-  const [ccValue, setCCValue] = useState<Contact[]>([])
+  const [ccValue, setCCValue] = useState<IContact[]>([])
   const debouncedCCValue = useDebounce(ccValue, 500)
   const [inputCCValue, setInputCCValue] = useState<string>('')
   const [showBCC, setShowBCC] = useState<boolean>(false)
-  const [bccValue, setBCCValue] = useState<Contact[]>([])
+  const [bccValue, setBCCValue] = useState<IContact[]>([])
   const debouncedBCCValue = useDebounce(bccValue, 500)
   const [inputBCCValue, setInputBCCValue] = useState<string>('')
   const [subjectValue, setSubjectValue] = useState('')
@@ -90,7 +90,7 @@ const ComposeEmail = ({
   const [composedEmail, setComposedEmail] = useState<any>({})
 
   const updateComposeEmail = useCallback(
-    (action: { id: string; value: string | Contact[] }, mounted: boolean) => {
+    (action: { id: string; value: string | IContact[] }, mounted: boolean) => {
       if (action.id && action.value) {
         const { id, value } = action
         mounted &&
@@ -148,7 +148,7 @@ const ComposeEmail = ({
 
   const recipientListTransform = (recipientListRaw: any) => ({
     fieldId: recipientListRaw.fieldId,
-    newValue: recipientListRaw.newValue.map((item: string | Contact) =>
+    newValue: recipientListRaw.newValue.map((item: string | IContact) =>
       typeof item === 'string' ? { name: item, emailAddress: item } : item
     ),
   })
@@ -501,12 +501,14 @@ const ComposeEmail = ({
                         <CustomButton
                           label={local.CC_LABEL}
                           onClick={() => setShowCC(true)}
+                          title="Show CC recipients"
                         />
                       )}
                       {!showBCC && (
                         <CustomButton
                           label={local.BCC_LABEL}
                           onClick={() => setShowBCC(true)}
+                          title="Show BCC recipients"
                         />
                       )}
                     </S.CcBccContainer>
@@ -529,6 +531,7 @@ const ComposeEmail = ({
                   type="submit"
                   label={local.SEND_BUTTON}
                   icon={<FiSend />}
+                  title="Send email"
                   suppressed
                 />
                 {(isReplying || isForwarding) && (
@@ -536,6 +539,7 @@ const ComposeEmail = ({
                     label={local.CANCEL_BUTTON}
                     onClick={() => handleCancelButton()}
                     suppressed
+                    title="Cancel"
                   />
                 )}
                 {draftDetails?.id && (

@@ -8,7 +8,7 @@ interface ICustomIconButton {
   disabled?: boolean
   icon: JSX.Element
   style?: React.CSSProperties
-  title?: string
+  title: string
   className?: string
   isActive?: boolean
   hoverColor?: string
@@ -72,7 +72,6 @@ CustomIconButton.defaultProps = {
   className: null,
   disabled: false,
   style: null,
-  title: null,
   type: 'button',
   isActive: false,
   hoverColor: null,

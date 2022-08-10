@@ -5,9 +5,10 @@ export interface IEmailMessagePayload {
   headers: any
   body: {
     data?: string
+    attachmentId?: string
     size: number
   }
-  parts: any
+  parts?: IEmailMessagePayload[]
 }
 
 export interface IEmailMessage {

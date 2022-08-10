@@ -7,8 +7,14 @@ import * as global from '../../../constants/globalConstants'
 const GOOGLE = 'Login with Google'
 interface IGoogleButton {
   disabled: boolean
-  onClick: Function
+  onClick: () => void
 }
+
+/**
+ * @component GoogleButton
+ * @param {object} - takes in render props, that contain an onClick handler and the disabled state.
+ * @returns a styled Google button that is either disabled or active.
+ */
 
 const GoogleButton = ({ renderProps }: { renderProps: IGoogleButton }) => {
   const EnterListener = useKeyPress(global.KEY_ENTER)

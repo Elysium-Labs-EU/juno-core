@@ -8,7 +8,7 @@ import LogoutOption, {
 } from '../MainHeader/Navigation/More/Options/LogoutOption'
 import { useAppSelector } from '../../store/hooks'
 
-const LOGO_ALT = "Juno's Logo"
+export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '
 const SECONDS = ' seconds.'
 
@@ -52,7 +52,7 @@ const Baseloader = () => {
   })
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-testid="base-loader">
       <S.Inner>
         {!serviceUnavailable && (
           <>

@@ -15,7 +15,7 @@ import {
   OpenDraftEmailType,
   DraftListObject,
 } from './storeTypes/draftsTypes'
-import { loopThroughBodyParts } from '../utils/bodyDecoder'
+import { loopThroughBodyParts } from '../utils/bodyDecoder/bodyDecoder'
 import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {

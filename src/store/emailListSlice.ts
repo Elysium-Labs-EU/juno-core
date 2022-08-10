@@ -441,6 +441,11 @@ export const loadEmailDetails =
     }
   }
 
+/**
+ * @function updateEmailLabel
+ * @param props - takes in an object with the default properties of request and labelIds. The other properties are optional.
+ * @returns {void} - based on the properties other Redux actions and/or GMail API requests are made.
+ */
 export const updateEmailLabel = (
   props: UpdateRequestParamsSingle
 ): AppThunk => {
@@ -457,7 +462,6 @@ export const updateEmailLabel = (
       const { coreStatus } = getState().emailDetail
       const { emailList, searchList } = getState().email
       const { isSilentLoading } = getState().utils
-
       const staticIndexActiveEmailList = getState().email.activeEmailListIndex
       const staticActiveEmailList =
         staticIndexActiveEmailList === -1
@@ -473,24 +477,23 @@ export const updateEmailLabel = (
           !getState().labels.labelIds.includes(global.DRAFT_LABEL)
         ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions.
+          // This action is done first, to speed up the UX.
           if (
             (request?.removeLabelIds &&
               !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request?.delete
           ) {
             const { viewIndex, sessionViewIndex } = getState().emailDetail
-
-            const nextID = () =>
+            const nextID =
               staticActiveEmailList.threads[viewIndex + 1] !== undefined
                 ? staticActiveEmailList.threads[viewIndex + 1].id
                 : null
 
-            const staticNextID = nextID()
             const staticLabelURL = labelURL(labelIds)
-            if (coreStatus && staticNextID) {
-              dispatch(setCurrentEmail(staticNextID))
+            if (coreStatus && nextID) {
+              dispatch(setCurrentEmail(nextID))
               dispatch(setSessionViewIndex(sessionViewIndex + 1))
-              dispatch(push(`/mail/${staticLabelURL}/${staticNextID}/messages`))
+              dispatch(push(`/mail/${staticLabelURL}/${nextID}/messages`))
               if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
                 const { emailFetchSize } = getState().utils
                 edgeLoadingNextPage({
@@ -502,12 +505,13 @@ export const updateEmailLabel = (
                 })
               }
             }
-            if (!coreStatus || (coreStatus && !staticNextID)) {
+            if (!coreStatus || (coreStatus && !nextID)) {
               dispatch(navigateBack())
             }
           }
         }
 
+        // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the GMail API.
         if (!request.delete) {
           try {
             dispatch(setIsProcessing(true))
@@ -531,6 +535,7 @@ export const updateEmailLabel = (
             dispatch(setServiceUnavailable('Error updating label.'))
           }
         }
+        // If the request is to delete the thread or message, dispatch the thrash action to the GMail API.
         if (request.delete) {
           try {
             if (threadId) {
@@ -545,6 +550,7 @@ export const updateEmailLabel = (
             dispatch(setServiceUnavailable('Error updating label.'))
           }
         }
+        // If the request is to delete the thread or message, or to remove a label (expect the unread label) - remove the item from the Redux store.
         if (
           (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
           request.delete
@@ -625,7 +631,12 @@ export const updateEmailLabelBatch = (
   }
 }
 
-// Use profile history id, compare this to the received history id. If the received history id is higher than stored version. Refetch the email list for inbox only.
+/**
+ * @function refreshEmailFeed
+ * Use profile history id, compare this to the received history id. If the received history id is higher than stored version. Refetch the email list for inbox only.
+ * @returns {void} dispatches an aciton based on the received history id and history object (sortedFeeds).
+ */
+
 export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
   try {
     dispatch(setIsFetching(true))

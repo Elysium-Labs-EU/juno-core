@@ -1,8 +1,9 @@
 import { updateEmailLabel } from '../store/emailListSlice'
 import * as global from '../constants/globalConstants'
+import { AppDispatch } from '../store/store'
 
 interface IMarkEmailAsRead {
-  dispatch: Function
+  dispatch: AppDispatch
   labelIds: string[]
   threadId: string
 }

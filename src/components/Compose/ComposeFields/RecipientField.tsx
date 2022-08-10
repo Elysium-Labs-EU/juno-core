@@ -3,10 +3,10 @@ import FormHelperText from '@mui/material/FormHelperText'
 import * as S from '../ComposeStyles'
 import * as local from '../../../constants/composeEmailConstants'
 import EmailInput from './EmailInput/EmailInput'
-import { Contact } from '../../../store/storeTypes/contactsTypes'
+import type { IContact } from '../../../store/storeTypes/contactsTypes'
 
 interface IRecipientField {
-  recipientFieldValue: Contact[]
+  recipientFieldValue: IContact[]
   fieldId: string
   fieldLabel: string
   toError: boolean

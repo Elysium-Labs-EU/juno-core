@@ -6,6 +6,7 @@ import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
 import * as global from '../../constants/globalConstants'
+import { AppDispatch } from '../../store/store'
 
 const rotate = keyframes`
   from {
@@ -41,7 +42,7 @@ const RotatingButton = styled.button<IRotatingButton>`
   ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
-const refreshFeed = (dispatch: Function) => {
+const refreshFeed = (dispatch: AppDispatch) => {
   dispatch(refreshEmailFeed())
 }
 
@@ -86,6 +87,7 @@ const InboxRefresh = () => {
       disabled={isLoading || disableRefresh}
       type="button"
       disableRefresh={disableRefresh}
+      title="Refresh inbox"
     >
       <MdRefresh size={20} />
     </RotatingButton>

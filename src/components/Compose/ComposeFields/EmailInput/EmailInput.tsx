@@ -4,7 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
-import { Contact } from '../../../../store/storeTypes/contactsTypes'
+import { IContact } from '../../../../store/storeTypes/contactsTypes'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
   selectAllContacts,
@@ -16,10 +16,11 @@ import contactApi from '../../../../data/contactApi'
 import { setServiceUnavailable } from '../../../../store/utilsSlice'
 import useDebounce from '../../../../hooks/useDebounce'
 import emailValidation from '../../../../utils/emailValidation'
+import type { AppDispatch } from '../../../../store/store'
 
 interface IEmailInputProps {
   id: string
-  valueState: Contact[]
+  valueState: IContact[]
   handleChange: any
   handleDelete: Function
   inputValue: string
@@ -34,10 +35,11 @@ interface IHandleIncompleteInput {
 
 interface IFetchContacts {
   inputValue: string
-  dispatch: Function
+  dispatch: AppDispatch
   setCompletedSearch: Function
 }
 
+// TODO: Check contactsSlice to unduplicate the code.
 const fetchContacts = async ({
   inputValue,
   dispatch,
@@ -57,7 +59,7 @@ const fetchContacts = async ({
       const mappedResults =
         results && results.length > 0
           ? results.map(
-              (contact: any): Contact => ({
+              (contact: any): IContact => ({
                 name: Object.prototype.hasOwnProperty.call(
                   contact.person,
                   'names'
@@ -79,7 +81,7 @@ const fetchContacts = async ({
 }
 
 const filterOptions: any = (
-  options: Contact[],
+  options: IContact[],
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 
@@ -94,10 +96,10 @@ const emailInput = (props: IEmailInputProps) => {
     willAutoFocus,
   } = props
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<readonly Contact[]>([])
+  const [options, setOptions] = useState<readonly IContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(false)
   const debouncedInputValue: string = useDebounce(inputValue, 500)
-  const availableContacts: Contact[] = useAppSelector(selectAllContacts)
+  const availableContacts: IContact[] = useAppSelector(selectAllContacts)
   const contactsLoaded: string = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
@@ -198,8 +200,8 @@ const emailInput = (props: IEmailInputProps) => {
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue)
       }}
-      renderTags={(value: readonly Contact[], getTagProps) =>
-        value.map((option: Contact, index: number) => {
+      renderTags={(value: readonly IContact[], getTagProps) =>
+        value.map((option: IContact, index: number) => {
           if (option) {
             return (
               <RecipientChip

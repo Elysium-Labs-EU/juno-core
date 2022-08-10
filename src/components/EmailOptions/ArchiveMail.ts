@@ -1,11 +1,18 @@
 import { updateEmailLabel } from '../../store/emailListSlice'
 import * as global from '../../constants/globalConstants'
+import { AppDispatch } from '../../store/store'
 
 interface IArchiveEmail {
   threadId: string
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
 }
+
+/**
+ * @function archiveMail
+ * @param {object} - takes in a threadId, labelIds, and dispatch function to trigger the Redux thunk to update the email label.
+ * @returns {void}
+ */
 
 const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
   const request = {
@@ -14,17 +21,13 @@ const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
     ],
   }
 
-  const markEmailArchived = () => {
-    dispatch(
-      updateEmailLabel({
-        threadId,
-        request,
-        labelIds,
-      })
-    )
-  }
-
-  return markEmailArchived()
+  dispatch(
+    updateEmailLabel({
+      threadId,
+      request,
+      labelIds,
+    })
+  )
 }
 
 export default archiveMail

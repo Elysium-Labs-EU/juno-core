@@ -5,9 +5,9 @@ import { Integrations } from '@sentry/tracing'
 import { Provider } from 'react-redux'
 import ThemeProvider from '@mui/material/styles/ThemeProvider'
 import { Buffer } from 'buffer'
-import { store } from './store/store'
 import App from './App'
 import { GlobalStyle, theme } from './styles/globalStyles'
+import { setupStore } from './store/store'
 
 // Set a global variable for Buffer, this is used for decoding B64.
 globalThis.Buffer = Buffer
@@ -24,6 +24,8 @@ process.env.NODE_ENV !== 'development' &&
     // We recommend adjusting this value in production
     tracesSampleRate: 1.0,
   })
+
+const store = setupStore()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>

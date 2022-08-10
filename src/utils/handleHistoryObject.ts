@@ -41,6 +41,8 @@ const restructureObject = (message: IHistoryMessage) => {
  * @returns {IFeedModel[]} - End result will be that the function returns multiple arrays. One for each inbox.
  * */
 
+// TODO: Create test for this function.
+
 export default function handleHistoryObject({
   history,
   storageLabels,
@@ -73,7 +75,7 @@ export default function handleHistoryObject({
   }
 
   if (Array.isArray(history)) {
-    // Remove all the entries that will not be used.
+    // Remove all the entries that will not be used. We only want objects that have 3 keys or more.
     const cleanHistoryArray = history.filter(
       (item) => Object.keys(item).length > 2
     )

@@ -68,7 +68,7 @@ interface IDetailDisplaySelector {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   index: number
-  setUnsubscribeLink: Function
+  setUnsubscribeLink: (value: string | null) => void
   setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
 }
@@ -119,7 +119,7 @@ const MappedMessages = ({
   indexMessageListener,
 }: {
   threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: Function
+  setUnsubscribeLink: (value: string | null) => void
   setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
 }) =>
@@ -171,6 +171,10 @@ const MessagesOverview = memo(
     const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
       undefined
     )
+
+    useEffect(() => {
+      console.log(unsubscribeLink)
+    }, [unsubscribeLink])
 
     useEffect(() => {
       let mounted = true

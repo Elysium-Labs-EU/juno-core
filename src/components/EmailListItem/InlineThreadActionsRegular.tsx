@@ -5,7 +5,7 @@ import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
-import SetToDoMail from '../EmailOptions/SetToDoMail'
+import setToDoMail from '../EmailOptions/SetToDoMail'
 import { findLabelByName } from '../../utils/findLabel'
 import { selectStorageLabels } from '../../store/labelsSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -19,6 +19,13 @@ interface IInlineThreadActionsRegular {
 
 const SIZE = 16
 
+/**
+ * @component InlineThreadActionsRegular
+ * This component is visible on the email list item - if the most recent message of the thread item is a regular message.
+ * @param {object} - takes in an id (threadId) as string, and the labelIds from the relevant thread.
+ * @returns regular inline thread actions, based on the labelIds and id.
+ */
+
 const InlineThreadActionsRegular = ({
   id,
   labelIds,
@@ -27,7 +34,7 @@ const InlineThreadActionsRegular = ({
   const dispatch = useAppDispatch()
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-testid="email-regular-inline-actions">
       {id && labelIds && (
         <S.Inner>
           <CustomIconButton
@@ -51,7 +58,7 @@ const InlineThreadActionsRegular = ({
             ) && (
               <CustomIconButton
                 onClick={() =>
-                  SetToDoMail({
+                  setToDoMail({
                     messageId: id,
                     labelIds,
                     dispatch,
