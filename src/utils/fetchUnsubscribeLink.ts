@@ -13,18 +13,18 @@ const REGEX = new RegExp(CHECK_WORDS.join('|'), 'i')
 
 /**
  * @function fetchUnsubscribeLink
- * @param {object} - takes in the setUnsubscribeLink function as callback
+ * @param activeDocument
+ * @param setUnsubscribeLink - takes in the setUnsubscribeLink function as callback
  * The function will attempt to match the regex with the found element. If there is a match, it will be pushed to the matchedElements array.
  * @returns {void}
  */
-export default function fetchUnsubscribeLink({
-  setUnsubscribeLink,
-}: {
+export default function fetchUnsubscribeLink(
+  activeDocument: HTMLDivElement | null,
   setUnsubscribeLink: (value: string | null) => void
-}): void {
-  const elements = document.querySelectorAll('a')
+): void {
+  const elements = activeDocument?.shadowRoot?.querySelectorAll('a')
   const matchedElements: string[] = []
-  if (elements.length > 0) {
+  if (elements && elements.length > 0) {
     elements.forEach((element) => {
       const elementHref = element.getAttribute('href')
       if (elementHref && REGEX.test(elementHref)) {

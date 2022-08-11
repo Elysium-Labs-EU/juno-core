@@ -26,19 +26,19 @@ const CLICK_EMAIL = 'Click to start new mail'
 
 /**
  * @function handleEmailLink
- * @property {object} - property containing the dispatch function.
+ * @param activeDocument
+ * @param dispatch
  * Takes in the dispatch function as an argument to allow a push function to be executed.
  * The function checks the active document on elements which match the email link pattern, and modifies the match into an internal link.
  * @returns an element that has no href, an eventListener, and custom attributes.
  */
 
-export default function handleEmailLink({
-  dispatch,
-}: {
+export default function handleEmailLink(
+  activeDocument: HTMLDivElement | null,
   dispatch: AppDispatch
-}) {
-  const elements = document.querySelectorAll('a')
-  if (elements.length > 0) {
+) {
+  const elements = activeDocument?.shadowRoot?.querySelectorAll('a')
+  if (elements && elements.length > 0) {
     elements.forEach((element) => {
       if (element.getAttribute('href')?.includes('mailto:')) {
         const mailToLink = element.getAttribute('href')
