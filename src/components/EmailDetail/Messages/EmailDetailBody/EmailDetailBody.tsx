@@ -36,7 +36,7 @@ interface IBodyState {
 const postTreatmentBody = ({
   dispatch,
   setUnsubscribeLink,
-  activeDocument
+  activeDocument,
 }: {
   dispatch: AppDispatch
   setUnsubscribeLink: (value: string | null) => void
@@ -51,7 +51,15 @@ const postTreatmentBody = ({
 // Use the shadowRoot body and trigger all the postTreatment functions
 // Otherwise just return an empty div
 
-const ShadowBody = ({ isDecoding, bodyState, setUnsubscribeLink }: { isDecoding: boolean, bodyState: null | IBodyState, setUnsubscribeLink?: (value: string | null) => void }) => {
+const ShadowBody = ({
+  isDecoding,
+  bodyState,
+  setUnsubscribeLink,
+}: {
+  isDecoding: boolean
+  bodyState: null | IBodyState
+  setUnsubscribeLink?: (value: string | null) => void
+}) => {
   const dispatch = useAppDispatch()
 
   const callbackRef = (node: HTMLDivElement | null) => {
@@ -59,14 +67,12 @@ const ShadowBody = ({ isDecoding, bodyState, setUnsubscribeLink }: { isDecoding:
       postTreatmentBody({ dispatch, setUnsubscribeLink, activeDocument: node })
     }
   }
-
-  if (
-    !isDecoding &&
-    bodyState?.emailHTML &&
-    bodyState.emailHTML.length > 0
-  ) {
-    return <root.div ref={callbackRef}>{ReactHtmlParser(bodyState.emailHTML)}</root.div>
-
+  if (!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0) {
+    return (
+      <root.div ref={callbackRef}>
+        {ReactHtmlParser(bodyState.emailHTML)}
+      </root.div>
+    )
   }
   return <div />
 }
@@ -137,7 +143,11 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      <ShadowBody isDecoding={isDecoding} bodyState={bodyState} setUnsubscribeLink={setUnsubscribeLink} />
+      <ShadowBody
+        isDecoding={isDecoding}
+        bodyState={bodyState}
+        setUnsubscribeLink={setUnsubscribeLink}
+      />
       {!isDecoding &&
         bodyState?.emailFileHTML &&
         bodyState.emailFileHTML.length > 0 &&
