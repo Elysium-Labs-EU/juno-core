@@ -173,7 +173,10 @@ const MessagesOverview = memo(
     )
 
     useEffect(() => {
-      console.log(unsubscribeLink)
+      console.log(
+        'DEV ONLY - Check the value of the unsubscribeLink',
+        unsubscribeLink
+      )
     }, [unsubscribeLink])
 
     useEffect(() => {
@@ -298,7 +301,7 @@ const MessagesOverview = memo(
           )}
         </>
       ),
-      [localThreadDetail]
+      [localThreadDetail, unsubscribeLink]
     )
 
     return memoizedMessagesOverview

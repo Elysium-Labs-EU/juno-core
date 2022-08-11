@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import ReactHtmlParser from 'react-html-parser'
+import root from 'react-shadow/styled-components'
 import { useAppDispatch } from '../../../../store/hooks'
 import { IEmailMessagePayload } from '../../../../store/storeTypes/emailListTypes'
 import bodyDecoder from '../../../../utils/bodyDecoder/bodyDecoder'
@@ -20,7 +21,12 @@ interface IEmailDetailBody {
   setBlockedTrackers?: (value: Attr[] | []) => void
 }
 
-let hasRan = false
+interface IBodyState {
+  emailHTML: string
+  emailFileHTML: any[]
+  removedTrackers: Attr[] | []
+}
+
 /**
  * @function postTreatmentBody
  * @param {object} - takes in the dispatch function and setUnsubscribeLink function as callback functions
@@ -30,15 +36,49 @@ let hasRan = false
 const postTreatmentBody = ({
   dispatch,
   setUnsubscribeLink,
+  activeDocument,
 }: {
   dispatch: AppDispatch
   setUnsubscribeLink: (value: string | null) => void
+  activeDocument: HTMLDivElement | null
 }): void => {
-  openLinkInNewTab()
-  handleEmailLink({ dispatch })
+  openLinkInNewTab(activeDocument)
+  handleEmailLink(activeDocument, dispatch)
   cleanLink()
-  fetchUnsubscribeLink({ setUnsubscribeLink })
-  hasRan = true
+  fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
+}
+
+// Use the shadowRoot body and trigger all the postTreatment functions
+// Otherwise just return an empty div
+
+const ShadowBody = ({
+  isDecoding,
+  bodyState,
+  setUnsubscribeLink,
+}: {
+  isDecoding: boolean
+  bodyState: null | IBodyState
+  setUnsubscribeLink?: (value: string | null) => void
+}) => {
+  const dispatch = useAppDispatch()
+
+  const callbackRef = (node: HTMLDivElement | null) => {
+    if (node && node.shadowRoot && setUnsubscribeLink) {
+      postTreatmentBody({ dispatch, setUnsubscribeLink, activeDocument: node })
+    }
+  }
+  if (!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0) {
+    return (
+      <root.div ref={callbackRef}>
+        {ReactHtmlParser(bodyState.emailHTML)}
+      </root.div>
+    )
+  }
+  return <div />
+}
+
+ShadowBody.defaultProps = {
+  setUnsubscribeLink: null,
 }
 
 const EmailDetailBody = ({
@@ -49,24 +89,15 @@ const EmailDetailBody = ({
   setContentRendered,
   setBlockedTrackers,
 }: IEmailDetailBody) => {
-  const [bodyState, setBodyState] = useState<null | {
-    emailHTML: string
-    emailFileHTML: any[]
-    removedTrackers: Attr[] | []
-  }>(null)
-  const dispatch = useAppDispatch()
+  const [bodyState, setBodyState] = useState<null | IBodyState>(null)
   const [isDecoding, setIsDecoding] = useState(true)
-
-  useEffect(() => {
-    hasRan = false
-  }, [window.location])
 
   useEffect(() => {
     let mounted = true
     const controller = new AbortController()
     const { signal } = controller
     if (messageId.length > 0) {
-      if (mounted && !hasRan) {
+      if (mounted) {
         const decoding = async () => {
           try {
             const bodyResponse = await bodyDecoder({
@@ -105,17 +136,6 @@ const EmailDetailBody = ({
     }
   }, [messageId, isDecoding])
 
-  useEffect(() => {
-    if (
-      !isDecoding &&
-      setUnsubscribeLink &&
-      !hasRan &&
-      detailBodyCSS === 'visible'
-    ) {
-      postTreatmentBody({ dispatch, setUnsubscribeLink })
-    }
-  }, [isDecoding, hasRan, setUnsubscribeLink, detailBodyCSS])
-
   return (
     <div className={detailBodyCSS}>
       {isDecoding && (
@@ -123,11 +143,11 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      {!isDecoding &&
-        bodyState?.emailHTML &&
-        bodyState.emailHTML.length > 0 && (
-          <div>{ReactHtmlParser(bodyState.emailHTML)}</div>
-        )}
+      <ShadowBody
+        isDecoding={isDecoding}
+        bodyState={bodyState}
+        setUnsubscribeLink={setUnsubscribeLink}
+      />
       {!isDecoding &&
         bodyState?.emailFileHTML &&
         bodyState.emailFileHTML.length > 0 &&
