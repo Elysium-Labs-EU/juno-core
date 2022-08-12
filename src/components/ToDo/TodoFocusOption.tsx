@@ -17,9 +17,9 @@ import {
   setSessionViewIndex,
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import modifierKey from '../../utils/setModifierKey'
+import { setModifierKey } from '../../utils/setModifierKey'
 
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, global.KEY_E]
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)

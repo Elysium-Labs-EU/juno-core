@@ -6,7 +6,7 @@ import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
-import modifierKey from '../../../utils/setModifierKey'
+import { setModifierKey } from '../../../utils/setModifierKey'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 
@@ -17,7 +17,7 @@ interface IDeleteOption {
   noArchive?: boolean
 }
 
-const actionKeys = [modifierKey, global.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, global.KEY_BACKSPACE]
 
 const DeleteOption = ({
   messageId,

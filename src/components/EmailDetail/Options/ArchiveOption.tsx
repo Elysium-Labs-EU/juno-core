@@ -9,9 +9,9 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
-import modifierKey from '../../../utils/setModifierKey'
+import { setModifierKey } from '../../../utils/setModifierKey'
 
-const actionKeys = [modifierKey, global.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, global.KEY_BACKSPACE]
 
 const ArchiveOption = ({
   threadDetail,

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { FiSlash } from 'react-icons/fi'
-import modifierKey from '../../../utils/setModifierKey'
+import { setModifierKey } from '../../../utils/setModifierKey'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as global from '../../../constants/globalConstants'
 import { useAppSelector } from '../../../store/hooks'
@@ -11,7 +11,7 @@ const handleUnsubscribe = (link: string) => {
   window.open(link)
 }
 
-const actionKeys = [modifierKey, global.KEY_SHIFT, global.KEY_U]
+const actionKeys = [setModifierKey, global.KEY_SHIFT, global.KEY_U]
 const UNSUBSCRIBE = 'Unsubscribe'
 
 const UnsubscribeOption = ({

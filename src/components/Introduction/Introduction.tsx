@@ -1,13 +1,13 @@
-import { ChangeEvent, useEffect, useState } from 'react'
 import { FiArrowRightCircle } from 'react-icons/fi'
 import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
 import CustomButton from '../Elements/Buttons/CustomButton'
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import {
   selectSettingsLabelId,
   selectShowIntroduction,
+  setShowIntroduction,
 } from '../../store/utilsSlice'
 
 const DIALOG_HEADER = 'Welcome to Juno'
@@ -24,37 +24,19 @@ const DIALOG_CONTENT_PRIVACY =
 const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
-  const [open, setOpen] = useState(false)
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const showIntroduction = useAppSelector(selectShowIntroduction)
-
-  useEffect(() => {
-    if (showIntroduction) {
-      setOpen(true)
-    }
-  }, [showIntroduction])
-
-  const handleCloseDefault = (event: ChangeEvent<{}>, reason: string) => {
-    if (reason === 'backdropClick') {
-      return null
-    }
-    if (reason === 'escapeKeyDown') {
-      updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-      setOpen(false)
-      return null
-    }
-    return null
-  }
+  const dispatch = useAppDispatch()
 
   const handleClose = () => {
     updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-    setOpen(false)
+    dispatch(setShowIntroduction(false))
   }
 
   return (
     <Dialog
-      open={open}
-      onClose={handleCloseDefault}
+      open={showIntroduction}
+      onClose={handleClose}
       aria-labelledby="introduction-dialog"
       aria-describedby="alert-dialog-for-first-users"
     >
@@ -72,6 +54,7 @@ const Introduction = () => {
           onClick={handleClose}
           label={CONFIRM_BUTTON}
           icon={<FiArrowRightCircle />}
+          title="Close Introduction"
         />
       </S.DialogContent>
     </Dialog>

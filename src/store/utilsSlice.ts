@@ -27,7 +27,7 @@ interface IUtilsState {
   isSettingsOpen: boolean
   isAvatarVisible: boolean
   emailFetchSize: number
-  showIntroduction: boolean | null
+  showIntroduction: boolean
   settingsLabelId: string | null
   showKeyboardCombos: boolean
 }
@@ -41,7 +41,7 @@ const initialState: IUtilsState = Object.freeze({
   isSettingsOpen: false,
   isAvatarVisible: true,
   emailFetchSize: 20,
-  showIntroduction: null,
+  showIntroduction: false,
   settingsLabelId: null,
   showKeyboardCombos: false,
 })
@@ -72,6 +72,9 @@ export const utilsSlice = createSlice({
       state.isAvatarVisible = payload.isAvatarVisible
       state.emailFetchSize = payload.emailFetchSize
       state.showIntroduction = payload.showIntroduction
+    },
+    setShowIntroduction: (state, { payload }: PayloadAction<boolean>) => {
+      state.showIntroduction = payload
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
@@ -123,6 +126,7 @@ export const {
   setIsSilentLoading,
   setIsSettingsOpen,
   setSettings,
+  setShowIntroduction,
   setShowAvatar,
   setEmailFetchSize,
   setSettingsLabelId,

@@ -1,17 +1,18 @@
 import Modal from '@mui/material/Modal'
 import { FiX } from 'react-icons/fi'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   selectShowKeyboardCombos,
   setShowKeyboardCombos,
-} from '../../store/utilsSlice'
-import * as S from './HelpStyles'
-import * as local from '../../constants/helpConstants'
-import * as HS from '../MainHeader/HeaderStyles'
-import * as GS from '../../styles/globalStyles'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import getUserAgent from '../../utils/getUserAgent'
-import { AppDispatch } from '../../store/store'
+} from '../../../store/utilsSlice'
+import * as HES from '../HelpStyles'
+import * as S from './KeyboardCombosStyles'
+import * as local from '../../../constants/keycomboConstants'
+import * as HS from '../../MainHeader/HeaderStyles'
+import * as GS from '../../../styles/globalStyles'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
+import getUserAgent from '../../../utils/getUserAgent'
+import { AppDispatch } from '../../../store/store'
 
 const handleClose = (dispatch: AppDispatch) =>
   dispatch(setShowKeyboardCombos(false))
@@ -52,7 +53,7 @@ const CreateSectionWithKeys = ({
   </S.SectionContainer>
 )
 
-const Help = () => {
+const KeyboardCombos = () => {
   const showKeyBoardCombos = useAppSelector(selectShowKeyboardCombos)
   const dispatch = useAppDispatch()
 
@@ -63,9 +64,9 @@ const Help = () => {
       aria-labelledby="modal-help"
       aria-describedby="modal-help-info"
     >
-      <S.Dialog>
-        <S.Inner>
-          <S.HeaderRow>
+      <HES.Dialog>
+        <HES.Inner>
+          <HES.HeaderRow>
             <HS.PageTitle>{local.MODAL_TITLE}</HS.PageTitle>
             <CustomIconButton
               onClick={() => handleClose(dispatch)}
@@ -73,7 +74,7 @@ const Help = () => {
               icon={<FiX size={16} />}
               title="Close"
             />
-          </S.HeaderRow>
+          </HES.HeaderRow>
           <p>
             {local.MODAL_OS_SUB} {getUserAgent()}
           </p>
@@ -94,10 +95,10 @@ const Help = () => {
               keyCombos={local.COMPOSE_KEY_COMBOS}
             />
           </S.Columns>
-        </S.Inner>
-      </S.Dialog>
+        </HES.Inner>
+      </HES.Dialog>
     </Modal>
   )
 }
 
-export default Help
+export default KeyboardCombos

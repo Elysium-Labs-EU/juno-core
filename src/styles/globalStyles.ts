@@ -31,6 +31,9 @@ export const GlobalStyle = createGlobalStyle`
     --h5: ${themeConstants.h5FontSize};
     --small-size: ${themeConstants.smallFontSize};
     --font-family: ${themeConstants.fontFamily};
+    --radius-s: 2px;
+    --radius-m: 4px;
+    --radius-l: 8px;
   }
   body {
     background-color: var(--color-white-off) !important;

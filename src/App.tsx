@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
@@ -18,20 +18,24 @@ import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './store/store'
 import { fetchToken } from './data/api'
 import HelpButton from './components/Help/HelpButton'
-import {
-  selectServiceUnavailable,
-  selectShowKeyboardCombos,
-} from './store/utilsSlice'
+import { selectInSearch, selectServiceUnavailable } from './store/utilsSlice'
 import SnackbarNotification from './components/Elements/SnackbarNotification/SnackbarNotification'
 import RoutesComponent from './Routes'
+import HelpMenu from './components/Help/HelpMenu'
+import useMultiKeyPress from './hooks/useMultiKeyPress'
+import { setModifierKey } from './utils/setModifierKey'
+import * as global from './constants/globalConstants'
+
+const actionKeys = [setModifierKey, global.KEY_FORWARD_SLASH]
 
 const App = () => {
   const dispatch = useAppDispatch()
+  const inSearch = useAppSelector(selectInSearch)
   const baseLoaded = useAppSelector(selectBaseLoaded)
   const storageLabels = useAppSelector(selectStorageLabels)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
-  const showKeyBoardCombos = useAppSelector(selectShowKeyboardCombos)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const [showHelpMenu, setShowHelpMenu] = useState(false)
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
@@ -53,6 +57,12 @@ const App = () => {
     }
   }, [baseLoaded, storageLabels])
 
+  const handleEvent = useCallback(() => {
+    setShowHelpMenu((prevState) => !prevState)
+  }, [showHelpMenu])
+
+  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+
   return (
     <HistoryRouter history={history}>
       <GS.Base>
@@ -61,7 +71,10 @@ const App = () => {
             <GS.OuterContainer>
               <Header />
             </GS.OuterContainer>
-            {!showKeyBoardCombos && <HelpButton />}
+            <HelpButton handleEvent={handleEvent} />
+            {showHelpMenu && (
+              <HelpMenu open={showHelpMenu} handleClose={handleEvent} />
+            )}
           </>
         )}
 
