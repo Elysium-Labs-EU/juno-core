@@ -3,15 +3,15 @@ import { FiCheckCircle } from 'react-icons/fi'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import setToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
-import modifierKey from '../../../utils/setModifierKey'
+import { setModifierKey } from '../../../utils/setModifierKey'
 
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const ToDoOption = ({
   threadDetail,

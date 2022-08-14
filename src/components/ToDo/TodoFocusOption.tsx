@@ -5,6 +5,7 @@ import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
@@ -17,9 +18,9 @@ import {
   setSessionViewIndex,
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import modifierKey from '../../utils/setModifierKey'
+import { setModifierKey } from '../../utils/setModifierKey'
 
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const TodoFocusOption = () => {
   const labelIds = useAppSelector(selectLabelIds)

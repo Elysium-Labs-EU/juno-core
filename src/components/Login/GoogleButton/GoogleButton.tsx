@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import * as S from './GoogleButtonStyles'
 import useKeyPress from '../../../hooks/useKeyPress'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 
 const GOOGLE = 'Login with Google'
 interface IGoogleButton {
@@ -17,7 +17,7 @@ interface IGoogleButton {
  */
 
 const GoogleButton = ({ renderProps }: { renderProps: IGoogleButton }) => {
-  const EnterListener = useKeyPress(global.KEY_ENTER)
+  const EnterListener = useKeyPress(keyConstants.KEY_ENTER)
 
   useEffect(() => {
     let mounted = true

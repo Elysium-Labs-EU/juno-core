@@ -9,7 +9,7 @@ import InlineThreadActionsRegular from './InlineThreadActionsRegular'
 import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
-
+import * as keyConstants from '../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
@@ -21,7 +21,7 @@ import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
-import { openEmail, selectInSearch } from '../../store/utilsSlice'
+import { openEmail, selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { selectLabelIds } from '../../store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
@@ -70,11 +70,12 @@ const EmailListItem = ({
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
+  const activeModal = useAppSelector(selectActiveModal)
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(global.KEY_ENTER)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
 
   useEffect(() => {
     if (!isFocused && activeIndex === index) {
@@ -98,7 +99,7 @@ const EmailListItem = ({
     () =>
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -108,7 +109,7 @@ const EmailListItem = ({
     () =>
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -118,7 +119,7 @@ const EmailListItem = ({
     () =>
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -128,7 +129,7 @@ const EmailListItem = ({
     () =>
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
@@ -139,7 +140,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
@@ -156,10 +157,10 @@ const EmailListItem = ({
 
   useEffect(() => {
     // This is not triggered in search mode.
-    if (EnterKeyListener && isFocused && !inSearch) {
+    if (EnterKeyListener && isFocused && !inSearch && !activeModal) {
       handleOpenEvent()
     }
-  }, [EnterKeyListener, isFocused, inSearch])
+  }, [EnterKeyListener, isFocused, inSearch, activeModal])
 
   const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(

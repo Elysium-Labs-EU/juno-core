@@ -27,9 +27,8 @@ interface IUtilsState {
   isSettingsOpen: boolean
   isAvatarVisible: boolean
   emailFetchSize: number
-  showIntroduction: boolean | null
   settingsLabelId: string | null
-  showKeyboardCombos: boolean
+  activeModal: null | string
 }
 
 const initialState: IUtilsState = Object.freeze({
@@ -41,9 +40,8 @@ const initialState: IUtilsState = Object.freeze({
   isSettingsOpen: false,
   isAvatarVisible: true,
   emailFetchSize: 20,
-  showIntroduction: null,
   settingsLabelId: null,
-  showKeyboardCombos: false,
+  activeModal: null,
 })
 
 export const utilsSlice = createSlice({
@@ -71,7 +69,7 @@ export const utilsSlice = createSlice({
     setSettings: (state, { payload }) => {
       state.isAvatarVisible = payload.isAvatarVisible
       state.emailFetchSize = payload.emailFetchSize
-      state.showIntroduction = payload.showIntroduction
+      state.activeModal = payload.showIntroduction
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
@@ -82,8 +80,8 @@ export const utilsSlice = createSlice({
     setSettingsLabelId(state, { payload }: PayloadAction<string>) {
       state.settingsLabelId = payload
     },
-    setShowKeyboardCombos(state, { payload }: PayloadAction<boolean>) {
-      state.showKeyboardCombos = payload
+    setActiveModal(state, { payload }: PayloadAction<string | null>) {
+      state.activeModal = payload
     },
   },
   extraReducers: (builder) => {
@@ -126,7 +124,7 @@ export const {
   setShowAvatar,
   setEmailFetchSize,
   setSettingsLabelId,
-  setShowKeyboardCombos,
+  setActiveModal,
 } = utilsSlice.actions
 
 export const closeMail = (): AppThunk => (dispatch, getState) => {
@@ -240,11 +238,8 @@ export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
 export const selectEmailListSize = (state: RootState) =>
   state.utils.emailFetchSize
-export const selectShowIntroduction = (state: RootState) =>
-  state.utils.showIntroduction
 export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
-export const selectShowKeyboardCombos = (state: RootState) =>
-  state.utils.showKeyboardCombos
+export const selectActiveModal = (state: RootState) => state.utils.activeModal
 
 export default utilsSlice.reducer

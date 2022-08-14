@@ -5,7 +5,7 @@ import useKeyPress from '../../hooks/useKeyPress'
 import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
-import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import { AppDispatch } from '../../store/store'
 
 const rotate = keyframes`
@@ -19,7 +19,7 @@ const rotate = keyframes`
 `
 
 const rotatingIcon = css`
-  animation: ${rotate} 1s ease infinite;
+  animation: ${ rotate } 1s ease infinite;
 `
 
 interface IRotatingButton {
@@ -39,7 +39,7 @@ const RotatingButton = styled.button<IRotatingButton>`
     color: var(--color-black);
     cursor: pointer;
   }
-  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
+  ${ ({ disableRefresh }) => (disableRefresh ? rotatingIcon : null) };
 `
 
 const refreshFeed = (dispatch: AppDispatch) => {
@@ -51,7 +51,7 @@ const InboxRefresh = () => {
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
   const inSearch = useAppSelector(selectInSearch)
-  const KeyListener = useKeyPress(global.KEY_R)
+  const KeyListener = useKeyPress(keyConstants.KEY_R)
   const dispatch = useAppDispatch()
 
   const handleClick = useCallback(() => {

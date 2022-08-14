@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../store/labelsSlice'
 import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
@@ -15,10 +16,10 @@ import {
   setSessionViewIndex,
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import modifierKey from '../../utils/setModifierKey'
+import { setModifierKey } from '../../utils/setModifierKey'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const SortInbox = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -54,6 +55,7 @@ const SortInbox = () => {
       }
       label={INBOX_BUTTON}
       variant="secondary"
+      title="Start sorting inbox"
     />
   )
 }

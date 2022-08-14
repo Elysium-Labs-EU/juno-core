@@ -1,11 +1,20 @@
 import getUserAgent from './getUserAgent'
 import * as global from '../constants/globalConstants'
+import * as keyConstant from '../constants/keyConstants'
 
 /**
- * Based on the user's user agent the variable modifier key is either KEY_OS or KEY_CONTROL.
+ * @function modifierKeyDisplay
+ * @returns Based on the user's user agent the variable modifier key is either CMD or KEY_CONTROL
  */
 
-const modifierKey =
-  getUserAgent() === global.MAC_OS ? global.KEY_OS : global.KEY_CONTROL
+export const modifierKeyDisplay =
+  getUserAgent() === global.MAC_OS ? 'CMD' : keyConstant.KEY_CONTROL
 
-export default modifierKey
+/**
+ * @function setModifierKey
+ * @returns Based on the user's user agent the variable modifier key is either KEY_OS or KEY_CONTROL.
+ */
+export const setModifierKey =
+  getUserAgent() === global.MAC_OS
+    ? keyConstant.KEY_OS
+    : keyConstant.KEY_CONTROL

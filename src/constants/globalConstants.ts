@@ -33,28 +33,15 @@ export const LOAD_STATE_MAP = {
   loaded: 'loaded',
   error: 'error',
 }
+export const ACTIVE_MODAL_MAP = {
+  intro: 'intro',
+  settings: 'settings',
+  feedback: 'feedback',
+  search: 'search',
+  help: 'help',
+  keyboard: 'keyboard',
+}
 export const WINDOWS_OS = 'Windows OS'
 export const MAC_OS = 'MacOS'
 export const UNIX_OS = 'UNIX OS'
 export const LINUX_OS = 'Linux OS'
-export const KEY_OS = 'META'
-export const KEY_E = 'E'
-export const KEY_X = 'X'
-export const KEY_K = 'K'
-export const KEY_U = 'U'
-export const KEY_R = 'R'
-export const KEY_ENTER = 'ENTER'
-export const KEY_SHIFT = 'SHIFT'
-export const KEY_CONTROL = 'CONTROL'
-export const KEY_FORWARD_SLASH = '/'
-export const KEY_ALT = 'ALT'
-export const KEY_DIGIT_1 = '1'
-export const KEY_DIGIT_2 = '2'
-export const KEY_DIGIT_3 = '3'
-export const KEY_DIGIT_4 = '4'
-export const KEY_BACKSPACE = 'BACKSPACE'
-export const KEY_ESCAPE = 'ESCAPE'
-export const KEY_ARROW_DOWN = 'ARROWDOWN'
-export const KEY_ARROW_UP = 'ARROWUP'
-export const KEY_ARROW_RIGHT = 'ARROWRIGHT'
-export const KEY_ARROW_LEFT = 'ARROWLEFT'
