@@ -1,14 +1,15 @@
 import { FiArrowRightCircle } from 'react-icons/fi'
-import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
+import * as global from '../../constants/globalConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import {
   selectSettingsLabelId,
-  selectShowIntroduction,
-  setShowIntroduction,
+  selectActiveModal,
+  setActiveModal,
 } from '../../store/utilsSlice'
+import CustomModal from '../Elements/Modal/CustomModal'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -25,23 +26,22 @@ const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
-  const showIntroduction = useAppSelector(selectShowIntroduction)
+  const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
 
   const handleClose = () => {
     updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-    dispatch(setShowIntroduction(false))
+    dispatch(setActiveModal(null))
   }
 
   return (
-    <Dialog
-      open={showIntroduction}
-      onClose={handleClose}
-      aria-labelledby="introduction-dialog"
-      aria-describedby="alert-dialog-for-first-users"
+    <CustomModal
+      open={activeModal === global.ACTIVE_MODAL_MAP.intro}
+      handleClose={handleClose}
+      modalTitle={DIALOG_HEADER}
+      modalAriaLabel="introduction"
     >
-      <S.DialogContent>
-        <S.DialogHeader>{DIALOG_HEADER}</S.DialogHeader>
+      <>
         <S.InnerContent>
           <p>{DIALOG_CONTENT_DEVELOPMENT}</p>
           <S.DialogSubHeader>{DIALOG_HEADER_INTRODUCTION}</S.DialogSubHeader>
@@ -56,8 +56,8 @@ const Introduction = () => {
           icon={<FiArrowRightCircle />}
           title="Close Introduction"
         />
-      </S.DialogContent>
-    </Dialog>
+      </>
+    </CustomModal>
   )
 }
 

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import filterIllegalLabels from '../../../utils/filterIllegalLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
@@ -17,7 +17,7 @@ interface IDeleteOption {
   noArchive?: boolean
 }
 
-const actionKeys = [setModifierKey, global.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
 
 const DeleteOption = ({
   messageId,
@@ -47,6 +47,7 @@ const DeleteOption = ({
       label={local.BUTTON_DELETE}
       icon={icon}
       suppressed={suppressed}
+      title="Delete email"
     />
   )
 }

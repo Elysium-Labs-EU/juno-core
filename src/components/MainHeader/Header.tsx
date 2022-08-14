@@ -14,6 +14,7 @@ import { useAppSelector } from '../../store/hooks'
 import { selectSelectedEmails } from '../../store/emailListSlice'
 import SelectedOptions from './SelectedOptions/SelectedOptions'
 import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
+import Feedback from '../Help/Feedback/Feedback'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -60,6 +61,7 @@ const Header = () => {
       <Search />
       <Settings />
       <KeyboardCombos />
+      <Feedback />
       {selectedEmails.length > 0 && <SelectedOptions />}
     </>
   )

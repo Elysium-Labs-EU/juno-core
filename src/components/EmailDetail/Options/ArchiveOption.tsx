@@ -4,14 +4,14 @@ import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
 
-const actionKeys = [setModifierKey, global.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
 
 const ArchiveOption = ({
   threadDetail,
@@ -38,6 +38,7 @@ const ArchiveOption = ({
       onClick={handleEvent}
       label={local.BUTTON_ARCHIVE}
       suppressed
+      title="Archive email"
     />
   )
 }

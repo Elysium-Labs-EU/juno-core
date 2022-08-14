@@ -1,40 +1,6 @@
 import styled from 'styled-components'
 
-// export const Menu = styled.span`
-
-// `
-
-// export const MenuInner = styled.div`
-
-// `
-
-export const Dialog = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1100;
-  transform: translate(-50%, -50%);
-  width: 825px;
-  border-radius: 5px;
-  background-color: var(--color-white);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  outline: 0;
-`
-
-export const HeaderRow = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-`
-
-export const Inner = styled.div`
-  padding: 0 20px;
-  display: flex;
-  flex-flow: column;
-`
-
-export const ButtonWrapper = styled.div`
+export const StartButtonWrapper = styled.div`
   position: absolute;
   bottom: 40px;
   right: 40px;
@@ -59,7 +25,6 @@ export const InnerLayer = styled.div`
 
 export const Container = styled.div`
   transition: all 0.2s ease-in;
-  transform: translateZ(0) rotate(0deg) scaleY(1);
   animation: fadeInUp 0.2s both;
   min-width: 260px;
   max-width: 800px;
@@ -110,7 +75,6 @@ export const MenuItem = styled.button`
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
-  /* flex: 2; */
   &:hover {
     background-color: var(--color-black-off);
   }
@@ -131,16 +95,3 @@ export const MenuItemContentSide = styled.div`
 export const OuterContainer = styled.div`
   position: relative;
 `
-
-// export const Container = styled.div`
-//   width: 256px;
-//   app-region: none;
-//   min-width: 200px;
-//   max-width: 800px;
-//   max-height: calc(100vh - 32px);
-//   overflow: auto;
-//   border-radius: var(--radius-l);
-//   background: var(--material-contrast);
-//   box-shadow: var(--elevation-low-material-border-contr-inside);
-//   color: var(--white);
-// `

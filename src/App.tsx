@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
@@ -18,15 +18,15 @@ import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './store/store'
 import { fetchToken } from './data/api'
 import HelpButton from './components/Help/HelpButton'
-import { selectInSearch, selectServiceUnavailable } from './store/utilsSlice'
+import { selectActiveModal, selectInSearch, selectServiceUnavailable } from './store/utilsSlice'
 import SnackbarNotification from './components/Elements/SnackbarNotification/SnackbarNotification'
 import RoutesComponent from './Routes'
 import HelpMenu from './components/Help/HelpMenu'
 import useMultiKeyPress from './hooks/useMultiKeyPress'
-import { setModifierKey } from './utils/setModifierKey'
-import * as global from './constants/globalConstants'
+import * as keyConstants from './constants/keyConstants'
+import useKeyPress from './hooks/useKeyPress'
 
-const actionKeys = [setModifierKey, global.KEY_FORWARD_SLASH]
+const actionKeys = [keyConstants.KEY_ARROW_RIGHT, keyConstants.KEY_SHIFT]
 
 const App = () => {
   const dispatch = useAppDispatch()
@@ -35,7 +35,27 @@ const App = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const activeModal = useAppSelector(selectActiveModal)
   const [showHelpMenu, setShowHelpMenu] = useState(false)
+  const escListenerHelpMenu = useKeyPress(keyConstants.KEY_ESCAPE)
+
+  const closeHelpMenu = useCallback(() => {
+    setShowHelpMenu(false)
+  }, [])
+
+  // Close help menu whenever a modal is opened.
+  useEffect(() => {
+    if (activeModal) {
+      closeHelpMenu()
+    }
+  }, [activeModal])
+
+  // Close help menu whenever a ESC is pressed and menu is opened.
+  useEffect(() => {
+    if (escListenerHelpMenu && showHelpMenu) {
+      closeHelpMenu()
+    }
+  }, [escListenerHelpMenu, showHelpMenu])
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
@@ -60,8 +80,13 @@ const App = () => {
   const handleEvent = useCallback(() => {
     setShowHelpMenu((prevState) => !prevState)
   }, [showHelpMenu])
-
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
+
+  const memoizedRoutesComponent = useMemo(() => (
+    <AnimatePresence exitBeforeEnter>
+      <RoutesComponent />
+    </AnimatePresence>
+  ), [])
 
   return (
     <HistoryRouter history={history}>
@@ -73,14 +98,11 @@ const App = () => {
             </GS.OuterContainer>
             <HelpButton handleEvent={handleEvent} />
             {showHelpMenu && (
-              <HelpMenu open={showHelpMenu} handleClose={handleEvent} />
+              <HelpMenu />
             )}
           </>
         )}
-
-        <AnimatePresence exitBeforeEnter>
-          <RoutesComponent />
-        </AnimatePresence>
+        {memoizedRoutesComponent}
         {serviceUnavailable && (
           <SnackbarNotification text={serviceUnavailable} />
         )}

@@ -1,8 +1,8 @@
-import { AxiosResponse } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import assertNonNullish from '../utils/assertNonNullish'
-import { errorHandling, instance } from './api'
+import { errorHandling } from './api'
 
-interface ISendFeedback {
+export interface ISendFeedback {
   type: 'BUG' | 'FEEDBACK' | 'IDEA'
   message: string
   metadata?: JSON
@@ -18,15 +18,12 @@ const feedbackApi = () => {
     )
 
   return {
-    sendFeedback: async ({ body }: { body: ISendFeedback }) => {
+    sendFeedback: async (body: ISendFeedback) => {
       try {
-        const res: AxiosResponse<any> = await instance.post(
+        const res: AxiosResponse<any> = await axios.post(
           `${import.meta.env.VITE_HEADLESS_FEEDBACK_URL}`,
-          {
-            params: {
-              body,
-            },
-          }
+
+          body
         )
         return res
       } catch (err) {
@@ -37,9 +34,3 @@ const feedbackApi = () => {
 }
 
 export default feedbackApi
-
-// opacity: 1;
-// transform: none;
-// top: 496px;
-// transform-origin: 100% 100%;
-// left: 839px;

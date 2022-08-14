@@ -10,6 +10,7 @@ import {
 } from '../../store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
 import {
+  selectActiveModal,
   selectEmailListSize,
   selectInSearch,
   selectIsLoading,
@@ -19,6 +20,7 @@ import {
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
@@ -43,31 +45,32 @@ const RenderEmailList = ({
   const labelIds = useAppSelector(selectLabelIds)
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const inSearch = useAppSelector(selectInSearch)
-  const ArrowDownListener = useKeyPress(global.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(global.KEY_ARROW_UP)
-  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+  const activeModal = useAppSelector(selectActiveModal)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   useEffect(() => {
-    if (EscapeListener && !inSearch) {
+    if (EscapeListener && !inSearch && !activeModal) {
       setFocusedItemIndex(-1)
     }
-  }, [EscapeListener, inSearch])
+  }, [EscapeListener, inSearch, activeModal])
 
   useEffect(() => {
     if (
       ArrowDownListener &&
-      !inSearch &&
+      !inSearch && !activeModal &&
       focusedItemIndex < filteredOnLabel.threads.length - 1
     ) {
       setFocusedItemIndex((prevState) => prevState + 1)
     }
-  }, [ArrowDownListener, inSearch])
+  }, [ArrowDownListener, inSearch, activeModal])
 
   useEffect(() => {
-    if (ArrowUpListener && !inSearch) {
+    if (ArrowUpListener && !inSearch && !activeModal) {
       setFocusedItemIndex((prevState) => prevState - 1)
     }
-  }, [ArrowUpListener, inSearch])
+  }, [ArrowUpListener, inSearch, activeModal])
 
   const { threads, nextPageToken } = filteredOnLabel
   return (
@@ -115,6 +118,7 @@ const RenderEmailList = ({
                 }
                 label={global.LOAD_MORE}
                 suppressed
+                title={global.LOAD_MORE}
               />
             )}
             {isLoading && <LoadingState />}
@@ -189,10 +193,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {

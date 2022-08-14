@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { FiArrowRight } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
@@ -14,7 +14,7 @@ interface IEmailDetailOptions {
 }
 
 const messageIndex = 0
-const actionKeys = [global.KEY_SHIFT, global.KEY_ENTER]
+const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
 
 const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -38,6 +38,7 @@ const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
       label={local.BUTTON_FORWARD}
       onClick={handleEvent}
       suppressed
+      title="Forward email"
     />
   )
 }

@@ -6,6 +6,7 @@ import { FiSearch, FiX, FiXCircle } from 'react-icons/fi'
 import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   selectInSearch,
@@ -125,9 +126,9 @@ const Search = () => {
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
-  const ArrowDownListener = useKeyPress(global.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(global.KEY_ARROW_UP)
-  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   useEffect(() => {
     if (EscapeListener) {
@@ -227,7 +228,7 @@ const Search = () => {
   }
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code.toUpperCase() === global.KEY_ENTER) {
+    if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
           searchValue,
@@ -303,7 +304,7 @@ const Search = () => {
             <>
               {searchResults.threads.map((thread, index) => (
                 <div
-                  key={`${thread.id}-search`}
+                  key={`${ thread.id }-search`}
                   onClick={() => handleOpenEvent(thread.id)}
                   onFocus={() => setFocusedItemIndex(index)}
                   onMouseOver={() => setFocusedItemIndex(index)}

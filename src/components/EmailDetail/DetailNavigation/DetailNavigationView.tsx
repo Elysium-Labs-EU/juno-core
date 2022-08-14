@@ -3,6 +3,7 @@ import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
@@ -34,9 +35,9 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const viewIndex = useAppSelector(selectViewIndex)
   const emailFetchSize = useAppSelector(selectEmailListSize)
-  const ArrowLeftListener = useKeyPress(global.KEY_ARROW_LEFT)
-  const ArrowRightListener = useKeyPress(global.KEY_ARROW_RIGHT)
-  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+  const ArrowLeftListener = useKeyPress(keyConstants.KEY_ARROW_LEFT)
+  const ArrowRightListener = useKeyPress(keyConstants.KEY_ARROW_RIGHT)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   const handleCloseEvent = useCallback(() => {
     dispatch(closeMail())

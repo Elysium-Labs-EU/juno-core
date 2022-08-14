@@ -14,7 +14,6 @@ import messageApi from '../data/messageApi'
 import * as global from '../constants/globalConstants'
 import type { AppThunk, RootState } from './store'
 import {
-  IEmailListThreadItem,
   IEmailListObject,
   IEmailListState,
   IEmailListObjectSearch,
