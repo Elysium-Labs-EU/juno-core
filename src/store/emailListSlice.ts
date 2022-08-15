@@ -164,6 +164,7 @@ export const emailListSlice = createSlice({
       }: {
         threadId: string
       } = payload
+      console.log('HERE', payload)
       const currentState = state.emailList
       currentState[state.activeEmailListIndex].threads = state.emailList[
         state.activeEmailListIndex
@@ -450,7 +451,6 @@ export const updateEmailLabel = (
 ): AppThunk => {
   const {
     threadId,
-    messageId,
     request,
     request: { removeLabelIds },
     labelIds,
@@ -521,12 +521,12 @@ export const updateEmailLabel = (
                 request,
               })
             }
-            if (messageId) {
-              response = await messageApi().updateMessage({
-                messageId,
-                request,
-              })
-            }
+            // if (messageId) {
+            //   response = await messageApi().updateMessage({
+            //     messageId,
+            //     request,
+            //   })
+            // }
             if (response) {
               dispatch(setIsProcessing(false))
             }
@@ -542,9 +542,9 @@ export const updateEmailLabel = (
                 threadId,
               })
             }
-            if (messageId) {
-              await messageApi().thrashMessage({ messageId })
-            }
+            // if (messageId) {
+            //   await messageApi().thrashMessage({ messageId })
+            // }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }

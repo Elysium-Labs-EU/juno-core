@@ -29,6 +29,7 @@ import { selectProfile } from '../../../../store/baseSlice'
 import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
 import Seo from '../../../Elements/Seo'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
+import useClickOutside from '../../../../hooks/useClickOutside'
 
 interface IReadMessage {
   message: IEmailMessage
@@ -52,6 +53,12 @@ const ReadUnreadMessage = ({
   const [blockedTrackers, setBlockedTrackers] = useState<Attr[] | []>([])
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
+  const { ref } = useClickOutside({
+    onClickOutside: () => {
+      setAnchorEl(null)
+      setShowMenu(false)
+    },
+  })
 
   useEffect(() => {
     let mounted = true
@@ -109,13 +116,16 @@ const ReadUnreadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
+  /**
+   * Open or close the email detail - if there is a Popper active, close it.
+  */
   const handleClick = () => {
     setOpen((currState) => !currState)
     if (anchorEl) {
@@ -184,6 +194,7 @@ const ReadUnreadMessage = ({
                   open={showMenu}
                   anchorEl={anchorEl}
                   placement={placement}
+                  ref={ref}
                 >
                   <SpecificEmailOptions
                     messageId={message?.id}

@@ -44,7 +44,7 @@ const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
       <S.StartButtonWrapper>
         <CustomIconButton
           icon={<FiInfo size={SIZE} />}
-          onClick={handleEvent}
+          onClick={() => handleEvent()}
           style={customStyles}
           title=""
         />

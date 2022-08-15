@@ -39,9 +39,11 @@ const AppHeaderHelp = () => {
     }
   }, [escListenerHelpMenu, showHelpMenu])
 
-  const handleEvent = useCallback(() => {
-    setShowHelpMenu((prevState) => !prevState)
-  }, [showHelpMenu])
+  const handleEvent = () => {
+    setShowHelpMenu((prevState) =>
+      !prevState
+    )
+  }
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
   return (
