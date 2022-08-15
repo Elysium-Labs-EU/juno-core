@@ -383,21 +383,24 @@ export const loadEmailDetails =
             buffer.push(threadApi({}).getThreadDetail(thread.id))
           )
           const resolvedThreads = await Promise.all(buffer)
+          const onlyObjectThreads = resolvedThreads.filter(
+            (thread) => typeof thread !== 'string'
+          )
           // If the object is only of length 1, then it could mean that it is an update from draft.
           // If that is the case, attempt to find the original label id of the thread to store the object.
           if (
-            resolvedThreads[0].messages[
-              resolvedThreads[0].messages.length - 1
+            onlyObjectThreads[0].messages[
+              onlyObjectThreads[0].messages.length - 1
             ].labelIds.includes(global.DRAFT_LABEL)
           ) {
             const { storageLabels } = getState().labels
-            const labelNames = resolvedThreads[0].messages[0].labelIds
+            const labelNames = onlyObjectThreads[0].messages[0].labelIds
             const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
             if (legalLabels.length > 0) {
               dispatch(
                 listAddEmailList({
                   labels: legalLabels[0].id,
-                  threads: resolvedThreads,
+                  threads: onlyObjectThreads,
                   nextPageToken: nextPageToken ?? null,
                 })
               )
@@ -406,7 +409,7 @@ export const loadEmailDetails =
             dispatch(
               listAddEmailList({
                 labels,
-                threads: resolvedThreads,
+                threads: onlyObjectThreads,
                 nextPageToken: nextPageToken ?? null,
               })
             )
@@ -436,6 +439,7 @@ export const loadEmailDetails =
         }
       }
     } catch (err) {
+      process.env.NODE_ENV !== 'production' && console.error(err)
       dispatch(setServiceUnavailable('Error hydrating emails.'))
     }
   }
