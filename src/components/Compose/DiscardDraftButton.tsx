@@ -15,7 +15,7 @@ import discardDraft from '../EmailOptions/DiscardDraft'
 
 const DiscardDraftButton = ({
   draftId,
-  messageOverviewListener,
+  messageOverviewListener = undefined,
 }: {
   draftId: string
   messageOverviewListener?: (value: string) => void
@@ -60,12 +60,9 @@ const DiscardDraftButton = ({
       icon={<FiDelete />}
       suppressed
       onClick={handleClick}
+      title="Delete"
     />
   ) : null
-}
-
-DiscardDraftButton.defaultProps = {
-  messageOverviewListener: undefined,
 }
 
 export default DiscardDraftButton

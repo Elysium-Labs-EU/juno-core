@@ -59,7 +59,8 @@ const RenderEmailList = ({
   useEffect(() => {
     if (
       ArrowDownListener &&
-      !inSearch && !activeModal &&
+      !inSearch &&
+      !activeModal &&
       focusedItemIndex < filteredOnLabel.threads.length - 1
     ) {
       setFocusedItemIndex((prevState) => prevState + 1)
@@ -193,10 +194,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-              : 0) >
-            global.MIN_DELAY_REFRESH &&
+              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+                : 0) >
+              global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {

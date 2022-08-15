@@ -21,8 +21,8 @@ const Button = styled.button<IButton>`
   font-family: var(--font-family);
   border-radius: 20px;
   border: none;
-  background-color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)`};
+  background-color: ${ ({ variant }) =>
+    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)` };
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
@@ -35,10 +35,10 @@ const Button = styled.button<IButton>`
   }
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `var(--color-black-off)`
-        : `var(--color-purple-dark)`};
+    background-color: ${ ({ variant }) =>
+    variant === 'primary'
+      ? `var(--color-black-off)`
+      : `var(--color-purple-dark)` };
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
@@ -59,29 +59,26 @@ const InnerButton = styled.div`
   align-items: center;
 `
 
-const CustomAttentionButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, label, type, variant, title } = props
-  return (
-    <Button
-      onClick={onClick ? (event) => onClick(event) : undefined}
-      className={className}
-      type={type ?? 'button'}
-      disabled={disabled}
-      variant={variant ?? 'primary'}
-      title={title}
-    >
-      <InnerButton>
-        <span>{label}</span>
-      </InnerButton>
-    </Button>
-  )
-}
+const CustomAttentionButton = ({
+  onClick = undefined,
+  className = undefined,
+  disabled = false,
+  label,
+  type = 'button',
+  variant = 'primary',
+  title,
+}: ICustomButton) => (
+  <Button
+    onClick={onClick ? (event) => onClick(event) : undefined}
+    className={className}
+    type={type ?? 'button'}
+    disabled={disabled}
+    variant={variant ?? 'primary'}
+    title={title}
+  >
+    <InnerButton>
+      <span>{label}</span>
+    </InnerButton>
+  </Button>
+)
 export default CustomAttentionButton
-
-CustomAttentionButton.defaultProps = {
-  onClick: undefined,
-  type: 'button',
-  disabled: false,
-  className: null,
-  variant: 'primary',
-}

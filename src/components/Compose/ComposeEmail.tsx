@@ -48,20 +48,20 @@ interface IComposeEmailProps {
   to?: IContact | null
   bcc?: IContact | null
   cc?: IContact | null
-  subject?: string
-  threadId?: string
-  foundBody?: string
+  subject?: string | null
+  threadId?: string | null
+  foundBody?: string | null
   messageOverviewListener?: (value: string) => void
 }
 
 const ComposeEmail = ({
-  to,
-  bcc,
-  cc,
-  subject,
-  threadId,
-  foundBody,
-  messageOverviewListener,
+  to = null,
+  bcc = null,
+  cc = null,
+  subject = null,
+  threadId = null,
+  foundBody = null,
+  messageOverviewListener = undefined,
 }: IComposeEmailProps) => {
   const location = useLocation()
   const dispatch = useAppDispatch()
@@ -560,13 +560,3 @@ const ComposeEmail = ({
 }
 
 export default ComposeEmail
-
-ComposeEmail.defaultProps = {
-  to: null,
-  bcc: null,
-  cc: null,
-  subject: null,
-  threadId: null,
-  foundBody: null,
-  messageOverviewListener: undefined,
-}

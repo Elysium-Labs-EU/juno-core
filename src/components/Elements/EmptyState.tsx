@@ -6,14 +6,14 @@ const Wrapper = styled.div`
   justify-content: center;
 `
 
-const EmptyState = ({ children }: { children?: JSX.Element | undefined }) => (
+const EmptyState = ({
+  children = undefined,
+}: {
+  children?: JSX.Element | undefined
+}) => (
   <Wrapper>
     {children || <p style={{ marginTop: '60px' }}>{global.NOTHING_TO_SEE}</p>}
   </Wrapper>
 )
-
-EmptyState.defaultProps = {
-  children: undefined,
-}
 
 export default EmptyState

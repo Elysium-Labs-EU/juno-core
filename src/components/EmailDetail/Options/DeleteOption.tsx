@@ -21,9 +21,9 @@ const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
 
 const DeleteOption = ({
   messageId,
-  icon,
-  suppressed,
-  noArchive,
+  icon = undefined,
+  suppressed = false,
+  noArchive = false,
 }: IDeleteOption) => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
@@ -53,9 +53,3 @@ const DeleteOption = ({
 }
 
 export default DeleteOption
-
-DeleteOption.defaultProps = {
-  icon: null,
-  suppressed: false,
-  noArchive: false,
-}

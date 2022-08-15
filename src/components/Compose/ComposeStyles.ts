@@ -60,10 +60,6 @@ export const Label = styled.div<ILabel>`
   }
 `
 
-Label.defaultProps = {
-  hasValue: false,
-}
-
 export const Row = styled.div`
   position: relative;
   min-height: 35px;

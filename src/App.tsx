@@ -48,21 +48,21 @@ const App = () => {
     }
   }, [baseLoaded, storageLabels])
 
-  const memoizedHeaderHelp = useMemo(() => (<AppHeaderHelp />), [])
+  const memoizedHeaderHelp = useMemo(() => <AppHeaderHelp />, [])
 
-  const memoizedRoutesComponent = useMemo(() => (
-    <AnimatePresence exitBeforeEnter>
-      <RoutesComponent />
-    </AnimatePresence>
-  ), [])
-
+  const memoizedRoutesComponent = useMemo(
+    () => (
+      <AnimatePresence exitBeforeEnter>
+        <RoutesComponent />
+      </AnimatePresence>
+    ),
+    []
+  )
 
   return (
     <HistoryRouter history={history}>
       <GS.Base>
-        {baseLoaded && (
-          memoizedHeaderHelp
-        )}
+        {baseLoaded && memoizedHeaderHelp}
         {memoizedRoutesComponent}
         {serviceUnavailable && (
           <SnackbarNotification text={serviceUnavailable} />
