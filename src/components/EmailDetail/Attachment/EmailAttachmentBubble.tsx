@@ -53,7 +53,7 @@ const RenderAttachment = ({
         <CustomIconButton
           onClick={handleClick}
           icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
-          title={!downloaded ? "Download attachment" : "Attachment downloaded"}
+          title={!downloaded ? 'Download attachment' : 'Attachment downloaded'}
         />
       ) : (
         <StyledCircularProgress size={20} />

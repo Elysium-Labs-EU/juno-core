@@ -273,9 +273,9 @@ const MessagesOverview = memo(
                 foundBody={
                   selectedIndex !== undefined
                     ? emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.length - 1 - selectedIndex
-                    )
+                        localThreadDetail,
+                        localThreadDetail.messages.length - 1 - selectedIndex
+                      )
                     : undefined
                 }
                 threadId={localThreadDetail.id}

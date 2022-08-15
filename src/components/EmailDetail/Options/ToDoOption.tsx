@@ -31,7 +31,7 @@ const ToDoOption = ({
       labelIds,
       dispatch,
       storageLabels,
-      location
+      location,
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 

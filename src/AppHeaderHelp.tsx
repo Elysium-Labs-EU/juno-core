@@ -40,9 +40,7 @@ const AppHeaderHelp = () => {
   }, [escListenerHelpMenu, showHelpMenu])
 
   const handleEvent = () => {
-    setShowHelpMenu((prevState) =>
-      !prevState
-    )
+    setShowHelpMenu((prevState) => !prevState)
   }
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 

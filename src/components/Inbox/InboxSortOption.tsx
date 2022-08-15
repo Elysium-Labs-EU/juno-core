@@ -45,10 +45,10 @@ const SortInbox = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
-  const isDisabled = isLoading ||
+  const isDisabled =
+    isLoading ||
     activeEmailListIndex < 0 ||
     emailList[activeEmailListIndex].threads.length === 0
-
 
   return (
     <CustomAttentionButton
@@ -56,7 +56,7 @@ const SortInbox = () => {
       disabled={isDisabled}
       label={INBOX_BUTTON}
       variant="secondary"
-      title={!isDisabled ? "Start sorting inbox" : "There is nothing to sort"}
+      title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
     />
   )
 }

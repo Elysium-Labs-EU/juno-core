@@ -29,7 +29,7 @@ const ArchiveOption = ({
       threadId: threadDetail.id,
       labelIds,
       dispatch,
-      location
+      location,
     })
   }, [threadDetail, labelIds, dispatch])
 

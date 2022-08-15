@@ -91,7 +91,9 @@ const EmailDetailOptions = ({
               noArchive
             />
           )}
-          {showMenu && <EmailMoreOptions ref={ref} threadId={threadDetail.id} />}
+          {showMenu && (
+            <EmailMoreOptions ref={ref} threadId={threadDetail.id} />
+          )}
           {unsubscribeLink && (
             <>
               <S.Spacer />

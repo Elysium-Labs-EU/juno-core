@@ -38,7 +38,7 @@ const DeleteOption = ({
       threadId,
       labelIds: onlyLegalLabels,
       dispatch,
-      location
+      location,
     })
   }, [onlyLegalLabels, labelIds, dispatch])
 

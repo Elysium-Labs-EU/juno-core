@@ -18,7 +18,7 @@ const setToDoMail = ({
   labelIds,
   dispatch,
   storageLabels,
-  location
+  location,
 }: ISetToDoMail) => {
   const toDoLabel = findLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
@@ -26,7 +26,9 @@ const setToDoMail = ({
     removeLabelIds: onlyLegalLabels,
     addLabelIds: [toDoLabel[0].id],
   }
-  dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels, location }))
+  dispatch(
+    updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels, location })
+  )
 }
 
 export default setToDoMail

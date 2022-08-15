@@ -21,8 +21,8 @@ const CustomModal = ({
   <Modal
     open={open}
     onClose={handleClose}
-    aria-labelledby={`modal-${ modalAriaLabel }`}
-    aria-describedby={`modal-${ modalAriaLabel }-info`}
+    aria-labelledby={`modal-${modalAriaLabel}`}
+    aria-describedby={`modal-${modalAriaLabel}-info`}
   >
     <S.Modal>
       <S.Inner>

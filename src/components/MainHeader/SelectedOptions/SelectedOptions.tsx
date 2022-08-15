@@ -72,14 +72,23 @@ const SelectedOptions = () => {
   return (
     <S.Wrapper>
       <S.Inner>
-        <CustomButton label="Cancel" onClick={handleCancel} title="Cancel the selection" />
-        <CustomButton label="Select all" onClick={handleSelectAll} title="Select all the emails in current view" />
+        <CustomButton
+          label="Cancel"
+          onClick={handleCancel}
+          title="Cancel the selection"
+        />
+        <CustomButton
+          label="Select all"
+          onClick={handleSelectAll}
+          title="Select all the emails in current view"
+        />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${ selectedEmails.length } ${ selectedEmails.length > 1
+        <S.SelectedLabelsText>{`${selectedEmails.length} ${
+          selectedEmails.length > 1
             ? EMAILS_SELECTED_SINGLE
             : EMAILS_SELECTED_PLURAL
-          }`}</S.SelectedLabelsText>
+        }`}</S.SelectedLabelsText>
         {!labelIds.includes(global.DRAFT_LABEL) ? (
           <CustomButton
             label={ARCHIVE_BUTTON_LABEL}
