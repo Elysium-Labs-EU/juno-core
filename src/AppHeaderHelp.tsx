@@ -8,14 +8,16 @@ import { useAppSelector } from './store/hooks'
 import { selectActiveModal, selectInSearch } from './store/utilsSlice'
 import * as GS from './styles/globalStyles'
 import * as keyConstants from './constants/keyConstants'
+import useClickOutside from './hooks/useClickOutside'
 
 const actionKeys = [keyConstants.KEY_ARROW_RIGHT, keyConstants.KEY_SHIFT]
 
 const AppHeaderHelp = () => {
+    const [showHelpMenu, setShowHelpMenu] = useState(false)
     const activeModal = useAppSelector(selectActiveModal)
     const inSearch = useAppSelector(selectInSearch)
-    const [showHelpMenu, setShowHelpMenu] = useState(false)
     const escListenerHelpMenu = useKeyPress(keyConstants.KEY_ESCAPE)
+    const { ref } = useClickOutside({ onClickOutside: () => setShowHelpMenu(false) })
 
     const closeHelpMenu = useCallback(() => {
         setShowHelpMenu(false)
@@ -47,7 +49,7 @@ const AppHeaderHelp = () => {
             </GS.OuterContainer>
             <HelpButton handleEvent={handleEvent} data-test-id="help-button" />
             {showHelpMenu && (
-                <HelpMenu />
+                <HelpMenu ref={ref} />
             )}
         </>
     )

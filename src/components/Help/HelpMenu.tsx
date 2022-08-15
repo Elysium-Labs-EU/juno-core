@@ -1,3 +1,4 @@
+import { forwardRef } from 'react'
 import { useAppDispatch } from '../../store/hooks'
 import {
   setActiveModal,
@@ -32,7 +33,7 @@ const MenuSection = ({
   </>
 )
 
-const HelpMenu = () => {
+const HelpMenu = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch()
   const MENU_ITEMS_HELP = [
     {
@@ -54,7 +55,7 @@ const HelpMenu = () => {
   ]
 
   return (
-    <S.Layer>
+    <S.Layer ref={ref}>
       <S.InnerLayer>
         <S.Container>
           <MenuSection data-test-id="help-menu" menuItems={[MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]} />
@@ -62,6 +63,6 @@ const HelpMenu = () => {
       </S.InnerLayer>
     </S.Layer>
   )
-}
+})
 
 export default HelpMenu

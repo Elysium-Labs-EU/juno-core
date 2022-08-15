@@ -12,8 +12,6 @@ export const Layer = styled.div`
   left: 0px;
   top: 0px;
   z-index: 1100;
-  /* width: 100%;
-  height: 100%; */
 `
 
 export const InnerLayer = styled.div`
