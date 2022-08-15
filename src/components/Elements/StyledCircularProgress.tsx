@@ -5,12 +5,8 @@ const CustomCircularProgress = styled(CircularProgress)`
   color: var(--color-black) !important;
 `
 
-const StyledCircularProgress = ({ size }: { size?: number }) => (
-  <CustomCircularProgress size={size ?? undefined} />
+const StyledCircularProgress = ({ size = undefined }: { size?: number }) => (
+  <CustomCircularProgress size={size} />
 )
-
-StyledCircularProgress.defaultProps = {
-  size: undefined,
-}
 
 export default StyledCircularProgress

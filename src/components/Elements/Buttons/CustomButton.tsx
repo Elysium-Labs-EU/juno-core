@@ -7,7 +7,7 @@ interface ICustomButton {
   className?: string
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
-  icon?: JSX.Element
+  icon?: JSX.Element | null
   label: string
   suppressed?: boolean
   style?: any
@@ -21,8 +21,8 @@ interface IButton {
 const Button = styled.button<IButton>`
   display: inline-block;
   font-weight: 400;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
+  color: ${ ({ suppressed }) =>
+    suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
   text-align: center;
   vertical-align: middle;
   user-select: none;
@@ -64,43 +64,30 @@ const InnerButton = styled.div`
   }
 `
 
-const CustomButton = (props: ICustomButton) => {
-  const {
-    onClick,
-    className,
-    disabled,
-    icon,
-    label,
-    type,
-    suppressed,
-    style,
-    title,
-  } = props
-  return (
-    <Button
-      onClick={onClick ? (event) => onClick(event) : undefined}
-      className={className}
-      type={type ?? 'button'}
-      disabled={disabled}
-      suppressed={suppressed}
-      style={style}
-      title={title}
-    >
-      <InnerButton>
-        {icon && <div className="icon">{icon}</div>}
-        <span>{label}</span>
-      </InnerButton>
-    </Button>
-  )
-}
+const CustomButton = ({
+  onClick = undefined,
+  className = undefined,
+  disabled = false,
+  icon = null,
+  label,
+  type = 'button',
+  suppressed = false,
+  style = undefined,
+  title,
+}: ICustomButton) => (
+  <Button
+    onClick={onClick ? (event) => onClick(event) : undefined}
+    className={className}
+    type={type ?? 'button'}
+    disabled={disabled}
+    suppressed={suppressed}
+    style={style}
+    title={title}
+  >
+    <InnerButton>
+      {icon && <div className="icon">{icon}</div>}
+      <span>{label}</span>
+    </InnerButton>
+  </Button>
+)
 export default CustomButton
-
-CustomButton.defaultProps = {
-  onClick: undefined,
-  type: 'button',
-  disabled: false,
-  icon: null,
-  className: null,
-  suppressed: false,
-  style: undefined,
-}

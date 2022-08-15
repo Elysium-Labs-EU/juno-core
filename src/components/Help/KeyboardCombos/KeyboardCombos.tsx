@@ -1,8 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import {
-  selectActiveModal,
-  setActiveModal,
-} from '../../../store/utilsSlice'
+import { selectActiveModal, setActiveModal } from '../../../store/utilsSlice'
 import * as S from './KeyboardCombosStyles'
 import * as local from '../../../constants/keycomboConstants'
 import * as global from '../../../constants/globalConstants'
@@ -11,8 +8,7 @@ import getUserAgent from '../../../utils/getUserAgent'
 import { AppDispatch } from '../../../store/store'
 import CustomModal from '../../Elements/Modal/CustomModal'
 
-const handleClose = (dispatch: AppDispatch) =>
-  dispatch(setActiveModal(null))
+const handleClose = (dispatch: AppDispatch) => dispatch(setActiveModal(null))
 
 interface IKeyCombos {
   title: string

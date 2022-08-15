@@ -57,7 +57,8 @@ const Navigation = () => {
     let mounted = true
     if (
       mounted &&
-      !inSearch && !activeModal &&
+      !inSearch &&
+      !activeModal &&
       !location.pathname.includes('/compose') &&
       !isReplying &&
       !isForwarding

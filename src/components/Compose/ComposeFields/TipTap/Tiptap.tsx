@@ -21,7 +21,7 @@ import MenuBar from './TipTapMenubar'
 
 const Tiptap = ({
   fetchedBodyValue,
-  isReplying,
+  isReplying = undefined,
   updateComposeEmail,
 }: {
   fetchedBodyValue: string
@@ -106,10 +106,6 @@ const Tiptap = ({
       </S.Wrapper>
     </>
   )
-}
-
-Tiptap.defaultProps = {
-  isReplying: undefined,
 }
 
 export default Tiptap

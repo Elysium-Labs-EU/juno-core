@@ -158,7 +158,7 @@ const Feedback = () => {
           </S.Wrapper>
           <S.ButtonContainer>
             <CustomButton
-              label={`Submit ${ selectedType.type.toLowerCase() }`}
+              label={`Submit ${selectedType.type.toLowerCase()}`}
               title="Submit feedback form"
               onClick={() => handleSubmit()}
               disabled={textAreaValue.length === 0}

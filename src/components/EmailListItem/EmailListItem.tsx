@@ -21,7 +21,11 @@ import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
 import { selectProfile } from '../../store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
-import { openEmail, selectActiveModal, selectInSearch } from '../../store/utilsSlice'
+import {
+  openEmail,
+  selectActiveModal,
+  selectInSearch,
+} from '../../store/utilsSlice'
 import { selectLabelIds } from '../../store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
@@ -99,7 +103,7 @@ const EmailListItem = ({
     () =>
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -109,7 +113,7 @@ const EmailListItem = ({
     () =>
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -119,7 +123,7 @@ const EmailListItem = ({
     () =>
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ],
         emailAddress
       ),
@@ -129,7 +133,7 @@ const EmailListItem = ({
     () =>
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
@@ -140,7 +144,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []

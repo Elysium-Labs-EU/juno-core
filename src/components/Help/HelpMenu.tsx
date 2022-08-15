@@ -1,8 +1,6 @@
 import { forwardRef } from 'react'
 import { useAppDispatch } from '../../store/hooks'
-import {
-  setActiveModal,
-} from '../../store/utilsSlice'
+import { setActiveModal } from '../../store/utilsSlice'
 import { modifierKeyDisplay } from '../../utils/setModifierKey'
 import * as S from './HelpStyles'
 import * as global from '../../constants/globalConstants'
@@ -18,11 +16,13 @@ const MenuSection = ({
       <S.MenuSection key={index}>
         {section.map((item) => (
           <S.MenuItem key={item.title} onClick={() => item.onClick()}>
-            <S.MenuItemContentMain data-test-id="item-title">{item.title}</S.MenuItemContentMain>
+            <S.MenuItemContentMain data-test-id="item-title">
+              {item.title}
+            </S.MenuItemContentMain>
             {item?.hint && (
               <S.MenuItemContentSide data-test-id="item-hint">
                 {item.hint.map((it) => (
-                  <span key={it} >{it}</span>
+                  <span key={it}>{it}</span>
                 ))}
               </S.MenuItemContentSide>
             )}
@@ -58,7 +58,10 @@ const HelpMenu = forwardRef((_props, ref) => {
     <S.Layer ref={ref}>
       <S.InnerLayer>
         <S.Container>
-          <MenuSection data-test-id="help-menu" menuItems={[MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]} />
+          <MenuSection
+            data-test-id="help-menu"
+            menuItems={[MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]}
+          />
         </S.Container>
       </S.InnerLayer>
     </S.Layer>

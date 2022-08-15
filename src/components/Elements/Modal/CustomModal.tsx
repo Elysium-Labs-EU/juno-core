@@ -7,7 +7,7 @@ const CustomModal = ({
   open,
   handleClose,
   modalTitle,
-  subTitle,
+  subTitle = undefined,
   modalAriaLabel,
   children,
 }: {
@@ -21,8 +21,8 @@ const CustomModal = ({
   <Modal
     open={open}
     onClose={handleClose}
-    aria-labelledby={`modal-${modalAriaLabel}`}
-    aria-describedby={`modal-${modalAriaLabel}-info`}
+    aria-labelledby={`modal-${ modalAriaLabel }`}
+    aria-describedby={`modal-${ modalAriaLabel }-info`}
   >
     <S.Modal>
       <S.Inner>
@@ -43,9 +43,5 @@ const CustomModal = ({
     </S.Modal>
   </Modal>
 )
-
-CustomModal.defaultProps = {
-  subTitle: undefined,
-}
 
 export default CustomModal

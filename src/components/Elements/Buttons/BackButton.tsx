@@ -32,7 +32,3 @@ const BackButton = () => {
 }
 
 export default BackButton
-
-BackButton.defaultProps = {
-  coreStatus: null,
-}

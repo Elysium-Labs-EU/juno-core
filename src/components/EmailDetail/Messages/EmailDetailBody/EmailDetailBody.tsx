@@ -54,7 +54,7 @@ const postTreatmentBody = ({
 const ShadowBody = ({
   isDecoding,
   bodyState,
-  setUnsubscribeLink,
+  setUnsubscribeLink = undefined,
 }: {
   isDecoding: boolean
   bodyState: null | IBodyState
@@ -77,17 +77,13 @@ const ShadowBody = ({
   return <div />
 }
 
-ShadowBody.defaultProps = {
-  setUnsubscribeLink: null,
-}
-
 const EmailDetailBody = ({
   threadDetailBody,
   messageId,
   detailBodyCSS,
-  setUnsubscribeLink,
-  setContentRendered,
-  setBlockedTrackers,
+  setUnsubscribeLink = undefined,
+  setContentRendered = undefined,
+  setBlockedTrackers = undefined,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<null | IBodyState>(null)
   const [isDecoding, setIsDecoding] = useState(true)
@@ -156,8 +152,8 @@ const EmailDetailBody = ({
             Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
             Object.prototype.hasOwnProperty.call(item, 'decodedB64') && (
               <img
-                key={`${item.filename + itemIdx}`}
-                src={`data:${item.mimeType};base64,${item.decodedB64}`}
+                key={`${ item.filename + itemIdx }`}
+                src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
                 alt={item?.filename ?? 'embedded image'}
                 style={{ maxWidth: '100%', borderRadius: '5px' }}
               />
@@ -165,12 +161,6 @@ const EmailDetailBody = ({
         )}
     </div>
   )
-}
-
-EmailDetailBody.defaultProps = {
-  setUnsubscribeLink: null,
-  setContentRendered: null,
-  setBlockedTrackers: null,
 }
 
 export default EmailDetailBody
