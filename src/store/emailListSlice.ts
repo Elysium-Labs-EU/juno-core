@@ -397,12 +397,14 @@ export const loadEmailDetails =
             const labelNames = onlyObjectThreads[0].messages[0].labelIds
             const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
             if (legalLabels.length > 0) {
-              dispatch(
-                listAddEmailList({
-                  labels: legalLabels[0].id,
-                  threads: onlyObjectThreads,
-                  nextPageToken: nextPageToken ?? null,
-                })
+              legalLabels.forEach((label) =>
+                dispatch(
+                  listAddEmailList({
+                    labels: label.id,
+                    threads: onlyObjectThreads,
+                    nextPageToken: nextPageToken ?? null,
+                  })
+                )
               )
             }
           } else {

@@ -16,6 +16,7 @@ export default {
     const filesToLint = await removeIgnoredFiles(files)
     return [`eslint --max-warnings=10 ${filesToLint}`]
   },
-  '*.{js,jsx,ts,tsx}': ['dprint fmt'],
+  '*.{js,jsx,ts,tsx}': ['yarn format'],
+  // '*.{js,jsx,ts,tsx}': ['dprint fmt'],
   // '*.{ts,tsx}': ['tsc-files --noEmit'],
 }

@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
+import { selectIsReplying } from '../../../store/emailDetailSlice'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -19,12 +20,15 @@ const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
 const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
+  const isReplying = useAppSelector(selectIsReplying)
 
   const handleEvent = useCallback(() => {
     if (threadDetail.messages) {
       return isForwardingListener({
+        messageId: threadDetail.messages[threadDetail.messages.length - 1].id,
         messageIndex,
         dispatch,
+        isReplying,
       })
     }
     return null

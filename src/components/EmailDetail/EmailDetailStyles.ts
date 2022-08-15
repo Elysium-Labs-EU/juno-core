@@ -124,8 +124,8 @@ export const CardFullWidth = styled.div`
 `
 
 export const EmailDetailContainer = styled.div<IEmailDetail>`
-  width: 100vw;
-  min-width: 665px;
+  width: ${({ tabbedView }) => (tabbedView ? '100%' : '100vw')};
+  min-width: ${({ tabbedView }) => (tabbedView ? '665px' : '300px')};
   max-width: min(100vw - 340px, 860px);
   padding-bottom: 320px;
   margin-bottom: 20px;
