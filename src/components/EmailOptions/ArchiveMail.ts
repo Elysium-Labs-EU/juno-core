@@ -6,6 +6,7 @@ interface IArchiveEmail {
   threadId: string
   labelIds: string[]
   dispatch: AppDispatch
+  location?: any
 }
 
 /**
@@ -14,7 +15,12 @@ interface IArchiveEmail {
  * @returns {void}
  */
 
-const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
+const archiveMail = ({
+  threadId,
+  labelIds,
+  dispatch,
+  location,
+}: IArchiveEmail) => {
   const request = {
     removeLabelIds: [
       ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
@@ -26,6 +32,7 @@ const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
       threadId,
       request,
       labelIds,
+      location,
     })
   )
 }

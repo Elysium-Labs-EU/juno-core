@@ -11,6 +11,7 @@ export interface UpdateRequestParamsSingle {
   threadId: string
   request: UpdateRequest
   labelIds: string[]
+  location?: any
 }
 
 export interface MetaListThreadItem {
