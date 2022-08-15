@@ -67,11 +67,14 @@ const emailBody = (
 ) => {
   const query = 'Body'
   if (threadDetail) {
-    const response = decodeBase64(findPayloadData(query, threadDetail, selectedIndex))
+    const response = decodeBase64(
+      findPayloadData(query, threadDetail, selectedIndex)
+    )
     if (isForwarding && response) {
-      const FORWARD_LABEL = '<p></p><p></p><p>---------- Forwarded message --------</p>'
+      const FORWARD_LABEL =
+        '<p></p><p></p><p>---------- Forwarded message --------</p>'
       // Add the Forwarded message label
-      const addedForwardedLabel = `${ FORWARD_LABEL }${ response }`
+      const addedForwardedLabel = `${FORWARD_LABEL}${response}`
       return addedForwardedLabel
     }
     return response
@@ -169,163 +172,161 @@ interface IMessagesOverview {
   setContentRendered: (value: boolean) => void
 }
 
-const MessagesOverview =
-  ({
-    threadDetail,
-    isLoading,
-    isReplying,
-    isForwarding,
-    labelIds,
-    setContentRendered,
-  }: IMessagesOverview) => {
-    const dispatch = useAppDispatch()
-    const currentMessage = useAppSelector(selectCurrentMessage)
-    const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
-    // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
-    const [localThreadDetail, setLocalThreadDetail] =
-      useState<IEmailListThreadItem | null>(null)
-    const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-      undefined
-    )
+const MessagesOverview = ({
+  threadDetail,
+  isLoading,
+  isReplying,
+  isForwarding,
+  labelIds,
+  setContentRendered,
+}: IMessagesOverview) => {
+  const dispatch = useAppDispatch()
+  const currentMessage = useAppSelector(selectCurrentMessage)
+  const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
+  // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
+  const [localThreadDetail, setLocalThreadDetail] =
+    useState<IEmailListThreadItem | null>(null)
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
+    undefined
+  )
 
-    useEffect(() => {
-      let mounted = true
-      if (mounted) {
-        setLocalThreadDetail(threadDetail)
-      }
-      return () => {
-        mounted = false
-      }
-    }, [threadDetail])
-
-    const messageOverviewListener = (messageId: string) => {
-      if (localThreadDetail && localThreadDetail.messages) {
-        setLocalThreadDetail({
-          ...localThreadDetail,
-          messages: localThreadDetail.messages.filter(
-            (message) => message.id !== messageId
-          ),
-        })
-      }
+  useEffect(() => {
+    let mounted = true
+    if (mounted) {
+      setLocalThreadDetail(threadDetail)
     }
+    return () => {
+      mounted = false
+    }
+  }, [threadDetail])
 
-    useEffect(() => {
-      if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
+  const messageOverviewListener = (messageId: string) => {
+    if (localThreadDetail && localThreadDetail.messages) {
+      setLocalThreadDetail({
+        ...localThreadDetail,
+        messages: localThreadDetail.messages.filter(
+          (message) => message.id !== messageId
+        ),
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
+      if (localThreadDetail.messages && localThreadDetail.messages.length > 0) {
         if (
-          localThreadDetail.messages &&
-          localThreadDetail.messages.length > 0
+          localThreadDetail.messages.filter(
+            (message) =>
+              message.labelIds?.includes(global.UNREAD_LABEL) === true
+          ).length > 0
         ) {
-          if (
-            localThreadDetail.messages.filter(
-              (message) =>
-                message.labelIds?.includes(global.UNREAD_LABEL) === true
-            ).length > 0
-          ) {
-            markEmailAsRead({
-              threadId: localThreadDetail.id,
-              dispatch,
-              labelIds,
-            })
-          }
+          markEmailAsRead({
+            threadId: localThreadDetail.id,
+            dispatch,
+            labelIds,
+          })
         }
       }
-    }, [localThreadDetail])
-
-    /**
-     * @function indexMessageListener
-     * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
-     * @param value - number of the index of the selected Draft Message
-     * @returns {void} - returns the found object or undefined if not found as a change on the state.
-     */
-    const indexMessageListener = (value: number) => {
-      setSelectedIndex(value)
     }
+  }, [localThreadDetail])
 
-    const memoizedMessagesOverview = useMemo(
-      () => (
-        <>
-          <ES.DetailRow>
-            <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
-              <ES.DetailBase>
-                <ES.CardFullWidth>
-                  {localThreadDetail?.messages && !isLoading ? (
-                    <MappedMessages
-                      threadDetail={localThreadDetail}
-                      setUnsubscribeLink={setUnsubscribeLink}
-                      setContentRendered={setContentRendered}
-                      indexMessageListener={indexMessageListener}
-                    />
-                  ) : (
-                    <ES.LoadingErrorWrapper>
-                      <CircularProgress />
-                    </ES.LoadingErrorWrapper>
-                  )}
-                  {!localThreadDetail && (
-                    <ES.LoadingErrorWrapper>
-                      {isLoading && <CircularProgress />}
-                      {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                    </ES.LoadingErrorWrapper>
-                  )}
-                </ES.CardFullWidth>
-              </ES.DetailBase>
-            </ES.EmailDetailContainer>
-            {localThreadDetail &&
-              !isReplying &&
-              !isForwarding &&
-              localThreadDetail.messages && (
-                <EmailDetailOptions
-                  threadDetail={localThreadDetail}
-                  unsubscribeLink={unsubscribeLink}
-                />
-              )}
-          </ES.DetailRow>
-          {isReplying && localThreadDetail && localThreadDetail.messages && (
-            <ES.ComposeWrapper>
-              <ComposeEmail
-                to={fromEmail(localThreadDetail)}
-                cc={ccEmail(localThreadDetail)}
-                bcc={bccEmail(localThreadDetail)}
-                subject={emailSubject(localThreadDetail)}
-                foundBody={
-                  selectedIndex !== undefined
-                    ? emailBody(
+  /**
+   * @function indexMessageListener
+   * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
+   * @param value - number of the index of the selected Draft Message
+   * @returns {void} - returns the found object or undefined if not found as a change on the state.
+   */
+  const indexMessageListener = (value: number) => {
+    setSelectedIndex(value)
+  }
+
+  const memoizedMessagesOverview = useMemo(
+    () => (
+      <>
+        <ES.DetailRow>
+          <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+            <ES.DetailBase>
+              <ES.CardFullWidth>
+                {localThreadDetail?.messages && !isLoading ? (
+                  <MappedMessages
+                    threadDetail={localThreadDetail}
+                    setUnsubscribeLink={setUnsubscribeLink}
+                    setContentRendered={setContentRendered}
+                    indexMessageListener={indexMessageListener}
+                  />
+                ) : (
+                  <ES.LoadingErrorWrapper>
+                    <CircularProgress />
+                  </ES.LoadingErrorWrapper>
+                )}
+                {!localThreadDetail && (
+                  <ES.LoadingErrorWrapper>
+                    {isLoading && <CircularProgress />}
+                    {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+                  </ES.LoadingErrorWrapper>
+                )}
+              </ES.CardFullWidth>
+            </ES.DetailBase>
+          </ES.EmailDetailContainer>
+          {localThreadDetail &&
+            !isReplying &&
+            !isForwarding &&
+            localThreadDetail.messages && (
+              <EmailDetailOptions
+                threadDetail={localThreadDetail}
+                unsubscribeLink={unsubscribeLink}
+              />
+            )}
+        </ES.DetailRow>
+        {isReplying && localThreadDetail && localThreadDetail.messages && (
+          <ES.ComposeWrapper>
+            <ComposeEmail
+              to={fromEmail(localThreadDetail)}
+              cc={ccEmail(localThreadDetail)}
+              bcc={bccEmail(localThreadDetail)}
+              subject={emailSubject(localThreadDetail)}
+              foundBody={
+                selectedIndex !== undefined
+                  ? emailBody(
                       localThreadDetail,
                       localThreadDetail.messages.length - 1 - selectedIndex
                     )
-                    : undefined
-                }
-                threadId={localThreadDetail.id}
-                messageOverviewListener={messageOverviewListener}
-              />
-            </ES.ComposeWrapper>
-          )}
-          {isForwarding && localThreadDetail && localThreadDetail.messages && (
-            <ES.ComposeWrapper>
-              <ComposeEmail
-                subject={emailSubject(localThreadDetail)}
-                threadId={localThreadDetail.id}
-                messageOverviewListener={messageOverviewListener}
-                foundBody={
-                  selectedIndex !== undefined
-                    ? emailBody(
+                  : undefined
+              }
+              threadId={localThreadDetail.id}
+              messageOverviewListener={messageOverviewListener}
+            />
+          </ES.ComposeWrapper>
+        )}
+        {isForwarding && localThreadDetail && localThreadDetail.messages && (
+          <ES.ComposeWrapper>
+            <ComposeEmail
+              subject={emailSubject(localThreadDetail)}
+              threadId={localThreadDetail.id}
+              messageOverviewListener={messageOverviewListener}
+              foundBody={
+                selectedIndex !== undefined
+                  ? emailBody(
                       localThreadDetail,
                       localThreadDetail.messages.length - 1 - selectedIndex,
                       isForwarding
                     )
-                    : emailBody(
+                  : emailBody(
                       localThreadDetail,
-                      localThreadDetail.messages.findIndex((message) => message.id === currentMessage),
+                      localThreadDetail.messages.findIndex(
+                        (message) => message.id === currentMessage
+                      ),
                       isForwarding
                     )
-                }
-              />
-            </ES.ComposeWrapper>
-          )}
-        </>
-      ),
-      [localThreadDetail, unsubscribeLink, isReplying, isForwarding]
-    )
+              }
+            />
+          </ES.ComposeWrapper>
+        )}
+      </>
+    ),
+    [localThreadDetail, unsubscribeLink, isReplying, isForwarding]
+  )
 
-    return memoizedMessagesOverview
-  }
+  return memoizedMessagesOverview
+}
 export default MessagesOverview

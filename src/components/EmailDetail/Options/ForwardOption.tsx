@@ -28,7 +28,7 @@ const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
         messageId: threadDetail.messages[threadDetail.messages.length - 1].id,
         messageIndex,
         dispatch,
-        isReplying
+        isReplying,
       })
     }
     return null
