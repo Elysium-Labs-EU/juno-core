@@ -397,12 +397,14 @@ export const loadEmailDetails =
             const labelNames = onlyObjectThreads[0].messages[0].labelIds
             const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
             if (legalLabels.length > 0) {
-              dispatch(
-                listAddEmailList({
-                  labels: legalLabels[0].id,
-                  threads: onlyObjectThreads,
-                  nextPageToken: nextPageToken ?? null,
-                })
+              legalLabels.forEach((label) =>
+                dispatch(
+                  listAddEmailList({
+                    labels: label.id,
+                    threads: onlyObjectThreads,
+                    nextPageToken: nextPageToken ?? null,
+                  })
+                )
               )
             }
           } else {
@@ -661,6 +663,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
               sortedFeeds[i].labels.includes(loadedInbox[j][0]) ||
               sortedFeeds[i].labels.includes(global.DRAFT_LABEL)
             ) {
+              console.log('HERE')
               dispatch(loadEmailDetails(sortedFeeds[i]))
             }
           }

@@ -25,7 +25,8 @@ const isForwardingListener = ({
     dispatch(setIsForwarding(true))
   }
   if (messageId) {
-    // This is used to specifically reply to a message.
+    // This is used to specifically reply to a message
+    // OR to set it as the newest message in the thread to handle the thread as a whole.
     dispatch(setCurrentMessage(messageId))
   }
 }

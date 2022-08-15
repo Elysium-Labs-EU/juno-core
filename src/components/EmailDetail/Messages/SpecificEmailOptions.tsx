@@ -35,7 +35,7 @@ const SpecificEmailOptions = ({
               isForwarding,
             })
           }
-          title=""
+          title="Reply to this messag"
         />
         <CustomButton
           label="Forward this message"
@@ -47,7 +47,7 @@ const SpecificEmailOptions = ({
               isReplying,
             })
           }
-          title=""
+          title="Forward this message"
         />
       </S.Inner>
     </GS.MenuPopper>
