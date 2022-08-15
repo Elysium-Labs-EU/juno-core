@@ -3,12 +3,12 @@ import * as S from './EmailMoreOptionsStyles'
 import DeleteOption from '../Options/DeleteOption'
 
 interface IEmailMoreOptions {
-  messageId: string
+  threadId: string
 }
 
-const EmailMoreOptions = forwardRef(({ messageId }: IEmailMoreOptions, ref) => (
+const EmailMoreOptions = forwardRef(({ threadId }: IEmailMoreOptions, ref) => (
   <S.Wrapper ref={ref}>
-    <DeleteOption messageId={messageId} />
+    <DeleteOption threadId={threadId} />
   </S.Wrapper>
 ))
 

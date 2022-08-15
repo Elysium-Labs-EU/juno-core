@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
@@ -11,7 +12,7 @@ import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IDeleteOption {
-  messageId: string
+  threadId: string
   icon?: JSX.Element
   suppressed?: boolean
   noArchive?: boolean
@@ -20,7 +21,7 @@ interface IDeleteOption {
 const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
 
 const DeleteOption = ({
-  messageId,
+  threadId,
   icon = undefined,
   suppressed = false,
   noArchive = false,
@@ -30,12 +31,14 @@ const DeleteOption = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
   const inSearch = useAppSelector(selectInSearch)
+  const location = useLocation()
 
   const handleEvent = useCallback(() => {
     thrashMail({
-      messageId,
+      threadId,
       labelIds: onlyLegalLabels,
       dispatch,
+      location,
     })
   }, [onlyLegalLabels, labelIds, dispatch])
 

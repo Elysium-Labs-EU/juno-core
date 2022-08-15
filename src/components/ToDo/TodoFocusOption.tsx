@@ -46,17 +46,20 @@ const TodoFocusOption = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 
+  const isDisabled =
+    isLoading ||
+    activeEmailListIndex < 0 ||
+    emailList[activeEmailListIndex].threads.length === 0
+
   return (
     <S.SortContainer>
       <CustomAttentionButton
         onClick={handleEvent}
-        disabled={
-          isLoading ||
-          activeEmailListIndex < 0 ||
-          emailList[activeEmailListIndex].threads.length === 0
-        }
+        disabled={isDisabled}
         label={local.BUTTON_FOCUS}
-        title="Start focus mode"
+        title={
+          !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
+        }
       />
     </S.SortContainer>
   )

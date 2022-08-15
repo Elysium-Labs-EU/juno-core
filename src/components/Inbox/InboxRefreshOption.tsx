@@ -87,7 +87,7 @@ const InboxRefresh = () => {
       disabled={isLoading || disableRefresh}
       type="button"
       disableRefresh={disableRefresh}
-      title="Refresh inbox"
+      title={!disableRefresh ? 'Refresh inbox' : 'Refreshing inbox...'}
     >
       <MdRefresh size={20} />
     </RotatingButton>

@@ -31,6 +31,7 @@ const rootReducer = combineReducers({
   utils: utilsReducer,
 })
 
+export type RootState = ReturnType<typeof rootReducer>
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   configureStore({
     reducer: rootReducer,
@@ -39,9 +40,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
       getDefaultMiddleware().concat(routerMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
   })
-
-export const history = createReduxHistory(setupStore())
-export type RootState = ReturnType<typeof rootReducer>
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -50,3 +48,4 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   any,
   Action<string>
 >
+export const history = createReduxHistory(setupStore())

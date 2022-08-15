@@ -85,13 +85,15 @@ const EmailDetailOptions = ({
           )}
           {staticOnlyLegalLabels.length === 0 && (
             <DeleteOption
-              messageId={threadDetail.id}
+              threadId={threadDetail.id}
               icon={<FiDelete />}
               suppressed
               noArchive
             />
           )}
-          {showMenu && <EmailMoreOptions ref={ref} messageId={threadDetail.id} />}
+          {showMenu && (
+            <EmailMoreOptions ref={ref} threadId={threadDetail.id} />
+          )}
           {unsubscribeLink && (
             <>
               <S.Spacer />

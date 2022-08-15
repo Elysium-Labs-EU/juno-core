@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { FiArchive } from 'react-icons/fi'
+import { useLocation } from 'react-router-dom'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
@@ -21,12 +22,14 @@ const ArchiveOption = ({
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
+  const location = useLocation()
 
   const handleEvent = useCallback(() => {
     archiveMail({
       threadId: threadDetail.id,
       labelIds,
       dispatch,
+      location,
     })
   }, [threadDetail, labelIds, dispatch])
 

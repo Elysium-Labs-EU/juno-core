@@ -173,13 +173,6 @@ const MessagesOverview = memo(
     )
 
     useEffect(() => {
-      console.log(
-        'DEV ONLY - Check the value of the unsubscribeLink',
-        unsubscribeLink
-      )
-    }, [unsubscribeLink])
-
-    useEffect(() => {
       let mounted = true
       if (mounted) {
         setLocalThreadDetail(threadDetail)

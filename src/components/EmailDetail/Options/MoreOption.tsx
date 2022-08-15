@@ -13,6 +13,7 @@ const MoreOption = ({ setShowMenu, showMenu }: IMoreOption) => (
     onClick={() => setShowMenu(!showMenu)}
     label={local.BUTTON_MORE}
     suppressed
+    title="Show more options"
   />
 )
 
