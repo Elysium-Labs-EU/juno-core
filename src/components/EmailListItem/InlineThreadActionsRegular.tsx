@@ -59,7 +59,7 @@ const InlineThreadActionsRegular = ({
               <CustomIconButton
                 onClick={() =>
                   setToDoMail({
-                    messageId: id,
+                    threadId: id,
                     labelIds,
                     dispatch,
                     storageLabels,
@@ -75,7 +75,7 @@ const InlineThreadActionsRegular = ({
             title="Archive"
           />
           <CustomIconButton
-            onClick={() => thrashMail({ messageId: id, dispatch, labelIds })}
+            onClick={() => thrashMail({ threadId: id, dispatch, labelIds })}
             icon={<AiOutlineDelete size={20} />}
             title="Delete"
             hoverColor={themeConstants.colorRed}

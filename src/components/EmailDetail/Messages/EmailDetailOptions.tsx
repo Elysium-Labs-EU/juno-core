@@ -24,6 +24,7 @@ import {
 import SkipOption from '../Options/SkipOption'
 import ForwardOption from '../Options/ForwardOption'
 import UnsubscribeOption from '../Options/UnsubscribeOption'
+import useClickOutside from '../../../hooks/useClickOutside'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -41,6 +42,10 @@ const EmailDetailOptions = ({
   const isForwarding = useAppSelector(selectIsForwarding)
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const location = useLocation()
+
+  const { ref } = useClickOutside({
+    onClickOutside: () => setShowMenu(false),
+  })
 
   useEffect(() => {
     if (showMenu) {
@@ -86,7 +91,7 @@ const EmailDetailOptions = ({
               noArchive
             />
           )}
-          {showMenu && <EmailMoreOptions messageId={threadDetail.id} />}
+          {showMenu && <EmailMoreOptions ref={ref} messageId={threadDetail.id} />}
           {unsubscribeLink && (
             <>
               <S.Spacer />

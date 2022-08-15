@@ -6,14 +6,14 @@ import * as todo from '../../constants/todoConstants'
 import { AppDispatch } from '../../store/store'
 
 interface ISetToDoMail {
-  messageId: string
+  threadId: string
   labelIds: string[]
   dispatch: AppDispatch
   storageLabels: LabelIdName[]
 }
 
 const setToDoMail = ({
-  messageId,
+  threadId,
   labelIds,
   dispatch,
   storageLabels,
@@ -25,7 +25,14 @@ const setToDoMail = ({
     addLabelIds: [toDoLabel[0].id],
   }
 
-  dispatch(updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels }))
+  console.log({
+    threadId,
+    labelIds,
+    dispatch,
+    storageLabels,
+  })
+
+  dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
 }
 
 export default setToDoMail
