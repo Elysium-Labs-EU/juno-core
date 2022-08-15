@@ -663,7 +663,6 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
               sortedFeeds[i].labels.includes(loadedInbox[j][0]) ||
               sortedFeeds[i].labels.includes(global.DRAFT_LABEL)
             ) {
-              console.log('HERE')
               dispatch(loadEmailDetails(sortedFeeds[i]))
             }
           }
