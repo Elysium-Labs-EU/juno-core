@@ -164,7 +164,6 @@ export const emailListSlice = createSlice({
       }: {
         threadId: string
       } = payload
-      console.log('HERE', payload)
       const currentState = state.emailList
       currentState[state.activeEmailListIndex].threads = state.emailList[
         state.activeEmailListIndex
