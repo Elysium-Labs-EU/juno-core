@@ -24,7 +24,6 @@ interface IUtilsState {
   isProcessing: boolean
   serviceUnavailable: string | null
   isSilentLoading: boolean
-  isSettingsOpen: boolean
   isAvatarVisible: boolean
   emailFetchSize: number
   settingsLabelId: string | null
@@ -37,7 +36,6 @@ const initialState: IUtilsState = Object.freeze({
   isProcessing: false,
   serviceUnavailable: null,
   isSilentLoading: false,
-  isSettingsOpen: false,
   isAvatarVisible: true,
   emailFetchSize: 20,
   settingsLabelId: null,
@@ -62,9 +60,6 @@ export const utilsSlice = createSlice({
     },
     setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isSilentLoading = payload
-    },
-    setIsSettingsOpen: (state, { payload }: PayloadAction<boolean>) => {
-      state.isSettingsOpen = payload
     },
     setSettings: (state, { payload }) => {
       state.isAvatarVisible = payload.isAvatarVisible
@@ -119,7 +114,6 @@ export const {
   setIsProcessing,
   setServiceUnavailable,
   setIsSilentLoading,
-  setIsSettingsOpen,
   setSettings,
   setShowAvatar,
   setEmailFetchSize,
@@ -225,8 +219,6 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   return dispatch(navigateBack())
 }
 
-export const selectIsSettingsOpen = (state: RootState) =>
-  state.utils.isSettingsOpen
 export const selectAvatarVisibility = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch

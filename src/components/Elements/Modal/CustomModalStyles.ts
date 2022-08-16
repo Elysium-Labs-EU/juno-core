@@ -4,7 +4,7 @@ export const Modal = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  z-index: 1100;
+  z-index: var(--z-index-modal);
   transform: translate(-50%, -50%);
   width: 825px;
   border-radius: 5px;

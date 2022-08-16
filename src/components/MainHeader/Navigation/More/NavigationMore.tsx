@@ -1,40 +1,133 @@
-import { Divider, MenuItem } from '@mui/material'
+import { useState } from 'react'
+import { push } from 'redux-first-history'
+import { Popper } from '@mui/material'
+import { FiMoreHorizontal } from 'react-icons/fi'
 import * as GS from '../../../../styles/globalStyles'
 import * as S from './NavigationMoreStyles'
-import * as local from '../../../../constants/subMenuHeaderConstants'
-import CustomLink from '../../../Elements/Links/CustomLink'
-import SettingsOption from './Options/SettingsOption'
-import LogoutOption from './Options/LogoutOption'
+import * as global from '../../../../constants/globalConstants'
+import Routes from '../../../../constants/routes.json'
+import { handleLogout } from './Options/LogoutOption'
+import {
+  MenuSection,
+  MenuItemContentMain,
+  MenuItemContentSide,
+  MenuItem,
+} from '../../../Help/HelpStyles'
+import { useAppDispatch } from '../../../../store/hooks'
+import { setActiveModal } from '../../../../store/utilsSlice'
+import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
+import useClickOutside from '../../../../hooks/useClickOutside'
 
-const NavigationMore = ({ open, handleClose, anchorEl }: any) => (
-  <GS.StyledMenu
-    id="navigation-more"
-    open={open}
-    anchorEl={anchorEl}
-    onClose={handleClose}
-  >
-    <S.Wrapper>
-      <S.TopMenuSectionWrapper>
-        <S.TopMenu>
-          {local.MENU_OPTIONS &&
-            local.MENU_OPTIONS.map((item, index) => (
-              <MenuItem key={`${item.name + index}`} onClick={handleClose}>
-                <CustomLink to={item.link} label={item.name} />
-              </MenuItem>
-            ))}
-        </S.TopMenu>
-      </S.TopMenuSectionWrapper>
-      <Divider variant="middle" />
-      <S.BottomMenuSectionWrapper>
-        <MenuItem onClick={handleClose}>
-          <SettingsOption />
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <LogoutOption />
-        </MenuItem>
-      </S.BottomMenuSectionWrapper>
-    </S.Wrapper>
-  </GS.StyledMenu>
+interface IMenuItemOnClick {
+  title: string
+  onClick: () => void
+  hint?: string[]
+}
+
+const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
+  <MenuItem onClick={() => item.onClick()}>
+    <MenuItemContentMain data-test-id="item-title">
+      {item.title}
+    </MenuItemContentMain>
+    {item?.hint && (
+      <MenuItemContentSide data-test-id="item-hint">
+        {item.hint.map((it) => (
+          <span key={it}>{it}</span>
+        ))}
+      </MenuItemContentSide>
+    )}
+  </MenuItem>
 )
+
+const MenuSectionComponent = ({
+  menuItems,
+}: {
+  menuItems: IMenuItemOnClick[][]
+}) => (
+  <>
+    {menuItems.map((section, index) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <MenuSection key={index}>
+        {section.map((item) => (
+          <MenuItemComponent key={item.title} item={item} />
+        ))}
+      </MenuSection>
+    ))}
+  </>
+)
+
+const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
+  const dispatch = useAppDispatch()
+  const MENU_OPTIONS = [
+    { title: 'Drafts', onClick: () => dispatch(push(Routes.DRAFTS)) },
+    { title: 'Sent', onClick: () => dispatch(push(Routes.SENT)) },
+  ]
+  const MENU_ITEMS_GLOBAL = [
+    {
+      title: 'Settings',
+      onClick: () => {
+        handleClose()
+        dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.settings))
+      },
+      // hint: [modifierKeyDisplay, '.'],
+    },
+    {
+      title: 'Logout',
+      onClick: () => handleLogout(),
+      // hint: [modifierKeyDisplay, '.'],
+    },
+  ]
+
+  return (
+    <GS.StyledMenu>
+      <S.Wrapper>
+        <MenuSectionComponent
+          data-test-id="more-menu"
+          menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
+        />
+      </S.Wrapper>
+    </GS.StyledMenu>
+  )
+}
+
+const SIZE = 16
+
+const NavigationMore = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+  const { ref } = useClickOutside({
+    onClickOutside: () => {
+      setAnchorEl(null)
+    },
+  })
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <>
+      <CustomIconButton
+        onClick={handleClick}
+        icon={<FiMoreHorizontal size={SIZE} />}
+        title="More menu"
+      />
+      <Popper
+        id="navigation-more"
+        open={open}
+        anchorEl={anchorEl}
+        ref={ref}
+        placement="bottom-end"
+        style={{ zIndex: `var(--z-index-popover)` }}
+      >
+        <NavigationMoreMenu handleClose={handleClose} />
+      </Popper>
+    </>
+  )
+}
 
 export default NavigationMore

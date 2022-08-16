@@ -1,6 +1,5 @@
 import createTheme from '@mui/material/styles/createTheme'
 import styled, { createGlobalStyle } from 'styled-components'
-import { Menu } from '@mui/material'
 import * as themeConstants from '../constants/themeConstants'
 
 /* 16px */
@@ -34,6 +33,10 @@ export const GlobalStyle = createGlobalStyle`
     --radius-s: 2px;
     --radius-m: 4px;
     --radius-l: 8px;
+    --box-shadow-low: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+    --z-index-popover: 400;
+    --z-index-modal: 401;
+    --z-index-block-layer: 1000;
   }
   body {
     background-color: var(--color-white-off) !important;
@@ -62,17 +65,25 @@ export const OuterContainer = styled.div<IOuterContainer>`
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 
-export const StyledMenu = styled(Menu)`
-  z-index: 1200;
+export const StyledMenu = styled.div`
+  animation: fadeInUp 0.2s both;
+  min-width: 260px;
+  max-width: 800px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  border-radius: var(--radius-l);
+  background: var(--color-black);
+  box-shadow: var(--box-shadow-low);
 `
 
 export const MenuPopper = styled.div`
   position: relative;
-  padding: 0.5rem;
-  box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
-    0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07);
-  background-color: hsl(0, 0%, 100%);
-  border-radius: 5px;
+  padding: 10px;
+  box-shadow: var(--box-shadow-low);
+  /* box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
+    0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07); */
+  background-color: var(--color-white);
+  border-radius: var(--radius-m);
 `
 
 export const theme = createTheme({
