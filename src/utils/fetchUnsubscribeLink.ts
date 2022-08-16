@@ -7,6 +7,7 @@ const CHECK_WORDS = [
   'uit te schrijven',
   'turn them off',
   'uitschrijven',
+  'no longer wish',
 ]
 
 const REGEX = new RegExp(CHECK_WORDS.join('|'), 'i')
