@@ -15,7 +15,6 @@ import {
 } from '../../../Help/HelpStyles'
 import { useAppDispatch } from '../../../../store/hooks'
 import { setActiveModal } from '../../../../store/utilsSlice'
-import { modifierKeyDisplay } from '../../../../utils/setModifierKey'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import useClickOutside from '../../../../hooks/useClickOutside'
 

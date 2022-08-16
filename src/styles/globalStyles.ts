@@ -1,4 +1,3 @@
-import { Popper } from '@mui/material'
 import createTheme from '@mui/material/styles/createTheme'
 import styled, { createGlobalStyle } from 'styled-components'
 import * as themeConstants from '../constants/themeConstants'
