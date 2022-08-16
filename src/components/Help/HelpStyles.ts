@@ -4,21 +4,21 @@ export const StartButtonWrapper = styled.div`
   position: absolute;
   bottom: 40px;
   right: 40px;
-  z-index: 1100;
+  z-index: var(--z-index-popover);
 `
 
 export const Layer = styled.div`
   position: fixed;
   left: 0px;
   top: 0px;
-  z-index: 1100;
+  z-index: var(--z-index-modal);
 `
 
 export const InnerLayer = styled.div`
   bottom: calc(100px - 100vh);
   right: calc(40px - 100vw);
   position: absolute;
-  z-index: 1100;
+  z-index: var(--z-index-modal);
 `
 
 export const Container = styled.div`
@@ -30,7 +30,7 @@ export const Container = styled.div`
   overflow: auto;
   border-radius: var(--radius-l);
   background: var(--color-black);
-  box-shadow: var(--elevation-low-material-border-contr-inside);
+  box-shadow: var(--box-shadow-low);
 
   /* Animation */
   @keyframes fadeInUp {

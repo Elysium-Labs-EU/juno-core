@@ -31,7 +31,6 @@ const SIZE = 16
 
 const Navigation = () => {
   const [active, setActive] = useState('')
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
   const isReplying = useAppSelector(selectIsReplying)
@@ -39,7 +38,6 @@ const Navigation = () => {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
-  const open = Boolean(anchorEl)
 
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
@@ -80,14 +78,6 @@ const Navigation = () => {
       mounted = false
     }
   }, [keysPressed, inSearch, activeModal, location, isReplying, isForwarding])
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
 
   const NavControllers = useMemo(
     () => (
@@ -138,21 +128,12 @@ const Navigation = () => {
           </StyledTooltip>
 
           <S.NavItem>
-            <CustomIconButton
-              onClick={handleClick}
-              icon={<FiMoreHorizontal size={SIZE} />}
-              title="More menu"
-            />
+            <NavigationMore />
           </S.NavItem>
-          <NavigationMore
-            open={open}
-            anchorEl={anchorEl}
-            handleClose={handleClose}
-          />
         </S.NavList>
       </S.NavControls>
     ),
-    [active, open]
+    [active]
   )
 
   return NavControllers
