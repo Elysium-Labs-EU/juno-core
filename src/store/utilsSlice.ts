@@ -65,6 +65,8 @@ export const utilsSlice = createSlice({
       state.isAvatarVisible = payload.isAvatarVisible
       state.emailFetchSize = payload.emailFetchSize
       state.activeModal = payload.showIntroduction
+        ? global.ACTIVE_MODAL_MAP.intro
+        : null
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
