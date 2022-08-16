@@ -16,6 +16,7 @@ Juno is an Open Source React based Gmail application.
 6.  Add `VITE_GOOGLE_CLIENT_ID` to the `.env` file - the value is the client id from your frontend Google Credentials. Read here how to setup Google Credentials: https://developers.google.com/workspace/guides/create-credentials. The credential version is `Web application`.
 7.  For the Google Web Application credentials you created on step 6, as the `Authorised JavaScript origins` set `http://localhost` and `http://localhost:3000`. This is done via the Google Cloud Console, by clicking on the credentials' name under Credentials > OAuth 2.0 Client IDs , and enter the form.
 8.  Also for the Google Web Application credentials you created on step 6, as the `Authorised redirect URIs` set `http://localhost:3000/oauth2callback`. This is done via the Google Cloud Console, by clicking on the credentials' name under Credentials > OAuth 2.0 Client IDs , and enter the form.
+8.  At the Google Web Application credentials you created on step 6, go to the `Test users` set yourself as a test user. This is done via the Google Cloud Console, by clicking on the credentials' name under OAuth consent screen > OAuth user cap , and enter the form.
 8.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Contributing
