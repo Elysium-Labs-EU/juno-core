@@ -1665,10 +1665,10 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
-autolinker@3.15.0:
-  version "3.15.0"
-  resolved "https://registry.yarnpkg.com/autolinker/-/autolinker-3.15.0.tgz#03956088648f236642a5783612f9ca16adbbed38"
-  integrity sha512-N/5Dk5AZnqL9k6kkHdFIGLm/0/rRuSnJwqYYhLCJjU7ZtiaJwCBzNTvjzy1zzJADngv/wvtHYcrPHytPnASeFA==
+autolinker@3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/autolinker/-/autolinker-3.16.0.tgz#6fad29b038ba99cbfbab79f78019fed4264df0c6"
+  integrity sha512-KY8yhlwvuQpA7exkkvHsmk0chdrtS0ZRO7XoPfs7w8N3kpiGPjYNDrQ0lIMx2GrKFZzGK/QSEd2Sx5SYtSNBKg==
   dependencies:
     tslib "^2.3.0"
 
