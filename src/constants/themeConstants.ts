@@ -22,4 +22,5 @@ export const h3FontSize = '1.953rem'
 export const h4FontSize = '1.563rem'
 export const h5FontSize = '1.25rem'
 export const smallFontSize = '0.8rem'
-export const fontFamily = "'system-ui', sans-serif"
+export const fontFamily =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
