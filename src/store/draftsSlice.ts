@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
@@ -45,7 +45,7 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {
-    listRemoveDraftThread: (state, { payload }) => {
+    listRemoveDraftThread: (state, { payload }: PayloadAction<any>) => {
       const { threadId }: { threadId: string } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
@@ -53,7 +53,7 @@ export const draftsSlice = createSlice({
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftMessage: (state, { payload }) => {
+    listRemoveDraftMessage: (state, { payload }: PayloadAction<any>) => {
       const { messageId }: { messageId: string } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
@@ -61,7 +61,7 @@ export const draftsSlice = createSlice({
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftBatch: (state, { payload }) => {
+    listRemoveDraftBatch: (state, { payload }: PayloadAction<any>) => {
       const { threadIds }: { threadIds: string[] } = payload
       const copyCurrentDraftList = state.draftList
 
@@ -73,7 +73,7 @@ export const draftsSlice = createSlice({
       }
       state.draftList = filterArray()
     },
-    listUpdateDraft: (state, { payload }) => {
+    listUpdateDraft: (state, { payload }: PayloadAction<any>) => {
       state.draftDetails = payload
     },
     resetDraftDetails: (state) => {

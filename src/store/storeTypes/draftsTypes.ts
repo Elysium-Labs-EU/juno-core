@@ -24,7 +24,7 @@ export interface FullEmailType {
 export interface EnhancedDraftDetails {
   draft: {
     id: string
-    message: FullEmailType
+    message: Partial<FullEmailType>
   }
 }
 
