@@ -56,13 +56,17 @@ const HelpMenu = forwardRef((_props, ref) => {
   const MENU_ITEMS_SOCIAL = [
     {
       title: 'Join us @ Slack',
-      onClick: () => window.open(import.meta.env.VITE_SLACK_SOCIAL_URL, '_blank'),
+      onClick: () =>
+        window.open(import.meta.env.VITE_SLACK_SOCIAL_URL, '_blank'),
     },
   ]
 
   const combinedMenuItems = () => {
     // If the Slack Social is defined, show the menu item
-    if (import.meta.env.VITE_SLACK_SOCIAL_URL && import.meta.env.VITE_SLACK_SOCIAL_URL.length > 0) {
+    if (
+      import.meta.env.VITE_SLACK_SOCIAL_URL &&
+      import.meta.env.VITE_SLACK_SOCIAL_URL.length > 0
+    ) {
       return [MENU_ITEMS_SOCIAL, MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
     }
     return [MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
