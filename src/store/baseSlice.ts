@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import labelApi from '../data/labelApi'
 import userApi from '../data/userApi'
 import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
@@ -28,12 +28,12 @@ export const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
-    setBaseLoaded: (state, { payload }: { payload: boolean }) => {
+    setBaseLoaded: (state, { payload }: PayloadAction<boolean>) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
       }
     },
-    setIsAuthenticated: (state, { payload }: { payload: boolean }) => {
+    setIsAuthenticated: (state, { payload }: PayloadAction<boolean>) => {
       state.isAuthenticated = payload
     },
     setProfile: (state, { payload }) => {

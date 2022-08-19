@@ -1,4 +1,4 @@
-export const ACCESS_TOKEN = 'accessToken'
+export const ID_TOKEN = 'idToken'
 export const REFRESH_TOKEN = 'refreshToken'
 export const INVALID_TOKEN = 'Invalid token'
 export const LAST_REFRESH = 'lastRefresh'

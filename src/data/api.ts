@@ -2,7 +2,6 @@ import axios from 'axios'
 // import { handleLogout } from '../components/MainHeader/Navigation/More/Options/LogoutOption'
 import * as global from '../constants/globalConstants'
 import assertNonNullish from '../utils/assertNonNullish'
-import getCookie from '../utils/cookie/getCookie'
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
@@ -12,7 +11,7 @@ assertNonNullish(
 export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
-  const token = getCookie(global.ACCESS_TOKEN)
+  const token = localStorage.getItem(global.ID_TOKEN)
   if (token) {
     return token
   }
