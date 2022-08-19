@@ -28,11 +28,12 @@ const GoogleCallBack = () => {
       }
       const response = await userApi().authGoogleCallback(body)
       if (response?.status === 200) {
-        handleUserTokens(response).setAccessToken()
+        handleUserTokens(response).setIdToken()
         dispatch(setIsAuthenticated(true))
         dispatch(push(RouteConstants.HOME))
       } else {
         dispatch(setServiceUnavailable(response.error))
+        dispatch(push(RouteConstants.LOGIN))
       }
     }
     getTokens()
