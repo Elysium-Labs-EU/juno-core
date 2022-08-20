@@ -34,8 +34,9 @@ export const GlobalStyle = createGlobalStyle`
     --radius-m: 4px;
     --radius-l: 8px;
     --box-shadow-low: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-    --z-index-popover: 400;
-    --z-index-modal: 401;
+    --z-index-top-element: 400;
+    --z-index-popover: 401;
+    --z-index-modal: 402;
     --z-index-block-layer: 1000;
   }
   body {
@@ -81,22 +82,11 @@ export const MenuPopper = styled.div`
   position: relative;
   padding: 10px;
   box-shadow: var(--box-shadow-low);
-  /* box-shadow: 0 2px 6.7px rgba(0, 0, 0, 0.028),
-    0 6.7px 22.3px rgba(0, 0, 0, 0.042), 0 30px 100px rgba(0, 0, 0, 0.07); */
   background-color: var(--color-white);
   border-radius: var(--radius-m);
 `
 
 export const theme = createTheme({
-  // breakpoints: {
-  //   values: {
-  //     xs: parseInt(BP.MAX_XS, 10),
-  //     sm: parseInt(BP.MAX_S, 10),
-  //     md: parseInt(BP.MAX_M, 10),
-  //     lg: parseInt(BP.MAX_L, 10),
-  //     xl: 1200,
-  //   },
-  // },
   typography: {
     fontFamily: [
       'system-ui',

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const Wrapper = styled.div`
   width: 100%;
   position: absolute;
-  z-index: var(--z-index-modal);
+  z-index: var(--z-index-top-element);
   background: rgb(246, 246, 246);
   background: linear-gradient(
     180deg,

@@ -14,14 +14,12 @@ export const Modal = styled.div`
 `
 
 export const Inner = styled.div`
-  padding: 20px;
+  margin: 20px;
   display: flex;
   flex-flow: column;
 `
 
 export const ModalHeader = styled.div`
-  margin-bottom: 10px;
-  padding-bottom: 10px;
   border-bottom: 1px solid var(--color-grey-ultra-light);
 `
 
@@ -35,4 +33,5 @@ export const HeaderRow = styled.div`
 export const ModalTitle = styled.h2`
   font-weight: 200;
   margin-bottom: 0;
+  margin-top: 0;
 `

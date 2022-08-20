@@ -57,7 +57,7 @@ const KeyboardCombos = () => {
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <GS.TextMutedParagraph>
+        <GS.TextMutedParagraph style={{ marginBottom: 0 }}>
           {local.MODAL_OS_SUB}{' '}
           <span style={{ color: `var(--color-black)` }}>{getUserAgent()}</span>
         </GS.TextMutedParagraph>

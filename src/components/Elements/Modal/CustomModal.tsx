@@ -21,12 +21,12 @@ const CustomModal = ({
   <Modal
     open={open}
     onClose={handleClose}
-    aria-labelledby={`modal-${modalAriaLabel}`}
-    aria-describedby={`modal-${modalAriaLabel}-info`}
+    aria-labelledby={`modal-${ modalAriaLabel }`}
+    aria-describedby={`modal-${ modalAriaLabel }-info`}
   >
     <S.Modal>
-      <S.Inner>
-        <S.ModalHeader>
+      <S.ModalHeader>
+        <S.Inner>
           <S.HeaderRow>
             <S.ModalTitle>{modalTitle}</S.ModalTitle>
             <CustomIconButton
@@ -37,7 +37,9 @@ const CustomModal = ({
             />
           </S.HeaderRow>
           {subTitle && subTitle}
-        </S.ModalHeader>
+        </S.Inner>
+      </S.ModalHeader>
+      <S.Inner>
         {children}
       </S.Inner>
     </S.Modal>

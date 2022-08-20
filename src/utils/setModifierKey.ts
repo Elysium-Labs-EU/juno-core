@@ -8,7 +8,7 @@ import * as keyConstant from '../constants/keyConstants'
  */
 
 export const modifierKeyDisplay =
-  getUserAgent() === global.MAC_OS ? 'CMD' : keyConstant.KEY_CONTROL
+  getUserAgent() === global.MAC_OS ? '⌘' : keyConstant.KEY_CONTROL
 
 /**
  * @function setModifierKey

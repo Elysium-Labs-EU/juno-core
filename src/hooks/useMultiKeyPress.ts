@@ -4,7 +4,7 @@ import multipleIncludes from '../utils/multipleIncludes'
 export default function useMultiKeyPress(
   handleEvent?: Function,
   actionKeys?: string[],
-  inSearch?: boolean
+  disabled?: boolean
 ) {
   const [keysPressed, setKeyPressed] = useState<string[]>([])
 
@@ -36,7 +36,7 @@ export default function useMultiKeyPress(
       if (
         keysPressed.length > 0 &&
         multipleIncludes(actionKeys, keysPressed) &&
-        (!inSearch ?? true) &&
+        !disabled &&
         mounted
       ) {
         setKeyPressed([])

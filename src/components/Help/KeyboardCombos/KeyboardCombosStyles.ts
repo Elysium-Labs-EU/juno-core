@@ -25,7 +25,7 @@ export const KeyBindShortcut = styled.div`
     background-color: var(--color-grey-border);
     border: 1px solid var(--color-grey);
     display: block;
-    padding: 3px 6px 4px;
+    padding: 2px 9px 5px;
     margin-right: 3px;
     border-radius: 4px;
     cursor: default;
@@ -38,4 +38,5 @@ export const KeyBindShortcut = styled.div`
   }
   display: flex;
   flex-flow: row;
+  margin-top: 5px;
 `

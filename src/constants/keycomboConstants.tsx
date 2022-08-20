@@ -1,9 +1,3 @@
-import {
-  FiArrowDown,
-  FiArrowLeft,
-  FiArrowRight,
-  FiArrowUp,
-} from 'react-icons/fi'
 import { modifierKeyDisplay } from '../utils/setModifierKey'
 
 export const MODAL_TITLE = 'Keyboard Combos'
@@ -18,13 +12,13 @@ export const GLOBAL_KEY_COMBOS = [
   { title: 'Open Inbox', keys: ['2'] },
   { title: 'Open Search', keys: ['3'] },
   { title: 'Open Compose', keys: ['4'] },
-  { title: 'Open Help', keys: ['SHIFT', <FiArrowRight />] },
+  { title: 'Open Help', keys: ['SHIFT', '→'] },
   { title: 'Open Feedback', keys: [modifierKeyDisplay, '.'] },
   { title: 'Open Keyboard shortcuts', keys: [modifierKeyDisplay, '/'] },
   { title: 'Focus Mode / Sort Inbox', keys: [modifierKeyDisplay, 'E'] },
   { title: 'Close Window / Back', keys: ['ESCAPE'] },
-  { title: 'Highlight Previous', keys: [<FiArrowUp />] },
-  { title: 'Highlight Next', keys: [<FiArrowDown />] },
+  { title: 'Highlight Previous', keys: ['↑'] },
+  { title: 'Highlight Next', keys: ['↓'] },
   { title: 'Open Highlighted Email', keys: ['ENTER'] },
   { title: 'Refresh Inbox', subTitle: 'When on the Inbox', keys: ['R'] },
 ]
@@ -48,12 +42,12 @@ export const EMAIL_DETAIL_COMBOS = [
   {
     title: 'Next Email',
     subTitle: 'When option is available',
-    keys: [<FiArrowRight />],
+    keys: ['→'],
   },
   {
     title: 'Previous Email',
     subTitle: 'When option is available',
-    keys: [<FiArrowLeft />],
+    keys: ['←'],
   },
 ]
 
