@@ -42,6 +42,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: var(--color-white-off) !important;
     margin: 0;
     font-family: var(--font-family) !important;
+    -webkit-font-smoothing: antialiased !important;
   }
 `
 

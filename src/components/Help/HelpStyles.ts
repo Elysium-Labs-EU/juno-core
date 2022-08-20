@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const StartButtonWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   bottom: 40px;
   right: 40px;
   z-index: var(--z-index-popover);

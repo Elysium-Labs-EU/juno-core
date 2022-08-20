@@ -48,6 +48,8 @@ const RenderEmailList = ({
   const activeModal = useAppSelector(selectActiveModal)
   const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
   const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
+  const KeyJListener = useKeyPress(keyConstants.KEY_J)
+  const KeyKListener = useKeyPress(keyConstants.KEY_K)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   useEffect(() => {
@@ -58,20 +60,20 @@ const RenderEmailList = ({
 
   useEffect(() => {
     if (
-      ArrowDownListener &&
+      (ArrowDownListener || KeyJListener) &&
       !inSearch &&
       !activeModal &&
       focusedItemIndex < filteredOnLabel.threads.length - 1
     ) {
       setFocusedItemIndex((prevState) => prevState + 1)
     }
-  }, [ArrowDownListener, inSearch, activeModal])
+  }, [ArrowDownListener, inSearch, activeModal, KeyJListener])
 
   useEffect(() => {
-    if (ArrowUpListener && !inSearch && !activeModal) {
+    if ((ArrowUpListener || KeyKListener) && !inSearch && !activeModal) {
       setFocusedItemIndex((prevState) => prevState - 1)
     }
-  }, [ArrowUpListener, inSearch, activeModal])
+  }, [ArrowUpListener, inSearch, activeModal, KeyKListener])
 
   const { threads, nextPageToken } = filteredOnLabel
   return (
@@ -194,10 +196,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {

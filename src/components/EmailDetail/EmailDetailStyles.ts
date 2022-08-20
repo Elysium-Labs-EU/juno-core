@@ -4,6 +4,21 @@ interface IScroll {
   clientState: boolean
 }
 
+export const Scroll = styled.div<IScroll>`
+  /* position: relative; */
+  width: 100%;
+  /* height: ${({ clientState }) => (clientState ? '90.5vh' : '88.3vh')}; */
+  /* overflow-y: auto; */
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+  /* scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  } */
+`
+
 export const HiddenMessagesFeed = styled.div`
   display: none;
 `
@@ -13,24 +28,11 @@ interface IEmailDetail {
 }
 
 export const EmailDetailWrapper = styled.div<IEmailDetail>`
-  margin-left: auto;
-  margin-right: auto;
-  flex: 1 1 0%;
-  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
-`
-
-export const Scroll = styled.div<IScroll>`
-  position: relative;
-  width: 100%;
-  height: ${({ clientState }) => (clientState ? '90.5vh' : '88.3vh')};
-  overflow-y: auto;
+  /* margin-left: auto;
+  margin-right: auto; */
+  /* flex: 1 1 0%; */
   display: flex;
-  flex-direction: column;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
-  }
+  /* display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')}; */
 `
 
 export const MessageFeedViewContainer = styled.div``
@@ -116,7 +118,7 @@ export const DetailRow = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  flex: 1 1;
+  flex: 1 1 0%;
 `
 
 export const CardFullWidth = styled.div`
@@ -127,7 +129,7 @@ export const EmailDetailContainer = styled.div<IEmailDetail>`
   width: ${({ tabbedView }) => (tabbedView ? '100%' : '100vw')};
   min-width: ${({ tabbedView }) => (tabbedView ? '665px' : '300px')};
   max-width: min(100vw - 340px, 860px);
-  padding-bottom: 320px;
+  /* padding-bottom: 320px; */
   margin-bottom: 20px;
   overflow: scroll;
   scrollbar-width: none;
