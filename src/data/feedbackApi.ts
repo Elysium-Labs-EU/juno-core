@@ -22,7 +22,6 @@ const feedbackApi = () => {
       try {
         const res: AxiosResponse<any> = await axios.post(
           `${import.meta.env.VITE_HEADLESS_FEEDBACK_URL}`,
-
           body
         )
         return res

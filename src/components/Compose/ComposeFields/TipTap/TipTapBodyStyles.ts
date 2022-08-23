@@ -12,12 +12,12 @@ export const Wrapper = styled.div<IWrapper>`
   display: flex;
   flex-flow: column;
   position: relative;
-  min-height: 375px;
+  min-height: 200px;
   height: 100%;
   border-radius: 4px;
   div {
     .ProseMirror {
-      min-height: 375px;
+      min-height: 200px;
       height: 100%;
       outline: 0;
       padding: 0 12px;

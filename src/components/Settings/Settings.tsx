@@ -1,16 +1,18 @@
+import { useState } from 'react'
 import { selectActiveModal, setActiveModal } from '../../store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import * as S from './SettingsStyles'
-import ShowAvatar from './SettingsOptions/ShowAvatar/ShowAvatar'
-import EmailSize from './SettingsOptions/EmailSize/EmailSize'
-import Contributions from './Contributions/contributions'
+import Contributions from './Contributions/Contributions'
 import CustomModal from '../Elements/Modal/CustomModal'
 import * as global from '../../constants/globalConstants'
+import SettingsSidebar from './SettingsSidebar/SettingsSidebar'
+import General from './General/General'
+import Signature from './Signature/Signature'
 
 const SETTINGS = 'Settings'
-const CONTRIBUTIONS = 'Contributions'
 
 const Settings = () => {
+  const [activeMenuItem, setActiveMenuItem] = useState(0)
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
 
@@ -22,10 +24,13 @@ const Settings = () => {
       modalAriaLabel="settings"
     >
       <S.SettingsContainer>
-        <ShowAvatar />
-        <EmailSize />
-        <S.SettingsSubHeader>{CONTRIBUTIONS}</S.SettingsSubHeader>
-        <Contributions />
+        <SettingsSidebar
+          activeMenuItem={activeMenuItem}
+          setActiveMenuItem={setActiveMenuItem}
+        />
+        {activeMenuItem === 0 && <General />}
+        {activeMenuItem === 1 && <Signature />}
+        {activeMenuItem === 2 && <Contributions />}
       </S.SettingsContainer>
     </CustomModal>
   )

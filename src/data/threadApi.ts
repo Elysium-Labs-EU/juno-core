@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 export interface EmailQueryObject {
   labelIds?: string[]
@@ -28,9 +28,6 @@ const threadApi = ({
         },
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
-        headers: {
-          Authorization: fetchToken(),
-        },
       })
       return res.data
     } catch (err) {
@@ -47,10 +44,6 @@ const threadApi = ({
       },
       paramsSerializer: (params) =>
         qs.stringify(params, { arrayFormat: 'repeat' }),
-
-      headers: {
-        Authorization: fetchToken(),
-      },
       signal: controller?.signal || signal,
     })
     return res
@@ -59,12 +52,7 @@ const threadApi = ({
   getThreadDetail: async (threadId: string) => {
     try {
       const res: AxiosResponse<any> = await instance.get(
-        `/api/thread/${threadId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `/api/thread/${threadId}`
       )
       return res.data
     } catch (err) {
@@ -75,12 +63,7 @@ const threadApi = ({
     try {
       const res: AxiosResponse<any> = await instance.patch(
         `/api/thread/${threadId}`,
-        request,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        request
       )
       return res
     } catch (err) {
@@ -92,12 +75,7 @@ const threadApi = ({
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/thread/thrash/${threadId}`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -108,9 +86,6 @@ const threadApi = ({
     try {
       const res: AxiosResponse<any> = await instance.delete(`/api/thread/`, {
         data: { id: threadId },
-        headers: {
-          Authorization: fetchToken(),
-        },
       })
       return res.data
     } catch (err) {

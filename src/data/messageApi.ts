@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 const messageApi = () => ({
   getMessageDetail: async (messageId: string) => {
@@ -22,12 +22,7 @@ const messageApi = () => ({
   }) => {
     try {
       const res: AxiosResponse<any> = await instance.get(
-        `/api/message/attachment/${messageId}/${attachmentId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `/api/message/attachment/${messageId}/${attachmentId}`
       )
       return res
     } catch (err) {
@@ -39,12 +34,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/send-message`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -55,12 +45,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await instance.patch(
         `/api/message/${messageId}`,
-        request,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        request
       )
       return res
     } catch (err) {
@@ -72,12 +57,7 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/message/thrash/${messageId}`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -88,9 +68,6 @@ const messageApi = () => ({
     try {
       const res: AxiosResponse<any> = await instance.delete(`/api/message/`, {
         data: { id: messageId },
-        headers: {
-          Authorization: fetchToken(),
-        },
       })
       return res.data
     } catch (err) {

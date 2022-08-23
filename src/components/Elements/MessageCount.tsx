@@ -4,8 +4,8 @@ import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
 import * as global from '../../constants/globalConstants'
 import StyledTooltip from './StyledTooltip'
 
-const MULTI_THREAD = 'Threads'
-const SINGLE_THREAD = 'Thread'
+const MULTI_MESSAGE = 'Messages'
+const SINGLE_MESSAGE = 'Message'
 const MULTI_DRAFT = 'Drafts'
 const SINGLE_DRAFT = 'Draft'
 
@@ -39,7 +39,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
     <StyledMessageCount>
       <StyledTooltip
         title={`${regularCount} ${
-          regularCount > 1 ? MULTI_THREAD : SINGLE_THREAD
+          regularCount > 1 ? MULTI_MESSAGE : SINGLE_MESSAGE
         }`}
       >
         <CountWrapper>

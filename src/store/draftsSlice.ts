@@ -95,41 +95,45 @@ export const {
   resetDraftDetails,
 } = draftsSlice.actions
 
-export const createUpdateDraft =
-  ({ composedEmail }: any): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { id, message } = getState().drafts.draftDetails
-      const { currEmail } = getState().emailDetail
+export const createUpdateDraft = ({ composedEmail }: any): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const { id, message } = getState().drafts.draftDetails
+    const { currEmail } = getState().emailDetail
+    // const { emailAddress } = getState().base.profile
 
-      const baseComposedEmail: ComposedEmail = {
-        draftId: id,
-        threadId: currEmail,
-        messageId: message?.id,
-        labelIds: message?.labelIds,
-        to: composedEmail?.to ? convertToGmailEmail(composedEmail.to) : '',
-        cc: composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : '',
-        bcc: composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : '',
-        subject: composedEmail?.subject ?? '',
-        body: composedEmail?.body ?? '',
-      }
+    const baseComposedEmail: ComposedEmail = {
+      draftId: id,
+      threadId: currEmail,
+      messageId: message?.id,
+      labelIds: message?.labelIds,
+      to: composedEmail?.to ? convertToGmailEmail(composedEmail.to) : '',
+      cc: composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : '',
+      bcc: composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : '',
+      subject: composedEmail?.subject ?? '',
+      body: composedEmail?.body ?? '',
+      signature: composedEmail?.signature ?? '',
+      // from: emailAddress,
+    }
 
-      const response = isEmpty(getState().drafts.draftDetails)
-        ? await draftApi().createDrafts(baseComposedEmail)
-        : await draftApi().updateDrafts(baseComposedEmail)
+    const response = isEmpty(getState().drafts.draftDetails)
+      ? await draftApi().createDrafts(baseComposedEmail)
+      : await draftApi().updateDrafts(baseComposedEmail)
 
-      if (response && response.status === 200) {
-        const {
-          data: { data },
-        } = response
-        dispatch(listUpdateDraft(data))
-      } else {
-        dispatch(setServiceUnavailable('Cannot create or update draft.'))
-      }
-    } catch (err) {
+    if (response && response.status === 200) {
+      const {
+        data: { data },
+      } = response
+      dispatch(listUpdateDraft(data))
+    } else {
       dispatch(setServiceUnavailable('Cannot create or update draft.'))
     }
+  } catch (err) {
+    dispatch(setServiceUnavailable('Cannot create or update draft.'))
   }
+}
 
 const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   const {
@@ -139,12 +143,11 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   return async (dispatch, getState) => {
     const { signal } = new AbortController()
     try {
-      // console.log(message.payload, signal)
       const decodedBody = await loopThroughBodyParts({
         inputObject: message.payload,
         signal,
       })
-      // console.log(decodedBody)
+
       const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
@@ -196,50 +199,51 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
 }
 
 const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
-export const openDraftEmail =
-  ({ messageId, id }: OpenDraftEmailType): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      // If Draft list is empty, fetch it first.
-      if (isEmpty(getState().drafts.draftList)) {
-        const { payload } = await dispatch(fetchDrafts())
-        if (payload?.drafts && payload.drafts.length > 0) {
-          const { drafts } = payload
-          dispatch(listUpdateDraft(drafts))
-          const draftIdFilter = drafts.filter(
-            (draft: any) => draft.message.id === messageId
-          )
-          const draftId = draftIdFilter[0].id
-          if (!isEmpty(draftId)) {
-            dispatch(loadDraftDetails({ draftId }))
-          } else {
-            dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
-          }
+export const openDraftEmail = ({
+  messageId,
+  id,
+}: OpenDraftEmailType): AppThunk => async (dispatch, getState) => {
+  try {
+    // If Draft list is empty, fetch it first.
+    if (isEmpty(getState().drafts.draftList)) {
+      const { payload } = await dispatch(fetchDrafts())
+      if (payload?.drafts && payload.drafts.length > 0) {
+        const { drafts } = payload
+        dispatch(listUpdateDraft(drafts))
+        const draftIdFilter = drafts.filter(
+          (draft: any) => draft.message.id === messageId
+        )
+        const draftId = draftIdFilter[0].id
+        if (!isEmpty(draftId)) {
+          dispatch(loadDraftDetails({ draftId }))
         } else {
           dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
         }
       } else {
-        const { draftList } = getState().drafts
+        dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
+      }
+    } else {
+      const { draftList } = getState().drafts
 
-        // Search the draftList on message.threadId to get the id. Use that Id to fetch all the details of the draft.
-        const selectedEmail =
-          draftList && messageId
-            ? draftList.filter((draft) => draft.message.id === messageId)
-            : draftList.filter((draft) => draft.message.threadId === id)
+      // Search the draftList on message.threadId to get the id. Use that Id to fetch all the details of the draft.
+      const selectedEmail =
+        draftList && messageId
+          ? draftList.filter((draft) => draft.message.id === messageId)
+          : draftList.filter((draft) => draft.message.threadId === id)
 
-        if (selectedEmail.length > 0) {
-          const draftId = selectedEmail[0].id
-          if (!isEmpty(draftId)) {
-            dispatch(loadDraftDetails({ draftId }))
-          } else {
-            dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
-          }
+      if (selectedEmail.length > 0) {
+        const draftId = selectedEmail[0].id
+        if (!isEmpty(draftId)) {
+          dispatch(loadDraftDetails({ draftId }))
+        } else {
+          dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
         }
       }
-    } catch (err) {
-      dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
     }
+  } catch (err) {
+    dispatch(setServiceUnavailable(ERROR_OPEN_DRAFT_EMAIL))
   }
+}
 
 export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
   const { selectedEmails } = getState().email
@@ -269,65 +273,66 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
   }
 }
 
-export const deleteDraft =
-  (id: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      draftApi().deleteDraft(id)
-    } catch (err) {
-      dispatch(setServiceUnavailable('Error deleting draft.'))
-    }
+export const deleteDraft = (id: string): AppThunk => async (dispatch) => {
+  try {
+    draftApi().deleteDraft(id)
+  } catch (err) {
+    dispatch(setServiceUnavailable('Error deleting draft.'))
   }
+}
 
-export const sendComposedEmail =
-  ({ composedEmail }: any): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const sender = getState().base.profile.emailAddress
-      const {
-        id,
-        message: { threadId },
-      } = getState().drafts.draftDetails
-      const { emailList } = getState().email
-      const completeEmail = { ...composedEmail, sender }
-      if (id) {
-        const body = { id }
-        const response = await draftApi().sendDraft(body)
-        if (response?.status === 200) {
-          const { labelIds } = getState().labels
-          dispatch(setCurrentEmail(''))
-          dispatch(resetDraftDetails())
-          archiveMail({ threadId, dispatch, labelIds })
-          const staticIndexActiveEmailList: number = getEmailListIndex({
-            emailList,
-            labelIds: [global.DRAFT_LABEL],
-          })
-          if (staticIndexActiveEmailList > -1)
-            dispatch(
-              listRemoveItemDetail({
-                messageId: threadId,
-                staticIndexActiveEmailList,
-              })
-            )
-          dispatch(closeMail())
-        } else {
-          dispatch(setServiceUnavailable('Error sending email.'))
-        }
+export const sendComposedEmail = ({ composedEmail }: any): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const sender = getState().base.profile.emailAddress
+    const {
+      id,
+      message: { threadId },
+    } = getState().drafts.draftDetails
+    const { emailList } = getState().email
+    const completeEmail = { ...composedEmail, sender }
+    // If the id is found on the draft details, send the draft email via the Google servers.
+    if (id) {
+      const body = { id }
+      const response = await draftApi().sendDraft(body)
+      if (response?.status === 200) {
+        const { labelIds } = getState().labels
+        dispatch(setCurrentEmail(''))
+        dispatch(resetDraftDetails())
+        archiveMail({ threadId, dispatch, labelIds })
+        const staticIndexActiveEmailList: number = getEmailListIndex({
+          emailList,
+          labelIds: [global.DRAFT_LABEL],
+        })
+        if (staticIndexActiveEmailList > -1)
+          dispatch(
+            listRemoveItemDetail({
+              messageId: threadId,
+              staticIndexActiveEmailList,
+            })
+          )
+        dispatch(closeMail())
+      } else {
+        dispatch(setServiceUnavailable('Error sending email.'))
       }
-      if (id === undefined) {
-        const response = await messageApi().sendMessage(completeEmail)
-        if (response?.status === 200) {
-          dispatch(setCurrentEmail(''))
-          dispatch(push(`/`))
-        } else {
-          dispatch(setServiceUnavailable('Error sending email.'))
-        }
-      }
-    } catch (err) {
-      dispatch(setServiceUnavailable('Error sending email.'))
     }
-    return null
+    // If the id cannot be found on the draft details, send the email via the sendMessage function
+    if (id === undefined) {
+      const response = await messageApi().sendMessage(completeEmail)
+      if (response?.status === 200) {
+        dispatch(setCurrentEmail(''))
+        dispatch(push(`/`))
+      } else {
+        dispatch(setServiceUnavailable('Error sending email.'))
+      }
+    }
+  } catch (err) {
+    dispatch(setServiceUnavailable('Error sending email.'))
   }
+  return null
+}
 
 export const selectDraft = (state: RootState) => state.drafts.draftList
 export const selectDraftDetails = (state: RootState) =>

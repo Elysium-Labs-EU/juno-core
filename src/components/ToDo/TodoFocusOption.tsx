@@ -1,7 +1,11 @@
 import { useCallback } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../store/labelsSlice'
-import { selectActiveModal, selectInSearch, selectIsLoading } from '../../store/utilsSlice'
+import {
+  selectActiveModal,
+  selectInSearch,
+  selectIsLoading,
+} from '../../store/utilsSlice'
 import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import * as global from '../../constants/globalConstants'
@@ -45,7 +49,7 @@ const TodoFocusOption = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useMultiKeyPress(handleEvent, actionKeys, (inSearch || Boolean(activeModal)))
+  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
 
   const isDisabled =
     isLoading ||

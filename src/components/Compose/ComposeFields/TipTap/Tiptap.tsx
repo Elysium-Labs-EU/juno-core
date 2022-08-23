@@ -1,6 +1,6 @@
 import { useEditor, EditorContent, generateHTML } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
@@ -17,33 +17,42 @@ import useDebounce from '../../../../hooks/useDebounce'
 import * as local from '../../../../constants/composeEmailConstants'
 import * as S from './TipTapBodyStyles'
 import * as Compose from '../../ComposeStyles'
+import * as global from '../../../../constants/globalConstants'
 import MenuBar from './TipTapMenubar'
+import removeSignature from '../../../../utils/removeSignature'
+
+/**
+ * @param fetchedBodyValue - the body value fetched from an external source.
+ * @param autofocus set the modal to focus on load
+ * @param callback - a callback function that sends back the  body value to the parent component
+ * @returns {JSX.Element}
+ */
 
 const Tiptap = ({
   fetchedBodyValue,
-  isReplying = undefined,
-  updateComposeEmail,
+  autofocus = false,
+  callback,
 }: {
   fetchedBodyValue: string
-  isReplying?: boolean
-  updateComposeEmail: (action: any, mounted: boolean) => void
+  autofocus?: boolean
+  callback: (action: any, mounted: boolean) => void
 }) => {
   const [bodyValue, setBodyValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedBodyValue = useDebounce(bodyValue, 500)
   const tipTapRef = useRef<any | null>(null)
 
-  const handleBodyChange = (value: string) => {
+  const handleBodyChange = useCallback((value: string) => {
     setBodyValue(
       DOMPurify.sanitize(value, {
         USE_PROFILES: { html: true },
       })
     )
-  }
+  }, [])
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
-    autofocus: isReplying ?? false,
+    autofocus,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
       const htlmlOutput = generateHTML(json, [
@@ -72,21 +81,29 @@ const Tiptap = ({
   useEffect(() => {
     let mounted = true
     if (mounted && fetchedBodyValue && fetchedBodyValue.length > 0) {
-      setBodyValue(fetchedBodyValue)
-      if (bodyValue.length < 1 && editorInstance) {
-        editorInstance.commands.setContent(fetchedBodyValue)
+      if (fetchedBodyValue.includes(global.JUNO_SIGNATURE)) {
+        const response = removeSignature(fetchedBodyValue)
+        setBodyValue(response.outerHTML)
+        if (bodyValue.length < 1 && editorInstance) {
+          editorInstance.commands.setContent(response.outerHTML)
+        }
+      } else {
+        setBodyValue(fetchedBodyValue)
+        if (bodyValue.length < 1 && editorInstance) {
+          editorInstance.commands.setContent(fetchedBodyValue)
+        }
       }
     }
     return () => {
       mounted = false
     }
-  }, [fetchedBodyValue])
+  }, [fetchedBodyValue, editorInstance])
 
   useEffect(() => {
     let mounted = true
     if (debouncedBodyValue !== '') {
       const updateEventObject = { id: local.BODY, value: debouncedBodyValue }
-      updateComposeEmail(updateEventObject, mounted)
+      callback(updateEventObject, mounted)
     }
     return () => {
       mounted = false
