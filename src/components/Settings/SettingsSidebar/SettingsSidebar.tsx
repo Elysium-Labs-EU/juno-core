@@ -1,10 +1,10 @@
-import { FiCode, FiSettings } from 'react-icons/fi'
+import { Cog, Sign, Signature } from '../../../images/svgIcons/quillIcons'
 import * as S from './SettingsSidebarStyles'
 
 const SETTINGS_OPTIONS = [
-  { title: 'General', icon: <FiSettings /> },
-  { title: 'Signature', icon: <FiCode /> },
-  { title: 'Credits', icon: <FiCode /> },
+  { title: 'General', icon: <Cog /> },
+  { title: 'Signature', icon: <Signature /> },
+  { title: 'Credits', icon: <Sign /> },
 ]
 
 const SettingsSidebar = ({
@@ -14,7 +14,9 @@ const SettingsSidebar = ({
   activeMenuItem: number
   setActiveMenuItem: (value: number) => void
 }) => (
-  <S.Wrapper>
+  <S.Wrapper
+    data-test-id="settings-menu"
+  >
     {SETTINGS_OPTIONS.map((item, index) => (
       <li key={item.title}>
         <S.MenuItem

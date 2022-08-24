@@ -27,7 +27,7 @@ export const MenuItem = styled.button<IMenuItem>`
   border: 0;
   border-radius: var(--radius-m);
   width: 100%;
-  line-height: 16px;
+  line-height: 8px;
   letter-spacing: 0.01em;
   white-space: nowrap;
   overflow: hidden;

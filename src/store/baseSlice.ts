@@ -18,6 +18,8 @@ const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
   profile: {
     signature: '',
+    name: '',
+    picture: '',
     emailAddress: '',
     messagesTotal: 0,
     threadsTotal: 0,
@@ -44,23 +46,20 @@ export const baseSlice = createSlice({
   },
 })
 
-export const {
-  setBaseLoaded,
-  setIsAuthenticated,
-  setProfile,
-} = baseSlice.actions
+export const { setBaseLoaded, setIsAuthenticated, setProfile } =
+  baseSlice.actions
 
-export const handleSettings = (labels: GoogleLabel[]): AppThunk => async (
-  dispatch
-) => {
-  const settingsLabel = findSettings(labels)
-  if (settingsLabel.length === 0) {
-    createSettingsLabel(dispatch)
-    return
+export const handleSettings =
+  (labels: GoogleLabel[]): AppThunk =>
+  async (dispatch) => {
+    const settingsLabel = findSettings(labels)
+    if (settingsLabel.length === 0) {
+      createSettingsLabel(dispatch)
+      return
+    }
+    dispatch(setSettingsLabelId(settingsLabel[0].id))
+    parseSettings(dispatch, settingsLabel)
   }
-  dispatch(setSettingsLabelId(settingsLabel[0].id))
-  parseSettings(dispatch, settingsLabel)
-}
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {

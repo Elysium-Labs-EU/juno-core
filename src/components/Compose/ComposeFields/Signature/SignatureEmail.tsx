@@ -14,7 +14,10 @@ import * as global from '../../../../constants/globalConstants'
 const SignatureEmail = ({
   callback,
 }: {
-  callback: (action: { id: string, value: string | null }, mounted: boolean) => void
+  callback: (
+    action: { id: string; value: string | null },
+    mounted: boolean
+  ) => void
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -36,8 +39,9 @@ const SignatureEmail = ({
     let mounted = true
     const updateEventObject = {
       id: local.SIGNATURE,
-      value: selectedSignature ? `<div data-juno=${ global.JUNO_SIGNATURE }>${ selectedSignature
-        }</div>` : null,
+      value: selectedSignature
+        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        : null,
     }
     callback(updateEventObject, mounted)
     return () => {

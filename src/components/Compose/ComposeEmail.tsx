@@ -92,7 +92,10 @@ const ComposeEmail = ({
 
   const updateComposeEmail = useCallback(
     (action: { id: string; value: string | IContact[] }, mounted: boolean) => {
-      if (Object.prototype.hasOwnProperty.call(action, 'id') && Object.prototype.hasOwnProperty.call(action, 'value')) {
+      if (
+        Object.prototype.hasOwnProperty.call(action, 'id') &&
+        Object.prototype.hasOwnProperty.call(action, 'value')
+      ) {
         const { id, value } = action
         mounted &&
           setComposedEmail({

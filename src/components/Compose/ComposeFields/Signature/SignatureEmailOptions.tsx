@@ -12,7 +12,7 @@ const MANAGE_SIGNATURES = 'Manage signatures'
 
 const partialSignature = (signature: string) => {
   if (signature && signature.length > 30) {
-    return `${ removeHTMLTag(signature.slice(0, 40)) }...`
+    return `${removeHTMLTag(signature.slice(0, 40))}...`
   }
   return removeHTMLTag(signature)
 }
@@ -34,7 +34,9 @@ const SignatureEmailOptions = ({
 
   const MENU_SIGNATURE_OPTIONS = [
     {
-      title: partialSignature(signature && signature.length > 0 ? signature : '(Empty signature)'),
+      title: partialSignature(
+        signature && signature.length > 0 ? signature : '(Empty signature)'
+      ),
       onClick: () => {
         handleClose()
         setSelectedSignature(signature)
