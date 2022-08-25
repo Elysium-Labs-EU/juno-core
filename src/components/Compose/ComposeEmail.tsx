@@ -39,6 +39,7 @@ import { refreshEmailFeed } from '../../store/emailListSlice'
 import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
+import { IRecipientsList } from './ComposeEmailTypes'
 
 const handleContactConversion = (contactValue: string): IContact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {
@@ -160,7 +161,7 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  const recipientListTransform = (recipientListRaw: any) => ({
+  const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
     fieldId: recipientListRaw.fieldId,
     newValue: recipientListRaw.newValue.map((item: string | IContact) =>
       typeof item === 'string' ? { name: item, emailAddress: item } : item
@@ -168,7 +169,7 @@ const ComposeEmail = ({
   })
 
   const handleChangeTo = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -183,7 +184,7 @@ const ComposeEmail = ({
   )
 
   const handleChangeCC = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -198,7 +199,7 @@ const ComposeEmail = ({
   )
 
   const handleChangeBCC = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -219,26 +220,29 @@ const ComposeEmail = ({
     [subjectValue]
   )
 
-  const handleDelete = useCallback((selectedOption: any) => {
-    const { option, fieldId } = selectedOption
-    switch (fieldId) {
-      case local.TO: {
-        setToValue(toValue.filter((item) => item !== option))
-        break
+  const handleDelete = useCallback(
+    (selectedOption: any) => {
+      const { option, fieldId } = selectedOption
+      switch (fieldId) {
+        case local.TO: {
+          setToValue(toValue.filter((item) => item !== option))
+          break
+        }
+        case local.CC: {
+          setCCValue(ccValue.filter((item) => item !== option))
+          break
+        }
+        case local.BCC: {
+          setBCCValue(bccValue.filter((item) => item !== option))
+          break
+        }
+        default: {
+          break
+        }
       }
-      case local.CC: {
-        setCCValue(ccValue.filter((item) => item !== option))
-        break
-      }
-      case local.BCC: {
-        setBCCValue(bccValue.filter((item) => item !== option))
-        break
-      }
-      default: {
-        break
-      }
-    }
-  }, [])
+    },
+    [toValue, ccValue, bccValue]
+  )
 
   useEffect(() => {
     let mounted = true
