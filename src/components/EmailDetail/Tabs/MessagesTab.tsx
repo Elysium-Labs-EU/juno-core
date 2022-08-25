@@ -9,7 +9,7 @@ const MessagesTab = ({
 }: {
   activeThread: IEmailListThreadItem
   activeLink: string
-  navigateTo: Function
+  navigateTo: ({ link, name }: { link: string, name: string }) => void
 }) => (
   <S.StyedListItem
     style={{ cursor: 'pointer' }}
@@ -18,10 +18,9 @@ const MessagesTab = ({
     isActive={activeLink === local.MESSAGE_MENU_ITEM.name}
   >
     <S.StyledBadge
+      isDimmed={activeLink === local.FILES_MENU_ITEM.name}
       badgeContent={
-        activeLink === local.MESSAGE_MENU_ITEM.name
-          ? 0
-          : activeThread?.messages?.length ?? 0
+        activeThread?.messages?.length ?? 0
       }
       color="primary"
     >
