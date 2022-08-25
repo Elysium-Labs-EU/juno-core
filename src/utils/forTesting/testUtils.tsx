@@ -27,10 +27,13 @@ export default function renderWithProviders(
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
-  function Wrapper({ children }: PropsWithChildren<{}>): JSX.Element {
+  function Wrapper({
+    children = undefined,
+  }: PropsWithChildren<{}>): JSX.Element {
     return (
       <Provider store={store}>
-        <HistoryRouter history={history}>{children}</HistoryRouter>
+        {children}
+        {/* <HistoryRouter history={history}>{children}</HistoryRouter> */}
       </Provider>
     )
   }

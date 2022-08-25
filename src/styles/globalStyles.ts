@@ -40,8 +40,8 @@ export const GlobalStyle = createGlobalStyle`
     --z-index-block-layer: 1000;
   }
   body {
-    background-color: var(--color-white-off) !important;
     margin: 0;
+    background-color: var(--color-white-off) !important;
     font-family: var(--font-family) !important;
     -webkit-font-smoothing: antialiased !important;
   }

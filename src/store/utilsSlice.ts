@@ -30,7 +30,7 @@ interface IUtilsState {
   activeModal: null | string
 }
 
-const initialState: IUtilsState = Object.freeze({
+export const initialState: IUtilsState = Object.freeze({
   inSearch: false,
   isLoading: false,
   isProcessing: false,

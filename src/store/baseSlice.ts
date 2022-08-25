@@ -12,10 +12,14 @@ import multipleIncludes from '../utils/multipleIncludes'
 import findSettings from '../utils/settings/findSettings'
 import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
+import settingsApi from '../data/settingsApi'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
   profile: {
+    signature: '',
+    name: '',
+    picture: '',
     emailAddress: '',
     messagesTotal: 0,
     threadsTotal: 0,
@@ -71,40 +75,55 @@ export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     // TODO: TYPE THE DATA
     const userResponse = await userApi().fetchUser()
-    const { data, status } = userResponse
+    const sendAsResponse = await settingsApi().getSendAs(
+      userResponse.data.emailAddress
+    )
     const labelResponse = await labelApi().fetchLabels()
     const { labels } = labelResponse
-    if (data && status === 200) {
-      dispatch(setProfile(data))
-      if (Array.isArray(labels) && labels.length > 0) {
-        const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
-        if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
-          const checkArray = BASE_ARRAY.map((item) =>
-            nameMapLabels.includes(item)
-          )
-          checkArray.forEach(
-            (checkValue, index) =>
-              !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-          )
+    if (userResponse?.data && userResponse?.status === 200) {
+      if (sendAsResponse?.data && sendAsResponse?.status === 200) {
+        dispatch(
+          setProfile({
+            signature: sendAsResponse?.data?.signature ?? '',
+            ...userResponse.data,
+          })
+        )
+        if (Array.isArray(labels) && labels.length > 0) {
+          const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
+          if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
+            const checkArray = BASE_ARRAY.map((item) =>
+              nameMapLabels.includes(item)
+            )
+            checkArray.forEach(
+              (checkValue, index) =>
+                !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
+            )
 
-          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labels.filter((item: GoogleLabel) => item.name === baseLabel)
-          ).filter((result) => result.length > 0)
-          dispatch(setStorageLabels(prefetchedBoxes))
-          dispatch(handleSettings(labels))
+            const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+              labels.filter((item: GoogleLabel) => item.name === baseLabel)
+            ).filter((result) => result.length > 0)
+            dispatch(setStorageLabels(prefetchedBoxes))
+            dispatch(handleSettings(labels))
+          } else {
+            const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+              labels.filter((item: GoogleLabel) => item.name === baseLabel)
+            )
+
+            dispatch(setStorageLabels(prefetchedBoxes))
+            dispatch(setBaseLoaded(true))
+            dispatch(handleSettings(labels))
+          }
         } else {
-          const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-            labels.filter((item: GoogleLabel) => item.name === baseLabel)
+          dispatch(
+            setServiceUnavailable(
+              `Network Error. ${labelResponse}. Please try again later.`
+            )
           )
-
-          dispatch(setStorageLabels(prefetchedBoxes))
-          dispatch(setBaseLoaded(true))
-          dispatch(handleSettings(labels))
         }
       } else {
         dispatch(
           setServiceUnavailable(
-            `Network Error. ${labelResponse}. Please try again later.`
+            `Network Error. ${sendAsResponse}. Please try again later.`
           )
         )
       }

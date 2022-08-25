@@ -35,6 +35,7 @@ import Seo from '../Elements/Seo'
 import DiscardDraftButton from './DiscardDraftButton'
 import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
 import { refreshEmailFeed } from '../../store/emailListSlice'
+import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 
 const handleContactConversion = (contactValue: string): IContact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {
@@ -91,7 +92,10 @@ const ComposeEmail = ({
 
   const updateComposeEmail = useCallback(
     (action: { id: string; value: string | IContact[] }, mounted: boolean) => {
-      if (action.id && action.value) {
+      if (
+        Object.prototype.hasOwnProperty.call(action, 'id') &&
+        Object.prototype.hasOwnProperty.call(action, 'value')
+      ) {
         const { id, value } = action
         mounted &&
           setComposedEmail({
@@ -471,13 +475,13 @@ const ComposeEmail = ({
   )
 
   const BodyField = useMemo(
-    () => (
-      <TipTap
-        fetchedBodyValue={bodyValue}
-        updateComposeEmail={updateComposeEmail}
-      />
-    ),
+    () => <TipTap fetchedBodyValue={bodyValue} callback={updateComposeEmail} />,
     [bodyValue, composedEmail]
+  )
+
+  const SignatureField = useMemo(
+    () => <SignatureEmail callback={updateComposeEmail} />,
+    [composedEmail]
   )
 
   return (
@@ -524,6 +528,7 @@ const ComposeEmail = ({
                     {SubjectField}
                   </S.Row>
                   <S.Row>{BodyField}</S.Row>
+                  <S.Row>{SignatureField}</S.Row>
                 </GS.Base>
               </div>
               <S.ButtonContainer>

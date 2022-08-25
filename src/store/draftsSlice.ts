@@ -101,6 +101,7 @@ export const createUpdateDraft =
     try {
       const { id, message } = getState().drafts.draftDetails
       const { currEmail } = getState().emailDetail
+      // const { emailAddress } = getState().base.profile
 
       const baseComposedEmail: ComposedEmail = {
         draftId: id,
@@ -112,6 +113,8 @@ export const createUpdateDraft =
         bcc: composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : '',
         subject: composedEmail?.subject ?? '',
         body: composedEmail?.body ?? '',
+        signature: composedEmail?.signature ?? '',
+        // from: emailAddress,
       }
 
       const response = isEmpty(getState().drafts.draftDetails)
@@ -139,12 +142,11 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
   return async (dispatch, getState) => {
     const { signal } = new AbortController()
     try {
-      // console.log(message.payload, signal)
       const decodedBody = await loopThroughBodyParts({
         inputObject: message.payload,
         signal,
       })
-      // console.log(decodedBody)
+
       const body = Array.isArray(decodedBody) ? decodedBody[0] : null
       const subject = findPayloadHeadersData('Subject', message)
       const to = findPayloadHeadersData('To', message)
@@ -290,6 +292,7 @@ export const sendComposedEmail =
       } = getState().drafts.draftDetails
       const { emailList } = getState().email
       const completeEmail = { ...composedEmail, sender }
+      // If the id is found on the draft details, send the draft email via the Google servers.
       if (id) {
         const body = { id }
         const response = await draftApi().sendDraft(body)
@@ -314,6 +317,7 @@ export const sendComposedEmail =
           dispatch(setServiceUnavailable('Error sending email.'))
         }
       }
+      // If the id cannot be found on the draft details, send the email via the sendMessage function
       if (id === undefined) {
         const response = await messageApi().sendMessage(completeEmail)
         if (response?.status === 200) {

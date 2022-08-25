@@ -43,6 +43,8 @@ export interface ComposedEmail {
   bcc: string
   subject: string
   body: string
+  signature: string
+  from?: string
 }
 
 export interface DraftDetailObject {

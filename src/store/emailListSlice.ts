@@ -669,7 +669,8 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
         }
       }
       const { data } = await userApi().fetchUser()
-      dispatch(setProfile(data))
+      const { signature } = getState().base.profile
+      dispatch(setProfile({ signature, ...data }))
       handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
     } else {
       dispatch(setServiceUnavailable('Cannot refresh feed'))

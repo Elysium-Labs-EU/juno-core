@@ -24,7 +24,7 @@ interface IMenuItemOnClick {
   hint?: string[]
 }
 
-const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
+export const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
   <MenuItem onClick={() => item.onClick()}>
     <MenuItemContentMain data-test-id="item-title">
       {item.title}
@@ -39,7 +39,7 @@ const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
   </MenuItem>
 )
 
-const MenuSectionComponent = ({
+export const MenuSectionComponent = ({
   menuItems,
 }: {
   menuItems: IMenuItemOnClick[][]

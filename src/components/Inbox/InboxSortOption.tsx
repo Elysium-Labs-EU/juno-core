@@ -3,7 +3,11 @@ import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../store/labelsSlice'
-import { selectActiveModal, selectInSearch, selectIsLoading } from '../../store/utilsSlice'
+import {
+  selectActiveModal,
+  selectInSearch,
+  selectIsLoading,
+} from '../../store/utilsSlice'
 import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
@@ -44,7 +48,7 @@ const SortInbox = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useMultiKeyPress(handleEvent, actionKeys, (inSearch || Boolean(activeModal)))
+  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
 
   const isDisabled =
     isLoading ||
