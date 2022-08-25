@@ -9,6 +9,7 @@ import * as GS from '../../styles/globalStyles'
 import useDebounce from '../../hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
+import * as keyConstants from '../../constants/keyConstants'
 import {
   createUpdateDraft,
   fetchDrafts,
@@ -36,6 +37,8 @@ import DiscardDraftButton from './DiscardDraftButton'
 import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
 import { refreshEmailFeed } from '../../store/emailListSlice'
 import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
+import { setModifierKey } from '../../utils/setModifierKey'
+import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 
 const handleContactConversion = (contactValue: string): IContact[] => {
   if (contactValue.length > 0 && typeof contactValue === 'string') {
@@ -55,6 +58,8 @@ interface IComposeEmailProps {
   messageOverviewListener?: (value: string) => void
 }
 
+const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
+
 const ComposeEmail = ({
   to = null,
   bcc = null,
@@ -70,6 +75,8 @@ const ComposeEmail = ({
   const isForwarding = useAppSelector(selectIsForwarding)
   const currentMessage = useAppSelector(selectCurrentMessage)
   const draftDetails = useAppSelector(selectDraftDetails)
+  const inSearch = useAppSelector(selectInSearch)
+  const activeModal = useAppSelector(selectActiveModal)
   const [toValue, setToValue] = useState<IContact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [inputToValue, setInputToValue] = useState<string>('')
@@ -91,7 +98,10 @@ const ComposeEmail = ({
   const [composedEmail, setComposedEmail] = useState<any>({})
 
   const updateComposeEmail = useCallback(
-    (action: { id: string; value: string | IContact[] }, mounted: boolean) => {
+    (
+      action: { id: string; value: string | IContact[] | null },
+      mounted: boolean
+    ) => {
       if (
         Object.prototype.hasOwnProperty.call(action, 'id') &&
         Object.prototype.hasOwnProperty.call(action, 'value')
@@ -373,9 +383,11 @@ const ComposeEmail = ({
     }
   }, [threadId])
 
-  const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+  const handleSubmit = useCallback(
+    (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      if (e) {
+        e.preventDefault()
+      }
       if (toValue.length > 0) {
         if (emailValidation(toValue)) {
           dispatch(sendComposedEmail({ composedEmail }))
@@ -395,10 +407,10 @@ const ComposeEmail = ({
         setToError(true)
       }
     },
-    [toValue, draftDetails, toError]
+    [toValue, composedEmail, toError]
   )
 
-  const handleCancelButton = () => {
+  const handleCancelButton = useCallback(() => {
     if (isReplying) {
       dispatch(setIsReplying(false))
     }
@@ -408,7 +420,7 @@ const ComposeEmail = ({
     dispatch(refreshEmailFeed())
     dispatch(fetchDrafts())
     dispatch(resetDraftDetails())
-  }
+  }, [isReplying, isForwarding, dispatch])
 
   const ToField = useMemo(
     () => (
@@ -484,6 +496,8 @@ const ComposeEmail = ({
     [composedEmail]
   )
 
+  useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
+
   return (
     <>
       <Seo title={local.COMPOSE} />
@@ -495,7 +509,7 @@ const ComposeEmail = ({
         </S.UpdateContainer>
         <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
           <GS.Base>
-            <form onSubmit={onSubmit} autoComplete="off">
+            <form autoComplete="off">
               <div style={{ marginBottom: `7px` }}>
                 <GS.Base>
                   <S.Row>
@@ -533,11 +547,12 @@ const ComposeEmail = ({
               </div>
               <S.ButtonContainer>
                 <CustomButton
-                  type="submit"
+                  type="button"
                   label={local.SEND_BUTTON}
                   icon={<FiSend />}
                   title="Send email"
                   suppressed
+                  onClick={(e) => handleSubmit(e)}
                 />
                 {(isReplying || isForwarding) && (
                   <CustomButton
