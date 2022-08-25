@@ -42,6 +42,7 @@ const restructureObject = (message: IHistoryMessage) => {
  * */
 
 // TODO: Create test for this function.
+// TODO: Make the remove changes also be worked on
 
 export default function handleHistoryObject({
   history,
