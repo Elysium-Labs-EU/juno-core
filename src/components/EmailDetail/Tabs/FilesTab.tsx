@@ -10,7 +10,7 @@ const FilesTab = ({
 }: {
   activeThread: IEmailListThreadItem
   activeLink: string
-  navigateTo: ({ link, name }: { link: string, name: string }) => void
+  navigateTo: ({ link, name }: { link: string; name: string }) => void
 }) => {
   let filesCount = 0
   const uniqueFilesArray = [
@@ -30,13 +30,7 @@ const FilesTab = ({
       aria-hidden="true"
       isActive={activeLink === local.FILES_MENU_ITEM.name}
     >
-      <S.StyledBadge
-        isDimmed={activeLink === local.FILES_MENU_ITEM.name}
-        badgeContent={
-          filesCount
-        }
-        color="primary"
-      >
+      <S.StyledBadge badgeContent={filesCount} color="primary">
         {local.FILES_MENU_ITEM.name}
       </S.StyledBadge>
     </S.StyedListItem>
