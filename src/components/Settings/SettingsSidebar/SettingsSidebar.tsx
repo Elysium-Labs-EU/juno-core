@@ -14,9 +14,7 @@ const SettingsSidebar = ({
   activeMenuItem: number
   setActiveMenuItem: (value: number) => void
 }) => (
-  <S.Wrapper
-    data-test-id="settings-menu"
-  >
+  <S.Wrapper data-test-id="settings-menu">
     {SETTINGS_OPTIONS.map((item, index) => (
       <li key={item.title}>
         <S.MenuItem
