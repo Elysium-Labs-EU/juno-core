@@ -11,25 +11,47 @@ import { useAppSelector } from '../../../../../store/hooks'
 import { IEmailMessage } from '../../../../../store/storeTypes/emailListTypes'
 import { IContact } from '../../../../../store/storeTypes/contactsTypes'
 
-const MappedContacts = ({ contactsMap, title }: { contactsMap: IContact[], title: string }) => {
+const MappedContacts = ({
+  contactsMap,
+  title,
+}: {
+  contactsMap: IContact[]
+  title: string
+}) => {
   const [showAll, setShowAll] = useState(false)
 
   return (
     <S.ToFromBCCInner>
-      <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>{title}</GS.TextMutedSpanSmall>
+      <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+        {title}
+      </GS.TextMutedSpanSmall>
       <S.SmallTextTruncated>
         {contactsMap.length > 2 ? (
-          <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
-            {contactsMap.slice(0, showAll ? contactsMap.length : 3).map((contact, index) => (
-              <S.SmallTextTruncated key={contact.emailAddress} showComma={index !== (showAll ? contactsMap.length : 3) - 1}>
+          <div
+            style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+          >
+            {contactsMap
+              .slice(0, showAll ? contactsMap.length : 3)
+              .map((contact, index) => (
                 <S.SmallTextTruncated
-                  title={contact.emailAddress}
+                  key={contact.emailAddress}
+                  showComma={index !== (showAll ? contactsMap.length : 3) - 1}
                 >
-                  {contact.name}
+                  <S.SmallTextTruncated title={contact.emailAddress}>
+                    {contact.name}
+                  </S.SmallTextTruncated>
                 </S.SmallTextTruncated>
-              </S.SmallTextTruncated>
-            ))}
-            {!showAll && <span style={{ marginLeft: '6px', cursor: 'pointer' }} onClick={() => setShowAll(true)} aria-hidden="true"> & {contactsMap.length - 3} others</span>}
+              ))}
+            {!showAll && (
+              <span
+                style={{ marginLeft: '6px', cursor: 'pointer' }}
+                onClick={() => setShowAll(true)}
+                aria-hidden="true"
+              >
+                {' '}
+                & {contactsMap.length - 3} others
+              </span>
+            )}
           </div>
         ) : (
           contactsMap.map((contact) => (
@@ -53,24 +75,21 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   const toNameFull = () => {
     const toValues = ToBCCNameFull(message, 'To')
     if (toValues) {
-      return toValues.split(',')
-        .map((item) => convertToContact(item))
+      return toValues.split(',').map((item) => convertToContact(item))
     }
     return []
   }
   const ccNameFull = () => {
     const toValues = ToBCCNameFull(message, 'Cc')
     if (toValues) {
-      return toValues.split(',')
-        .map((item) => convertToContact(item))
+      return toValues.split(',').map((item) => convertToContact(item))
     }
     return []
   }
   const bccNameFull = () => {
     const toValues = ToBCCNameFull(message, 'Bcc')
     if (toValues) {
-      return toValues.split(',')
-        .map((item) => convertToContact(item))
+      return toValues.split(',').map((item) => convertToContact(item))
     }
     return []
   }
@@ -78,22 +97,37 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   return (
     <>
       <S.FromContainer
-        multipleComponents={Boolean(toNameFull().length > 0 || ccNameFull().length > 0 || bccNameFull().length > 0)}
+        multipleComponents={Boolean(
+          toNameFull().length > 0 ||
+            ccNameFull().length > 0 ||
+            bccNameFull().length > 0
+        )}
       >
         <S.ToFromBCCInner>
-          <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>{emailDetail.FROM_LABEL}</GS.TextMutedSpanSmall>
+          <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+            {emailDetail.FROM_LABEL}
+          </GS.TextMutedSpanSmall>
           <S.SmallTextTruncated>{senderNameFull}</S.SmallTextTruncated>
         </S.ToFromBCCInner>
       </S.FromContainer>
       <S.ToBCCContainer
-        multipleComponents={Boolean(toNameFull().length > 0 && (ccNameFull().length > 0 || bccNameFull().length > 0))}
+        multipleComponents={Boolean(
+          toNameFull().length > 0 &&
+            (ccNameFull().length > 0 || bccNameFull().length > 0)
+        )}
       >
-        <MappedContacts contactsMap={toNameFull()} title={emailDetail.TO_LABEL} />
+        <MappedContacts
+          contactsMap={toNameFull()}
+          title={emailDetail.TO_LABEL}
+        />
         {ccNameFull && ccNameFull.length > 0 && (
           <MappedContacts contactsMap={ccNameFull()} title={compose.CC_LABEL} />
         )}
         {bccNameFull && bccNameFull.length > 0 && (
-          <MappedContacts contactsMap={bccNameFull()} title={compose.BCC_LABEL} />
+          <MappedContacts
+            contactsMap={bccNameFull()}
+            title={compose.BCC_LABEL}
+          />
         )}
       </S.ToBCCContainer>
     </>

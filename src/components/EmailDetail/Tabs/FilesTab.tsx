@@ -30,10 +30,7 @@ const FilesTab = ({
       aria-hidden="true"
       isActive={activeLink === local.FILES_MENU_ITEM.name}
     >
-      <S.StyledBadge
-        badgeContent={filesCount}
-        color="primary"
-      >
+      <S.StyledBadge badgeContent={filesCount} color="primary">
         {local.FILES_MENU_ITEM.name}
       </S.StyledBadge>
     </S.StyedListItem>
