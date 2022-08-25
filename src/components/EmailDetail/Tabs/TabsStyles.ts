@@ -57,9 +57,14 @@ export const StyedListItem = styled.li<StyledListItem>`
   }
 `
 
-export const StyledBadge = styled(Badge)`
+interface IStyledBadge {
+  isDimmed?: boolean
+}
+
+export const StyledBadge = styled(Badge)<IStyledBadge>`
   .MuiBadge-badge {
-    background-color: var(--color-black);
+    background-color: ${({ isDimmed }) =>
+      isDimmed ? 'var(--color-grey)' : 'var(--color-black)'};
     top: 10px;
     right: -16px;
   }
