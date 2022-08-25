@@ -1,9 +1,8 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
-import ComposeEmail from '../../Compose/ComposeEmail'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import * as ES from '../EmailDetailStyles'
@@ -11,76 +10,10 @@ import {
   IEmailListThreadItem,
   IEmailMessage,
 } from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { useAppDispatch } from '../../../store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
-import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
-import convertToContact from '../../../utils/convertToContact'
-import findPayloadData from '../../../utils/findPayloadBodyData'
-import { decodeBase64 } from '../../../utils/decodeBase64'
-import { selectCurrentMessage } from '../../../store/emailDetailSlice'
-
-const fromEmail = (threadDetail: IEmailListThreadItem) => {
-  const query = 'From'
-  if (threadDetail) {
-    const data: string = findPayloadHeadersData(query, threadDetail)
-    return convertToContact(data)
-  }
-  return null
-}
-
-const bccEmail = (threadDetail: IEmailListThreadItem) => {
-  const query = 'Bcc'
-  if (threadDetail) {
-    const data: string = findPayloadHeadersData(query, threadDetail)
-    return convertToContact(data)
-  }
-  return null
-}
-
-const ccEmail = (threadDetail: IEmailListThreadItem) => {
-  const query = 'Cc'
-  if (threadDetail) {
-    const data: string = findPayloadHeadersData(query, threadDetail)
-    return convertToContact(data)
-  }
-  return null
-}
-
-const emailSubject = (threadDetail: IEmailListThreadItem) => {
-  const query = 'Subject'
-  if (threadDetail) {
-    return findPayloadHeadersData(query, threadDetail)
-  }
-  return null
-}
-
-/**
- * @function emailBody
- * @param threadDetail - takes in the complete active threadDetail object
- * @param selectedIndex - taknes in the selectedIndex to select this message
- * @returns a decoded string representing the selected message's body or undefined.
- */
-const emailBody = (
-  threadDetail: IEmailListThreadItem,
-  selectedIndex: number,
-  isForwarding?: boolean
-) => {
-  const query = 'Body'
-  if (threadDetail) {
-    const response = decodeBase64(
-      findPayloadData(query, threadDetail, selectedIndex)
-    )
-    if (isForwarding && response) {
-      const FORWARD_LABEL =
-        '<p></p><p></p><p>---------- Forwarded message --------</p>'
-      // Add the Forwarded message label
-      const addedForwardedLabel = `${FORWARD_LABEL}${response}`
-      return addedForwardedLabel
-    }
-    return response
-  }
-  return undefined
-}
+import ReplyComposer from './InlineComposers/ReplyComposer'
+import ForwardingComposer from './InlineComposers/ForwardingComposer'
 
 interface IDetailDisplaySelector {
   message: IEmailMessage
@@ -99,23 +32,12 @@ const DetailDisplaySelector = ({
   setContentRendered,
   indexMessageListener,
 }: IDetailDisplaySelector) => {
-  if (Object.prototype.hasOwnProperty.call(message, 'labelIds')) {
-    if (message.labelIds.includes(global.DRAFT_LABEL)) {
-      return (
-        <DraftMessage
-          message={message}
-          draftIndex={index}
-          indexMessageListener={indexMessageListener}
-        />
-      )
-    }
+  if (message.labelIds.includes(global.DRAFT_LABEL)) {
     return (
-      <ReadUnreadMessage
+      <DraftMessage
         message={message}
-        threadDetail={threadDetail}
-        messageIndex={index}
-        setUnsubscribeLink={setUnsubscribeLink}
-        setContentRendered={setContentRendered}
+        draftIndex={index}
+        indexMessageListener={indexMessageListener}
       />
     )
   }
@@ -181,7 +103,6 @@ const MessagesOverview = ({
   setContentRendered,
 }: IMessagesOverview) => {
   const dispatch = useAppDispatch()
-  const currentMessage = useAppSelector(selectCurrentMessage)
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
   // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
   const [localThreadDetail, setLocalThreadDetail] =
@@ -279,48 +200,19 @@ const MessagesOverview = ({
             )}
         </ES.DetailRow>
         {isReplying && localThreadDetail && localThreadDetail.messages && (
-          <ES.ComposeWrapper>
-            <ComposeEmail
-              to={fromEmail(localThreadDetail)}
-              cc={ccEmail(localThreadDetail)}
-              bcc={bccEmail(localThreadDetail)}
-              subject={emailSubject(localThreadDetail)}
-              foundBody={
-                selectedIndex !== undefined
-                  ? emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.length - 1 - selectedIndex
-                    )
-                  : undefined
-              }
-              threadId={localThreadDetail.id}
-              messageOverviewListener={messageOverviewListener}
-            />
-          </ES.ComposeWrapper>
+          <ReplyComposer
+            localThreadDetail={localThreadDetail}
+            selectedIndex={selectedIndex}
+            messageOverviewListener={messageOverviewListener}
+          />
         )}
         {isForwarding && localThreadDetail && localThreadDetail.messages && (
-          <ES.ComposeWrapper>
-            <ComposeEmail
-              subject={emailSubject(localThreadDetail)}
-              threadId={localThreadDetail.id}
-              messageOverviewListener={messageOverviewListener}
-              foundBody={
-                selectedIndex !== undefined
-                  ? emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.length - 1 - selectedIndex,
-                      isForwarding
-                    )
-                  : emailBody(
-                      localThreadDetail,
-                      localThreadDetail.messages.findIndex(
-                        (message) => message.id === currentMessage
-                      ),
-                      isForwarding
-                    )
-              }
-            />
-          </ES.ComposeWrapper>
+          <ForwardingComposer
+            localThreadDetail={localThreadDetail}
+            selectedIndex={selectedIndex}
+            messageOverviewListener={messageOverviewListener}
+            isForwarding={isForwarding}
+          />
         )}
       </>
     ),

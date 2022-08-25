@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface IScroll {
   clientState: boolean
@@ -209,7 +209,7 @@ export const ToBCCContainer = styled.div<IFromCCContainer>`
 export const ToFromBCCInner = styled.div`
   display: flex;
   flex-flow: row;
-  align-items: center;
+  align-items: flex-start;
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -264,18 +264,24 @@ export const EmailDetailTitle = styled.span`
   white-space: nowrap;
 `
 
-export const SmallTextMuted = styled.span`
-  color: var(--color-grey);
-  font-size: var(--small-size);
-  margin-right: 4px;
+interface ISmallTextTruncated {
+  showComma?: boolean
+}
+
+const commaSeperator = css`
+  margin-right: 6px;
+  &:after {
+    content: ',';
+  }
 `
 
-export const SmallTextTruncated = styled.span`
+export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: var(--small-size);
-  padding-right: 6px;
+  ${({ showComma }) => showComma && commaSeperator};
+  margin-right: ${({ showComma }) => (showComma ? '6px' : '0')};
 `
 
 export const ComposeWrapper = styled.div`
