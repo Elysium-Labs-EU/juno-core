@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import StyledTextField from './EmailInputStyles'
@@ -17,14 +17,15 @@ import { setServiceUnavailable } from '../../../../store/utilsSlice'
 import useDebounce from '../../../../hooks/useDebounce'
 import emailValidation from '../../../../utils/emailValidation'
 import type { AppDispatch } from '../../../../store/store'
+import { IRecipientsList } from '../../ComposeEmailTypes'
 
 interface IEmailInputProps {
   id: string
   valueState: IContact[]
-  handleChange: any
+  handleChange: (recipientListRaw: IRecipientsList) => void
   handleDelete: Function
   inputValue: string
-  setInputValue: Function
+  setInputValue: (value: string) => void
   willAutoFocus: boolean
 }
 
@@ -85,7 +86,7 @@ const filterOptions: any = (
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 
-const emailInput = (props: IEmailInputProps) => {
+const EmailInput = (props: IEmailInputProps) => {
   const {
     id,
     valueState,
@@ -148,20 +149,22 @@ const emailInput = (props: IEmailInputProps) => {
   }, [open])
 
   // If user changes focus and there is incomplete input, attempt to complete it.
-  const handleIncompleteInput = (incompleteProps: IHandleIncompleteInput) => {
-    const validation = emailValidation([
-      {
+  const handleIncompleteInput = useCallback(
+    (incompleteProps: IHandleIncompleteInput) => {
+      const inputObject = {
         name: incompleteProps.inputValue,
         emailAddress: incompleteProps.inputValue,
-      },
-    ])
-    if (validation) {
-      handleChange({
-        newValue: [...valueState, incompleteProps.inputValue],
-        fieldId: incompleteProps.id,
-      })
-    }
-  }
+      }
+      const validation = emailValidation([inputObject])
+      if (validation) {
+        handleChange({
+          newValue: [...valueState, inputObject],
+          fieldId: incompleteProps.id,
+        })
+      }
+    },
+    [valueState]
+  )
 
   // Clear input when a new contact chip is created.
   useEffect(() => {
@@ -229,4 +232,4 @@ const emailInput = (props: IEmailInputProps) => {
   )
 }
 
-export default emailInput
+export default EmailInput
