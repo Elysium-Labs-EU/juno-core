@@ -89,7 +89,7 @@ const Tiptap = ({
         }
       } else {
         setBodyValue(fetchedBodyValue)
-        if (bodyValue.length < 1 && editorInstance) {
+        if (editorInstance) {
           editorInstance.commands.setContent(fetchedBodyValue)
         }
       }

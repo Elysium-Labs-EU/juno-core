@@ -15,25 +15,32 @@ const ReplyComposer = ({
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
   messageOverviewListener: (messageId: string) => void
-}) => (
-  <ES.ComposeWrapper>
-    <ComposeEmail
-      to={fromEmail(localThreadDetail)}
-      cc={ccEmail(localThreadDetail)}
-      bcc={bccEmail(localThreadDetail)}
-      subject={emailSubject(localThreadDetail)}
-      foundBody={
-        selectedIndex !== undefined
-          ? emailBody(
-              localThreadDetail,
-              localThreadDetail.messages.length - 1 - selectedIndex
-            )
-          : undefined
-      }
-      threadId={localThreadDetail.id}
-      messageOverviewListener={messageOverviewListener}
-    />
-  </ES.ComposeWrapper>
-)
+}) => {
+  console.log({
+    localThreadDetail,
+    selectedIndex,
+    messageOverviewListener,
+  })
+  return (
+    <ES.ComposeWrapper>
+      <ComposeEmail
+        to={fromEmail(localThreadDetail)}
+        cc={ccEmail(localThreadDetail)}
+        bcc={bccEmail(localThreadDetail)}
+        subject={emailSubject(localThreadDetail)}
+        foundBody={
+          selectedIndex !== undefined
+            ? emailBody(
+                localThreadDetail,
+                localThreadDetail.messages.length - 1 - selectedIndex
+              )
+            : undefined
+        }
+        threadId={localThreadDetail.id}
+        messageOverviewListener={messageOverviewListener}
+      />
+    </ES.ComposeWrapper>
+  )
+}
 
 export default ReplyComposer

@@ -1,35 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import { openDraftEmail } from '../../../../store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
-import {
-  selectCurrentEmail,
-  selectIsReplying,
-} from '../../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import { selectProfile } from '../../../../store/baseSlice'
+import { openDraftEmail } from '../../../../store/draftsSlice'
+import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
 
 const DraftMessage = ({
   message,
-  draftIndex,
+  hideDraft,
+  index,
   indexMessageListener,
 }: {
   message: IEmailMessage
-  draftIndex: number
-  indexMessageListener: (value: number) => void
+  hideDraft: boolean
+  index: number
+  indexMessageListener: (index: number) => void
 }) => {
-  const [draftOpened, setDraftOpened] = useState(false)
-  const [hideDraft, setHideDraft] = useState(false)
   const dispatch = useAppDispatch()
-  const isReplying = useAppSelector(selectIsReplying)
   const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
-  const messageId = message && message.id
 
   const EmailSnippet =
     message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
@@ -43,26 +38,10 @@ const DraftMessage = ({
     []
   )
 
-  /**
-   * This function only hides the draft whenever the replying mode is set active.
-   */
-  useEffect(() => {
-    let mounted = true
-    if (isReplying && draftOpened && mounted) {
-      setHideDraft(true)
-    }
-    if (!isReplying && draftOpened && mounted) {
-      setHideDraft(false)
-    }
-    return () => {
-      mounted = false
-    }
-  }, [isReplying, draftOpened])
-
   const handleClick = useCallback(() => {
-    dispatch(openDraftEmail({ id, messageId }))
-    setDraftOpened(true)
-    indexMessageListener(draftIndex)
+    dispatch(openDraftEmail({ id, messageId: message?.id }))
+    // setDraftOpened(true)
+    indexMessageListener(index)
   }, [])
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -10,10 +10,15 @@ import {
   IEmailListThreadItem,
   IEmailMessage,
 } from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch } from '../../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import ReplyComposer from './InlineComposers/ReplyComposer'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
+import { openDraftEmail } from '../../../store/draftsSlice'
+import {
+  selectIsReplying,
+  selectCurrentEmail,
+} from '../../../store/emailDetailSlice'
 
 interface IDetailDisplaySelector {
   message: IEmailMessage
@@ -22,6 +27,7 @@ interface IDetailDisplaySelector {
   setUnsubscribeLink: (value: string | null) => void
   setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
+  hideDraft: boolean
 }
 
 const DetailDisplaySelector = ({
@@ -31,12 +37,14 @@ const DetailDisplaySelector = ({
   setUnsubscribeLink,
   setContentRendered,
   indexMessageListener,
+  hideDraft,
 }: IDetailDisplaySelector) => {
   if (message.labelIds.includes(global.DRAFT_LABEL)) {
     return (
       <DraftMessage
         message={message}
-        draftIndex={index}
+        hideDraft={hideDraft}
+        index={index}
         indexMessageListener={indexMessageListener}
       />
     )
@@ -62,8 +70,33 @@ const MappedMessages = ({
   setUnsubscribeLink: (value: string | null) => void
   setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
-}) =>
-  threadDetail.messages ? (
+}) => {
+  const [draftOpened, setDraftOpened] = useState<number | null>(null)
+  const isReplying = useAppSelector(selectIsReplying)
+
+  /**
+   * Reset the draft opened value if the isReplying is false.
+   */
+  useEffect(() => {
+    let mounted = true
+    if (!isReplying && draftOpened !== null && mounted) {
+      setDraftOpened(null)
+    }
+    return () => {
+      mounted = false
+    }
+  }, [isReplying, draftOpened])
+
+  /**
+   * Intercept the callback function to hide one draft message at a time
+   * @param value - index of the selected draft message
+   */
+  const indexMessageMiddelware = (value: number) => {
+    setDraftOpened(value)
+    indexMessageListener(value)
+  }
+
+  return threadDetail.messages ? (
     <>
       {threadDetail.messages
         .slice(0)
@@ -76,7 +109,8 @@ const MappedMessages = ({
               index={index}
               setUnsubscribeLink={setUnsubscribeLink}
               setContentRendered={setContentRendered}
-              indexMessageListener={indexMessageListener}
+              indexMessageListener={indexMessageMiddelware}
+              hideDraft={draftOpened === index}
             />
           </div>
         ))}
@@ -84,6 +118,7 @@ const MappedMessages = ({
   ) : (
     <p>{global.NOTHING_TO_SEE}</p>
   )
+}
 
 interface IMessagesOverview {
   threadDetail: IEmailListThreadItem
@@ -153,7 +188,7 @@ const MessagesOverview = ({
 
   /**
    * @function indexMessageListener
-   * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
+   * This function will listen to the selected draft message. This is used to get a body value when opening the composer.
    * @param value - number of the index of the selected Draft Message
    * @returns {void} - returns the found object or undefined if not found as a change on the state.
    */
@@ -216,7 +251,13 @@ const MessagesOverview = ({
         )}
       </>
     ),
-    [localThreadDetail, unsubscribeLink, isReplying, isForwarding]
+    [
+      localThreadDetail,
+      unsubscribeLink,
+      isReplying,
+      isForwarding,
+      selectedIndex,
+    ]
   )
 
   return memoizedMessagesOverview

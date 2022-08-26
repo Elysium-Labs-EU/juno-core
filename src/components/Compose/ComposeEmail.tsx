@@ -18,6 +18,7 @@ import {
   sendComposedEmail,
 } from '../../store/draftsSlice'
 import {
+  selectCurrentEmail,
   selectCurrentMessage,
   selectIsForwarding,
   selectIsReplying,
@@ -335,7 +336,8 @@ const ComposeEmail = ({
         setSubjectValue(state.subject)
         setBodyValue(state.body)
       }
-      if (!mailto && isEmpty(composedEmail)) {
+      if (!mailto) {
+        console.log('HERE', foundBody)
         // Form values coming from a new reply via MessagesOverview (EmailDetail)
         if (to) {
           setToValue([to])
@@ -357,7 +359,7 @@ const ComposeEmail = ({
     return () => {
       mounted = false
     }
-  }, [])
+  }, [to, bcc, cc, subject, threadId, foundBody])
 
   useEffect(() => {
     let mounted = true
