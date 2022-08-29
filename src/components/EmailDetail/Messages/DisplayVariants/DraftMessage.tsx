@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import { openDraftEmail } from '../../../../store/draftsSlice'
 import * as local from '../../../../constants/draftConstants'
 import * as S from '../../EmailDetailStyles'
-import {
-  selectCurrentEmail,
-  selectIsReplying,
-} from '../../../../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
+import { useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
@@ -17,16 +13,18 @@ import { selectProfile } from '../../../../store/baseSlice'
 const DraftMessage = ({
   message,
   draftIndex,
-  indexMessageListener,
+  handleClickListener,
+  hideDraft,
 }: {
   message: IEmailMessage
   draftIndex: number
-  indexMessageListener: (value: number) => void
+  handleClickListener: (
+    id: string,
+    messageId: string,
+    draftIndex: number
+  ) => void
+  hideDraft: boolean
 }) => {
-  const [draftOpened, setDraftOpened] = useState(false)
-  const [hideDraft, setHideDraft] = useState(false)
-  const dispatch = useAppDispatch()
-  const isReplying = useAppSelector(selectIsReplying)
   const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
   const messageId = message && message.id
@@ -43,31 +41,14 @@ const DraftMessage = ({
     []
   )
 
-  /**
-   * This function only hides the draft whenever the replying mode is set active.
-   */
-  useEffect(() => {
-    let mounted = true
-    if (isReplying && draftOpened && mounted) {
-      setHideDraft(true)
-    }
-    if (!isReplying && draftOpened && mounted) {
-      setHideDraft(false)
-    }
-    return () => {
-      mounted = false
-    }
-  }, [isReplying, draftOpened])
-
-  const handleClick = useCallback(() => {
-    dispatch(openDraftEmail({ id, messageId }))
-    setDraftOpened(true)
-    indexMessageListener(draftIndex)
-  }, [])
+  // Send back detail to the parent component to hide the draft from the list and open the composer
+  const handleClickLocal = () => {
+    handleClickListener(id, messageId, draftIndex)
+  }
 
   return (
     <S.EmailClosedWrapper
-      onClick={handleClick}
+      onClick={handleClickLocal}
       aria-hidden="true"
       hideDraft={hideDraft}
       isDraft
