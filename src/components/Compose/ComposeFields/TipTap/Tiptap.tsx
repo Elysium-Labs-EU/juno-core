@@ -1,3 +1,4 @@
+import { compareTwoStrings } from 'string-similarity'
 import { useEditor, EditorContent, generateHTML } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -84,7 +85,12 @@ const Tiptap = ({
       if (fetchedBodyValue.includes(global.JUNO_SIGNATURE)) {
         const response = removeSignature(fetchedBodyValue)
         setBodyValue(response.outerHTML)
-        if (bodyValue.length < 1 && editorInstance) {
+
+        // Compare the input fetched body value and the stored body value - if below a certain treshhold, overwrite the local state.
+        if (
+          compareTwoStrings(fetchedBodyValue, bodyValue) < 0.9 &&
+          editorInstance
+        ) {
           editorInstance.commands.setContent(response.outerHTML)
         }
       } else {

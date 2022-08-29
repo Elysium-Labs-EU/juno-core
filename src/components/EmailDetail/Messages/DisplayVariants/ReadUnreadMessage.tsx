@@ -74,7 +74,7 @@ const ReadUnreadMessage = ({
         setOpen(true)
       }
       if (
-        threadDetail.messages.length === 2 &&
+        threadDetail.messages.length > 1 &&
         threadDetail.messages.some((item) =>
           item.labelIds.includes(global.DRAFT_LABEL)
         )

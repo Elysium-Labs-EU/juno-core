@@ -41,7 +41,7 @@ import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
 import { handleContactConversion } from '../../utils/convertToContact'
 
-// Props are coming from MessageOverview
+// Props are coming from MessageOverview (email detail view)
 interface IComposeEmailProps {
   to?: IContact[] | null
   bcc?: IContact[] | null
@@ -290,7 +290,7 @@ const ComposeEmail = ({
     }
   }, [debouncedSubjectValue])
 
-  // Set the form values
+  // Set the form values that come either from the location state or the URL.
   useEffect(() => {
     let mounted = true
     if (mounted) {
@@ -328,31 +328,39 @@ const ComposeEmail = ({
         setSubjectValue(state.subject)
         setBodyValue(state.body)
       }
-      if (!mailto && isEmpty(composedEmail)) {
-        // Form values coming from a new reply via MessagesOverview (EmailDetail)
-        if (to && to.length > 0) {
-          setToValue(to)
-        }
-        if (cc && cc.length > 0) {
-          setShowCC(true)
-          setCCValue(cc)
-        }
-        if (bcc && bcc.length > 0) {
-          setShowBCC(true)
-          setBCCValue(bcc)
-        }
-        if (subject) {
-          setSubjectValue(subject)
-        }
-        if (foundBody) {
-          setBodyValue(foundBody)
-        }
-      }
     }
     return () => {
       mounted = false
     }
   }, [])
+
+  // Set the form values via the passed props from the email detail
+  useEffect(() => {
+    let mounted = true
+    if (mounted) {
+      // Form values coming from a new reply via MessagesOverview (EmailDetail)
+      if (to && to.length > 0) {
+        setToValue(to)
+      }
+      if (cc && cc.length > 0) {
+        setShowCC(true)
+        setCCValue(cc)
+      }
+      if (bcc && bcc.length > 0) {
+        setShowBCC(true)
+        setBCCValue(bcc)
+      }
+      if (subject) {
+        setSubjectValue(subject)
+      }
+      if (foundBody) {
+        setBodyValue(foundBody)
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [to, cc, bcc, subject, foundBody])
 
   useEffect(() => {
     let mounted = true

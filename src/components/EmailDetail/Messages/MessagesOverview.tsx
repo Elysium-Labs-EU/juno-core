@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
@@ -6,48 +6,16 @@ import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import * as local from '../../../constants/emailDetailConstants'
 import * as global from '../../../constants/globalConstants'
 import * as ES from '../EmailDetailStyles'
-import {
-  IEmailListThreadItem,
-  IEmailMessage,
-} from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch } from '../../../store/hooks'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import markEmailAsRead from '../../../utils/markEmailAsRead'
 import ReplyComposer from './InlineComposers/ReplyComposer'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
-
-interface IDetailDisplaySelector {
-  message: IEmailMessage
-  threadDetail: IEmailListThreadItem
-  index: number
-  setUnsubscribeLink: (value: string | null) => void
-  indexMessageListener: (value: number) => void
-}
-
-const DetailDisplaySelector = ({
-  message,
-  threadDetail,
-  index,
-  setUnsubscribeLink,
-  indexMessageListener,
-}: IDetailDisplaySelector) => {
-  if (message.labelIds.includes(global.DRAFT_LABEL)) {
-    return (
-      <DraftMessage
-        message={message}
-        draftIndex={index}
-        indexMessageListener={indexMessageListener}
-      />
-    )
-  }
-  return (
-    <ReadUnreadMessage
-      message={message}
-      threadDetail={threadDetail}
-      messageIndex={index}
-      setUnsubscribeLink={setUnsubscribeLink}
-    />
-  )
-}
+import { openDraftEmail } from '../../../store/draftsSlice'
+import {
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../store/emailDetailSlice'
 
 const MappedMessages = ({
   threadDetail,
@@ -57,27 +25,61 @@ const MappedMessages = ({
   threadDetail: IEmailListThreadItem
   setUnsubscribeLink: (value: string | null) => void
   indexMessageListener: (value: number) => void
-}) =>
-  threadDetail.messages ? (
+}) => {
+  const [hideDraft, setHideDraft] = useState<number | null>(null)
+  const dispatch = useAppDispatch()
+
+  const handleClick = useCallback(
+    (id: string, messageId: string, draftIndex: number) => {
+      dispatch(openDraftEmail({ id, messageId }))
+      setHideDraft(draftIndex)
+      indexMessageListener(draftIndex)
+    },
+    []
+  )
+
+  /**
+   * This function unhides the draft when neither forwarding or replying mode is active
+   */
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
+  useEffect(() => {
+    if (!isReplying && !isForwarding) {
+      setHideDraft(null)
+    }
+  }, [isReplying, isForwarding])
+
+  const reversedMessagesOrder = useMemo(
+    () => threadDetail.messages.slice(0).reverse(),
+    [threadDetail]
+  )
+
+  return threadDetail.messages ? (
     <>
-      {threadDetail.messages
-        .slice(0)
-        .reverse()
-        .map((message, index) => (
-          <div key={message.id}>
-            <DetailDisplaySelector
+      {reversedMessagesOrder.map((message, index) => (
+        <div key={message.id}>
+          {message.labelIds.includes(global.DRAFT_LABEL) ? (
+            <DraftMessage
+              message={message}
+              draftIndex={index}
+              handleClickListener={handleClick}
+              hideDraft={hideDraft === index}
+            />
+          ) : (
+            <ReadUnreadMessage
               message={message}
               threadDetail={threadDetail}
-              index={index}
+              messageIndex={index}
               setUnsubscribeLink={setUnsubscribeLink}
-              indexMessageListener={indexMessageListener}
             />
-          </div>
-        ))}
+          )}
+        </div>
+      ))}
     </>
   ) : (
     <p>{global.NOTHING_TO_SEE}</p>
   )
+}
 
 interface IMessagesOverview {
   threadDetail: IEmailListThreadItem
@@ -113,17 +115,22 @@ const MessagesOverview = ({
     }
   }, [threadDetail])
 
-  const messageOverviewListener = (messageId: string) => {
-    if (localThreadDetail && localThreadDetail.messages) {
-      setLocalThreadDetail({
-        ...localThreadDetail,
-        messages: localThreadDetail.messages.filter(
-          (message) => message.id !== messageId
-        ),
-      })
-    }
-  }
+  // A callback function that will listen to the discard event on the composer
+  const messageOverviewListener = useCallback(
+    (messageId: string) => {
+      if (localThreadDetail && localThreadDetail?.messages) {
+        setLocalThreadDetail({
+          ...localThreadDetail,
+          messages: localThreadDetail.messages.filter(
+            (message) => message.id !== messageId
+          ),
+        })
+      }
+    },
+    [localThreadDetail]
+  )
 
+  // On mount of the email detail - mark the email as read when it is unread.s
   useEffect(() => {
     if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
       if (localThreadDetail.messages && localThreadDetail.messages.length > 0) {
@@ -153,63 +160,58 @@ const MessagesOverview = ({
     setSelectedIndex(value)
   }
 
-  const memoizedMessagesOverview = useMemo(
-    () => (
-      <>
-        <ES.DetailRow>
-          <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
-            <ES.DetailBase>
-              <ES.CardFullWidth>
-                {localThreadDetail?.messages && !isLoading ? (
-                  <MappedMessages
-                    threadDetail={localThreadDetail}
-                    setUnsubscribeLink={setUnsubscribeLink}
-                    indexMessageListener={indexMessageListener}
-                  />
-                ) : (
-                  <ES.LoadingErrorWrapper>
-                    <CircularProgress />
-                  </ES.LoadingErrorWrapper>
-                )}
-                {!localThreadDetail && (
-                  <ES.LoadingErrorWrapper>
-                    {isLoading && <CircularProgress />}
-                    {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                  </ES.LoadingErrorWrapper>
-                )}
-              </ES.CardFullWidth>
-            </ES.DetailBase>
-          </ES.EmailDetailContainer>
-          {localThreadDetail &&
-            !isReplying &&
-            !isForwarding &&
-            localThreadDetail.messages && (
-              <EmailDetailOptions
-                threadDetail={localThreadDetail}
-                unsubscribeLink={unsubscribeLink}
-              />
-            )}
-        </ES.DetailRow>
-        {isReplying && localThreadDetail && localThreadDetail.messages && (
-          <ReplyComposer
-            localThreadDetail={localThreadDetail}
-            selectedIndex={selectedIndex}
-            messageOverviewListener={messageOverviewListener}
-          />
-        )}
-        {isForwarding && localThreadDetail && localThreadDetail.messages && (
-          <ForwardingComposer
-            localThreadDetail={localThreadDetail}
-            selectedIndex={selectedIndex}
-            messageOverviewListener={messageOverviewListener}
-            isForwarding={isForwarding}
-          />
-        )}
-      </>
-    ),
-    [localThreadDetail, unsubscribeLink, isReplying, isForwarding]
+  return (
+    <>
+      <ES.DetailRow>
+        <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+          <ES.DetailBase>
+            <ES.CardFullWidth>
+              {localThreadDetail?.messages && !isLoading ? (
+                <MappedMessages
+                  threadDetail={localThreadDetail}
+                  setUnsubscribeLink={setUnsubscribeLink}
+                  indexMessageListener={indexMessageListener}
+                />
+              ) : (
+                <ES.LoadingErrorWrapper>
+                  <CircularProgress />
+                </ES.LoadingErrorWrapper>
+              )}
+              {!localThreadDetail && (
+                <ES.LoadingErrorWrapper>
+                  {isLoading && <CircularProgress />}
+                  {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+                </ES.LoadingErrorWrapper>
+              )}
+            </ES.CardFullWidth>
+          </ES.DetailBase>
+        </ES.EmailDetailContainer>
+        {localThreadDetail &&
+          !isReplying &&
+          !isForwarding &&
+          localThreadDetail.messages && (
+            <EmailDetailOptions
+              threadDetail={localThreadDetail}
+              unsubscribeLink={unsubscribeLink}
+            />
+          )}
+      </ES.DetailRow>
+      {isReplying && localThreadDetail && localThreadDetail?.messages && (
+        <ReplyComposer
+          localThreadDetail={localThreadDetail}
+          selectedIndex={selectedIndex}
+          messageOverviewListener={messageOverviewListener}
+        />
+      )}
+      {isForwarding && localThreadDetail && localThreadDetail?.messages && (
+        <ForwardingComposer
+          localThreadDetail={localThreadDetail}
+          selectedIndex={selectedIndex}
+          messageOverviewListener={messageOverviewListener}
+          isForwarding={isForwarding}
+        />
+      )}
+    </>
   )
-
-  return memoizedMessagesOverview
 }
 export default MessagesOverview

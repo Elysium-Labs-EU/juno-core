@@ -17,6 +17,7 @@ import labelURL from '../utils/createLabelURL'
 import labelMap from '../constants/labelMapConstant'
 import { findLabelById } from '../utils/findLabel'
 import filterIllegalLabels from '../utils/filterIllegalLabels'
+import { IEmailListThreadItem } from './storeTypes/emailListTypes'
 
 interface IUtilsState {
   inSearch: boolean
@@ -154,21 +155,23 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
 }
 
 export const openEmail =
-  ({ email, id }: { email?: any; id: string }): AppThunk =>
+  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
   (dispatch, getState) => {
     const { labelIds, storageLabels } = getState().labels
-    const { inSearch } = getState().utils
 
     const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-    if (!onlyLegalLabels.includes(global.DRAFT_LABEL) && !inSearch) {
-      dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
-      return
-    }
-    if (onlyLegalLabels.includes(global.DRAFT_LABEL) && email) {
+    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+    if (
+      email?.messages?.length === 1 &&
+      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+      email
+    ) {
       const messageId = email.messages[email.messages.length - 1].id
       dispatch(openDraftEmail({ id, messageId }))
+      return
     }
+    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
   }
 
 export const navigateTo =
