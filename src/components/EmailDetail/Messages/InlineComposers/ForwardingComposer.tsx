@@ -1,10 +1,15 @@
-import { selectCurrentMessage } from '../../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../../store/hooks'
 import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListTypes'
 import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
-import emailSubject from '../../../../utils/emailDetailDisplayData/emailSubject'
 import ComposeEmail from '../../../Compose/ComposeEmail'
 import * as ES from '../../EmailDetailStyles'
+
+/**
+ *
+ * @param localThreadDetail - the relevant thread detail object
+ * @param selectedIndex - the selected index is the index of the selected message, NOTE - the message list on display is flipped
+ * @param messageOverviewListener a callback that
+ * @returns
+ */
 
 const ForwardingComposer = ({
   localThreadDetail,
@@ -17,28 +22,23 @@ const ForwardingComposer = ({
   messageOverviewListener: (messageId: string) => void
   isForwarding: boolean
 }) => {
-  const currentMessage = useAppSelector(selectCurrentMessage)
+  const relevantMessage =
+    selectedIndex !== undefined
+      ? localThreadDetail.messages[
+          localThreadDetail.messages.length - 1 - selectedIndex
+        ]
+      : localThreadDetail.messages[localThreadDetail.messages.length - 1]
 
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
-        subject={emailSubject(localThreadDetail)}
+        subject={relevantMessage?.payload.headers.subject}
         threadId={localThreadDetail.id}
         messageOverviewListener={messageOverviewListener}
         foundBody={
-          selectedIndex !== undefined
-            ? emailBody(
-                localThreadDetail,
-                localThreadDetail.messages.length - 1 - selectedIndex,
-                isForwarding
-              )
-            : emailBody(
-                localThreadDetail,
-                localThreadDetail.messages.findIndex(
-                  (message) => message.id === currentMessage
-                ),
-                isForwarding
-              )
+          relevantMessage !== null
+            ? emailBody(relevantMessage.payload.body.emailHTML, isForwarding)
+            : undefined
         }
       />
     </ES.ComposeWrapper>

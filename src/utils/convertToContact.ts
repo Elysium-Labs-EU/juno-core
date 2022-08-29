@@ -7,7 +7,7 @@ import { IContact } from '../store/storeTypes/contactsTypes'
  * @returns - returns a Contact object
  */
 
-export default function convertToContact(data: string): IContact {
+export function convertToContact(data: string): IContact {
   const splitted = data.split('<')
 
   if (splitted.length > 1) {
@@ -25,4 +25,21 @@ export default function convertToContact(data: string): IContact {
 
   splitted[0].replace(/(")+/g, '')
   return { name: splitted[0], emailAddress: splitted[0] }
+}
+
+/**
+ * @function handleContactConversion
+ * @param contactValue - takes in a raw string an parses it
+ * @returns an array of contact objects or an empty array
+ */
+
+export function handleContactConversion(contactValue: string): IContact[] {
+  if (
+    contactValue &&
+    contactValue.length > 0 &&
+    typeof contactValue === 'string'
+  ) {
+    return contactValue.split(',').map((item) => convertToContact(item))
+  }
+  return []
 }

@@ -20,7 +20,6 @@ interface IDetailDisplaySelector {
   threadDetail: IEmailListThreadItem
   index: number
   setUnsubscribeLink: (value: string | null) => void
-  setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
 }
 
@@ -29,7 +28,6 @@ const DetailDisplaySelector = ({
   threadDetail,
   index,
   setUnsubscribeLink,
-  setContentRendered,
   indexMessageListener,
 }: IDetailDisplaySelector) => {
   if (message.labelIds.includes(global.DRAFT_LABEL)) {
@@ -47,7 +45,6 @@ const DetailDisplaySelector = ({
       threadDetail={threadDetail}
       messageIndex={index}
       setUnsubscribeLink={setUnsubscribeLink}
-      setContentRendered={setContentRendered}
     />
   )
 }
@@ -55,12 +52,10 @@ const DetailDisplaySelector = ({
 const MappedMessages = ({
   threadDetail,
   setUnsubscribeLink,
-  setContentRendered,
   indexMessageListener,
 }: {
   threadDetail: IEmailListThreadItem
   setUnsubscribeLink: (value: string | null) => void
-  setContentRendered: (value: boolean) => void
   indexMessageListener: (value: number) => void
 }) =>
   threadDetail.messages ? (
@@ -75,7 +70,6 @@ const MappedMessages = ({
               threadDetail={threadDetail}
               index={index}
               setUnsubscribeLink={setUnsubscribeLink}
-              setContentRendered={setContentRendered}
               indexMessageListener={indexMessageListener}
             />
           </div>
@@ -91,7 +85,6 @@ interface IMessagesOverview {
   isReplying: boolean
   isForwarding: boolean
   labelIds: string[]
-  setContentRendered: (value: boolean) => void
 }
 
 const MessagesOverview = ({
@@ -100,7 +93,6 @@ const MessagesOverview = ({
   isReplying,
   isForwarding,
   labelIds,
-  setContentRendered,
 }: IMessagesOverview) => {
   const dispatch = useAppDispatch()
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
@@ -172,7 +164,6 @@ const MessagesOverview = ({
                   <MappedMessages
                     threadDetail={localThreadDetail}
                     setUnsubscribeLink={setUnsubscribeLink}
-                    setContentRendered={setContentRendered}
                     indexMessageListener={indexMessageListener}
                   />
                 ) : (

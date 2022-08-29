@@ -1,14 +1,36 @@
-export interface IEmailMessagePayload {
+export interface IEmailMessageHeaders {
+  date: string
+  from: string
+  subject: string
+  to: string
+  cc: string
+  bcc: string
+}
+
+export interface IEmailMessagePayloadRaw {
   partId: string
   mimeType: string
   filename: string
-  headers: any
+  headers: IEmailMessageHeaders
   body: {
     data?: string
     attachmentId?: string
     size: number
   }
-  parts?: IEmailMessagePayload[]
+  parts?: IEmailMessagePayloadRaw[]
+}
+
+export interface IEmailMessagePayloadConverted {
+  partId: string
+  mimeType: string
+  filename: string
+  headers: IEmailMessageHeaders
+  body: {
+    emailFileHTML: any[]
+    emailHTML: string
+    removedTrackers: string[]
+  }
+  parts?: IEmailMessagePayloadRaw[]
 }
 
 export interface IEmailMessage {
@@ -16,7 +38,7 @@ export interface IEmailMessage {
   threadId: string
   labelIds: string[]
   snippet: string
-  payload: IEmailMessagePayload
+  payload: IEmailMessagePayloadConverted
   sizeEstimate: number
   historyId: string
   internalDate: string

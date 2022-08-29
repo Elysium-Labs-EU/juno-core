@@ -18,13 +18,13 @@ const DetailModal = ({
 }: {
   showDialog: boolean
   setShowDialog: (value: boolean) => void
-  blockedTrackers: Attr[]
+  blockedTrackers: string[]
 }) => (
   <Modal
     open={showDialog}
     onClose={() => setShowDialog(false)}
-    aria-labelledby="modal-settings"
-    aria-describedby="modal-settings-box"
+    aria-labelledby="modal-removed-trackers"
+    aria-describedby="modal-removed-trackers-box"
   >
     <S.Dialog>
       <S.DialogTop>
@@ -36,12 +36,13 @@ const DetailModal = ({
           onClick={() => setShowDialog(false)}
           aria-label="close-modal"
           icon={<FiX size={16} />}
+          title="Close"
         />
       </S.DialogTop>
       <S.DialogInner>
         {blockedTrackers.map((item) => {
-          if (item?.nodeValue) {
-            const convertedToString = new URL(item.nodeValue)
+          if (item) {
+            const convertedToString = new URL(item)
             return (
               <S.BlockedItemInformation key={convertedToString.href}>
                 <p>{convertedToString.host}</p>
@@ -56,7 +57,11 @@ const DetailModal = ({
   </Modal>
 )
 
-const RemovedTrackers = ({ blockedTrackers }: { blockedTrackers: Attr[] }) => {
+const RemovedTrackers = ({
+  blockedTrackers,
+}: {
+  blockedTrackers: string[]
+}) => {
   const [showDialog, setShowDialog] = useState(false)
 
   return (

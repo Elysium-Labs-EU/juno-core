@@ -25,6 +25,7 @@ import {
 import sortThreads from '../utils/sortThreads'
 import undoubleThreads from '../utils/undoubleThreads'
 import {
+  fetchEmailDetail,
   setCoreStatus,
   setCurrentEmail,
   setSessionViewIndex,
@@ -41,8 +42,17 @@ import handleHistoryObject, {
 import handleSessionStorage from '../utils/handleSessionStorage'
 import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
 
-export const fetchEmails = createAsyncThunk(
-  'email/fetchEmails',
+export const fetchEmailsSimple = createAsyncThunk(
+  'email/fetchEmailsSimple',
+  async (query: EmailQueryObject, { dispatch, signal }) => {
+    const response = await threadApi({ signal }).getSimpleThreads(query)
+    dispatch(setLoadedInbox(query.labelIds))
+    return { response: response.data, labels: query.labelIds }
+  }
+)
+
+export const fetchEmailsFull = createAsyncThunk(
+  'email/fetchEmailsFull',
   async (query: EmailQueryObject, { dispatch, signal }) => {
     const response = await threadApi({ signal }).getFullThreads(query)
     dispatch(setLoadedInbox(query.labelIds))
@@ -230,7 +240,7 @@ export const emailListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(
-      fetchEmails.fulfilled,
+      fetchEmailsFull.fulfilled,
       // TODO: Refactor code to remove duplication
       (state, { payload: { labels, response } }) => {
         if (labels && response.threads) {
@@ -304,6 +314,152 @@ export const emailListSlice = createSlice({
         }
       }
     )
+    builder.addCase(
+      fetchEmailsSimple.fulfilled,
+      // TODO: Refactor code to remove duplication
+      (state, { payload: { labels, response } }) => {
+        if (labels && response.threads) {
+          // Find emailList sub-array index
+          const arrayIndex: number = state.emailList
+            .map((emailArray) => emailArray.labels)
+            .flat(1)
+            .findIndex((obj) => (obj ? obj.includes(labels[0]) : null))
+          // If emailList sub-array index exists, if exists concat threads.
+          // If not, push the new emailList
+          if (arrayIndex > -1) {
+            // It loops through all the newly fetched threads, and if check what to do with this.
+            // Either push it to the tempArray, or update the entry in the emailList state.
+            const tempArray: any = []
+            let activeCount: number = 0
+            const completeCount: number = response.threads.length
+
+            for (let i = 0; i < completeCount; i += 1) {
+              // Check if the object already exists on the Redux store.
+              const threadIndex = state.emailList[arrayIndex].threads.findIndex(
+                (thread) => thread.id === response.threads[i].id
+              )
+
+              if (threadIndex === -1) {
+                activeCount += 1
+                tempArray.push(response.threads[i])
+              }
+
+              if (threadIndex > -1) {
+                activeCount += 1
+                const currentState = state.emailList
+                currentState[arrayIndex].threads[threadIndex] =
+                  response.threads[i]
+                state.emailList = currentState
+              }
+
+              if (activeCount === completeCount) {
+                const currentState = state.emailList
+                const sortedThreads = sortThreads(
+                  currentState[arrayIndex].threads.concat(tempArray)
+                )
+
+                const newObject: IEmailListObject = {
+                  labels,
+                  threads: undoubleThreads(sortedThreads),
+                  nextPageToken: response.nextPageToken ?? null,
+                }
+                currentState[arrayIndex] = newObject
+                state.emailList = currentState
+              }
+            }
+          }
+          if (arrayIndex === -1) {
+            const sortedThreads = sortThreads(response.threads)
+
+            const sortedEmailList: IEmailListObject = {
+              ...response,
+              labels,
+              threads: undoubleThreads(sortedThreads),
+            }
+            state.emailList.push(sortedEmailList)
+          }
+        }
+        if (labels && !response.threads) {
+          const emptyResultObject = {
+            labels,
+            threads: [],
+            nextPageToken: null,
+          }
+          state.emailList.push(emptyResultObject)
+        }
+      }
+    )
+    builder.addCase(
+      fetchEmailDetail.fulfilled,
+      (state, { payload: { labels, response } }) => {
+        if (labels && response.threads) {
+          // Find emailList sub-array index
+          const arrayIndex: number = state.emailList
+            .map((emailArray) => emailArray.labels)
+            .flat(1)
+            .findIndex((obj) => (obj ? obj.includes(labels[0]) : null))
+          // If emailList sub-array index exists, if exists concat threads.
+          // If not, push the new emailList
+          if (arrayIndex > -1) {
+            // It loops through all the newly fetched threads, and if check what to do with this.
+            // Either push it to the tempArray, or update the entry in the emailList state.
+            const tempArray: any = []
+            let activeCount: number = 0
+            const completeCount: number = response.threads.length
+
+            for (let i = 0; i < completeCount; i += 1) {
+              // Check if the object already exists on the Redux store.
+              const threadIndex = state.emailList[arrayIndex].threads.findIndex(
+                (thread) => thread.id === response.threads[i].id
+              )
+
+              // The object doesn't exist in the Redux store
+              if (threadIndex === -1) {
+                activeCount += 1
+                tempArray.push(response.threads[i])
+              }
+
+              // The object exists in the Redux store
+              if (threadIndex > -1) {
+                activeCount += 1
+                const currentState = state.emailList
+                currentState[arrayIndex].threads[threadIndex] =
+                  response.threads[i]
+                state.emailList = currentState
+              }
+
+              if (activeCount === completeCount) {
+                const currentState = state.emailList
+                const sortedThreads = sortThreads(
+                  currentState[arrayIndex].threads.concat(tempArray)
+                )
+
+                const newObject: IEmailListObject = {
+                  labels,
+                  threads: undoubleThreads(sortedThreads),
+                  nextPageToken: state.emailList[arrayIndex].nextPageToken,
+                }
+                currentState[arrayIndex] = newObject
+                state.emailList = currentState
+              }
+            }
+          }
+        }
+        if (labels && !response.threads) {
+          const emptyResultObject = {
+            labels,
+            threads: [],
+            nextPageToken: null,
+          }
+          state.emailList.push(emptyResultObject)
+        }
+      }
+    )
+
+    // builder.addCase(fetchEmailDetail.fulfilled, (state, { payload }) => {
+    //   console.log(payload)
+    //   console.log(current(state))
+    // })
   },
 })
 

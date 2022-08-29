@@ -1,7 +1,31 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IEmailDetailState } from './storeTypes/emailDetailTypes'
 import type { RootState } from './store'
+import threadApi from '../data/threadApi'
+
+export const fetchEmailDetail = createAsyncThunk(
+  'emailDetail/fetchEmailDetail',
+  async (
+    { threadId, labelIds }: { threadId: string; labelIds: string[] },
+    { signal }
+  ) => {
+    const response = await threadApi({ signal }).getThreadDetail(threadId)
+    // Convert the output to facilite the current code to update and email in the emaillist.
+    return { response: { threads: [response] }, labels: labelIds }
+  },
+  {
+    condition: (arg, { getState }) => {
+      const { fetchStatus } = getState().emailDetail
+      // Don't retry a request that's currently in-flight
+      if (fetchStatus === 'pending') {
+        return false
+      }
+      return true
+    },
+    dispatchConditionRejection: true,
+  }
+)
 
 const initialState: IEmailDetailState = Object.freeze({
   coreStatus: null,
@@ -11,6 +35,7 @@ const initialState: IEmailDetailState = Object.freeze({
   sessionViewIndex: -1,
   isReplying: false,
   isForwarding: false,
+  fetchStatus: 'idle',
 })
 
 export const emailDetailSlice = createSlice({
@@ -21,10 +46,10 @@ export const emailDetailSlice = createSlice({
     setCoreStatus: (state, { payload }: PayloadAction<string | null>) => {
       state.coreStatus = payload
     },
-    setCurrentEmail: (state, { payload }) => {
+    setCurrentEmail: (state, { payload }: PayloadAction<string>) => {
       state.currEmail = payload
     },
-    setCurrentMessage: (state, { payload }) => {
+    setCurrentMessage: (state, { payload }: PayloadAction<string>) => {
       state.currMessage = payload
     },
     setViewIndex: (state, { payload }: PayloadAction<number>) => {
@@ -39,6 +64,17 @@ export const emailDetailSlice = createSlice({
     setIsForwarding: (state, { payload }: PayloadAction<boolean>) => {
       state.isForwarding = payload
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchEmailDetail.pending, (state) => {
+      state.fetchStatus = 'pending'
+    })
+    builder.addCase(fetchEmailDetail.rejected, (state) => {
+      state.fetchStatus = 'rejected'
+    })
+    builder.addCase(fetchEmailDetail.fulfilled, (state) => {
+      state.fetchStatus = 'idle'
+    })
   },
 })
 

@@ -35,11 +35,11 @@ const DraftMessage = ({
     message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
-    () => SenderNameFull(message, emailAddress),
+    () => SenderNameFull(message.payload.headers?.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => SenderNamePartial(message, emailAddress),
+    () => SenderNamePartial(message.payload.headers?.from, emailAddress),
     []
   )
 

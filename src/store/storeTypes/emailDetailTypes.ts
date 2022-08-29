@@ -6,4 +6,5 @@ export interface IEmailDetailState {
   isForwarding: boolean
   viewIndex: number
   sessionViewIndex: number
+  fetchStatus: 'idle' | 'pending' | 'fulfilled' | 'rejected'
 }

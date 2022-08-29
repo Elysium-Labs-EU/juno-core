@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-// import { useSessionContext } from 'supertokens-auth-react/recipe/session'
 import EmailList from '../EmailList/EmailList'
 import { selectBaseLoaded } from '../../store/baseSlice'
 import {

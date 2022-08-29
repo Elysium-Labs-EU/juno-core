@@ -5,18 +5,10 @@ interface IScroll {
 }
 
 export const Scroll = styled.div<IScroll>`
-  /* position: relative; */
   width: 100%;
-  /* height: ${({ clientState }) => (clientState ? '90.5vh' : '88.3vh')}; */
-  /* overflow-y: auto; */
   display: flex;
   flex: 2;
   flex-direction: column;
-  /* scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
-  } */
 `
 
 export const HiddenMessagesFeed = styled.div`
@@ -28,11 +20,7 @@ interface IEmailDetail {
 }
 
 export const EmailDetailWrapper = styled.div<IEmailDetail>`
-  /* margin-left: auto;
-  margin-right: auto; */
-  /* flex: 1 1 0%; */
   display: flex;
-  /* display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')}; */
 `
 
 export const MessageFeedViewContainer = styled.div``
@@ -182,28 +170,11 @@ export const HeaderFullWidth = styled.div`
   place-items: center;
 `
 
-interface IFromCCContainer {
-  multipleComponents: boolean
-}
-
-export const FromContainer = styled.div<IFromCCContainer>`
+export const ContactsContainer = styled.div`
   align-items: center;
   display: flex;
-  padding-top: 16px;
-  padding-bottom: 8px;
-`
-
-export const ToBCCContainer = styled.div<IFromCCContainer>`
-  align-items: center;
-  display: flex;
-  div {
-    max-width: ${({ multipleComponents }) =>
-      multipleComponents ? '33%' : '100%'};
-    margin-right: ${({ multipleComponents }) =>
-      multipleComponents ? '2rem' : 0};
-  }
-  padding-top: 8px;
-  padding-bottom: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `
 
 export const ToFromBCCInner = styled.div`
@@ -217,7 +188,7 @@ export const ToFromBCCInner = styled.div`
   }
 `
 
-export const BlockedTrackersContainer = styled.div<IFromCCContainer>`
+export const BlockedTrackersContainer = styled.div`
   align-items: center;
   display: flex;
   padding-top: 16px;

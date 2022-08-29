@@ -7,12 +7,13 @@ import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
 import { GoogleLabel } from './storeTypes/labelsTypes'
-import { IBaseState } from './storeTypes/baseTypes'
+import { IBaseState, PrefetchedBoxes } from './storeTypes/baseTypes'
 import multipleIncludes from '../utils/multipleIncludes'
 import findSettings from '../utils/settings/findSettings'
 import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
 import settingsApi from '../data/settingsApi'
+import { listAddEmailList } from './emailListSlice'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -71,6 +72,31 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
   }
 }
 
+const presetEmailList =
+  (prefetchedBoxes: PrefetchedBoxes): AppThunk =>
+  (dispatch) => {
+    prefetchedBoxes.forEach((emailContainer: any) => {
+      dispatch(
+        listAddEmailList({
+          labels: emailContainer[0].id,
+          threads: [],
+          nextPageToken: null,
+        })
+      )
+    })
+  }
+
+const finalizeBaseLoading =
+  (labels: any[]): AppThunk =>
+  (dispatch) => {
+    const prefetchedBoxes: PrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      labels.filter((item: GoogleLabel) => item.name === baseLabel)
+    )
+    dispatch(presetEmailList(prefetchedBoxes))
+    dispatch(setStorageLabels(prefetchedBoxes))
+    dispatch(handleSettings(labels))
+  }
+
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     // TODO: TYPE THE DATA
@@ -89,6 +115,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           })
         )
         if (Array.isArray(labels) && labels.length > 0) {
+          // TODO: Check when this is triggered and write an explanation
           const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
           if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
             const checkArray = BASE_ARRAY.map((item) =>
@@ -99,19 +126,10 @@ export const checkBase = (): AppThunk => async (dispatch) => {
                 !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
             )
 
-            const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-              labels.filter((item: GoogleLabel) => item.name === baseLabel)
-            ).filter((result) => result.length > 0)
-            dispatch(setStorageLabels(prefetchedBoxes))
-            dispatch(handleSettings(labels))
+            dispatch(finalizeBaseLoading(labels))
           } else {
-            const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-              labels.filter((item: GoogleLabel) => item.name === baseLabel)
-            )
-
-            dispatch(setStorageLabels(prefetchedBoxes))
+            dispatch(finalizeBaseLoading(labels))
             dispatch(setBaseLoaded(true))
-            dispatch(handleSettings(labels))
           }
         } else {
           dispatch(
