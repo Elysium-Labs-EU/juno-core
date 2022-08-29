@@ -1,13 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import * as React from 'react'
 import { useLocation } from 'react-router-dom'
-import {
-  FiCheckSquare,
-  FiMoreHorizontal,
-  FiEdit,
-  FiInbox,
-  FiSearch,
-} from 'react-icons/fi'
+import { FiCheckSquare, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import * as S from './NavigationStyles'
 import * as keyConstants from '../../../constants/keyConstants'

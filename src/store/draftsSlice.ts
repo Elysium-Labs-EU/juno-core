@@ -4,7 +4,6 @@ import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import { closeMail, setServiceUnavailable } from './utilsSlice'
-// import { setComposeEmail } from './composeSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
@@ -15,8 +14,6 @@ import {
   OpenDraftEmailType,
   DraftListObject,
 } from './storeTypes/draftsTypes'
-import { loopThroughBodyParts } from '../utils/bodyDecoder/bodyDecoder'
-import findPayloadHeadersData from '../utils/findPayloadHeadersData'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
   listRemoveItemDetail,
@@ -134,31 +131,10 @@ export const createUpdateDraft =
     }
   }
 
-const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
-  const {
-    draft,
-    draft: { message },
-  } = props
-  return async (dispatch, getState) => {
-    const { signal } = new AbortController()
+const pushDraftDetails =
+  ({ draft, draft: { message } }: EnhancedDraftDetails): AppThunk =>
+  async (dispatch, getState) => {
     try {
-      const decodedBody = await loopThroughBodyParts({
-        inputObject: message.payload,
-        signal,
-      })
-
-      const body = Array.isArray(decodedBody) ? decodedBody[0] : null
-      const subject = findPayloadHeadersData('Subject', message)
-      const to = findPayloadHeadersData('To', message)
-      const cc = findPayloadHeadersData('Cc', message)
-      const bcc = findPayloadHeadersData('Bcc', message)
-      const loadEmail = {
-        to,
-        cc,
-        bcc,
-        subject,
-        body,
-      }
       const draftDetails = {
         id: draft?.id,
         message: {
@@ -172,6 +148,13 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
         if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
           dispatch(setIsReplying(true))
         } else {
+          const loadEmail = {
+            to: message?.payload?.headers?.to,
+            cc: message?.payload?.headers?.cc,
+            bcc: message?.payload?.headers?.bcc,
+            subject: message?.payload?.headers?.subject,
+            body: message?.payload?.body?.emailHTML,
+          }
           dispatch(push(`/compose/${draft.id}`, loadEmail))
         }
       } else {
@@ -181,7 +164,6 @@ const pushDraftDetails = (props: EnhancedDraftDetails): AppThunk => {
       dispatch(setServiceUnavailable('Error setting up compose email.'))
     }
   }
-}
 
 const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
   const { draftId } = draftDetails
@@ -190,6 +172,8 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
       const response = await draftApi().getDraftDetail(draftId)
       if (response?.status && response.status === 200) {
         dispatch(pushDraftDetails({ draft: response.data }))
+      } else {
+        dispatch(setServiceUnavailable('Error setting up compose email.'))
       }
     } catch (err) {
       dispatch(setServiceUnavailable('Error setting up compose email.'))

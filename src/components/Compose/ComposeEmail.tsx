@@ -26,7 +26,6 @@ import {
 } from '../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { IContact } from '../../store/storeTypes/contactsTypes'
-import convertToContact from '../../utils/convertToContact'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
 import TipTap from './ComposeFields/TipTap/Tiptap'
@@ -40,19 +39,13 @@ import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
-
-const handleContactConversion = (contactValue: string): IContact[] => {
-  if (contactValue.length > 0 && typeof contactValue === 'string') {
-    return contactValue.split(',').map((item) => convertToContact(item))
-  }
-  return []
-}
+import { handleContactConversion } from '../../utils/convertToContact'
 
 // Props are coming from MessageOverview
 interface IComposeEmailProps {
-  to?: IContact | null
-  bcc?: IContact | null
-  cc?: IContact | null
+  to?: IContact[] | null
+  bcc?: IContact[] | null
+  cc?: IContact[] | null
   subject?: string | null
   threadId?: string | null
   foundBody?: string | null
@@ -337,14 +330,16 @@ const ComposeEmail = ({
       }
       if (!mailto && isEmpty(composedEmail)) {
         // Form values coming from a new reply via MessagesOverview (EmailDetail)
-        if (to) {
-          setToValue([to])
+        if (to && to.length > 0) {
+          setToValue(to)
         }
-        if (cc) {
-          setCCValue([cc])
+        if (cc && cc.length > 0) {
+          setShowCC(true)
+          setCCValue(cc)
         }
-        if (bcc) {
-          setBCCValue([bcc])
+        if (bcc && bcc.length > 0) {
+          setShowBCC(true)
+          setBCCValue(bcc)
         }
         if (subject) {
           setSubjectValue(subject)

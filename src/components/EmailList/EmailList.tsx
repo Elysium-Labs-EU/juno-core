@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../store/draftsSlice'
 import {
-  fetchEmails,
+  fetchEmailsSimple,
   refreshEmailFeed,
   selectActiveEmailListIndex,
   selectEmailList,
@@ -15,7 +15,6 @@ import {
   selectInSearch,
   selectIsLoading,
   selectIsProcessing,
-  selectServiceUnavailable,
 } from '../../store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
@@ -159,7 +158,6 @@ const EmailList = () => {
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
-  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
@@ -179,7 +177,7 @@ const EmailList = () => {
         }
 
         if (mounted) {
-          emailPromise = dispatch(fetchEmails(params))
+          emailPromise = dispatch(fetchEmailsSimple(params))
         }
         if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
           draftPromise = dispatch(fetchDrafts())
@@ -226,19 +224,15 @@ const EmailList = () => {
   // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {
     dispatch(resetEmailDetail())
-  }, [dispatch])
-
-  const emailListIndex = useMemo(
-    () => getEmailListIndex({ emailList, labelIds }),
-    [emailList, labelIds]
-  )
+  }, [])
 
   // Sync the emailListIndex with Redux
   useEffect(() => {
+    const emailListIndex = getEmailListIndex({ emailList, labelIds })
     if (emailListIndex > -1 && activeEmailListIndex !== emailListIndex) {
       dispatch(setActiveEmailListIndex(emailListIndex))
     }
-  }, [emailListIndex])
+  }, [emailList, labelIds])
 
   return (
     <>
@@ -253,11 +247,6 @@ const EmailList = () => {
         labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
           <LoadingState />
         )}
-      {serviceUnavailable && serviceUnavailable.length > 0 && (
-        <S.UnavailableContainer>
-          <span>{serviceUnavailable}</span>
-        </S.UnavailableContainer>
-      )}
     </>
   )
 }

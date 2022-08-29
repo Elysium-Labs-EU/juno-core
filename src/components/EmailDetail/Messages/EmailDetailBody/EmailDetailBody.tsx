@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
-import ReactHtmlParser from 'react-html-parser'
 import root from 'react-shadow/styled-components'
 import { useAppDispatch } from '../../../../store/hooks'
-import { IEmailMessagePayload } from '../../../../store/storeTypes/emailListTypes'
-import bodyDecoder from '../../../../utils/bodyDecoder/bodyDecoder'
 import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
 import cleanLink from '../../../../utils/cleanLink'
 import handleEmailLink from '../../../../utils/handleEmailLink'
@@ -11,20 +8,20 @@ import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
 import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
 import Wrapper from './EmailDetailBodyStyles'
 import { AppDispatch } from '../../../../store/store'
+import sanitizeAndParseHtmlContent from '../../../../utils/sanitizeAndParseHtmlContent'
 
 interface IEmailDetailBody {
-  threadDetailBody: IEmailMessagePayload
-  messageId: string
+  threadDetailBody: any
+  // threadDetailBody: IEmailMessagePayload
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: (value: string | null) => void
-  setContentRendered?: (value: boolean) => void
-  setBlockedTrackers?: (value: Attr[] | []) => void
+  setBlockedTrackers?: (value: string[] | []) => void
 }
 
 interface IBodyState {
   emailHTML: string
   emailFileHTML: any[]
-  removedTrackers: Attr[] | []
+  removedTrackers: string[] | []
 }
 
 /**
@@ -39,98 +36,69 @@ const postTreatmentBody = ({
   activeDocument,
 }: {
   dispatch: AppDispatch
-  setUnsubscribeLink: (value: string | null) => void
+  setUnsubscribeLink?: (value: string | null) => void
   activeDocument: HTMLDivElement | null
 }): void => {
   openLinkInNewTab(activeDocument)
   handleEmailLink(activeDocument, dispatch)
   cleanLink()
-  fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
+  // Only fetch the unsubscribe link if there isn't one passed from the backend - the setUnsubscribe callback will be undefined if backend provided link already.
+  setUnsubscribeLink && fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
 }
 
 // Use the shadowRoot body and trigger all the postTreatment functions
 // Otherwise just return an empty div
 
 const ShadowBody = ({
-  isDecoding,
   bodyState,
   setUnsubscribeLink = undefined,
 }: {
-  isDecoding: boolean
-  bodyState: null | IBodyState
+  bodyState: IBodyState
   setUnsubscribeLink?: (value: string | null) => void
 }) => {
   const dispatch = useAppDispatch()
+  const [enhancedBody, setEnhancedBody] = useState(false)
 
   const callbackRef = (node: HTMLDivElement | null) => {
-    if (node && node.shadowRoot && setUnsubscribeLink) {
+    // A hack to rerender the component, to get the postTreatmentBody active on the rendered html
+    if (!enhancedBody) {
+      setEnhancedBody(true)
+    }
+    if (node && node.shadowRoot && node.shadowRoot.innerHTML.length > 0) {
       postTreatmentBody({ dispatch, setUnsubscribeLink, activeDocument: node })
     }
   }
-  if (!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0) {
-    return (
-      <root.div ref={callbackRef}>
-        {ReactHtmlParser(bodyState.emailHTML)}
-      </root.div>
-    )
-  }
-  return <div />
+
+  return (
+    <root.div ref={callbackRef}>
+      {sanitizeAndParseHtmlContent(bodyState.emailHTML)}
+    </root.div>
+  )
 }
 
 const EmailDetailBody = ({
   threadDetailBody,
-  messageId,
   detailBodyCSS,
   setUnsubscribeLink = undefined,
-  setContentRendered = undefined,
   setBlockedTrackers = undefined,
 }: IEmailDetailBody) => {
   const [bodyState, setBodyState] = useState<null | IBodyState>(null)
   const [isDecoding, setIsDecoding] = useState(true)
+  const [fallbackUnsubscribe, setFallbackUnsubscribe] = useState(true)
 
   useEffect(() => {
-    let mounted = true
-    const controller = new AbortController()
-    const { signal } = controller
-    if (messageId.length > 0) {
-      if (mounted) {
-        const decoding = async () => {
-          try {
-            const bodyResponse = await bodyDecoder({
-              messageId,
-              inputObject: threadDetailBody,
-              decodeImage: true,
-              signal,
-            })
-            mounted && setBodyState(bodyResponse)
-            if (setContentRendered && mounted) {
-              setContentRendered(true)
-            }
-            if (setBlockedTrackers && bodyResponse.removedTrackers && mounted) {
-              setBlockedTrackers(bodyResponse.removedTrackers)
-            }
-            mounted && setIsDecoding(false)
-          } catch (err) {
-            if (setContentRendered) {
-              setContentRendered(true)
-              setBodyState({
-                emailHTML: '<p>Something went wrong during the decoding</p>',
-                emailFileHTML: [],
-                removedTrackers: [],
-              })
-            }
-          }
-        }
-        decoding()
+    if (threadDetailBody?.body) {
+      setBodyState(threadDetailBody.body)
+      if (setUnsubscribeLink && threadDetailBody?.headers?.listUnsubscribe) {
+        setUnsubscribeLink(threadDetailBody?.headers?.listUnsubscribe)
+        setFallbackUnsubscribe(false)
       }
-    }
-    return () => {
-      mounted = false
-      if (isDecoding) {
-        controller.abort()
+      if (setBlockedTrackers && threadDetailBody?.body?.removedTrackers) {
+        setBlockedTrackers(threadDetailBody?.body?.removedTrackers)
       }
+      setIsDecoding(false)
     }
-  }, [messageId, isDecoding])
+  }, [threadDetailBody])
 
   return (
     <div className={detailBodyCSS}>
@@ -139,14 +107,18 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      <ShadowBody
-        isDecoding={isDecoding}
-        bodyState={bodyState}
-        setUnsubscribeLink={setUnsubscribeLink}
-      />
+      {!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0 && (
+        <ShadowBody
+          bodyState={bodyState}
+          setUnsubscribeLink={
+            // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
+            fallbackUnsubscribe ? setUnsubscribeLink : undefined
+          }
+        />
+      )}
       {!isDecoding &&
         bodyState?.emailFileHTML &&
-        bodyState.emailFileHTML.length > 0 &&
+        bodyState?.emailFileHTML.length > 0 &&
         bodyState.emailFileHTML.map(
           (item, itemIdx) =>
             Object.prototype.hasOwnProperty.call(item, 'mimeType') &&

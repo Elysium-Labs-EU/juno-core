@@ -94,6 +94,7 @@ const EmailListItem = ({
     () => shouldUseDraftOrRegular(labelIds, email),
     [email]
   )
+
   const staticEmailLabels = useMemo(
     () => emailLabels(staticShouldUseDraftOrRegular),
     [email]
@@ -104,7 +105,7 @@ const EmailListItem = ({
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
+        ].payload.headers?.to,
         emailAddress
       ),
     []
@@ -114,7 +115,7 @@ const EmailListItem = ({
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
+        ].payload.headers?.from,
         emailAddress
       ),
     []
@@ -124,22 +125,20 @@ const EmailListItem = ({
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ],
+        ].payload.headers?.from,
         emailAddress
       ),
     []
   )
-  const staticSubjectFetch = useMemo(
+  const staticSubject = useMemo(
     () =>
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ]
+        ].payload.headers?.subject
       ),
     []
   )
-  const staticSubject =
-    staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = useMemo(
     () =>
       EmailSnippet(

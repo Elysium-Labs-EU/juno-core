@@ -17,7 +17,7 @@ const threadApi = ({
   controller?: AbortController
   signal?: AbortSignal
 }) => ({
-  getThreads: async (query: EmailQueryObject) => {
+  getSimpleThreads: async (query: EmailQueryObject) => {
     try {
       const res: AxiosResponse<any> = await instance.get(`/api/threads/`, {
         params: {
@@ -29,7 +29,7 @@ const threadApi = ({
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
       })
-      return res.data
+      return res
     } catch (err) {
       return errorHandling(err)
     }

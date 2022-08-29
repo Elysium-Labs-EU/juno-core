@@ -33,7 +33,6 @@ interface IReadMessage {
   threadDetail: IEmailListThreadItem
   messageIndex: number
   setUnsubscribeLink: (value: string | null) => void
-  setContentRendered: (value: boolean) => void
 }
 
 const ReadUnreadMessage = ({
@@ -41,13 +40,12 @@ const ReadUnreadMessage = ({
   threadDetail,
   messageIndex,
   setUnsubscribeLink,
-  setContentRendered,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [blockedTrackers, setBlockedTrackers] = useState<Attr[] | []>([])
+  const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
   const { ref } = useClickOutside({
@@ -139,14 +137,17 @@ const ReadUnreadMessage = ({
   }, [isReplying])
 
   const staticSenderNameFull = useMemo(
-    () => SenderNameFull(message, emailAddress),
+    () => SenderNameFull(message.payload.headers?.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => SenderNamePartial(message, emailAddress),
+    () => SenderNamePartial(message.payload.headers?.from, emailAddress),
     []
   )
-  const staticEmailSubject = useMemo(() => EmailSubject(message), [])
+  const staticEmailSubject = useMemo(
+    () => EmailSubject(message.payload.headers?.subject),
+    []
+  )
   const staticSnippet = useMemo(() => EmailSnippet(message), [])
 
   const memoizedClosedEmail = useMemo(
@@ -231,10 +232,8 @@ const ReadUnreadMessage = ({
             {message && message?.payload && message?.id && (
               <EmailDetailBody
                 threadDetailBody={message.payload}
-                messageId={message.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
                 setUnsubscribeLink={setUnsubscribeLink}
-                setContentRendered={setContentRendered}
                 setBlockedTrackers={setBlockedTrackers}
               />
             )}

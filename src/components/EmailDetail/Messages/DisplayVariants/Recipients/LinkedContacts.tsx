@@ -1,11 +1,10 @@
 import { useState } from 'react'
-import convertToContact from '../../../../../utils/convertToContact'
-import ToBCCNameFull from '../../../../Elements/ToBCCNameFull'
+import { handleContactConversion } from '../../../../../utils/convertToContact'
 import * as S from '../../../EmailDetailStyles'
 import * as GS from '../../../../../styles/globalStyles'
 import * as compose from '../../../../../constants/composeEmailConstants'
 import * as emailDetail from '../../../../../constants/emailDetailConstants'
-import SenderNameFull from '../../../../Elements/SenderName/senderNameFull'
+import senderNameFull from '../../../../Elements/SenderName/senderNameFull'
 import { selectProfile } from '../../../../../store/baseSlice'
 import { useAppSelector } from '../../../../../store/hooks'
 import { IEmailMessage } from '../../../../../store/storeTypes/emailListTypes'
@@ -54,12 +53,14 @@ const MappedContacts = ({
             )}
           </div>
         ) : (
-          contactsMap.map((contact) => (
+          contactsMap.map((contact, index) => (
             <S.SmallTextTruncated
               key={contact.emailAddress}
-              title={contact.emailAddress}
+              showComma={index !== contactsMap.length - 1}
             >
-              {contact.name}
+              <S.SmallTextTruncated title={contact.emailAddress}>
+                {contact.name}
+              </S.SmallTextTruncated>
             </S.SmallTextTruncated>
           ))
         )}
@@ -70,66 +71,34 @@ const MappedContacts = ({
 
 const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   const { emailAddress } = useAppSelector(selectProfile)
-
-  const senderNameFull = SenderNameFull(message, emailAddress)
-  const toNameFull = () => {
-    const toValues = ToBCCNameFull(message, 'To')
-    if (toValues) {
-      return toValues.split(',').map((item) => convertToContact(item))
-    }
-    return []
-  }
-  const ccNameFull = () => {
-    const toValues = ToBCCNameFull(message, 'Cc')
-    if (toValues) {
-      return toValues.split(',').map((item) => convertToContact(item))
-    }
-    return []
-  }
-  const bccNameFull = () => {
-    const toValues = ToBCCNameFull(message, 'Bcc')
-    if (toValues) {
-      return toValues.split(',').map((item) => convertToContact(item))
-    }
-    return []
-  }
+  const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
+  const toNameFull = handleContactConversion(message?.payload?.headers?.to)
+  const ccNameFull = handleContactConversion(message?.payload?.headers?.cc)
+  const bccNameFull = handleContactConversion(message?.payload?.headers?.bcc)
 
   return (
     <>
-      <S.FromContainer
-        multipleComponents={Boolean(
-          toNameFull().length > 0 ||
-            ccNameFull().length > 0 ||
-            bccNameFull().length > 0
-        )}
-      >
+      <S.ContactsContainer>
         <S.ToFromBCCInner>
           <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
           </GS.TextMutedSpanSmall>
-          <S.SmallTextTruncated>{senderNameFull}</S.SmallTextTruncated>
+          <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
         </S.ToFromBCCInner>
-      </S.FromContainer>
-      <S.ToBCCContainer
-        multipleComponents={Boolean(
-          toNameFull().length > 0 &&
-            (ccNameFull().length > 0 || bccNameFull().length > 0)
-        )}
-      >
-        <MappedContacts
-          contactsMap={toNameFull()}
-          title={emailDetail.TO_LABEL}
-        />
-        {ccNameFull && ccNameFull.length > 0 && (
-          <MappedContacts contactsMap={ccNameFull()} title={compose.CC_LABEL} />
-        )}
-        {bccNameFull && bccNameFull.length > 0 && (
-          <MappedContacts
-            contactsMap={bccNameFull()}
-            title={compose.BCC_LABEL}
-          />
-        )}
-      </S.ToBCCContainer>
+      </S.ContactsContainer>
+      <S.ContactsContainer>
+        <MappedContacts contactsMap={toNameFull} title={emailDetail.TO_LABEL} />
+      </S.ContactsContainer>
+      {ccNameFull.length > 0 && (
+        <S.ContactsContainer>
+          <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
+        </S.ContactsContainer>
+      )}
+      {bccNameFull.length > 0 && (
+        <S.ContactsContainer>
+          <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
+        </S.ContactsContainer>
+      )}
     </>
   )
 }

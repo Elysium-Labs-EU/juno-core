@@ -5,7 +5,7 @@ import * as S from './FilesOverviewStyles'
 import * as local from '../../../constants/filesOverviewConstants'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
-import SenderNameFull from '../../Elements/SenderName/senderNameFull'
+import senderNameFull from '../../Elements/SenderName/senderNameFull'
 import { selectProfile } from '../../../store/baseSlice'
 import { useAppSelector } from '../../../store/hooks'
 import checkAttachment from '../../../utils/checkAttachment'
@@ -33,7 +33,10 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
         .reverse()
         .map((message) => {
           const result = checkAttachment(message)
-          const staticSenderNameFull = SenderNameFull(message, emailAddress)
+          const staticSenderNameFull = senderNameFull(
+            message.payload.headers?.from,
+            emailAddress
+          )
           if (result.length > 0) {
             return (
               <S.FileEmailRow key={message.id}>

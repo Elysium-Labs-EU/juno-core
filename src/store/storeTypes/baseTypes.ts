@@ -1,3 +1,5 @@
+import { GoogleLabel } from './labelsTypes'
+
 export interface IProfile {
   signature: string
   name: string
@@ -13,3 +15,5 @@ export interface IBaseState {
   profile: IProfile
   isAuthenticated: boolean
 }
+
+export type PrefetchedBoxes = GoogleLabel[][]

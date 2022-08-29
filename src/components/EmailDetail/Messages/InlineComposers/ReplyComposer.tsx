@@ -1,11 +1,16 @@
 import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListTypes'
-import bccEmail from '../../../../utils/emailDetailDisplayData/emailBcc'
+import { handleContactConversion } from '../../../../utils/convertToContact'
 import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
-import ccEmail from '../../../../utils/emailDetailDisplayData/emailCc'
-import fromEmail from '../../../../utils/emailDetailDisplayData/emailFrom'
-import emailSubject from '../../../../utils/emailDetailDisplayData/emailSubject'
 import ComposeEmail from '../../../Compose/ComposeEmail'
 import * as ES from '../../EmailDetailStyles'
+
+/**
+ *
+ * @param localThreadDetail - the relevant thread detail object
+ * @param selectedIndex - the selected index is the index of the selected message, NOTE - the message list on display is flipped
+ * @param messageOverviewListener a callback that
+ * @returns
+ */
 
 const ReplyComposer = ({
   localThreadDetail,
@@ -15,25 +20,31 @@ const ReplyComposer = ({
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
   messageOverviewListener: (messageId: string) => void
-}) => (
-  <ES.ComposeWrapper>
-    <ComposeEmail
-      to={fromEmail(localThreadDetail)}
-      cc={ccEmail(localThreadDetail)}
-      bcc={bccEmail(localThreadDetail)}
-      subject={emailSubject(localThreadDetail)}
-      foundBody={
-        selectedIndex !== undefined
-          ? emailBody(
-              localThreadDetail,
-              localThreadDetail.messages.length - 1 - selectedIndex
-            )
-          : undefined
-      }
-      threadId={localThreadDetail.id}
-      messageOverviewListener={messageOverviewListener}
-    />
-  </ES.ComposeWrapper>
-)
+}) => {
+  const relevantMessage =
+    selectedIndex !== undefined
+      ? localThreadDetail.messages[
+          localThreadDetail.messages.length - 1 - selectedIndex
+        ]
+      : localThreadDetail.messages[localThreadDetail.messages.length - 1]
+
+  return (
+    <ES.ComposeWrapper>
+      <ComposeEmail
+        to={handleContactConversion(relevantMessage?.payload.headers.from)}
+        cc={handleContactConversion(relevantMessage?.payload.headers.cc)}
+        bcc={handleContactConversion(relevantMessage?.payload.headers.bcc)}
+        subject={relevantMessage?.payload.headers.subject}
+        foundBody={
+          selectedIndex !== undefined
+            ? emailBody(relevantMessage.payload.body.emailHTML)
+            : undefined
+        }
+        threadId={localThreadDetail.id}
+        messageOverviewListener={messageOverviewListener}
+      />
+    </ES.ComposeWrapper>
+  )
+}
 
 export default ReplyComposer

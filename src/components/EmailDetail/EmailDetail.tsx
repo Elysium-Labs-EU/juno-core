@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
+  fetchEmailDetail,
   selectCoreStatus,
   selectCurrentEmail,
   selectIsForwarding,
@@ -29,7 +30,7 @@ import {
   IEmailListObjectSearch,
 } from '../../store/storeTypes/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
-import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
+// import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
@@ -52,7 +53,6 @@ const EmailDetail = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
-  const [contentRendered, setContentRendered] = useState(false)
   const [currentLocal, setCurrentLocal] = useState<string>('')
   const { threadId, overviewId } = useParams<{
     threadId: string
@@ -62,7 +62,7 @@ const EmailDetail = () => {
     IEmailListObject | IEmailListObjectSearch
   >()
 
-  // This will set the activeEmailList when first opening the email.
+  // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
@@ -95,7 +95,7 @@ const EmailDetail = () => {
 
   // If the found threadId doesn't match with the Redux version - it will set it.
   useEffect(() => {
-    if (threadId && currentEmail !== threadId) {
+    if (threadId) {
       dispatch(setCurrentEmail(threadId))
     }
   }, [threadId])
@@ -121,7 +121,6 @@ const EmailDetail = () => {
   useEffect(() => {
     if (
       viewIndex === -1 &&
-      !isLoading &&
       activeEmailList &&
       activeEmailList.threads.length > 0
     ) {
@@ -131,7 +130,25 @@ const EmailDetail = () => {
         )
       )
     }
-  }, [viewIndex, activeEmailList, currentEmail, isLoading])
+  }, [viewIndex, activeEmailList, currentEmail])
+
+  useEffect(() => {
+    if (threadId && activeEmailList) {
+      // First check if the thread already has a body, if not fetch it.
+      const emailThreadObject = activeEmailList.threads.find(
+        (item) => item.id === threadId
+      )
+      if (emailThreadObject) {
+        const someThreadHasBody = emailThreadObject.messages.some((message) =>
+          Object.prototype.hasOwnProperty.call(message.payload, 'body')
+        )
+        if (someThreadHasBody) {
+          return
+        }
+        dispatch(fetchEmailDetail({ threadId, labelIds }))
+      }
+    }
+  }, [threadId, activeEmailList])
 
   return activeEmailList ? (
     <>
@@ -149,15 +166,13 @@ const EmailDetail = () => {
                     isReplying={isReplying}
                     isForwarding={isForwarding}
                     labelIds={labelIds}
-                    setContentRendered={setContentRendered}
                   />
-                  <S.HiddenMessagesFeed test-dataid="email-hidden-message-feed">
+                  {/* <S.HiddenMessagesFeed test-dataid="email-hidden-message-feed">
                     <PreLoadMessages
                       threadDetailList={activeEmailList.threads}
                       viewIndex={viewIndex}
-                      contentRendered={contentRendered}
                     />
-                  </S.HiddenMessagesFeed>
+                  </S.HiddenMessagesFeed> */}
                 </>
               )}
             {overviewId === local.FILES &&

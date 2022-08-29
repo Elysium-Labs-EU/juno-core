@@ -1,4 +1,4 @@
-import { fetchEmails } from '../store/emailListSlice'
+import { fetchEmailsFull } from '../store/emailListSlice'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
@@ -31,7 +31,7 @@ const loadNextPage = ({
       maxResults,
       silentLoading,
     }
-    dispatch(fetchEmails(params))
+    dispatch(fetchEmailsFull(params))
   }
 }
 

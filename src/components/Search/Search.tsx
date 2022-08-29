@@ -174,16 +174,16 @@ const Search = () => {
     }
   }, [searchList])
 
+  // TODO: Refactor search
   const fetchSearchThreads = async (searchBody: any) => {
     try {
-      const response: IEmailListObject = await threadApi({}).getThreads(
-        searchBody
-      )
-      if ((response?.resultSizeEstimate ?? 0) > 0) {
+      const response = await threadApi({}).getSimpleThreads(searchBody)
+      if ((response.data?.resultSizeEstimate ?? 0) > 0) {
         const buffer: IEmailListThreadItem[] = []
-        const loadCount = response.threads.length
+        const loadCount = response.data.threads.length
+        const { threads }: IEmailListObject = response.data
 
-        response.threads.forEach(async (item) => {
+        threads.forEach(async (item) => {
           const threadDetail = await threadApi({}).getThreadDetail(item.id)
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {

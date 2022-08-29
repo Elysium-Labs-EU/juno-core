@@ -27,8 +27,11 @@ interface IDetailNavigationView {
   activeEmailList: any
 }
 
-const DetailNavigationView = (props: IDetailNavigationView) => {
-  const { isDisabledPrev, isDisabledNext, activeEmailList } = props
+const DetailNavigationView = ({
+  isDisabledPrev,
+  isDisabledNext,
+  activeEmailList,
+}: IDetailNavigationView) => {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)

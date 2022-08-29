@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import { fetchDrafts, openDraftEmail } from './draftsSlice'
-import { fetchEmails } from './emailListSlice'
+import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
 import type { AppThunk, RootState } from './store'
 import RouteConstants from '../constants/routes.json'
 import * as global from '../constants/globalConstants'
@@ -87,7 +87,7 @@ export const utilsSlice = createSlice({
         state.serviceUnavailable = 'Something went wrong whilst loading data.'
       }
     })
-    builder.addCase(fetchEmails.pending, (state, { meta: { arg } }) => {
+    builder.addCase(fetchEmailsSimple.pending, (state, { meta: { arg } }) => {
       const { silentLoading } = arg
       if (!state.isLoading && !silentLoading) {
         state.isLoading = true
@@ -96,11 +96,31 @@ export const utilsSlice = createSlice({
         state.isSilentLoading = true
       }
     })
-    builder.addCase(fetchEmails.fulfilled, (state) => {
+    builder.addCase(fetchEmailsSimple.fulfilled, (state) => {
       state.isLoading = false
       state.isSilentLoading = false
     })
-    builder.addCase(fetchEmails.rejected, (state, { meta }) => {
+    builder.addCase(fetchEmailsSimple.rejected, (state, { meta }) => {
+      state.isLoading = false
+      state.isSilentLoading = false
+      if (!meta.aborted) {
+        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+      }
+    })
+    builder.addCase(fetchEmailsFull.pending, (state, { meta: { arg } }) => {
+      const { silentLoading } = arg
+      if (!state.isLoading && !silentLoading) {
+        state.isLoading = true
+      }
+      if (!state.isSilentLoading && silentLoading) {
+        state.isSilentLoading = true
+      }
+    })
+    builder.addCase(fetchEmailsFull.fulfilled, (state) => {
+      state.isLoading = false
+      state.isSilentLoading = false
+    })
+    builder.addCase(fetchEmailsFull.rejected, (state, { meta }) => {
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
