@@ -107,17 +107,15 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      {!isDecoding &&
-        bodyState?.emailHTML &&
-        bodyState.emailHTML.length > 0 && (
-          <ShadowBody
-            bodyState={bodyState}
-            setUnsubscribeLink={
-              // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
-              fallbackUnsubscribe ? setUnsubscribeLink : undefined
-            }
-          />
-        )}
+      {!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0 && (
+        <ShadowBody
+          bodyState={bodyState}
+          setUnsubscribeLink={
+            // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
+            fallbackUnsubscribe ? setUnsubscribeLink : undefined
+          }
+        />
+      )}
       {!isDecoding &&
         bodyState?.emailFileHTML &&
         bodyState?.emailFileHTML.length > 0 &&
@@ -126,8 +124,8 @@ const EmailDetailBody = ({
             Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
             Object.prototype.hasOwnProperty.call(item, 'decodedB64') && (
               <img
-                key={`${ item.filename + itemIdx }`}
-                src={`data:${ item.mimeType };base64,${ item.decodedB64 }`}
+                key={`${item.filename + itemIdx}`}
+                src={`data:${item.mimeType};base64,${item.decodedB64}`}
                 alt={item?.filename ?? 'embedded image'}
                 style={{ maxWidth: '100%', borderRadius: '5px' }}
               />
