@@ -34,6 +34,7 @@ const loadNextPage = ({
       silentLoading,
     }
     // Fetch Simple is used for overviews and search results. Full fetch is used during the email detail view and edge loading when on email detail.
+    // For safety, resort to full fetching by default.
     if (fetchSimple) {
       dispatch(fetchEmailsSimple(params))
     } else {
