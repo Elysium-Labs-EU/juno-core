@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import EmailListItem from '../EmailListItem/EmailListItem'
 import { fetchDrafts } from '../../store/draftsSlice'
 import {
@@ -74,59 +74,62 @@ const RenderEmailList = ({
     }
   }, [ArrowUpListener, inSearch, activeModal, KeyKListener])
 
+
   const { threads, nextPageToken } = filteredOnLabel
+
+  const memoizedThreadList = useMemo(() => <S.ThreadList>
+    {threads.length > 0 && (
+      <GS.Base>
+        {threads.map((email, index) => (
+          <div
+            key={email?.id}
+            onFocus={() => setFocusedItemIndex(index)}
+            onMouseOver={() => setFocusedItemIndex(index)}
+            aria-hidden="true"
+          >
+            <EmailListItem
+              email={email}
+              showLabel={false}
+              index={index}
+              activeIndex={focusedItemIndex}
+            />
+          </div>
+        ))}
+      </GS.Base>
+    )}
+    {threads.length === 0 && (
+      <EmptyState>
+        <EmailListEmptyStates />
+      </EmptyState>
+    )}
+  </S.ThreadList>, [threads, focusedItemIndex])
+
+  const memoizedLoadMore = useMemo(() => <S.LoadMoreContainer>
+    {!isLoading && (
+      <CustomButton
+        disabled={isLoading}
+        onClick={() =>
+          loadNextPage({
+            nextPageToken,
+            labelIds,
+            dispatch,
+            maxResults: emailFetchSize,
+            fetchSimple: true
+          })
+        }
+        label={global.LOAD_MORE}
+        suppressed
+        title={global.LOAD_MORE}
+      />
+    )}
+    {isLoading && <LoadingState />}
+  </S.LoadMoreContainer>, [isLoading, nextPageToken, labelIds, emailFetchSize])
+
   return (
     <S.Scroll>
       <GS.OuterContainer>
-        <S.ThreadList>
-          {threads.length > 0 && (
-            <GS.Base>
-              {threads.map((email, index) => (
-                <div
-                  key={email?.id}
-                  onFocus={() => setFocusedItemIndex(index)}
-                  onMouseOver={() => setFocusedItemIndex(index)}
-                  aria-hidden="true"
-                >
-                  <EmailListItem
-                    email={email}
-                    showLabel={false}
-                    index={index}
-                    activeIndex={focusedItemIndex}
-                  />
-                </div>
-              ))}
-            </GS.Base>
-          )}
-          {threads.length === 0 && (
-            <EmptyState>
-              <EmailListEmptyStates />
-            </EmptyState>
-          )}
-        </S.ThreadList>
-
-        {nextPageToken && (
-          <S.LoadMoreContainer>
-            {!isLoading && (
-              <CustomButton
-                disabled={isLoading}
-                onClick={() =>
-                  loadNextPage({
-                    nextPageToken,
-                    labelIds,
-                    dispatch,
-                    maxResults: emailFetchSize,
-                    fetchSimple: true
-                  })
-                }
-                label={global.LOAD_MORE}
-                suppressed
-                title={global.LOAD_MORE}
-              />
-            )}
-            {isLoading && <LoadingState />}
-          </S.LoadMoreContainer>
-        )}
+        {memoizedThreadList}
+        {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
             <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>

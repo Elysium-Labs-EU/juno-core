@@ -32,11 +32,13 @@ const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
   const handleShowKeyboardShortcuts = useCallback(() => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard))
   }, [dispatch])
+
   useMultiKeyPress(handleShowKeyboardShortcuts, actionKeysKeyboard, inSearch)
 
   const handleShowFeedback = useCallback(() => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback))
   }, [dispatch])
+
   useMultiKeyPress(handleShowFeedback, actionKeysFeedback, inSearch)
 
   return (
