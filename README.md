@@ -37,6 +37,7 @@ In the project directory, you can run:
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Your system should run on the development `dev` branch to be in sync with the latest development changes.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
@@ -44,4 +45,4 @@ You will also see any lint errors in the console.
 ## Roadmap
 
 For the Roadmap of this project please check [this](https://github.com/Elysium-Labs-EU/juno-core/projects/1).
-The current focus is to stabilize the app and adding some core mail features, such as forwarding, cc/bcc options.
+The current focus is to stabilize the app and adding some core mail features, such as composing with attachments.
