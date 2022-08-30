@@ -21,11 +21,10 @@ export interface IEmailMessagePayloadRaw {
 }
 
 export interface IEmailMessagePayloadConverted {
-  partId: string
   mimeType: string
-  filename: string
   headers: IEmailMessageHeaders
-  body: {
+  files?: undefined | IEmailMessagePayloadRaw[]
+  body?: {
     emailFileHTML: any[]
     emailHTML: string
     removedTrackers: string[]

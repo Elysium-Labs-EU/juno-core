@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
-import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
 import MessageCount from '../Elements/MessageCount'
 import Snippet from './Snippet'
@@ -33,6 +32,7 @@ import {
   setSelectedEmails,
 } from '../../store/emailListSlice'
 import useKeyPress from '../../hooks/useKeyPress'
+import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -143,9 +143,18 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
+    []
+  )
+  const staticHasAttachment = useMemo(
+    () =>
+      <EmailHasAttachmentSimple files={
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]?.payload?.files} />
+    ,
     []
   )
 
@@ -236,7 +245,7 @@ const EmailListItem = ({
           </S.CellMessage>
 
           <S.CellAttachment>
-            {email.messages && <EmailHasAttachment messages={email.messages} />}
+            {staticHasAttachment}
           </S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
