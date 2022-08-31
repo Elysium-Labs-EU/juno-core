@@ -3,7 +3,7 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 
 interface IMoreOption {
-  setShowMenu: Function
+  setShowMenu: (value: boolean) => void
   showMenu: boolean
 }
 

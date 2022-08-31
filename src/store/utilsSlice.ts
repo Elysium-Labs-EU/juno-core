@@ -198,6 +198,14 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
       dispatch(push(RouteConstants.DRAFTS))
       return
     }
+    if (labelIds.includes(global.SENT_LABEL)) {
+      dispatch(push(RouteConstants.SENT))
+      return
+    }
+    if (labelIds.includes(global.ALL_LABEL)) {
+      dispatch(push(RouteConstants.ALL_EMAIL))
+      return
+    }
     dispatch(push(RouteConstants.HOME))
   }
   if (coreStatus === global.CORE_STATUS_FOCUSED) {

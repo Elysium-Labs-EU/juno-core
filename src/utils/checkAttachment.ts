@@ -44,11 +44,10 @@ const loopThroughParts = ({
 }
 const checkAttachment = (message: IEmailMessage): IEmailAttachmentType[] => {
   if (Object.prototype.hasOwnProperty.call(message?.payload, 'parts')) {
-    const parts:
-      | IEmailAttachmentType[]
-      | undefined = message?.payload?.parts?.filter(
-      (item: IEmailAttachmentType) => item !== undefined
-    )
+    const parts: IEmailAttachmentType[] | undefined =
+      message?.payload?.parts?.filter(
+        (item: IEmailAttachmentType) => item !== undefined
+      )
     return loopThroughParts({ input: parts, reset: true })
   }
   return []

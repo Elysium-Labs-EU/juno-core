@@ -143,18 +143,21 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
   )
   const staticHasAttachment = useMemo(
-    () =>
-      <EmailHasAttachmentSimple files={
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]?.payload?.files} />
-    ,
+    () => (
+      <EmailHasAttachmentSimple
+        files={
+          staticShouldUseDraftOrRegular.messages![
+            staticShouldUseDraftOrRegular.messages!.length - 1
+          ]?.payload?.files
+        }
+      />
+    ),
     []
   )
 
@@ -244,9 +247,7 @@ const EmailListItem = ({
             </S.TruncatedDiv>
           </S.CellMessage>
 
-          <S.CellAttachment>
-            {staticHasAttachment}
-          </S.CellAttachment>
+          <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
               <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
