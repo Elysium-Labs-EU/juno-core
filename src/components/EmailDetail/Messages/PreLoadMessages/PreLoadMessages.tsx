@@ -14,7 +14,6 @@ const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
   !window.location.pathname.includes(message.id) ? (
     <EmailDetailBody
       threadDetailBody={message.payload}
-      messageId={message.id}
       detailBodyCSS={global.EMAIL_BODY_INVISIBLE}
     />
   ) : (
