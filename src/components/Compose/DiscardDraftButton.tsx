@@ -24,6 +24,7 @@ const DiscardDraftButton = ({
   const draftList = useAppSelector(selectDraft)
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
+
   const draftMessage = useCallback(
     () => draftList.find((draft) => draft.id === draftId)?.message,
     [draftId]

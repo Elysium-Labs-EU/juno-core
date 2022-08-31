@@ -25,33 +25,45 @@ export const EmailDetailWrapper = styled.div<IEmailDetail>`
 
 export const MessageFeedViewContainer = styled.div``
 
-interface IEmailClosedWrapper {
+interface IEmailWrapper {
   hideDraft?: boolean
   isDraft?: boolean
 }
 
-export const EmailClosedWrapper = styled.div<IEmailClosedWrapper>`
-  padding: 16px;
+export const EmailClosedWrapper = styled.div<IEmailWrapper>`
+  padding: 20px;
   transition: background-color ease-in 0.125s;
   background-color: ${({ isDraft }) =>
     isDraft ? '#c2a6ff17' : `var(--color-white)`};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
-  margin-bottom: 8px;
+  margin-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-l);
   &:hover {
-    background-color: var(--color-grey-hover);
-    border-radius: 6px;
+    background-color: ${({ isDraft }) =>
+      isDraft ? `var(--color-purple-soft)` : `var(--color-grey-hover)`};
+    border-radius: var(--radius-l);
   }
 `
-export const EmailOpenWrapper = styled.div`
-  padding: 16px;
-  margin-bottom: 8px;
-  border-radius: 6px;
+export const EmailOpenWrapper = styled.div<IEmailWrapper>`
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: ${({ isDraft }) =>
+    isDraft ? '#c2a6ff17' : `var(--color-white)`};
+  border-radius: var(--radius-l);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  background-color: var(--color-white);
+  display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
+`
+
+export const DraftHeaderControls = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--color-purple-soft);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
 `
 
 export const EmailOptionsContainer = styled.div<IEmailDetail>`
