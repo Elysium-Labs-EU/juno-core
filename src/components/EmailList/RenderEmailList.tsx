@@ -59,7 +59,12 @@ const RenderEmailList = ({
   }, [ArrowDownListener, inSearch, activeModal, KeyJListener])
 
   useEffect(() => {
-    if ((ArrowUpListener || KeyKListener) && !inSearch && !activeModal) {
+    if (
+      (ArrowUpListener || KeyKListener) &&
+      !inSearch &&
+      !activeModal &&
+      focusedItemIndex > -1
+    ) {
       setFocusedItemIndex((prevState) => prevState - 1)
     }
   }, [ArrowUpListener, inSearch, activeModal, KeyKListener])
