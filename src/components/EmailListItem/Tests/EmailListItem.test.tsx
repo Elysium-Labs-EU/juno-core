@@ -8,11 +8,6 @@ import renderWithProviders from '../../../utils/ForTesting/testUtils'
 import EmailListItem from '../EmailListItem'
 
 describe('EmailListItem regular tests', () => {
-  // test('set up initial state, and render', () => {
-  //   const store = setupStore()
-  //   store.dispatch(todoAdded('Buy milk'))
-  // })
-
   test('should always show an avatar', () => {
     renderWithProviders(
       <EmailListItem

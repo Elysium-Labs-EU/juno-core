@@ -36,8 +36,8 @@ const ForwardingComposer = ({
         threadId={localThreadDetail.id}
         messageOverviewListener={messageOverviewListener}
         foundBody={
-          relevantMessage !== null
-            ? emailBody(relevantMessage.payload.body.emailHTML, isForwarding)
+          relevantMessage !== null && relevantMessage?.payload?.body?.emailHTML
+            ? emailBody(relevantMessage?.payload?.body?.emailHTML, isForwarding)
             : undefined
         }
       />

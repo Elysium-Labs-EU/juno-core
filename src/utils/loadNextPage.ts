@@ -8,7 +8,7 @@ import { AppDispatch } from '../store/store'
 
 interface ILoadNextPage {
   q?: string
-  nextPageToken: string | null
+  nextPageToken: string | null | undefined
   labelIds: string[]
   dispatch: AppDispatch
   silentLoading?: boolean

@@ -41,6 +41,7 @@ const Spamclearoption = () => {
         onClick={handleClickOpen}
         disabled={isLoading}
         label={SPAM_BUTTON}
+        title="Clear Spam"
       />
       <Dialog
         open={open}

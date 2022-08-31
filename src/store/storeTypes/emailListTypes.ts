@@ -52,7 +52,7 @@ export interface IEmailListThreadItem {
 export interface IEmailListObject {
   labels: string[]
   threads: IEmailListThreadItem[]
-  nextPageToken: string | null
+  nextPageToken: string | null | undefined
   resultSizeEstimate?: number
   timestamp?: number
 }

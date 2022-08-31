@@ -36,7 +36,8 @@ const ReplyComposer = ({
         bcc={handleContactConversion(relevantMessage?.payload.headers.bcc)}
         subject={relevantMessage?.payload.headers.subject}
         foundBody={
-          selectedIndex !== undefined
+          selectedIndex !== undefined &&
+          relevantMessage?.payload?.body?.emailHTML
             ? emailBody(relevantMessage.payload.body.emailHTML)
             : undefined
         }
