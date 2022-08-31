@@ -27,6 +27,8 @@ import Seo from '../../../Elements/Seo'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import LinkedContacts from './Recipients/LinkedContacts'
+import EmailLabel from '../../../Elements/EmailLabel'
+import { selectLabelIds } from '../../../../store/labelsSlice'
 
 interface IReadMessage {
   message: IEmailMessage
@@ -41,6 +43,8 @@ const ReadUnreadMessage = ({
   messageIndex,
   setUnsubscribeLink,
 }: IReadMessage) => {
+  console.log(threadDetail)
+  const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
@@ -54,6 +58,14 @@ const ReadUnreadMessage = ({
       setShowMenu(false)
     },
   })
+
+  let label
+  if (labelIds[0] === 'ARCHIVE'){
+    label = <EmailLabel labelNames = {threadDetail.messages[0].labelIds}/>
+  }else{
+    label = <> </>
+  }
+
 
   useEffect(() => {
     let mounted = true
@@ -170,6 +182,7 @@ const ReadUnreadMessage = ({
             <S.ChildDiv>
               <EmailHasAttachment messages={message} />
             </S.ChildDiv>
+
             <S.ChildDiv>
               <TimeStamp threadTimeStamp={message.internalDate} />
             </S.ChildDiv>
@@ -197,6 +210,7 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <EmailHasAttachment messages={message} />
                 </S.ChildDiv>
+                {label}
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />
                 </S.ChildDiv>
