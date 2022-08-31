@@ -12,6 +12,7 @@ import SentEmail from './components/Sent/Sent'
 import Login from './components/Login/Login'
 import GoogleCallback from './components/Login/Callback/GoogleCallBack'
 import PageNotFound from './components/PageNotFound/PageNotFound'
+import AllEmail from './components/AllEmail/AllEmail'
 
 const ProtectedRoute = ({
   children,
@@ -103,6 +104,14 @@ const RoutesComponent = () => (
       element={
         <ProtectedRouteTemplate>
           <Inbox />
+        </ProtectedRouteTemplate>
+      }
+    />
+    <Route
+      path={RoutesConstants.ALL_EMAIL}
+      element={
+        <ProtectedRouteTemplate>
+          <AllEmail />
         </ProtectedRouteTemplate>
       }
     />

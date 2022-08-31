@@ -19,7 +19,6 @@ import {
   IEmailListObjectSearch,
   IEmailListThreadItem,
 } from '../../store/storeTypes/emailListTypes'
-import EmailListItem from '../EmailListItem/EmailListItem'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
@@ -27,6 +26,7 @@ import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import useKeyPress from '../../hooks/useKeyPress'
 import { AppDispatch } from '../../store/store'
+import ThreadList from '../EmailList/ThreadList'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 
@@ -299,25 +299,18 @@ const Search = () => {
             title="Close"
           />
         </S.InputRow>
+
         <S.SearchResults>
           {searchResults && searchResults?.threads ? (
             <>
-              {searchResults.threads.map((thread, index) => (
-                <div
-                  key={`${thread.id}-search`}
-                  onClick={() => handleOpenEvent(thread.id)}
-                  onFocus={() => setFocusedItemIndex(index)}
-                  onMouseOver={() => setFocusedItemIndex(index)}
-                  aria-hidden="true"
-                >
-                  <EmailListItem
-                    email={thread}
-                    showLabel
-                    index={index}
-                    activeIndex={focusedItemIndex}
-                  />
-                </div>
-              ))}
+              <ThreadList
+                threads={searchResults.threads}
+                focusedItemIndex={focusedItemIndex}
+                setFocusedItemIndex={setFocusedItemIndex}
+                showLabel
+                keySuffix="search"
+                searchOnClickHandeler={handleOpenEvent}
+              />
               {searchResults.nextPageToken ? (
                 <S.FooterRow>
                   {loadState !== global.LOAD_STATE_MAP.loading && (

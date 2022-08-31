@@ -10,7 +10,6 @@ import {
   setServiceUnavailable,
 } from './utilsSlice'
 import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
-import messageApi from '../data/messageApi'
 import * as global from '../constants/globalConstants'
 import type { AppThunk, RootState } from './store'
 import {
@@ -833,7 +832,8 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     }
   } catch (err) {
     const typedError: any = err
-    console.error(typedError.response.message)
+    process.env.NODE_ENV === 'development' &&
+      console.error(typedError.response.message)
     dispatch(setServiceUnavailable('Cannot refresh feed'))
   } finally {
     dispatch(setIsFetching(false))

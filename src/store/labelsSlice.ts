@@ -43,8 +43,8 @@ export const labelsSlice = createSlice({
       }
       if (Array.isArray(payload)) {
         const labelIdNameArray = payload.map((label: GoogleLabel[]) => ({
-          id: label[0].id,
-          name: label[0].name,
+          id: label[0]?.id,
+          name: label[0]?.name,
         }))
         state.storageLabels = [...state.storageLabels, ...labelIdNameArray]
       }

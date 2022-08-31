@@ -14,6 +14,7 @@ import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
 import settingsApi from '../data/settingsApi'
 import { listAddEmailList } from './emailListSlice'
+import { ALL_LABEL } from '../constants/globalConstants'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -71,14 +72,19 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
     dispatch(setBaseLoaded(true))
   }
 }
+/**
+ * @function presetEmailList
+ * @param prefetchedBoxes
+ * @returns adding all the required emailboxes as empty shells to the Redux state. To ensure that the position of the boxes are static.
+ */
 
 const presetEmailList =
   (prefetchedBoxes: PrefetchedBoxes): AppThunk =>
   (dispatch) => {
-    prefetchedBoxes.forEach((emailContainer: any) => {
+    prefetchedBoxes.forEach((emailContainer) => {
       dispatch(
         listAddEmailList({
-          labels: emailContainer[0].id,
+          labels: emailContainer[0]?.id,
           threads: [],
           nextPageToken: null,
         })
@@ -86,14 +92,33 @@ const presetEmailList =
     })
   }
 
+/**
+ * @function finalizeBaseLoading
+ * @param labels
+ * @returns finalizes the base loading by setting the emaillist and the storagelabels in Redux and parsing the settings.
+ */
+
 const finalizeBaseLoading =
   (labels: any[]): AppThunk =>
   (dispatch) => {
+    // TODO: Refactor this to not be an array of arrays, but an array of objects
     const prefetchedBoxes: PrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
       labels.filter((item: GoogleLabel) => item.name === baseLabel)
     )
-    dispatch(presetEmailList(prefetchedBoxes))
-    dispatch(setStorageLabels(prefetchedBoxes))
+    // Add an empty label to have the option to show ALL emails.
+    const addEmptyAllLabel = prefetchedBoxes.concat([
+      [
+        {
+          id: ALL_LABEL,
+          name: 'All Mail',
+          messageListVisibility: 'show',
+          labelListVisibility: 'labelShow',
+          type: 'junoCustom',
+        },
+      ],
+    ])
+    dispatch(presetEmailList(addEmptyAllLabel))
+    dispatch(setStorageLabels(addEmptyAllLabel))
     dispatch(handleSettings(labels))
   }
 

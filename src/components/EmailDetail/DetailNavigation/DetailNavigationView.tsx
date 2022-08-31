@@ -16,7 +16,10 @@ import {
 } from '../../../store/utilsSlice'
 import { selectViewIndex } from '../../../store/emailDetailSlice'
 import { selectLabelIds } from '../../../store/labelsSlice'
-import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../store/storeTypes/emailListTypes'
 import loadNextPage from '../../../utils/loadNextPage'
 import useKeyPress from '../../../hooks/useKeyPress'
 
@@ -24,7 +27,7 @@ const ICON_SIZE = 20
 interface IDetailNavigationView {
   isDisabledPrev: boolean
   isDisabledNext: boolean
-  activeEmailList: any
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
 }
 
 const DetailNavigationView = ({
@@ -55,6 +58,7 @@ const DetailNavigationView = ({
   const handleNavPrevEvent = useCallback(() => {
     dispatch(navigatePreviousMail())
   }, [])
+
   useEffect(() => {
     if (ArrowLeftListener) {
       handleNavPrevEvent()
@@ -91,6 +95,7 @@ const DetailNavigationView = ({
     }
     nextButtonSelector()
   }, [])
+
   useEffect(() => {
     if (ArrowRightListener) {
       handleNavNextEvent()

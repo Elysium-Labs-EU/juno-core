@@ -61,6 +61,7 @@ const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
   const MENU_OPTIONS = [
     { title: 'Drafts', onClick: () => dispatch(push(Routes.DRAFTS)) },
     { title: 'Sent', onClick: () => dispatch(push(Routes.SENT)) },
+    { title: 'All Mail', onClick: () => dispatch(push(Routes.ALL_EMAIL)) },
   ]
   const MENU_ITEMS_GLOBAL = [
     {
@@ -74,7 +75,6 @@ const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
     {
       title: 'Logout',
       onClick: () => handleLogout(),
-      // hint: [modifierKeyDisplay, '.'],
     },
   ]
 

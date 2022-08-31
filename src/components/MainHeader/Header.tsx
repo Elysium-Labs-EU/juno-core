@@ -15,6 +15,7 @@ import { selectSelectedEmails } from '../../store/emailListSlice'
 import SelectedOptions from './SelectedOptions/SelectedOptions'
 import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
 import Feedback from '../Help/Feedback/Feedback'
+import AllEmailHeader from '../AllEmail/AllEmailHeader'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -37,6 +38,9 @@ const SetHeader = memo(() => {
   }
   if (location.pathname === '/spam') {
     return <SpamHeader />
+  }
+  if (location.pathname === '/all') {
+    return <AllEmailHeader />
   }
   return null
 })
