@@ -42,7 +42,7 @@ const DraftMessage = ({
   const dispatch = useAppDispatch()
 
   const EmailSnippet =
-    message && `${ message.snippet.replace(/^(.{65}[^\s]*).*/, '$1') }...`
+    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message.payload.headers?.from, emailAddress),
