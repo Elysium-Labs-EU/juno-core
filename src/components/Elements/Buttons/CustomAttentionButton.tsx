@@ -3,13 +3,14 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 interface ICustomButton {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   className?: string
-  type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
+  icon?: JSX.Element | null
   label: string
-  variant?: 'primary' | 'secondary'
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   title: string
+  type?: 'submit' | 'reset' | 'button'
+  variant?: 'primary' | 'secondary'
 }
 
 interface IButton {
@@ -17,14 +18,12 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  font-weight: 500;
-  font-family: var(--font-family);
-  border-radius: 20px;
+  background-color: ${ ({ variant }) => variant === 'primary' ? `var(--color-black)` : `var(--color-purple)` };
+  border-radius: var(--radius-l);
   border: none;
-  background-color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)`};
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  font-family: var(--font-family);
+  font-weight: 500;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 10px 14px;
     span {
@@ -35,10 +34,10 @@ const Button = styled.button<IButton>`
   }
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `var(--color-black-off)`
-        : `var(--color-purple-dark)`};
+    background-color: ${ ({ variant }) =>
+    variant === 'primary'
+      ? `var(--color-black-off)`
+      : `var(--color-purple-dark)` };
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
@@ -55,28 +54,38 @@ const Button = styled.button<IButton>`
 `
 
 const InnerButton = styled.div`
-  display: flex;
   align-items: center;
+  display: flex;
+
+  .icon {
+    line-height: 0;
+    margin: 0;
+    margin-right: 5px;
+    text-align: center;
+    transition: opacity 0.3s ease 0s;
+  }
 `
 
 const CustomAttentionButton = ({
-  onClick = undefined,
   className = undefined,
   disabled = false,
+  icon = null,
   label,
+  onClick = undefined,
+  title,
   type = 'button',
   variant = 'primary',
-  title,
 }: ICustomButton) => (
   <Button
-    onClick={onClick ? (event) => onClick(event) : undefined}
     className={className}
-    type={type ?? 'button'}
     disabled={disabled}
-    variant={variant ?? 'primary'}
+    onClick={onClick ? (event) => onClick(event) : undefined}
     title={title}
+    type={type ?? 'button'}
+    variant={variant ?? 'primary'}
   >
     <InnerButton>
+      {icon && <div className="icon">{icon}</div>}
       <span>{label}</span>
     </InnerButton>
   </Button>

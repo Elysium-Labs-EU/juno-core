@@ -38,6 +38,38 @@ export const Cog = ({
     </svg>
   )
 }
+
+export const Jump = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+        d="M26.622 5.17c.096-.043.184.072.119.154l-7.355 9.193a.5.5 0 0 0 .167.76l3.563 1.781a1 1 0 0 1-.037 1.806L5.38 26.83c-.097.043-.186-.072-.12-.154l7.355-9.193a.5.5 0 0 0-.167-.76l-3.563-1.781a1 1 0 0 1 .037-1.806l17.7-7.966z"
+      />
+    </svg>
+  )
+}
+
 export const Signature = ({
   size = 0,
   color = 'currentColor',
@@ -107,6 +139,52 @@ export const Sign = ({
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={strokeWidth}
+      />
+    </svg>
+  )
+}
+
+export const Sort = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={width}
+      height={height} fill="none" viewBox="0 0 32 32" preserveAspectRatio={preserveAspectRatio}>
+      <path
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M9 25v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-3"
+      />
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="m8.201 9.85 3.95-.626M9.14 15.776l9.877-1.564m-9.252 5.515 7.902-1.252"
+      />
+      <circle
+        cx={18.078}
+        cy={8.286}
+        r={1}
+        fill="#535358"
+        transform="rotate(-9 18.078 8.286)"
+      />
+      <path
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M3.781 7.513a2 2 0 0 1 1.663-2.289l13.827-2.19a2 2 0 0 1 2.288 1.663l2.66 16.79a2 2 0 0 1-1.663 2.289L8.73 25.966a2 2 0 0 1-2.289-1.663l-2.66-16.79z"
       />
     </svg>
   )

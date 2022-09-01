@@ -3,15 +3,15 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 interface ICustomButton {
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   className?: string
-  type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
   icon?: JSX.Element | null
   label: string
-  suppressed?: boolean
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   style?: any
+  suppressed?: boolean
   title: string
+  type?: 'submit' | 'reset' | 'button'
 }
 
 interface IButton {
@@ -19,32 +19,30 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  display: inline-block;
-  font-weight: 400;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
   background-color: transparent;
-  border: 1px solid transparent;
-  border-top-color: transparent;
-  border-right-color: transparent;
   border-bottom-color: transparent;
   border-left-color: transparent;
-  padding: 0.375rem 0.75rem;
-  font-size: 13px;
-  line-height: 1.5;
   border-radius: 4px;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border: 1px solid transparent;
+  color: ${ ({ suppressed }) => suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
   cursor: pointer;
+  display: inline-block;
   font-family: var(--font-family);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  padding: 0.375rem 0.75rem;
+  text-align: center;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  user-select: none;
+  vertical-align: middle;
 
   &:hover {
-    color: var(--color-black);
     border-color: var(--color-grey);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+    color: var(--color-black);
   }
 
   &:disabled {
@@ -53,36 +51,36 @@ const Button = styled.button<IButton>`
 `
 
 const InnerButton = styled.div`
-  display: flex;
   align-items: center;
+  display: flex;
 
   .icon {
-    margin-right: 13px;
     line-height: 0;
+    margin-right: 13px;
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
 `
 
 const CustomButton = ({
-  onClick = undefined,
   className = undefined,
   disabled = false,
   icon = null,
   label,
-  type = 'button',
-  suppressed = false,
+  onClick = undefined,
   style = undefined,
+  suppressed = false,
   title,
+  type = 'button',
 }: ICustomButton) => (
   <Button
-    onClick={onClick ? (event) => onClick(event) : undefined}
     className={className}
-    type={type ?? 'button'}
     disabled={disabled}
-    suppressed={suppressed}
+    onClick={onClick ? (event) => onClick(event) : undefined}
     style={style}
+    suppressed={suppressed}
     title={title}
+    type={type ?? 'button'}
   >
     <InnerButton>
       {icon && <div className="icon">{icon}</div>}

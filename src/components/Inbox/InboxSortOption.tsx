@@ -21,6 +21,7 @@ import {
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { setModifierKey } from '../../utils/setModifierKey'
+import { Sort } from '../../images/svgIcons/quillIcons'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
@@ -62,6 +63,7 @@ const SortInbox = () => {
       label={INBOX_BUTTON}
       variant="secondary"
       title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
+      icon={<Sort color="var(--color-white)" size={20} />}
     />
   )
 }
