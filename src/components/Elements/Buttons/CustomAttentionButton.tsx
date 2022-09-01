@@ -18,12 +18,14 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  background-color: ${ ({ variant }) => variant === 'primary' ? `var(--color-black)` : `var(--color-purple)` };
+  background-color: ${({ variant }) =>
+    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)`};
   border-radius: var(--radius-l);
   border: none;
   font-family: var(--font-family);
   font-weight: 500;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
     margin: 10px 14px;
     span {
@@ -34,10 +36,10 @@ const Button = styled.button<IButton>`
   }
 
   &:hover {
-    background-color: ${ ({ variant }) =>
-    variant === 'primary'
-      ? `var(--color-black-off)`
-      : `var(--color-purple-dark)` };
+    background-color: ${({ variant }) =>
+      variant === 'primary'
+        ? `var(--color-black-off)`
+        : `var(--color-purple-dark)`};
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }

@@ -26,7 +26,8 @@ const Button = styled.button<IButton>`
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;
-  color: ${ ({ suppressed }) => suppressed ? `var(--color-grey) ` : `var(--color-black) ` };
+  color: ${({ suppressed }) =>
+    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
   cursor: pointer;
   display: inline-block;
   font-family: var(--font-family);
@@ -35,7 +36,8 @@ const Button = styled.button<IButton>`
   line-height: 1.5;
   padding: 0.375rem 0.75rem;
   text-align: center;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   user-select: none;
   vertical-align: middle;
 

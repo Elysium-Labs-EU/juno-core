@@ -158,8 +158,14 @@ export const Sort = ({
   const height = size === 0 ? '1em' : size
 
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={width}
-      height={height} fill="none" viewBox="0 0 32 32" preserveAspectRatio={preserveAspectRatio}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
       <path
         stroke={color}
         strokeLinejoin="round"
