@@ -56,13 +56,16 @@ export const MenuSection = styled.div`
   }
 `
 
-export const MenuItem = styled.button`
+interface IMenuItem {
+  isFocused: boolean
+}
+
+export const MenuItem = styled.button<IMenuItem>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px;
   margin: 0px 4px;
-  background-color: transparent;
   color: var(--color-white);
   border: 0;
   border-radius: var(--radius-m);
@@ -73,6 +76,8 @@ export const MenuItem = styled.button`
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
+  background-color: ${({ isFocused }) =>
+    isFocused ? `var(--color-black-off)` : 'transparent'};
   &:hover {
     background-color: var(--color-black-off);
   }

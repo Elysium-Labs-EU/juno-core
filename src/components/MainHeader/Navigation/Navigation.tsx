@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import { FiCheckSquare, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import * as S from './NavigationStyles'
+import { useLocation } from 'react-router-dom'
+
 import * as keyConstants from '../../../constants/keyConstants'
 import Routes from '../../../constants/routes.json'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import {
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   navigateTo,
@@ -12,13 +16,10 @@ import {
   selectInSearch,
   setInSearch,
 } from '../../../store/utilsSlice'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
-import NavigationMore from './More/NavigationMore'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import StyledTooltip from '../../Elements/StyledTooltip'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
+import NavigationMore from './More/NavigationMore'
+import * as S from './NavigationStyles'
 
 const SIZE = 16
 
@@ -114,7 +115,9 @@ const Navigation = () => {
               <CustomIconButton
                 icon={<FiEdit size={SIZE} />}
                 isActive={active === 'compose'}
-                onClick={() => dispatch(navigateTo('/compose'))}
+                onClick={() => {
+                  dispatch(navigateTo('/compose'))
+                }}
                 title="Compose"
               />
             </S.NavItem>
