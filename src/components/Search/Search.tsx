@@ -2,29 +2,31 @@ import { useEffect, useRef, useState } from 'react'
 import * as React from 'react'
 import Modal from '@mui/material/Modal'
 import InputBase from '@mui/material/InputBase'
-import { FiSearch, FiX } from 'react-icons/fi'
+import { FiSearch, FiX, FiXCircle } from 'react-icons/fi'
 import * as S from './SearchStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import * as keyConstants from '../../constants/keyConstants'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   selectInSearch,
   setInSearch,
   setServiceUnavailable,
-} from '../../Store/utilsSlice'
+} from '../../store/utilsSlice'
 import threadApi from '../../data/threadApi'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
   IEmailListThreadItem,
-} from '../../Store/storeTypes/emailListTypes'
-import EmailListItem from '../EmailListItem/EmailListItem'
+} from '../../store/storeTypes/emailListTypes'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import sortThreads from '../../utils/sortThreads'
-import { selectSearchList, useSearchResults } from '../../Store/emailListSlice'
+import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import useKeyPress from '../../Hooks/useKeyPress'
+import useKeyPress from '../../hooks/useKeyPress'
+import { AppDispatch } from '../../store/store'
+import ThreadList from '../EmailList/ThreadList'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 
@@ -32,20 +34,20 @@ interface IShouldClearOutPreviousResults {
   searchValueRef: any
   searchValue: string
   setSearchResults: Function
-  dispatch: Function
+  dispatch: AppDispatch
 }
 interface IIntitialSearch {
   searchValue: string
-  setLoadState: Function
+  setLoadState: (value: string) => void
   fetchSearchThreads: Function
   searchValueRef: any
   setSearchResults: Function
-  dispatch: Function
+  dispatch: AppDispatch
 }
 interface ILoadMoreSearchResults {
   searchValue: string
   searchResults: IEmailListObjectSearch
-  setLoadState: Function
+  setLoadState: (value: string) => void
   fetchSearchThreads: Function
 }
 
@@ -104,7 +106,7 @@ const openDetail = ({
   searchResults,
   currentEmail,
 }: {
-  dispatch: Function
+  dispatch: AppDispatch
   searchResults: IEmailListObjectSearch
   currentEmail: string
 }) => {
@@ -112,7 +114,7 @@ const openDetail = ({
   dispatch(setInSearch(false))
 }
 
-const handleClose = (dispatch: Function) => dispatch(setInSearch(false))
+const handleClose = (dispatch: AppDispatch) => dispatch(setInSearch(false))
 
 const Search = () => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
@@ -124,9 +126,9 @@ const Search = () => {
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
-  const ArrowDownListener = useKeyPress(global.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(global.KEY_ARROW_UP)
-  const EscapeListener = useKeyPress(global.KEY_ESCAPE)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   useEffect(() => {
     if (EscapeListener) {
@@ -172,16 +174,16 @@ const Search = () => {
     }
   }, [searchList])
 
+  // TODO: Refactor search
   const fetchSearchThreads = async (searchBody: any) => {
     try {
-      const response: IEmailListObject = await threadApi({}).getThreads(
-        searchBody
-      )
-      if ((response?.resultSizeEstimate ?? 0) > 0) {
+      const response = await threadApi({}).getSimpleThreads(searchBody)
+      if ((response.data?.resultSizeEstimate ?? 0) > 0) {
         const buffer: IEmailListThreadItem[] = []
-        const loadCount = response.threads.length
+        const loadCount = response.data.threads.length
+        const { threads }: IEmailListObject = response.data
 
-        response.threads.forEach(async (item) => {
+        threads.forEach(async (item) => {
           const threadDetail = await threadApi({}).getThreadDetail(item.id)
           buffer.push(threadDetail)
           if (buffer.length === loadCount) {
@@ -226,7 +228,7 @@ const Search = () => {
   }
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code.toUpperCase() === global.KEY_ENTER) {
+    if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
           searchValue,
@@ -268,7 +270,8 @@ const Search = () => {
             <CustomIconButton
               onClick={resetSearch}
               aria-label="clear-search"
-              icon={<FiX size={16} />}
+              icon={<FiXCircle size={16} />}
+              title="Clear search input"
             />
           )}
           <CustomButton
@@ -286,27 +289,28 @@ const Search = () => {
               searchValue.length < 1 || searchValue === searchValueRef.current
             }
             label={SEARCH}
+            style={{ marginRight: '10px' }}
+            title="Search"
+          />
+          <CustomIconButton
+            onClick={() => handleClose(dispatch)}
+            aria-label="close-modal"
+            icon={<FiX size={16} />}
+            title="Close"
           />
         </S.InputRow>
+
         <S.SearchResults>
-          {searchResults && searchResults.threads ? (
+          {searchResults && searchResults?.threads ? (
             <>
-              {searchResults.threads.map((thread, index) => (
-                <div
-                  key={`${thread.id}-search`}
-                  onClick={() => handleOpenEvent(thread.id)}
-                  onFocus={() => setFocusedItemIndex(index)}
-                  onMouseOver={() => setFocusedItemIndex(index)}
-                  aria-hidden="true"
-                >
-                  <EmailListItem
-                    email={thread}
-                    showLabel
-                    index={index}
-                    activeIndex={focusedItemIndex}
-                  />
-                </div>
-              ))}
+              <ThreadList
+                threads={searchResults.threads}
+                focusedItemIndex={focusedItemIndex}
+                setFocusedItemIndex={setFocusedItemIndex}
+                showLabel
+                keySuffix="search"
+                searchOnClickHandeler={handleOpenEvent}
+              />
               {searchResults.nextPageToken ? (
                 <S.FooterRow>
                   {loadState !== global.LOAD_STATE_MAP.loading && (
@@ -321,6 +325,7 @@ const Search = () => {
                       }
                       label={global.LOAD_MORE}
                       suppressed
+                      title="Load more results"
                     />
                   )}
                   {loadState === global.LOAD_STATE_MAP.loading && (

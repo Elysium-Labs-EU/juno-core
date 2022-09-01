@@ -1,14 +1,15 @@
+import { forwardRef } from 'react'
 import * as S from './EmailMoreOptionsStyles'
 import DeleteOption from '../Options/DeleteOption'
 
 interface IEmailMoreOptions {
-  messageId: string
+  threadId: string
 }
 
-const EmailMoreOptions = ({ messageId }: IEmailMoreOptions) => (
-  <S.Wrapper>
-    <DeleteOption messageId={messageId} />
+const EmailMoreOptions = forwardRef(({ threadId }: IEmailMoreOptions, ref) => (
+  <S.Wrapper ref={ref}>
+    <DeleteOption threadId={threadId} />
   </S.Wrapper>
-)
+))
 
 export default EmailMoreOptions

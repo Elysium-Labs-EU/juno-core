@@ -1,5 +1,5 @@
 import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { IEmailMessage } from '../Store/storeTypes/emailListTypes'
+import { IEmailMessage } from '../store/storeTypes/emailListTypes'
 import * as global from '../constants/globalConstants'
 
 let foundAttachments: IEmailAttachmentType[] = []
@@ -44,9 +44,10 @@ const loopThroughParts = ({
 }
 const checkAttachment = (message: IEmailMessage): IEmailAttachmentType[] => {
   if (Object.prototype.hasOwnProperty.call(message?.payload, 'parts')) {
-    const parts: IEmailAttachmentType[] = message.payload.parts.filter(
-      (item: IEmailAttachmentType) => item !== undefined
-    )
+    const parts: IEmailAttachmentType[] | undefined =
+      message?.payload?.parts?.filter(
+        (item: IEmailAttachmentType) => item !== undefined
+      )
     return loopThroughParts({ input: parts, reset: true })
   }
   return []

@@ -1,14 +1,10 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: any) => {
     try {
-      const res = await instance.post(`/api/create-draft`, data, {
-        headers: {
-          Authorization: fetchToken(),
-        },
-      })
+      const res = await instance.post(`/api/create-draft`, data)
       return res
     } catch (err) {
       return errorHandling(err)
@@ -20,12 +16,7 @@ const draftApi = (signal?: AbortSignal) => ({
     try {
       const res: AxiosResponse<any> = await instance.put(
         `/api/update-draft/${draftId}`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -36,9 +27,6 @@ const draftApi = (signal?: AbortSignal) => ({
   getDrafts: async () => {
     try {
       const res: AxiosResponse<any> = await instance.get(`/api/drafts/`, {
-        headers: {
-          Authorization: fetchToken(),
-        },
         signal,
       })
       return res.data
@@ -50,12 +38,7 @@ const draftApi = (signal?: AbortSignal) => ({
   getDraftDetail: async (draftId: string) => {
     try {
       const res: AxiosResponse<any> = await instance.get(
-        `/api/draft/${draftId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `/api/draft/${draftId}`
       )
       return res
     } catch (err) {
@@ -63,16 +46,11 @@ const draftApi = (signal?: AbortSignal) => ({
     }
   },
 
-  sendDraft: async (data: any) => {
+  sendDraft: async (data: { id: string }) => {
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/send-draft`,
-        data,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        data
       )
       return res
     } catch (err) {
@@ -84,9 +62,6 @@ const draftApi = (signal?: AbortSignal) => ({
     try {
       const res: AxiosResponse<any> = await instance.delete(`/api/draft`, {
         data: { id },
-        headers: {
-          Authorization: fetchToken(),
-        },
       })
       return res
     } catch (err) {

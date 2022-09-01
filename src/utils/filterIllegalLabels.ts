@@ -1,4 +1,11 @@
-import { LabelIdName } from '../Store/storeTypes/labelsTypes'
+import { LabelIdName } from '../store/storeTypes/labelsTypes'
+
+/**
+ * @function filterIllegalLabels
+ * @param labelIds
+ * @param storageLabels
+ * @returns a list of the all the labels which Juno is using.
+ */
 
 const filterIllegalLabels = (
   labelIds: string[],

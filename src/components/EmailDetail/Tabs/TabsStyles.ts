@@ -59,8 +59,12 @@ export const StyedListItem = styled.li<StyledListItem>`
 
 export const StyledBadge = styled(Badge)`
   .MuiBadge-badge {
-    background-color: var(--color-black);
+    background-color: var(--color-grey);
     top: 10px;
     right: -16px;
+    transition: background-color 0.1s ease-in;
+    &:hover {
+      background-color: var(--color-black);
+    }
   }
 `

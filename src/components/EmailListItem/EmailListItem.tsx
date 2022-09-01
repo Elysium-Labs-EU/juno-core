@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
-import EmailHasAttachment from '../Elements/EmailHasAttachment'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
 import MessageCount from '../Elements/MessageCount'
 import Snippet from './Snippet'
@@ -9,9 +8,9 @@ import InlineThreadActionsRegular from './InlineThreadActionsRegular'
 import * as S from './EmailListItemStyles'
 import * as draft from '../../constants/draftConstants'
 import * as global from '../../constants/globalConstants'
-
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { IEmailListThreadItem } from '../../Store/storeTypes/emailListTypes'
+import * as keyConstants from '../../constants/keyConstants'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
 import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
@@ -19,18 +18,30 @@ import SenderNameFull from '../Elements/SenderName/senderNameFull'
 import EmailSubject from '../Elements/EmailSubject'
 import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
-import { selectProfile } from '../../Store/baseSlice'
+import { selectProfile } from '../../store/baseSlice'
 import EmailLabel from '../Elements/EmailLabel'
-import { openEmail, selectInSearch } from '../../Store/utilsSlice'
-import { selectLabelIds } from '../../Store/labelsSlice'
+import {
+  openEmail,
+  selectActiveModal,
+  selectInSearch,
+} from '../../store/utilsSlice'
+import { selectLabelIds } from '../../store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
   selectSelectedEmails,
   setSelectedEmails,
-} from '../../Store/emailListSlice'
-import useKeyPress from '../../Hooks/useKeyPress'
+} from '../../store/emailListSlice'
+import useKeyPress from '../../hooks/useKeyPress'
+import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
 
 // If the user is on Draft list, show only draft emails.
+
+/**
+ * @function shouldUseDraftOrRegular
+ * @param labelIds - all the label ids stored in Redux
+ * @param email - the email list object
+ * @returns a filtered version of the emaillist object, if the draft label is found.
+ */
 const shouldUseDraftOrRegular = (
   labelIds: string[],
   email: IEmailListThreadItem
@@ -63,11 +74,12 @@ const EmailListItem = ({
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
+  const activeModal = useAppSelector(selectActiveModal)
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(global.KEY_ENTER)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
 
   useEffect(() => {
     if (!isFocused && activeIndex === index) {
@@ -82,6 +94,7 @@ const EmailListItem = ({
     () => shouldUseDraftOrRegular(labelIds, email),
     [email]
   )
+
   const staticEmailLabels = useMemo(
     () => emailLabels(staticShouldUseDraftOrRegular),
     [email]
@@ -90,10 +103,9 @@ const EmailListItem = ({
   const staticRecipientName = useMemo(
     () =>
       RecipientName(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ].payload.headers?.to,
         emailAddress
       ),
     []
@@ -101,10 +113,9 @@ const EmailListItem = ({
   const staticSenderPartial = useMemo(
     () =>
       SenderNamePartial(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ].payload.headers?.from,
         emailAddress
       ),
     []
@@ -112,34 +123,41 @@ const EmailListItem = ({
   const staticSenderFull = useMemo(
     () =>
       SenderNameFull(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ],
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ].payload.headers?.from,
         emailAddress
       ),
     []
   )
-  const staticSubjectFetch = useMemo(
+  const staticSubject = useMemo(
     () =>
       EmailSubject(
-        staticShouldUseDraftOrRegular.message ||
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ].payload.headers?.subject
       ),
     []
   )
-  const staticSubject =
-    staticSubjectFetch.length > 0 ? staticSubjectFetch : global.NO_SUBJECT
   const staticSnippet = useMemo(
     () =>
       EmailSnippet(
-        staticShouldUseDraftOrRegular.message ||
+        staticShouldUseDraftOrRegular.messages![
+          staticShouldUseDraftOrRegular.messages!.length - 1
+        ]
+      ),
+    []
+  )
+  const staticHasAttachment = useMemo(
+    () => (
+      <EmailHasAttachmentSimple
+        files={
           staticShouldUseDraftOrRegular.messages![
             staticShouldUseDraftOrRegular.messages!.length - 1
-          ]
-      ),
+          ]?.payload?.files
+        }
+      />
+    ),
     []
   )
 
@@ -154,10 +172,10 @@ const EmailListItem = ({
 
   useEffect(() => {
     // This is not triggered in search mode.
-    if (EnterKeyListener && isFocused && !inSearch) {
+    if (EnterKeyListener && isFocused && !inSearch && !activeModal) {
       handleOpenEvent()
     }
-  }, [EnterKeyListener, isFocused, inSearch])
+  }, [EnterKeyListener, isFocused, inSearch, activeModal])
 
   const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(
@@ -193,11 +211,17 @@ const EmailListItem = ({
               )}
             </S.Avatars>
             {!labelIds.includes(global.DRAFT_LABEL) ? (
-              <S.TruncatedSpan title={staticSenderPartial.emailAddress}>
+              <S.TruncatedSpan
+                title={staticSenderPartial.emailAddress}
+                data-testid="email-sender"
+              >
                 {staticSenderPartial.name ?? staticSenderPartial.emailAddress}
               </S.TruncatedSpan>
             ) : (
-              <S.TruncatedSpan title={staticRecipientName.emailAddress}>
+              <S.TruncatedSpan
+                title={staticRecipientName.emailAddress}
+                data-testid="email-recipient"
+              >
                 {staticRecipientName.name}
               </S.TruncatedSpan>
             )}
@@ -210,21 +234,20 @@ const EmailListItem = ({
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
               {labelIds.includes(global.DRAFT_LABEL) && (
-                <span style={{ fontWeight: 'bold' }}>
+                <span
+                  style={{ fontWeight: 'bold', marginRight: '10px' }}
+                  data-testid="email-draft-snippet-indicator"
+                >
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </span>
               )}
-              {email.messages && (
-                <MessageCount countOfMessage={email.messages} />
-              )}
+              {email.messages && <MessageCount messages={email.messages} />}
               <span>{staticSubject}</span>
               <Snippet snippet={staticSnippet} />
             </S.TruncatedDiv>
           </S.CellMessage>
 
-          <S.CellAttachment>
-            {email.messages && <EmailHasAttachment messages={email.messages} />}
-          </S.CellAttachment>
+          <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
               <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
@@ -233,7 +256,7 @@ const EmailListItem = ({
           <div />
           <div />
           {!labelIds.includes(global.DRAFT_LABEL) ? (
-            <InlineThreadActionsRegular id={id} labelIds={labelIds} />
+            <InlineThreadActionsRegular id={id} email={email} />
           ) : (
             <InlineThreadActionsDraft threadId={id} />
           )}

@@ -1,15 +1,14 @@
-import { resetComposeEmail } from '../../Store/composeSlice'
-import { resetDraftDetails } from '../../Store/draftsSlice'
-import { setIsReplying } from '../../Store/emailDetailSlice'
-import { openEmail } from '../../Store/utilsSlice'
+import { resetDraftDetails } from '../../store/draftsSlice'
+import { setIsReplying } from '../../store/emailDetailSlice'
+import { AppDispatch } from '../../store/store'
+import { openEmail } from '../../store/utilsSlice'
 
 interface IReplyOverview {
   id: string
-  dispatch: Function
+  dispatch: AppDispatch
 }
 
 const ReplyOverview = ({ id, dispatch }: IReplyOverview) => {
-  dispatch(resetComposeEmail())
   dispatch(resetDraftDetails())
   dispatch(setIsReplying(true))
   dispatch(openEmail({ id }))

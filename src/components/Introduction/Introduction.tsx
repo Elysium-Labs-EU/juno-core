@@ -1,14 +1,15 @@
-import { ChangeEvent, useEffect, useState } from 'react'
 import { FiArrowRightCircle } from 'react-icons/fi'
-import Dialog from '@mui/material/Dialog'
 import * as S from './IntroductionStyles'
+import * as global from '../../constants/globalConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
-import { useAppSelector } from '../../Store/hooks'
-import updateSettingsLabel from '../../utils/Settings/updateSettingsLabel'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import {
   selectSettingsLabelId,
-  selectShowIntroduction,
-} from '../../Store/utilsSlice'
+  selectActiveModal,
+  setActiveModal,
+} from '../../store/utilsSlice'
+import CustomModal from '../Elements/Modal/CustomModal'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -24,42 +25,23 @@ const DIALOG_CONTENT_PRIVACY =
 const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
-  const [open, setOpen] = useState(false)
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
-  const showIntroduction = useAppSelector(selectShowIntroduction)
-
-  useEffect(() => {
-    if (showIntroduction) {
-      setOpen(true)
-    }
-  }, [showIntroduction])
-
-  const handleCloseDefault = (event: ChangeEvent<{}>, reason: string) => {
-    if (reason === 'backdropClick') {
-      return null
-    }
-    if (reason === 'escapeKeyDown') {
-      updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-      setOpen(false)
-      return null
-    }
-    return null
-  }
+  const activeModal = useAppSelector(selectActiveModal)
+  const dispatch = useAppDispatch()
 
   const handleClose = () => {
     updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-    setOpen(false)
+    dispatch(setActiveModal(null))
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleCloseDefault}
-      aria-labelledby="introduction-dialog"
-      aria-describedby="alert-dialog-for-first-users"
+    <CustomModal
+      open={activeModal === global.ACTIVE_MODAL_MAP.intro}
+      handleClose={handleClose}
+      modalTitle={DIALOG_HEADER}
+      modalAriaLabel="introduction"
     >
-      <S.DialogContent>
-        <S.DialogHeader>{DIALOG_HEADER}</S.DialogHeader>
+      <>
         <S.InnerContent>
           <p>{DIALOG_CONTENT_DEVELOPMENT}</p>
           <S.DialogSubHeader>{DIALOG_HEADER_INTRODUCTION}</S.DialogSubHeader>
@@ -72,9 +54,10 @@ const Introduction = () => {
           onClick={handleClose}
           label={CONFIRM_BUTTON}
           icon={<FiArrowRightCircle />}
+          title="Close Introduction"
         />
-      </S.DialogContent>
-    </Dialog>
+      </>
+    </CustomModal>
   )
 }
 

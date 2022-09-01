@@ -1,11 +1,10 @@
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 
 const GetTimeStamp = (email: IEmailListThreadItem): string => {
   if (email?.messages) {
-    return email.messages[email.messages.length - 1].internalDate
-  }
-  if (email?.message) {
-    return email.message.internalDate
+    return email.messages[email.messages.length - 1]
+      ? email.messages[email.messages.length - 1].internalDate
+      : ''
   }
   return ''
 }

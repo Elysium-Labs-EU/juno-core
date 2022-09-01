@@ -5,7 +5,7 @@ import StyledChip from './RecipientChipStyles'
 interface IRecipientChip {
   option: any
   getTagProps: any
-  handleDelete: Function
+  handleDelete: (data: any) => void
   id: string
   index: number
 }

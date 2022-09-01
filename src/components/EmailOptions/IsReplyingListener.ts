@@ -2,10 +2,11 @@ import {
   setCurrentMessage,
   setIsForwarding,
   setIsReplying,
-} from '../../Store/emailDetailSlice'
+} from '../../store/emailDetailSlice'
+import { AppDispatch } from '../../store/store'
 
 interface IIsReplyingListener {
-  dispatch: Function
+  dispatch: AppDispatch
   messageIndex: number
   messageId?: string
   isForwarding?: boolean

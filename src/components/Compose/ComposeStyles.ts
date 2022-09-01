@@ -5,9 +5,10 @@ interface IWrapper {
 }
 
 export const Wrapper = styled.div<IWrapper>`
-  min-width: 665px;
-  max-width: min(100vw - 340px, 860px);
   width: ${({ tabbedView }) => (tabbedView ? 'auto' : '100%')};
+  min-width: ${({ tabbedView }) => (tabbedView ? '500px' : '665px')};
+  max-width: ${({ tabbedView }) =>
+    tabbedView ? '40%' : 'min(100vw - 340px, 860px)'};
   margin-left: ${({ tabbedView }) => (tabbedView ? '10%' : 'auto')};
   margin-right: auto;
   position: ${({ tabbedView }) => (tabbedView ? 'sticky' : 'static')};
@@ -60,10 +61,6 @@ export const Label = styled.div<ILabel>`
   }
 `
 
-Label.defaultProps = {
-  hasValue: false,
-}
-
 export const Row = styled.div`
   position: relative;
   min-height: 35px;
@@ -74,4 +71,14 @@ export const Row = styled.div`
 export const CcBccContainer = styled.div`
   display: flex;
   flex-flow: row;
+`
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+`
+
+export const DiscardContainer = styled.div`
+  margin-left: auto;
 `

@@ -1,37 +1,38 @@
-import Modal from '@mui/material/Modal'
-import { selectIsSettingsOpen, setIsSettingsOpen } from '../../Store/utilsSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useState } from 'react'
+import { selectActiveModal, setActiveModal } from '../../store/utilsSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import * as S from './SettingsStyles'
-import ShowAvatar from './SettingsOptions/ShowAvatar/ShowAvatar'
-import EmailSize from './SettingsOptions/EmailSize/EmailSize'
-import Contributions from './Contributions/contributions'
-
-const handleClose = (dispatch: Function) => dispatch(setIsSettingsOpen(false))
+import Contributions from './Contributions/Contributions'
+import CustomModal from '../Elements/Modal/CustomModal'
+import * as global from '../../constants/globalConstants'
+import SettingsSidebar from './SettingsSidebar/SettingsSidebar'
+import General from './General/General'
+import Signature from './Signature/Signature'
 
 const SETTINGS = 'Settings'
-const CONTRIBUTIONS = 'Contributions'
 
 const Settings = () => {
+  const [activeMenuItem, setActiveMenuItem] = useState(0)
   const dispatch = useAppDispatch()
-  const isSettingsOpen = useAppSelector(selectIsSettingsOpen)
+  const activeModal = useAppSelector(selectActiveModal)
 
   return (
-    <Modal
-      open={isSettingsOpen}
-      onClose={() => handleClose(dispatch)}
-      aria-labelledby="modal-settings"
-      aria-describedby="modal-settings-box"
+    <CustomModal
+      open={activeModal === global.ACTIVE_MODAL_MAP.settings}
+      handleClose={() => dispatch(setActiveModal(null))}
+      modalTitle={SETTINGS}
+      modalAriaLabel="settings"
     >
-      <S.Dialog>
-        <S.SettingsHeader>{SETTINGS}</S.SettingsHeader>
-        <S.SettingsContainer>
-          <ShowAvatar />
-          <EmailSize />
-          <S.SettingsSubHeader>{CONTRIBUTIONS}</S.SettingsSubHeader>
-          <Contributions />
-        </S.SettingsContainer>
-      </S.Dialog>
-    </Modal>
+      <S.SettingsContainer>
+        <SettingsSidebar
+          activeMenuItem={activeMenuItem}
+          setActiveMenuItem={setActiveMenuItem}
+        />
+        {activeMenuItem === 0 && <General />}
+        {activeMenuItem === 1 && <Signature />}
+        {activeMenuItem === 2 && <Contributions />}
+      </S.SettingsContainer>
+    </CustomModal>
   )
 }
 

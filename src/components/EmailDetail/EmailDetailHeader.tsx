@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import Navigation from '../MainHeader/Navigation/Navigation'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import Tabs from './Tabs/Tabs'
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import * as local from '../../constants/emailDetailConstants'
@@ -9,19 +9,19 @@ import * as global from '../../constants/globalConstants'
 import BackButton from '../Elements/Buttons/BackButton'
 import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
-import { selectLabelIds, selectStorageLabels } from '../../Store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
 import { findLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../../Store/storeTypes/emailListTypes'
+} from '../../store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
-import { selectCoreStatus, selectViewIndex } from '../../Store/emailDetailSlice'
+import { selectCoreStatus, selectViewIndex } from '../../store/emailDetailSlice'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
-} from '../../Store/utilsSlice'
+} from '../../store/utilsSlice'
 
 const EmailDetailHeader = ({
   activeEmailList,
@@ -73,7 +73,7 @@ const EmailDetailHeader = ({
   }
 
   return (
-    <GS.OuterContainer>
+    <GS.OuterContainer data-testid="email-detail-header">
       {!coreStatus || coreStatus === global.CORE_STATUS_SEARCHING ? (
         <S.Wrapper>
           <S.HeaderCenter>

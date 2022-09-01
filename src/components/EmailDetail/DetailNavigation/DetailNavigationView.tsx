@@ -1,39 +1,106 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
 import CircularProgress from '@mui/material/CircularProgress'
 import * as S from './DetailNavigationStyles'
 import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   closeMail,
+  navigateNextMail,
   navigatePreviousMail,
+  selectEmailListSize,
   selectIsLoading,
-} from '../../../Store/utilsSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
+  selectIsSilentLoading,
+} from '../../../store/utilsSlice'
+import { selectViewIndex } from '../../../store/emailDetailSlice'
+import { selectLabelIds } from '../../../store/labelsSlice'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../store/storeTypes/emailListTypes'
+import loadNextPage from '../../../utils/loadNextPage'
+import useKeyPress from '../../../hooks/useKeyPress'
 
 const ICON_SIZE = 20
-const actionKeys = [global.KEY_ESCAPE]
 interface IDetailNavigationView {
   isDisabledPrev: boolean
   isDisabledNext: boolean
-  nextButtonSelector: Function
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
 }
 
-const DetailNavigationView = (props: IDetailNavigationView) => {
-  const { isDisabledPrev, isDisabledNext, nextButtonSelector } = props
+const DetailNavigationView = ({
+  isDisabledPrev,
+  isDisabledNext,
+  activeEmailList,
+}: IDetailNavigationView) => {
   const dispatch = useAppDispatch()
   const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  const viewIndex = useAppSelector(selectViewIndex)
+  const emailFetchSize = useAppSelector(selectEmailListSize)
+  const ArrowLeftListener = useKeyPress(keyConstants.KEY_ARROW_LEFT)
+  const ArrowRightListener = useKeyPress(keyConstants.KEY_ARROW_RIGHT)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
   const handleCloseEvent = useCallback(() => {
     dispatch(closeMail())
   }, [])
 
-  useMultiKeyPress(handleCloseEvent, actionKeys)
+  useEffect(() => {
+    if (EscapeListener) {
+      handleCloseEvent()
+    }
+  }, [EscapeListener])
 
   const handleNavPrevEvent = useCallback(() => {
     dispatch(navigatePreviousMail())
   }, [])
+
+  useEffect(() => {
+    if (ArrowLeftListener) {
+      handleNavPrevEvent()
+    }
+  }, [ArrowLeftListener])
+
+  const handleNavNextEvent = useCallback(() => {
+    const nextButtonSelector = () => {
+      if (
+        activeEmailList.threads.length > 0 &&
+        activeEmailList.threads[viewIndex + 1] !== undefined &&
+        labelIds
+      ) {
+        dispatch(navigateNextMail())
+      }
+      if (!labelIds.includes(global.SEARCH_LABEL)) {
+        // If loading isn't already happening, load the nextPage
+        const { nextPageToken } = activeEmailList as IEmailListObject
+        if (
+          activeEmailList.nextPageToken !== null &&
+          activeEmailList.threads[viewIndex + 1] === undefined &&
+          !isSilentLoading
+        ) {
+          return loadNextPage({
+            nextPageToken,
+            labelIds,
+            dispatch,
+            maxResults: emailFetchSize,
+          })
+        }
+      }
+
+      return null
+    }
+    nextButtonSelector()
+  }, [])
+
+  useEffect(() => {
+    if (ArrowRightListener) {
+      handleNavNextEvent()
+    }
+  }, [ArrowRightListener])
 
   const NavigationView = useMemo(
     () => (
@@ -48,7 +115,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
         </S.NavButton>
         <S.NavButton>
           <CustomIconButton
-            onClick={() => nextButtonSelector()}
+            onClick={handleNavNextEvent}
             disabled={isDisabledNext || isLoading}
             title="Next email"
             icon={
@@ -69,7 +136,7 @@ const DetailNavigationView = (props: IDetailNavigationView) => {
         </S.NavButton>
       </S.Wrapper>
     ),
-    [isDisabledPrev, isDisabledNext, isLoading, nextButtonSelector]
+    [isDisabledPrev, isDisabledNext, isLoading, activeEmailList]
   )
 
   return NavigationView

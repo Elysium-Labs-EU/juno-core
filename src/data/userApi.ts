@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 interface UserType {
   emailAddress?: string | null
@@ -44,11 +44,7 @@ const userApi = () => ({
   },
   fetchUser: async () => {
     try {
-      const res: AxiosResponse<UserPromise> = await instance.get(`/api/user`, {
-        headers: {
-          Authorization: fetchToken(),
-        },
-      })
+      const res: AxiosResponse<UserPromise> = await instance.get(`/api/user`)
       return res
     } catch (err: any) {
       return errorHandling(err)
@@ -57,12 +53,7 @@ const userApi = () => ({
   logoutUser: async () => {
     try {
       const res: AxiosResponse<UserPromise> = await instance.get(
-        `/api/user/logout`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `/api/user/logout`
       )
       return res
     } catch (err: any) {

@@ -1,29 +1,31 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import StyledTextField from './EmailInputStyles'
 import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
-import { Contact } from '../../../../Store/storeTypes/contactsTypes'
-import { useAppDispatch, useAppSelector } from '../../../../Store/hooks'
+import { IContact } from '../../../../store/storeTypes/contactsTypes'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
   selectAllContacts,
   selectContactsLoaded,
   setAllContacts,
   setContactsLoaded,
-} from '../../../../Store/contactsSlice'
+} from '../../../../store/contactsSlice'
 import contactApi from '../../../../data/contactApi'
-import { setServiceUnavailable } from '../../../../Store/utilsSlice'
-import useDebounce from '../../../../Hooks/useDebounce'
+import { setServiceUnavailable } from '../../../../store/utilsSlice'
+import useDebounce from '../../../../hooks/useDebounce'
 import emailValidation from '../../../../utils/emailValidation'
+import type { AppDispatch } from '../../../../store/store'
+import { IRecipientsList } from '../../ComposeEmailTypes'
 
 interface IEmailInputProps {
   id: string
-  valueState: Contact[]
-  handleChange: any
+  valueState: IContact[]
+  handleChange: (recipientListRaw: IRecipientsList) => void
   handleDelete: Function
   inputValue: string
-  setInputValue: Function
+  setInputValue: (value: string) => void
   willAutoFocus: boolean
 }
 
@@ -34,10 +36,11 @@ interface IHandleIncompleteInput {
 
 interface IFetchContacts {
   inputValue: string
-  dispatch: Function
+  dispatch: AppDispatch
   setCompletedSearch: Function
 }
 
+// TODO: Check contactsSlice to unduplicate the code.
 const fetchContacts = async ({
   inputValue,
   dispatch,
@@ -57,7 +60,7 @@ const fetchContacts = async ({
       const mappedResults =
         results && results.length > 0
           ? results.map(
-              (contact: any): Contact => ({
+              (contact: any): IContact => ({
                 name: Object.prototype.hasOwnProperty.call(
                   contact.person,
                   'names'
@@ -79,11 +82,11 @@ const fetchContacts = async ({
 }
 
 const filterOptions: any = (
-  options: Contact[],
+  options: IContact[],
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 
-const emailInput = (props: IEmailInputProps) => {
+const EmailInput = (props: IEmailInputProps) => {
   const {
     id,
     valueState,
@@ -94,10 +97,10 @@ const emailInput = (props: IEmailInputProps) => {
     willAutoFocus,
   } = props
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<readonly Contact[]>([])
+  const [options, setOptions] = useState<readonly IContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(false)
   const debouncedInputValue: string = useDebounce(inputValue, 500)
-  const availableContacts: Contact[] = useAppSelector(selectAllContacts)
+  const availableContacts: IContact[] = useAppSelector(selectAllContacts)
   const contactsLoaded: string = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
@@ -146,20 +149,22 @@ const emailInput = (props: IEmailInputProps) => {
   }, [open])
 
   // If user changes focus and there is incomplete input, attempt to complete it.
-  const handleIncompleteInput = (incompleteProps: IHandleIncompleteInput) => {
-    const validation = emailValidation([
-      {
+  const handleIncompleteInput = useCallback(
+    (incompleteProps: IHandleIncompleteInput) => {
+      const inputObject = {
         name: incompleteProps.inputValue,
         emailAddress: incompleteProps.inputValue,
-      },
-    ])
-    if (validation) {
-      handleChange({
-        newValue: [...valueState, incompleteProps.inputValue],
-        fieldId: incompleteProps.id,
-      })
-    }
-  }
+      }
+      const validation = emailValidation([inputObject])
+      if (validation) {
+        handleChange({
+          newValue: [...valueState, inputObject],
+          fieldId: incompleteProps.id,
+        })
+      }
+    },
+    [valueState]
+  )
 
   // Clear input when a new contact chip is created.
   useEffect(() => {
@@ -198,8 +203,8 @@ const emailInput = (props: IEmailInputProps) => {
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue)
       }}
-      renderTags={(value: readonly Contact[], getTagProps) =>
-        value.map((option: Contact, index: number) => {
+      renderTags={(value: readonly IContact[], getTagProps) =>
+        value.map((option: IContact, index: number) => {
           if (option) {
             return (
               <RecipientChip
@@ -227,4 +232,4 @@ const emailInput = (props: IEmailInputProps) => {
   )
 }
 
-export default emailInput
+export default EmailInput

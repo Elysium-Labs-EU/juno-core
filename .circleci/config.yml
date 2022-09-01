@@ -28,28 +28,27 @@ jobs:
           condition:
             equal: [main, << pipeline.git.branch >>]
           steps:
-          - deploy-command:
-              HEROKU_APP_NAME: juno-core
-              BRANCH: main
+            - deploy-command:
+                HEROKU_APP_NAME: juno-core
+                BRANCH: main
 
       - when:
           condition:
             equal: [dev, << pipeline.git.branch >>]
           steps:
-          - deploy-command:
-              HEROKU_APP_NAME: juno-core-dev
-              BRANCH: dev
-
+            - deploy-command:
+                HEROKU_APP_NAME: juno-core-dev
+                BRANCH: dev
 
 workflows:
   heroku_deploy:
     jobs:
       - node/run:
           pkg-manager: yarn
-          yarn-run: lint:prettier
+          yarn-run: format
       - deploy:
           filters:
-              branches:
-                only: 
-                  - main
-                  - dev
+            branches:
+              only:
+                - main
+                - dev

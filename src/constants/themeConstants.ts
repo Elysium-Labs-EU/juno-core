@@ -9,7 +9,7 @@ export const colorDarkGrey = '#535358'
 export const colorGreyHover = '#E2E2E2'
 export const colorGreyBorder = '#ededed'
 export const colorBlack = '#000000'
-export const colorOffBlack = '#1c1c1c'
+export const colorOffBlack = '#333333'
 export const colorPurpleDark = '#711ca6'
 export const colorPurple = '#8e23d1'
 export const colorPurpleSoft = '#e4dee7'
@@ -22,4 +22,5 @@ export const h3FontSize = '1.953rem'
 export const h4FontSize = '1.563rem'
 export const h5FontSize = '1.25rem'
 export const smallFontSize = '0.8rem'
-export const fontFamily = "'system-ui', sans-serif"
+export const fontFamily =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif"

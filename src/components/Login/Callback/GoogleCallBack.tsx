@@ -3,11 +3,17 @@ import { useEffect } from 'react'
 import { push } from 'redux-first-history'
 import * as RouteConstants from '../../../constants/routes.json'
 import userApi from '../../../data/userApi'
-import { setIsAuthenticated } from '../../../Store/baseSlice'
-import { useAppDispatch } from '../../../Store/hooks'
-import { setServiceUnavailable } from '../../../Store/utilsSlice'
+import { setIsAuthenticated } from '../../../store/baseSlice'
+import { useAppDispatch } from '../../../store/hooks'
+import { setServiceUnavailable } from '../../../store/utilsSlice'
 import handleUserTokens from '../../../utils/handleUserTokens'
 import Baseloader from '../../BaseLoader/BaseLoader'
+
+/**
+ * @component GoogleCallBack
+ * Parses the window location search parameters, and triggers the callback for Google. If succesful, the user is logged in, otherwise an error is thrown.
+ * @returns {JSX.Element} a BaseLoader JSX.Element
+ */
 
 const GoogleCallBack = () => {
   const dispatch = useAppDispatch()
@@ -22,11 +28,12 @@ const GoogleCallBack = () => {
       }
       const response = await userApi().authGoogleCallback(body)
       if (response?.status === 200) {
-        handleUserTokens(response).setAccessToken()
+        handleUserTokens(response).setIdToken()
         dispatch(setIsAuthenticated(true))
         dispatch(push(RouteConstants.HOME))
       } else {
         dispatch(setServiceUnavailable(response.error))
+        dispatch(push(RouteConstants.LOGIN))
       }
     }
     getTokens()

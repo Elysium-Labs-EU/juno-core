@@ -1,1 +1,7 @@
 lint-staged.config.mjs
+vite.config.ts
+**/node_modules/**
+**/build/**
+**/dist/**
+**/.git/**
+**/public/**

@@ -1,82 +1,85 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
 import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
 import qs from 'qs'
+import { useLocation } from 'react-router-dom'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
-import {
-  cleanUpComposerAndDraft,
-  selectComposeEmail,
-  SendComposedEmail,
-  TrackComposeEmail,
-} from '../../Store/composeSlice'
-import useDebounce from '../../Hooks/useDebounce'
+import useDebounce from '../../hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
 import emailValidation from '../../utils/emailValidation'
+import * as keyConstants from '../../constants/keyConstants'
 import {
   createUpdateDraft,
-  listRemoveDraft,
+  fetchDrafts,
   resetDraftDetails,
   selectDraftDetails,
-} from '../../Store/draftsSlice'
+  sendComposedEmail,
+} from '../../store/draftsSlice'
 import {
   selectCurrentMessage,
   selectIsForwarding,
   selectIsReplying,
   setIsForwarding,
   setIsReplying,
-} from '../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { Contact } from '../../Store/storeTypes/contactsTypes'
-import convertToContact from '../../utils/convertToContact'
+} from '../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { IContact } from '../../store/storeTypes/contactsTypes'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import RecipientField from './ComposeFields/RecipientField'
 import TipTap from './ComposeFields/TipTap/Tiptap'
 import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
-import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
-import DiscardDraft from './DiscardDraft'
+import DiscardDraftButton from './DiscardDraftButton'
+import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
+import { refreshEmailFeed } from '../../store/emailListSlice'
+import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
+import { setModifierKey } from '../../utils/setModifierKey'
+import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
+import { IRecipientsList } from './ComposeEmailTypes'
+import { handleContactConversion } from '../../utils/convertToContact'
 
-const handleContactConversion = (contactValue: string): Contact[] => {
-  if (contactValue.length > 0) {
-    return contactValue.split(',').map((item) => convertToContact(item))
-  }
-  return []
-}
-
-// Props are coming from MessageOverview
+// Props are coming from MessageOverview (email detail view)
 interface IComposeEmailProps {
-  to?: Contact | null
-  bcc?: Contact | null
-  cc?: Contact | null
-  subject?: string
-  threadId?: string
+  to?: IContact[] | null
+  bcc?: IContact[] | null
+  cc?: IContact[] | null
+  subject?: string | null
+  threadId?: string | null
+  foundBody?: string | null
+  messageOverviewListener?: (value: string) => void
 }
+
+const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
 
 const ComposeEmail = ({
-  to,
-  bcc,
-  cc,
-  subject,
-  threadId,
+  to = null,
+  bcc = null,
+  cc = null,
+  subject = null,
+  threadId = null,
+  foundBody = null,
+  messageOverviewListener = undefined,
 }: IComposeEmailProps) => {
+  const location = useLocation()
   const dispatch = useAppDispatch()
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
   const currentMessage = useAppSelector(selectCurrentMessage)
-  const composeEmail = useAppSelector(selectComposeEmail)
   const draftDetails = useAppSelector(selectDraftDetails)
-  const [toValue, setToValue] = useState<Contact[]>([])
+  const inSearch = useAppSelector(selectInSearch)
+  const activeModal = useAppSelector(selectActiveModal)
+  const [toValue, setToValue] = useState<IContact[]>([])
   const debouncedToValue = useDebounce(toValue, 500)
   const [inputToValue, setInputToValue] = useState<string>('')
   const [showCC, setShowCC] = useState<boolean>(false)
-  const [ccValue, setCCValue] = useState<Contact[]>([])
+  const [ccValue, setCCValue] = useState<IContact[]>([])
   const debouncedCCValue = useDebounce(ccValue, 500)
   const [inputCCValue, setInputCCValue] = useState<string>('')
   const [showBCC, setShowBCC] = useState<boolean>(false)
-  const [bccValue, setBCCValue] = useState<Contact[]>([])
+  const [bccValue, setBCCValue] = useState<IContact[]>([])
   const debouncedBCCValue = useDebounce(bccValue, 500)
   const [inputBCCValue, setInputBCCValue] = useState<string>('')
   const [subjectValue, setSubjectValue] = useState('')
@@ -84,9 +87,39 @@ const ComposeEmail = ({
   const [bodyValue, setBodyValue] = useState('')
   const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const { draftId } = useParams()
   const keysPressed = useMultiKeyPress()
   const userInteractedRef = useRef(false)
+  const [composedEmail, setComposedEmail] = useState<any>({})
+
+  const updateComposeEmail = useCallback(
+    (
+      action: { id: string; value: string | IContact[] | null },
+      mounted: boolean
+    ) => {
+      if (
+        Object.prototype.hasOwnProperty.call(action, 'id') &&
+        Object.prototype.hasOwnProperty.call(action, 'value')
+      ) {
+        const { id, value } = action
+        mounted &&
+          setComposedEmail({
+            ...composedEmail,
+            [id]: value,
+          })
+      }
+    },
+    [composedEmail]
+  )
+
+  useEffect(() => {
+    if (
+      draftDetails &&
+      Object.keys(draftDetails).length > 0 &&
+      userInteractedRef.current
+    ) {
+      dispatch(resetDraftDetails())
+    }
+  }, [])
 
   useEffect(() => {
     if (keysPressed.length > 0 && !userInteractedRef.current) {
@@ -94,16 +127,16 @@ const ComposeEmail = ({
     }
   }, [keysPressed])
 
-  // Listen to any changes of the composeEmail object to update the
+  // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(composeEmail) && userInteractedRef.current) {
-      mounted && dispatch(createUpdateDraft())
+    if (!isEmpty(composedEmail) && userInteractedRef.current) {
+      mounted && dispatch(createUpdateDraft({ composedEmail }))
     }
     return () => {
       mounted = false
     }
-  }, [composeEmail])
+  }, [composedEmail])
 
   useEffect(() => {
     let mounted = true
@@ -121,15 +154,15 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  const recipientListTransform = (recipientListRaw: any) => ({
+  const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
     fieldId: recipientListRaw.fieldId,
-    newValue: recipientListRaw.newValue.map((item: string | Contact) =>
+    newValue: recipientListRaw.newValue.map((item: string | IContact) =>
       typeof item === 'string' ? { name: item, emailAddress: item } : item
     ),
   })
 
   const handleChangeTo = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -144,7 +177,7 @@ const ComposeEmail = ({
   )
 
   const handleChangeCC = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -159,7 +192,7 @@ const ComposeEmail = ({
   )
 
   const handleChangeBCC = useCallback(
-    (recipientListRaw: any) => {
+    (recipientListRaw: IRecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
       const validation = emailValidation(recipientList.newValue)
       if (validation) {
@@ -180,33 +213,36 @@ const ComposeEmail = ({
     [subjectValue]
   )
 
-  const handleDelete = useCallback((selectedOption: any) => {
-    const { option, fieldId } = selectedOption
-    switch (fieldId) {
-      case local.TO: {
-        setToValue(toValue.filter((item) => item !== option))
-        break
+  const handleDelete = useCallback(
+    (selectedOption: any) => {
+      const { option, fieldId } = selectedOption
+      switch (fieldId) {
+        case local.TO: {
+          setToValue(toValue.filter((item) => item !== option))
+          break
+        }
+        case local.CC: {
+          setCCValue(ccValue.filter((item) => item !== option))
+          break
+        }
+        case local.BCC: {
+          setBCCValue(bccValue.filter((item) => item !== option))
+          break
+        }
+        default: {
+          break
+        }
       }
-      case local.CC: {
-        setCCValue(ccValue.filter((item) => item !== option))
-        break
-      }
-      case local.BCC: {
-        setBCCValue(bccValue.filter((item) => item !== option))
-        break
-      }
-      default: {
-        break
-      }
-    }
-  }, [])
+    },
+    [toValue, ccValue, bccValue]
+  )
 
   useEffect(() => {
     let mounted = true
     if (debouncedToValue && debouncedToValue.length > 0) {
       if (emailValidation(debouncedToValue)) {
         const updateEventObject = { id: local.TO, value: debouncedToValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        updateComposeEmail(updateEventObject, mounted)
       }
     }
     return () => {
@@ -219,7 +255,7 @@ const ComposeEmail = ({
     if (debouncedBCCValue && debouncedBCCValue.length > 0) {
       if (emailValidation(debouncedBCCValue)) {
         const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        updateComposeEmail(updateEventObject, mounted)
       }
     }
     return () => {
@@ -232,7 +268,7 @@ const ComposeEmail = ({
     if (debouncedCCValue && debouncedCCValue.length > 0) {
       if (emailValidation(debouncedCCValue)) {
         const updateEventObject = { id: local.CC, value: debouncedCCValue }
-        mounted && dispatch(TrackComposeEmail(updateEventObject))
+        updateComposeEmail(updateEventObject, mounted)
       }
     }
     return () => {
@@ -247,14 +283,14 @@ const ComposeEmail = ({
         id: local.SUBJECT,
         value: debouncedSubjectValue,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      updateComposeEmail(updateEventObject, mounted)
     }
     return () => {
       mounted = false
     }
   }, [debouncedSubjectValue])
 
-  // Set the form values
+  // Set the form values that come either from the location state or the URL.
   useEffect(() => {
     let mounted = true
     if (mounted) {
@@ -264,7 +300,7 @@ const ComposeEmail = ({
           ignoreQueryPrefix: true,
         }
       )
-      if (mailto || (body && isEmpty(composeEmail))) {
+      if (mailto || (body && isEmpty(composedEmail))) {
         if (mailto?.includes('@')) {
           setToValue(handleContactConversion(mailto))
         }
@@ -275,43 +311,56 @@ const ComposeEmail = ({
           setBodyValue(body)
         }
       }
-      // composeEmail object coming from a draft item on the draft list
-      if (!isEmpty(composeEmail)) {
-        if (composeEmail.to.length > 0) {
-          setToValue(handleContactConversion(composeEmail.to))
+      // composeEmail object coming from a draft item on the draft list via the pushed route
+      if (location?.state) {
+        const state = location.state as IComposeEmailReceive
+        if (state.to && state.to.length > 0) {
+          setToValue(handleContactConversion(state.to))
         }
-        if (composeEmail.cc && composeEmail.cc.length > 0) {
+        if (state.cc && state.cc.length > 0) {
           setShowCC(true)
-          setCCValue(handleContactConversion(composeEmail.cc))
+          setCCValue(handleContactConversion(state.cc))
         }
-        if (composeEmail.bcc && composeEmail.bcc.length > 0) {
+        if (state.bcc && state.bcc.length > 0) {
           setShowBCC(true)
-          setBCCValue(handleContactConversion(composeEmail.bcc))
+          setBCCValue(handleContactConversion(state.bcc))
         }
-        setSubjectValue(composeEmail.subject)
-        setBodyValue(composeEmail.body)
-      }
-      if (!mailto && isEmpty(composeEmail)) {
-        // Form values coming from a new reply via MessagesOverview (EmailDetail)
-        if (to) {
-          setToValue([to])
-        }
-        if (cc) {
-          setCCValue([cc])
-        }
-        if (bcc) {
-          setBCCValue([bcc])
-        }
-        if (subject) {
-          setSubjectValue(subject)
-        }
+        setSubjectValue(state.subject)
+        setBodyValue(state.body)
       }
     }
     return () => {
       mounted = false
-      dispatch(cleanUpComposerAndDraft())
     }
   }, [])
+
+  // Set the form values via the passed props from the email detail
+  useEffect(() => {
+    let mounted = true
+    if (mounted) {
+      // Form values coming from a new reply via MessagesOverview (EmailDetail)
+      if (to && to.length > 0) {
+        setToValue(to)
+      }
+      if (cc && cc.length > 0) {
+        setShowCC(true)
+        setCCValue(cc)
+      }
+      if (bcc && bcc.length > 0) {
+        setShowBCC(true)
+        setBCCValue(bcc)
+      }
+      if (subject) {
+        setSubjectValue(subject)
+      }
+      if (foundBody) {
+        setBodyValue(foundBody)
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [to, cc, bcc, subject, foundBody])
 
   useEffect(() => {
     let mounted = true
@@ -320,7 +369,7 @@ const ComposeEmail = ({
         id: 'id',
         value: currentMessage,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      updateComposeEmail(updateEventObject, mounted)
     }
     return () => {
       mounted = false
@@ -334,23 +383,30 @@ const ComposeEmail = ({
         id: 'threadId',
         value: threadId,
       }
-      mounted && dispatch(TrackComposeEmail(updateEventObject))
+      updateComposeEmail(updateEventObject, mounted)
     }
     return () => {
       mounted = false
     }
   }, [threadId])
 
-  const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
+  const handleSubmit = useCallback(
+    (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      if (e) {
+        e.preventDefault()
+      }
       if (toValue.length > 0) {
         if (emailValidation(toValue)) {
-          dispatch(SendComposedEmail())
+          dispatch(sendComposedEmail({ composedEmail }))
           dispatch(resetDraftDetails())
-          dispatch(
-            listRemoveDraft({ threadId: draftDetails?.message?.threadId })
-          )
+          // dispatch(
+          //   listRemoveDraft({ threadId: draftDetails?.message?.threadId })
+          // )
+          // archiveMail({
+          //   messageId: threadDetail.id,
+          //   labelIds,
+          //   dispatch,
+          // })
         } else {
           setToError(true)
         }
@@ -358,17 +414,20 @@ const ComposeEmail = ({
         setToError(true)
       }
     },
-    [toValue, draftDetails, toError]
+    [toValue, composedEmail, toError]
   )
 
-  const handleCancelButton = () => {
+  const handleCancelButton = useCallback(() => {
     if (isReplying) {
       dispatch(setIsReplying(false))
     }
     if (isForwarding) {
       dispatch(setIsForwarding(false))
     }
-  }
+    dispatch(refreshEmailFeed())
+    dispatch(fetchDrafts())
+    dispatch(resetDraftDetails())
+  }, [isReplying, isForwarding, dispatch])
 
   const ToField = useMemo(
     () => (
@@ -435,9 +494,16 @@ const ComposeEmail = ({
   )
 
   const BodyField = useMemo(
-    () => <TipTap fetchedBodyValue={bodyValue} />,
-    [bodyValue]
+    () => <TipTap fetchedBodyValue={bodyValue} callback={updateComposeEmail} />,
+    [bodyValue, composedEmail]
   )
+
+  const SignatureField = useMemo(
+    () => <SignatureEmail callback={updateComposeEmail} />,
+    [composedEmail]
+  )
+
+  useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
 
   return (
     <>
@@ -450,7 +516,7 @@ const ComposeEmail = ({
         </S.UpdateContainer>
         <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
           <GS.Base>
-            <form onSubmit={onSubmit} autoComplete="off">
+            <form autoComplete="off">
               <div style={{ marginBottom: `7px` }}>
                 <GS.Base>
                   <S.Row>
@@ -460,12 +526,14 @@ const ComposeEmail = ({
                         <CustomButton
                           label={local.CC_LABEL}
                           onClick={() => setShowCC(true)}
+                          title="Show CC recipients"
                         />
                       )}
                       {!showBCC && (
                         <CustomButton
                           label={local.BCC_LABEL}
                           onClick={() => setShowBCC(true)}
+                          title="Show BCC recipients"
                         />
                       )}
                     </S.CcBccContainer>
@@ -481,23 +549,35 @@ const ComposeEmail = ({
                     {SubjectField}
                   </S.Row>
                   <S.Row>{BodyField}</S.Row>
+                  <S.Row>{SignatureField}</S.Row>
                 </GS.Base>
               </div>
-              <CustomButton
-                type="submit"
-                label={local.SEND_BUTTON}
-                icon={<FiSend />}
-                suppressed
-              />
-              {(isReplying || isForwarding) && (
+              <S.ButtonContainer>
                 <CustomButton
-                  label={local.CANCEL_BUTTON}
-                  onClick={() => handleCancelButton()}
+                  type="button"
+                  label={local.SEND_BUTTON}
+                  icon={<FiSend />}
+                  title="Send email"
                   suppressed
+                  onClick={(e) => handleSubmit(e)}
                 />
-              )}
-
-              {draftId && <DiscardDraft draftId={draftId} />}
+                {(isReplying || isForwarding) && (
+                  <CustomButton
+                    label={local.CANCEL_BUTTON}
+                    onClick={() => handleCancelButton()}
+                    suppressed
+                    title="Cancel"
+                  />
+                )}
+                {draftDetails?.id && (
+                  <S.DiscardContainer>
+                    <DiscardDraftButton
+                      draftId={draftDetails.id}
+                      messageOverviewListener={messageOverviewListener}
+                    />
+                  </S.DiscardContainer>
+                )}
+              </S.ButtonContainer>
             </form>
           </GS.Base>
         </S.ComposerContainer>
@@ -507,11 +587,3 @@ const ComposeEmail = ({
 }
 
 export default ComposeEmail
-
-ComposeEmail.defaultProps = {
-  to: null,
-  bcc: null,
-  cc: null,
-  subject: null,
-  threadId: null,
-}

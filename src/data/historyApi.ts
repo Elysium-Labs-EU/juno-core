@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 const historyApi = () => ({
   listHistory: async (startHistoryId: number) => {
@@ -7,9 +7,6 @@ const historyApi = () => ({
       const res: AxiosResponse<any> = await instance.get(`/api/history`, {
         params: {
           startHistoryId,
-        },
-        headers: {
-          Authorization: fetchToken(),
         },
       })
       return res

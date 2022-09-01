@@ -2,22 +2,21 @@ import { useCallback } from 'react'
 import { FiChevronLeft } from 'react-icons/fi'
 import CustomButton from './CustomButton'
 import * as global from '../../../constants/globalConstants'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectComposeEmail } from '../../../Store/composeSlice'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { navigateBack } from '../../../Store/utilsSlice'
-import { selectCoreStatus } from '../../../Store/emailDetailSlice'
+import * as keyConstants from '../../../constants/keyConstants'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { navigateBack } from '../../../store/utilsSlice'
+import { selectCoreStatus } from '../../../store/emailDetailSlice'
 
-const actionKeys = [global.KEY_ESCAPE]
+const actionKeys = [keyConstants.KEY_ESCAPE]
 
 const BackButton = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const dispatch = useAppDispatch()
-  const composeEmail = useAppSelector(selectComposeEmail)
 
   const handleEvent = useCallback(() => {
     dispatch(navigateBack())
-  }, [coreStatus, composeEmail, dispatch])
+  }, [coreStatus, dispatch])
 
   useMultiKeyPress(handleEvent, actionKeys)
 
@@ -27,12 +26,9 @@ const BackButton = () => {
       label={global.BUTTON_BACK}
       suppressed
       icon={<FiChevronLeft />}
+      title="Back"
     />
   )
 }
 
 export default BackButton
-
-BackButton.defaultProps = {
-  coreStatus: null,
-}

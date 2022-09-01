@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 import qs from 'qs'
-import { errorHandling, fetchToken, instance } from './api'
+import { errorHandling, instance } from './api'
 
 export interface EmailQueryObject {
   labelIds?: string[]
@@ -17,7 +17,7 @@ const threadApi = ({
   controller?: AbortController
   signal?: AbortSignal
 }) => ({
-  getThreads: async (query: EmailQueryObject) => {
+  getSimpleThreads: async (query: EmailQueryObject) => {
     try {
       const res: AxiosResponse<any> = await instance.get(`/api/threads/`, {
         params: {
@@ -28,11 +28,8 @@ const threadApi = ({
         },
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
-        headers: {
-          Authorization: fetchToken(),
-        },
       })
-      return res.data
+      return res
     } catch (err) {
       return errorHandling(err)
     }
@@ -47,10 +44,6 @@ const threadApi = ({
       },
       paramsSerializer: (params) =>
         qs.stringify(params, { arrayFormat: 'repeat' }),
-
-      headers: {
-        Authorization: fetchToken(),
-      },
       signal: controller?.signal || signal,
     })
     return res
@@ -59,13 +52,41 @@ const threadApi = ({
   getThreadDetail: async (threadId: string) => {
     try {
       const res: AxiosResponse<any> = await instance.get(
-        `/api/thread/${threadId}`,
-        {
-          headers: {
-            Authorization: fetchToken(),
-          },
-        }
+        `/api/thread/${threadId}`
       )
+      return res.data
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  updateThread: async ({ threadId, request }: any) => {
+    try {
+      const res: AxiosResponse<any> = await instance.patch(
+        `/api/thread/${threadId}`,
+        request
+      )
+      return res
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  thrashThread: async ({ threadId }: { threadId: string }) => {
+    const data = {}
+    try {
+      const res: AxiosResponse<any> = await instance.post(
+        `/api/thread/thrash/${threadId}`,
+        data
+      )
+      return res
+    } catch (err) {
+      return errorHandling(err)
+    }
+  },
+  deleteThread: async (threadId: string) => {
+    try {
+      const res: AxiosResponse<any> = await instance.delete(`/api/thread/`, {
+        data: { id: threadId },
+      })
       return res.data
     } catch (err) {
       return errorHandling(err)

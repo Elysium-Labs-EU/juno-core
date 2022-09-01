@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from '../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
 
 const sortThreads = (sortObject: IEmailListThreadItem[]) => {
   if (sortObject && sortObject.length > 0) {
@@ -7,24 +7,6 @@ const sortThreads = (sortObject: IEmailListThreadItem[]) => {
         return (
           parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
           parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-        )
-      }
-      if (a.message && b.messages) {
-        return (
-          parseInt(b.messages[b.messages.length - 1].internalDate, 10) -
-          parseInt(a.message.internalDate, 10)
-        )
-      }
-      if (a.messages && b.message) {
-        return (
-          parseInt(b.message.internalDate, 10) -
-          parseInt(a.messages[a.messages.length - 1].internalDate, 10)
-        )
-      }
-      if (a.message && b.message) {
-        return (
-          parseInt(b.message.internalDate, 10) -
-          parseInt(a.message.internalDate, 10)
         )
       }
       return 0

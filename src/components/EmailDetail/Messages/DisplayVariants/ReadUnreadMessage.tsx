@@ -7,35 +7,32 @@ import EmailAttachment from '../../Attachment/EmailAttachment'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import * as local from '../../../../constants/unreadConstants'
-import * as compose from '../../../../constants/composeEmailConstants'
-import * as emailDetail from '../../../../constants/emailDetailConstants'
 import * as S from '../../EmailDetailStyles'
 import * as global from '../../../../constants/globalConstants'
 import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
 import {
   IEmailMessage,
   IEmailListThreadItem,
-} from '../../../../Store/storeTypes/emailListTypes'
+} from '../../../../store/storeTypes/emailListTypes'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import { useAppSelector } from '../../../../Store/hooks'
-import { selectIsReplying } from '../../../../Store/emailDetailSlice'
+import { useAppSelector } from '../../../../store/hooks'
+import { selectIsReplying } from '../../../../store/emailDetailSlice'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import EmailSubject from '../../../Elements/EmailSubject'
 import EmailSnippet from '../../../Elements/EmailSnippet'
-import convertToContact from '../../../../utils/convertToContact'
-import { selectProfile } from '../../../../Store/baseSlice'
-import ToBCCNameFull from '../../../Elements/ToBCCNameFull'
+import { selectProfile } from '../../../../store/baseSlice'
 import Seo from '../../../Elements/Seo'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
+import useClickOutside from '../../../../hooks/useClickOutside'
+import LinkedContacts from './Recipients/LinkedContacts'
 
 interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
   messageIndex: number
-  setUnsubscribeLink: Function
-  setContentRendered: (value: boolean) => void
+  setUnsubscribeLink: (value: string | null) => void
 }
 
 const ReadUnreadMessage = ({
@@ -43,15 +40,20 @@ const ReadUnreadMessage = ({
   threadDetail,
   messageIndex,
   setUnsubscribeLink,
-  setContentRendered,
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
-  const [blockedTrackers, setBlockedTrackers] = useState<Attr[] | []>([])
+  const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
+  const { ref } = useClickOutside({
+    onClickOutside: () => {
+      setAnchorEl(null)
+      setShowMenu(false)
+    },
+  })
 
   useEffect(() => {
     let mounted = true
@@ -72,7 +74,7 @@ const ReadUnreadMessage = ({
         setOpen(true)
       }
       if (
-        threadDetail.messages.length === 2 &&
+        threadDetail.messages.length > 1 &&
         threadDetail.messages.some((item) =>
           item.labelIds.includes(global.DRAFT_LABEL)
         )
@@ -116,6 +118,9 @@ const ReadUnreadMessage = ({
     }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
+  /**
+   * Open or close the email detail - if there is a Popper active, close it.
+   */
   const handleClick = () => {
     setOpen((currState) => !currState)
     if (anchorEl) {
@@ -132,24 +137,48 @@ const ReadUnreadMessage = ({
   }, [isReplying])
 
   const staticSenderNameFull = useMemo(
-    () => SenderNameFull(message, emailAddress),
+    () => SenderNameFull(message.payload.headers?.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => SenderNamePartial(message, emailAddress),
+    () => SenderNamePartial(message.payload.headers?.from, emailAddress),
     []
   )
-  const staticToNameFull = useMemo(
-    () =>
-      ToBCCNameFull(message, 'To')
-        .split(',')
-        .map((item) => convertToContact(item)),
+  const staticEmailSubject = useMemo(
+    () => EmailSubject(message.payload.headers?.subject),
     []
   )
-  const staticCCNameFull = useMemo(() => ToBCCNameFull(message, 'Cc'), [])
-  const staticBCCNameFull = useMemo(() => ToBCCNameFull(message, 'Bcc'), [])
-  const staticEmailSubject = useMemo(() => EmailSubject(message), [])
   const staticSnippet = useMemo(() => EmailSnippet(message), [])
+
+  const memoizedClosedEmail = useMemo(
+    () => (
+      <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
+        <S.ClosedMessageWrapper>
+          <S.ClosedAvatarSender>
+            <EmailAvatar avatarURL={staticSenderNameFull} />
+            <S.ClosedSender>
+              <span
+                style={{ fontWeight: 'bold' }}
+                title={staticSenderNamePartial?.emailAddress}
+              >
+                {staticSenderNamePartial?.name}
+              </span>
+            </S.ClosedSender>
+          </S.ClosedAvatarSender>
+          <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
+          <S.TimeAttachmentContainer>
+            <S.ChildDiv>
+              <EmailHasAttachment messages={message} />
+            </S.ChildDiv>
+            <S.ChildDiv>
+              <TimeStamp threadTimeStamp={message.internalDate} />
+            </S.ChildDiv>
+          </S.TimeAttachmentContainer>
+        </S.ClosedMessageWrapper>
+      </S.EmailClosedWrapper>
+    ),
+    [message, staticSenderNamePartial, staticSenderNameFull]
+  )
 
   return (
     <>
@@ -176,6 +205,7 @@ const ReadUnreadMessage = ({
                     onClick={handleSpecificMenu('bottom-start')}
                     icon={<FiChevronDown />}
                     aria-describedby={popperId}
+                    title="Show message options"
                   />
                 </S.ChildDiv>
                 <Popper
@@ -183,6 +213,7 @@ const ReadUnreadMessage = ({
                   open={showMenu}
                   anchorEl={anchorEl}
                   placement={placement}
+                  ref={ref}
                 >
                   <SpecificEmailOptions
                     messageId={message?.id}
@@ -192,57 +223,7 @@ const ReadUnreadMessage = ({
               </S.TimeAttachmentContainer>
             </S.HeaderFullWidth>
           </S.TopContainer>
-          <S.FromContainer
-            multipleComponents={Boolean(
-              staticToNameFull || staticCCNameFull || staticBCCNameFull
-            )}
-          >
-            <S.ToFromBCCInner>
-              <S.SmallTextMuted>{emailDetail.FROM_LABEL}</S.SmallTextMuted>
-              <S.SmallTextTruncated>
-                {staticSenderNameFull}
-              </S.SmallTextTruncated>
-            </S.ToFromBCCInner>
-          </S.FromContainer>
-          <S.ToBCCContainer
-            multipleComponents={Boolean(
-              staticToNameFull && (staticCCNameFull || staticBCCNameFull)
-            )}
-          >
-            <S.ToFromBCCInner>
-              <S.SmallTextMuted>{emailDetail.TO_LABEL}</S.SmallTextMuted>
-              <S.SmallTextTruncated>
-                {staticToNameFull.map((contact) => (
-                  <S.SmallTextTruncated
-                    key={contact.emailAddress}
-                    title={contact.emailAddress}
-                  >
-                    {contact.name}
-                  </S.SmallTextTruncated>
-                ))}
-              </S.SmallTextTruncated>
-            </S.ToFromBCCInner>
-            {staticCCNameFull && staticCCNameFull.length > 0 && (
-              <S.ToFromBCCInner>
-                <S.SmallTextMuted>{compose.CC_LABEL}</S.SmallTextMuted>
-                <S.SmallTextTruncated
-                  title={convertToContact(staticCCNameFull).emailAddress}
-                >
-                  {convertToContact(staticCCNameFull).name}
-                </S.SmallTextTruncated>
-              </S.ToFromBCCInner>
-            )}
-            {staticBCCNameFull && staticBCCNameFull.length > 0 && (
-              <S.ToFromBCCInner>
-                <S.SmallTextMuted>{compose.BCC_LABEL}</S.SmallTextMuted>
-                <S.SmallTextTruncated
-                  title={convertToContact(staticBCCNameFull).emailAddress}
-                >
-                  {convertToContact(staticBCCNameFull).name}
-                </S.SmallTextTruncated>
-              </S.ToFromBCCInner>
-            )}
-          </S.ToBCCContainer>
+          <LinkedContacts message={message} />
           {blockedTrackers.length > 0 && (
             <RemovedTrackers blockedTrackers={blockedTrackers} />
           )}
@@ -251,10 +232,8 @@ const ReadUnreadMessage = ({
             {message && message?.payload && message?.id && (
               <EmailDetailBody
                 threadDetailBody={message.payload}
-                messageId={message.id}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
                 setUnsubscribeLink={setUnsubscribeLink}
-                setContentRendered={setContentRendered}
                 setBlockedTrackers={setBlockedTrackers}
               />
             )}
@@ -262,33 +241,7 @@ const ReadUnreadMessage = ({
           <EmailAttachment message={message} />
         </S.EmailOpenWrapper>
       )}
-
-      {!open && (
-        <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
-          <S.ClosedMessageWrapper>
-            <S.ClosedAvatarSender>
-              <EmailAvatar avatarURL={staticSenderNameFull} />
-              <S.ClosedSender>
-                <span
-                  style={{ fontWeight: 'bold' }}
-                  title={staticSenderNamePartial?.emailAddress}
-                >
-                  {staticSenderNamePartial?.name}
-                </span>
-              </S.ClosedSender>
-            </S.ClosedAvatarSender>
-            <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
-            <S.TimeAttachmentContainer>
-              <S.ChildDiv>
-                <EmailHasAttachment messages={message} />
-              </S.ChildDiv>
-              <S.ChildDiv>
-                <TimeStamp threadTimeStamp={message.internalDate} />
-              </S.ChildDiv>
-            </S.TimeAttachmentContainer>
-          </S.ClosedMessageWrapper>
-        </S.EmailClosedWrapper>
-      )}
+      {!open && memoizedClosedEmail}
     </>
   )
 }

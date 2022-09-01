@@ -8,7 +8,7 @@ interface ICustomIconButton {
   disabled?: boolean
   icon: JSX.Element
   style?: React.CSSProperties
-  title?: string
+  title: string
   className?: string
   isActive?: boolean
   hoverColor?: string
@@ -38,42 +38,29 @@ const Button = styled.button<IButton>`
     cursor: not-allowed;
   }
 `
-const CustomIconButton = (props: ICustomIconButton) => {
-  const {
-    onClick,
-    disabled,
-    icon,
-    type,
-    style,
-    title,
-    className,
-    isActive,
-    hoverColor,
-  } = props
-  return (
-    <Button
-      onClick={(event) => onClick(event)}
-      type={type ?? 'button'}
-      disabled={disabled}
-      style={style}
-      title={title}
-      className={className}
-      isActive={isActive}
-      hoverColor={hoverColor}
-    >
-      <span>{icon}</span>
-    </Button>
-  )
-}
+const CustomIconButton = ({
+  onClick,
+  disabled = false,
+  icon,
+  type = 'button',
+  style = undefined,
+  title,
+  className = undefined,
+  isActive = false,
+  hoverColor = undefined,
+}: ICustomIconButton) => (
+  <Button
+    onClick={(event) => onClick(event)}
+    type={type ?? 'button'}
+    disabled={disabled}
+    style={style}
+    title={title}
+    className={className}
+    isActive={isActive}
+    hoverColor={hoverColor}
+  >
+    <span>{icon}</span>
+  </Button>
+)
 
 export default CustomIconButton
-
-CustomIconButton.defaultProps = {
-  className: null,
-  disabled: false,
-  style: null,
-  title: null,
-  type: 'button',
-  isActive: false,
-  hoverColor: null,
-}

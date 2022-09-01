@@ -1,78 +1,76 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 interface IScroll {
   clientState: boolean
 }
 
+export const Scroll = styled.div<IScroll>`
+  width: 100%;
+  display: flex;
+  flex: 2;
+  flex-direction: column;
+`
+
 export const HiddenMessagesFeed = styled.div`
   display: none;
 `
 
-interface IEmailDetailWrapper {
+interface IEmailDetail {
   tabbedView?: boolean
 }
 
-export const EmailDetailWrapper = styled.div<IEmailDetailWrapper>`
-  max-width: 1480px;
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  flex: 1 1 0%;
-  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
-  position: relative;
-  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
-  transition: all 0.2s ease-in-out;
-`
-
-export const Scroll = styled.div<IScroll>`
-  position: relative;
-  width: 100%;
-  height: ${({ clientState }) => (clientState ? '90.5vh' : '88.3vh')};
-  overflow-y: auto;
+export const EmailDetailWrapper = styled.div<IEmailDetail>`
   display: flex;
-  flex-direction: column;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
-  }
 `
 
 export const MessageFeedViewContainer = styled.div``
 
-interface IEmailClosedWrapper {
+interface IEmailWrapper {
   hideDraft?: boolean
   isDraft?: boolean
 }
 
-export const EmailClosedWrapper = styled.div<IEmailClosedWrapper>`
-  padding: 16px;
+export const EmailClosedWrapper = styled.div<IEmailWrapper>`
+  padding: 20px;
   transition: background-color ease-in 0.125s;
   background-color: ${({ isDraft }) =>
     isDraft ? '#c2a6ff17' : `var(--color-white)`};
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
-  margin-bottom: 8px;
+  margin-bottom: 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-l);
   &:hover {
-    background-color: var(--color-grey-hover);
-    border-radius: 6px;
+    background-color: ${({ isDraft }) =>
+      isDraft ? `var(--color-purple-soft)` : `var(--color-grey-hover)`};
+    border-radius: var(--radius-l);
   }
 `
-export const EmailOpenWrapper = styled.div`
-  padding: 16px;
-  margin-bottom: 8px;
-  border-radius: 6px;
+export const EmailOpenWrapper = styled.div<IEmailWrapper>`
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: ${({ isDraft }) =>
+    isDraft ? '#c2a6ff17' : `var(--color-white)`};
+  border-radius: var(--radius-l);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  background-color: var(--color-white);
+  display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
 `
 
-export const EmailOptionsContainer = styled.div`
+export const DraftHeaderControls = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid var(--color-purple-soft);
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+`
+
+export const EmailOptionsContainer = styled.div<IEmailDetail>`
   position: relative;
   min-height: 200px;
   padding: 30px;
+  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
 `
 
 export const EmailOptionsPlaceholder = styled.div`
@@ -120,21 +118,24 @@ export const DetailRow = styled.article`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  flex: 1 1;
+  flex: 1 1 0%;
 `
 
 export const CardFullWidth = styled.div`
   width: 100%;
 `
 
-export const EmailDetailContainer = styled.div`
-  min-width: 665px;
+export const EmailDetailContainer = styled.div<IEmailDetail>`
+  width: ${({ tabbedView }) => (tabbedView ? '100%' : '100vw')};
+  min-width: ${({ tabbedView }) => (tabbedView ? '665px' : '300px')};
   max-width: min(100vw - 340px, 860px);
-  padding-bottom: 320px;
+  /* padding-bottom: 320px; */
   margin-bottom: 20px;
-  width: 100%;
   overflow: scroll;
   scrollbar-width: none;
+  transition: all 0.2s ease-in-out;
+  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
+  position: relative;
 
   &::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */
@@ -181,34 +182,17 @@ export const HeaderFullWidth = styled.div`
   place-items: center;
 `
 
-interface IFromCCContainer {
-  multipleComponents: boolean
-}
-
-export const FromContainer = styled.div<IFromCCContainer>`
+export const ContactsContainer = styled.div`
   align-items: center;
   display: flex;
-  padding-top: 16px;
-  padding-bottom: 8px;
-`
-
-export const ToBCCContainer = styled.div<IFromCCContainer>`
-  align-items: center;
-  display: flex;
-  div {
-    max-width: ${({ multipleComponents }) =>
-      multipleComponents ? '33%' : '100%'};
-    margin-right: ${({ multipleComponents }) =>
-      multipleComponents ? '2rem' : 0};
-  }
-  padding-top: 8px;
-  padding-bottom: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `
 
 export const ToFromBCCInner = styled.div`
   display: flex;
   flex-flow: row;
-  align-items: center;
+  align-items: flex-start;
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -216,7 +200,7 @@ export const ToFromBCCInner = styled.div`
   }
 `
 
-export const BlockedTrackersContainer = styled.div<IFromCCContainer>`
+export const BlockedTrackersContainer = styled.div`
   align-items: center;
   display: flex;
   padding-top: 16px;
@@ -263,18 +247,24 @@ export const EmailDetailTitle = styled.span`
   white-space: nowrap;
 `
 
-export const SmallTextMuted = styled.span`
-  color: var(--color-grey);
-  font-size: var(--small-size);
-  margin-right: 4px;
+interface ISmallTextTruncated {
+  showComma?: boolean
+}
+
+const commaSeperator = css`
+  margin-right: 6px;
+  &:after {
+    content: ',';
+  }
 `
 
-export const SmallTextTruncated = styled.span`
+export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: var(--small-size);
-  padding-right: 6px;
+  ${({ showComma }) => showComma && commaSeperator};
+  margin-right: ${({ showComma }) => (showComma ? '6px' : '0')};
 `
 
 export const ComposeWrapper = styled.div`

@@ -1,20 +1,26 @@
-import { updateEmailLabel } from '../../Store/emailListSlice'
+import { updateEmailLabel } from '../../store/emailListSlice'
+import { AppDispatch } from '../../store/store'
 
 interface IThrashMailProps {
-  messageId: string
+  threadId: string
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
+  location?: any
 }
 
-const thrashMail = (props: IThrashMailProps) => {
-  const { messageId, labelIds, dispatch } = props
-
+const thrashMail = ({
+  threadId,
+  labelIds,
+  dispatch,
+  location,
+}: IThrashMailProps) => {
   const markEmailThrashed = () => {
     dispatch(
       updateEmailLabel({
-        messageId,
+        threadId,
         request: { delete: true },
         labelIds,
+        location,
       })
     )
   }

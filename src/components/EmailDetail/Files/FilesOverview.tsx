@@ -3,14 +3,18 @@ import CircularProgress from '@mui/material/CircularProgress'
 import * as ES from '../EmailDetailStyles'
 import * as S from './FilesOverviewStyles'
 import * as local from '../../../constants/filesOverviewConstants'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
-import SenderNameFull from '../../Elements/SenderName/senderNameFull'
-import { selectProfile } from '../../../Store/baseSlice'
-import { useAppSelector } from '../../../Store/hooks'
+import senderNameFull from '../../Elements/SenderName/senderNameFull'
+import { selectProfile } from '../../../store/baseSlice'
+import { useAppSelector } from '../../../store/hooks'
 import checkAttachment from '../../../utils/checkAttachment'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
+import {
+  selectIsReplying,
+  selectIsForwarding,
+} from '../../../store/emailDetailSlice'
 
 interface IFilesOverview {
   threadDetail: IEmailListThreadItem | null
@@ -19,6 +23,8 @@ interface IFilesOverview {
 
 const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
   const { emailAddress } = useAppSelector(selectProfile)
+  const isReplying = useAppSelector(selectIsReplying)
+  const isForwarding = useAppSelector(selectIsForwarding)
 
   const files = useCallback(() => {
     if (threadDetail?.messages) {
@@ -27,7 +33,10 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
         .reverse()
         .map((message) => {
           const result = checkAttachment(message)
-          const staticSenderNameFull = SenderNameFull(message, emailAddress)
+          const staticSenderNameFull = senderNameFull(
+            message.payload.headers?.from,
+            emailAddress
+          )
           if (result.length > 0) {
             return (
               <S.FileEmailRow key={message.id}>
@@ -61,7 +70,7 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
 
   return (
     <ES.DetailRow>
-      <ES.EmailDetailContainer>
+      <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
           {!isLoading && staticFiles && staticFiles.length > 0 ? (
             staticFiles

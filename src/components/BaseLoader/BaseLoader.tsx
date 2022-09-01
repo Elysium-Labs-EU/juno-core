@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import * as S from './BaseLoaderStyles'
-import { selectServiceUnavailable } from '../../Store/utilsSlice'
+import { selectServiceUnavailable } from '../../store/utilsSlice'
 import Logo from '../../images/Juno_logo.png'
 import LogoutOption, {
   handleLogout,
 } from '../MainHeader/Navigation/More/Options/LogoutOption'
-import { useAppSelector } from '../../Store/hooks'
+import { useAppSelector } from '../../store/hooks'
 
-const LOGO_ALT = "Juno's Logo"
+export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '
 const SECONDS = ' seconds.'
 
@@ -28,7 +28,7 @@ const AnimatedMountUnmount = ({
 
 const Baseloader = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
-  const [countDown, setCountDown] = useState(3)
+  const [countDown, setCountDown] = useState(5)
 
   useEffect(() => {
     let mounted = true
@@ -52,7 +52,7 @@ const Baseloader = () => {
   })
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-testid="base-loader">
       <S.Inner>
         {!serviceUnavailable && (
           <>

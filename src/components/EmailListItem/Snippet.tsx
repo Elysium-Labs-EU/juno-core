@@ -10,14 +10,14 @@ const StyledSnippet = styled.span`
 const Snippet = ({ snippet }: { snippet: string }) => {
   if (snippet.length > 0)
     return (
-      <StyledSnippet>
+      <StyledSnippet data-testid="email-snippet">
         &nbsp;&nbsp;—&nbsp;&nbsp;
         {DOMPurify.sanitize(convertStringToHTML(snippet)?.innerText, {
           USE_PROFILES: { html: true },
         })}
       </StyledSnippet>
     )
-  return null
+  return <div data-testid="email-snippet" />
 }
 
 export default Snippet

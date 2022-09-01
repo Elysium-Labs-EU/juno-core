@@ -18,4 +18,5 @@ export const EmailAvatarContainer = styled.div<IEmailAvatarContainer>`
   border-radius: 50%;
   height: 2rem;
   align-items: center;
+  position: relative;
 `

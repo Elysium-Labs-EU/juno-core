@@ -1,26 +1,29 @@
-import { fetchEmails } from '../Store/emailListSlice'
+import { fetchEmailsFull, fetchEmailsSimple } from '../store/emailListSlice'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
-} from '../Store/storeTypes/emailListTypes'
+} from '../store/storeTypes/emailListTypes'
 import * as global from '../constants/globalConstants'
+import { AppDispatch } from '../store/store'
 
 interface ILoadNextPage {
   q?: string
-  nextPageToken: string | null
+  nextPageToken: string | null | undefined
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
   silentLoading?: boolean
   maxResults: number
+  fetchSimple?: boolean
 }
 
 const loadNextPage = ({
-  q,
+  q = undefined,
   nextPageToken,
   labelIds,
   dispatch,
-  silentLoading,
+  silentLoading = false,
   maxResults,
+  fetchSimple = false,
 }: ILoadNextPage) => {
   if (nextPageToken) {
     const params = {
@@ -30,11 +33,25 @@ const loadNextPage = ({
       maxResults,
       silentLoading,
     }
-    dispatch(fetchEmails(params))
+    // Fetch Simple is used for overviews and search results. Full fetch is used during the email detail view and edge loading when on email detail.
+    // For safety, resort to full fetching by default.
+    if (fetchSimple) {
+      dispatch(fetchEmailsSimple(params))
+    } else {
+      dispatch(fetchEmailsFull(params))
+    }
   }
 }
 
 export default loadNextPage
+
+interface IEdgeLoadingNextPage {
+  isSilentLoading: boolean
+  dispatch: AppDispatch
+  labelIds: string[]
+  emailFetchSize: number
+  activeEmailList: IEmailListObject | IEmailListObjectSearch
+}
 
 export const edgeLoadingNextPage = ({
   isSilentLoading,
@@ -42,7 +59,7 @@ export const edgeLoadingNextPage = ({
   labelIds,
   emailFetchSize,
   activeEmailList,
-}: any) => {
+}: IEdgeLoadingNextPage) => {
   if (!isSilentLoading) {
     if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
       const { q, nextPageToken } = activeEmailList as IEmailListObjectSearch

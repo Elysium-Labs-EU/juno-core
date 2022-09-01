@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
-import useKeyPress from '../../Hooks/useKeyPress'
-import { refreshEmailFeed, selectIsFetching } from '../../Store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
-import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
-import * as global from '../../constants/globalConstants'
+import useKeyPress from '../../hooks/useKeyPress'
+import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
+import * as keyConstants from '../../constants/keyConstants'
+import { AppDispatch } from '../../store/store'
 
 const rotate = keyframes`
   from {
@@ -41,7 +42,7 @@ const RotatingButton = styled.button<IRotatingButton>`
   ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
-const refreshFeed = (dispatch: Function) => {
+const refreshFeed = (dispatch: AppDispatch) => {
   dispatch(refreshEmailFeed())
 }
 
@@ -50,7 +51,7 @@ const InboxRefresh = () => {
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
   const inSearch = useAppSelector(selectInSearch)
-  const KeyListener = useKeyPress(global.KEY_R)
+  const KeyListener = useKeyPress(keyConstants.KEY_R)
   const dispatch = useAppDispatch()
 
   const handleClick = useCallback(() => {
@@ -86,6 +87,7 @@ const InboxRefresh = () => {
       disabled={isLoading || disableRefresh}
       type="button"
       disableRefresh={disableRefresh}
+      title={!disableRefresh ? 'Refresh inbox' : 'Refreshing inbox...'}
     >
       <MdRefresh size={20} />
     </RotatingButton>

@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import EmailList from '../EmailList/EmailList'
-import { setCurrentLabels } from '../../Store/labelsSlice'
-import { selectBaseLoaded } from '../../Store/baseSlice'
+import { setCurrentLabels } from '../../store/labelsSlice'
+import { selectBaseLoaded } from '../../store/baseSlice'
 import * as local from '../../constants/draftConstants'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Seo from '../Elements/Seo'
 

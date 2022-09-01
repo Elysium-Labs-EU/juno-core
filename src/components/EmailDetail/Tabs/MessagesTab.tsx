@@ -1,6 +1,6 @@
 import * as S from './TabsStyles'
 import * as local from '../../../constants/menuConstants'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 
 const MessagesTab = ({
   activeThread,
@@ -9,7 +9,7 @@ const MessagesTab = ({
 }: {
   activeThread: IEmailListThreadItem
   activeLink: string
-  navigateTo: Function
+  navigateTo: ({ link, name }: { link: string; name: string }) => void
 }) => (
   <S.StyedListItem
     style={{ cursor: 'pointer' }}
@@ -18,11 +18,7 @@ const MessagesTab = ({
     isActive={activeLink === local.MESSAGE_MENU_ITEM.name}
   >
     <S.StyledBadge
-      badgeContent={
-        activeLink === local.MESSAGE_MENU_ITEM.name
-          ? 0
-          : activeThread?.messages?.length ?? 0
-      }
+      badgeContent={activeThread?.messages?.length ?? 0}
       color="primary"
     >
       {local.MESSAGE_MENU_ITEM.name}

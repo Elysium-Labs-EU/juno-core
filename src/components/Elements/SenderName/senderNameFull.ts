@@ -1,24 +1,17 @@
-import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
-import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
 import { NO_SENDER } from './senderNamePartial'
 import * as global from '../../../constants/globalConstants'
 
-const SenderNameFull = (
-  message: IEmailMessage,
-  emailAddress: string
-): string => {
-  if (message) {
-    const query = 'From'
-    const from = findPayloadHeadersData(query, message)
-    if (from.length > 0) {
-      if (from.includes(emailAddress)) {
+const senderNameFull = (fromHeader: string, emailAddress: string): string => {
+  if (fromHeader) {
+    if (fromHeader.length > 0) {
+      if (emailAddress && fromHeader.includes(emailAddress)) {
         return global.ME_LABEL
       }
-      return from
+      return fromHeader
     }
     return NO_SENDER
   }
   return NO_SENDER
 }
 
-export default SenderNameFull
+export default senderNameFull

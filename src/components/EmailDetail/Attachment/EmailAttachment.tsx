@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as S from './EmailAttachmentStyles'
-import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
+import { IEmailMessage } from '../../../store/storeTypes/emailListTypes'
 import checkAttachment from '../../../utils/checkAttachment'
 import { IEmailAttachmentType } from './EmailAttachmentTypes'
 

@@ -1,8 +1,8 @@
 import {
   selectIsForwarding,
   selectIsReplying,
-} from '../../../Store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
+} from '../../../store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as GS from '../../../styles/globalStyles'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
@@ -35,6 +35,7 @@ const SpecificEmailOptions = ({
               isForwarding,
             })
           }
+          title="Reply to this messag"
         />
         <CustomButton
           label="Forward this message"
@@ -46,6 +47,7 @@ const SpecificEmailOptions = ({
               isReplying,
             })
           }
+          title="Forward this message"
         />
       </S.Inner>
     </GS.MenuPopper>

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { useAppSelector } from '../../Store/hooks'
-import { selectStorageLabels } from '../../Store/labelsSlice'
+import { useAppSelector } from '../../store/hooks'
+import { selectStorageLabels } from '../../store/labelsSlice'
 import onlyLegalLabelObjects from '../../utils/onlyLegalLabelObjects'
 import CustomLabel from './CustomLabel'
 
@@ -30,7 +30,7 @@ const EmailLabel = ({ labelNames }: { labelNames: string[] }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper data-testid="email-label">
       {legalLabel().map((label) => (
         <CustomLabel key={label} labelName={label} />
       ))}

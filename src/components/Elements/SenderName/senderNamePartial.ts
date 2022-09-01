@@ -1,23 +1,19 @@
-import { Contact } from '../../../Store/storeTypes/contactsTypes'
-import { IEmailMessage } from '../../../Store/storeTypes/emailListTypes'
-import convertToContact from '../../../utils/convertToContact'
-import findPayloadHeadersData from '../../../utils/findPayloadHeadersData'
+import { IContact } from '../../../store/storeTypes/contactsTypes'
+import { convertToContact } from '../../../utils/convertToContact'
 import * as global from '../../../constants/globalConstants'
 
 export const NO_SENDER = '(No sender)'
 
 const senderNamePartial = (
-  message: IEmailMessage,
+  fromHeaders: string,
   emailAddress: string
-): Contact => {
-  if (message) {
-    const query = 'From'
-    const from = findPayloadHeadersData(query, message)
-    if (from.length > 0) {
-      if (from.includes(emailAddress)) {
+): IContact => {
+  if (fromHeaders) {
+    if (fromHeaders.length > 0) {
+      if (emailAddress && fromHeaders.includes(emailAddress)) {
         return { name: global.ME_LABEL, emailAddress }
       }
-      return convertToContact(from)
+      return convertToContact(fromHeaders)
     }
     return { name: NO_SENDER, emailAddress: NO_SENDER }
   }

@@ -1,0 +1,13 @@
+{
+  "includes": ["src/**/*.{js,jsx,json,md,tsx,ts}"],
+  "excludes": ["/node_modules, /build, /dist, /.git, /public"],
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true
+  },
+  "plugins": [
+    "https://plugins.dprint.dev/prettier-0.10.0.json@ca9a97de84cbb2cd60534eb72c0455f3ca8704743917569ace70499136cf5c9c"
+  ]
+}

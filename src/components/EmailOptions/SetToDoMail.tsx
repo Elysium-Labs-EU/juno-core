@@ -1,32 +1,34 @@
-import { LabelIdName } from '../../Store/storeTypes/labelsTypes'
-import { updateEmailLabel } from '../../Store/emailListSlice'
+import { LabelIdName } from '../../store/storeTypes/labelsTypes'
+import { updateEmailLabel } from '../../store/emailListSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
 import { findLabelByName } from '../../utils/findLabel'
 import * as todo from '../../constants/todoConstants'
+import { AppDispatch } from '../../store/store'
 
-interface SetToDoMailProps {
-  messageId: string
+interface ISetToDoMail {
+  threadId: string
   labelIds: string[]
-  dispatch: Function
+  dispatch: AppDispatch
   storageLabels: LabelIdName[]
+  location?: any
 }
 
-const SetToDoMail = (props: SetToDoMailProps) => {
-  const { messageId, labelIds, dispatch, storageLabels } = props
+const setToDoMail = ({
+  threadId,
+  labelIds,
+  dispatch,
+  storageLabels,
+  location,
+}: ISetToDoMail) => {
   const toDoLabel = findLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
-
-  const ToDoAction = () => {
-    const request = {
-      removeLabelIds: onlyLegalLabels,
-      addLabelIds: [toDoLabel[0].id],
-    }
-    dispatch(
-      updateEmailLabel({ messageId, request, labelIds: onlyLegalLabels })
-    )
+  const request = {
+    removeLabelIds: onlyLegalLabels,
+    addLabelIds: [toDoLabel[0].id],
   }
-
-  return ToDoAction()
+  dispatch(
+    updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels, location })
+  )
 }
 
-export default SetToDoMail
+export default setToDoMail

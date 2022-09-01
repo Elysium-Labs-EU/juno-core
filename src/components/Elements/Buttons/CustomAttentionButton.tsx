@@ -9,6 +9,7 @@ interface ICustomButton {
   disabled?: boolean
   label: string
   variant?: 'primary' | 'secondary'
+  title: string
 }
 
 interface IButton {
@@ -16,7 +17,7 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  font-weight: 600;
+  font-weight: 500;
   font-family: var(--font-family);
   border-radius: 20px;
   border: none;
@@ -25,10 +26,11 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
-    margin: 0.4rem 0.8rem;
+    margin: 10px 14px;
     span {
       color: var(--color-white);
       font-size: 1rem;
+      line-height: 1rem;
     }
   }
 
@@ -57,28 +59,26 @@ const InnerButton = styled.div`
   align-items: center;
 `
 
-const CustomAttentionButton = (props: ICustomButton) => {
-  const { onClick, className, disabled, label, type, variant } = props
-  return (
-    <Button
-      onClick={onClick ? (event) => onClick(event) : undefined}
-      className={className}
-      type={type ?? 'button'}
-      disabled={disabled}
-      variant={variant ?? 'primary'}
-    >
-      <InnerButton>
-        <span>{label}</span>
-      </InnerButton>
-    </Button>
-  )
-}
+const CustomAttentionButton = ({
+  onClick = undefined,
+  className = undefined,
+  disabled = false,
+  label,
+  type = 'button',
+  variant = 'primary',
+  title,
+}: ICustomButton) => (
+  <Button
+    onClick={onClick ? (event) => onClick(event) : undefined}
+    className={className}
+    type={type ?? 'button'}
+    disabled={disabled}
+    variant={variant ?? 'primary'}
+    title={title}
+  >
+    <InnerButton>
+      <span>{label}</span>
+    </InnerButton>
+  </Button>
+)
 export default CustomAttentionButton
-
-CustomAttentionButton.defaultProps = {
-  onClick: undefined,
-  type: 'button',
-  disabled: false,
-  className: null,
-  variant: 'primary',
-}

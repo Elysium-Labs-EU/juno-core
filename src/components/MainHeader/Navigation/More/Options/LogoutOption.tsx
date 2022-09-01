@@ -1,5 +1,4 @@
 import * as S from '../NavigationMoreStyles'
-import * as local from '../../../../../constants/subMenuHeaderConstants'
 import handleUserTokens from '../../../../../utils/handleUserTokens'
 import userApi from '../../../../../data/userApi'
 
@@ -13,7 +12,7 @@ export const handleLogout = async () => {
 
 const LogoutOption = () => (
   <S.MenuItemButton onClick={handleLogout} type="button">
-    {local.LOGOUT}
+    Logout
   </S.MenuItemButton>
 )
 

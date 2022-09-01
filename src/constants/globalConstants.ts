@@ -1,58 +1,53 @@
-export const ACCESS_TOKEN = 'accessToken'
-export const REFRESH_TOKEN = 'refreshToken'
-export const INVALID_TOKEN = 'Invalid token'
-export const LAST_REFRESH = 'lastRefresh'
-export const INVALID_SESSION = 'Invalid session'
-export const JUNO_SETTINGS_LOCAL = 'junoSettings'
-export const LOADING_TEXT = 'Loading'
-export const BUTTON_BACK = 'Back'
-export const ME_LABEL = 'me'
-export const NOTHING_TO_SEE = 'Nothing to see here'
-export const NETWORK_ERROR = 'Network Error. Please try again later'
-export const NO_SUBJECT = '(No subject)'
-export const LOAD_MORE = 'Load more messages'
-export const MIN_DELAY_REFRESH = 2500
-export const MAX_RESULTS = 20
-export const NO_MORE_RESULTS = "You've reached the end."
-export const UNREAD_LABEL = 'UNREAD'
+// SYSTEM CODE
+export const ACTIVE_MODAL_MAP = {
+  feedback: 'feedback',
+  help: 'help',
+  intro: 'intro',
+  keyboard: 'keyboard',
+  navigation: 'navigation',
+  search: 'search',
+  settings: 'settings',
+}
 export const ARCHIVE_LABEL = 'ARCHIVE'
-export const SEARCH_LABEL = 'SEARCH'
-export const INBOX_LABEL = 'INBOX'
-export const SENT_LABEL = 'SENT'
-export const DRAFT_LABEL = 'DRAFT'
-export const MIME_TYPE_NO_INLINE = 'application/octet-stream'
-export const CORE_STATUS_SORTING = 'isSorting'
-export const CORE_STATUS_SEARCHING = 'isSearching'
 export const CORE_STATUS_FOCUSED = 'isFocused'
-export const ERROR_MESSAGE = 'Something went wrong, try again.'
-export const EMAIL_BODY_VISIBLE = 'visible'
+export const CORE_STATUS_SEARCHING = 'isSearching'
+export const CORE_STATUS_SORTING = 'isSorting'
+export const DRAFT_LABEL = 'DRAFT'
 export const EMAIL_BODY_INVISIBLE = 'invisible'
+export const EMAIL_BODY_VISIBLE = 'visible'
+export const ID_TOKEN = 'idToken'
+export const INBOX_LABEL = 'INBOX'
+export const JUNO_SETTINGS_LOCAL = 'junoSettings'
+export const JUNO_SIGNATURE = 'juno_signature'
+export const LAST_REFRESH = 'lastRefresh'
 export const LOAD_STATE_MAP = {
   idle: 'idle',
   loading: 'loading',
   loaded: 'loaded',
   error: 'error',
 }
-export const WINDOWS_OS = 'Windows OS'
-export const MAC_OS = 'MacOS'
-export const UNIX_OS = 'UNIX OS'
+export const MAX_RESULTS = 20
+export const MIME_TYPE_NO_INLINE = 'application/octet-stream'
+export const MIN_DELAY_REFRESH = 2500
+export const REFRESH_TOKEN = 'refreshToken'
+export const SEARCH_LABEL = 'SEARCH'
+export const SENT_LABEL = 'SENT'
+export const UNREAD_LABEL = 'UNREAD'
+
+// DISPLAY
+export const BUTTON_BACK = 'Back'
+export const ERROR_MESSAGE = 'Something went wrong, try again.'
+export const INVALID_SESSION = 'Invalid session'
+export const INVALID_TOKEN = 'Invalid token'
 export const LINUX_OS = 'Linux OS'
-export const KEY_OS = 'META'
-export const KEY_E = 'E'
-export const KEY_X = 'X'
-export const KEY_K = 'K'
-export const KEY_U = 'U'
-export const KEY_R = 'R'
-export const KEY_ENTER = 'ENTER'
-export const KEY_SHIFT = 'SHIFT'
-export const KEY_CONTROL = 'CONTROL'
-export const KEY_FORWARD_SLASH = '/'
-export const KEY_ALT = 'ALT'
-export const KEY_DIGIT_1 = '1'
-export const KEY_DIGIT_2 = '2'
-export const KEY_DIGIT_3 = '3'
-export const KEY_DIGIT_4 = '4'
-export const KEY_BACKSPACE = 'BACKSPACE'
-export const KEY_ESCAPE = 'ESCAPE'
-export const KEY_ARROW_DOWN = 'ARROWDOWN'
-export const KEY_ARROW_UP = 'ARROWUP'
+export const LOAD_MORE = 'Load more messages'
+export const LOADING_TEXT = 'Loading'
+export const MAC_OS = 'MacOS'
+export const ME_LABEL = 'me'
+export const NETWORK_ERROR = 'Network Error. Please try again later'
+export const NO_MORE_RESULTS = "You've reached the end."
+export const NO_SUBJECT = '(No subject)'
+export const NOTHING_TO_SEE = 'Nothing to see here'
+export const SOMETHING_WRONG = 'Something went wrong whilst loading data.'
+export const UNIX_OS = 'UNIX OS'
+export const WINDOWS_OS = 'Windows OS'

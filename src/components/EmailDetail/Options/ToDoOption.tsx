@@ -1,17 +1,18 @@
 import { useCallback } from 'react'
 import { FiCheckCircle } from 'react-icons/fi'
-import { useAppDispatch, useAppSelector } from '../../../Store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../Store/labelsSlice'
+import { useLocation } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
+import * as keyConstants from '../../../constants/keyConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
-import SetToDoMail from '../../EmailOptions/SetToDoMail'
-import { IEmailListThreadItem } from '../../../Store/storeTypes/emailListTypes'
-import useMultiKeyPress from '../../../Hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../Store/utilsSlice'
-import modifierKey from '../../../utils/setModifierKey'
+import setToDoMail from '../../EmailOptions/SetToDoMail'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { selectInSearch } from '../../../store/utilsSlice'
+import { setModifierKey } from '../../../utils/setModifierKey'
 
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const ToDoOption = ({
   threadDetail,
@@ -22,13 +23,15 @@ const ToDoOption = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
+  const location = useLocation()
 
   const handleEvent = useCallback(() => {
-    SetToDoMail({
-      messageId: threadDetail.id,
+    setToDoMail({
+      threadId: threadDetail.id,
       labelIds,
       dispatch,
       storageLabels,
+      location,
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 
@@ -40,6 +43,7 @@ const ToDoOption = ({
       onClick={handleEvent}
       label={local.BUTTON_TODO}
       suppressed
+      title="Mark as To Do"
     />
   )
 }

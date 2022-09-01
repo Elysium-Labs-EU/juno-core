@@ -10,10 +10,12 @@ import NoMobileOverlay from '../NoMobileOverlay'
 import Search from '../Search/Search'
 import Settings from '../Settings/Settings'
 import Introduction from '../Introduction/Introduction'
-import { useAppSelector } from '../../Store/hooks'
-import { selectSelectedEmails } from '../../Store/emailListSlice'
+import { useAppSelector } from '../../store/hooks'
+import { selectSelectedEmails } from '../../store/emailListSlice'
 import SelectedOptions from './SelectedOptions/SelectedOptions'
-import Help from '../Help/Help'
+import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
+import Feedback from '../Help/Feedback/Feedback'
+import ArchiveHeader from '../Archive/ArchiveHeader'
 
 const SetHeader = memo(() => {
   const location = useLocation()
@@ -37,6 +39,9 @@ const SetHeader = memo(() => {
   if (location.pathname === '/spam') {
     return <SpamHeader />
   }
+  if (location.pathname === '/archive') {
+    return <ArchiveHeader />
+  }
   return null
 })
 
@@ -59,7 +64,8 @@ const Header = () => {
       <SetHeader />
       <Search />
       <Settings />
-      <Help />
+      <KeyboardCombos />
+      <Feedback />
       {selectedEmails.length > 0 && <SelectedOptions />}
     </>
   )

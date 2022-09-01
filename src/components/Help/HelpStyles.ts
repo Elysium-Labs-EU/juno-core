@@ -1,77 +1,100 @@
 import styled from 'styled-components'
 
-export const Dialog = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 1100;
-  transform: translate(-50%, -50%);
-  width: 825px;
-  border-radius: 5px;
-  background-color: var(--color-white);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  margin: 100px 0px 0px 0px;
-  outline: 0;
+export const StartButtonWrapper = styled.div`
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: var(--z-index-popover);
 `
 
-export const HeaderRow = styled.div`
+export const Layer = styled.div`
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: var(--z-index-modal);
+`
+
+export const InnerLayer = styled.div`
+  bottom: calc(100px - 100vh);
+  right: calc(40px - 100vw);
+  position: absolute;
+  z-index: var(--z-index-modal);
+`
+
+export const Container = styled.div`
+  transition: all 0.2s ease-in;
+  animation: fadeInUp 0.2s both;
+  min-width: 260px;
+  max-width: 800px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  border-radius: var(--radius-l);
+  background: var(--color-black);
+  box-shadow: var(--box-shadow-low);
+
+  /* Animation */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 5px, 0);
+    }
+
+    100% {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+    }
+  }
+`
+
+export const MenuSection = styled.div`
+  padding: 4px 0px;
+  border-bottom: 1px solid var(--color-black-off);
   display: flex;
-  flex-flow: row;
+  flex-direction: column;
+  div:last-child {
+    border-bottom: 0px;
+  }
+`
+
+interface IMenuItem {
+  isFocused: boolean
+}
+
+export const MenuItem = styled.button<IMenuItem>`
+  display: flex;
   justify-content: space-between;
   align-items: center;
-`
-
-export const Inner = styled.div`
-  padding: 0 20px;
-  display: flex;
-  flex-flow: column;
-`
-
-export const Columns = styled.div`
-  display: flex;
-  flex-flow: row;
-  div:first-child {
-    margin-right: 40px;
+  padding: 12px;
+  margin: 0px 4px;
+  color: var(--color-white);
+  border: 0;
+  border-radius: var(--radius-m);
+  width: auto;
+  line-height: 16px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  background-color: ${({ isFocused }) =>
+    isFocused ? `var(--color-black-off)` : 'transparent'};
+  &:hover {
+    background-color: var(--color-black-off);
   }
 `
 
-export const SectionContainer = styled.div`
-  padding: 8px;
-  padding-top: 8px;
-  margin: 8px 0;
-  margin-top: 8px;
-  width: 100%;
+export const MenuItemContentMain = styled.div`
+  flex: 1 1 0%;
+  margin-right: 16px;
 `
 
-export const KeyComboContainer = styled.div`
-  margin: 12px 0;
-`
-
-export const KeyBindShortcut = styled.div`
-  span {
-    background-color: var(--color-grey-border);
-    border: 1px solid var(--color-grey);
-    display: block;
-    padding: 3px 6px 4px;
-    margin-right: 3px;
-    border-radius: 4px;
-    cursor: default;
-    min-width: 14px;
-    min-height: 14px;
-    text-align: center;
-    -webkit-box-shadow: inset 0 -4px 0 var(--color-grey);
-    box-shadow: inset 0 -4px 0 var(--color-grey);
-    box-sizing: border-box;
+export const MenuItemContentSide = styled.div`
+  color: var(--color-grey);
+  span:not(:last-child) {
+    margin-right: 8px;
   }
-  display: flex;
-  flex-flow: row;
 `
 
-export const ButtonWrapper = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  z-index: 1100;
-  margin-bottom: 40px;
-  margin-right: 40px;
+export const OuterContainer = styled.div`
+  position: relative;
 `

@@ -1,29 +1,35 @@
 import { useCallback } from 'react'
 import * as global from '../../constants/globalConstants'
+import * as keyConstants from '../../constants/keyConstants'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { selectLabelIds } from '../../Store/labelsSlice'
-import { selectInSearch, selectIsLoading } from '../../Store/utilsSlice'
+import { selectLabelIds } from '../../store/labelsSlice'
+import {
+  selectActiveModal,
+  selectInSearch,
+  selectIsLoading,
+} from '../../store/utilsSlice'
 import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
-} from '../../Store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../Store/hooks'
+} from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import labelURL from '../../utils/createLabelURL'
 import {
   setCoreStatus,
   setSessionViewIndex,
-} from '../../Store/emailDetailSlice'
-import useMultiKeyPress from '../../Hooks/useMultiKeyPress'
-import modifierKey from '../../utils/setModifierKey'
+} from '../../store/emailDetailSlice'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import { setModifierKey } from '../../utils/setModifierKey'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeys = [modifierKey, global.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const SortInbox = () => {
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
+  const activeModal = useAppSelector(selectActiveModal)
   const inSearch = useAppSelector(selectInSearch)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
@@ -42,18 +48,20 @@ const SortInbox = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
+
+  const isDisabled =
+    isLoading ||
+    activeEmailListIndex < 0 ||
+    emailList[activeEmailListIndex].threads.length === 0
 
   return (
     <CustomAttentionButton
       onClick={handleEvent}
-      disabled={
-        isLoading ||
-        activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex].threads.length === 0
-      }
+      disabled={isDisabled}
       label={INBOX_BUTTON}
       variant="secondary"
+      title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
     />
   )
 }

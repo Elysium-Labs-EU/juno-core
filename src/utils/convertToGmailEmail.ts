@@ -1,8 +1,12 @@
-// Takes the object email format from this app, and converts it to string format for the Gmail api.
+import { IContact } from '../store/storeTypes/contactsTypes'
 
-import { Contact } from '../Store/storeTypes/contactsTypes'
+/**
+ * @function convertToGmailEmail
+ * @param data - takes in an array of Contact objects, and converts it to string format for the GMail API
+ * @returns {string} - returns string representing the contact object.
+ */
 
-const convertToGmailEmail = (data: Contact[]) => {
+const convertToGmailEmail = (data: IContact[]) => {
   if (data.length > 0 && typeof data !== 'string') {
     const convertedData = data
       .map((item) => `${item.name} <${item.emailAddress}>`)

@@ -8,8 +8,8 @@ import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import EmailAttachmentIcon from './EmailAttachmentIcon'
 import { IEmailAttachmentType } from './EmailAttachmentTypes'
 import downloadAttachment from '../../../utils/downloadAttachment'
-import { useAppDispatch } from '../../../Store/hooks'
-import { setServiceUnavailable } from '../../../Store/utilsSlice'
+import { useAppDispatch } from '../../../store/hooks'
+import { setServiceUnavailable } from '../../../store/utilsSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 
 const FILE = 'File - '
@@ -53,6 +53,7 @@ const RenderAttachment = ({
         <CustomIconButton
           onClick={handleClick}
           icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
+          title={!downloaded ? 'Download attachment' : 'Attachment downloaded'}
         />
       ) : (
         <StyledCircularProgress size={20} />
@@ -64,7 +65,7 @@ const RenderAttachment = ({
 const EmailAttachmentBubble = ({
   attachmentData,
   messageId,
-  index,
+  index = undefined,
 }: {
   attachmentData: IEmailAttachmentType
   messageId: string
@@ -79,7 +80,3 @@ const EmailAttachmentBubble = ({
   ) : null
 
 export default EmailAttachmentBubble
-
-EmailAttachmentBubble.defaultProps = {
-  index: undefined,
-}

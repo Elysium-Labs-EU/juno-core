@@ -1,8 +1,6 @@
-import axios from 'axios'
-// import { handleLogout } from '../components/MainHeader/Navigation/More/Options/LogoutOption'
+import axios, { AxiosRequestConfig } from 'axios'
 import * as global from '../constants/globalConstants'
 import assertNonNullish from '../utils/assertNonNullish'
-import getCookie from '../utils/Cookie/getCookie'
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
@@ -12,7 +10,7 @@ assertNonNullish(
 export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
-  const token = getCookie(global.ACCESS_TOKEN)
+  const token = localStorage.getItem(global.ID_TOKEN)
   if (token) {
     return token
   }
@@ -23,8 +21,30 @@ export const instance = axios.create({
   baseURL: BASE_API_URL,
 })
 
+/**
+ * Set an accessToken for all the urls within the system, barring the Google oAuth API and external api.
+ */
+instance.interceptors.request.use(
+  (config: AxiosRequestConfig) => {
+    const accessToken = fetchToken()
+    if (
+      accessToken &&
+      config.headers &&
+      !config.url?.includes(`/api/auth/oauth/google/`) &&
+      !config.url?.includes(import.meta.env.VITE_HEADLESS_FEEDBACK_URL)
+    ) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `${accessToken}`
+    }
+    return config
+  },
+  (error) => {
+    Promise.reject(error)
+  }
+)
+
 export const errorHandling = async (err: any) => {
-  // console.log(err)
+  process.env.NODE_ENV === 'development' && console.error(err)
   const originalRequest = err.config
   if (
     err?.response?.data === global.INVALID_TOKEN &&
@@ -32,18 +52,6 @@ export const errorHandling = async (err: any) => {
     !originalRequest.isRetry
   ) {
     originalRequest.isRetry = true
-    // const refreshToken = localStorage.getItem(global.REFRESH_TOKEN)
-    // const body = { refresh: refreshToken }
-    // console.log(body)
-    // const response = await getRefreshToken(body)
-    // if (response?.status === 200) {
-    //   handleUserTokens(response).setBothTokens()
-    //   return axios(originalRequest)
-    // }
   }
-  // if (err.response.data === global.INVALID_SESSION) {
-  //   console.log(global.INVALID_SESSION)
-  //   // handleLogout()
-  // }
   return err?.response?.data ?? err?.message
 }

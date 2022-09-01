@@ -21,15 +21,18 @@ export default async function downloadAttachment({
     mimeType,
   } = attachmentData
   try {
-    const fetchedAttachment = await messageApi().getAttachment({
-      messageId,
-      attachmentId,
-    })
-    if (fetchedAttachment) {
-      const base64Data = fetchedAttachment.data.data
-      const blobData = base64toBlob({ base64Data, mimeType })
-      fileSaver(blobData, filename)
-      return { success: true, message: null }
+    if (attachmentId) {
+      const fetchedAttachment = await messageApi().getAttachment({
+        messageId,
+        attachmentId,
+      })
+      if (fetchedAttachment) {
+        const base64Data = fetchedAttachment.data.data
+        const blobData = base64toBlob({ base64Data, mimeType })
+        fileSaver(blobData, filename)
+        return { success: true, message: null }
+      }
+      return FAIL_RESPONSE_OBJECT
     }
     return FAIL_RESPONSE_OBJECT
   } catch (err) {

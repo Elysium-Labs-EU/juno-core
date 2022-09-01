@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  z-index: 1000;
+  z-index: var(--z-index-block-layer);
   position: fixed;
   top: 0;
   width: 100%;
