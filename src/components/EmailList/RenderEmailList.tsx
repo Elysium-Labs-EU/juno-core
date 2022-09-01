@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import * as S from './EmailListStyles'
 import * as GS from '../../styles/globalStyles'
 import * as global from '../../constants/globalConstants'
@@ -41,6 +41,20 @@ const RenderEmailList = ({
   const KeyKListener = useKeyPress(keyConstants.KEY_K)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
+  const { threads, nextPageToken } = filteredOnLabel
+
+  const handleLoadMore = useCallback(
+    () =>
+      loadNextPage({
+        nextPageToken,
+        labelIds,
+        dispatch,
+        maxResults: emailFetchSize,
+        fetchSimple: true,
+      }),
+    [nextPageToken, labelIds, emailFetchSize]
+  )
+
   useEffect(() => {
     if (EscapeListener && !inSearch && !activeModal) {
       setFocusedItemIndex(-1)
@@ -69,7 +83,13 @@ const RenderEmailList = ({
     }
   }, [ArrowUpListener, inSearch, activeModal, KeyKListener])
 
-  const { threads, nextPageToken } = filteredOnLabel
+  // Listen to the thread count, if it reaches 0, but there is a nextPageToken
+  // trigger automatically to load the next page.
+  useEffect(() => {
+    if (threads && threads.length === 0 && nextPageToken) {
+      handleLoadMore()
+    }
+  }, [threads, nextPageToken])
 
   const memoizedThreadList = useMemo(
     () => (
@@ -80,7 +100,7 @@ const RenderEmailList = ({
               threads={threads}
               focusedItemIndex={focusedItemIndex}
               setFocusedItemIndex={setFocusedItemIndex}
-              showLabel={labelIds.includes(global.ALL_LABEL)}
+              showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
             />
           </GS.Base>
         )}
@@ -100,15 +120,7 @@ const RenderEmailList = ({
         {!isLoading && (
           <CustomButton
             disabled={isLoading}
-            onClick={() =>
-              loadNextPage({
-                nextPageToken,
-                labelIds,
-                dispatch,
-                maxResults: emailFetchSize,
-                fetchSimple: true,
-              })
-            }
+            onClick={handleLoadMore}
             label={global.LOAD_MORE}
             suppressed
             title={global.LOAD_MORE}

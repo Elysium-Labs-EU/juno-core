@@ -9,6 +9,6 @@
   "GOOGLE_CALLBACK": "/oauth2callback",
   "LOGIN_SUCCESS": "/login_success",
   "INBOX": "/inbox",
-  "ALL_EMAIL": "/all",
+  "ARCHIVE": "/archive",
   "WILDCARD": "*"
 }

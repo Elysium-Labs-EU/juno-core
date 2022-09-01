@@ -85,7 +85,7 @@ export const utilsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDrafts.rejected, (state, { meta }) => {
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
     builder.addCase(fetchEmailsSimple.pending, (state, { meta: { arg } }) => {
@@ -105,7 +105,7 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
     builder.addCase(fetchEmailsFull.pending, (state, { meta: { arg } }) => {
@@ -125,7 +125,7 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
   },
@@ -154,37 +154,42 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   dispatch(push(RouteConstants.HOME))
 }
 
-export const openEmail =
-  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
-  (dispatch, getState) => {
-    const { labelIds, storageLabels } = getState().labels
+export const openEmail = ({
+  email,
+  id,
+}: {
+  email?: IEmailListThreadItem
+  id: string
+}): AppThunk => (dispatch, getState) => {
+  const { labelIds, storageLabels } = getState().labels
 
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
-    }
-    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+  if (
+    email?.messages?.length === 1 &&
+    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+    email
+  ) {
+    const messageId = email.messages[email.messages.length - 1].id
+    dispatch(openDraftEmail({ id, messageId }))
+    return
   }
+  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+}
 
-export const navigateTo =
-  (destination: string): AppThunk =>
-  (dispatch, getState) => {
-    if (getState().emailDetail.isReplying) {
-      dispatch(setIsReplying(false))
-    }
-    if (getState().emailDetail.isForwarding) {
-      dispatch(setIsForwarding(false))
-    }
-    dispatch(push(destination))
+export const navigateTo = (destination: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  if (getState().emailDetail.isReplying) {
+    dispatch(setIsReplying(false))
   }
+  if (getState().emailDetail.isForwarding) {
+    dispatch(setIsForwarding(false))
+  }
+  dispatch(push(destination))
+}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
@@ -202,8 +207,8 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
       dispatch(push(RouteConstants.SENT))
       return
     }
-    if (labelIds.includes(global.ALL_LABEL)) {
-      dispatch(push(RouteConstants.ALL_EMAIL))
+    if (labelIds.includes(global.ARCHIVE_LABEL)) {
+      dispatch(push(RouteConstants.ARCHIVE))
       return
     }
     dispatch(push(RouteConstants.HOME))

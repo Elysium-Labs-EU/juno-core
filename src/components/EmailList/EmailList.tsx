@@ -56,7 +56,7 @@ const EmailList = () => {
     let mounted = true
     let emailPromise: any = {}
     let draftPromise: any = {}
-    if (labelIds && !labelIds.includes(global.ARCHIVE_LABEL)) {
+    if (labelIds && !labelIds.includes(global.SEARCH_LABEL)) {
       if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
         const params = {
           labelIds,
@@ -82,10 +82,10 @@ const EmailList = () => {
           if (
             mounted &&
             Date.now() -
-              (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
-                : 0) >
-              global.MIN_DELAY_REFRESH &&
+            (parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              ? parseInt(handleSessionStorage(global.LAST_REFRESH), 10)
+              : 0) >
+            global.MIN_DELAY_REFRESH &&
             !isRefreshing &&
             !isProcessing
           ) {
