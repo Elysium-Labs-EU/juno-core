@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { FiMoreHorizontal } from 'react-icons/fi'
 import { push } from 'redux-first-history'
 
@@ -93,9 +93,14 @@ export const MenuSectionComponent = ({
   )
 }
 
-const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
+const NavigationMoreMenu = ({
+  handleClose,
+  activeModal,
+}: {
+  handleClose: () => void
+  activeModal: string | null
+}) => {
   const dispatch = useAppDispatch()
-  const activeModal = useAppSelector(selectActiveModal)
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
   const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
@@ -191,25 +196,38 @@ const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
 const SIZE = 16
 
 const NavigationMore = () => {
+  const activeModal = useAppSelector(selectActiveModal)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
   const dispatch = useAppDispatch()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+
+  const handleClose = useCallback(() => {
+    setAnchorEl(null)
+    dispatch(setActiveModal(null))
+  }, [])
+
   const { ref } = useClickOutside({
-    onClickOutside: () => {
-      setAnchorEl(null)
-      dispatch(setActiveModal(null))
-    },
+    onClickOutside: handleClose,
   })
+  // Close help menu whenever a ESC is pressed and menu is opened.
+  useEffect(() => {
+    if (EscapeListener && activeModal === global.ACTIVE_MODAL_MAP.navigation) {
+      handleClose()
+    }
+  }, [EscapeListener, activeModal])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.navigation))
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
-    dispatch(setActiveModal(null))
-  }
+  const memoizedMenu = useMemo(
+    () => (
+      <NavigationMoreMenu handleClose={handleClose} activeModal={activeModal} />
+    ),
+    [activeModal]
+  )
 
   return (
     <>
@@ -226,7 +244,7 @@ const NavigationMore = () => {
         placement="bottom-end"
         style={{ zIndex: `var(--z-index-popover)` }}
       >
-        <NavigationMoreMenu handleClose={handleClose} />
+        {memoizedMenu}
       </Popper>
     </>
   )

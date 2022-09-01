@@ -21,17 +21,17 @@ const AppHeaderHelp = () => {
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
   const inSearch = useAppSelector(selectInSearch)
-  const escListenerHelpMenu = useKeyPress(keyConstants.KEY_ESCAPE)
+  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
   const { ref } = useClickOutside({
     onClickOutside: () => dispatch(setActiveModal(null)),
   })
 
   // Close help menu whenever a ESC is pressed and menu is opened.
   useEffect(() => {
-    if (escListenerHelpMenu && activeModal === global.ACTIVE_MODAL_MAP.help) {
+    if (EscapeListener && activeModal === global.ACTIVE_MODAL_MAP.help) {
       dispatch(setActiveModal(null))
     }
-  }, [escListenerHelpMenu, activeModal])
+  }, [EscapeListener, activeModal])
 
   const handleEvent = useCallback(() => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.help))
