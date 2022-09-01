@@ -352,7 +352,7 @@ export const useSearchResults =
     }
     if (coreStatus !== global.CORE_STATUS_SEARCHING) {
       dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
-      dispatch(setCurrentLabels([global.ARCHIVE_LABEL]))
+      dispatch(setCurrentLabels([global.SEARCH_LABEL]))
     }
     dispatch(
       setViewIndex(
@@ -360,7 +360,7 @@ export const useSearchResults =
       )
     )
     dispatch(setCurrentEmail(currentEmail))
-    dispatch(push(`/mail/${global.ARCHIVE_LABEL}/${currentEmail}/messages`))
+    dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
   }
 
 /**
@@ -448,7 +448,7 @@ export const loadEmailDetails =
 /**
  * @function updateEmailLabel
  * @param props - takes in an object with the default properties of request and labelIds. The other properties are optional.
- * @returns {void} - based on the properties other Redux actions and/or GMail API requests are made.
+ * @returns {void} - based on the properties other Redux actions and/or Gmail API requests are made.
  */
 export const updateEmailLabel = (
   props: UpdateRequestParamsSingle
@@ -463,13 +463,12 @@ export const updateEmailLabel = (
   return async (dispatch, getState) => {
     try {
       const { coreStatus } = getState().emailDetail
-      const { emailList, searchList } = getState().email
+      const { activeEmailListIndex, emailList, searchList } = getState().email
       const { isSilentLoading } = getState().utils
-      const staticIndexActiveEmailList = getState().email.activeEmailListIndex
       const staticActiveEmailList =
-        staticIndexActiveEmailList === -1
+        activeEmailListIndex === -1
           ? searchList
-          : emailList[getState().email.activeEmailListIndex]
+          : emailList[activeEmailListIndex]
 
       if (
         staticActiveEmailList &&
@@ -519,7 +518,7 @@ export const updateEmailLabel = (
           }
         }
 
-        // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the GMail API.
+        // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
         if (!request.delete) {
           try {
             dispatch(setIsProcessing(true))
@@ -543,7 +542,7 @@ export const updateEmailLabel = (
             dispatch(setServiceUnavailable('Error updating label.'))
           }
         }
-        // If the request is to delete the thread or message, dispatch the thrash action to the GMail API.
+        // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
         if (request.delete) {
           try {
             if (threadId) {
@@ -558,7 +557,7 @@ export const updateEmailLabel = (
             dispatch(setServiceUnavailable('Error updating label.'))
           }
         }
-        // If the request is to delete the thread or message, or to remove a label (expect the unread label) - remove the item from the Redux store.
+        // If the request is to delete the thread or message, or to remove a label (expect the unread label)
         if (
           (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
           request.delete
@@ -566,7 +565,6 @@ export const updateEmailLabel = (
           dispatch(
             listRemoveItemDetail({
               threadId,
-              staticIndexActiveEmailList,
             })
           )
         }
@@ -589,13 +587,12 @@ export const updateEmailLabelBatch = (
 
   return async (dispatch, getState) => {
     try {
-      const { emailList, selectedEmails, searchList } = getState().email
-
-      const staticIndexActiveEmailList = getState().email.activeEmailListIndex
+      const { activeEmailListIndex, emailList, selectedEmails, searchList } =
+        getState().email
       const staticActiveEmailList =
-        staticIndexActiveEmailList === -1
+        activeEmailListIndex === -1
           ? searchList
-          : emailList[getState().email.activeEmailListIndex]
+          : emailList[activeEmailListIndex]
 
       if (
         staticActiveEmailList &&

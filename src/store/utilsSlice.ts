@@ -85,7 +85,7 @@ export const utilsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDrafts.rejected, (state, { meta }) => {
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
     builder.addCase(fetchEmailsSimple.pending, (state, { meta: { arg } }) => {
@@ -105,7 +105,7 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
     builder.addCase(fetchEmailsFull.pending, (state, { meta: { arg } }) => {
@@ -125,7 +125,7 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = 'Something went wrong whilst loading data.'
+        state.serviceUnavailable = global.SOMETHING_WRONG
       }
     })
   },
@@ -202,8 +202,8 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
       dispatch(push(RouteConstants.SENT))
       return
     }
-    if (labelIds.includes(global.ALL_LABEL)) {
-      dispatch(push(RouteConstants.ALL_EMAIL))
+    if (labelIds.includes(global.ARCHIVE_LABEL)) {
+      dispatch(push(RouteConstants.ARCHIVE))
       return
     }
     dispatch(push(RouteConstants.HOME))

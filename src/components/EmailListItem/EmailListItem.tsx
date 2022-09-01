@@ -256,7 +256,7 @@ const EmailListItem = ({
           <div />
           <div />
           {!labelIds.includes(global.DRAFT_LABEL) ? (
-            <InlineThreadActionsRegular id={id} labelIds={labelIds} />
+            <InlineThreadActionsRegular id={id} email={email} />
           ) : (
             <InlineThreadActionsDraft threadId={id} />
           )}

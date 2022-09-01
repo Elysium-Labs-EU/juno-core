@@ -61,7 +61,7 @@ const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
   const MENU_OPTIONS = [
     { title: 'Drafts', onClick: () => dispatch(push(Routes.DRAFTS)) },
     { title: 'Sent', onClick: () => dispatch(push(Routes.SENT)) },
-    { title: 'All Mail', onClick: () => dispatch(push(Routes.ALL_EMAIL)) },
+    { title: 'Archive', onClick: () => dispatch(push(Routes.ARCHIVE)) },
   ]
   const MENU_ITEMS_GLOBAL = [
     {

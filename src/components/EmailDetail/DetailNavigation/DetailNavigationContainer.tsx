@@ -45,7 +45,7 @@ const DetailNavigationContainer = ({
           activeEmailList.threads[viewIndex + 1] === undefined &&
           mounted
         ) {
-          if (!labelIds.includes(global.ARCHIVE_LABEL) && mounted) {
+          if (!labelIds.includes(global.SEARCH_LABEL) && mounted) {
             return loadNextPage({
               nextPageToken,
               labelIds,

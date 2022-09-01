@@ -74,7 +74,7 @@ const DetailNavigationView = ({
       ) {
         dispatch(navigateNextMail())
       }
-      if (!labelIds.includes(global.ARCHIVE_LABEL)) {
+      if (!labelIds.includes(global.SEARCH_LABEL)) {
         // If loading isn't already happening, load the nextPage
         const { nextPageToken } = activeEmailList as IEmailListObject
         if (

@@ -14,7 +14,7 @@ import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
 import settingsApi from '../data/settingsApi'
 import { listAddEmailList } from './emailListSlice'
-import { ALL_LABEL } from '../constants/globalConstants'
+import { ARCHIVE_LABEL } from '../constants/globalConstants'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -109,8 +109,8 @@ const finalizeBaseLoading =
     const addEmptyAllLabel = prefetchedBoxes.concat([
       [
         {
-          id: ALL_LABEL,
-          name: 'All Mail',
+          id: ARCHIVE_LABEL,
+          name: 'Archive',
           messageListVisibility: 'show',
           labelListVisibility: 'labelShow',
           type: 'junoCustom',
