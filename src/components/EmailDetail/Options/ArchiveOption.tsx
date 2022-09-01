@@ -24,7 +24,6 @@ const ArchiveOption = ({
   const inSearch = useAppSelector(selectInSearch)
   const location = useLocation()
 
-
   const handleEvent = useCallback(() => {
     archiveMail({
       threadId: threadDetail.id,

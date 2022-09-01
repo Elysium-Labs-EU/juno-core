@@ -48,23 +48,20 @@ export const baseSlice = createSlice({
   },
 })
 
-export const {
-  setBaseLoaded,
-  setIsAuthenticated,
-  setProfile,
-} = baseSlice.actions
+export const { setBaseLoaded, setIsAuthenticated, setProfile } =
+  baseSlice.actions
 
-export const handleSettings = (labels: GoogleLabel[]): AppThunk => async (
-  dispatch
-) => {
-  const settingsLabel = findSettings(labels)
-  if (settingsLabel.length === 0) {
-    createSettingsLabel(dispatch)
-    return
+export const handleSettings =
+  (labels: GoogleLabel[]): AppThunk =>
+  async (dispatch) => {
+    const settingsLabel = findSettings(labels)
+    if (settingsLabel.length === 0) {
+      createSettingsLabel(dispatch)
+      return
+    }
+    dispatch(setSettingsLabelId(settingsLabel[0].id))
+    parseSettings(dispatch, settingsLabel)
   }
-  dispatch(setSettingsLabelId(settingsLabel[0].id))
-  parseSettings(dispatch, settingsLabel)
-}
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
@@ -81,19 +78,19 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
  * @returns adding all the required emailboxes as empty shells to the Redux state. To ensure that the position of the boxes are static.
  */
 
-const presetEmailList = (prefetchedBoxes: PrefetchedBoxes): AppThunk => (
-  dispatch
-) => {
-  prefetchedBoxes.forEach((emailContainer) => {
-    dispatch(
-      listAddEmailList({
-        labels: emailContainer[0]?.id,
-        threads: [],
-        nextPageToken: null,
-      })
-    )
-  })
-}
+const presetEmailList =
+  (prefetchedBoxes: PrefetchedBoxes): AppThunk =>
+  (dispatch) => {
+    prefetchedBoxes.forEach((emailContainer) => {
+      dispatch(
+        listAddEmailList({
+          labels: emailContainer[0]?.id,
+          threads: [],
+          nextPageToken: null,
+        })
+      )
+    })
+  }
 
 /**
  * @function finalizeBaseLoading
@@ -101,27 +98,29 @@ const presetEmailList = (prefetchedBoxes: PrefetchedBoxes): AppThunk => (
  * @returns finalizes the base loading by setting the emaillist and the storagelabels in Redux and parsing the settings.
  */
 
-const finalizeBaseLoading = (labels: any[]): AppThunk => (dispatch) => {
-  // TODO: Refactor this to not be an array of arrays, but an array of objects
-  const prefetchedBoxes: PrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-    labels.filter((item: GoogleLabel) => item.name === baseLabel)
-  )
-  // Add an empty label to have the option to show ALL emails.
-  const addEmptyAllLabel = prefetchedBoxes.concat([
-    [
-      {
-        id: ARCHIVE_LABEL,
-        name: 'Archive',
-        messageListVisibility: 'show',
-        labelListVisibility: 'labelShow',
-        type: 'junoCustom',
-      },
-    ],
-  ])
-  dispatch(presetEmailList(addEmptyAllLabel))
-  dispatch(setStorageLabels(addEmptyAllLabel))
-  dispatch(handleSettings(labels))
-}
+const finalizeBaseLoading =
+  (labels: any[]): AppThunk =>
+  (dispatch) => {
+    // TODO: Refactor this to not be an array of arrays, but an array of objects
+    const prefetchedBoxes: PrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      labels.filter((item: GoogleLabel) => item.name === baseLabel)
+    )
+    // Add an empty label to have the option to show ALL emails.
+    const addEmptyAllLabel = prefetchedBoxes.concat([
+      [
+        {
+          id: ARCHIVE_LABEL,
+          name: 'Archive',
+          messageListVisibility: 'show',
+          labelListVisibility: 'labelShow',
+          type: 'junoCustom',
+        },
+      ],
+    ])
+    dispatch(presetEmailList(addEmptyAllLabel))
+    dispatch(setStorageLabels(addEmptyAllLabel))
+    dispatch(handleSettings(labels))
+  }
 
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
