@@ -235,7 +235,7 @@ const EmailListItem = ({
             <S.TruncatedDiv>
               {labelIds.includes(global.DRAFT_LABEL) && (
                 <span
-                  style={{ fontWeight: 'bold' }}
+                  style={{ fontWeight: 'bold', marginRight: '10px' }}
                   data-testid="email-draft-snippet-indicator"
                 >
                   {draft.DRAFT_SNIPPET_INDICATOR}

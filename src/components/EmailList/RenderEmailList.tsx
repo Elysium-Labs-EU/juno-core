@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo, useCallback } from 'react'
-import * as S from './EmailListStyles'
-import * as GS from '../../styles/globalStyles'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useKeyPress from '../../hooks/useKeyPress'
@@ -11,15 +10,17 @@ import {
   IEmailListObjectSearch,
 } from '../../store/storeTypes/emailListTypes'
 import {
-  selectIsLoading,
+  selectActiveModal,
   selectEmailListSize,
   selectInSearch,
-  selectActiveModal,
+  selectIsLoading,
 } from '../../store/utilsSlice'
+import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
+import * as S from './EmailListStyles'
 import EmailListEmptyStates from './EmptyStates/EmailListEmptyStates'
 import ThreadList from './ThreadList'
 

@@ -1,22 +1,26 @@
-import { useState } from 'react'
-import { push } from 'redux-first-history'
-import { Popper } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
 import { FiMoreHorizontal } from 'react-icons/fi'
-import * as GS from '../../../../styles/globalStyles'
-import * as S from './NavigationMoreStyles'
+import { push } from 'redux-first-history'
+
+import { Popper } from '@mui/material'
+
 import * as global from '../../../../constants/globalConstants'
+import * as keyConstants from '../../../../constants/keyConstants'
 import Routes from '../../../../constants/routes.json'
-import { handleLogout } from './Options/LogoutOption'
+import useClickOutside from '../../../../hooks/useClickOutside'
+import useKeyPress from '../../../../hooks/useKeyPress'
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import { selectActiveModal, setActiveModal } from '../../../../store/utilsSlice'
+import * as GS from '../../../../styles/globalStyles'
+import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
 import {
-  MenuSection,
+  MenuItem,
   MenuItemContentMain,
   MenuItemContentSide,
-  MenuItem,
+  MenuSection,
 } from '../../../Help/HelpStyles'
-import { useAppDispatch } from '../../../../store/hooks'
-import { setActiveModal } from '../../../../store/utilsSlice'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import useClickOutside from '../../../../hooks/useClickOutside'
+import * as S from './NavigationMoreStyles'
+import { handleLogout } from './Options/LogoutOption'
 
 interface IMenuItemOnClick {
   title: string
@@ -24,8 +28,23 @@ interface IMenuItemOnClick {
   hint?: string[]
 }
 
-export const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
-  <MenuItem onClick={() => item.onClick()}>
+export const MenuItemComponent = ({
+  item,
+  absoluteIndex,
+  focusedItemIndex,
+  setFocusedItemIndex,
+}: {
+  item: IMenuItemOnClick
+  absoluteIndex: number
+  focusedItemIndex: number
+  setFocusedItemIndex: (newIndex: number) => void
+}) => (
+  <MenuItem
+    onClick={() => item.onClick()}
+    onFocus={() => setFocusedItemIndex(absoluteIndex)}
+    onMouseOver={() => setFocusedItemIndex(absoluteIndex)}
+    isFocused={focusedItemIndex === absoluteIndex}
+  >
     <MenuItemContentMain data-test-id="item-title">
       {item.title}
     </MenuItemContentMain>
@@ -41,47 +60,126 @@ export const MenuItemComponent = ({ item }: { item: IMenuItemOnClick }) => (
 
 export const MenuSectionComponent = ({
   menuItems,
+  focusedItemIndex,
+  setFocusedItemIndex,
 }: {
   menuItems: IMenuItemOnClick[][]
-}) => (
-  <>
-    {menuItems.map((section, index) => (
-      // eslint-disable-next-line react/no-array-index-key
-      <MenuSection key={index}>
-        {section.map((item) => (
-          <MenuItemComponent key={item.title} item={item} />
-        ))}
-      </MenuSection>
-    ))}
-  </>
-)
+  focusedItemIndex: number
+  setFocusedItemIndex: (newIndex: number) => void
+}) => {
+  const menuItemsFlatArray = menuItems.flat(1)
+  return (
+    <>
+      {menuItems.map((section, index) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <MenuSection key={index}>
+          {section.map((item) => {
+            const absoluteIndex = menuItemsFlatArray.findIndex(
+              (mItem) => mItem.title === item.title
+            )
+            return (
+              <MenuItemComponent
+                key={item.title}
+                item={item}
+                absoluteIndex={absoluteIndex}
+                focusedItemIndex={focusedItemIndex}
+                setFocusedItemIndex={setFocusedItemIndex}
+              />
+            )
+          })}
+        </MenuSection>
+      ))}
+    </>
+  )
+}
 
 const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
   const dispatch = useAppDispatch()
-  const MENU_OPTIONS = [
-    { title: 'Drafts', onClick: () => dispatch(push(Routes.DRAFTS)) },
-    { title: 'Sent', onClick: () => dispatch(push(Routes.SENT)) },
-    { title: 'Archive', onClick: () => dispatch(push(Routes.ARCHIVE)) },
-  ]
-  const MENU_ITEMS_GLOBAL = [
-    {
-      title: 'Settings',
-      onClick: () => {
-        handleClose()
-        dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.settings))
+  const activeModal = useAppSelector(selectActiveModal)
+  const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
+  const KeyJListener = useKeyPress(keyConstants.KEY_J)
+  const KeyKListener = useKeyPress(keyConstants.KEY_K)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+
+  const MENU_OPTIONS = useMemo(
+    () => [
+      {
+        title: 'Drafts',
+        onClick: () => {
+          dispatch(setActiveModal(null))
+          dispatch(push(Routes.DRAFTS))
+        },
       },
-      // hint: [modifierKeyDisplay, '.'],
-    },
-    {
-      title: 'Logout',
-      onClick: () => handleLogout(),
-    },
-  ]
+      {
+        title: 'Sent',
+        onClick: () => {
+          dispatch(setActiveModal(null))
+          dispatch(push(Routes.SENT))
+        },
+      },
+      {
+        title: 'Archive',
+        onClick: () => {
+          dispatch(setActiveModal(null))
+          dispatch(push(Routes.ARCHIVE))
+        },
+      },
+    ],
+    []
+  )
+  const MENU_ITEMS_GLOBAL = useMemo(
+    () => [
+      {
+        title: 'Settings',
+        onClick: () => {
+          handleClose()
+          dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.settings))
+        },
+        // hint: [modifierKeyDisplay, '.'],
+      },
+      {
+        title: 'Logout',
+        onClick: () => handleLogout(),
+      },
+    ],
+    []
+  )
+
+  useEffect(() => {
+    if (focusedItemIndex > -1 && EnterKeyListener) {
+      const menuItemsFlatArray = [MENU_OPTIONS, MENU_ITEMS_GLOBAL].flat(1)
+      menuItemsFlatArray[focusedItemIndex].onClick()
+    }
+  }, [focusedItemIndex, EnterKeyListener])
+
+  useEffect(() => {
+    if (
+      (ArrowDownListener || KeyJListener) &&
+      activeModal === global.ACTIVE_MODAL_MAP.navigation &&
+      focusedItemIndex < [MENU_OPTIONS, MENU_ITEMS_GLOBAL].flat(1).length - 1
+    ) {
+      setFocusedItemIndex((prevState) => prevState + 1)
+    }
+  }, [ArrowDownListener, activeModal, KeyJListener])
+
+  useEffect(() => {
+    if (
+      (ArrowUpListener || KeyKListener) &&
+      activeModal === global.ACTIVE_MODAL_MAP.navigation &&
+      focusedItemIndex > -1
+    ) {
+      setFocusedItemIndex((prevState) => prevState - 1)
+    }
+  }, [ArrowUpListener, activeModal, KeyKListener])
 
   return (
     <GS.StyledMenu>
       <S.Wrapper>
         <MenuSectionComponent
+          setFocusedItemIndex={setFocusedItemIndex}
+          focusedItemIndex={focusedItemIndex}
           data-test-id="more-menu"
           menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
         />
@@ -93,20 +191,24 @@ const NavigationMoreMenu = ({ handleClose }: { handleClose: () => void }) => {
 const SIZE = 16
 
 const NavigationMore = () => {
+  const dispatch = useAppDispatch()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const { ref } = useClickOutside({
     onClickOutside: () => {
       setAnchorEl(null)
+      dispatch(setActiveModal(null))
     },
   })
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.navigation))
   }
 
   const handleClose = () => {
     setAnchorEl(null)
+    dispatch(setActiveModal(null))
   }
 
   return (
