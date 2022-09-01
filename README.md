@@ -24,7 +24,7 @@ Thank you for using Juno 😎 . With the help of its contributors, your experien
 Looking for a first issue to tackle?
 
 - Issues tagged with `good first issue` are a good place to start.
-- Or contact me via [Discord](https://discord.gg/773bDh4X)
+- Or contact me via [Discord](https://discord.gg/peRDGMn9xa)
 
 Contributing guidelines
 
