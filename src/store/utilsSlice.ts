@@ -26,6 +26,7 @@ interface IUtilsState {
   serviceUnavailable: string | null
   isSilentLoading: boolean
   isAvatarVisible: boolean
+  isFlexibleFlowActive: boolean
   emailFetchSize: number
   settingsLabelId: string | null
   activeModal: null | string
@@ -38,6 +39,7 @@ export const initialState: IUtilsState = Object.freeze({
   serviceUnavailable: null,
   isSilentLoading: false,
   isAvatarVisible: true,
+  isFlexibleFlowActive: false,
   emailFetchSize: 20,
   settingsLabelId: null,
   activeModal: null,
@@ -71,6 +73,9 @@ export const utilsSlice = createSlice({
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
+    },
+    setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
+      state.isFlexibleFlowActive = payload
     },
     setEmailFetchSize(state, { payload }: PayloadAction<number>) {
       state.emailFetchSize = payload
@@ -139,11 +144,13 @@ export const {
   setIsSilentLoading,
   setSettings,
   setShowAvatar,
+  setFlexibleFlow,
   setEmailFetchSize,
   setSettingsLabelId,
   setActiveModal,
 } = utilsSlice.actions
 
+// TODO: Refactor this with the BackButton
 export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
   const foundLabel = findLabelById({ storageLabels, labelIds })
@@ -191,7 +198,7 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { labelIds } = getState().labels
   if (!coreStatus) {
     if (labelIds.includes(global.INBOX_LABEL)) {
-      dispatch(push(RouteConstants.INBOX))
+      dispatch(push(RouteConstants.HOME))
       return
     }
     if (labelIds.includes(global.DRAFT_LABEL)) {
@@ -213,7 +220,7 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
     return
   }
   if (coreStatus === global.CORE_STATUS_SORTING) {
-    dispatch(push(RouteConstants.INBOX))
+    dispatch(push(RouteConstants.HOME))
     return
   }
   if (coreStatus) {
@@ -252,7 +259,7 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   return dispatch(navigateBack())
 }
 
-export const selectAvatarVisibility = (state: RootState) =>
+export const selectIsAvatarVisible = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
 export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
@@ -265,6 +272,8 @@ export const selectEmailListSize = (state: RootState) =>
   state.utils.emailFetchSize
 export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
+export const selectIsFlexibleFlowActive = (state: RootState) =>
+  state.utils.isFlexibleFlowActive
 export const selectActiveModal = (state: RootState) => state.utils.activeModal
 
 export default utilsSlice.reducer

@@ -23,3 +23,7 @@ export const StyledSelect = styled(Select)<SelectProps>`
   margin-top: 16px;
   margin-right: 8px;
 `
+
+export const PageSection = styled.div`
+  border-top: 1px solid var(--color-grey-ultra-light);
+`

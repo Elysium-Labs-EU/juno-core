@@ -50,12 +50,14 @@ const Introduction = () => {
           <S.DialogSubHeader>{DIALOG_HEADER_PRIVACY}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_PRIVACY}</p>
         </S.InnerContent>
-        <CustomButton
-          onClick={handleClose}
-          label={CONFIRM_BUTTON}
-          icon={<FiArrowRightCircle />}
-          title="Close Introduction"
-        />
+        <S.ButtonContainer>
+          <CustomButton
+            onClick={handleClose}
+            label={CONFIRM_BUTTON}
+            icon={<FiArrowRightCircle />}
+            title="Close Introduction"
+          />
+        </S.ButtonContainer>
       </>
     </CustomModal>
   )

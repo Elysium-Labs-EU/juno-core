@@ -19,7 +19,7 @@ interface IButton {
 
 const Button = styled.button<IButton>`
   background-color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-black)` : `var(--color-purple)`};
+    variant === 'primary' ? `var(--color-black)` : `var(--color-white)`};
   border-radius: var(--radius-l);
   border: none;
   font-family: var(--font-family);
@@ -29,7 +29,8 @@ const Button = styled.button<IButton>`
   div {
     margin: 10px 14px;
     span {
-      color: var(--color-white);
+      color: ${({ variant }) =>
+        variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
       font-size: 1rem;
       line-height: 1rem;
     }
@@ -39,7 +40,7 @@ const Button = styled.button<IButton>`
     background-color: ${({ variant }) =>
       variant === 'primary'
         ? `var(--color-black-off)`
-        : `var(--color-purple-dark)`};
+        : `var(--color-grey-border)`};
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }

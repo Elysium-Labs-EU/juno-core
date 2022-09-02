@@ -2,7 +2,7 @@ import { IContact } from '../store/storeTypes/contactsTypes'
 
 /**
  * @function convertToGmailEmail
- * @param data - takes in an array of Contact objects, and converts it to string format for the GMail API
+ * @param data - takes in an array of Contact objects, and converts it to string format for the Gmail API
  * @returns {string} - returns string representing the contact object.
  */
 
