@@ -13,6 +13,7 @@ import Login from './components/Login/Login'
 import GoogleCallback from './components/Login/Callback/GoogleCallBack'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import Archive from './components/Archive/Archive'
+import { selectIsFlexibleFlowActive } from './store/utilsSlice'
 
 const ProtectedRoute = ({
   children,
@@ -41,82 +42,88 @@ const ProtectedRouteTemplate = ({ children }: { children: JSX.Element }) => {
   )
 }
 
-const RoutesComponent = () => (
-  <Routes>
-    <Route path={RoutesConstants.LOGIN} element={<Login />} />
-    <Route
-      path={RoutesConstants.GOOGLE_CALLBACK}
-      element={<GoogleCallback />}
-    />
-    <Route path={RoutesConstants.LOGIN_SUCCESS} element={<Login />} />
-    <Route
-      path={RoutesConstants.HOME}
-      element={
-        <ProtectedRouteTemplate>
-          <ToDo />
-        </ProtectedRouteTemplate>
-      }
-    />
-    <Route
-      path={RoutesConstants.EMAIL_DETAIL}
-      element={
-        <ProtectedRouteTemplate>
-          <EmailDetail />
-        </ProtectedRouteTemplate>
-      }
-    />
-    <Route path={RoutesConstants.COMPOSE_EMAIL}>
+const RoutesComponent = () => {
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+
+  return (
+    <Routes>
+      <Route path={RoutesConstants.LOGIN} element={<Login />} />
       <Route
-        path=""
+        path={RoutesConstants.GOOGLE_CALLBACK}
+        element={<GoogleCallback />}
+      />
+      <Route path={RoutesConstants.LOGIN_SUCCESS} element={<Login />} />
+      <Route
+        path={RoutesConstants.HOME}
         element={
           <ProtectedRouteTemplate>
-            <ComposeEmail />
+            <ToDo />
           </ProtectedRouteTemplate>
         }
       />
       <Route
-        path=":draftId"
+        path={RoutesConstants.EMAIL_DETAIL}
         element={
           <ProtectedRouteTemplate>
-            <ComposeEmail />
+            <EmailDetail />
           </ProtectedRouteTemplate>
         }
       />
-    </Route>
-    <Route
-      path={RoutesConstants.DRAFTS}
-      element={
-        <ProtectedRouteTemplate>
-          <DraftEmail />
-        </ProtectedRouteTemplate>
-      }
-    />
-    <Route
-      path={RoutesConstants.SENT}
-      element={
-        <ProtectedRouteTemplate>
-          <SentEmail />
-        </ProtectedRouteTemplate>
-      }
-    />
-    {/* <Route
-      path={RoutesConstants.INBOX}
-      element={
-        <ProtectedRouteTemplate>
-          <Inbox />
-        </ProtectedRouteTemplate>
-      }
-    /> */}
-    <Route
-      path={RoutesConstants.ARCHIVE}
-      element={
-        <ProtectedRouteTemplate>
-          <Archive />
-        </ProtectedRouteTemplate>
-      }
-    />
-    <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
-  </Routes>
-)
+      <Route path={RoutesConstants.COMPOSE_EMAIL}>
+        <Route
+          path=""
+          element={
+            <ProtectedRouteTemplate>
+              <ComposeEmail />
+            </ProtectedRouteTemplate>
+          }
+        />
+        <Route
+          path=":draftId"
+          element={
+            <ProtectedRouteTemplate>
+              <ComposeEmail />
+            </ProtectedRouteTemplate>
+          }
+        />
+      </Route>
+      <Route
+        path={RoutesConstants.DRAFTS}
+        element={
+          <ProtectedRouteTemplate>
+            <DraftEmail />
+          </ProtectedRouteTemplate>
+        }
+      />
+      <Route
+        path={RoutesConstants.SENT}
+        element={
+          <ProtectedRouteTemplate>
+            <SentEmail />
+          </ProtectedRouteTemplate>
+        }
+      />
+      {isFlexibleFlowActive && (
+        <Route
+          path={RoutesConstants.INBOX}
+          element={
+            <ProtectedRouteTemplate>
+              <Inbox />
+            </ProtectedRouteTemplate>
+          }
+        />
+      )}
+      <Route
+        path={RoutesConstants.ARCHIVE}
+        element={
+          <ProtectedRouteTemplate>
+            <Archive />
+          </ProtectedRouteTemplate>
+        }
+      />
+      <Route path={RoutesConstants.WILDCARD} element={<PageNotFound />} />
+    </Routes>
+  )
+}
 
 export default RoutesComponent

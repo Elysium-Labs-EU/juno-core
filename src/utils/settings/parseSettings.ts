@@ -1,5 +1,6 @@
 import {
   fetchSizeMap,
+  flexibleFlowMap,
   SETTINGS_DELIMITER,
   showAvatarMap,
   showIntroductionMap,
@@ -33,6 +34,9 @@ export default function parseSettings(
     }
     if (showIntroductionMap[setting] !== undefined) {
       foundSettings.showIntroduction = showIntroductionMap[setting]
+    }
+    if (flexibleFlowMap[setting] !== undefined) {
+      foundSettings.isFlexibleFlowActive = flexibleFlowMap[setting]
     }
   })
   localStorage.setItem(

@@ -14,6 +14,7 @@ import {
   navigateTo,
   selectActiveModal,
   selectInSearch,
+  selectIsFlexibleFlowActive,
   setInSearch,
 } from '../../../store/utilsSlice'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
@@ -29,6 +30,7 @@ const Navigation = () => {
   const activeModal = useAppSelector(selectActiveModal)
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const location = useLocation()
   const dispatch = useAppDispatch()
   const keysPressed = useMultiKeyPress()
@@ -88,16 +90,18 @@ const Navigation = () => {
             </S.NavItem>
           </StyledTooltip>
 
-          {/* <StyledTooltip title="Inbox">
-            <S.NavItem>
-              <CustomIconButton
-                icon={<FiInbox size={SIZE} />}
-                onClick={() => dispatch(navigateTo(Routes.INBOX))}
-                isActive={active === 'inbox'}
-                title="Inbox"
-              />
-            </S.NavItem>
-          </StyledTooltip> */}
+          {isFlexibleFlowActive ? (
+            <StyledTooltip title="Inbox">
+              <S.NavItem>
+                <CustomIconButton
+                  icon={<FiInbox size={SIZE} />}
+                  onClick={() => dispatch(navigateTo(Routes.INBOX))}
+                  isActive={active === 'inbox'}
+                  title="Inbox"
+                />
+              </S.NavItem>
+            </StyledTooltip>
+          ) : null}
 
           <StyledTooltip title="Search">
             <S.NavItem>
@@ -129,7 +133,7 @@ const Navigation = () => {
         </S.NavList>
       </S.NavControls>
     ),
-    [active]
+    [active, isFlexibleFlowActive]
   )
 
   return NavControllers

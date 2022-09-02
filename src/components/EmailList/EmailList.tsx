@@ -64,8 +64,6 @@ const EmailList = () => {
           nextPageToken: null,
         }
 
-        console.log(params)
-
         if (mounted) {
           emailPromise = dispatch(fetchEmailsSimple(params))
         }

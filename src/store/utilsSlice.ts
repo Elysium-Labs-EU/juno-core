@@ -161,42 +161,37 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   dispatch(push(RouteConstants.HOME))
 }
 
-export const openEmail = ({
-  email,
-  id,
-}: {
-  email?: IEmailListThreadItem
-  id: string
-}): AppThunk => (dispatch, getState) => {
-  const { labelIds, storageLabels } = getState().labels
+export const openEmail =
+  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
+  (dispatch, getState) => {
+    const { labelIds, storageLabels } = getState().labels
 
-  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-  if (
-    email?.messages?.length === 1 &&
-    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-    email
-  ) {
-    const messageId = email.messages[email.messages.length - 1].id
-    dispatch(openDraftEmail({ id, messageId }))
-    return
+    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+    if (
+      email?.messages?.length === 1 &&
+      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+      email
+    ) {
+      const messageId = email.messages[email.messages.length - 1].id
+      dispatch(openDraftEmail({ id, messageId }))
+      return
+    }
+    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
   }
-  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
-}
 
-export const navigateTo = (destination: string): AppThunk => (
-  dispatch,
-  getState
-) => {
-  if (getState().emailDetail.isReplying) {
-    dispatch(setIsReplying(false))
+export const navigateTo =
+  (destination: string): AppThunk =>
+  (dispatch, getState) => {
+    if (getState().emailDetail.isReplying) {
+      dispatch(setIsReplying(false))
+    }
+    if (getState().emailDetail.isForwarding) {
+      dispatch(setIsForwarding(false))
+    }
+    dispatch(push(destination))
   }
-  if (getState().emailDetail.isForwarding) {
-    dispatch(setIsForwarding(false))
-  }
-  dispatch(push(destination))
-}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
@@ -264,7 +259,7 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   return dispatch(navigateBack())
 }
 
-export const selectAvatarVisibility = (state: RootState) =>
+export const selectIsAvatarVisible = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
 export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
@@ -277,6 +272,8 @@ export const selectEmailListSize = (state: RootState) =>
   state.utils.emailFetchSize
 export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
+export const selectIsFlexibleFlowActive = (state: RootState) =>
+  state.utils.isFlexibleFlowActive
 export const selectActiveModal = (state: RootState) => state.utils.activeModal
 
 export default utilsSlice.reducer
