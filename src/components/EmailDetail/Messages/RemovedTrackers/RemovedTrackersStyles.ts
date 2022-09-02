@@ -27,7 +27,7 @@ export const StyledButton = styled.button`
   border-left-color: transparent;
   margin: 0;
   padding: 0;
-  font-size: 13px;
+  font-size: var(--small-size);
   line-height: 1.5;
   cursor: pointer;
   font-family: var(--font-family);

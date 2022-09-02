@@ -28,7 +28,7 @@ export const ThreadRow = styled.div<IThreadRow>`
     !showLabel
       ? '30px 20px 215px auto max-content 105px 20px 30px'
       : '30px 20px 215px fit-content(450px) auto max-content 105px 20px 30px'};
-  font-size: 13px;
+  font-size: var(--small-size);
   height: 56px;
   background-color: ${({ isFocused }) =>
     isFocused ? `var(--color-grey-hover)` : 'transparent'};

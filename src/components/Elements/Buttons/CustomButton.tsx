@@ -31,7 +31,7 @@ const Button = styled.button<IButton>`
   cursor: pointer;
   display: inline-block;
   font-family: var(--font-family);
-  font-size: 13px;
+  font-size: var(--small-size);
   font-weight: 400;
   line-height: 1.5;
   padding: 0.375rem 0.75rem;

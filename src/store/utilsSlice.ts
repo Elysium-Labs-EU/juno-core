@@ -26,6 +26,7 @@ interface IUtilsState {
   serviceUnavailable: string | null
   isSilentLoading: boolean
   isAvatarVisible: boolean
+  isFlexibleFlowActive: boolean
   emailFetchSize: number
   settingsLabelId: string | null
   activeModal: null | string
@@ -38,6 +39,7 @@ export const initialState: IUtilsState = Object.freeze({
   serviceUnavailable: null,
   isSilentLoading: false,
   isAvatarVisible: true,
+  isFlexibleFlowActive: false,
   emailFetchSize: 20,
   settingsLabelId: null,
   activeModal: null,
@@ -71,6 +73,9 @@ export const utilsSlice = createSlice({
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
+    },
+    setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
+      state.isFlexibleFlowActive = payload
     },
     setEmailFetchSize(state, { payload }: PayloadAction<number>) {
       state.emailFetchSize = payload
@@ -139,11 +144,13 @@ export const {
   setIsSilentLoading,
   setSettings,
   setShowAvatar,
+  setFlexibleFlow,
   setEmailFetchSize,
   setSettingsLabelId,
   setActiveModal,
 } = utilsSlice.actions
 
+// TODO: Refactor this with the BackButton
 export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
   const foundLabel = findLabelById({ storageLabels, labelIds })
@@ -154,44 +161,49 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   dispatch(push(RouteConstants.HOME))
 }
 
-export const openEmail =
-  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
-  (dispatch, getState) => {
-    const { labelIds, storageLabels } = getState().labels
+export const openEmail = ({
+  email,
+  id,
+}: {
+  email?: IEmailListThreadItem
+  id: string
+}): AppThunk => (dispatch, getState) => {
+  const { labelIds, storageLabels } = getState().labels
 
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
-    }
-    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+  if (
+    email?.messages?.length === 1 &&
+    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+    email
+  ) {
+    const messageId = email.messages[email.messages.length - 1].id
+    dispatch(openDraftEmail({ id, messageId }))
+    return
   }
+  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+}
 
-export const navigateTo =
-  (destination: string): AppThunk =>
-  (dispatch, getState) => {
-    if (getState().emailDetail.isReplying) {
-      dispatch(setIsReplying(false))
-    }
-    if (getState().emailDetail.isForwarding) {
-      dispatch(setIsForwarding(false))
-    }
-    dispatch(push(destination))
+export const navigateTo = (destination: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  if (getState().emailDetail.isReplying) {
+    dispatch(setIsReplying(false))
   }
+  if (getState().emailDetail.isForwarding) {
+    dispatch(setIsForwarding(false))
+  }
+  dispatch(push(destination))
+}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
   const { labelIds } = getState().labels
   if (!coreStatus) {
     if (labelIds.includes(global.INBOX_LABEL)) {
-      dispatch(push(RouteConstants.INBOX))
+      dispatch(push(RouteConstants.HOME))
       return
     }
     if (labelIds.includes(global.DRAFT_LABEL)) {
@@ -213,7 +225,7 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
     return
   }
   if (coreStatus === global.CORE_STATUS_SORTING) {
-    dispatch(push(RouteConstants.INBOX))
+    dispatch(push(RouteConstants.HOME))
     return
   }
   if (coreStatus) {

@@ -1,8 +1,8 @@
 export const BASE_ARRAY = [
   'Juno',
   'Juno/To Do',
-  'Juno/Keep',
-  'Juno/Reminder',
+  // 'Juno/Keep',
+  // 'Juno/Reminder',
   'INBOX',
   'SPAM',
   'DRAFT',
@@ -30,6 +30,15 @@ export const fetchSizeKeyMap: { [key: number]: string } = {
   20: 'FS20',
   25: 'FS25',
   30: 'FS30',
+}
+
+export const flexibleFlowMap: { [key: string]: boolean } = {
+  FF0: false,
+  FF1: true,
+}
+export const flexibleFlowKeyMap: { [key: string]: string } = {
+  false: 'FF0',
+  true: 'FF1',
 }
 
 export const showIntroductionMap: { [key: string]: boolean } = {

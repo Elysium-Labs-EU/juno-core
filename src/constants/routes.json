@@ -8,7 +8,6 @@
   "LOGIN": "/login",
   "GOOGLE_CALLBACK": "/oauth2callback",
   "LOGIN_SUCCESS": "/login_success",
-  "INBOX": "/inbox",
   "ARCHIVE": "/archive",
   "WILDCARD": "*"
 }

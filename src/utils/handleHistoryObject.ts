@@ -36,7 +36,7 @@ const restructureObject = (message: IHistoryMessage) => {
 
 /**
  * @function handleHistoryObject
- * @param {IHistoryObject[]} history - the history object from the GMail api.
+ * @param {IHistoryObject[]} history - the history object from the Gmail api.
  * @param {LabelIdName[]} storageLabels - all the available Juno labels in this system.
  * @returns {IFeedModel[]} - End result will be that the function returns multiple arrays. One for each inbox.
  * */

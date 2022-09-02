@@ -22,6 +22,8 @@ import {
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { Sort } from '../../images/svgIcons/quillIcons'
+import { INBOX_LABEL } from './InboxIndicator/InboxIndicatorBar'
+import CustomButton from '../Elements/Buttons/CustomButton'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
@@ -36,7 +38,7 @@ const SortInbox = () => {
   const dispatch = useAppDispatch()
 
   const handleEvent = useCallback(() => {
-    const staticLabelURL = labelURL(labelIds)
+    const staticLabelURL = labelURL(INBOX_LABEL)
     if (staticLabelURL) {
       startSort({
         dispatch,
@@ -57,13 +59,13 @@ const SortInbox = () => {
     emailList[activeEmailListIndex].threads.length === 0
 
   return (
-    <CustomAttentionButton
+    <CustomButton
       onClick={handleEvent}
       disabled={isDisabled}
       label={INBOX_BUTTON}
-      variant="secondary"
+      // variant="secondary"
       title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
-      icon={<Sort color="var(--color-white)" size={20} />}
+      icon={<Sort color="var(--color-black)" size={20} />}
     />
   )
 }

@@ -5,6 +5,7 @@ import {
   showAvatarKeyMap,
   fetchSizeKeyMap,
   showIntroductionKeyMap,
+  flexibleFlowKeyMap,
 } from '../../constants/baseConstants'
 import * as global from '../../constants/globalConstants'
 import labelApi from '../../data/labelApi'
@@ -35,6 +36,13 @@ const buildLabelString = (input: any) => {
         newString += `${SETTINGS_DELIMITER + value}`
       }
     }
+    if (key === 'flexibleFlow') {
+      if (flexibleFlowKeyMap[value as any]) {
+        newString += `${SETTINGS_DELIMITER + flexibleFlowKeyMap[value as any]}`
+      } else {
+        newString += `${SETTINGS_DELIMITER + value}`
+      }
+    }
   }
   return newString
 }
@@ -55,6 +63,7 @@ interface IUpdateSettingsLabel {
   fetchSize?: string
   showIntroduction?: boolean
   isAvatarVisible?: boolean
+  isFlexibleFlowActive?: boolean
 }
 
 const updateSettingsLabel = async ({
@@ -62,6 +71,7 @@ const updateSettingsLabel = async ({
   fetchSize,
   showIntroduction,
   isAvatarVisible,
+  isFlexibleFlowActive,
 }: IUpdateSettingsLabel) => {
   const foundSettings = localStorage.getItem(global.JUNO_SETTINGS_LOCAL)
   const parsedSettings = foundSettings ? JSON.parse(foundSettings) : undefined
@@ -87,6 +97,16 @@ const updateSettingsLabel = async ({
       const updatedObject = {
         ...parsedSettings,
         isAvatarVisible,
+      }
+      storeUpdatedSettingsLabel({
+        settingsLabelId,
+        updatedString: buildLabelString(updatedObject),
+      })
+    }
+    if (isFlexibleFlowActive !== undefined) {
+      const updatedObject = {
+        ...parsedSettings,
+        isFlexibleFlowActive,
       }
       storeUpdatedSettingsLabel({
         settingsLabelId,

@@ -99,14 +99,14 @@ const RoutesComponent = () => (
         </ProtectedRouteTemplate>
       }
     />
-    <Route
+    {/* <Route
       path={RoutesConstants.INBOX}
       element={
         <ProtectedRouteTemplate>
           <Inbox />
         </ProtectedRouteTemplate>
       }
-    />
+    /> */}
     <Route
       path={RoutesConstants.ARCHIVE}
       element={

@@ -58,9 +58,9 @@ const Navigation = () => {
       if (keysPressed.includes(keyConstants.KEY_DIGIT_1)) {
         dispatch(navigateTo(Routes.HOME))
       }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_2)) {
-        dispatch(navigateTo(Routes.INBOX))
-      }
+      // if (keysPressed.includes(keyConstants.KEY_DIGIT_2)) {
+      //   dispatch(navigateTo(Routes.INBOX))
+      // }
       if (keysPressed.includes(keyConstants.KEY_DIGIT_3)) {
         dispatch(setInSearch(true))
       }
@@ -88,7 +88,7 @@ const Navigation = () => {
             </S.NavItem>
           </StyledTooltip>
 
-          <StyledTooltip title="Inbox">
+          {/* <StyledTooltip title="Inbox">
             <S.NavItem>
               <CustomIconButton
                 icon={<FiInbox size={SIZE} />}
@@ -97,7 +97,7 @@ const Navigation = () => {
                 title="Inbox"
               />
             </S.NavItem>
-          </StyledTooltip>
+          </StyledTooltip> */}
 
           <StyledTooltip title="Search">
             <S.NavItem>

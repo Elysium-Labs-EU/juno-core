@@ -9,7 +9,7 @@ import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 
 const SWITCH_LABEL = 'Show avatars'
 
-const showAvatar = () => {
+const ShowAvatar = () => {
   const dispatch = useAppDispatch()
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const avatarVisible = useAppSelector(selectAvatarVisibility)
@@ -46,4 +46,4 @@ const showAvatar = () => {
   )
 }
 
-export default showAvatar
+export default ShowAvatar

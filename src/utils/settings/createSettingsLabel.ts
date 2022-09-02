@@ -4,6 +4,7 @@ import {
   showAvatarKeyMap,
   fetchSizeKeyMap,
   showIntroductionKeyMap,
+  flexibleFlowKeyMap,
 } from '../../constants/baseConstants'
 import { createLabel } from '../../store/labelsSlice'
 import { AppDispatch } from '../../store/store'
@@ -11,7 +12,7 @@ import { AppDispatch } from '../../store/store'
 /**
  * @function createSettingsLabel
  * @param dispatch - takes in a callback function to store the result of the function to the Redux store.
- * Creates a settings label to be stored as a label inside GMail.
+ * Creates a settings label to be stored as a label inside Gmail.
  * @returns {void}
  */
 const createSettingsLabel = (dispatch: AppDispatch): void =>
@@ -24,7 +25,9 @@ const createSettingsLabel = (dispatch: AppDispatch): void =>
         SETTINGS_DELIMITER +
         fetchSizeKeyMap[20] +
         SETTINGS_DELIMITER +
-        showIntroductionKeyMap.true
+        showIntroductionKeyMap.true +
+        SETTINGS_DELIMITER +
+        flexibleFlowKeyMap.true
       }`
     )
   )

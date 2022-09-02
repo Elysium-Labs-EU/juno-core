@@ -22,7 +22,7 @@ export const Wrapper = styled.div`
 export const Inner = styled.div``
 
 export const SelectedLabelsText = styled.span`
-  font-size: 13px;
+  font-size: var(--small-size);
   user-select: none;
   color: var(--color-grey-light);
   margin-right: 16px;

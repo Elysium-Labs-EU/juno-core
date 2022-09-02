@@ -15,3 +15,9 @@ export const DialogSubHeader = styled.h3`
   font-weight: 200;
   margin-top: 36px;
 `
+
+export const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+`
