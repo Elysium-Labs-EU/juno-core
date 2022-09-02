@@ -29,7 +29,9 @@ const EmailPosition = () => {
       {loadingState === global.LOAD_STATE_MAP.loading && (
         <StyledCircularProgress size={10} />
       )}
-      {loadingState === global.LOAD_STATE_MAP.error && <FiAlertCircle />}
+      {loadingState === global.LOAD_STATE_MAP.error && (
+        <FiAlertCircle title={global.SOMETHING_WRONG} />
+      )}
     </S.Wrapper>
   )
 }
