@@ -6,7 +6,7 @@ interface ICustomButton {
   className?: string
   disabled?: boolean
   icon?: JSX.Element | null
-  label: string
+  label: string | JSX.Element
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   title: string
   type?: 'submit' | 'reset' | 'button'

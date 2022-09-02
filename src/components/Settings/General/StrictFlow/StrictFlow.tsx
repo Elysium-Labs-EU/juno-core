@@ -1,13 +1,17 @@
+import { push } from 'redux-first-history'
+
 import { FormControlLabel, Switch } from '@mui/material'
+
+import RoutesConstants from '../../../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
-  selectSettingsLabelId,
   selectIsFlexibleFlowActive,
+  selectSettingsLabelId,
   setFlexibleFlow,
 } from '../../../../store/utilsSlice'
+import * as GS from '../../../../styles/globalStyles'
 import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 import * as S from '../../SettingsStyles'
-import * as GS from '../../../../styles/globalStyles'
 
 const HEADER = 'Workflow mode'
 const BODY =
@@ -34,6 +38,7 @@ const StrictFlow = () => {
         settingsLabelId,
         isFlexibleFlowActive: true,
       })
+      dispatch(push(RoutesConstants.HOME))
     }
   }
 
