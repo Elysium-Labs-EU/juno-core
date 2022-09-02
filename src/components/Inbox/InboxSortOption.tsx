@@ -117,16 +117,21 @@ const InboxSortOption = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
 
-  // TODO: activeEmailListIndex is not always the inbox, in case of an empty todo list and the user has the strict flow enabled.
-  const isDisabled =
-    isLoading ||
-    activeEmailListIndex < 0 ||
-    emailList[activeEmailListIndex].threads.length === 0
+  const isDisabled = () => {
+    if (isFlexibleFlowActive) {
+      return (
+        isLoading ||
+        activeEmailListIndex < 0 ||
+        emailList[activeEmailListIndex].threads.length === 0
+      )
+    }
+    return isLoading || totalThreads === 0
+  }
 
   return (
     <CustomAttentionButton
       onClick={handleEvent}
-      disabled={isDisabled}
+      disabled={isDisabled()}
       label={
         isFlexibleFlowActive ? (
           INBOX_BUTTON
@@ -137,7 +142,7 @@ const InboxSortOption = () => {
         )
       }
       variant="secondary"
-      title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
+      title={!isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'}
       icon={<Sort color="var(--color-black)" size={20} />}
     />
   )
