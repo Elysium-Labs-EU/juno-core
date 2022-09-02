@@ -43,7 +43,6 @@ const ReadUnreadMessage = ({
   messageIndex,
   setUnsubscribeLink,
 }: IReadMessage) => {
-  console.log(threadDetail)
   const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -58,14 +57,6 @@ const ReadUnreadMessage = ({
       setShowMenu(false)
     },
   })
-
-  let label
-  if (labelIds[0] === 'ARCHIVE'){
-    label = <EmailLabel labelNames = {threadDetail.messages[0].labelIds}/>
-  }else{
-    label = <> </>
-  }
-
 
   useEffect(() => {
     let mounted = true
@@ -210,7 +201,7 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <EmailHasAttachment messages={message} />
                 </S.ChildDiv>
-                {label}
+                {labelIds.includes(global.ARCHIVE_LABEL) && <EmailLabel labelNames = {threadDetail.messages[messageIndex].labelIds}/>} 
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />
                 </S.ChildDiv>
