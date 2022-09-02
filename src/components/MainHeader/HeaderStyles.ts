@@ -40,6 +40,18 @@ export const FocusSortHeaderWrapper = styled.div`
   width: 100%;
 `
 
+export const StrictFlowButtonContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  margin: 40px 0 20px;
+
+  button:last-child {
+    margin-left: 20px;
+  }
+`
+
 export const PageTitle = styled.h2`
   margin: 40px 0 0;
   font-weight: 200;

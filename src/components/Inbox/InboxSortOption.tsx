@@ -1,45 +1,83 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
+
+import { CircularProgress } from '@mui/material'
+
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { selectLabelIds, setCurrentLabels } from '../../store/labelsSlice'
+import useFetchThreadsTotalNumber from '../../hooks/useFetchThreadsTotalNumber'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import { Sort } from '../../images/svgIcons/quillIcons'
+import {
+  setCoreStatus,
+  setSessionViewIndex,
+} from '../../store/emailDetailSlice'
+import {
+  fetchEmailsSimple,
+  selectActiveEmailListIndex,
+  selectEmailList,
+  setActiveEmailListIndex,
+} from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+  selectLabelIds,
+  selectLoadedInbox,
+  setCurrentLabels,
+} from '../../store/labelsSlice'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsFlexibleFlowActive,
   selectIsLoading,
 } from '../../store/utilsSlice'
-import startSort from '../../utils/startSort'
-import {
-  selectActiveEmailListIndex,
-  selectEmailList,
-  setActiveEmailListIndex,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import labelURL from '../../utils/createLabelURL'
-import {
-  setCoreStatus,
-  setSessionViewIndex,
-} from '../../store/emailDetailSlice'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import { setModifierKey } from '../../utils/setModifierKey'
-import { Sort } from '../../images/svgIcons/quillIcons'
-import { INBOX_LABEL } from './InboxIndicator/InboxIndicatorBar'
-import CustomButton from '../Elements/Buttons/CustomButton'
 import getEmailListIndex from '../../utils/getEmailListIndex'
+import { setModifierKey } from '../../utils/setModifierKey'
+import startSort from '../../utils/startSort'
+import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
+
+import { INBOX_LABEL } from './InboxIndicator/InboxIndicatorBar'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
-const SortInbox = () => {
+// TODO: Refactor to have simpler code
+
+const InboxSortOption = () => {
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const isLoading = useAppSelector(selectIsLoading)
   const activeModal = useAppSelector(selectActiveModal)
   const inSearch = useAppSelector(selectInSearch)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const loadedInbox = useAppSelector(selectLoadedInbox)
   const dispatch = useAppDispatch()
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+
+  const { totalThreads, loadingState } = useFetchThreadsTotalNumber(INBOX_LABEL)
+
+  const resultMap = {
+    [global.LOAD_STATE_MAP.loaded]: `(${totalThreads})`,
+    [global.LOAD_STATE_MAP.loading]: <CircularProgress size={10} />,
+    [global.LOAD_STATE_MAP.idle]: <CircularProgress size={10} />,
+  }
+
+  useEffect(() => {
+    let mounted = true
+    if (loadedInbox.flat(1).indexOf(INBOX_LABEL[0]) === -1) {
+      const params = {
+        labelIds: INBOX_LABEL,
+        maxResults: 10,
+        nextPageToken: null,
+      }
+
+      if (mounted) {
+        dispatch(fetchEmailsSimple(params))
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   const handleEvent = useCallback(() => {
     const staticLabelURL = labelURL(INBOX_LABEL)
@@ -79,29 +117,30 @@ const SortInbox = () => {
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
 
+  // TODO: activeEmailListIndex is not always the inbox, in case of an empty todo list and the user has the strict flow enabled.
   const isDisabled =
     isLoading ||
     activeEmailListIndex < 0 ||
     emailList[activeEmailListIndex].threads.length === 0
 
-  return isFlexibleFlowActive ? (
+  return (
     <CustomAttentionButton
       onClick={handleEvent}
       disabled={isDisabled}
-      label={INBOX_BUTTON}
+      label={
+        isFlexibleFlowActive ? (
+          INBOX_BUTTON
+        ) : (
+          <>
+            {INBOX_BUTTON} {resultMap[loadingState]}
+          </>
+        )
+      }
       variant="secondary"
       title={!isDisabled ? 'Start sorting inbox' : 'There is nothing to sort'}
-      icon={<Sort color="var(--color-black)" size={20} />}
-    />
-  ) : (
-    <CustomButton
-      onClick={handleEvent}
-      disabled={isDisabled}
-      label={INBOX_BUTTON}
-      title="Start sorting inbox"
       icon={<Sort color="var(--color-black)" size={20} />}
     />
   )
 }
 
-export default SortInbox
+export default InboxSortOption

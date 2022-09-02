@@ -6,7 +6,6 @@ import {
   selectInSearch,
   selectIsLoading,
 } from '../../store/utilsSlice'
-import * as S from './TodoFocusOptionStyles'
 import * as local from '../../constants/todoConstants'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
@@ -58,17 +57,15 @@ const TodoFocusOption = () => {
     emailList[activeEmailListIndex].threads.length === 0
 
   return (
-    <S.SortContainer>
-      <CustomAttentionButton
-        onClick={handleEvent}
-        disabled={isDisabled}
-        label={local.BUTTON_FOCUS}
-        title={
-          !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
-        }
-        icon={<Jump color="var(--color-white)" size={20} />}
-      />
-    </S.SortContainer>
+    <CustomAttentionButton
+      onClick={handleEvent}
+      disabled={isDisabled}
+      label={local.BUTTON_FOCUS}
+      title={
+        !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
+      }
+      icon={<Jump color="var(--color-white)" size={20} />}
+    />
   )
 }
 
