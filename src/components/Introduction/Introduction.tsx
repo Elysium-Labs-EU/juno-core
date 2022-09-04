@@ -1,4 +1,3 @@
-import { FiArrowRightCircle } from 'react-icons/fi'
 import * as S from './IntroductionStyles'
 import * as global from '../../constants/globalConstants'
 import CustomButton from '../Elements/Buttons/CustomButton'
@@ -10,6 +9,7 @@ import {
   setActiveModal,
 } from '../../store/utilsSlice'
 import CustomModal from '../Elements/Modal/CustomModal'
+import { QiArrowRight } from '../../images/svgIcons/quillIcons'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -54,7 +54,7 @@ const Introduction = () => {
           <CustomButton
             onClick={handleClose}
             label={CONFIRM_BUTTON}
-            icon={<FiArrowRightCircle />}
+            icon={<QiArrowRight />}
             title="Close Introduction"
           />
         </S.ButtonContainer>

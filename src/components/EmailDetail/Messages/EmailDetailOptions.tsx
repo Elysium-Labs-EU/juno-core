@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { FiDelete } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { findLabelByName } from '../../../utils/findLabel'
@@ -25,11 +24,14 @@ import SkipOption from '../Options/SkipOption'
 import ForwardOption from '../Options/ForwardOption'
 import UnsubscribeOption from '../Options/UnsubscribeOption'
 import useClickOutside from '../../../hooks/useClickOutside'
+import { QiFolderTrash } from '../../../images/svgIcons/quillIcons'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
   unsubscribeLink: string | null
 }
+
+const ICON_SIZE = 16
 
 const EmailDetailOptions = ({
   threadDetail,
@@ -64,8 +66,8 @@ const EmailDetailOptions = ({
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
-          <ReplyOption threadDetail={threadDetail} />
-          <ForwardOption threadDetail={threadDetail} />
+          <ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+          <ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
           {labelIds &&
             !labelIds.some(
               (item) =>
@@ -74,19 +76,27 @@ const EmailDetailOptions = ({
                   storageLabels,
                   LABEL_NAME: todo.LABEL,
                 })[0]?.id
-            ) && <ToDoOption threadDetail={threadDetail} />}
+            ) && (
+              <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+            )}
           {staticOnlyLegalLabels.length > 0 && (
-            <ArchiveOption threadDetail={threadDetail} />
+            <ArchiveOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
           )}
           {(coreStatus === global.CORE_STATUS_FOCUSED ||
-            coreStatus === global.CORE_STATUS_SORTING) && <SkipOption />}
+            coreStatus === global.CORE_STATUS_SORTING) && (
+            <SkipOption iconSize={ICON_SIZE} />
+          )}
           {staticOnlyLegalLabels.length > 0 && (
-            <MoreOption setShowMenu={setShowMenu} showMenu={showMenu} />
+            <MoreOption
+              setShowMenu={setShowMenu}
+              showMenu={showMenu}
+              iconSize={ICON_SIZE}
+            />
           )}
           {staticOnlyLegalLabels.length === 0 && (
             <DeleteOption
               threadId={threadDetail.id}
-              icon={<FiDelete />}
+              icon={<QiFolderTrash size={ICON_SIZE} />}
               suppressed
               noArchive
             />
@@ -97,7 +107,10 @@ const EmailDetailOptions = ({
           {unsubscribeLink && (
             <>
               <S.Spacer />
-              <UnsubscribeOption unsubscribeLink={unsubscribeLink} />
+              <UnsubscribeOption
+                unsubscribeLink={unsubscribeLink}
+                iconSize={ICON_SIZE}
+              />
             </>
           )}
         </S.InnerOptionsContainer>

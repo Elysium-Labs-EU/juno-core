@@ -22,7 +22,7 @@ import {
 } from '../../store/emailDetailSlice'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { setModifierKey } from '../../utils/setModifierKey'
-import { Jump } from '../../images/svgIcons/quillIcons'
+import { QiJump } from '../../images/svgIcons/quillIcons'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
@@ -64,7 +64,12 @@ const TodoFocusOption = () => {
       title={
         !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
       }
-      icon={<Jump color="var(--color-white)" size={20} />}
+      icon={
+        <QiJump
+          color={isDisabled ? 'var(--color-black)' : 'var(--color-white)'}
+          size={20}
+        />
+      }
     />
   )
 }

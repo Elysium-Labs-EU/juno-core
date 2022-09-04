@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
-import { FiSkipForward } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { navigateNextMail, selectInSearch } from '../../../store/utilsSlice'
+import { QiSkip } from '../../../images/svgIcons/quillIcons'
 
 const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_K]
 
-const SkipOption = () => {
+const SkipOption = ({ iconSize }: { iconSize: number }) => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
 
@@ -20,7 +20,7 @@ const SkipOption = () => {
 
   return (
     <CustomButton
-      icon={<FiSkipForward />}
+      icon={<QiSkip size={iconSize} />}
       label={local.BUTTON_SKIP}
       onClick={handleEvent}
       suppressed

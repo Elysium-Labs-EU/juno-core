@@ -8,7 +8,7 @@ export const INBOX_PARAGRAPH = 'You have reached it!'
 export const INBOX_SVG = <EmptyStateOne />
 
 export const TODO_HEADER = 'To do or not to do'
-export const TODO_PARAGRAPH = 'You currently have no to-dos'
+export const TODO_PARAGRAPH = 'You currently have no to-dos - check you inbox?'
 export const TODO_SVG = <EmptyStateTwo />
 
 export const DRAFT_HEADER = 'No work left unsent'

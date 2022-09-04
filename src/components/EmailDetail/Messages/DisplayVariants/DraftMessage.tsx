@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import { FiEdit, FiDelete } from 'react-icons/fi'
+import { FiEdit } from 'react-icons/fi'
 import * as GS from '../../../../styles/globalStyles'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
@@ -19,6 +19,7 @@ import LinkedContacts from './Recipients/LinkedContacts'
 import CustomButton from '../../../Elements/Buttons/CustomButton'
 import { selectDraft } from '../../../../store/draftsSlice'
 import discardDraft from '../../../EmailOptions/DiscardDraft'
+import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
 
 const DraftMessage = ({
   message,
@@ -134,7 +135,7 @@ const DraftMessage = ({
         <CustomButton
           label="Discard"
           title="Discard the draft"
-          icon={<FiDelete />}
+          icon={<QiFolderTrash />}
           suppressed
           onClick={handleDiscardDraft}
         />

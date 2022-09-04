@@ -1,10 +1,10 @@
-import { Cog, Sign, Signature } from '../../../images/svgIcons/quillIcons'
+import { QiCog, QiSign, QiSignature } from '../../../images/svgIcons/quillIcons'
 import * as S from './SettingsSidebarStyles'
 
 const SETTINGS_OPTIONS = [
-  { title: 'General', icon: <Cog /> },
-  { title: 'Signature', icon: <Signature /> },
-  { title: 'Credits', icon: <Sign /> },
+  { title: 'General', icon: <QiCog /> },
+  { title: 'Signature', icon: <QiSignature /> },
+  { title: 'Credits', icon: <QiSign /> },
 ]
 
 const SettingsSidebar = ({

@@ -1,23 +1,19 @@
 import { useCallback } from 'react'
-import { FiArrowRight } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { selectIsReplying } from '../../../store/emailDetailSlice'
-
-interface IEmailDetailOptions {
-  threadDetail: IEmailListThreadItem
-}
+import { QiForward } from '../../../images/svgIcons/quillIcons'
+import { IEmailDetailOptions } from './optionTypes'
 
 const messageIndex = 0
 const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
 
-const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
+const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
   const isReplying = useAppSelector(selectIsReplying)
@@ -38,7 +34,7 @@ const ForwardOption = ({ threadDetail }: IEmailDetailOptions) => {
 
   return (
     <CustomButton
-      icon={<FiArrowRight />}
+      icon={<QiForward size={iconSize} />}
       label={local.BUTTON_FORWARD}
       onClick={handleEvent}
       suppressed

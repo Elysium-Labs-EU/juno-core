@@ -1,8 +1,9 @@
-import { FiEdit2, FiMail } from 'react-icons/fi'
+import { FiEdit2 } from 'react-icons/fi'
 import styled from 'styled-components'
 import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
 import * as global from '../../constants/globalConstants'
 import StyledTooltip from './StyledTooltip'
+import { QiMail } from '../../images/svgIcons/quillIcons'
 
 const MULTI_MESSAGE = 'Messages'
 const SINGLE_MESSAGE = 'Message'
@@ -45,7 +46,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
         <CountWrapper>
           {regularCount}
           <IconWrapper>
-            <FiMail />
+            <QiMail />
           </IconWrapper>
         </CountWrapper>
       </StyledTooltip>

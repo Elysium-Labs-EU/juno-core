@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import { FiSlash } from 'react-icons/fi'
 import { setModifierKey } from '../../../utils/setModifierKey'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as keyConstants from '../../../constants/keyConstants'
 import { useAppSelector } from '../../../store/hooks'
 import { selectInSearch } from '../../../store/utilsSlice'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import { QiMailUnsub } from '../../../images/svgIcons/quillIcons'
 
 const handleUnsubscribe = (link: string) => {
   window.open(link)
@@ -16,8 +16,10 @@ const UNSUBSCRIBE = 'Unsubscribe'
 
 const UnsubscribeOption = ({
   unsubscribeLink,
+  iconSize,
 }: {
   unsubscribeLink: string
+  iconSize: number
 }) => {
   const inSearch = useAppSelector(selectInSearch)
 
@@ -29,7 +31,7 @@ const UnsubscribeOption = ({
 
   return (
     <CustomButton
-      icon={<FiSlash />}
+      icon={<QiMailUnsub size={iconSize} />}
       label={UNSUBSCRIBE}
       onClick={handleEvent}
       suppressed

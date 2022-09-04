@@ -1,6 +1,5 @@
 import { Popper } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { FiChevronDown } from 'react-icons/fi'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import { selectProfile } from '../../../../store/baseSlice'
 import { useAppSelector } from '../../../../store/hooks'
@@ -10,6 +9,7 @@ import SignatureEmailOptions from './SignatureEmailOptions'
 import * as S from './SignatureEmailStyles'
 import * as local from '../../../../constants/composeEmailConstants'
 import * as global from '../../../../constants/globalConstants'
+import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 
 const SignatureEmail = ({
   callback,
@@ -60,7 +60,7 @@ const SignatureEmail = ({
   return (
     <S.Wrapper>
       <CustomIconButton
-        icon={<FiChevronDown />}
+        icon={<QiChevronDown />}
         title="Show signature options"
         onClick={handleClick}
         style={{ marginRight: '20px' }}

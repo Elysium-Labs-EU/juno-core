@@ -1,7 +1,7 @@
 import { Modal } from '@mui/material'
-import { FiX } from 'react-icons/fi'
 import CustomIconButton from '../Buttons/CustomIconButton'
 import * as S from './CustomModalStyles'
+import { QiEscape } from '../../../images/svgIcons/quillIcons'
 
 const CustomModal = ({
   open,
@@ -32,7 +32,7 @@ const CustomModal = ({
             <CustomIconButton
               onClick={() => handleClose()}
               aria-label="close-keyboard-shortcuts-modal"
-              icon={<FiX size={16} />}
+              icon={<QiEscape size={16} />}
               title="Close"
             />
           </S.HeaderRow>

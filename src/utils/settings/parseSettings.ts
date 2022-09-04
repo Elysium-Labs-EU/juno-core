@@ -19,6 +19,8 @@ import { AppDispatch } from '../../store/store'
  * @returns {void}
  */
 
+// TODO: If the setting is undefined, set it to a default
+
 export default function parseSettings(
   dispatch: AppDispatch,
   settingsLabel: GoogleLabel[]

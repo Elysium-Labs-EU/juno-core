@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
 import TextareaAutosize from '@mui/material/TextareaAutosize'
-import { FiAlertCircle, FiCheck, FiMessageCircle, FiZap } from 'react-icons/fi'
 import * as S from './FeedbackStyles'
 import * as GS from '../../../styles/globalStyles'
 import feedbackApi, { ISendFeedback } from '../../../data/feedbackApi'
@@ -15,6 +14,12 @@ import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import CustomModal from '../../Elements/Modal/CustomModal'
 import { selectProfile } from '../../../store/baseSlice'
+import {
+  QiChat,
+  QiCheckmark,
+  QiGift,
+  QiWarningAlt,
+} from '../../../images/svgIcons/quillIcons'
 
 interface IFeedbackTypeMapItem {
   [key: string]: 'BUG' | 'FEEDBACK' | 'IDEA'
@@ -27,9 +32,9 @@ const FEEDBACK_TYPE_MAP: IFeedbackTypeMapItem[] = [
 ]
 
 const ICON_MAP: { [key: string]: JSX.Element } = {
-  BUG: <FiAlertCircle />,
-  FEEDBACK: <FiMessageCircle />,
-  IDEA: <FiZap />,
+  BUG: <QiWarningAlt />,
+  FEEDBACK: <QiChat />,
+  IDEA: <QiGift />,
 }
 
 const customStyles = {
@@ -121,7 +126,7 @@ const Feedback = () => {
       {showSuccess ? (
         <S.SuccessContainer>
           <div>
-            <FiCheck size={40} />
+            <QiCheckmark size={40} />
             <p>{SUCCESS_MESSAGE}</p>
           </div>
         </S.SuccessContainer>

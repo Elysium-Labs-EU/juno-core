@@ -6,7 +6,7 @@ import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useFetchThreadsTotalNumber from '../../hooks/useFetchThreadsTotalNumber'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import { Sort } from '../../images/svgIcons/quillIcons'
+import { QiSort } from '../../images/svgIcons/quillIcons'
 import {
   setCoreStatus,
   setSessionViewIndex,
@@ -40,8 +40,6 @@ import { INBOX_LABEL } from './InboxIndicator/InboxIndicatorBar'
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
-// TODO: Refactor to have simpler code
-
 const InboxSortOption = () => {
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
@@ -52,7 +50,6 @@ const InboxSortOption = () => {
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const dispatch = useAppDispatch()
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
-
   const { totalThreads, loadingState } = useFetchThreadsTotalNumber(INBOX_LABEL)
 
   const resultMap = {
@@ -63,7 +60,11 @@ const InboxSortOption = () => {
 
   useEffect(() => {
     let mounted = true
-    if (loadedInbox.flat(1).indexOf(INBOX_LABEL[0]) === -1) {
+    // Only preload the messages when the strict flow is active
+    if (
+      !isFlexibleFlowActive &&
+      loadedInbox.flat(1).indexOf(INBOX_LABEL[0]) === -1
+    ) {
       const params = {
         labelIds: INBOX_LABEL,
         maxResults: 10,
@@ -77,45 +78,50 @@ const InboxSortOption = () => {
     return () => {
       mounted = false
     }
-  }, [])
+  }, [isFlexibleFlowActive])
 
-  const handleEvent = useCallback(() => {
+  const handleEventStrictFlow = useCallback(() => {
     const staticLabelURL = labelURL(INBOX_LABEL)
     if (staticLabelURL) {
       // If the strict flow is active, find the index and set the labels and email list on click.
-      if (!isFlexibleFlowActive) {
-        const emailListIndex = getEmailListIndex({
-          emailList,
-          labelIds: INBOX_LABEL,
-        })
-        dispatch(setActiveEmailListIndex(emailListIndex))
-        dispatch(setCurrentLabels(INBOX_LABEL))
-        startSort({
-          dispatch,
-          labelURL: staticLabelURL,
-          emailList,
-          activeEmailListIndex: emailListIndex,
-        })
-      } else {
-        startSort({
-          dispatch,
-          labelURL: staticLabelURL,
-          emailList,
-          activeEmailListIndex,
-        })
-      }
+      const emailListIndex = getEmailListIndex({
+        emailList,
+        labelIds: INBOX_LABEL,
+      })
+      dispatch(setActiveEmailListIndex(emailListIndex))
+      dispatch(setCurrentLabels(INBOX_LABEL))
+      startSort({
+        dispatch,
+        labelURL: staticLabelURL,
+        emailList,
+        activeEmailListIndex: emailListIndex,
+      })
+
       dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
       dispatch(setSessionViewIndex(0))
     }
-  }, [
-    activeEmailListIndex,
-    dispatch,
-    emailList,
-    labelIds,
-    isFlexibleFlowActive,
-  ])
+  }, [dispatch, emailList])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
+  const handleEventFlexibleFlow = useCallback(() => {
+    const staticLabelURL = labelURL(INBOX_LABEL)
+    if (staticLabelURL) {
+      startSort({
+        dispatch,
+        labelURL: staticLabelURL,
+        emailList,
+        activeEmailListIndex,
+      })
+
+      dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
+      dispatch(setSessionViewIndex(0))
+    }
+  }, [activeEmailListIndex, dispatch, emailList, labelIds])
+
+  useMultiKeyPress(
+    isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow,
+    actionKeys,
+    inSearch || Boolean(activeModal)
+  )
 
   const isDisabled = () => {
     if (isFlexibleFlowActive) {
@@ -130,20 +136,25 @@ const InboxSortOption = () => {
 
   return (
     <CustomAttentionButton
-      onClick={handleEvent}
+      onClick={
+        isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow
+      }
       disabled={isDisabled()}
       label={
         isFlexibleFlowActive ? (
           INBOX_BUTTON
         ) : (
           <>
-            {INBOX_BUTTON} {resultMap[loadingState]}
+            {INBOX_BUTTON}{' '}
+            <span style={{ color: `var(--color-grey)`, fontWeight: '200' }}>
+              {resultMap[loadingState]}
+            </span>
           </>
         )
       }
       variant="secondary"
       title={!isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'}
-      icon={<Sort color="var(--color-black)" size={20} />}
+      icon={<QiSort color="var(--color-black)" size={20} />}
     />
   )
 }

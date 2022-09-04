@@ -1,11 +1,22 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { FiChevronLeft, FiChevronRight, FiX } from 'react-icons/fi'
+
 import CircularProgress from '@mui/material/CircularProgress'
-import * as S from './DetailNavigationStyles'
+
 import * as global from '../../../constants/globalConstants'
 import * as keyConstants from '../../../constants/keyConstants'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
+import useKeyPress from '../../../hooks/useKeyPress'
+import {
+  QiChevronLeft,
+  QiChevronRight,
+  QiEscape,
+} from '../../../images/svgIcons/quillIcons'
+import { selectViewIndex } from '../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { selectLabelIds } from '../../../store/labelsSlice'
+import {
+  IEmailListObject,
+  IEmailListObjectSearch,
+} from '../../../store/storeTypes/emailListTypes'
 import {
   closeMail,
   navigateNextMail,
@@ -14,14 +25,9 @@ import {
   selectIsLoading,
   selectIsSilentLoading,
 } from '../../../store/utilsSlice'
-import { selectViewIndex } from '../../../store/emailDetailSlice'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import {
-  IEmailListObject,
-  IEmailListObjectSearch,
-} from '../../../store/storeTypes/emailListTypes'
 import loadNextPage from '../../../utils/loadNextPage'
-import useKeyPress from '../../../hooks/useKeyPress'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
+import * as S from './DetailNavigationStyles'
 
 const ICON_SIZE = 20
 interface IDetailNavigationView {
@@ -110,7 +116,7 @@ const DetailNavigationView = ({
             onClick={handleNavPrevEvent}
             disabled={isDisabledPrev}
             title="Previous email"
-            icon={<FiChevronLeft size={ICON_SIZE} />}
+            icon={<QiChevronLeft size={ICON_SIZE} />}
           />
         </S.NavButton>
         <S.NavButton>
@@ -120,7 +126,7 @@ const DetailNavigationView = ({
             title="Next email"
             icon={
               !isLoading ? (
-                <FiChevronRight size={ICON_SIZE} />
+                <QiChevronRight size={ICON_SIZE} />
               ) : (
                 <CircularProgress size={10} />
               )
@@ -131,7 +137,7 @@ const DetailNavigationView = ({
           <CustomIconButton
             title="Close view"
             onClick={handleCloseEvent}
-            icon={<FiX size={ICON_SIZE} />}
+            icon={<QiEscape size={ICON_SIZE} />}
           />
         </S.NavButton>
       </S.Wrapper>

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { FiMoreHorizontal } from 'react-icons/fi'
 import { push } from 'redux-first-history'
 
 import { Popper } from '@mui/material'
@@ -21,6 +20,7 @@ import {
 } from '../../../Help/HelpStyles'
 import * as S from './NavigationMoreStyles'
 import { handleLogout } from './Options/LogoutOption'
+import { QiMeatballsH } from '../../../../images/svgIcons/quillIcons'
 
 interface IMenuItemOnClick {
   title: string
@@ -233,7 +233,7 @@ const NavigationMore = () => {
     <>
       <CustomIconButton
         onClick={handleClick}
-        icon={<FiMoreHorizontal size={SIZE} />}
+        icon={<QiMeatballsH size={SIZE} />}
         title="More menu"
       />
       <Popper

@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { FiInfo } from 'react-icons/fi'
 import { selectInSearch, setActiveModal } from '../../store/utilsSlice'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -9,6 +8,7 @@ import * as S from './HelpStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import StyledTooltip from '../Elements/StyledTooltip'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import { QiInfo } from '../../images/svgIcons/quillIcons'
 
 const SIZE = 16
 const BUTTON_TITLE = 'Feedback and help'
@@ -45,7 +45,7 @@ const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
     <StyledTooltip title={BUTTON_TITLE}>
       <S.StartButtonWrapper>
         <CustomIconButton
-          icon={<FiInfo size={SIZE} />}
+          icon={<QiInfo size={SIZE} />}
           onClick={() => handleEvent()}
           style={customStyles}
           title=""

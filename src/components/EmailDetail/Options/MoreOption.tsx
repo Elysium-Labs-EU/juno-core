@@ -1,15 +1,16 @@
-import { FiMoreHorizontal } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
+import { QiMeatballsH } from '../../../images/svgIcons/quillIcons'
 
 interface IMoreOption {
   setShowMenu: (value: boolean) => void
   showMenu: boolean
+  iconSize: number
 }
 
-const MoreOption = ({ setShowMenu, showMenu }: IMoreOption) => (
+const MoreOption = ({ setShowMenu, showMenu, iconSize }: IMoreOption) => (
   <CustomButton
-    icon={<FiMoreHorizontal />}
+    icon={<QiMeatballsH size={iconSize} />}
     onClick={() => setShowMenu(!showMenu)}
     label={local.BUTTON_MORE}
     suppressed
