@@ -1,4 +1,5 @@
 import { push } from 'redux-first-history'
+import { useLocation } from 'react-router-dom'
 
 import { FormControlLabel, Switch } from '@mui/material'
 
@@ -22,6 +23,7 @@ const StrictFlow = () => {
   const dispatch = useAppDispatch()
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+  const location = useLocation()
 
   const switchWorkFlow = (event: any) => {
     if (!event.target.checked) {
@@ -31,6 +33,10 @@ const StrictFlow = () => {
         settingsLabelId,
         isFlexibleFlowActive: false,
       })
+      if (location.pathname.includes(RoutesConstants.INBOX)) {
+        // In case the user is on the inbox page, redirect to user to the homepage, since the inbox page will be removed from the RoutesComponent.
+        dispatch(push(RoutesConstants.HOME))
+      }
     } else {
       localStorage.setItem('isFlexibleFlowActive', 'true')
       dispatch(setFlexibleFlow(true))
@@ -38,7 +44,6 @@ const StrictFlow = () => {
         settingsLabelId,
         isFlexibleFlowActive: true,
       })
-      dispatch(push(RoutesConstants.HOME))
     }
   }
 

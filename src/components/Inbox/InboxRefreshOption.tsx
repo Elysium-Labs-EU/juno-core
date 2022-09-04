@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
+
+import * as keyConstants from '../../constants/keyConstants'
 import useKeyPress from '../../hooks/useKeyPress'
 import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
-import * as keyConstants from '../../constants/keyConstants'
 import { AppDispatch } from '../../store/store'
+import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
+import CustomButton from '../Elements/Buttons/CustomButton'
 
 const rotate = keyframes`
   from {
@@ -22,23 +24,11 @@ const rotatingIcon = css`
   animation: ${rotate} 1s ease infinite;
 `
 
-interface IRotatingButton {
+interface IRotatingIcon {
   disableRefresh: boolean
 }
 
-const RotatingButton = styled.button<IRotatingButton>`
-  border: none;
-  color: var(--color-grey);
-  outline: none;
-  background-color: transparent;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
-  padding: 0;
-  line-height: 0;
-
-  &:hover {
-    color: var(--color-black);
-    cursor: pointer;
-  }
+const RotatingIcon = styled.div<IRotatingIcon>`
   ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
@@ -46,7 +36,14 @@ const refreshFeed = (dispatch: AppDispatch) => {
   dispatch(refreshEmailFeed())
 }
 
-const InboxRefresh = () => {
+const LABEL_INACTIVE = 'Refresh inbox'
+const LABEL_ACTIVE = 'Refreshing inbox...'
+
+const InboxRefresh = ({
+  showButtonLabel = false,
+}: {
+  showButtonLabel?: boolean
+}) => {
   const [disableRefresh, setDisableRefresh] = useState(false)
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
@@ -69,28 +66,32 @@ const InboxRefresh = () => {
   }, [KeyListener, inSearch, disableRefresh, isLoading])
 
   useEffect(() => {
-    setDisableRefresh(true)
+    let disableTimer: NodeJS.Timeout | null
+    if (isFetching) {
+      setDisableRefresh(true)
 
-    const disableTimer = setTimeout(() => {
-      setDisableRefresh(false)
-    }, 3000)
-
+      disableTimer = setTimeout(() => {
+        setDisableRefresh(false)
+      }, 3000)
+    }
     return () => {
-      clearTimeout(disableTimer)
+      disableTimer && clearTimeout(disableTimer)
       setDisableRefresh(false)
     }
   }, [isFetching])
 
   return (
-    <RotatingButton
+    <CustomButton
+      label={showButtonLabel ? LABEL_INACTIVE : null}
       onClick={handleClick}
       disabled={isLoading || disableRefresh}
-      type="button"
-      disableRefresh={disableRefresh}
-      title={!disableRefresh ? 'Refresh inbox' : 'Refreshing inbox...'}
-    >
-      <MdRefresh size={20} />
-    </RotatingButton>
+      title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}
+      icon={
+        <RotatingIcon disableRefresh={disableRefresh}>
+          <MdRefresh size={20} />
+        </RotatingIcon>
+      }
+    />
   )
 }
 

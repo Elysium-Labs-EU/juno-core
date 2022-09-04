@@ -35,7 +35,8 @@ import { setModifierKey } from '../../utils/setModifierKey'
 import startSort from '../../utils/startSort'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 
-import { INBOX_LABEL } from './InboxIndicator/InboxIndicatorBar'
+import InboxSortPopper from './InboxSortPopper'
+import { INBOX_LABEL } from './Inbox'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
@@ -135,27 +136,32 @@ const InboxSortOption = () => {
   }
 
   return (
-    <CustomAttentionButton
-      onClick={
-        isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow
-      }
-      disabled={isDisabled()}
-      label={
-        isFlexibleFlowActive ? (
-          INBOX_BUTTON
-        ) : (
-          <>
-            {INBOX_BUTTON}{' '}
-            <span style={{ color: `var(--color-grey)`, fontWeight: '200' }}>
-              {resultMap[loadingState]}
-            </span>
-          </>
-        )
-      }
-      variant="secondary"
-      title={!isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'}
-      icon={<QiSort color="var(--color-black)" size={20} />}
-    />
+    <>
+      <CustomAttentionButton
+        onClick={
+          isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow
+        }
+        disabled={isDisabled()}
+        label={
+          isFlexibleFlowActive ? (
+            INBOX_BUTTON
+          ) : (
+            <>
+              {INBOX_BUTTON}{' '}
+              <span style={{ color: `var(--color-grey)`, fontWeight: '200' }}>
+                {resultMap[loadingState]}
+              </span>
+            </>
+          )
+        }
+        variant="secondary"
+        title={
+          !isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'
+        }
+        icon={<QiSort color="var(--color-black)" size={20} />}
+      />
+      {!isFlexibleFlowActive && <InboxSortPopper />}
+    </>
   )
 }
 

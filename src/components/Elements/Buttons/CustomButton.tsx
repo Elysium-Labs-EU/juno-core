@@ -6,7 +6,7 @@ interface ICustomButton {
   className?: string
   disabled?: boolean
   icon?: JSX.Element | null
-  label: string
+  label: string | null
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   style?: any
   suppressed?: boolean
@@ -52,13 +52,17 @@ const Button = styled.button<IButton>`
   }
 `
 
-const InnerButton = styled.div`
+interface IInnerButton {
+  hasLabel: boolean
+}
+
+const InnerButton = styled.div<IInnerButton>`
   align-items: center;
   display: flex;
 
   .icon {
     line-height: 0;
-    margin-right: 13px;
+    margin-right: ${({ hasLabel }) => hasLabel && '13px'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
@@ -84,7 +88,7 @@ const CustomButton = ({
     title={title}
     type={type ?? 'button'}
   >
-    <InnerButton>
+    <InnerButton hasLabel={Boolean(label)}>
       {icon && <div className="icon">{icon}</div>}
       <span>{label}</span>
     </InnerButton>
