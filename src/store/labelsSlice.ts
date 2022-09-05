@@ -67,7 +67,6 @@ export const createLabel =
               messageListVisibility: 'show',
             }
           : label
-
       const response = await labelApi().createLabel(body)
 
       if (response?.status === 200) {
@@ -84,6 +83,20 @@ export const createLabel =
       }
     } catch (err) {
       dispatch(setServiceUnavailable('Error creating label.'))
+    }
+    return null
+  }
+
+export const removeLabel =
+  (labelId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const response = await labelApi().deleteLabel(labelId)
+      if (response?.status !== 204) {
+        dispatch(setServiceUnavailable('Error removing label.'))
+      }
+    } catch (err) {
+      dispatch(setServiceUnavailable('Error removing label.'))
     }
     return null
   }

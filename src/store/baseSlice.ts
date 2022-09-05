@@ -54,12 +54,12 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
 export const handleSettings =
   (labels: GoogleLabel[]): AppThunk =>
   async (dispatch) => {
-    const settingsLabel = findSettings(labels)
-    if (settingsLabel.length === 0) {
+    const settingsLabel = findSettings(labels, dispatch)
+    if (!settingsLabel) {
       createSettingsLabel(dispatch)
       return
     }
-    dispatch(setSettingsLabelId(settingsLabel[0].id))
+    dispatch(setSettingsLabelId(settingsLabel.id))
     parseSettings(dispatch, settingsLabel)
   }
 

@@ -11,6 +11,12 @@ export const BASE_ARRAY = [
 
 export const SETTINGS_LABEL = 'Juno/'
 export const SETTINGS_DELIMITER = '#'
+export const AVAILABLE_SETTINGS = [
+  'isAvatarVisible',
+  'emailFetchSize',
+  'isFlexibleFlowActive',
+  'showIntroduction',
+]
 
 export const showAvatarMap: { [key: string]: boolean } = {
   SA0: false,

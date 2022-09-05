@@ -70,6 +70,7 @@ export const utilsSlice = createSlice({
       state.activeModal = payload.showIntroduction
         ? global.ACTIVE_MODAL_MAP.intro
         : null
+      state.isFlexibleFlowActive = payload.isFlexibleFlowActive
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload

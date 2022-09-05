@@ -1,4 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import {
+  AVAILABLE_SETTINGS,
   fetchSizeMap,
   flexibleFlowMap,
   SETTINGS_DELIMITER,
@@ -9,6 +11,8 @@ import { setSettings } from '../../store/utilsSlice'
 import * as global from '../../constants/globalConstants'
 import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
 import { AppDispatch } from '../../store/store'
+import fixMissingSetting from './fixMissingSetting'
+import createSettingsLabel from './createSettingsLabel'
 
 /**
  * @function parseSettings
@@ -19,31 +23,55 @@ import { AppDispatch } from '../../store/store'
  * @returns {void}
  */
 
-// TODO: If the setting is undefined, set it to a default
-
 export default function parseSettings(
   dispatch: AppDispatch,
-  settingsLabel: GoogleLabel[]
+  settingsLabel: GoogleLabel
 ): void {
-  const parsedSettings = settingsLabel[0].name.split(SETTINGS_DELIMITER)
-  const foundSettings: any = {}
-  parsedSettings.forEach((setting) => {
-    if (showAvatarMap[setting] !== undefined) {
-      foundSettings.isAvatarVisible = showAvatarMap[setting]
+  const parsedSettings = settingsLabel.name.split(SETTINGS_DELIMITER)
+  if (parsedSettings && parsedSettings.length > 0) {
+    // Remove the prefix of 'Juno/' from the parsed result
+    parsedSettings.shift()
+    const baseSettings = AVAILABLE_SETTINGS
+    const foundSettings: any = {}
+    for (const value of Object.values(parsedSettings)) {
+      switch (value) {
+        case 'SA0':
+        case 'SA1':
+          foundSettings.isAvatarVisible = showAvatarMap[value]
+          baseSettings.filter((item) => item !== 'avatar')
+          break
+        case 'FS20':
+        case 'FS25':
+        case 'FS30':
+          foundSettings.emailFetchSize = fetchSizeMap[value]
+          break
+        case 'FF0':
+        case 'FF1':
+          foundSettings.isFlexibleFlowActive = flexibleFlowMap[value]
+          break
+        case 'SI0':
+        case 'SI1':
+          foundSettings.showIntroduction = showIntroductionMap[value]
+          break
+        default:
+          // No default option needed, if there is a missing settings function.
+          break
+      }
     }
-    if (fetchSizeMap[setting] !== undefined) {
-      foundSettings.emailFetchSize = fetchSizeMap[setting]
+    const missingSettings = baseSettings.filter(
+      (item) => !Object.keys(foundSettings).includes(item)
+    )
+    if (missingSettings.length > 0) {
+      const fixedResult = fixMissingSetting(missingSettings)
+      // Patch the foundSettings with the fixed settings and update the settings label on Gmail with the fixed settings.
+      const completeSettings = Object.assign(foundSettings, fixedResult)
+      createSettingsLabel(dispatch, completeSettings)
     }
-    if (showIntroductionMap[setting] !== undefined) {
-      foundSettings.showIntroduction = showIntroductionMap[setting]
-    }
-    if (flexibleFlowMap[setting] !== undefined) {
-      foundSettings.isFlexibleFlowActive = flexibleFlowMap[setting]
-    }
-  })
-  localStorage.setItem(
-    global.JUNO_SETTINGS_LOCAL,
-    JSON.stringify(foundSettings)
-  )
-  dispatch(setSettings(foundSettings))
+
+    localStorage.setItem(
+      global.JUNO_SETTINGS_LOCAL,
+      JSON.stringify(foundSettings)
+    )
+    dispatch(setSettings(foundSettings))
+  }
 }
