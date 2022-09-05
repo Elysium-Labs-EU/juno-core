@@ -27,6 +27,9 @@ import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import LinkedContacts from './Recipients/LinkedContacts'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
+import EmailLabel from '../../../Elements/EmailLabel'
+import { selectLabelIds } from '../../../../store/labelsSlice'
+
 
 interface IReadMessage {
   message: IEmailMessage
@@ -41,6 +44,7 @@ const ReadUnreadMessage = ({
   messageIndex,
   setUnsubscribeLink,
 }: IReadMessage) => {
+  const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [placement, setPlacement] = useState<PopperPlacementType>()
@@ -170,6 +174,7 @@ const ReadUnreadMessage = ({
             <S.ChildDiv>
               <EmailHasAttachment messages={message} />
             </S.ChildDiv>
+
             <S.ChildDiv>
               <TimeStamp threadTimeStamp={message.internalDate} />
             </S.ChildDiv>
@@ -197,6 +202,7 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <EmailHasAttachment messages={message} />
                 </S.ChildDiv>
+                {labelIds.includes(global.ARCHIVE_LABEL) && <EmailLabel labelNames = {threadDetail.messages[messageIndex].labelIds}/>} 
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />
                 </S.ChildDiv>
