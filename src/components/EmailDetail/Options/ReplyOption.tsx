@@ -1,23 +1,20 @@
 import { useCallback } from 'react'
-import { FiCornerUpLeft } from 'react-icons/fi'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
 import { selectIsForwarding } from '../../../store/emailDetailSlice'
+import { QiReply } from '../../../images/svgIcons/quillIcons'
+import { IEmailDetailOptions } from './optionTypes'
 
-interface IEmailDetailOptions {
-  threadDetail: IEmailListThreadItem
-}
 const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
 const messageIndex = 0
 
-const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
+const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
   const isForwarding = useAppSelector(selectIsForwarding)
@@ -38,7 +35,7 @@ const ReplyOption = ({ threadDetail }: IEmailDetailOptions) => {
 
   return (
     <CustomButton
-      icon={<FiCornerUpLeft />}
+      icon={<QiReply size={iconSize} />}
       label={local.BUTTON_REPLY}
       onClick={handleEvent}
       suppressed

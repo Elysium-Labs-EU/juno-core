@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { FiCheckSquare, FiEdit, FiInbox, FiSearch } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 
 import * as keyConstants from '../../../constants/keyConstants'
 import Routes from '../../../constants/routes.json'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import {
+  QiCompose,
+  QiInbox,
+  QiSearch,
+  QiToDo,
+} from '../../../images/svgIcons/quillIcons'
 import {
   selectIsForwarding,
   selectIsReplying,
@@ -22,7 +27,7 @@ import StyledTooltip from '../../Elements/StyledTooltip'
 import NavigationMore from './More/NavigationMore'
 import * as S from './NavigationStyles'
 
-const SIZE = 16
+const ICON_SIZE = 18
 
 const Navigation = () => {
   const [active, setActive] = useState('')
@@ -82,10 +87,10 @@ const Navigation = () => {
           <StyledTooltip title="To Do">
             <S.NavItem>
               <CustomIconButton
-                icon={<FiCheckSquare size={SIZE} />}
+                icon={<QiToDo size={ICON_SIZE} />}
                 onClick={() => dispatch(navigateTo(Routes.HOME))}
                 isActive={active === 'todo'}
-                title="To Do"
+                title=""
               />
             </S.NavItem>
           </StyledTooltip>
@@ -94,10 +99,10 @@ const Navigation = () => {
             <StyledTooltip title="Inbox">
               <S.NavItem>
                 <CustomIconButton
-                  icon={<FiInbox size={SIZE} />}
+                  icon={<QiInbox size={ICON_SIZE} />}
                   onClick={() => dispatch(navigateTo(Routes.INBOX))}
                   isActive={active === 'inbox'}
-                  title="Inbox"
+                  title=""
                 />
               </S.NavItem>
             </StyledTooltip>
@@ -106,10 +111,10 @@ const Navigation = () => {
           <StyledTooltip title="Search">
             <S.NavItem>
               <CustomIconButton
-                icon={<FiSearch size={SIZE} />}
+                icon={<QiSearch size={ICON_SIZE} />}
                 isActive={active === 'search'}
                 onClick={() => dispatch(setInSearch(true))}
-                title="Search"
+                title=""
               />
             </S.NavItem>
           </StyledTooltip>
@@ -117,7 +122,7 @@ const Navigation = () => {
           <StyledTooltip title="Compose">
             <S.NavItem>
               <CustomIconButton
-                icon={<FiEdit size={SIZE} />}
+                icon={<QiCompose size={ICON_SIZE} />}
                 isActive={active === 'compose'}
                 onClick={() => {
                   dispatch(navigateTo('/compose'))

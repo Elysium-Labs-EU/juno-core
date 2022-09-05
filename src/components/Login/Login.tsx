@@ -10,7 +10,7 @@ import GoogleButton from './GoogleButton/GoogleButton'
 import userApi from '../../data/userApi'
 
 const TITLE = 'Login'
-const SUB_HEADER = 'To get started with Juno, log in with Google'
+const SUB_HEADER = 'To get started with Juno'
 const ENTER_HINT = 'use Enter to start'
 
 const Login = () => {
@@ -43,7 +43,6 @@ const Login = () => {
             <S.Header>
               <HS.PageTitle>{TITLE}</HS.PageTitle>
               <p>{SUB_HEADER}</p>
-              <GS.TextMutedSmall>{ENTER_HINT}</GS.TextMutedSmall>
             </S.Header>
             <GoogleButton
               renderProps={{
@@ -51,6 +50,7 @@ const Login = () => {
                 disabled: loginUrl === null,
               }}
             />
+            <GS.TextMutedSmall>{ENTER_HINT}</GS.TextMutedSmall>
           </S.Inner>
         </S.LoginContainer>
       </AnimatedMountUnmount>

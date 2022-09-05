@@ -1,4 +1,4 @@
-import { FiPaperclip } from 'react-icons/fi'
+import { QiAttachment } from '../../images/svgIcons/quillIcons'
 import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
 import checkAttachment from '../../utils/checkAttachment'
 
@@ -17,13 +17,13 @@ const EmailHasAttachment = ({
       }
     }
     if (verdict) {
-      return <FiPaperclip data-testid="email-has-attachment" />
+      return <QiAttachment data-testid="email-has-attachment" />
     }
   }
   if (!Array.isArray(messages)) {
     const verdict = checkAttachment(messages)
     if (verdict.length > 0) {
-      return <FiPaperclip data-testid="email-has-attachment" />
+      return <QiAttachment data-testid="email-has-attachment" />
     }
   }
   return <div data-testid="email-has-no-attachment" />

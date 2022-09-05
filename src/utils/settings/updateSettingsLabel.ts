@@ -9,8 +9,9 @@ import {
 } from '../../constants/baseConstants'
 import * as global from '../../constants/globalConstants'
 import labelApi from '../../data/labelApi'
+import { ISettingsObject } from './settingsTypes'
 
-const buildLabelString = (input: any) => {
+export const buildLabelString = (input: ISettingsObject) => {
   let newString = `${SETTINGS_LABEL}`
   for (const [key, value] of Object.entries(input)) {
     if (key === 'isAvatarVisible') {
@@ -36,7 +37,7 @@ const buildLabelString = (input: any) => {
         newString += `${SETTINGS_DELIMITER + value}`
       }
     }
-    if (key === 'flexibleFlow') {
+    if (key === 'isFlexibleFlowActive') {
       if (flexibleFlowKeyMap[value as any]) {
         newString += `${SETTINGS_DELIMITER + flexibleFlowKeyMap[value as any]}`
       } else {
@@ -76,7 +77,7 @@ const updateSettingsLabel = async ({
   const foundSettings = localStorage.getItem(global.JUNO_SETTINGS_LOCAL)
   const parsedSettings = foundSettings ? JSON.parse(foundSettings) : undefined
   if (parsedSettings !== undefined) {
-    if (fetchSize) {
+    if (fetchSize !== undefined) {
       const updatedObject = { ...parsedSettings, emailFetchSize: fetchSize }
       storeUpdatedSettingsLabel({
         settingsLabelId,

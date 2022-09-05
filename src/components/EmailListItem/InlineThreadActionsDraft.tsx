@@ -1,11 +1,11 @@
-import { FiDelete } from 'react-icons/fi'
 import * as S from './InlineThreadActionsStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import discardDraft from '../EmailOptions/DiscardDraft'
 import { selectDraft } from '../../store/draftsSlice'
+import { QiDiscard } from '../../images/svgIcons/quillIcons'
 
-const SIZE = 16
+const ICON_SIZE = 16
 
 const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const dispatch = useAppDispatch()
@@ -26,7 +26,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
               draftId,
             })
           }
-          icon={<FiDelete size={SIZE} />}
+          icon={<QiDiscard size={ICON_SIZE} />}
           title="Discard Draft"
         />
       </S.Inner>

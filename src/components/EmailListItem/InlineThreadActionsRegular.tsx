@@ -1,6 +1,4 @@
 import { useCallback, useMemo } from 'react'
-import { FiArchive, FiCheckCircle, FiCornerUpLeft } from 'react-icons/fi'
-import { AiOutlineDelete } from 'react-icons/ai'
 import archiveMail from '../EmailOptions/ArchiveMail'
 import * as S from './InlineThreadActionsStyles'
 import * as todo from '../../constants/todoConstants'
@@ -15,13 +13,19 @@ import thrashMail from '../EmailOptions/ThrashMail'
 import * as themeConstants from '../../constants/themeConstants'
 import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
+import {
+  QiFolderArchive,
+  QiFolderTrash,
+  QiReply,
+  QiToDo,
+} from '../../images/svgIcons/quillIcons'
 
 interface IInlineThreadActionsRegular {
   id: string
   email: IEmailListThreadItem
 }
 
-const SIZE = 16
+const ICON_SIZE = 18
 
 /**
  * @component InlineThreadActionsRegular
@@ -56,7 +60,7 @@ const InlineThreadActionsRegular = ({
   const memoizedReplyButton = useMemo(
     () => (
       <CustomIconButton
-        icon={<FiCornerUpLeft size={SIZE} />}
+        icon={<QiReply size={ICON_SIZE} />}
         onClick={() =>
           ReplyOverview({
             id,
@@ -90,7 +94,7 @@ const InlineThreadActionsRegular = ({
               storageLabels,
             })
           }
-          icon={<FiCheckCircle size={SIZE} />}
+          icon={<QiToDo size={ICON_SIZE} />}
           title="Mark as To Do"
         />
       )
@@ -109,7 +113,7 @@ const InlineThreadActionsRegular = ({
               labelIds: staticAllMessageLabelIds,
             })
           }
-          icon={<FiArchive size={SIZE} />}
+          icon={<QiFolderArchive size={ICON_SIZE} />}
           title="Archive"
         />
       )
@@ -120,7 +124,7 @@ const InlineThreadActionsRegular = ({
     () => (
       <CustomIconButton
         onClick={() => thrashMail({ threadId: id, dispatch, labelIds })}
-        icon={<AiOutlineDelete size={20} />}
+        icon={<QiFolderTrash size={ICON_SIZE} />}
         title="Delete"
         hoverColor={themeConstants.colorRed}
       />

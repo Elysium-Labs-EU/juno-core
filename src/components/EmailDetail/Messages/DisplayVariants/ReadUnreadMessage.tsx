@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
-import { FiChevronDown } from 'react-icons/fi'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import EmailAttachment from '../../Attachment/EmailAttachment'
@@ -27,8 +26,10 @@ import Seo from '../../../Elements/Seo'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import LinkedContacts from './Recipients/LinkedContacts'
+import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 import EmailLabel from '../../../Elements/EmailLabel'
 import { selectLabelIds } from '../../../../store/labelsSlice'
+
 
 interface IReadMessage {
   message: IEmailMessage
@@ -208,7 +209,7 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <CustomIconButton
                     onClick={handleSpecificMenu('bottom-start')}
-                    icon={<FiChevronDown />}
+                    icon={<QiChevronDown />}
                     aria-describedby={popperId}
                     title="Show message options"
                   />

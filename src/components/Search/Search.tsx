@@ -1,32 +1,34 @@
-import { useEffect, useRef, useState } from 'react'
 import * as React from 'react'
-import Modal from '@mui/material/Modal'
+import { useEffect, useRef, useState } from 'react'
+
 import InputBase from '@mui/material/InputBase'
-import { FiSearch, FiX, FiXCircle } from 'react-icons/fi'
-import * as S from './SearchStyles'
-import * as GS from '../../styles/globalStyles'
+import Modal from '@mui/material/Modal'
+
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import {
-  selectInSearch,
-  setInSearch,
-  setServiceUnavailable,
-} from '../../store/utilsSlice'
 import threadApi from '../../data/threadApi'
+import useKeyPress from '../../hooks/useKeyPress'
+import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
+import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { AppDispatch } from '../../store/store'
 import {
   IEmailListObject,
   IEmailListObjectSearch,
   IEmailListThreadItem,
 } from '../../store/storeTypes/emailListTypes'
-import LoadingState from '../Elements/LoadingState/LoadingState'
-import CustomButton from '../Elements/Buttons/CustomButton'
+import {
+  selectInSearch,
+  setInSearch,
+  setServiceUnavailable,
+} from '../../store/utilsSlice'
+import * as GS from '../../styles/globalStyles'
 import sortThreads from '../../utils/sortThreads'
-import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import useKeyPress from '../../hooks/useKeyPress'
-import { AppDispatch } from '../../store/store'
+import LoadingState from '../Elements/LoadingState/LoadingState'
 import ThreadList from '../EmailList/ThreadList'
+import * as S from './SearchStyles'
 
 const ENTER_TO_SEARCH = 'Enter to Search'
 
@@ -254,7 +256,7 @@ const Search = () => {
       <S.Dialog>
         <S.InputRow>
           <S.Icon>
-            <FiSearch size={24} />
+            <QiSearch size={24} />
           </S.Icon>
           <InputBase
             id="search"
@@ -270,7 +272,7 @@ const Search = () => {
             <CustomIconButton
               onClick={resetSearch}
               aria-label="clear-search"
-              icon={<FiXCircle size={16} />}
+              icon={<QiDiscard size={16} />}
               title="Clear search input"
             />
           )}
@@ -295,7 +297,7 @@ const Search = () => {
           <CustomIconButton
             onClick={() => handleClose(dispatch)}
             aria-label="close-modal"
-            icon={<FiX size={16} />}
+            icon={<QiEscape size={16} />}
             title="Close"
           />
         </S.InputRow>

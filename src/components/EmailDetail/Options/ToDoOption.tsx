@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { FiCheckCircle } from 'react-icons/fi'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
@@ -7,18 +6,15 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import setToDoMail from '../../EmailOptions/SetToDoMail'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
+import { QiToDo } from '../../../images/svgIcons/quillIcons'
+import { IEmailDetailOptions } from './optionTypes'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
-const ToDoOption = ({
-  threadDetail,
-}: {
-  threadDetail: IEmailListThreadItem
-}) => {
+const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
@@ -39,7 +35,7 @@ const ToDoOption = ({
 
   return (
     <CustomButton
-      icon={<FiCheckCircle />}
+      icon={<QiToDo size={iconSize} />}
       onClick={handleEvent}
       label={local.BUTTON_TODO}
       suppressed

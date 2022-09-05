@@ -11,10 +11,11 @@ export const Wrapper = styled.div`
 `
 
 export const LoginContainer = styled.div`
-  padding: 0.5rem 0.75rem;
+  padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   background-color: var(--color-white);
   border-radius: 5px;
+  min-width: 300px;
 `
 
 export const Inner = styled.div`

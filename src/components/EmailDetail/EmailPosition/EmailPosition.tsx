@@ -1,4 +1,3 @@
-import { FiAlertCircle } from 'react-icons/fi'
 import { selectSessionViewIndex } from '../../../store/emailDetailSlice'
 import { useAppSelector } from '../../../store/hooks'
 import * as S from './EmailPositionStyles'
@@ -8,6 +7,7 @@ import { selectLabelIds } from '../../../store/labelsSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import useFetchThreadsTotalNumber from '../../../hooks/useFetchThreadsTotalNumber'
+import { QiWarningAlt } from '../../../images/svgIcons/quillIcons'
 
 const EXPLANATION =
   'This shows on what email you are of all the emails in this Gmail box.'
@@ -30,7 +30,8 @@ const EmailPosition = () => {
         <StyledCircularProgress size={10} />
       )}
       {loadingState === global.LOAD_STATE_MAP.error && (
-        <FiAlertCircle title={global.SOMETHING_WRONG} />
+        <QiWarningAlt />
+        // TODO: Add explanation here (Something went wrong)
       )}
     </S.Wrapper>
   )

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
-import { FiSend } from 'react-icons/fi'
 import isEmpty from 'lodash/isEmpty'
 import qs from 'qs'
 import { useLocation } from 'react-router-dom'
@@ -40,6 +39,7 @@ import { setModifierKey } from '../../utils/setModifierKey'
 import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
 import { handleContactConversion } from '../../utils/convertToContact'
+import { QiSend } from '../../images/svgIcons/quillIcons'
 
 // Props are coming from MessageOverview (email detail view)
 interface IComposeEmailProps {
@@ -556,7 +556,7 @@ const ComposeEmail = ({
                 <CustomButton
                   type="button"
                   label={local.SEND_BUTTON}
-                  icon={<FiSend />}
+                  icon={<QiSend />}
                   title="Send email"
                   suppressed
                   onClick={(e) => handleSubmit(e)}

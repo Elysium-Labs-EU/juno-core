@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { FiDelete } from 'react-icons/fi'
 import * as local from '../../constants/composeEmailConstants'
+import { QiDiscard } from '../../images/svgIcons/quillIcons'
 import { selectDraft } from '../../store/draftsSlice'
 import {
   selectIsReplying,
@@ -58,7 +58,7 @@ const DiscardDraftButton = ({
   return draftMessage() ? (
     <CustomButton
       label={local.DISCARD_DRAFT_BUTTON}
-      icon={<FiDelete />}
+      icon={<QiDiscard />}
       suppressed
       onClick={handleClick}
       title="Delete"

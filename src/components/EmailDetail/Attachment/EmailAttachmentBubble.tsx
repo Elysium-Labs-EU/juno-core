@@ -1,18 +1,20 @@
-import { useState } from 'react'
-import { FiCheck, FiDownload } from 'react-icons/fi'
 import prettyBytes from 'pretty-bytes'
-import * as S from './EmailAttachmentBubbleStyles'
-import * as GS from '../../../styles/globalStyles'
+import { useState } from 'react'
+
 import * as global from '../../../constants/globalConstants'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import EmailAttachmentIcon from './EmailAttachmentIcon'
-import { IEmailAttachmentType } from './EmailAttachmentTypes'
-import downloadAttachment from '../../../utils/downloadAttachment'
+import { QiCheckmark, QiDownload } from '../../../images/svgIcons/quillIcons'
 import { useAppDispatch } from '../../../store/hooks'
 import { setServiceUnavailable } from '../../../store/utilsSlice'
+import * as GS from '../../../styles/globalStyles'
+import downloadAttachment from '../../../utils/downloadAttachment'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import * as S from './EmailAttachmentBubbleStyles'
+import EmailAttachmentIcon from './EmailAttachmentIcon'
+import { IEmailAttachmentType } from './EmailAttachmentTypes'
 
 const FILE = 'File - '
+const ICON_SIZE = 20
 
 const RenderAttachment = ({
   attachmentData,
@@ -52,11 +54,17 @@ const RenderAttachment = ({
       {loadState !== global.LOAD_STATE_MAP.loading ? (
         <CustomIconButton
           onClick={handleClick}
-          icon={!downloaded ? <FiDownload size={20} /> : <FiCheck size={20} />}
+          icon={
+            !downloaded ? (
+              <QiDownload size={ICON_SIZE} />
+            ) : (
+              <QiCheckmark size={ICON_SIZE} />
+            )
+          }
           title={!downloaded ? 'Download attachment' : 'Attachment downloaded'}
         />
       ) : (
-        <StyledCircularProgress size={20} />
+        <StyledCircularProgress size={ICON_SIZE} />
       )}
     </S.Attachment>
   )

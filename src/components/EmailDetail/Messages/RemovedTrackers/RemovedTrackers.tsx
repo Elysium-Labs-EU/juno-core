@@ -1,15 +1,17 @@
 import { useState } from 'react'
-import { FiShield, FiX } from 'react-icons/fi'
+import { FiShield } from 'react-icons/fi'
 import { Modal } from '@mui/material'
 import * as S from './RemovedTrackersStyles'
 import * as GS from '../../../../styles/globalStyles'
 import * as themeConstants from '../../../../constants/themeConstants'
 import StyledTooltip from '../../../Elements/StyledTooltip'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
+import { QiEscape } from '../../../../images/svgIcons/quillIcons'
 
 const REMOVED_TRACKERS = 'Trackers removed'
 const REMOVED_TRACKER = 'Tracker removed'
 const JUNO_TRACKERS = 'Juno has blocked trackers on the email.'
+const ICON_SIZE = 16
 
 const DetailModal = ({
   showDialog,
@@ -35,7 +37,7 @@ const DetailModal = ({
         <CustomIconButton
           onClick={() => setShowDialog(false)}
           aria-label="close-modal"
-          icon={<FiX size={16} />}
+          icon={<QiEscape size={ICON_SIZE} />}
           title="Close"
         />
       </S.DialogTop>

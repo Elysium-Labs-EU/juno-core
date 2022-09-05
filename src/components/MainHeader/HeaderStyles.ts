@@ -47,8 +47,11 @@ export const StrictFlowButtonContainer = styled.div`
   justify-content: center;
   margin: 40px 0 20px;
 
-  button:last-child {
-    margin-left: 20px;
+  button:nth-child(1) {
+    margin-right: 20px;
+  }
+  button:nth-child(2) {
+    margin-right: 5px;
   }
 `
 
