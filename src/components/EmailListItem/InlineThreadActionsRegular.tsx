@@ -46,7 +46,7 @@ const InlineThreadActionsRegular = ({
   const getAllLegalMessagesLabelIds = useCallback(() => {
     const foundLabels: string[] = []
     email.messages.forEach((message) =>
-      message.labelIds.forEach((label) => foundLabels.push(label))
+      message?.labelIds?.forEach((label) => foundLabels.push(label))
     )
     return [
       ...new Set(
