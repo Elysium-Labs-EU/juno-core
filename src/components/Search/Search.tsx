@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
@@ -9,13 +9,11 @@ import * as keyConstants from '../../constants/keyConstants'
 import threadApi from '../../data/threadApi'
 import useKeyPress from '../../hooks/useKeyPress'
 import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
-import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
+import { useSearchResults } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { AppDispatch } from '../../store/store'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
-  IEmailListThreadItem,
 } from '../../store/storeTypes/emailListTypes'
 import {
   selectInSearch,
@@ -48,7 +46,7 @@ interface IIntitialSearch {
 }
 interface ILoadMoreSearchResults {
   searchValue: string
-  searchResults: IEmailListObjectSearch
+  searchResults: IEmailListObject
   setLoadState: (value: string) => void
   fetchSearchThreads: Function
 }
@@ -109,7 +107,7 @@ const openDetail = ({
   currentEmail,
 }: {
   dispatch: AppDispatch
-  searchResults: IEmailListObjectSearch
+  searchResults: IEmailListObject
   currentEmail: string
 }) => {
   dispatch(useSearchResults({ searchResults, currentEmail }))
@@ -123,11 +121,10 @@ const Search = () => {
   const [searchValue, setSearchValue] = useState('')
   const searchValueRef = useRef('')
   const searchInputRef = useRef<HTMLInputElement | null>(null)
-  const [searchResults, setSearchResults] = useState<IEmailListObjectSearch>()
+  const [searchResults, setSearchResults] = useState<IEmailListObject>()
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
-  const searchList = useAppSelector(selectSearchList)
   const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
   const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
@@ -154,70 +151,74 @@ const Search = () => {
     setSearchValue(event.target.value)
   }
 
-  const resetSearch = () => {
+  const resetSearch = useCallback(() => {
     setSearchValue('')
+    searchValueRef.current = ''
     setSearchResults(undefined)
     setLoadState(global.LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
-  }
+  }, [])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      searchList &&
-      (searchResults?.threads.length ?? 0) < searchList.threads.length
-    ) {
-      mounted && setSearchResults(searchList)
-    }
-    return () => {
-      mounted = false
-    }
-  }, [searchList])
+  // useEffect(() => {
+  //   let mounted = true
+  //   if (
+  //     searchList &&
+  //     (searchResults?.threads.length ?? 0) < searchList.threads.length
+  //   ) {
+  //     mounted && setSearchResults(searchList)
+  //   }
+  //   return () => {
+  //     mounted = false
+  //   }
+  // }, [searchList])
 
-  // TODO: Refactor search
-  const fetchSearchThreads = async (searchBody: any) => {
-    try {
-      const response = await threadApi({}).getSimpleThreads(searchBody)
-      if ((response.data?.resultSizeEstimate ?? 0) > 0) {
-        const buffer: IEmailListThreadItem[] = []
-        const loadCount = response.data.threads.length
-        const { threads }: IEmailListObject = response.data
-
-        threads.forEach(async (item) => {
-          const threadDetail = await threadApi({}).getThreadDetail(item.id)
-          buffer.push(threadDetail)
-          if (buffer.length === loadCount) {
-            if (searchValueRef.current !== searchValue) {
-              setLoadState(global.LOAD_STATE_MAP.loaded)
-              searchValueRef.current = searchValue
-              const newStateObject = {
-                q: searchBody.q,
-                threads: sortThreads(buffer),
-                nextPageToken: response.nextPageToken ?? null,
-              }
-              setSearchResults(newStateObject)
-              setLoadState(global.LOAD_STATE_MAP.loaded)
-              return
-            }
-            if (searchResults && searchResults.threads.length > 0) {
-              const newStateObject = {
-                threads: sortThreads(searchResults.threads.concat(buffer)),
-                nextPageToken: response.nextPageToken ?? null,
-              }
-              setSearchResults(newStateObject)
-              setLoadState(global.LOAD_STATE_MAP.loaded)
-            }
-          }
-        })
-      } else {
-        setLoadState(global.LOAD_STATE_MAP.loaded)
+  const fetchSearchThreads = useCallback(
+    async (searchBody: { q: string; nextPageToken?: string }) => {
+      const searchBodyWithNextPageToken = {
+        q: searchBody.q,
+        nextPageToken: searchBody?.nextPageToken ?? null,
       }
-    } catch (err) {
-      dispatch(setServiceUnavailable(global.ERROR_MESSAGE))
-    }
-  }
+      try {
+        const response = await threadApi({}).getSimpleThreads(
+          searchBodyWithNextPageToken
+        )
+        if (response?.data?.resultSizeEstimate > 0) {
+          const { threads, nextPageToken }: IEmailListObject = response.data
+          // If there is no prior search - use this.
+          if (searchValueRef.current !== searchValue) {
+            searchValueRef.current = searchValue
+            const newStateObject = {
+              q: searchBody.q,
+              threads: sortThreads(threads),
+              nextPageToken: nextPageToken ?? null,
+              labels: [global.SEARCH_LABEL]
+            }
+            setSearchResults(newStateObject)
+            setLoadState(global.LOAD_STATE_MAP.loaded)
+            return
+          }
+          // If there is already a search result use this
+          if (searchResults && searchResults.threads.length > 0) {
+            const newStateObject = {
+              threads: sortThreads(searchResults.threads.concat(threads)),
+              nextPageToken: nextPageToken ?? null,
+              labels: [global.SEARCH_LABEL]
+            }
+            setSearchResults(newStateObject)
+            setLoadState(global.LOAD_STATE_MAP.loaded)
+          }
+        } else {
+          setLoadState(global.LOAD_STATE_MAP.error)
+        }
+      } catch (err) {
+        setLoadState(global.LOAD_STATE_MAP.error)
+        dispatch(setServiceUnavailable(global.ERROR_MESSAGE))
+      }
+    },
+    [loadState, searchValueRef, searchValue, searchResults]
+  )
 
   const handleOpenEvent = (threadId: string) => {
     if (searchResults) {
@@ -246,6 +247,65 @@ const Search = () => {
     }
   }
 
+  const memoizedSearchResults = useMemo(
+    () => (
+      <S.SearchResults>
+        {searchResults && searchResults?.threads ? (
+          <>
+            <ThreadList
+              threads={searchResults.threads}
+              focusedItemIndex={focusedItemIndex}
+              setFocusedItemIndex={setFocusedItemIndex}
+              showLabel
+              keySuffix="search"
+              searchOnClickHandeler={handleOpenEvent}
+            />
+            {searchResults.nextPageToken ? (
+              <S.FooterRow>
+                {loadState !== global.LOAD_STATE_MAP.loading && (
+                  <CustomButton
+                    onClick={() =>
+                      loadMoreSearchResults({
+                        searchValue,
+                        searchResults,
+                        setLoadState,
+                        fetchSearchThreads,
+                      })
+                    }
+                    label={global.LOAD_MORE}
+                    suppressed
+                    title="Load more results"
+                  />
+                )}
+                {loadState === global.LOAD_STATE_MAP.loading && (
+                  <LoadingState />
+                )}
+              </S.FooterRow>
+            ) : (
+              <S.FooterRow>
+                <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
+              </S.FooterRow>
+            )}
+          </>
+        ) : (
+          <S.NoSearchResults>
+            {loadState === global.LOAD_STATE_MAP.loading ? (
+              <LoadingState />
+            ) : (
+              <div>
+                <span>{ENTER_TO_SEARCH}</span>
+                <GS.TextMutedParagraph>
+                  {global.NOTHING_TO_SEE}
+                </GS.TextMutedParagraph>
+              </div>
+            )}
+          </S.NoSearchResults>
+        )}
+      </S.SearchResults>
+    ),
+    [loadState, searchResults, focusedItemIndex]
+  )
+
   return (
     <Modal
       open={isSearching}
@@ -273,7 +333,7 @@ const Search = () => {
               onClick={resetSearch}
               aria-label="clear-search"
               icon={<QiDiscard size={16} />}
-              title="Clear search input"
+              title="Clear search input and results"
             />
           )}
           <CustomButton
@@ -301,62 +361,7 @@ const Search = () => {
             title="Close"
           />
         </S.InputRow>
-
-        <S.SearchResults>
-          {searchResults && searchResults?.threads ? (
-            <>
-              <ThreadList
-                threads={searchResults.threads}
-                focusedItemIndex={focusedItemIndex}
-                setFocusedItemIndex={setFocusedItemIndex}
-                showLabel
-                keySuffix="search"
-                searchOnClickHandeler={handleOpenEvent}
-              />
-              {searchResults.nextPageToken ? (
-                <S.FooterRow>
-                  {loadState !== global.LOAD_STATE_MAP.loading && (
-                    <CustomButton
-                      onClick={() =>
-                        loadMoreSearchResults({
-                          searchValue,
-                          searchResults,
-                          setLoadState,
-                          fetchSearchThreads,
-                        })
-                      }
-                      label={global.LOAD_MORE}
-                      suppressed
-                      title="Load more results"
-                    />
-                  )}
-                  {loadState === global.LOAD_STATE_MAP.loading && (
-                    <LoadingState />
-                  )}
-                </S.FooterRow>
-              ) : (
-                <S.FooterRow>
-                  <GS.TextMutedSmall>
-                    {global.NO_MORE_RESULTS}
-                  </GS.TextMutedSmall>
-                </S.FooterRow>
-              )}
-            </>
-          ) : (
-            <S.NoSearchResults>
-              {loadState === global.LOAD_STATE_MAP.loading ? (
-                <LoadingState />
-              ) : (
-                <div>
-                  <span>{ENTER_TO_SEARCH}</span>
-                  <GS.TextMutedParagraph>
-                    {global.NOTHING_TO_SEE}
-                  </GS.TextMutedParagraph>
-                </div>
-              )}
-            </S.NoSearchResults>
-          )}
-        </S.SearchResults>
+        {memoizedSearchResults}
       </S.Dialog>
     </Modal>
   )

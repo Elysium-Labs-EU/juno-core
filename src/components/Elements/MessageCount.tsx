@@ -30,10 +30,10 @@ const IconWrapper = styled.div`
 
 const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
   const regularCount: number = messages.filter(
-    (item) => !item.labelIds.includes(global.DRAFT_LABEL)
+    (item) => !item?.labelIds?.includes(global.DRAFT_LABEL)
   ).length
   const draftCount: number = messages.filter((item) =>
-    item.labelIds.includes(global.DRAFT_LABEL)
+    item?.labelIds?.includes(global.DRAFT_LABEL)
   ).length
 
   return (

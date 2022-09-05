@@ -55,18 +55,19 @@ export interface IEmailListObject {
   nextPageToken: string | null | undefined
   resultSizeEstimate?: number
   timestamp?: number
+  q?: string
 }
 
-export interface IEmailListObjectSearch {
-  q?: string
-  threads: IEmailListThreadItem[]
-  nextPageToken: string | null
-}
+// export interface IEmailListObjectSearch {
+//   q?: string
+//   threads: IEmailListThreadItem[]
+//   nextPageToken: string | null
+// }
 
 export interface IEmailListState {
   emailList: IEmailListObject[]
   selectedEmails: string[]
-  searchList: IEmailListObjectSearch | null
+  // searchList: IEmailListObjectSearch | null
   activeEmailListIndex: number
   isFetching: boolean
 }

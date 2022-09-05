@@ -1,7 +1,6 @@
 import * as S from './TabsStyles'
 import * as local from '../../../constants/menuConstants'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import checkAttachment from '../../../utils/checkAttachment'
 
 const FilesTab = ({
   activeThread,
@@ -15,12 +14,15 @@ const FilesTab = ({
   let filesCount = 0
   const uniqueFilesArray = [
     ...new Set(
-      activeThread?.messages?.map((message) => checkAttachment(message))
+      activeThread?.messages?.map((message) => message?.payload?.files)
     ),
   ]
 
   for (let i = 0; i < uniqueFilesArray.length; i += 1) {
-    filesCount += uniqueFilesArray[i].length
+    const file = uniqueFilesArray[i]
+    if (file !== undefined) {
+      filesCount += file.length
+    }
   }
 
   return (

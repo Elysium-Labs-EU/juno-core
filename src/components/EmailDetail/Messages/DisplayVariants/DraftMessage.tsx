@@ -1,25 +1,26 @@
 import { useCallback, useMemo, useState } from 'react'
 import { FiEdit } from 'react-icons/fi'
-import * as GS from '../../../../styles/globalStyles'
-import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
-import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
+
 import * as local from '../../../../constants/draftConstants'
 import * as global from '../../../../constants/globalConstants'
-import * as S from '../../EmailDetailStyles'
+import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
+import { selectProfile } from '../../../../store/baseSlice'
+import { selectDraft } from '../../../../store/draftsSlice'
 import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
+import * as GS from '../../../../styles/globalStyles'
+import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
+import CustomButton from '../../../Elements/Buttons/CustomButton'
+import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
+import EmailSubject from '../../../Elements/EmailSubject'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
-import { selectProfile } from '../../../../store/baseSlice'
-import EmailSubject from '../../../Elements/EmailSubject'
-import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
+import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
+import discardDraft from '../../../EmailOptions/DiscardDraft'
+import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import LinkedContacts from './Recipients/LinkedContacts'
-import CustomButton from '../../../Elements/Buttons/CustomButton'
-import { selectDraft } from '../../../../store/draftsSlice'
-import discardDraft from '../../../EmailOptions/DiscardDraft'
-import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
 
 const DraftMessage = ({
   message,
@@ -154,7 +155,7 @@ const DraftMessage = ({
             </S.EmailDetailTitle>
             <S.TimeAttachmentContainer>
               <S.ChildDiv>
-                <EmailHasAttachment messages={message} />
+                <EmailHasAttachmentSimple files={message?.payload?.files} />
               </S.ChildDiv>
               <S.ChildDiv>
                 <TimeStamp threadTimeStamp={message.internalDate} />

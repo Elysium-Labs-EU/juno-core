@@ -7,6 +7,7 @@ export const BASE_ARRAY = [
   'SPAM',
   'DRAFT',
   'SENT',
+  'SEARCH',
 ]
 
 export const SETTINGS_LABEL = 'Juno/'
