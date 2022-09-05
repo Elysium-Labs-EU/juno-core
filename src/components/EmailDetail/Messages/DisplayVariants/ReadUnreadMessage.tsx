@@ -30,7 +30,6 @@ import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 import EmailLabel from '../../../Elements/EmailLabel'
 import { selectLabelIds } from '../../../../store/labelsSlice'
 
-
 interface IReadMessage {
   message: IEmailMessage
   threadDetail: IEmailListThreadItem
@@ -202,7 +201,11 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <EmailHasAttachment messages={message} />
                 </S.ChildDiv>
-                {labelIds.includes(global.ARCHIVE_LABEL) && <EmailLabel labelNames = {threadDetail.messages[messageIndex].labelIds}/>} 
+                {labelIds.includes(global.ARCHIVE_LABEL) && (
+                  <EmailLabel
+                    labelNames={threadDetail.messages[messageIndex].labelIds}
+                  />
+                )}
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />
                 </S.ChildDiv>
