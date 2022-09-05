@@ -18,10 +18,10 @@ const DIALOG_HEADER_INTRODUCTION = 'How it works'
 const DIALOG_CONTENT_INTRODUCTION_1 =
   'Your homepage is your To Do list of emails. You can populate it by marking emails from your Inbox as To Do.'
 const DIALOG_CONTENT_INTRODUCTION_2 =
-  'On top of the Inbox and To Do, there is a special button you should give it a shot. Also, you can navigate between pages via the top-right menu.'
+  'On top of the To Do, there are two buttons you should give it a shot. Also, you can navigate between pages via the top-right menu.'
 const DIALOG_HEADER_PRIVACY = 'Privacy'
 const DIALOG_CONTENT_PRIVACY =
-  'Juno does not store any of your personal information - nada! It only serves as an interaction layer between you and your Gmail.'
+  'Juno does not store any of your personal information, outside an authorization token. It only serves as an interaction layer between you and your Gmail!'
 const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
