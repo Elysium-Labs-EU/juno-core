@@ -5,9 +5,7 @@ import * as keyConstants from '../../constants/keyConstants'
 import useKeyPress from '../../hooks/useKeyPress'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectLabelIds } from '../../store/labelsSlice'
-import {
-  IEmailListObject,
-} from '../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectEmailListSize,

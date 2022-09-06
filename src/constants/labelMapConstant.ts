@@ -6,7 +6,7 @@ const labelMap: { [key: string]: string } = {
   SPAM: `${RoutesConstants.SPAM}`,
   DRAFT: `${RoutesConstants.DRAFTS}`,
   SENT: `${RoutesConstants.SENT}`,
-  'All Mail': `${RoutesConstants.ALL_EMAIL}`,
+  ARCHIVE: `${RoutesConstants.ARCHIVE}`,
 }
 
 export default labelMap

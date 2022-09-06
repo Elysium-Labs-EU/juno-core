@@ -9,9 +9,7 @@ import {
 } from '../../../store/utilsSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import DetailNavigationView from './DetailNavigationView'
-import {
-  IEmailListObject,
-} from '../../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,

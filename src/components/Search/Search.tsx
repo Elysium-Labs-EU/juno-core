@@ -12,9 +12,7 @@ import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
 import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { AppDispatch } from '../../store/store'
-import {
-  IEmailListObject,
-} from '../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import {
   selectInSearch,
   setInSearch,
@@ -196,7 +194,7 @@ const Search = () => {
               q: searchBody.q,
               threads: sortThreads(threads),
               nextPageToken: nextPageToken ?? null,
-              labels: [global.SEARCH_LABEL]
+              labels: [global.SEARCH_LABEL],
             }
             setSearchResults(newStateObject)
             setLoadState(global.LOAD_STATE_MAP.loaded)
@@ -207,7 +205,7 @@ const Search = () => {
             const newStateObject = {
               threads: sortThreads(searchResults.threads.concat(threads)),
               nextPageToken: nextPageToken ?? null,
-              labels: [global.SEARCH_LABEL]
+              labels: [global.SEARCH_LABEL],
             }
             setSearchResults(newStateObject)
             setLoadState(global.LOAD_STATE_MAP.loaded)

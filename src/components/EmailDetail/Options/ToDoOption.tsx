@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import * as local from '../../../constants/emailDetailConstants'
@@ -19,7 +18,6 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
-  const location = useLocation()
 
   const handleEvent = useCallback(() => {
     setToDoMail({
@@ -27,7 +25,6 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
       labelIds,
       dispatch,
       storageLabels,
-      location,
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 

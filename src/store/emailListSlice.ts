@@ -1,10 +1,5 @@
 /* eslint-disable no-param-reassign */
-import {
-  createSlice,
-  createAsyncThunk,
-  PayloadAction,
-  current,
-} from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
@@ -503,7 +498,6 @@ export const updateEmailLabel = (
     request,
     request: { removeLabelIds },
     labelIds,
-    location,
   } = props
   return async (dispatch, getState) => {
     try {
@@ -519,15 +513,10 @@ export const updateEmailLabel = (
         staticActiveEmailList &&
         Object.keys(staticActiveEmailList).length > 0
       ) {
-        // TODO: Revert this change whenever Redux First History is working again.
         if (
-          location?.pathname.includes('/mail/') &&
+          getState().router.location?.pathname.includes('/mail/') &&
           !getState().labels.labelIds.includes(global.DRAFT_LABEL)
         ) {
-          // if (
-          //   getState().router.location?.pathname.includes('/mail/') &&
-          //   !getState().labels.labelIds.includes(global.DRAFT_LABEL)
-          // ) {
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
           // This action is done first, to speed up the UX.
           if (

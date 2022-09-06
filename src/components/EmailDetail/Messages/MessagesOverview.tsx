@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import CircularProgress from '@mui/material/CircularProgress'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
@@ -16,6 +15,7 @@ import {
   selectIsForwarding,
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
+import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 
 const MappedMessages = ({
   threadDetail,
@@ -174,12 +174,12 @@ const MessagesOverview = ({
                 />
               ) : (
                 <ES.LoadingErrorWrapper>
-                  <CircularProgress />
+                  <StyledCircularProgress />
                 </ES.LoadingErrorWrapper>
               )}
               {!localThreadDetail && (
                 <ES.LoadingErrorWrapper>
-                  {isLoading && <CircularProgress />}
+                  {isLoading && <StyledCircularProgress />}
                   {!isLoading && <p>{local.ERROR_EMAIL}</p>}
                 </ES.LoadingErrorWrapper>
               )}

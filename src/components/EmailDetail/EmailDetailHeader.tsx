@@ -12,9 +12,7 @@ import * as GS from '../../styles/globalStyles'
 import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
 import { findLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
-import {
-  IEmailListObject,
-} from '../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
 import { selectCoreStatus, selectViewIndex } from '../../store/emailDetailSlice'
 import {

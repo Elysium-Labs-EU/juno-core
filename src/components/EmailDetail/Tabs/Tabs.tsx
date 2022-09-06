@@ -3,9 +3,7 @@ import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
 import * as S from './TabsStyles'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import {
-  IEmailListObject,
-} from '../../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import { selectViewIndex } from '../../../store/emailDetailSlice'
 import MessagesTab from './MessagesTab'
 import FilesTab from './FilesTab'
@@ -15,11 +13,7 @@ interface ITabItem {
   link: string
 }
 
-const Tabs = ({
-  activeEmailList,
-}: {
-  activeEmailList: IEmailListObject
-}) => {
+const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const [activeLink, setActiveLink] = useState('')
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)
