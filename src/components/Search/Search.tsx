@@ -9,7 +9,7 @@ import * as keyConstants from '../../constants/keyConstants'
 import threadApi from '../../data/threadApi'
 import useKeyPress from '../../hooks/useKeyPress'
 import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
-import { useSearchResults } from '../../store/emailListSlice'
+import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { AppDispatch } from '../../store/store'
 import {
@@ -125,6 +125,7 @@ const Search = () => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
+  const searchList = useAppSelector(selectSearchList)
   const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
   const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
@@ -161,18 +162,18 @@ const Search = () => {
     }
   }, [])
 
-  // useEffect(() => {
-  //   let mounted = true
-  //   if (
-  //     searchList &&
-  //     (searchResults?.threads.length ?? 0) < searchList.threads.length
-  //   ) {
-  //     mounted && setSearchResults(searchList)
-  //   }
-  //   return () => {
-  //     mounted = false
-  //   }
-  // }, [searchList])
+  useEffect(() => {
+    let mounted = true
+    if (
+      searchList &&
+      (searchResults?.threads.length ?? 0) < searchList.threads.length
+    ) {
+      mounted && setSearchResults(searchList)
+    }
+    return () => {
+      mounted = false
+    }
+  }, [searchList])
 
   const fetchSearchThreads = useCallback(
     async (searchBody: { q: string; nextPageToken?: string }) => {

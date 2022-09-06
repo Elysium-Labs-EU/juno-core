@@ -162,37 +162,42 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   dispatch(push(RouteConstants.HOME))
 }
 
-export const openEmail =
-  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
-  (dispatch, getState) => {
-    const { labelIds, storageLabels } = getState().labels
+export const openEmail = ({
+  email,
+  id,
+}: {
+  email?: IEmailListThreadItem
+  id: string
+}): AppThunk => (dispatch, getState) => {
+  const { labelIds, storageLabels } = getState().labels
 
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
-    }
-    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+  if (
+    email?.messages?.length === 1 &&
+    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+    email
+  ) {
+    const messageId = email.messages[email.messages.length - 1].id
+    dispatch(openDraftEmail({ id, messageId }))
+    return
   }
+  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+}
 
-export const navigateTo =
-  (destination: string): AppThunk =>
-  (dispatch, getState) => {
-    if (getState().emailDetail.isReplying) {
-      dispatch(setIsReplying(false))
-    }
-    if (getState().emailDetail.isForwarding) {
-      dispatch(setIsForwarding(false))
-    }
-    dispatch(push(destination))
+export const navigateTo = (destination: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  if (getState().emailDetail.isReplying) {
+    dispatch(setIsReplying(false))
   }
+  if (getState().emailDetail.isForwarding) {
+    dispatch(setIsForwarding(false))
+  }
+  dispatch(push(destination))
+}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
@@ -230,7 +235,7 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
 }
 
 export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
-  const { emailList, activeEmailListIndex } = getState().email
+  const { emailList, activeEmailListIndex, searchList } = getState().email
   const { coreStatus, sessionViewIndex, viewIndex } = getState().emailDetail
   const { labelIds } = getState().labels
 
@@ -239,7 +244,10 @@ export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
     dispatch(setSessionViewIndex(sessionViewIndex + 1))
   }
 
-  const nextID = emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
+  const nextID =
+    coreStatus !== global.CORE_STATUS_SEARCHING
+      ? emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
+      : searchList?.threads[viewIndex + 1]?.id
   if (nextID) {
     return dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
   }
@@ -247,13 +255,16 @@ export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
 }
 
 export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
-  const { emailList, activeEmailListIndex } = getState().email
-  const { viewIndex } = getState().emailDetail
+  const { emailList, activeEmailListIndex, searchList } = getState().email
+  const { coreStatus, viewIndex } = getState().emailDetail
   const { labelIds } = getState().labels
 
   dispatch(setViewIndex(viewIndex - 1))
 
-  const prevID = emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
+  const prevID =
+    coreStatus !== global.CORE_STATUS_SEARCHING
+      ? emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
+      : searchList?.threads[viewIndex - 1]?.id
   if (prevID) {
     return dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
   }

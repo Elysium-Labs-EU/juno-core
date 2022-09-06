@@ -17,6 +17,7 @@ import { selectIsLoading } from '../../store/utilsSlice'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
   selectEmailList,
+  selectSearchList,
   selectActiveEmailListIndex,
 } from '../../store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
@@ -41,6 +42,7 @@ import Baseloader from '../BaseLoader/BaseLoader'
 const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
+  const searchList = useAppSelector(selectSearchList)
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const isReplying = useAppSelector(selectIsReplying)
@@ -59,15 +61,18 @@ const EmailDetail = () => {
     IEmailListObject
   >()
 
+  useEffect(() => {
+    console.log(activeEmailList)
+  }, [activeEmailList])
+
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
-    // TODO: Check how to get the activeEmailListIndex updated
-    // if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
-    //   setActiveEmailList(searchList)
-    //   return
-    // }
+    if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
+      setActiveEmailList(searchList)
+      return
+    }
     if (
       emailList &&
       activeEmailListIndex > -1 &&
@@ -75,7 +80,7 @@ const EmailDetail = () => {
     ) {
       setActiveEmailList(emailList[activeEmailListIndex])
     }
-  }, [emailList, activeEmailListIndex])
+  }, [emailList, activeEmailListIndex, searchList])
 
   // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
   useEffect(() => {

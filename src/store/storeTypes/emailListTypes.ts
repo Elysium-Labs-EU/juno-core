@@ -58,16 +58,17 @@ export interface IEmailListObject {
   q?: string
 }
 
-// export interface IEmailListObjectSearch {
-//   q?: string
-//   threads: IEmailListThreadItem[]
-//   nextPageToken: string | null
-// }
+// TODO: Clear out
+export interface IEmailListObjectSearch {
+  q?: string
+  threads: IEmailListThreadItem[]
+  nextPageToken: string | null
+}
 
 export interface IEmailListState {
   emailList: IEmailListObject[]
   selectedEmails: string[]
-  // searchList: IEmailListObjectSearch | null
+  searchList: IEmailListObject | null
   activeEmailListIndex: number
   isFetching: boolean
 }
