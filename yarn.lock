@@ -448,6 +448,17 @@
     "@emotion/weak-memoize" "^0.3.0"
     stylis "4.0.13"
 
+"@emotion/cache@^11.10.3":
+  version "11.10.3"
+  resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.10.3.tgz#c4f67904fad10c945fea5165c3a5a0583c164b87"
+  integrity sha512-Psmp/7ovAa8appWh3g51goxu/z3iVms7JXOreq136D8Bbn6dYraPnmL6mdM8GThEx9vwSn92Fz+mGSjBzN8UPQ==
+  dependencies:
+    "@emotion/memoize" "^0.8.0"
+    "@emotion/sheet" "^1.2.0"
+    "@emotion/utils" "^1.2.0"
+    "@emotion/weak-memoize" "^0.3.0"
+    stylis "4.0.13"
+
 "@emotion/cache@^11.9.3":
   version "11.9.3"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.9.3.tgz#96638449f6929fd18062cfe04d79b29b44c0d6cb"
@@ -779,7 +790,31 @@
     csstype "^3.1.0"
     prop-types "^15.8.1"
 
-"@mui/system@5.10.0", "@mui/system@^5.10.0":
+"@mui/styled-engine@^5.10.1":
+  version "5.10.4"
+  resolved "https://registry.yarnpkg.com/@mui/styled-engine/-/styled-engine-5.10.4.tgz#21b3ff3c18a748548b061bccff337a275e1f4861"
+  integrity sha512-y29qlonPj4wndTjbePk9O6uWp/FBRNXjiMwI64oiYQ+v3E0EkLnADfDn49GAqOJAfN/r7nHbVZBlvLNIcMbgDg==
+  dependencies:
+    "@babel/runtime" "^7.18.9"
+    "@emotion/cache" "^11.10.3"
+    csstype "^3.1.0"
+    prop-types "^15.8.1"
+
+"@mui/system@5.10.1":
+  version "5.10.1"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.10.1.tgz#737cc9c703083ff14b4434ba72227522be4659bf"
+  integrity sha512-Ix8LVAMtVrNtmncK0yc5llHWlZKCm9okbw8QMnWbI5UH+nI9qhtf+Aure4p5ei6dGKdil++lukar/GxCjfzRSg==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    "@mui/private-theming" "^5.9.3"
+    "@mui/styled-engine" "^5.10.1"
+    "@mui/types" "^7.1.5"
+    "@mui/utils" "^5.9.3"
+    clsx "^1.2.1"
+    csstype "^3.1.0"
+    prop-types "^15.8.1"
+
+"@mui/system@^5.10.0":
   version "5.10.0"
   resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.10.0.tgz#48daf4aa8e61424c232378acb27a735abfb1fcc1"
   integrity sha512-HNu3LdA+37cWqgJBEhOF4F5LX4WVmvg6SoHRfajRO0neKXLdooibMP3W1bhSd27QcPxyMUmvY9/Dlp9znDeCRw==
