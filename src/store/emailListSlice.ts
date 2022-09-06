@@ -1,5 +1,10 @@
 /* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  createAsyncThunk,
+  PayloadAction,
+  current,
+} from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
@@ -15,7 +20,6 @@ import type { AppThunk, RootState } from './store'
 import {
   IEmailListObject,
   IEmailListState,
-  IEmailListObjectSearch,
   IEmailListThreadItem,
 } from './storeTypes/emailListTypes'
 import {
@@ -47,10 +51,14 @@ export const fetchEmailsSimple = createAsyncThunk(
   async (query: EmailQueryObject, { dispatch, signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
     dispatch(setLoadedInbox(query.labelIds))
-    return { response: response.data, labels: query.labelIds }
+    return { response: response.data, labels: query.labelIds, q: query?.q }
   }
 )
 
+/**
+ * @function fetchEmailsFull
+ * @deprecated in favor of fetchEmailSimple
+ */
 export const fetchEmailsFull = createAsyncThunk(
   'email/fetchEmailsFull',
   async (query: EmailQueryObject, { dispatch, signal }) => {
@@ -74,7 +82,8 @@ const handleAdditionToExistingEmailArray = (
   labels: string[],
   threads: IEmailListThreadItem[],
   arrayIndex?: number,
-  nextPageToken?: undefined | string | null
+  nextPageToken?: undefined | string | null,
+  q?: undefined | string
 ) => {
   const tempArray: IEmailListThreadItem[] = []
   let activeCount: number = 0
@@ -112,10 +121,13 @@ const handleAdditionToExistingEmailArray = (
           nextPageToken === HISTORY_NEXT_PAGETOKEN
             ? targetEmailListObject.nextPageToken
             : nextPageToken,
+        q,
       }
       targetEmailListObject = newObject
-      if (arrayIndex) {
+      if (arrayIndex && arrayIndex > -1) {
         state.emailList[arrayIndex] = targetEmailListObject
+      } else {
+        state.searchList = targetEmailListObject
       }
     }
   }
@@ -125,15 +137,42 @@ const handleEmailListChange = (
   state: IEmailListState,
   labels: string[] | undefined,
   threads: IEmailListThreadItem[],
-  nextPageToken?: undefined | string | null
+  nextPageToken?: undefined | string | null,
+  q?: string
 ) => {
-  console.log(labels)
   if (labels && threads && threads.length > 0) {
     // Find emailList sub-array index
     const arrayIndex: number = state.emailList
       .map((emailArray) => emailArray.labels)
       .flat(1)
       .findIndex((obj) => (obj ? obj.includes(labels[0]) : null))
+    // If the input contains a q - it is search request.
+    if (q) {
+      // This function is used to update the search List.
+      // If there is one, use the function, otherwise just assign the state.
+      const targetEmailListObject = state.searchList
+      if (targetEmailListObject && q === targetEmailListObject?.q) {
+        handleAdditionToExistingEmailArray(
+          targetEmailListObject,
+          state,
+          labels,
+          threads,
+          arrayIndex,
+          nextPageToken,
+          q
+        )
+      } else {
+        const sortedThreads = sortThreads(threads)
+        const sortedEmailList: IEmailListObject = {
+          nextPageToken,
+          labels,
+          threads: sortedThreads,
+          q,
+        }
+        state.searchList = sortedEmailList
+      }
+      return
+    }
     // If emailList sub-array index exists, if exists concat threads.
     // If not, push the new emailList
     if (arrayIndex > -1) {
@@ -159,21 +198,8 @@ const handleEmailListChange = (
         threads: undoubleThreads(sortedThreads),
       }
       state.emailList.push(sortedEmailList)
-      return
     }
-    console.log('we are here')
-    const targetEmailListObject = state.searchList
-    if (targetEmailListObject) {
-      handleAdditionToExistingEmailArray(
-        targetEmailListObject,
-        state,
-        labels,
-        threads,
-        arrayIndex,
-        nextPageToken
-      )
-    }
-    // listUpdateSearchResults()
+    return
   }
   if (labels && (!threads || threads.length === 0)) {
     const emptyResultObject = {
@@ -293,7 +319,8 @@ export const emailListSlice = createSlice({
       state.emailList = currentState
     },
     listUpdateSearchResults: (state, { payload }) => {
-      state.searchList = payload
+      const { labels, threads, q, nextPageToken } = payload
+      handleEmailListChange(state, labels, threads, nextPageToken, q)
     },
   },
   extraReducers: (builder) => {
@@ -319,10 +346,12 @@ export const emailListSlice = createSlice({
           payload: {
             labels,
             response: { threads, nextPageToken },
+            q,
           },
         }
       ) => {
-        handleEmailListChange(state, labels, threads, nextPageToken)
+        // If there is a q (query) - send it - this is used to determine if the action is search related.
+        handleEmailListChange(state, labels, threads, nextPageToken, q)
       }
     )
     builder.addCase(
@@ -334,11 +363,13 @@ export const emailListSlice = createSlice({
           payload: {
             labels,
             response: { threads },
+            q,
           },
         }
       ) => {
         // Send the nextPageToken as History - so the original next page token will not be overwritten.
-        handleEmailListChange(state, labels, threads, HISTORY_NEXT_PAGETOKEN)
+        // If there is a q (query) - send it - this is used to determine if the action is search related.
+        handleEmailListChange(state, labels, threads, HISTORY_NEXT_PAGETOKEN, q)
       }
     )
   },
@@ -355,25 +386,6 @@ export const {
   listUpdateSearchResults,
 } = emailListSlice.actions
 
-export const storeSearchResults = (
-  searchResults: IEmailListObject
-): AppThunk => (dispatch, getState) => {
-  const { searchList } = getState().email
-  if (searchList && searchResults.q === searchList.q) {
-    const sortedThreads = sortThreads(
-      searchList.threads.concat(searchResults.threads)
-    )
-    const newSearchList = {
-      q: searchList.q,
-      nextPageToken: searchResults.nextPageToken,
-      threads: undoubleThreads(sortedThreads),
-    }
-    dispatch(listUpdateSearchResults(newSearchList))
-  } else {
-    dispatch(listUpdateSearchResults(searchResults))
-  }
-}
-
 export const useSearchResults = ({
   searchResults,
   currentEmail,
@@ -384,7 +396,7 @@ export const useSearchResults = ({
   const { searchList } = getState().email
   const { coreStatus } = getState().emailDetail
   if (searchList !== searchResults) {
-    dispatch(storeSearchResults(searchResults))
+    dispatch(listUpdateSearchResults(searchResults))
   }
   if (coreStatus !== global.CORE_STATUS_SEARCHING) {
     dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))

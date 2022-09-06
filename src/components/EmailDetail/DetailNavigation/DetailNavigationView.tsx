@@ -15,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../../store/storeTypes/emailListTypes'
 import {
   closeMail,
@@ -33,7 +32,7 @@ const ICON_SIZE = 20
 interface IDetailNavigationView {
   isDisabledPrev: boolean
   isDisabledNext: boolean
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
+  activeEmailList: IEmailListObject
 }
 
 const DetailNavigationView = ({

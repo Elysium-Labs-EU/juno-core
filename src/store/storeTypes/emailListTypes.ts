@@ -58,13 +58,6 @@ export interface IEmailListObject {
   q?: string
 }
 
-// TODO: Clear out
-export interface IEmailListObjectSearch {
-  q?: string
-  threads: IEmailListThreadItem[]
-  nextPageToken: string | null
-}
-
 export interface IEmailListState {
   emailList: IEmailListObject[]
   selectedEmails: string[]

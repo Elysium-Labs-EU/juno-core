@@ -156,6 +156,8 @@ const Search = () => {
     setSearchValue('')
     searchValueRef.current = ''
     setSearchResults(undefined)
+    // TODO: Clear out the search results from Redux
+    // dispatch(setSearchResults())
     setLoadState(global.LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()

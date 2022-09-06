@@ -11,13 +11,12 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import DetailNavigationView from './DetailNavigationView'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../../store/storeTypes/emailListTypes'
 
 const DetailNavigationContainer = ({
   activeEmailList,
 }: {
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
+  activeEmailList: IEmailListObject
 }) => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)

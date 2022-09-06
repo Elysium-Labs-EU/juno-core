@@ -61,10 +61,6 @@ const EmailDetail = () => {
     IEmailListObject
   >()
 
-  useEffect(() => {
-    console.log(activeEmailList)
-  }, [activeEmailList])
-
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
@@ -148,7 +144,7 @@ const EmailDetail = () => {
         if (someThreadHasBody) {
           return
         }
-        dispatch(fetchEmailDetail({ threadId, labelIds }))
+        dispatch(fetchEmailDetail({ threadId, labelIds, q: activeEmailList?.q }))
       }
     }
   }, [threadId, activeEmailList])

@@ -61,9 +61,9 @@ const ReadUnreadMessage = ({
 
   useEffect(() => {
     let mounted = true
-    if (threadDetail && threadDetail.messages) {
+    if (threadDetail && threadDetail?.messages) {
       if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message.labelIds?.includes(local.UNREAD)) {
+        if (message && message?.labelIds?.includes(local.UNREAD)) {
           setOpen(true)
         }
         if (
@@ -80,7 +80,7 @@ const ReadUnreadMessage = ({
       if (
         threadDetail.messages.length > 1 &&
         threadDetail.messages.some((item) =>
-          item.labelIds.includes(global.DRAFT_LABEL)
+          item?.labelIds?.includes(global.DRAFT_LABEL)
         )
       ) {
         setOpen(true)

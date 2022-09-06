@@ -58,7 +58,7 @@ const MappedMessages = ({
     <>
       {reversedMessagesOrder.map((message, index) => (
         <div key={message.id}>
-          {message.labelIds.includes(global.DRAFT_LABEL) ? (
+          {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
             <DraftMessage
               message={message}
               draftIndex={index}
