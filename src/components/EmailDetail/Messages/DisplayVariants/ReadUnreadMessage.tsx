@@ -202,7 +202,7 @@ const ReadUnreadMessage = ({
                 <S.ChildDiv>
                   <EmailHasAttachmentSimple files={message?.payload?.files} />
                 </S.ChildDiv>
-                {labelIds.includes(global.ARCHIVE_LABEL) && (
+                {labelIds.includes(global.SEARCH_LABEL) && (
                   <EmailLabel
                     labelNames={threadDetail.messages[messageIndex].labelIds}
                   />
