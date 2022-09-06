@@ -64,16 +64,12 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
     return []
   }, [threadDetail])
 
-  // TODO: Remove this
-  const staticFiles = files()?.filter((item) => item !== null)
-  console.log(files())
-
   return (
     <ES.DetailRow>
       <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
-          {!isLoading && staticFiles && staticFiles.length > 0 ? (
-            staticFiles
+          {!isLoading && files() && files().length > 0 ? (
+            files()
           ) : (
             <span>{local.NO_FILES}</span>
           )}

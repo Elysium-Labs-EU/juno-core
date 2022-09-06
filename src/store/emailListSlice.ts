@@ -359,7 +359,6 @@ export const emailListSlice = createSlice({
       (
         state,
         {
-          payload,
           payload: {
             labels,
             response: { threads },
