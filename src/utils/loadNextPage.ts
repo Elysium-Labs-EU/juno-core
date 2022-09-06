@@ -1,10 +1,7 @@
-import { fetchEmailsFull, fetchEmailsSimple } from '../store/emailListSlice'
-import {
-  IEmailListObject,
-  IEmailListObjectSearch,
-} from '../store/storeTypes/emailListTypes'
-import * as global from '../constants/globalConstants'
+import { fetchEmailsSimple } from '../store/emailListSlice'
+import { IEmailListObject } from '../store/storeTypes/emailListTypes'
 import { AppDispatch } from '../store/store'
+import { HISTORY_NEXT_PAGETOKEN } from './handleHistoryObject'
 
 interface ILoadNextPage {
   q?: string
@@ -23,9 +20,8 @@ const loadNextPage = ({
   dispatch,
   silentLoading = false,
   maxResults,
-  fetchSimple = false,
 }: ILoadNextPage) => {
-  if (nextPageToken) {
+  if (nextPageToken && nextPageToken !== HISTORY_NEXT_PAGETOKEN) {
     const params = {
       q,
       labelIds,
@@ -33,13 +29,7 @@ const loadNextPage = ({
       maxResults,
       silentLoading,
     }
-    // Fetch Simple is used for overviews and search results. Full fetch is used during the email detail view and edge loading when on email detail.
-    // For safety, resort to full fetching by default.
-    if (fetchSimple) {
-      dispatch(fetchEmailsSimple(params))
-    } else {
-      dispatch(fetchEmailsFull(params))
-    }
+    dispatch(fetchEmailsSimple(params))
   }
 }
 
@@ -50,7 +40,7 @@ interface IEdgeLoadingNextPage {
   dispatch: AppDispatch
   labelIds: string[]
   emailFetchSize: number
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
+  activeEmailList: IEmailListObject
 }
 
 export const edgeLoadingNextPage = ({
@@ -61,18 +51,18 @@ export const edgeLoadingNextPage = ({
   activeEmailList,
 }: IEdgeLoadingNextPage) => {
   if (!isSilentLoading) {
-    if (Object.prototype.hasOwnProperty.call(activeEmailList, 'q')) {
-      const { q, nextPageToken } = activeEmailList as IEmailListObjectSearch
+    if ('q' in activeEmailList) {
+      const { q, nextPageToken } = activeEmailList
       return loadNextPage({
         q,
         nextPageToken,
         dispatch,
-        maxResults: global.MAX_RESULTS,
+        maxResults: emailFetchSize,
         silentLoading: true,
-        labelIds,
+        labelIds: [],
       })
     }
-    const { nextPageToken } = activeEmailList as IEmailListObject
+    const { nextPageToken } = activeEmailList
     return loadNextPage({
       nextPageToken,
       labelIds,

@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
@@ -27,7 +26,7 @@ import ThreadList from './ThreadList'
 const RenderEmailList = ({
   filteredOnLabel,
 }: {
-  filteredOnLabel: IEmailListObject | IEmailListObjectSearch
+  filteredOnLabel: IEmailListObject
 }) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()

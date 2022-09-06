@@ -8,7 +8,6 @@ import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
 import senderNameFull from '../../Elements/SenderName/senderNameFull'
 import { selectProfile } from '../../../store/baseSlice'
 import { useAppSelector } from '../../../store/hooks'
-import checkAttachment from '../../../utils/checkAttachment'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
 import {
@@ -32,12 +31,11 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
         .slice(0)
         .reverse()
         .map((message) => {
-          const result = checkAttachment(message)
           const staticSenderNameFull = senderNameFull(
             message.payload.headers?.from,
             emailAddress
           )
-          if (result.length > 0) {
+          if (message?.payload?.files && message.payload.files.length > 0) {
             return (
               <S.FileEmailRow key={message.id}>
                 <S.NameTimestampRow>
@@ -48,7 +46,7 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
                   <TimeStampDisplay threadTimeStamp={message.internalDate} />
                 </S.NameTimestampRow>
                 <S.BubbleWrapper>
-                  {result.map((item, index) => (
+                  {message.payload.files.map((item, index) => (
                     <EmailAttachmentBubble
                       attachmentData={item}
                       messageId={message.id}
@@ -60,20 +58,18 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
               </S.FileEmailRow>
             )
           }
-          return null
+          return []
         })
     }
-    return null
+    return []
   }, [threadDetail])
-
-  const staticFiles = files()?.filter((item) => item !== null)
 
   return (
     <ES.DetailRow>
       <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
-          {!isLoading && staticFiles && staticFiles.length > 0 ? (
-            staticFiles
+          {!isLoading && files() && files().length > 0 ? (
+            files()
           ) : (
             <span>{local.NO_FILES}</span>
           )}

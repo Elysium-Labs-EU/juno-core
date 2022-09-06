@@ -7,12 +7,16 @@ import threadApi from '../data/threadApi'
 export const fetchEmailDetail = createAsyncThunk(
   'emailDetail/fetchEmailDetail',
   async (
-    { threadId, labelIds }: { threadId: string; labelIds: string[] },
+    {
+      threadId,
+      labelIds,
+      q,
+    }: { threadId: string; labelIds: string[]; q?: string },
     { signal }
   ) => {
     const response = await threadApi({ signal }).getThreadDetail(threadId)
     // Convert the output to facilite the current code to update and email in the emaillist.
-    return { response: { threads: [response] }, labels: labelIds }
+    return { response: { threads: [response] }, labels: labelIds, q }
   },
   {
     condition: (arg, { getState }) => {

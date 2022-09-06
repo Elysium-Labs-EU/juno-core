@@ -27,7 +27,6 @@ import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../store/storeTypes/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
@@ -59,7 +58,7 @@ const EmailDetail = () => {
     overviewId: string
   }>()
   const [activeEmailList, setActiveEmailList] = useState<
-    IEmailListObject | IEmailListObjectSearch
+    IEmailListObject
   >()
 
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
@@ -145,7 +144,7 @@ const EmailDetail = () => {
         if (someThreadHasBody) {
           return
         }
-        dispatch(fetchEmailDetail({ threadId, labelIds }))
+        dispatch(fetchEmailDetail({ threadId, labelIds, q: activeEmailList?.q }))
       }
     }
   }, [threadId, activeEmailList])

@@ -4,7 +4,7 @@ export const FilesWrapper = styled.div`
   border-radius: 6px;
   background-color: var(--color-white);
   margin-bottom: 0.5rem;
-  padding: 1rem;
+  padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
 `
 

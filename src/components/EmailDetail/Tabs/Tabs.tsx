@@ -5,7 +5,6 @@ import * as S from './TabsStyles'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../../store/storeTypes/emailListTypes'
 import { selectViewIndex } from '../../../store/emailDetailSlice'
 import MessagesTab from './MessagesTab'
@@ -19,7 +18,7 @@ interface ITabItem {
 const Tabs = ({
   activeEmailList,
 }: {
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
+  activeEmailList: IEmailListObject
 }) => {
   const [activeLink, setActiveLink] = useState('')
   const dispatch = useAppDispatch()

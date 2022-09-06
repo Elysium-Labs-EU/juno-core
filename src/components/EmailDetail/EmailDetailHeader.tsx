@@ -14,7 +14,6 @@ import { findLabelById } from '../../utils/findLabel'
 import EmailPosition from './EmailPosition/EmailPosition'
 import {
   IEmailListObject,
-  IEmailListObjectSearch,
 } from '../../store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
 import { selectCoreStatus, selectViewIndex } from '../../store/emailDetailSlice'
@@ -26,7 +25,7 @@ import {
 const EmailDetailHeader = ({
   activeEmailList,
 }: {
-  activeEmailList: IEmailListObject | IEmailListObjectSearch
+  activeEmailList: IEmailListObject
 }) => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -41,7 +40,7 @@ const EmailDetailHeader = ({
   useEffect(() => {
     let mounted = true
     if (storageLabels.length > 0 && labelIds.length > 0) {
-      if (location.pathname.includes(labelIds[0])) {
+      if (location?.pathname?.includes(labelIds[0])) {
         const matchedLabel = findLabelById({ storageLabels, labelIds })
         if (matchedLabel.length > 0) {
           const splitHeader = matchedLabel[0].name.split('/')

@@ -1,34 +1,35 @@
-import { useEffect, useMemo, useState } from 'react'
 import * as React from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
-import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
-import EmailAttachment from '../../Attachment/EmailAttachment'
-import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
-import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import * as local from '../../../../constants/unreadConstants'
-import * as S from '../../EmailDetailStyles'
+
 import * as global from '../../../../constants/globalConstants'
-import EmailHasAttachment from '../../../Elements/EmailHasAttachment'
-import {
-  IEmailMessage,
-  IEmailListThreadItem,
-} from '../../../../store/storeTypes/emailListTypes'
-import SpecificEmailOptions from '../SpecificEmailOptions'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import { useAppSelector } from '../../../../store/hooks'
-import { selectIsReplying } from '../../../../store/emailDetailSlice'
-import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
-import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
-import EmailSubject from '../../../Elements/EmailSubject'
-import EmailSnippet from '../../../Elements/EmailSnippet'
-import { selectProfile } from '../../../../store/baseSlice'
-import Seo from '../../../Elements/Seo'
-import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
+import * as local from '../../../../constants/unreadConstants'
 import useClickOutside from '../../../../hooks/useClickOutside'
-import LinkedContacts from './Recipients/LinkedContacts'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
-import EmailLabel from '../../../Elements/EmailLabel'
+import { selectProfile } from '../../../../store/baseSlice'
+import { selectIsReplying } from '../../../../store/emailDetailSlice'
+import { useAppSelector } from '../../../../store/hooks'
 import { selectLabelIds } from '../../../../store/labelsSlice'
+import {
+  IEmailListThreadItem,
+  IEmailMessage,
+} from '../../../../store/storeTypes/emailListTypes'
+import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
+import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
+import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
+import EmailLabel from '../../../Elements/EmailLabel'
+import EmailSnippet from '../../../Elements/EmailSnippet'
+import EmailSubject from '../../../Elements/EmailSubject'
+import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
+import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
+import Seo from '../../../Elements/Seo'
+import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
+import EmailAttachment from '../../Attachment/EmailAttachment'
+import * as S from '../../EmailDetailStyles'
+import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
+import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
+import SpecificEmailOptions from '../SpecificEmailOptions'
+import LinkedContacts from './Recipients/LinkedContacts'
 
 interface IReadMessage {
   message: IEmailMessage
@@ -60,9 +61,9 @@ const ReadUnreadMessage = ({
 
   useEffect(() => {
     let mounted = true
-    if (threadDetail && threadDetail.messages) {
+    if (threadDetail && threadDetail?.messages) {
       if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message.labelIds?.includes(local.UNREAD)) {
+        if (message && message?.labelIds?.includes(local.UNREAD)) {
           setOpen(true)
         }
         if (
@@ -79,7 +80,7 @@ const ReadUnreadMessage = ({
       if (
         threadDetail.messages.length > 1 &&
         threadDetail.messages.some((item) =>
-          item.labelIds.includes(global.DRAFT_LABEL)
+          item?.labelIds?.includes(global.DRAFT_LABEL)
         )
       ) {
         setOpen(true)
@@ -114,11 +115,11 @@ const ReadUnreadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   /**
@@ -171,7 +172,7 @@ const ReadUnreadMessage = ({
           <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
           <S.TimeAttachmentContainer>
             <S.ChildDiv>
-              <EmailHasAttachment messages={message} />
+              <EmailHasAttachmentSimple files={message?.payload?.files} />
             </S.ChildDiv>
 
             <S.ChildDiv>
@@ -199,7 +200,7 @@ const ReadUnreadMessage = ({
               </S.ClickHeader>
               <S.TimeAttachmentContainer>
                 <S.ChildDiv>
-                  <EmailHasAttachment messages={message} />
+                  <EmailHasAttachmentSimple files={message?.payload?.files} />
                 </S.ChildDiv>
                 {labelIds.includes(global.ARCHIVE_LABEL) && (
                   <EmailLabel
