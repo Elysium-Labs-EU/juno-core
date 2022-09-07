@@ -5,8 +5,8 @@ import { selectBaseLoaded } from '../../store/baseSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Seo from '../Elements/Seo'
+import { INBOX_LABEL } from '../../constants/globalConstants'
 
-export const INBOX_LABEL = ['INBOX']
 const HEADER_INBOX = 'Inbox'
 
 const Inbox = () => {
@@ -15,7 +15,7 @@ const Inbox = () => {
 
   useEffect(() => {
     if (baseLoaded) {
-      dispatch(setCurrentLabels(INBOX_LABEL))
+      dispatch(setCurrentLabels([INBOX_LABEL]))
     }
   }, [baseLoaded])
 

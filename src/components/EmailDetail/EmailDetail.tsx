@@ -31,6 +31,7 @@ import EmailDetailHeader from './EmailDetailHeader'
 import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
+import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -56,6 +57,7 @@ const EmailDetail = () => {
     overviewId: string
   }>()
   const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
+  useFetchEmailDetail({ threadId, activeEmailList })
 
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
@@ -126,26 +128,6 @@ const EmailDetail = () => {
       )
     }
   }, [viewIndex, activeEmailList, currentEmail])
-
-  useEffect(() => {
-    if (threadId && activeEmailList) {
-      // First check if the thread already has a body, if not fetch it.
-      const emailThreadObject = activeEmailList.threads.find(
-        (item) => item.id === threadId
-      )
-      if (emailThreadObject) {
-        const someThreadHasBody = emailThreadObject.messages.some((message) =>
-          Object.prototype.hasOwnProperty.call(message.payload, 'body')
-        )
-        if (someThreadHasBody) {
-          return
-        }
-        dispatch(
-          fetchEmailDetail({ threadId, labelIds, q: activeEmailList?.q })
-        )
-      }
-    }
-  }, [threadId, activeEmailList])
 
   return activeEmailList ? (
     <>

@@ -65,3 +65,9 @@ export interface IEmailListState {
   activeEmailListIndex: number
   isFetching: boolean
 }
+
+export type TBaseEmailList = {
+  labels: string[]
+  threads: []
+  nextPageToken: null
+}[]

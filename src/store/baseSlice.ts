@@ -13,7 +13,7 @@ import findSettings from '../utils/settings/findSettings'
 import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
 import settingsApi from '../data/settingsApi'
-import { listAddEmailList } from './emailListSlice'
+import { listAddEmailList, setBaseEmailList } from './emailListSlice'
 import { ARCHIVE_LABEL } from '../constants/globalConstants'
 
 const initialState: IBaseState = Object.freeze({
@@ -81,15 +81,15 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 const presetEmailList =
   (prefetchedBoxes: PrefetchedBoxes): AppThunk =>
   (dispatch) => {
-    prefetchedBoxes.forEach((emailContainer) => {
-      dispatch(
-        listAddEmailList({
-          labels: emailContainer[0]?.id,
+    dispatch(
+      setBaseEmailList(
+        prefetchedBoxes.map((emailContainer) => ({
+          labels: [emailContainer[0]?.id],
           threads: [],
           nextPageToken: null,
-        })
+        }))
       )
-    })
+    )
   }
 
 /**

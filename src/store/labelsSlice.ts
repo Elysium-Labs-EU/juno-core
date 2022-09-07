@@ -5,6 +5,7 @@ import labelApi from '../data/labelApi'
 import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
 import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
+import { fetchEmailsSimple } from './emailListSlice'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],
@@ -20,18 +21,7 @@ export const labelsSlice = createSlice({
       state.labelIds = payload
     },
     setLoadedInbox: (state, { payload }) => {
-      const doesLabelAlreadyExist =
-        state.loadedInbox.length > 0 &&
-        state.loadedInbox
-          .map((item) => item.includes(payload[0]))
-          .filter((result) => result === false)
-
-      if (!doesLabelAlreadyExist) {
-        state.loadedInbox.push(payload)
-      }
-      if (doesLabelAlreadyExist && doesLabelAlreadyExist.length > 0) {
-        state.loadedInbox = [...state.loadedInbox, payload]
-      }
+      state.loadedInbox = [...new Set([...state.loadedInbox, payload])]
     },
     setStorageLabels: (state, { payload }) => {
       if (!Array.isArray(payload)) {
@@ -49,6 +39,16 @@ export const labelsSlice = createSlice({
         state.storageLabels = [...state.storageLabels, ...labelIdNameArray]
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      fetchEmailsSimple.fulfilled,
+      (state, { payload: { labels } }) => {
+        if (labels) {
+          state.loadedInbox = [...state.loadedInbox, ...labels]
+        }
+      }
+    )
   },
 })
 
@@ -122,7 +122,6 @@ export const fetchLabelIds =
     } catch (err) {
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
-    // TO-DO: What if multiple labels are used
   }
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds

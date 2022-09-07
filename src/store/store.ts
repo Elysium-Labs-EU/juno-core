@@ -38,7 +38,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     preloadedState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(routerMiddleware),
-    devTools: process.env.NODE_ENV !== 'production',
+    // devTools: process.env.NODE_ENV !== 'production',
   })
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
