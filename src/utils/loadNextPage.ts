@@ -29,6 +29,7 @@ const loadNextPage = ({
       maxResults,
       silentLoading,
     }
+    console.log('here')
     dispatch(fetchEmailsSimple(params))
   }
 }
@@ -51,7 +52,7 @@ export const edgeLoadingNextPage = ({
   activeEmailList,
 }: IEdgeLoadingNextPage) => {
   if (!isSilentLoading) {
-    if ('q' in activeEmailList) {
+    if ('q' in activeEmailList && activeEmailList.q !== undefined) {
       const { q, nextPageToken } = activeEmailList
       return loadNextPage({
         q,

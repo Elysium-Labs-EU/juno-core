@@ -4,7 +4,7 @@ import type { RenderOptions } from '@testing-library/react'
 import type { PreloadedState } from '@reduxjs/toolkit'
 import {
   // createMemoryHistory,
-  History
+  History,
 } from 'history'
 import { Provider } from 'react-redux'
 // import { HistoryRouter } from 'redux-first-history/rr6'

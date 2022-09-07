@@ -8,11 +8,7 @@ import {
   setActiveEmailListIndex,
 } from '../../store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
-import {
-  selectEmailListSize,
-  selectIsLoading,
-  selectIsProcessing,
-} from '../../store/utilsSlice'
+import { selectEmailListSize, selectIsProcessing } from '../../store/utilsSlice'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as global from '../../constants/globalConstants'
@@ -21,7 +17,11 @@ import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import getEmailListIndex from '../../utils/getEmailListIndex'
 import isPromise from '../../utils/isPromise'
 import handleSessionStorage from '../../utils/handleSessionStorage'
-import { resetEmailDetail, selectViewIndex } from '../../store/emailDetailSlice'
+import {
+  resetEmailDetail,
+  selectCurrentEmail,
+  selectViewIndex,
+} from '../../store/emailDetailSlice'
 import RenderEmailList from './RenderEmailList'
 
 const LabeledInbox = ({
@@ -41,13 +41,13 @@ const LabeledInbox = ({
 const EmailList = () => {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const emailList = useAppSelector(selectEmailList)
-  const isLoading = useAppSelector(selectIsLoading)
   const isProcessing = useAppSelector(selectIsProcessing)
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const viewIndex = useAppSelector(selectViewIndex)
+  const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
 
   // If the box is empty, and the history feed is adding the item to the feed
@@ -57,7 +57,7 @@ const EmailList = () => {
     let emailPromise: any = {}
     let draftPromise: any = {}
     if (labelIds && !labelIds.includes(global.SEARCH_LABEL)) {
-      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1)) {
+      if (labelIds.some((val) => loadedInbox.indexOf(val) === -1)) {
         const params = {
           labelIds,
           maxResults: emailFetchSize,
@@ -71,7 +71,7 @@ const EmailList = () => {
           draftPromise = dispatch(fetchDrafts())
         }
       }
-      if (labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1)) {
+      if (labelIds.some((val) => loadedInbox.indexOf(val) > -1)) {
         if (
           emailList.length > 0 &&
           emailList.filter((emailSubList) =>
@@ -111,8 +111,10 @@ const EmailList = () => {
 
   // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {
-    dispatch(resetEmailDetail())
-  }, [])
+    if (currentEmail.length > 0) {
+      dispatch(resetEmailDetail())
+    }
+  }, [currentEmail])
 
   // Sync the emailListIndex with Redux
   useEffect(() => {
@@ -122,20 +124,14 @@ const EmailList = () => {
     }
   }, [emailList, labelIds])
 
-  return (
-    <>
-      {labelIds.some((val) => loadedInbox.flat(1).indexOf(val) > -1) &&
-        activeEmailListIndex > -1 && (
-          <LabeledInbox
-            emailList={emailList}
-            activeEmailListIndex={activeEmailListIndex}
-          />
-        )}
-      {(isLoading || activeEmailListIndex === -1) &&
-        labelIds.some((val) => loadedInbox.flat(1).indexOf(val) === -1) && (
-          <LoadingState />
-        )}
-    </>
+  return labelIds.some((val) => loadedInbox.indexOf(val) > -1) &&
+    activeEmailListIndex > -1 ? (
+    <LabeledInbox
+      emailList={emailList}
+      activeEmailListIndex={activeEmailListIndex}
+    />
+  ) : (
+    <LoadingState />
   )
 }
 

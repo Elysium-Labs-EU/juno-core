@@ -16,6 +16,7 @@ import {
   IEmailListObject,
   IEmailListState,
   IEmailListThreadItem,
+  TBaseEmailList,
 } from './storeTypes/emailListTypes'
 import {
   UpdateRequestParamsBatch,
@@ -43,9 +44,8 @@ import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
-  async (query: EmailQueryObject, { dispatch, signal }) => {
+  async (query: EmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
-    dispatch(setLoadedInbox(query.labelIds))
     return { response: response.data, labels: query.labelIds, q: query?.q }
   }
 )
@@ -56,9 +56,8 @@ export const fetchEmailsSimple = createAsyncThunk(
  */
 export const fetchEmailsFull = createAsyncThunk(
   'email/fetchEmailsFull',
-  async (query: EmailQueryObject, { dispatch, signal }) => {
+  async (query: EmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getFullThreads(query)
-    dispatch(setLoadedInbox(query.labelIds))
     return { response: response.data, labels: query.labelIds }
   }
 )
@@ -235,6 +234,9 @@ export const emailListSlice = createSlice({
     setActiveEmailListIndex: (state, { payload }: PayloadAction<number>) => {
       state.activeEmailListIndex = payload
     },
+    setBaseEmailList: (state, { payload }: PayloadAction<TBaseEmailList>) => {
+      state.emailList = payload
+    },
     listAddEmailList: (state, { payload }) => {
       const { labels, threads } = payload
       handleEmailListChange(state, labels, threads)
@@ -372,6 +374,7 @@ export const {
   setSelectedEmails,
   setIsFetching,
   setActiveEmailListIndex,
+  setBaseEmailList,
   listAddEmailList,
   listRemoveItemDetail,
   listRemoveItemMessage,
@@ -467,7 +470,7 @@ export const loadEmailDetails =
         if (
           !getState().base.baseLoaded &&
           labels.some(
-            (val) => getState().labels.loadedInbox.flat(1).indexOf(val) === -1
+            (val) => getState().labels.loadedInbox.indexOf(val) === -1
           )
         ) {
           dispatch(setLoadedInbox(labels))
@@ -689,6 +692,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
+        console.log('sortedFeeds', sortedFeeds)
         // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {

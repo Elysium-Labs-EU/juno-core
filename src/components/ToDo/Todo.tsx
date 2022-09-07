@@ -17,21 +17,26 @@ const Todo = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
+    let mounted = true
     if (
       baseLoaded &&
       !storageLabels.some((label) => label.name === local.LABEL)
     ) {
-      dispatch(fetchLabelIds(local.LABEL))
-    } else if (
+      mounted && dispatch(fetchLabelIds(local.LABEL))
+    }
+    if (
       baseLoaded &&
       storageLabels.some((label) => label.name === local.LABEL)
     ) {
       const labelId = storageLabels.filter(
         (label) => label.name === local.LABEL
       )
-      dispatch(setCurrentLabels([labelId[0].id]))
+      mounted && dispatch(setCurrentLabels([labelId[0].id]))
     }
-  }, [baseLoaded])
+    return () => {
+      mounted = false
+    }
+  }, [baseLoaded, storageLabels])
 
   return (
     <>

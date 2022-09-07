@@ -108,7 +108,7 @@ describe('EmailListItem draft tests', () => {
     expect(screen.findByTestId('email-recipient')).toBeDefined()
   })
 
-  test('should render a draft snippet indicator when the email is a draft', () => {
+  test('should render a draft label indicator when the email is a draft', () => {
     renderWithProviders(
       <EmailListItem
         email={testDraftEmail}

@@ -60,7 +60,8 @@ const EmailDetailHeader = ({
     if (
       activeEmailList.threads.length - 1 - viewIndex <= 4 &&
       activeEmailList.nextPageToken &&
-      mounted
+      mounted &&
+      !isSilentLoading
     ) {
       edgeLoadingNextPage({
         isSilentLoading,
