@@ -42,7 +42,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     background-color: var(--color-white-off) !important;
-    font-family: var(--font-family) !important;
+    font-family: var(--font-family);
     -webkit-font-smoothing: antialiased !important;
   }
 `
