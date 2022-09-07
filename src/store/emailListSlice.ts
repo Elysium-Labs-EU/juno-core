@@ -38,6 +38,7 @@ import labelURL from '../utils/createLabelURL'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
 import handleHistoryObject, {
   HISTORY_NEXT_PAGETOKEN,
+  HISTORY_TIME_STAMP,
 } from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
 import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
@@ -75,6 +76,7 @@ const handleAdditionToExistingEmailArray = (
   state: IEmailListState,
   labels: string[],
   threads: IEmailListThreadItem[],
+  timestamp: number,
   arrayIndex?: number,
   nextPageToken?: undefined | string | null,
   q?: undefined | string
@@ -108,6 +110,7 @@ const handleAdditionToExistingEmailArray = (
         targetEmailListObject.threads.concat(tempArray)
       )
 
+      // Here we create the final object that will be pushed to the Redux state
       const newObject: IEmailListObject = {
         labels,
         threads: undoubleThreads(sortedThreads),
@@ -115,6 +118,7 @@ const handleAdditionToExistingEmailArray = (
           nextPageToken === HISTORY_NEXT_PAGETOKEN
             ? targetEmailListObject.nextPageToken
             : nextPageToken,
+        timestamp,
         q,
       }
       targetEmailListObject = newObject
@@ -131,6 +135,7 @@ const handleEmailListChange = (
   state: IEmailListState,
   labels: string[] | undefined,
   threads: IEmailListThreadItem[],
+  timestamp: number,
   nextPageToken?: undefined | string | null,
   q?: string
 ) => {
@@ -151,6 +156,7 @@ const handleEmailListChange = (
           state,
           labels,
           threads,
+          timestamp,
           arrayIndex,
           nextPageToken,
           q
@@ -178,6 +184,7 @@ const handleEmailListChange = (
         state,
         labels,
         threads,
+        timestamp,
         arrayIndex,
         nextPageToken
       )
@@ -238,8 +245,8 @@ export const emailListSlice = createSlice({
       state.emailList = payload
     },
     listAddEmailList: (state, { payload }) => {
-      const { labels, threads } = payload
-      handleEmailListChange(state, labels, threads)
+      const { labels, threads, timestamp } = payload
+      handleEmailListChange(state, labels, threads, timestamp)
     },
     /**
      * @function listRemoveItemDetail
@@ -292,8 +299,9 @@ export const emailListSlice = createSlice({
       ].threads.findIndex((thread) => thread.id === threadId)
 
       const currentState = state.emailList
-      currentState[state.activeEmailListIndex].threads[threadIndex].messages =
-        filteredMessages()
+      currentState[state.activeEmailListIndex].threads[
+        threadIndex
+      ].messages = filteredMessages()
       state.emailList = currentState
     },
     listRemoveItemDetailBatch: (state, { payload }) => {
@@ -341,13 +349,20 @@ export const emailListSlice = createSlice({
         {
           payload: {
             labels,
-            response: { threads, nextPageToken },
+            response: { threads, nextPageToken, timestamp },
             q,
           },
         }
       ) => {
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(state, labels, threads, nextPageToken, q)
+        handleEmailListChange(
+          state,
+          labels,
+          threads,
+          timestamp,
+          nextPageToken,
+          q
+        )
       }
     )
     builder.addCase(
@@ -362,9 +377,17 @@ export const emailListSlice = createSlice({
           },
         }
       ) => {
-        // Send the nextPageToken as History - so the original next page token will not be overwritten.
+        // Send the nextPageToken as History - so the original nextPageToken will not be overwritten.
+        // Send the timstamp as 0 - so the original timestamp will not be overwritten.
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(state, labels, threads, HISTORY_NEXT_PAGETOKEN, q)
+        handleEmailListChange(
+          state,
+          labels,
+          threads,
+          HISTORY_TIME_STAMP,
+          HISTORY_NEXT_PAGETOKEN,
+          q
+        )
       }
     )
   },
@@ -382,32 +405,30 @@ export const {
   listUpdateSearchResults,
 } = emailListSlice.actions
 
-export const useSearchResults =
-  ({
-    searchResults,
-    currentEmail,
-  }: {
-    searchResults: IEmailListObject
-    currentEmail: string
-  }): AppThunk =>
-  (dispatch, getState) => {
-    const { searchList } = getState().email
-    const { coreStatus } = getState().emailDetail
-    if (searchList !== searchResults) {
-      dispatch(listUpdateSearchResults(searchResults))
-    }
-    if (coreStatus !== global.CORE_STATUS_SEARCHING) {
-      dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
-      dispatch(setCurrentLabels([global.SEARCH_LABEL]))
-    }
-    dispatch(
-      setViewIndex(
-        searchResults.threads.findIndex((item) => item.id === currentEmail)
-      )
-    )
-    dispatch(setCurrentEmail(currentEmail))
-    dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
+export const useSearchResults = ({
+  searchResults,
+  currentEmail,
+}: {
+  searchResults: IEmailListObject
+  currentEmail: string
+}): AppThunk => (dispatch, getState) => {
+  const { searchList } = getState().email
+  const { coreStatus } = getState().emailDetail
+  if (searchList !== searchResults) {
+    dispatch(listUpdateSearchResults(searchResults))
   }
+  if (coreStatus !== global.CORE_STATUS_SEARCHING) {
+    dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
+    dispatch(setCurrentLabels([global.SEARCH_LABEL]))
+  }
+  dispatch(
+    setViewIndex(
+      searchResults.threads.findIndex((item) => item.id === currentEmail)
+    )
+  )
+  dispatch(setCurrentEmail(currentEmail))
+  dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
+}
 
 /**
  * @function loadEmailDetails
@@ -415,81 +436,77 @@ export const useSearchResults =
  * @returns - the function updates the Redux state with the found email details.
  */
 
-export const loadEmailDetails =
-  (labeledThreads: IEmailListObject): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { threads, labels, nextPageToken } = labeledThreads
-      if (threads) {
-        if (threads.length > 0) {
-          const buffer: any = []
-          threads.forEach((thread) =>
-            // TODO: Alter all input to have the threadId as input
-            buffer.push(threadApi({}).getThreadDetail(thread.id))
-          )
-          const resolvedThreads = await Promise.all(buffer)
-          const onlyObjectThreads = resolvedThreads.filter(
-            (thread) => typeof thread !== 'string'
-          )
-          // If the object is only of length 1, then it could mean that it is an update from draft.
-          // If that is the case, attempt to find the original label id of the thread to store the object.
-          if (
-            onlyObjectThreads[0].messages[
-              onlyObjectThreads[0].messages.length - 1
-            ].labelIds.includes(global.DRAFT_LABEL)
-          ) {
-            const { storageLabels } = getState().labels
-            const labelNames = onlyObjectThreads[0].messages[0].labelIds
-            const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
-            if (legalLabels.length > 0) {
-              legalLabels.forEach((label) =>
-                dispatch(
-                  listAddEmailList({
-                    labels: label.id,
-                    threads: onlyObjectThreads,
-                    nextPageToken: nextPageToken ?? null,
-                  })
-                )
-              )
-            }
-          } else {
-            dispatch(
-              listAddEmailList({
-                labels,
-                threads: onlyObjectThreads,
-                nextPageToken: nextPageToken ?? null,
-              })
-            )
-            dispatch(setLoadedInbox(labels))
-          }
-          getState().utils.isLoading && dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
-        }
-      } else {
+export const loadEmailDetails = (
+  labeledThreads: IEmailListObject
+): AppThunk => async (dispatch, getState) => {
+  try {
+    const { threads, labels, nextPageToken } = labeledThreads
+    if (threads) {
+      if (threads.length > 0) {
+        const buffer: any = []
+        threads.forEach((thread) =>
+          // TODO: Alter all input to have the threadId as input
+          buffer.push(threadApi({}).getThreadDetail(thread.id))
+        )
+        const resolvedThreads = await Promise.all(buffer)
+        const onlyObjectThreads = resolvedThreads.filter(
+          (thread) => typeof thread !== 'string'
+        )
+        // If the object is only of length 1, then it could mean that it is an update from draft.
+        // If that is the case, attempt to find the original label id of the thread to store the object.
         if (
-          !getState().base.baseLoaded &&
-          labels.some(
-            (val) => getState().labels.loadedInbox.indexOf(val) === -1
-          )
+          onlyObjectThreads[0].messages[
+            onlyObjectThreads[0].messages.length - 1
+          ].labelIds.includes(global.DRAFT_LABEL)
         ) {
+          const { storageLabels } = getState().labels
+          const labelNames = onlyObjectThreads[0].messages[0].labelIds
+          const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
+          if (legalLabels.length > 0) {
+            legalLabels.forEach((label) =>
+              dispatch(
+                listAddEmailList({
+                  labels: label.id,
+                  threads: onlyObjectThreads,
+                  nextPageToken: nextPageToken ?? null,
+                })
+              )
+            )
+          }
+        } else {
+          dispatch(
+            listAddEmailList({
+              labels,
+              threads: onlyObjectThreads,
+              nextPageToken: nextPageToken ?? null,
+            })
+          )
           dispatch(setLoadedInbox(labels))
         }
-        if (
-          !getState().base.baseLoaded &&
-          getState().labels.storageLabels.length ===
-            getState().labels.loadedInbox.length
-        ) {
-          dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
-        }
+        getState().utils.isLoading && dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
       }
-    } catch (err) {
-      process.env.NODE_ENV !== 'production' && console.error(err)
-      dispatch(setServiceUnavailable('Error hydrating emails.'))
+    } else {
+      if (
+        !getState().base.baseLoaded &&
+        labels.some((val) => getState().labels.loadedInbox.indexOf(val) === -1)
+      ) {
+        dispatch(setLoadedInbox(labels))
+      }
+      if (
+        !getState().base.baseLoaded &&
+        getState().labels.storageLabels.length ===
+          getState().labels.loadedInbox.length
+      ) {
+        dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
+      }
     }
+  } catch (err) {
+    process.env.NODE_ENV !== 'production' && console.error(err)
+    dispatch(setServiceUnavailable('Error hydrating emails.'))
   }
+}
 
 /**
  * @function updateEmailLabel
@@ -627,8 +644,12 @@ export const updateEmailLabelBatch = (
 
   return async (dispatch, getState) => {
     try {
-      const { activeEmailListIndex, emailList, selectedEmails, searchList } =
-        getState().email
+      const {
+        activeEmailListIndex,
+        emailList,
+        selectedEmails,
+        searchList,
+      } = getState().email
       const staticActiveEmailList =
         activeEmailListIndex === -1
           ? searchList
@@ -692,7 +713,6 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-        console.log('sortedFeeds', sortedFeeds)
         // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {

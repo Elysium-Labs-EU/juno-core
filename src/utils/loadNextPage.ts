@@ -29,7 +29,6 @@ const loadNextPage = ({
       maxResults,
       silentLoading,
     }
-    console.log('here')
     dispatch(fetchEmailsSimple(params))
   }
 }

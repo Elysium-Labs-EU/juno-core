@@ -3,6 +3,7 @@ import { LabelIdName } from '../store/storeTypes/labelsTypes'
 import onlyLegalLabelObjects from './onlyLegalLabelObjects'
 
 export const HISTORY_NEXT_PAGETOKEN = 'history'
+export const HISTORY_TIME_STAMP = 0
 
 interface IHistoryMessage {
   id: string
