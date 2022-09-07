@@ -13,7 +13,7 @@ import findSettings from '../utils/settings/findSettings'
 import parseSettings from '../utils/settings/parseSettings'
 import createSettingsLabel from '../utils/settings/createSettingsLabel'
 import settingsApi from '../data/settingsApi'
-import { listAddEmailList, setBaseEmailList } from './emailListSlice'
+import { setBaseEmailList } from './emailListSlice'
 import { ARCHIVE_LABEL } from '../constants/globalConstants'
 
 const initialState: IBaseState = Object.freeze({
