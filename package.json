@@ -24,7 +24,7 @@
     "@mui/system": "5.10.0",
     "@reduxjs/toolkit": "1.8.4",
     "@sentry/react": "7.10.0",
-    "@sentry/tracing": "7.10.0",
+    "@sentry/tracing": "7.11.1",
     "@testing-library/react": "13.3.0",
     "@tiptap/core": "2.0.0-beta.182",
     "@tiptap/extension-blockquote": "2.0.0-beta.29",
