@@ -15,7 +15,7 @@ const PageNotFound = () => (
         <img style={{ marginBottom: '1rem' }} src={Logo} alt="Juno's Logo" />
         <S.PageHeaderText>{PAGE_NOT_FOUND}</S.PageHeaderText>
         <p>{SUB_TEXT}</p>
-        <Link to={RouteConstants.HOME}>{LINK_TEXT}</Link>
+        <Link to={RouteConstants.TODO}>{LINK_TEXT}</Link>
       </S.Inner>
     </S.Wrapper>
   </GS.OuterContainer>

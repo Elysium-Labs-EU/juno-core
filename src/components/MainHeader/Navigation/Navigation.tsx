@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import * as keyConstants from '../../../constants/keyConstants'
-import Routes from '../../../constants/routes.json'
+import RoutesConstants from '../../../constants/routes.json'
 import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import {
   QiCompose,
@@ -63,11 +63,11 @@ const Navigation = () => {
       !isForwarding
     ) {
       if (keysPressed.includes(keyConstants.KEY_DIGIT_1)) {
-        dispatch(navigateTo(Routes.HOME))
+        dispatch(navigateTo(RoutesConstants.TODO))
       }
-      // if (keysPressed.includes(keyConstants.KEY_DIGIT_2)) {
-      //   dispatch(navigateTo(Routes.INBOX))
-      // }
+      if (keysPressed.includes(keyConstants.KEY_DIGIT_2) && !isFlexibleFlowActive) {
+        dispatch(navigateTo(RoutesConstants.INBOX))
+      }
       if (keysPressed.includes(keyConstants.KEY_DIGIT_3)) {
         dispatch(setInSearch(true))
       }
@@ -78,7 +78,7 @@ const Navigation = () => {
     return () => {
       mounted = false
     }
-  }, [keysPressed, inSearch, activeModal, location, isReplying, isForwarding])
+  }, [keysPressed, inSearch, activeModal, location, isReplying, isForwarding, isFlexibleFlowActive])
 
   const NavControllers = useMemo(
     () => (
@@ -88,7 +88,7 @@ const Navigation = () => {
             <S.NavItem>
               <CustomIconButton
                 icon={<QiToDo size={ICON_SIZE} />}
-                onClick={() => dispatch(navigateTo(Routes.HOME))}
+                onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
                 isActive={active === 'todo'}
                 title=""
               />
@@ -100,7 +100,7 @@ const Navigation = () => {
               <S.NavItem>
                 <CustomIconButton
                   icon={<QiInbox size={ICON_SIZE} />}
-                  onClick={() => dispatch(navigateTo(Routes.INBOX))}
+                  onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
                   isActive={active === 'inbox'}
                   title=""
                 />

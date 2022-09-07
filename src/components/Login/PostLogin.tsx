@@ -15,7 +15,7 @@ const PostLogin = () => {
 
   useEffect(() => {
     if (baseLoaded) {
-      dispatch(push(RoutesConstants.HOME))
+      dispatch(push(RoutesConstants.TODO))
     }
   }, [baseLoaded])
 

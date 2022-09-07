@@ -17,8 +17,10 @@ export const EMAIL_BODY_INVISIBLE = 'invisible'
 export const EMAIL_BODY_VISIBLE = 'visible'
 export const ID_TOKEN = 'idToken'
 export const INBOX_LABEL = 'INBOX'
+export const TODO_LABEL_NAME = 'Juno/To Do'
 export const JUNO_SETTINGS_LOCAL = 'junoSettings'
 export const JUNO_SIGNATURE = 'juno_signature'
+export const JUNO_BASE_LABEL = 'Juno'
 export const LAST_REFRESH = 'lastRefresh'
 export const LOAD_STATE_MAP = {
   idle: 'idle',
@@ -32,6 +34,7 @@ export const MIN_DELAY_REFRESH = 2500
 export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'
 export const SENT_LABEL = 'SENT'
+export const SPAM_LABEL = 'SPAM'
 export const UNREAD_LABEL = 'UNREAD'
 
 // DISPLAY

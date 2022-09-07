@@ -14,7 +14,7 @@ import {
   setViewIndex,
 } from './emailDetailSlice'
 import labelURL from '../utils/createLabelURL'
-import labelMap from '../constants/labelMapConstant'
+import { getRouteByLabelMap } from '../constants/labelMapConstant'
 import { findLabelById } from '../utils/findLabel'
 import filterIllegalLabels from '../utils/filterIllegalLabels'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
@@ -156,50 +156,55 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
   const foundLabel = findLabelById({ storageLabels, labelIds })
   if (foundLabel.length > 0) {
-    dispatch(push(labelMap[foundLabel[0].name]))
+    dispatch(push(getRouteByLabelMap[foundLabel[0].name]))
     return
   }
-  dispatch(push(RouteConstants.HOME))
+  dispatch(push(RouteConstants.TODO))
 }
 
-export const openEmail =
-  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
-  (dispatch, getState) => {
-    const { labelIds, storageLabels } = getState().labels
+export const openEmail = ({
+  email,
+  id,
+}: {
+  email?: IEmailListThreadItem
+  id: string
+}): AppThunk => (dispatch, getState) => {
+  const { labelIds, storageLabels } = getState().labels
 
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
 
-    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
-    }
-    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+  if (
+    email?.messages?.length === 1 &&
+    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+    email
+  ) {
+    const messageId = email.messages[email.messages.length - 1].id
+    dispatch(openDraftEmail({ id, messageId }))
+    return
   }
+  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+}
 
-export const navigateTo =
-  (destination: string): AppThunk =>
-  (dispatch, getState) => {
-    if (getState().emailDetail.isReplying) {
-      dispatch(setIsReplying(false))
-    }
-    if (getState().emailDetail.isForwarding) {
-      dispatch(setIsForwarding(false))
-    }
-    dispatch(push(destination))
+export const navigateTo = (destination: string): AppThunk => (
+  dispatch,
+  getState
+) => {
+  if (getState().emailDetail.isReplying) {
+    dispatch(setIsReplying(false))
   }
+  if (getState().emailDetail.isForwarding) {
+    dispatch(setIsForwarding(false))
+  }
+  dispatch(push(destination))
+}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
   const { labelIds } = getState().labels
   if (!coreStatus) {
     if (labelIds.includes(global.INBOX_LABEL)) {
-      dispatch(push(RouteConstants.HOME))
+      dispatch(push(RouteConstants.TODO))
       return
     }
     if (labelIds.includes(global.DRAFT_LABEL)) {
@@ -214,14 +219,14 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
       dispatch(push(RouteConstants.ARCHIVE))
       return
     }
-    dispatch(push(RouteConstants.HOME))
+    dispatch(push(RouteConstants.TODO))
   }
   if (coreStatus === global.CORE_STATUS_FOCUSED) {
-    dispatch(push(RouteConstants.HOME))
+    dispatch(push(RouteConstants.TODO))
     return
   }
   if (coreStatus === global.CORE_STATUS_SORTING) {
-    dispatch(push(RouteConstants.HOME))
+    dispatch(push(RouteConstants.TODO))
     return
   }
   if (coreStatus) {

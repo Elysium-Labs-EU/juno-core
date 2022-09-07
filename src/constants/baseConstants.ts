@@ -1,13 +1,14 @@
+import * as global from './globalConstants'
+
 export const BASE_ARRAY = [
-  'Juno',
-  'Juno/To Do',
-  // 'Juno/Keep',
-  // 'Juno/Reminder',
-  'INBOX',
-  'SPAM',
-  'DRAFT',
-  'SENT',
+  global.JUNO_BASE_LABEL,
+  global.TODO_LABEL_NAME,
+  global.INBOX_LABEL,
+  global.SPAM_LABEL,
+  global.DRAFT_LABEL,
+  global.SENT_LABEL,
 ]
+// 'Juno/Reminder',
 
 export const SETTINGS_LABEL = 'Juno/'
 export const SETTINGS_DELIMITER = '#'

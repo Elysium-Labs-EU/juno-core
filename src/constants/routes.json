@@ -1,5 +1,5 @@
 {
-  "HOME": "/",
+  "TODO": "/",
   "EMAIL_DETAIL": "/mail/:labelId/:threadId/:overviewId",
   "COMPOSE_EMAIL": "/compose/",
   "DRAFTS": "/drafts",

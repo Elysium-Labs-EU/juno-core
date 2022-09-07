@@ -1,20 +1,11 @@
-import { useEffect } from 'react'
 import EmailList from '../EmailList/EmailList'
-import { setCurrentLabels } from '../../store/labelsSlice'
-import { selectBaseLoaded } from '../../store/baseSlice'
 import * as local from '../../constants/draftConstants'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Seo from '../Elements/Seo'
+import useSetCurrentLabel from '../../hooks/useSetCurrentLabel'
 
 const DraftEmail = () => {
-  const baseLoaded = useAppSelector(selectBaseLoaded)
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    if (baseLoaded) {
-      dispatch(setCurrentLabels(local.DRAFT_LABEL_ARRAY))
-    }
-  }, [baseLoaded])
+  useSetCurrentLabel()
 
   return (
     <>
