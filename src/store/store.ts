@@ -15,13 +15,10 @@ import emailDetailReducer from './emailDetailSlice'
 import labelsReducer from './labelsSlice'
 import utilsReducer from './utilsSlice'
 
-const {
-  createReduxHistory,
-  routerMiddleware,
-  routerReducer,
-} = createReduxHistoryContext({
-  history: createBrowserHistory(),
-})
+const { createReduxHistory, routerMiddleware, routerReducer } =
+  createReduxHistoryContext({
+    history: createBrowserHistory(),
+  })
 
 const rootReducer = combineReducers({
   base: baseReducer,

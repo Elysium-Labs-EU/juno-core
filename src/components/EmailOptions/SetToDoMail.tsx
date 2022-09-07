@@ -24,9 +24,7 @@ const setToDoMail = ({
     removeLabelIds: onlyLegalLabels,
     addLabelIds: [toDoLabel[0].id],
   }
-  dispatch(
-    updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels })
-  )
+  dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
 }
 
 export default setToDoMail

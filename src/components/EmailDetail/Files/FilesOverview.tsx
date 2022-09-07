@@ -6,6 +6,7 @@ import {
 } from '../../../store/emailDetailSlice'
 import { useAppSelector } from '../../../store/hooks'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import countUniqueFiles from '../../../utils/countUniqueFiles'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
 import senderNameFull from '../../Elements/SenderName/senderNameFull'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
@@ -93,10 +94,10 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
     <ES.DetailRow>
       <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
-          {!isLoading && threadDetail ? (
+          {!isLoading && threadDetail && countUniqueFiles(threadDetail) > 0 ? (
             <MappedFiles threadDetail={threadDetail} />
           ) : (
-            <span>{local.NO_FILES}</span>
+            <span data-test-id="no-files-overview">{local.NO_FILES}</span>
           )}
           {isLoading && <StyledCircularProgress />}
         </S.FilesWrapper>

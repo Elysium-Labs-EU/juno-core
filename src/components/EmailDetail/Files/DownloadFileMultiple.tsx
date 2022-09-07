@@ -72,7 +72,7 @@ const DownloadButtonMultiple = ({
     <CustomButton
       onClick={handleClick}
       label={
-        filesObjectArray.length > 1
+        filesObjectArray.length > 0
           ? 'Download all files'
           : `Download ${
               filesObjectArray[0]?.files ? filesObjectArray[0].files.length : 0

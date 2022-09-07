@@ -54,20 +54,26 @@ const EmailDetailHeader = ({
     }
   }, [storageLabels, labelIds])
 
-  // TODO: Double check amount of rerenders on this function
-  // Attempt to load the next emails on the background when approaching the edge
-  if (
-    activeEmailList.threads.length - 1 - viewIndex <= 4 &&
-    activeEmailList.nextPageToken
-  ) {
-    edgeLoadingNextPage({
-      isSilentLoading,
-      dispatch,
-      labelIds,
-      emailFetchSize,
-      activeEmailList,
-    })
-  }
+  useEffect(() => {
+    let mounted = true
+    // Attempt to load the next emails on the background when approaching the edge
+    if (
+      activeEmailList.threads.length - 1 - viewIndex <= 4 &&
+      activeEmailList.nextPageToken &&
+      mounted
+    ) {
+      edgeLoadingNextPage({
+        isSilentLoading,
+        dispatch,
+        labelIds,
+        emailFetchSize,
+        activeEmailList,
+      })
+    }
+    return () => {
+      mounted = false
+    }
+  }, [activeEmailList, emailFetchSize, isSilentLoading, labelIds, viewIndex])
 
   return (
     <GS.OuterContainer data-testid="email-detail-header">
@@ -102,6 +108,9 @@ const EmailDetailHeader = ({
             <BackButton />
             <EmailPosition />
           </S.BackButtonWithNavgationContainer>
+          <S.InnerMenu>
+            {activeEmailList && <Tabs activeEmailList={activeEmailList} />}
+          </S.InnerMenu>
         </S.Wrapper>
       )}
     </GS.OuterContainer>

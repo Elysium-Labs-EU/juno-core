@@ -2,9 +2,12 @@ import React, { PropsWithChildren } from 'react'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
 import type { PreloadedState } from '@reduxjs/toolkit'
-import { createMemoryHistory, History } from 'history'
+import {
+  // createMemoryHistory,
+  History
+} from 'history'
 import { Provider } from 'react-redux'
-import { HistoryRouter } from 'redux-first-history/rr6'
+// import { HistoryRouter } from 'redux-first-history/rr6'
 import type { AppStore, RootState } from '../../store/store'
 import { setupStore } from '../../store/store'
 
@@ -23,7 +26,7 @@ export default function renderWithProviders(
     // Automatically create a store instance if no store was passed in
     store = setupStore(preloadedState),
     // Create memory history to be used for tests
-    history = createMemoryHistory(),
+    // history = createMemoryHistory(),
     ...renderOptions
   }: ExtendedRenderOptions = {}
 ) {
