@@ -9,146 +9,15 @@ const testEmail = {
       snippet:
         'And more news, tutorials and articles about React in this week&#39;s issue. #364 — July 11, 2022 View in browser React Digest Spread the word, build the community, share the knowledge with your friends',
       payload: {
-        partId: '',
         mimeType: 'multipart/alternative',
-        filename: '',
-        headers: [
-          {
-            name: 'Delivered-To',
-            value: 'robberttg@gmail.com',
-          },
-          {
-            name: 'Received',
-            value:
-              'by 2002:ac8:4895:0:0:0:0:0 with SMTP id i21csp2282839qtq;        Sun, 10 Jul 2022 10:49:16 -0700 (PDT)',
-          },
-          {
-            name: 'X-Google-Smtp-Source',
-            value:
-              'AGRyM1sCUcTlEFlazsG9CLCAkZY9Zb7l+IekYPP0C4D71J1lqHGeS51LhlcoHDp683Nt2ghXh9oq',
-          },
-          {
-            name: 'X-Received',
-            value:
-              'by 2002:a63:1d15:0:b0:412:8c83:a366 with SMTP id d21-20020a631d15000000b004128c83a366mr12848664pgd.32.1657475356615;        Sun, 10 Jul 2022 10:49:16 -0700 (PDT)',
-          },
-          {
-            name: 'ARC-Seal',
-            value:
-              'i=1; a=rsa-sha256; t=1657475356; cv=none;        d=google.com; s=arc-20160816;        b=BaX5ULqdtDG7dh6usxjwjZjnD5s7cvFFh9l5xbnNHhDRagbwSMUeHsI8dgICpIRIWj         WKlLKFn046i1OjXUXXxZh5EocnzOBq0In78ztwVEzbX8P8i+b72RhuXecFxq9yIBj2UN         S+XAyLh1DMVz1/pdzcFMKl2yQxJOv5g+aUo78qCn/lwM0kCqsjVF6HTJbfGmFcb+7CkO         UtUHCI9zts5gWPoMDxRL+z4b9I7wkMl3A4DFLAEkGsF6PCPEhygUitLHLvj6y7BHy8W/         m4PomnZUikcU+vxF1pCXGFjKW13L3vc+lATjz4xu9v9METbclUKOk2uNZ0cYY81Ix8ek         yoWA==',
-          },
-          {
-            name: 'ARC-Message-Signature',
-            value:
-              'i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20160816;        h=to:list-unsubscribe:content-transfer-encoding:mime-version:subject         :message-id:from:date:dkim-signature:dkim-signature;        bh=XgLJm4AkyWlFLqQjv9G0mEK3KPKiNis8B5BIdA2cm4M=;        b=meyuBYepIoAUOG8NXgk1jMQ1FBkdBHFXI+VEP0tbfK41rwhyPbOC0pcdlucCut999j         344OQz+yGHcrTiA+kedor++ikTYhAOrDkNJBS+dcmslPl40qrX0U1tc91eaPPkes0zp/         zHWxWanENs43xb90dW9dOjSbQUXNOmeGloZEPAhYobLqcFa7y4dsm6iOqkBdiV+E5bPy         0ZZlTUR/+/mZxJmA/Ud8q2ToC6mRP7l/U0vjN3KL8H02VlaeOPMPYLBzAVWDBp5XTSY6         pLBA6oCIjL1ZboI/MiM1rw18akD4fngMbpZcAcHojFEzNXzu1AuQtsdk7W9N4FijIu/3         C8Ag==',
-          },
-          {
-            name: 'ARC-Authentication-Results',
-            value:
-              'i=1; mx.google.com;       dkim=pass header.i=@reactdigest.net header.s=s1 header.b=2Ie1jGgt;       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=uLeM9vGS;       spf=pass (google.com: domain of bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net designates 149.72.28.143 as permitted sender) smtp.mailfrom="bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net";       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=reactdigest.net',
-          },
-          {
-            name: 'Return-Path',
-            value:
-              '<bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net>',
-          },
-          {
-            name: 'Received',
-            value:
-              'from wrqvkcvf.outbound-mail.sendgrid.net (wrqvkcvf.outbound-mail.sendgrid.net. [149.72.28.143])        by mx.google.com with ESMTPS id v202-20020a6361d3000000b004037c60a2c6si6371741pgb.668.2022.07.10.10.49.15        for <robberttg@gmail.com>        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);        Sun, 10 Jul 2022 10:49:16 -0700 (PDT)',
-          },
-          {
-            name: 'Received-SPF',
-            value:
-              'pass (google.com: domain of bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net designates 149.72.28.143 as permitted sender) client-ip=149.72.28.143;',
-          },
-          {
-            name: 'Authentication-Results',
-            value:
-              'mx.google.com;       dkim=pass header.i=@reactdigest.net header.s=s1 header.b=2Ie1jGgt;       dkim=pass header.i=@sendgrid.info header.s=smtpapi header.b=uLeM9vGS;       spf=pass (google.com: domain of bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net designates 149.72.28.143 as permitted sender) smtp.mailfrom="bounces+2322038-c3f4-robberttg=gmail.com@email.reactdigest.net";       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=reactdigest.net',
-          },
-          {
-            name: 'DKIM-Signature',
-            value:
-              'v=1; a=rsa-sha256; c=relaxed/relaxed; d=reactdigest.net; h=from:subject:mime-version:content-type:content-transfer-encoding: list-unsubscribe:x-feedback-id:to; s=s1; bh=XgLJm4AkyWlFLqQjv9G0mEK3KPKiNis8B5BIdA2cm4M=; b=2Ie1jGgt3sC0SU3eTYNuxgIpEMSmV21PccV7nv+4oZycyaMJCUEfRC3tdsu6y7bIShiq Dpx3nD3CABrV4uIktOkuGrOEQJAmt8FRfu5Aqa8QqaOw3p23pBdFGRjKF4npER2Iu6A+kS y4e7QlbP4Ma+P8A+lkyVYrsupDfdF74gFnayXLkwzC3oQz34nlJ5hY015hTJwOg0re8QWM msB1v312ESzEJPIDiWTqxvCUElq8I1TLKPCIDYD27dkiojjXdju/Igppr3wkkOS0EPmRGk SrgH2KDq3oiu2m/1C9LuC82GtkqKeqUsjlBz5Ocjxp9mb999+dZThcqG14p23DGg==',
-          },
-          {
-            name: 'DKIM-Signature',
-            value:
-              'v=1; a=rsa-sha256; c=relaxed/relaxed; d=sendgrid.info; h=from:subject:mime-version:content-type:content-transfer-encoding: list-unsubscribe:x-feedback-id:to; s=smtpapi; bh=XgLJm4AkyWlFLqQjv9G0mEK3KPKiNis8B5BIdA2cm4M=; b=uLeM9vGSbxuD7UFNNUEMIVPLrdKZ4bVKoFrJkfZjPFg12xNND9Z6+4P7V4NH9dGnPR9m 4ZwPr9iw6ujHXtFpPTFu3hdjSJd5Wbh1w6UMvd27q2Nw5XQGa/LCmYAD/S2ivMKLmbNiwf Kkf8xA0jexJ5D236Lgkd/56zt62i5fi0E=',
-          },
-          {
-            name: 'Received',
-            value:
-              'by filterdrecv-7446d8dd8d-qp4jj with SMTP id filterdrecv-7446d8dd8d-qp4jj-1-62CB111A-29        2022-07-10 17:49:14.779838085 +0000 UTC m=+2766352.696727995',
-          },
-          {
-            name: 'Received',
-            value:
-              'from reactdigest.net (unknown) by geopod-ismtpd-5-2 (SG) with ESMTP id drF-7qp-QbyJRJkxHtRPlQ for <robberttg@gmail.com>; Sun, 10 Jul 2022 17:49:14.643 +0000 (UTC)',
-          },
-          {
-            name: 'Date',
-            value: 'Sun, 10 Jul 2022 17:49:14 +0000 (UTC)',
-          },
-          {
-            name: 'From',
-            value: 'React Digest <jakub@reactdigest.net>',
-          },
-          {
-            name: 'Message-ID',
-            value:
-              '<62cb111a8775c_35521af4125354a0@digitalocean-linkyard.mail>',
-          },
-          {
-            name: 'Subject',
-            value: 'React Digest #364: How to animate multiplayer cursors',
-          },
-          {
-            name: 'Mime-Version',
-            value: '1.0',
-          },
-          {
-            name: 'Content-Type',
-            value:
-              'multipart/alternative; boundary="--==_mimepart_62cb111a87085_35521af41253531"; charset=UTF-8',
-          },
-          {
-            name: 'Content-Transfer-Encoding',
-            value: '7bit',
-          },
-          {
-            name: 'X-MC-PreserveRecipients',
-            value: '',
-          },
-          {
-            name: 'List-Unsubscribe',
-            value:
-              'https://reactdigest.net/subscribers/aa82e1ec-eae5-47ff-9d9c-645f9538d283/unsubscribe',
-          },
-          {
-            name: 'X-Feedback-ID',
-            value: '2322038:SG',
-          },
-          {
-            name: 'X-SG-EID',
-            value:
-              'K/opInuRUP7iLxxpu4HypyRrk1vRn43d3JCZvxqj16G8TJAWJKAO2BVvlEqyed2DksPlRKRe6mTHrnvfwYku4RN02uDQy8M8oh7hq1LFrptnoWR/V2D3X6oEq56zvLUIgJIfWO04Jm6AZBvuIztjUrtfw0JwI4jyHQuelIyFDiFoPhVlhvZlaeFSKXDOaYcaCEG50y68Y/PCQrXxuckxieu5bDkay+NhC1LpyUFXrhZj+f+zG2Wt2cVTdI5ZH9BK',
-          },
-          {
-            name: 'X-SG-ID',
-            value:
-              'N2C25iY2uzGMFz6rgvQsbz3FovL+H+pWiZQamwTaGdi+lD88wnXx0TtLz/++Gldges2o8G1lbNBmgTae3iYXBQ==',
-          },
-          {
-            name: 'To',
-            value: 'robberttg@gmail.com',
-          },
-          {
-            name: 'X-Entity-ID',
-            value: '7Pn3IwSe/+JP4X4JP6Gmhg==',
-          },
-        ],
+        headers: {
+          date: 'Sun, 10 Jul 2022 17:49:14 +0000 (UTC)',
+          from: 'React Digest <jakub@reactdigest.net>',
+          subject: 'React Digest #364: How to animate multiplayer cursors',
+          to: 'robberttg@gmail.com',
+          cc: '',
+          bcc: '',
+        },
         body: {
           size: 0,
         },

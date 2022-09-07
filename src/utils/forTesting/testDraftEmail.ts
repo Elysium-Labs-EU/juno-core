@@ -8,56 +8,20 @@ const testDraftEmail = {
       labelIds: ['DRAFT'],
       snippet: 'sadfsafsadfsadfsafdsafasdf',
       payload: {
-        partId: '',
         mimeType: 'text/html',
-        filename: '',
-        headers: [
-          {
-            name: 'Received',
-            value:
-              'from 113671319507 named unknown by gmailapi.google.com with HTTPREST; Sat, 4 Jun 2022 10:11:44 -0700',
-          },
-          {
-            name: 'From',
-            value: 'robberttg@gmail.com',
-          },
-          {
-            name: 'To',
-            value: '',
-          },
-          {
-            name: 'Cc',
-            value: '',
-          },
-          {
-            name: 'Bcc',
-            value: '',
-          },
-          {
-            name: 'Content-Type',
-            value: 'text/html; charset=utf-8',
-          },
-          {
-            name: 'MIME-Version',
-            value: '1.0',
-          },
-          {
-            name: 'Subject',
-            value: '',
-          },
-          {
-            name: 'Date',
-            value: 'Sat, 4 Jun 2022 10:11:44 -0700',
-          },
-          {
-            name: 'Message-Id',
-            value:
-              '<CAHyoLgjhq-qx+oB7K4WoLxsMMko8wH_r96CsbUL3nxUpgmswHg@mail.gmail.com>',
-          },
-        ],
+        headers: {
+          date: 'Sat, 4 Jun 2022 10:11:44 -0700',
+          from: 'robberttg@gmail.com',
+          subject: '',
+          to: '',
+          cc: '',
+          bcc: '',
+        },
         body: {
-          size: 26,
-          data: 'c2FkZnNhZnNhZGZzYWRmc2FmZHNhZmFzZGY=',
+          emailFileHTML: [],
+          emailHTML:
+            '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><body>Test</body></html>',
+          removedTrackers: [],
         },
       },
       sizeEstimate: 396,

@@ -48,4 +48,5 @@ export type AppThunk<ReturnType = void> = ThunkAction<
   any,
   Action<string>
 >
-export const history = createReduxHistory(setupStore())
+export const store = setupStore()
+export const history = createReduxHistory(store)

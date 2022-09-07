@@ -42,6 +42,7 @@ const restructureObject = (message: IHistoryMessage) => {
  * */
 
 // TODO: Make the remove changes also be worked on
+// TODO: Fix this function to update the Archive feed correctly.
 
 export default function handleHistoryObject({
   history,
@@ -74,8 +75,8 @@ export default function handleHistoryObject({
     nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
   // The All feed takes in all the changes of the other feeds.
-  const allFeed: IFeedModel = {
-    labels: [global.ALL_LABEL],
+  const archiveFeed: IFeedModel = {
+    labels: [global.ARCHIVE_LABEL],
     threads: [],
     nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
@@ -106,7 +107,9 @@ export default function handleHistoryObject({
             restructureObject(item.labelsRemoved[0].message)
           )
         }
-        allFeed.threads.push(restructureObject(item.labelsRemoved[0].message))
+        archiveFeed.threads.push(
+          restructureObject(item.labelsRemoved[0].message)
+        )
       }
     }
   }
@@ -145,7 +148,6 @@ export default function handleHistoryObject({
       if (item.labelsAdded[0].labelIds.includes(global.SENT_LABEL)) {
         sentFeed.threads.push(restructureObject(item.labelsAdded[0].message))
       }
-      allFeed.threads.push(restructureObject(item.labelsAdded[0].message))
     }
   }
 
@@ -190,7 +192,7 @@ export default function handleHistoryObject({
       if (item.messagesAdded[0].message.labelIds.includes(global.DRAFT_LABEL)) {
         handleAdditionDraftMessage(item)
       }
-      allFeed.threads.push(restructureObject(item.messagesAdded[0].message))
+      // allFeed.threads.push(restructureObject(item.messagesAdded[0].message))
     }
   }
 
@@ -219,5 +221,5 @@ export default function handleHistoryObject({
       process.env.NODE_ENV === 'development' && console.error(err)
     }
   }
-  return [inboxFeed, todoFeed, sentFeed, draftFeed, allFeed]
+  return [inboxFeed, todoFeed, sentFeed, draftFeed, archiveFeed]
 }

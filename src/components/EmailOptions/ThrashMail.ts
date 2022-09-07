@@ -5,22 +5,15 @@ interface IThrashMailProps {
   threadId: string
   labelIds: string[]
   dispatch: AppDispatch
-  location?: any
 }
 
-const thrashMail = ({
-  threadId,
-  labelIds,
-  dispatch,
-  location,
-}: IThrashMailProps) => {
+const thrashMail = ({ threadId, labelIds, dispatch }: IThrashMailProps) => {
   const markEmailThrashed = () => {
     dispatch(
       updateEmailLabel({
         threadId,
         request: { delete: true },
         labelIds,
-        location,
       })
     )
   }

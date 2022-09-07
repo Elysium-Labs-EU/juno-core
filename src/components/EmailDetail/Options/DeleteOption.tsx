@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
@@ -31,14 +30,12 @@ const DeleteOption = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
   const inSearch = useAppSelector(selectInSearch)
-  const location = useLocation()
 
   const handleEvent = useCallback(() => {
     thrashMail({
       threadId,
       labelIds: onlyLegalLabels,
       dispatch,
-      location,
     })
   }, [onlyLegalLabels, labelIds, dispatch])
 

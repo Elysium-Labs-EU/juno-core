@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
 
-import CircularProgress from '@mui/material/CircularProgress'
-
 import * as global from '../../../constants/globalConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import useKeyPress from '../../../hooks/useKeyPress'
@@ -13,9 +11,7 @@ import {
 import { selectViewIndex } from '../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
-import {
-  IEmailListObject,
-} from '../../../store/storeTypes/emailListTypes'
+import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import {
   closeMail,
   navigateNextMail,
@@ -26,6 +22,7 @@ import {
 } from '../../../store/utilsSlice'
 import loadNextPage from '../../../utils/loadNextPage'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
+import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as S from './DetailNavigationStyles'
 
 const ICON_SIZE = 20
@@ -127,7 +124,7 @@ const DetailNavigationView = ({
               !isLoading ? (
                 <QiChevronRight size={ICON_SIZE} />
               ) : (
-                <CircularProgress size={10} />
+                <StyledCircularProgress size={10} />
               )
             }
           />

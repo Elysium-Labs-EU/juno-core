@@ -1,12 +1,12 @@
 import prettyBytes from 'pretty-bytes'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import * as global from '../../../constants/globalConstants'
 import { QiCheckmark, QiDownload } from '../../../images/svgIcons/quillIcons'
 import { useAppDispatch } from '../../../store/hooks'
 import { setServiceUnavailable } from '../../../store/utilsSlice'
 import * as GS from '../../../styles/globalStyles'
-import downloadAttachment from '../../../utils/downloadAttachment'
+import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as S from './EmailAttachmentBubbleStyles'
@@ -19,37 +19,38 @@ const ICON_SIZE = 20
 const RenderAttachment = ({
   attachmentData,
   messageId,
-  index,
 }: {
   attachmentData: IEmailAttachmentType
   messageId: string
-  index: number | undefined
 }) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
-  const handleClick = async () => {
+  const handleClick = useCallback(async () => {
     setLoadState(global.LOAD_STATE_MAP.loading)
-    const response = await downloadAttachment({ messageId, attachmentData })
-    if (response.success) {
+    const response = await downloadAttachmentSingle({
+      messageId,
+      attachmentData,
+    })
+    if (response?.success) {
       setDownloaded(true)
       setLoadState(global.LOAD_STATE_MAP.loaded)
       return
     }
     setLoadState(global.LOAD_STATE_MAP.error)
     dispatch(setServiceUnavailable(response.message ?? global.NETWORK_ERROR))
-  }
+  }, [attachmentData, messageId])
 
   return (
-    <S.Attachment index={index ?? 0}>
+    <S.Attachment>
       <EmailAttachmentIcon mimeType={attachmentData?.mimeType} />
       <S.AttachmentInner>
-        <span>{attachmentData.filename}</span>
-        <GS.TextMutedSmall style={{ margin: 0 }}>
+        <span className="file_name">{attachmentData.filename}</span>
+        <GS.TextMutedSpanSmall>
           {FILE}
           {prettyBytes(attachmentData.body.size)}
-        </GS.TextMutedSmall>
+        </GS.TextMutedSpanSmall>
       </S.AttachmentInner>
       {loadState !== global.LOAD_STATE_MAP.loading ? (
         <CustomIconButton
@@ -73,18 +74,12 @@ const RenderAttachment = ({
 const EmailAttachmentBubble = ({
   attachmentData,
   messageId,
-  index = undefined,
 }: {
   attachmentData: IEmailAttachmentType
   messageId: string
-  index?: number
 }) =>
   attachmentData.filename.length > 0 && messageId.length > 0 ? (
-    <RenderAttachment
-      attachmentData={attachmentData}
-      messageId={messageId}
-      index={index}
-    />
+    <RenderAttachment attachmentData={attachmentData} messageId={messageId} />
   ) : null
 
 export default EmailAttachmentBubble
