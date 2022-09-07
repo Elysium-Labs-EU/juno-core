@@ -21,7 +21,7 @@ describe('FilesOverview tests', () => {
             <FilesOverview threadDetail={null} isLoading />
         )
 
-        expect(screen.findByTestId('no-files-overview')).not.toBeDefined()
+        expect(screen.findByTestId('no-files-overview')).toBeDefined()
     })
 
     // test('should render a draft snippet indicator when the email is a draft', () => {
