@@ -7,7 +7,7 @@ import * as local from '../../../../constants/unreadConstants'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 import { selectProfile } from '../../../../store/baseSlice'
-import { selectIsReplying } from '../../../../store/emailDetailSlice'
+import { selectIsForwarding, selectIsReplying } from '../../../../store/emailDetailSlice'
 import { useAppSelector } from '../../../../store/hooks'
 import { selectLabelIds } from '../../../../store/labelsSlice'
 import {
@@ -50,6 +50,7 @@ const ReadUnreadMessage = ({
   const [placement, setPlacement] = useState<PopperPlacementType>()
   const [showMenu, setShowMenu] = useState<boolean>(false)
   const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
+  const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
   const { ref } = useClickOutside({
@@ -115,11 +116,11 @@ const ReadUnreadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget)
+        setShowMenu((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+      }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   /**
@@ -134,11 +135,11 @@ const ReadUnreadMessage = ({
   }
 
   useEffect(() => {
-    if (isReplying) {
+    if (isForwarding || isReplying) {
       setAnchorEl(null)
       setShowMenu(false)
     }
-  }, [isReplying])
+  }, [isForwarding, isReplying])
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message.payload.headers?.from, emailAddress),
