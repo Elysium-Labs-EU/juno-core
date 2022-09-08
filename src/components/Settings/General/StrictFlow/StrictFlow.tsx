@@ -35,7 +35,7 @@ const StrictFlow = () => {
       })
       if (location.pathname.includes(RoutesConstants.INBOX)) {
         // In case the user is on the inbox page, redirect to user to the homepage, since the inbox page will be removed from the RoutesComponent.
-        dispatch(push(RoutesConstants.HOME))
+        dispatch(push(RoutesConstants.TODO))
       }
     } else {
       localStorage.setItem('isFlexibleFlowActive', 'true')

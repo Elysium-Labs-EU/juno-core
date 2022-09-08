@@ -3,6 +3,8 @@ import { useAppSelector } from '../../store/hooks'
 import { selectStorageLabels } from '../../store/labelsSlice'
 import onlyLegalLabelObjects from '../../utils/onlyLegalLabelObjects'
 import CustomLabel from './CustomLabel'
+import * as global from '../../constants/globalConstants'
+import capFirstLetterOnly from '../../utils/capFirstLetterOnly'
 
 const Wrapper = styled.div`
   div:not(:first-child) {
@@ -20,13 +22,11 @@ const EmailLabel = ({ labelNames }: { labelNames: string[] }) => {
 
   const legalLabel = () => {
     if (staticOnlyLegalLabels.length > 0) {
-      return staticOnlyLegalLabels.map(
-        (labelName) =>
-          labelName.name.charAt(0).toUpperCase() +
-          labelName.name.slice(1).toLowerCase()
+      return staticOnlyLegalLabels.map((labelName) =>
+        capFirstLetterOnly(labelName.name)
       )
     }
-    return ['Archive']
+    return [capFirstLetterOnly(global.ARCHIVE_LABEL)]
   }
 
   return (

@@ -38,6 +38,7 @@ import labelURL from '../utils/createLabelURL'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
 import handleHistoryObject, {
   HISTORY_NEXT_PAGETOKEN,
+  HISTORY_TIME_STAMP,
 } from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
 import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
@@ -75,6 +76,7 @@ const handleAdditionToExistingEmailArray = (
   state: IEmailListState,
   labels: string[],
   threads: IEmailListThreadItem[],
+  timestamp: number,
   arrayIndex?: number,
   nextPageToken?: undefined | string | null,
   q?: undefined | string
@@ -108,6 +110,7 @@ const handleAdditionToExistingEmailArray = (
         targetEmailListObject.threads.concat(tempArray)
       )
 
+      // Here we create the final object that will be pushed to the Redux state
       const newObject: IEmailListObject = {
         labels,
         threads: undoubleThreads(sortedThreads),
@@ -115,6 +118,7 @@ const handleAdditionToExistingEmailArray = (
           nextPageToken === HISTORY_NEXT_PAGETOKEN
             ? targetEmailListObject.nextPageToken
             : nextPageToken,
+        timestamp,
         q,
       }
       targetEmailListObject = newObject
@@ -131,6 +135,7 @@ const handleEmailListChange = (
   state: IEmailListState,
   labels: string[] | undefined,
   threads: IEmailListThreadItem[],
+  timestamp: number,
   nextPageToken?: undefined | string | null,
   q?: string
 ) => {
@@ -151,6 +156,7 @@ const handleEmailListChange = (
           state,
           labels,
           threads,
+          timestamp,
           arrayIndex,
           nextPageToken,
           q
@@ -178,6 +184,7 @@ const handleEmailListChange = (
         state,
         labels,
         threads,
+        timestamp,
         arrayIndex,
         nextPageToken
       )
@@ -238,8 +245,8 @@ export const emailListSlice = createSlice({
       state.emailList = payload
     },
     listAddEmailList: (state, { payload }) => {
-      const { labels, threads } = payload
-      handleEmailListChange(state, labels, threads)
+      const { labels, threads, timestamp } = payload
+      handleEmailListChange(state, labels, threads, timestamp)
     },
     /**
      * @function listRemoveItemDetail
@@ -341,13 +348,20 @@ export const emailListSlice = createSlice({
         {
           payload: {
             labels,
-            response: { threads, nextPageToken },
+            response: { threads, nextPageToken, timestamp },
             q,
           },
         }
       ) => {
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(state, labels, threads, nextPageToken, q)
+        handleEmailListChange(
+          state,
+          labels,
+          threads,
+          timestamp,
+          nextPageToken,
+          q
+        )
       }
     )
     builder.addCase(
@@ -362,9 +376,17 @@ export const emailListSlice = createSlice({
           },
         }
       ) => {
-        // Send the nextPageToken as History - so the original next page token will not be overwritten.
+        // Send the nextPageToken as History - so the original nextPageToken will not be overwritten.
+        // Send the timstamp as 0 - so the original timestamp will not be overwritten.
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(state, labels, threads, HISTORY_NEXT_PAGETOKEN, q)
+        handleEmailListChange(
+          state,
+          labels,
+          threads,
+          HISTORY_TIME_STAMP,
+          HISTORY_NEXT_PAGETOKEN,
+          q
+        )
       }
     )
   },
@@ -692,7 +714,6 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-        console.log('sortedFeeds', sortedFeeds)
         // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {

@@ -54,7 +54,7 @@ const RoutesComponent = () => {
       />
       <Route path={RoutesConstants.LOGIN_SUCCESS} element={<Login />} />
       <Route
-        path={RoutesConstants.HOME}
+        path={RoutesConstants.TODO}
         element={
           <ProtectedRouteTemplate>
             <ToDo />

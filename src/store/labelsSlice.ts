@@ -6,6 +6,7 @@ import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
 import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
 import { fetchEmailsSimple } from './emailListSlice'
+import { getLabelByRoute } from '../constants/labelMapConstant'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],
@@ -123,6 +124,29 @@ export const fetchLabelIds =
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
   }
+
+export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
+  const activePath = getState().router.location?.pathname
+  const { storageLabels } = getState().labels
+
+  if (activePath) {
+    const currentLabelName = getLabelByRoute[activePath]
+    const labelObject = storageLabels.find(
+      (label) => label.name === currentLabelName
+    )
+    if (labelObject) {
+      dispatch(setCurrentLabels([labelObject.id]))
+    } else {
+      dispatch(
+        setServiceUnavailable(
+          'Error setting current label - label is not found'
+        )
+      )
+    }
+  } else {
+    dispatch(setServiceUnavailable('Error setting getting current location'))
+  }
+}
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds
 export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox

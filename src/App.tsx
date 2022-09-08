@@ -38,7 +38,7 @@ const App = () => {
     const token = fetchToken()
     if (token) {
       dispatch(setIsAuthenticated(true))
-      dispatch(push(RoutesConstants.HOME))
+      dispatch(push(RoutesConstants.TODO))
     }
   }, [])
 

@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { useEffect } from 'react'
 import { push } from 'redux-first-history'
-import * as RouteConstants from '../../../constants/routes.json'
+import RoutesConstants from '../../../constants/routes.json'
 import userApi from '../../../data/userApi'
 import { setIsAuthenticated } from '../../../store/baseSlice'
 import { useAppDispatch } from '../../../store/hooks'
@@ -30,10 +30,10 @@ const GoogleCallBack = () => {
       if (response?.status === 200) {
         handleUserTokens(response).setIdToken()
         dispatch(setIsAuthenticated(true))
-        dispatch(push(RouteConstants.HOME))
+        dispatch(push(RoutesConstants.TODO))
       } else {
         dispatch(setServiceUnavailable(response.error))
-        dispatch(push(RouteConstants.LOGIN))
+        dispatch(push(RoutesConstants.LOGIN))
       }
     }
     getTokens()
