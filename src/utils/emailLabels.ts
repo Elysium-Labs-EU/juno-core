@@ -1,17 +1,35 @@
 import * as global from '../constants/globalConstants'
 import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
-
-// TODO: Recheck if this function should be checking on all the messages in the thread, not just index 0
+import { LabelIdName } from '../store/storeTypes/labelsTypes'
+import filterIllegalLabels from './filterIllegalLabels'
 
 /**
  * @function emailLabels
  * @param emailListThreadItem - takes in a the thread item
- * @returns returns the email labels for the email top email list item. If nothing can be found, send back the Archive label.
+ * @returns returns the legal email labels for the email thread. If an error occurs, send back the Archive label.
  */
 
-const emailLabels = (emailListThreadItem: IEmailListThreadItem) => {
-  if (emailListThreadItem?.messages)
-    return emailListThreadItem?.messages[0]?.labelIds ?? [global.ARCHIVE_LABEL]
+const emailLabels = (
+  emailListThreadItem: IEmailListThreadItem,
+  storageLabels: LabelIdName[]
+) => {
+  if (emailListThreadItem?.messages) {
+    const getAllLegalMessagesLabelIds = () => {
+      const foundLabels: string[] = []
+      emailListThreadItem.messages.forEach((message) =>
+        message?.labelIds?.forEach((label) => foundLabels.push(label))
+      )
+      return [
+        ...new Set(
+          filterIllegalLabels(foundLabels, storageLabels).filter(
+            (label) =>
+              label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
+          )
+        ),
+      ]
+    }
+    return getAllLegalMessagesLabelIds() ?? [global.ARCHIVE_LABEL]
+  }
   return [global.ARCHIVE_LABEL]
 }
 

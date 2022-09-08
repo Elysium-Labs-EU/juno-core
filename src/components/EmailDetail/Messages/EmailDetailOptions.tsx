@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
 import { findLabelByName } from '../../../utils/findLabel'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
-import * as todo from '../../../constants/todoConstants'
 import * as global from '../../../constants/globalConstants'
 import * as S from '../EmailDetailStyles'
 import { useAppSelector } from '../../../store/hooks'
 import emailLabels from '../../../utils/emailLabels'
 import DeleteOption from '../Options/DeleteOption'
-import onlyLegalLabelObjects from '../../../utils/onlyLegalLabelObjects'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import ReplyOption from '../Options/ReplyOption'
 import ToDoOption from '../Options/ToDoOption'
@@ -55,45 +53,43 @@ const EmailDetailOptions = ({
     }
   }, [location])
 
-  // Use on legal labels - if there is at least 1 legal label, the item can be archived still.
-  const staticEmailLabels = emailLabels(threadDetail)
-  const staticOnlyLegalLabels = onlyLegalLabelObjects({
-    labelNames: staticEmailLabels,
-    storageLabels,
-  })
+  const staticEmailLabels = emailLabels(threadDetail, storageLabels)
+
+  const memoizedReplyOption = useMemo(() => (<ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />), [threadDetail])
+  const memoizedForwardOption = useMemo(() => (<ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />), [threadDetail])
 
   return (
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
-          <ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
-          <ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+          {memoizedReplyOption}
+          {memoizedForwardOption}
           {labelIds &&
             !labelIds.some(
               (item) =>
                 item ===
                 findLabelByName({
                   storageLabels,
-                  LABEL_NAME: todo.LABEL,
-                })[0]?.id
+                  LABEL_NAME: global.TODO_LABEL_NAME,
+                })?.id
             ) && (
               <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
             )}
-          {staticOnlyLegalLabels.length > 0 && (
+          {staticEmailLabels.length > 0 && (
             <ArchiveOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
           )}
           {(coreStatus === global.CORE_STATUS_FOCUSED ||
             coreStatus === global.CORE_STATUS_SORTING) && (
-            <SkipOption iconSize={ICON_SIZE} />
-          )}
-          {staticOnlyLegalLabels.length > 0 && (
+              <SkipOption iconSize={ICON_SIZE} />
+            )}
+          {staticEmailLabels.length > 0 && (
             <MoreOption
               setShowMenu={setShowMenu}
               showMenu={showMenu}
               iconSize={ICON_SIZE}
             />
           )}
-          {staticOnlyLegalLabels.length === 0 && (
+          {staticEmailLabels.length === 0 && (
             <DeleteOption
               threadId={threadDetail.id}
               icon={<QiFolderTrash size={ICON_SIZE} />}

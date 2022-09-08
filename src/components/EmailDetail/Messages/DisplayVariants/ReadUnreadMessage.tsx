@@ -7,7 +7,10 @@ import * as local from '../../../../constants/unreadConstants'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 import { selectProfile } from '../../../../store/baseSlice'
-import { selectIsForwarding, selectIsReplying } from '../../../../store/emailDetailSlice'
+import {
+  selectIsForwarding,
+  selectIsReplying,
+} from '../../../../store/emailDetailSlice'
 import { useAppSelector } from '../../../../store/hooks'
 import { selectLabelIds } from '../../../../store/labelsSlice'
 import {
@@ -116,11 +119,11 @@ const ReadUnreadMessage = ({
 
   const handleSpecificMenu =
     (newPlacement: PopperPlacementType) =>
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(anchorEl ? null : event.currentTarget)
-        setShowMenu((prev) => placement !== newPlacement || !prev)
-        setPlacement(newPlacement)
-      }
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(anchorEl ? null : event.currentTarget)
+      setShowMenu((prev) => placement !== newPlacement || !prev)
+      setPlacement(newPlacement)
+    }
   const popperId = showMenu ? 'specifc-email-popper' : undefined
 
   /**
