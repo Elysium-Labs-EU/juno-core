@@ -9,7 +9,7 @@ export const findLabelByName = ({
   storageLabels,
   LABEL_NAME,
 }: IFindLabelByNameType) =>
-  storageLabels.filter((label) => label.name === LABEL_NAME)
+  storageLabels.find((label) => label.name === LABEL_NAME)
 
 interface IFindLabelByIdType {
   storageLabels: LabelIdName[]
@@ -20,4 +20,4 @@ export const findLabelById = ({
   storageLabels,
   labelIds,
 }: IFindLabelByIdType) =>
-  storageLabels.filter((label) => label.id === labelIds[0])
+  storageLabels.find((label) => label.id === labelIds[0])

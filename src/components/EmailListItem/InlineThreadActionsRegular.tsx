@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import archiveMail from '../EmailOptions/ArchiveMail'
 import * as S from './InlineThreadActionsStyles'
-import * as todo from '../../constants/todoConstants'
 import * as global from '../../constants/globalConstants'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import ReplyOverview from '../EmailOptions/ReplyOverview'
@@ -19,6 +18,7 @@ import {
   QiReply,
   QiToDo,
 } from '../../images/svgIcons/quillIcons'
+import emailLabels from '../../utils/emailLabels'
 
 interface IInlineThreadActionsRegular {
   id: string
@@ -42,20 +42,7 @@ const InlineThreadActionsRegular = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
-  // TODO: Check if this can be used elsewhere
-  const getAllLegalMessagesLabelIds = useCallback(() => {
-    const foundLabels: string[] = []
-    email.messages.forEach((message) =>
-      message?.labelIds?.forEach((label) => foundLabels.push(label))
-    )
-    return [
-      ...new Set(
-        filterIllegalLabels(foundLabels, storageLabels).filter(
-          (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
-        )
-      ),
-    ]
-  }, [email, storageLabels])
+  const getAllLegalMessagesLabelIds = useCallback(() => emailLabels(email, storageLabels), [email, storageLabels])
 
   const memoizedReplyButton = useMemo(
     () => (
@@ -82,8 +69,8 @@ const InlineThreadActionsRegular = ({
           item ===
           findLabelByName({
             storageLabels,
-            LABEL_NAME: todo.LABEL,
-          })[0]?.id
+            LABEL_NAME: global.TODO_LABEL_NAME,
+          })?.id
       ) && (
         <CustomIconButton
           onClick={() =>

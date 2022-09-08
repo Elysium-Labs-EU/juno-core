@@ -1,9 +1,10 @@
-import { LabelIdName } from '../../store/storeTypes/labelsTypes'
+import * as global from '../../constants/globalConstants'
 import { updateEmailLabel } from '../../store/emailListSlice'
+import { AppDispatch } from '../../store/store'
+import { LabelIdName } from '../../store/storeTypes/labelsTypes'
+import { setServiceUnavailable } from '../../store/utilsSlice'
 import filterIllegalLabels from '../../utils/filterIllegalLabels'
 import { findLabelByName } from '../../utils/findLabel'
-import * as todo from '../../constants/todoConstants'
-import { AppDispatch } from '../../store/store'
 
 interface ISetToDoMail {
   threadId: string
@@ -18,13 +19,20 @@ const setToDoMail = ({
   dispatch,
   storageLabels,
 }: ISetToDoMail) => {
-  const toDoLabel = findLabelByName({ storageLabels, LABEL_NAME: todo.LABEL })
-  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
-  const request = {
-    removeLabelIds: onlyLegalLabels,
-    addLabelIds: [toDoLabel[0].id],
+  const toDoLabel = findLabelByName({
+    storageLabels,
+    LABEL_NAME: global.TODO_LABEL_NAME,
+  })
+  if (toDoLabel) {
+    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+    const request = {
+      removeLabelIds: onlyLegalLabels,
+      addLabelIds: [toDoLabel?.id],
+    }
+    dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
+  } else {
+    dispatch(setServiceUnavailable('Cannot find to do label'))
   }
-  dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
 }
 
 export default setToDoMail

@@ -25,7 +25,7 @@ import {
   selectActiveModal,
   selectInSearch,
 } from '../../store/utilsSlice'
-import { selectLabelIds } from '../../store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
 import emailLabels from '../../utils/emailLabels'
 import {
   selectSelectedEmails,
@@ -75,6 +75,7 @@ const EmailListItem = ({
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const { id } = email
@@ -96,8 +97,8 @@ const EmailListItem = ({
   )
 
   const staticEmailLabels = useMemo(
-    () => emailLabels(staticShouldUseDraftOrRegular),
-    [email]
+    () => emailLabels(staticShouldUseDraftOrRegular, storageLabels),
+    [staticShouldUseDraftOrRegular, storageLabels]
   )
 
   const staticRecipientName = useMemo(
@@ -143,7 +144,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
