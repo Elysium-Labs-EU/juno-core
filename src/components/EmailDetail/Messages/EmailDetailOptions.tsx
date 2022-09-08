@@ -55,8 +55,14 @@ const EmailDetailOptions = ({
 
   const staticEmailLabels = emailLabels(threadDetail, storageLabels)
 
-  const memoizedReplyOption = useMemo(() => (<ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />), [threadDetail])
-  const memoizedForwardOption = useMemo(() => (<ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />), [threadDetail])
+  const memoizedReplyOption = useMemo(
+    () => <ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />,
+    [threadDetail]
+  )
+  const memoizedForwardOption = useMemo(
+    () => <ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />,
+    [threadDetail]
+  )
 
   return (
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
@@ -80,8 +86,8 @@ const EmailDetailOptions = ({
           )}
           {(coreStatus === global.CORE_STATUS_FOCUSED ||
             coreStatus === global.CORE_STATUS_SORTING) && (
-              <SkipOption iconSize={ICON_SIZE} />
-            )}
+            <SkipOption iconSize={ICON_SIZE} />
+          )}
           {staticEmailLabels.length > 0 && (
             <MoreOption
               setShowMenu={setShowMenu}

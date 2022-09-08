@@ -144,7 +144,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-        staticShouldUseDraftOrRegular.messages!.length - 1
+          staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     []
