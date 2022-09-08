@@ -53,74 +53,77 @@ export const labelsSlice = createSlice({
   },
 })
 
-export const {
-  setCurrentLabels,
-  setLoadedInbox,
-  setStorageLabels,
-} = labelsSlice.actions
+export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
+  labelsSlice.actions
 
-export const createLabel = (label: string): AppThunk => async (dispatch) => {
-  try {
-    const body =
-      typeof label === 'string'
-        ? {
-            name: label,
-            labelVisibility: 'labelShow',
-            messageListVisibility: 'show',
-          }
-        : label
-    const response = await labelApi().createLabel(body)
+export const createLabel =
+  (label: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const body =
+        typeof label === 'string'
+          ? {
+              name: label,
+              labelVisibility: 'labelShow',
+              messageListVisibility: 'show',
+            }
+          : label
+      const response = await labelApi().createLabel(body)
 
-    if (response?.status === 200) {
-      dispatch(setStorageLabels(response.data))
-      if (
-        response?.data?.data?.name.startsWith(
-          `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
-        )
-      ) {
-        dispatch(setSettingsLabelId(response.data.data.id))
+      if (response?.status === 200) {
+        dispatch(setStorageLabels(response.data))
+        if (
+          response?.data?.data?.name.startsWith(
+            `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
+          )
+        ) {
+          dispatch(setSettingsLabelId(response.data.data.id))
+        }
+      } else {
+        dispatch(setServiceUnavailable('Error creating label.'))
       }
-    } else {
+    } catch (err) {
       dispatch(setServiceUnavailable('Error creating label.'))
     }
-  } catch (err) {
-    dispatch(setServiceUnavailable('Error creating label.'))
+    return null
   }
-  return null
-}
 
-export const removeLabel = (labelId: string): AppThunk => async (dispatch) => {
-  try {
-    const response = await labelApi().deleteLabel(labelId)
-    if (response?.status !== 204) {
+export const removeLabel =
+  (labelId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const response = await labelApi().deleteLabel(labelId)
+      if (response?.status !== 204) {
+        dispatch(setServiceUnavailable('Error removing label.'))
+      }
+    } catch (err) {
       dispatch(setServiceUnavailable('Error removing label.'))
     }
-  } catch (err) {
-    dispatch(setServiceUnavailable('Error removing label.'))
+    return null
   }
-  return null
-}
 
-export const fetchLabelIds = (LABEL: string): AppThunk => async (dispatch) => {
-  try {
-    const { labels } = await labelApi().fetchLabels()
-    if (labels) {
-      const labelObject = labels.filter(
-        (label: LabelIdName) => label.name === LABEL
-      )
-      if (labelObject.length > 0) {
-        dispatch(setCurrentLabels([labelObject[0].id]))
-        dispatch(setStorageLabels([labelObject[0].id]))
+export const fetchLabelIds =
+  (LABEL: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const { labels } = await labelApi().fetchLabels()
+      if (labels) {
+        const labelObject = labels.filter(
+          (label: LabelIdName) => label.name === LABEL
+        )
+        if (labelObject.length > 0) {
+          dispatch(setCurrentLabels([labelObject[0].id]))
+          dispatch(setStorageLabels([labelObject[0].id]))
+        } else {
+          dispatch(setServiceUnavailable('Error fetching label.'))
+        }
       } else {
         dispatch(setServiceUnavailable('Error fetching label.'))
       }
-    } else {
+    } catch (err) {
       dispatch(setServiceUnavailable('Error fetching label.'))
     }
-  } catch (err) {
-    dispatch(setServiceUnavailable('Error fetching label.'))
   }
-}
 
 export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   const activePath = getState().router.location?.pathname

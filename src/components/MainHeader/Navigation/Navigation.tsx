@@ -65,7 +65,10 @@ const Navigation = () => {
       if (keysPressed.includes(keyConstants.KEY_DIGIT_1)) {
         dispatch(navigateTo(RoutesConstants.TODO))
       }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_2) && !isFlexibleFlowActive) {
+      if (
+        keysPressed.includes(keyConstants.KEY_DIGIT_2) &&
+        isFlexibleFlowActive
+      ) {
         dispatch(navigateTo(RoutesConstants.INBOX))
       }
       if (keysPressed.includes(keyConstants.KEY_DIGIT_3)) {
@@ -78,7 +81,15 @@ const Navigation = () => {
     return () => {
       mounted = false
     }
-  }, [keysPressed, inSearch, activeModal, location, isReplying, isForwarding, isFlexibleFlowActive])
+  }, [
+    keysPressed,
+    inSearch,
+    activeModal,
+    location,
+    isReplying,
+    isForwarding,
+    isFlexibleFlowActive,
+  ])
 
   const NavControllers = useMemo(
     () => (

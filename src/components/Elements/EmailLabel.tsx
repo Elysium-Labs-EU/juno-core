@@ -22,8 +22,8 @@ const EmailLabel = ({ labelNames }: { labelNames: string[] }) => {
 
   const legalLabel = () => {
     if (staticOnlyLegalLabels.length > 0) {
-      return staticOnlyLegalLabels.map(
-        (labelName) => capFirstLetterOnly(labelName.name)
+      return staticOnlyLegalLabels.map((labelName) =>
+        capFirstLetterOnly(labelName.name)
       )
     }
     return [capFirstLetterOnly(global.ARCHIVE_LABEL)]
