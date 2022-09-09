@@ -42,7 +42,10 @@ const InlineThreadActionsRegular = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
-  const getAllLegalMessagesLabelIds = useCallback(() => emailLabels(email, storageLabels), [email, storageLabels])
+  const getAllLegalMessagesLabelIds = useCallback(
+    () => emailLabels(email, storageLabels),
+    [email, storageLabels]
+  )
 
   const memoizedReplyButton = useMemo(
     () => (

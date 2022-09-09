@@ -5,6 +5,7 @@ import {
   fetchSizeKeyMap,
   showIntroductionKeyMap,
   flexibleFlowKeyMap,
+  alternateActionsMap,
 } from '../../constants/baseConstants'
 import { createLabel } from '../../store/labelsSlice'
 import { AppDispatch } from '../../store/store'
@@ -35,7 +36,9 @@ export default function createSettingsLabel(
           SETTINGS_DELIMITER +
           showIntroductionKeyMap.true +
           SETTINGS_DELIMITER +
-          flexibleFlowKeyMap.false
+          flexibleFlowKeyMap.false +
+          SETTINGS_DELIMITER +
+          alternateActionsMap.true
         }`
       )
     )
