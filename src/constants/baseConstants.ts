@@ -17,6 +17,7 @@ export const AVAILABLE_SETTINGS = [
   'emailFetchSize',
   'isFlexibleFlowActive',
   'showIntroduction',
+  'alternateActions',
 ]
 
 export const showAvatarMap: { [key: string]: boolean } = {
@@ -55,4 +56,13 @@ export const showIntroductionMap: { [key: string]: boolean } = {
 export const showIntroductionKeyMap: { [key: string]: string } = {
   false: 'SI0',
   true: 'SI1',
+}
+
+export const alternateActionsMap: { [key: string]: boolean } = {
+  AA0: false,
+  AA1: true,
+}
+export const alternateActionsKeyMap: { [key: string]: string } = {
+  false: 'AA0',
+  true: 'AA1',
 }

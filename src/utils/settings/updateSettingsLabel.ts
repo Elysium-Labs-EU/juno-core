@@ -6,6 +6,7 @@ import {
   fetchSizeKeyMap,
   showIntroductionKeyMap,
   flexibleFlowKeyMap,
+  alternateActionsKeyMap,
 } from '../../constants/baseConstants'
 import * as global from '../../constants/globalConstants'
 import labelApi from '../../data/labelApi'
@@ -44,6 +45,15 @@ export const buildLabelString = (input: ISettingsObject) => {
         newString += `${SETTINGS_DELIMITER + value}`
       }
     }
+    if (key === 'alternateActions') {
+      if (alternateActionsKeyMap[value as any]) {
+        newString += `${
+          SETTINGS_DELIMITER + alternateActionsKeyMap[value as any]
+        }`
+      } else {
+        newString += `${SETTINGS_DELIMITER + value}`
+      }
+    }
   }
   return newString
 }
@@ -65,6 +75,7 @@ interface IUpdateSettingsLabel {
   showIntroduction?: boolean
   isAvatarVisible?: boolean
   isFlexibleFlowActive?: boolean
+  alternateActions?: boolean
 }
 
 const updateSettingsLabel = async ({
@@ -73,6 +84,7 @@ const updateSettingsLabel = async ({
   showIntroduction,
   isAvatarVisible,
   isFlexibleFlowActive,
+  alternateActions,
 }: IUpdateSettingsLabel) => {
   const foundSettings = localStorage.getItem(global.JUNO_SETTINGS_LOCAL)
   const parsedSettings = foundSettings ? JSON.parse(foundSettings) : undefined
@@ -108,6 +120,16 @@ const updateSettingsLabel = async ({
       const updatedObject = {
         ...parsedSettings,
         isFlexibleFlowActive,
+      }
+      storeUpdatedSettingsLabel({
+        settingsLabelId,
+        updatedString: buildLabelString(updatedObject),
+      })
+    }
+    if (alternateActions !== undefined) {
+      const updatedObject = {
+        ...parsedSettings,
+        alternateActions,
       }
       storeUpdatedSettingsLabel({
         settingsLabelId,

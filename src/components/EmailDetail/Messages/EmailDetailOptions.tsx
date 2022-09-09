@@ -1,28 +1,27 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import EmailMoreOptions from '../MoreOptions/EmailMoreOptions'
-import { findLabelByName } from '../../../utils/findLabel'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+import { useMemo } from 'react'
+
 import * as global from '../../../constants/globalConstants'
-import * as S from '../EmailDetailStyles'
-import { useAppSelector } from '../../../store/hooks'
-import emailLabels from '../../../utils/emailLabels'
-import DeleteOption from '../Options/DeleteOption'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import ReplyOption from '../Options/ReplyOption'
-import ToDoOption from '../Options/ToDoOption'
-import ArchiveOption from '../Options/ArchiveOption'
-import MoreOption from '../Options/MoreOption'
+import { QiFolderTrash } from '../../../images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
   selectIsForwarding,
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
-import SkipOption from '../Options/SkipOption'
+import { useAppSelector } from '../../../store/hooks'
+import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import { selectAlternateActions } from '../../../store/utilsSlice'
+import emailLabels from '../../../utils/emailLabels'
+import { findLabelByName } from '../../../utils/findLabel'
+import * as S from '../EmailDetailStyles'
+import ArchiveOption from '../Options/ArchiveOption'
+import DeleteOption from '../Options/DeleteOption'
 import ForwardOption from '../Options/ForwardOption'
+import ReplyOption from '../Options/ReplyOption'
+import SkipOption from '../Options/SkipOption'
+import ToDoOption from '../Options/ToDoOption'
 import UnsubscribeOption from '../Options/UnsubscribeOption'
-import useClickOutside from '../../../hooks/useClickOutside'
-import { QiFolderTrash } from '../../../images/svgIcons/quillIcons'
+import EmailDetailOptionStacker from './EmailDetailOptionsStacker/EmailDetailOptionStacker'
 
 interface IEmailDetailOptions {
   threadDetail: IEmailListThreadItem
@@ -38,20 +37,9 @@ const EmailDetailOptions = ({
   const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
+  const alternateActions = useAppSelector(selectAlternateActions)
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
-  const [showMenu, setShowMenu] = useState<boolean>(false)
-  const location = useLocation()
-
-  const { ref } = useClickOutside({
-    onClickOutside: () => setShowMenu(false),
-  })
-
-  useEffect(() => {
-    if (showMenu) {
-      setShowMenu(false)
-    }
-  }, [location])
 
   const staticEmailLabels = emailLabels(threadDetail, storageLabels)
 
@@ -81,21 +69,25 @@ const EmailDetailOptions = ({
             ) && (
               <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
             )}
-          {staticEmailLabels.length > 0 && (
-            <ArchiveOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
-          )}
-          {(coreStatus === global.CORE_STATUS_FOCUSED ||
-            coreStatus === global.CORE_STATUS_SORTING) && (
-            <SkipOption iconSize={ICON_SIZE} />
-          )}
-          {staticEmailLabels.length > 0 && (
-            <MoreOption
-              setShowMenu={setShowMenu}
-              showMenu={showMenu}
-              iconSize={ICON_SIZE}
+          {staticEmailLabels.length > 0 ? (
+            <EmailDetailOptionStacker
+              firstOption={
+                <ArchiveOption
+                  threadDetail={threadDetail}
+                  iconSize={ICON_SIZE}
+                />
+              }
+              secondOption={
+                <DeleteOption
+                  threadId={threadDetail.id}
+                  icon={<QiFolderTrash size={ICON_SIZE} />}
+                  suppressed
+                  noArchive
+                />
+              }
+              prioritizeSecondOption={alternateActions}
             />
-          )}
-          {staticEmailLabels.length === 0 && (
+          ) : (
             <DeleteOption
               threadId={threadDetail.id}
               icon={<QiFolderTrash size={ICON_SIZE} />}
@@ -103,8 +95,9 @@ const EmailDetailOptions = ({
               noArchive
             />
           )}
-          {showMenu && (
-            <EmailMoreOptions ref={ref} threadId={threadDetail.id} />
+          {(coreStatus === global.CORE_STATUS_FOCUSED ||
+            coreStatus === global.CORE_STATUS_SORTING) && (
+            <SkipOption iconSize={ICON_SIZE} />
           )}
           {unsubscribeLink && (
             <>

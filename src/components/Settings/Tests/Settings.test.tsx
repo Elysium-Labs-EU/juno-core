@@ -12,6 +12,7 @@ const initiaUtilsState = {
   isSilentLoading: false,
   isAvatarVisible: true,
   isFlexibleFlowActive: false,
+  alternateActions: true,
   emailFetchSize: 20,
   settingsLabelId: null,
   activeModal: global.ACTIVE_MODAL_MAP.settings,

@@ -3,4 +3,5 @@ export interface ISettingsObject {
   emailFetchSize: 20 | 25 | 30
   showIntroduction: boolean
   isFlexibleFlowActive: boolean
+  alternateActions: boolean
 }

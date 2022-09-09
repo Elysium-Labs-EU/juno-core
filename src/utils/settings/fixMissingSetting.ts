@@ -4,6 +4,7 @@ import {
   fetchSizeMap,
   flexibleFlowMap,
   showIntroductionMap,
+  alternateActionsMap,
 } from '../../constants/baseConstants'
 
 export default function fixMissingSetting(missingSettings: string[]) {
@@ -22,6 +23,9 @@ export default function fixMissingSetting(missingSettings: string[]) {
         break
       case 'showIntroduction':
         fixedSettings.showIntroduction = showIntroductionMap.SI1
+        break
+      case 'alternateActions':
+        fixedSettings.alternateActions = alternateActionsMap.AA1
         break
       default:
         unableToHandle.push(value)

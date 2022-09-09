@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import {
+  alternateActionsMap,
   AVAILABLE_SETTINGS,
   fetchSizeMap,
   flexibleFlowMap,
@@ -52,6 +53,10 @@ export default function parseSettings(
         case 'SI0':
         case 'SI1':
           foundSettings.showIntroduction = showIntroductionMap[value]
+          break
+        case 'AA0':
+        case 'AA1':
+          foundSettings.alternateActions = alternateActionsMap[value]
           break
         default:
           // No default option needed, if there is a missing settings function.

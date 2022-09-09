@@ -27,6 +27,7 @@ interface IUtilsState {
   isSilentLoading: boolean
   isAvatarVisible: boolean
   isFlexibleFlowActive: boolean
+  alternateActions: boolean
   emailFetchSize: number
   settingsLabelId: string | null
   activeModal: null | string
@@ -40,6 +41,7 @@ export const initialState: IUtilsState = Object.freeze({
   isSilentLoading: false,
   isAvatarVisible: true,
   isFlexibleFlowActive: false,
+  alternateActions: true,
   emailFetchSize: 20,
   settingsLabelId: null,
   activeModal: null,
@@ -71,12 +73,16 @@ export const utilsSlice = createSlice({
         ? global.ACTIVE_MODAL_MAP.intro
         : null
       state.isFlexibleFlowActive = payload.isFlexibleFlowActive
+      state.alternateActions = payload.alternateActions
     },
     setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
       state.isAvatarVisible = payload
     },
     setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
       state.isFlexibleFlowActive = payload
+    },
+    setAlternateActions: (state, { payload }: PayloadAction<boolean>) => {
+      state.alternateActions = payload
     },
     setEmailFetchSize(state, { payload }: PayloadAction<number>) {
       state.emailFetchSize = payload
@@ -146,6 +152,7 @@ export const {
   setSettings,
   setShowAvatar,
   setFlexibleFlow,
+  setAlternateActions,
   setEmailFetchSize,
   setSettingsLabelId,
   setActiveModal,
@@ -281,6 +288,8 @@ export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
 export const selectIsFlexibleFlowActive = (state: RootState) =>
   state.utils.isFlexibleFlowActive
+export const selectAlternateActions = (state: RootState) =>
+  state.utils.alternateActions
 export const selectActiveModal = (state: RootState) => state.utils.activeModal
 
 export default utilsSlice.reducer
