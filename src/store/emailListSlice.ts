@@ -131,14 +131,21 @@ const handleAdditionToExistingEmailArray = (
   }
 }
 
-const handleEmailListChange = (
-  state: IEmailListState,
-  labels: string[] | undefined,
-  threads: IEmailListThreadItem[],
-  timestamp: number,
-  nextPageToken?: undefined | string | null,
+const handleEmailListChange = ({
+  state,
+  labels,
+  threads,
+  timestamp,
+  nextPageToken,
+  q,
+}: {
+  state: IEmailListState
+  labels: string[] | undefined
+  threads: IEmailListThreadItem[]
+  timestamp: number
+  nextPageToken?: undefined | string | null
   q?: string
-) => {
+}) => {
   if (labels && threads && threads.length > 0) {
     // Find emailList sub-array index
     const arrayIndex: number = state.emailList
@@ -246,7 +253,7 @@ export const emailListSlice = createSlice({
     },
     listAddEmailList: (state, { payload }) => {
       const { labels, threads, timestamp } = payload
-      handleEmailListChange(state, labels, threads, timestamp)
+      handleEmailListChange({ state, labels, threads, timestamp })
     },
     /**
      * @function listRemoveItemDetail
@@ -322,8 +329,15 @@ export const emailListSlice = createSlice({
       state.emailList = currentState
     },
     listUpdateSearchResults: (state, { payload }) => {
-      const { labels, threads, q, nextPageToken } = payload
-      handleEmailListChange(state, labels, threads, nextPageToken, q)
+      const { labels, threads, q, nextPageToken, timestamp } = payload
+      handleEmailListChange({
+        state,
+        labels,
+        threads,
+        nextPageToken,
+        q,
+        timestamp,
+      })
     },
   },
   extraReducers: (builder) => {
@@ -334,11 +348,17 @@ export const emailListSlice = createSlice({
         {
           payload: {
             labels,
-            response: { threads, nextPageToken },
+            response: { threads, nextPageToken, timestamp },
           },
         }
       ) => {
-        handleEmailListChange(state, labels, threads, nextPageToken)
+        handleEmailListChange({
+          state,
+          labels,
+          threads,
+          nextPageToken,
+          timestamp,
+        })
       }
     )
     builder.addCase(
@@ -354,14 +374,14 @@ export const emailListSlice = createSlice({
         }
       ) => {
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(
+        handleEmailListChange({
           state,
           labels,
           threads,
           timestamp,
           nextPageToken,
-          q
-        )
+          q,
+        })
       }
     )
     builder.addCase(
@@ -379,14 +399,14 @@ export const emailListSlice = createSlice({
         // Send the nextPageToken as History - so the original nextPageToken will not be overwritten.
         // Send the timstamp as 0 - so the original timestamp will not be overwritten.
         // If there is a q (query) - send it - this is used to determine if the action is search related.
-        handleEmailListChange(
+        handleEmailListChange({
           state,
           labels,
           threads,
-          HISTORY_TIME_STAMP,
-          HISTORY_NEXT_PAGETOKEN,
-          q
-        )
+          timestamp: HISTORY_TIME_STAMP,
+          nextPageToken: HISTORY_NEXT_PAGETOKEN,
+          q,
+        })
       }
     )
   },
