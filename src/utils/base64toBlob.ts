@@ -1,6 +1,6 @@
 import { baseBase64 } from './decodeBase64'
 
-function base64toBlob({
+export default function base64toBlob({
   base64Data,
   mimeType,
 }: {
@@ -25,5 +25,3 @@ function base64toBlob({
   }
   return new Blob(byteArrays, { type: mimeType })
 }
-
-export default base64toBlob

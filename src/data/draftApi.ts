@@ -4,15 +4,18 @@ import { errorHandling, instance } from './api'
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: any) => {
     try {
+      console.log('data', data)
       const res = await instance.post(`/api/create-draft`, data)
       return res
     } catch (err) {
+      console.error(err)
       return errorHandling(err)
     }
   },
 
   updateDrafts: async (data: any) => {
     const { draftId } = data
+    console.log('data2', data)
     try {
       const res: AxiosResponse<any> = await instance.put(
         `/api/update-draft/${draftId}`,
@@ -20,6 +23,7 @@ const draftApi = (signal?: AbortSignal) => ({
       )
       return res
     } catch (err) {
+      console.error(err)
       return errorHandling(err)
     }
   },

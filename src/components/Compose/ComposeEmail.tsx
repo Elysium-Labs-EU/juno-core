@@ -40,6 +40,7 @@ import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
 import { handleContactConversion } from '../../utils/convertToContact'
 import { QiSend } from '../../images/svgIcons/quillIcons'
+import Attachments from './ComposeFields/Attachments/Attachments'
 
 // Props are coming from MessageOverview (email detail view)
 interface IComposeEmailProps {
@@ -49,6 +50,7 @@ interface IComposeEmailProps {
   subject?: string | null
   threadId?: string | null
   foundBody?: string | null
+  files?: any
   messageOverviewListener?: (value: string) => void
 }
 
@@ -61,6 +63,7 @@ const ComposeEmail = ({
   subject = null,
   threadId = null,
   foundBody = null,
+  files = null,
   messageOverviewListener = undefined,
 }: IComposeEmailProps) => {
   const location = useLocation()
@@ -90,10 +93,15 @@ const ComposeEmail = ({
   const keysPressed = useMultiKeyPress()
   const userInteractedRef = useRef(false)
   const [composedEmail, setComposedEmail] = useState<any>({})
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+
+  useEffect(() => {
+    console.log('composedEmail', composedEmail)
+  }, [composedEmail])
 
   const updateComposeEmail = useCallback(
     (
-      action: { id: string; value: string | IContact[] | null },
+      action: { id: string; value: string | IContact[] | null | File[] },
       mounted: boolean
     ) => {
       if (
@@ -122,10 +130,10 @@ const ComposeEmail = ({
   }, [])
 
   useEffect(() => {
-    if (keysPressed.length > 0 && !userInteractedRef.current) {
+    if ((keysPressed.length > 0 || uploadedFiles.length > 0) && !userInteractedRef.current) {
       userInteractedRef.current = true
     }
-  }, [keysPressed])
+  }, [keysPressed, uploadedFiles])
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
@@ -289,6 +297,19 @@ const ComposeEmail = ({
       mounted = false
     }
   }, [debouncedSubjectValue])
+
+  useEffect(() => {
+    let mounted = true
+    const updateEventObject = {
+      id: local.FILES,
+      value: uploadedFiles,
+    }
+    updateComposeEmail(updateEventObject, mounted)
+
+    return () => {
+      mounted = false
+    }
+  }, [uploadedFiles])
 
   // Set the form values that come either from the location state or the URL.
   useEffect(() => {
@@ -498,6 +519,38 @@ const ComposeEmail = ({
     [bodyValue, composedEmail]
   )
 
+  const memoizedButtons = useMemo(
+    () => (
+      <S.ButtonContainer>
+        <CustomButton
+          type="button"
+          label={local.SEND_BUTTON}
+          icon={<QiSend />}
+          title="Send email"
+          suppressed
+          onClick={(e) => handleSubmit(e)}
+        />
+        {(isReplying || isForwarding) && (
+          <CustomButton
+            label={local.CANCEL_BUTTON}
+            onClick={() => handleCancelButton()}
+            suppressed
+            title="Cancel"
+          />
+        )}
+        {draftDetails?.id && (
+          <S.DiscardContainer>
+            <DiscardDraftButton
+              draftId={draftDetails.id}
+              messageOverviewListener={messageOverviewListener}
+            />
+          </S.DiscardContainer>
+        )}
+      </S.ButtonContainer>
+    ),
+    [isReplying, isForwarding, draftDetails]
+  )
+
   const SignatureField = useMemo(
     () => <SignatureEmail callback={updateComposeEmail} />,
     [composedEmail]
@@ -552,33 +605,11 @@ const ComposeEmail = ({
                   <S.Row>{SignatureField}</S.Row>
                 </GS.Base>
               </div>
-              <S.ButtonContainer>
-                <CustomButton
-                  type="button"
-                  label={local.SEND_BUTTON}
-                  icon={<QiSend />}
-                  title="Send email"
-                  suppressed
-                  onClick={(e) => handleSubmit(e)}
-                />
-                {(isReplying || isForwarding) && (
-                  <CustomButton
-                    label={local.CANCEL_BUTTON}
-                    onClick={() => handleCancelButton()}
-                    suppressed
-                    title="Cancel"
-                  />
-                )}
-                {draftDetails?.id && (
-                  <S.DiscardContainer>
-                    <DiscardDraftButton
-                      draftId={draftDetails.id}
-                      messageOverviewListener={messageOverviewListener}
-                    />
-                  </S.DiscardContainer>
-                )}
-              </S.ButtonContainer>
+              {memoizedButtons}
             </form>
+            <Attachments
+              onChange={setUploadedFiles}
+            />
           </GS.Base>
         </S.ComposerContainer>
       </S.Wrapper>

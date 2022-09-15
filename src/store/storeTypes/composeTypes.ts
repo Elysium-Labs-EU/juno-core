@@ -28,3 +28,14 @@ export interface IComposeEmailReceive {
 export interface IComposeState {
   composeEmail: any
 }
+
+// TODO: Check need of file
+export interface IFile {
+  path: string
+  name: string
+  lastModified: number
+  size: number
+  type: string
+  webkitRelativePath: string
+  bytes: any
+}

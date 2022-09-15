@@ -40,6 +40,7 @@ export const UNREAD_LABEL = 'UNREAD'
 // DISPLAY
 export const BUTTON_BACK = 'Back'
 export const ERROR_MESSAGE = 'Something went wrong, try again.'
+export const FILE = 'File - '
 export const INVALID_SESSION = 'Invalid session'
 export const INVALID_TOKEN = 'Invalid token'
 export const LINUX_OS = 'Linux OS'

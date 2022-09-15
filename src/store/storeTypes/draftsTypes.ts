@@ -1,3 +1,5 @@
+import { IFile } from './composeTypes'
+
 export interface OpenDraftEmailType {
   messageId: string
   id: string
@@ -45,6 +47,11 @@ export interface ComposedEmail {
   body: string
   signature: string
   from?: string
+  files?: {
+    fileName: string
+    mimeType: string
+    data: ArrayBuffer
+  }[]
 }
 
 export interface DraftDetailObject {
