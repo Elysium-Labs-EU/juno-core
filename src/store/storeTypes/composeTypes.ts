@@ -18,11 +18,13 @@ export interface IComposeEmail {
   body: string
 }
 export interface IComposeEmailReceive {
+  id: string
   to: string
   cc: string
   bcc: string
   subject: string
   body: string
+  files: any
 }
 
 export interface IComposeState {

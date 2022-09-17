@@ -1,6 +1,6 @@
 import { useEditor, EditorContent, generateHTML } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
@@ -25,19 +25,19 @@ import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 const TITLE = 'Signature'
 
 const Signature = () => {
-  const [bodyValue, setBodyValue] = useState('')
-  const debouncedBodyValue = useDebounce(bodyValue, 500)
+  const [value, setValue] = useState('')
+  const debouncedValue = useDebounce(value, 500)
   const profile = useAppSelector(selectProfile)
   const dispatch = useAppDispatch()
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
 
-  const handleBodyChange = (value: string) => {
-    setBodyValue(
-      DOMPurify.sanitize(value, {
+  const handleBodyChange = useCallback((incomingValue: string) => {
+    setValue(
+      DOMPurify.sanitize(incomingValue, {
         USE_PROFILES: { html: true },
       })
     )
-  }
+  }, [])
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
@@ -62,7 +62,7 @@ const Signature = () => {
 
   useEffect(() => {
     const updateSignature = async () => {
-      const request = { signature: debouncedBodyValue }
+      const request = { signature: debouncedValue }
       try {
         const response = await settingsApi().updateSendAs(
           profile.emailAddress,
@@ -80,12 +80,12 @@ const Signature = () => {
       }
     }
     if (
-      debouncedBodyValue !== profile?.signature &&
+      debouncedValue !== profile?.signature &&
       loadState === global.LOAD_STATE_MAP.loaded
     ) {
       updateSignature()
     }
-  }, [debouncedBodyValue, profile?.signature])
+  }, [debouncedValue, profile?.signature])
 
   // Load the state from Redux into the editor.
   useEffect(() => {
@@ -95,10 +95,10 @@ const Signature = () => {
     }
     if (
       typeof profile?.signature === 'string' &&
-      bodyValue.length < 1 &&
+      value.length < 1 &&
       editorInstance
     ) {
-      setBodyValue(profile?.signature)
+      setValue(profile?.signature)
       editorInstance.commands.setContent(profile?.signature)
       setLoadState(global.LOAD_STATE_MAP.loaded)
     }

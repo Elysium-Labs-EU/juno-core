@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import * as local from '../../constants/composeEmailConstants'
 import { QiDiscard } from '../../images/svgIcons/quillIcons'
-import { selectDraft } from '../../store/draftsSlice'
+import { resetDraftDetails, selectDraft } from '../../store/draftsSlice'
 import {
   selectIsReplying,
   selectIsForwarding,
@@ -27,7 +27,7 @@ const DiscardDraftButton = ({
 
   const draftMessage = useCallback(
     () => draftList.find((draft) => draft.id === draftId)?.message,
-    [draftId]
+    [draftId, draftList]
   )
 
   const handleClick = useCallback(() => {
@@ -38,7 +38,7 @@ const DiscardDraftButton = ({
         messageId: isReplying || isForwarding ? id : undefined,
         threadId,
         dispatch,
-        draftId,
+        draftId: id,
       })
       if (messageOverviewListener) {
         messageOverviewListener(id)
@@ -51,9 +51,10 @@ const DiscardDraftButton = ({
         dispatch(setIsForwarding(false))
         return
       }
+      dispatch(resetDraftDetails())
       dispatch(navigateBack())
     }
-  }, [draftId, isForwarding, isReplying])
+  }, [draftId, draftList, isForwarding, isReplying])
 
   return draftMessage() ? (
     <CustomButton

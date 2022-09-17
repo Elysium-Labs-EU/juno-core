@@ -5,9 +5,7 @@ import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
-import useDebounce from '../../hooks/useDebounce'
 import * as local from '../../constants/composeEmailConstants'
-import emailValidation from '../../utils/emailValidation'
 import * as keyConstants from '../../constants/keyConstants'
 import {
   createUpdateDraft,
@@ -26,9 +24,6 @@ import {
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { IContact } from '../../store/storeTypes/contactsTypes'
 import CustomButton from '../Elements/Buttons/CustomButton'
-import RecipientField from './ComposeFields/RecipientField'
-import TipTap from './ComposeFields/TipTap/Tiptap'
-import StyledTextField from './ComposeFields/EmailInput/EmailInputStyles'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
 import DiscardDraftButton from './DiscardDraftButton'
@@ -41,6 +36,19 @@ import { IRecipientsList } from './ComposeEmailTypes'
 import { handleContactConversion } from '../../utils/convertToContact'
 import { QiSend } from '../../images/svgIcons/quillIcons'
 import Attachments from './ComposeFields/Attachments/Attachments'
+import useFetchDraftList from '../../hooks/useFetchDraftList'
+import convertB64AttachmentToFile from '../../utils/convertB64AttachmentToFile'
+import ContactField from './ComposeFields/ContactField'
+import SubjectField from './ComposeFields/SubjectField'
+import BodyField from './ComposeFields/BodyField/BodyField'
+import * as global from '../../constants/globalConstants'
+
+export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
+  fieldId: recipientListRaw.fieldId,
+  newValue: recipientListRaw.newValue.map((item: string | IContact) =>
+    typeof item === 'string' ? { name: item, emailAddress: item } : item
+  ),
+})
 
 // Props are coming from MessageOverview (email detail view)
 interface IComposeEmailProps {
@@ -74,78 +82,70 @@ const ComposeEmail = ({
   const draftDetails = useAppSelector(selectDraftDetails)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
-  const [toValue, setToValue] = useState<IContact[]>([])
-  const debouncedToValue = useDebounce(toValue, 500)
-  const [inputToValue, setInputToValue] = useState<string>('')
   const [showCC, setShowCC] = useState<boolean>(false)
-  const [ccValue, setCCValue] = useState<IContact[]>([])
-  const debouncedCCValue = useDebounce(ccValue, 500)
-  const [inputCCValue, setInputCCValue] = useState<string>('')
   const [showBCC, setShowBCC] = useState<boolean>(false)
-  const [bccValue, setBCCValue] = useState<IContact[]>([])
-  const debouncedBCCValue = useDebounce(bccValue, 500)
-  const [inputBCCValue, setInputBCCValue] = useState<string>('')
-  const [subjectValue, setSubjectValue] = useState('')
-  const debouncedSubjectValue = useDebounce(subjectValue, 500)
-  const [bodyValue, setBodyValue] = useState('')
-  const [toError, setToError] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const keysPressed = useMultiKeyPress()
+  const [composedEmail, setComposedEmail] = useState<any>(undefined)
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [hasInteracted, setHasInteracted] = useState(false)
   const userInteractedRef = useRef(false)
-  const [composedEmail, setComposedEmail] = useState<any>({})
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+  useFetchDraftList(draftDetails)
 
   useEffect(() => {
     console.log('composedEmail', composedEmail)
   }, [composedEmail])
 
   const updateComposeEmail = useCallback(
-    (
-      action: { id: string; value: string | IContact[] | null | File[] },
-      mounted: boolean
-    ) => {
-      if (
-        Object.prototype.hasOwnProperty.call(action, 'id') &&
-        Object.prototype.hasOwnProperty.call(action, 'value')
-      ) {
+    (action: { id: string; value: string | IContact[] | null | File[] }) => {
+      if ('id' in action && 'value' in action) {
         const { id, value } = action
-        mounted &&
-          setComposedEmail({
-            ...composedEmail,
-            [id]: value,
-          })
+        console.log('pre action composedEmail', composedEmail)
+        console.log('action', action)
+        setComposedEmail({
+          ...composedEmail,
+          [id]: value,
+        })
       }
     },
     [composedEmail]
   )
 
-  useEffect(() => {
-    if (
-      draftDetails &&
-      Object.keys(draftDetails).length > 0 &&
-      userInteractedRef.current
-    ) {
-      dispatch(resetDraftDetails())
-    }
-  }, [])
+  // Why is this?
+  // useEffect(() => {
+  //   if (
+  //     draftDetails &&
+  //     Object.keys(draftDetails).length > 0 &&
+  //     userInteractedRef.current
+  //   ) {
+  //     dispatch(resetDraftDetails())
+  //   }
+  // }, [])
 
+  // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
+  // The flag is used to allow the system to update the draft.
   useEffect(() => {
-    if ((keysPressed.length > 0 || uploadedFiles.length > 0) && !userInteractedRef.current) {
-      userInteractedRef.current = true
+    if (!userInteractedRef.current) {
+      if (keysPressed.length > 0 || hasInteracted) {
+        userInteractedRef.current = true
+      }
     }
-  }, [keysPressed, uploadedFiles])
+  }, [keysPressed, hasInteracted])
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
+    console.log('TO SEND AS UPDATE PRE', composedEmail)
     let mounted = true
     if (!isEmpty(composedEmail) && userInteractedRef.current) {
-      mounted && dispatch(createUpdateDraft({ composedEmail }))
+      console.log('TO SEND AS UPDATE', composedEmail)
+      // mounted && dispatch(createUpdateDraft({ composedEmail }))
     }
     return () => {
       mounted = false
     }
   }, [composedEmail])
 
+  // Based on the changes in the draftDetails, notify the user that the save was successful
   useEffect(() => {
     let mounted = true
     if (!isEmpty(draftDetails) && mounted && userInteractedRef.current) {
@@ -162,252 +162,122 @@ const ComposeEmail = ({
     }
   }, [draftDetails])
 
-  const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
-    fieldId: recipientListRaw.fieldId,
-    newValue: recipientListRaw.newValue.map((item: string | IContact) =>
-      typeof item === 'string' ? { name: item, emailAddress: item } : item
-    ),
-  })
-
-  const handleChangeTo = useCallback(
-    (recipientListRaw: IRecipientsList) => {
-      const recipientList = recipientListTransform(recipientListRaw)
-      const validation = emailValidation(recipientList.newValue)
-      if (validation) {
-        setToValue(recipientList.newValue)
-        toError && setToError(false)
-      }
-      if (!validation) {
-        setToError(true)
-      }
-    },
-    [toValue]
-  )
-
-  const handleChangeCC = useCallback(
-    (recipientListRaw: IRecipientsList) => {
-      const recipientList = recipientListTransform(recipientListRaw)
-      const validation = emailValidation(recipientList.newValue)
-      if (validation) {
-        setCCValue(recipientList.newValue)
-        toError && setToError(false)
-      }
-      if (!validation) {
-        setToError(true)
-      }
-    },
-    [ccValue]
-  )
-
-  const handleChangeBCC = useCallback(
-    (recipientListRaw: IRecipientsList) => {
-      const recipientList = recipientListTransform(recipientListRaw)
-      const validation = emailValidation(recipientList.newValue)
-      if (validation) {
-        setBCCValue(recipientList.newValue)
-        toError && setToError(false)
-      }
-      if (!validation) {
-        setToError(true)
-      }
-    },
-    [bccValue]
-  )
-
-  const handleChangeSubject = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSubjectValue(e.target.value)
-    },
-    [subjectValue]
-  )
-
-  const handleDelete = useCallback(
-    (selectedOption: any) => {
-      const { option, fieldId } = selectedOption
-      switch (fieldId) {
-        case local.TO: {
-          setToValue(toValue.filter((item) => item !== option))
-          break
-        }
-        case local.CC: {
-          setCCValue(ccValue.filter((item) => item !== option))
-          break
-        }
-        case local.BCC: {
-          setBCCValue(bccValue.filter((item) => item !== option))
-          break
-        }
-        default: {
-          break
-        }
-      }
-    },
-    [toValue, ccValue, bccValue]
-  )
-
-  useEffect(() => {
-    let mounted = true
-    if (debouncedToValue && debouncedToValue.length > 0) {
-      if (emailValidation(debouncedToValue)) {
-        const updateEventObject = { id: local.TO, value: debouncedToValue }
-        updateComposeEmail(updateEventObject, mounted)
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [debouncedToValue])
-
-  useEffect(() => {
-    let mounted = true
-    if (debouncedBCCValue && debouncedBCCValue.length > 0) {
-      if (emailValidation(debouncedBCCValue)) {
-        const updateEventObject = { id: local.BCC, value: debouncedBCCValue }
-        updateComposeEmail(updateEventObject, mounted)
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [debouncedBCCValue])
-
-  useEffect(() => {
-    let mounted = true
-    if (debouncedCCValue && debouncedCCValue.length > 0) {
-      if (emailValidation(debouncedCCValue)) {
-        const updateEventObject = { id: local.CC, value: debouncedCCValue }
-        updateComposeEmail(updateEventObject, mounted)
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [debouncedCCValue])
-
-  useEffect(() => {
-    let mounted = true
-    if (debouncedSubjectValue) {
-      const updateEventObject = {
-        id: local.SUBJECT,
-        value: debouncedSubjectValue,
-      }
-      updateComposeEmail(updateEventObject, mounted)
-    }
-    return () => {
-      mounted = false
-    }
-  }, [debouncedSubjectValue])
-
-  useEffect(() => {
-    let mounted = true
-    const updateEventObject = {
-      id: local.FILES,
-      value: uploadedFiles,
-    }
-    updateComposeEmail(updateEventObject, mounted)
-
-    return () => {
-      mounted = false
-    }
-  }, [uploadedFiles])
-
   // Set the form values that come either from the location state or the URL.
   useEffect(() => {
     let mounted = true
-    if (mounted) {
-      const { mailto, body }: { mailto?: string; body?: string } = qs.parse(
-        window.location.search,
-        {
-          ignoreQueryPrefix: true,
-        }
-      )
-      if (mailto || (body && isEmpty(composedEmail))) {
-        if (mailto?.includes('@')) {
-          setToValue(handleContactConversion(mailto))
-        }
-        if (mailto?.includes('subject')) {
-          setSubjectValue(mailto.replace('?subject=', ''))
-        }
-        if (body) {
-          setBodyValue(body)
-        }
-      }
+    if (mounted && loadState === global.LOAD_STATE_MAP.idle) {
+      // const { mailto, body }: { mailto?: string; body?: string } = qs.parse(
+      //   window.location.search,
+      //   {
+      //     ignoreQueryPrefix: true,
+      //   }
+      // )
+      // if (mailto || (body && isEmpty(composedEmail))) {
+      //   if (mailto?.includes('@')) {
+      //     setPresetToValue(handleContactConversion(mailto))
+      //   }
+      //   if (mailto?.includes('subject')) {
+      //     setPresetSubjectValue(mailto.replace('?subject=', ''))
+      //   }
+      //   if (body) {
+      //     setPresetBodyValue(body)
+      //   }
+      // }
       // composeEmail object coming from a draft item on the draft list via the pushed route
       if (location?.state) {
         const state = location.state as IComposeEmailReceive
-        if (state.to && state.to.length > 0) {
-          setToValue(handleContactConversion(state.to))
+        const handlePresetvalueConversions = () => {
+          const presetValueBody: any = {}
+          if (state.id && state.id.length > 0) {
+            presetValueBody.id = state.id
+          }
+          if (state.to && state.to.length > 0) {
+            presetValueBody.to = handleContactConversion(state.to)
+          }
+          if (state.cc && state.cc.length > 0) {
+            setShowCC(true)
+            presetValueBody.cc = handleContactConversion(state.cc)
+          }
+          if (state.bcc && state.bcc.length > 0) {
+            setShowBCC(true)
+            presetValueBody.bcc = handleContactConversion(state.bcc)
+          }
+          if (state.subject) {
+            presetValueBody.subject = state.subject
+          }
+          if (state.body) {
+            presetValueBody.body = state.body
+          }
+          if (state.files && state.files.length > 0) {
+            presetValueBody.files = state.files
+          }
+          return presetValueBody
         }
-        if (state.cc && state.cc.length > 0) {
-          setShowCC(true)
-          setCCValue(handleContactConversion(state.cc))
-        }
-        if (state.bcc && state.bcc.length > 0) {
-          setShowBCC(true)
-          setBCCValue(handleContactConversion(state.bcc))
-        }
-        setSubjectValue(state.subject)
-        setBodyValue(state.body)
+        const output = handlePresetvalueConversions()
+        setComposedEmail(output)
       }
     }
+    setLoadState(global.LOAD_STATE_MAP.loaded)
     return () => {
       mounted = false
     }
   }, [])
 
   // Set the form values via the passed props from the email detail
-  useEffect(() => {
-    let mounted = true
-    if (mounted) {
-      // Form values coming from a new reply via MessagesOverview (EmailDetail)
-      if (to && to.length > 0) {
-        setToValue(to)
-      }
-      if (cc && cc.length > 0) {
-        setShowCC(true)
-        setCCValue(cc)
-      }
-      if (bcc && bcc.length > 0) {
-        setShowBCC(true)
-        setBCCValue(bcc)
-      }
-      if (subject) {
-        setSubjectValue(subject)
-      }
-      if (foundBody) {
-        setBodyValue(foundBody)
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [to, cc, bcc, subject, foundBody])
+  // useEffect(() => {
+  //   let mounted = true
+  //   if (mounted) {
+  //     // Form values coming from a new reply via MessagesOverview (EmailDetail)
+  //     if (to && to.length > 0) {
+  //       setPresetToValue(to)
+  //     }
+  //     if (cc && cc.length > 0) {
+  //       setShowCC(true)
+  //       setPresetCCValue(cc)
+  //     }
+  //     if (bcc && bcc.length > 0) {
+  //       setShowBCC(true)
+  //       setPresetBCCValue(bcc)
+  //     }
+  //     if (subject) {
+  //       setPresetSubjectValue(subject)
+  //     }
+  //     if (foundBody) {
+  //       setPresetBodyValue(foundBody)
+  //     }
+  //     // if (files && files.length > 0) {
+  //     // TODO: Find the ID value from the message overview
+  //     //   const convertFiles = async () => {
+  //     //     const response = await convertB64AttachmentToFile({ id: state.id, files: state.files })
+  //     //     if (response && response.length > 0) {
+  //     //       setUploadedFiles(response)
+  //     //     }
+  //     //   }
+  //     //   convertFiles()
+  //     // }
+  //   }
+  //   return () => {
+  //     mounted = false
+  //   }
+  // }, [to, cc, bcc, subject, foundBody])
 
   useEffect(() => {
-    let mounted = true
     if (currentMessage) {
       const updateEventObject = {
         id: 'id',
         value: currentMessage,
       }
-      updateComposeEmail(updateEventObject, mounted)
-    }
-    return () => {
-      mounted = false
+      updateComposeEmail(updateEventObject)
     }
   }, [currentMessage])
 
   useEffect(() => {
-    let mounted = true
     if (threadId) {
       const updateEventObject = {
         id: 'threadId',
         value: threadId,
       }
-      updateComposeEmail(updateEventObject, mounted)
-    }
-    return () => {
-      mounted = false
+      updateComposeEmail(updateEventObject)
     }
   }, [threadId])
 
@@ -416,26 +286,18 @@ const ComposeEmail = ({
       if (e) {
         e.preventDefault()
       }
-      if (toValue.length > 0) {
-        if (emailValidation(toValue)) {
-          dispatch(sendComposedEmail({ composedEmail }))
-          dispatch(resetDraftDetails())
-          // dispatch(
-          //   listRemoveDraft({ threadId: draftDetails?.message?.threadId })
-          // )
-          // archiveMail({
-          //   messageId: threadDetail.id,
-          //   labelIds,
-          //   dispatch,
-          // })
-        } else {
-          setToError(true)
-        }
-      } else {
-        setToError(true)
-      }
+      dispatch(sendComposedEmail({ composedEmail }))
+      dispatch(resetDraftDetails())
+      // dispatch(
+      //   listRemoveDraft({ threadId: draftDetails?.message?.threadId })
+      // )
+      // archiveMail({
+      //   messageId: threadDetail.id,
+      //   labelIds,
+      //   dispatch,
+      // })
     },
-    [toValue, composedEmail, toError]
+    [composedEmail]
   )
 
   const handleCancelButton = useCallback(() => {
@@ -450,73 +312,98 @@ const ComposeEmail = ({
     dispatch(resetDraftDetails())
   }, [isReplying, isForwarding, dispatch])
 
-  const ToField = useMemo(
+  const memoizedToField = useMemo(
     () => (
-      <RecipientField
-        recipientFieldValue={toValue}
-        fieldId={local.TO}
-        fieldLabel={local.TO_LABEL}
-        toError={toError}
-        handleChangeRecipients={handleChangeTo}
-        inputValue={inputToValue}
-        setInputValue={setInputToValue}
-        handleDelete={handleDelete}
+      <ContactField
+        updateComposeEmail={updateComposeEmail}
+        composeValue={composedEmail?.to}
+        loadState={loadState}
         showField={!isReplying}
+        id={local.TO}
+        label={local.TO_LABEL}
+        setHasInteracted={setHasInteracted}
+        hasInteracted={hasInteracted}
       />
     ),
-    [inputToValue, toError, handleChangeTo]
+    [isReplying, composedEmail, loadState, hasInteracted]
   )
 
-  const CcField = useMemo(
+  const memoizedCCField = useMemo(
     () => (
-      <RecipientField
-        recipientFieldValue={ccValue}
-        fieldId={local.CC}
-        fieldLabel={local.CC_LABEL}
-        toError={toError}
-        handleChangeRecipients={handleChangeCC}
-        inputValue={inputCCValue}
-        setInputValue={setInputCCValue}
-        handleDelete={handleDelete}
+      <ContactField
+        updateComposeEmail={updateComposeEmail}
+        composeValue={composedEmail?.cc}
+        loadState={loadState}
         showField={showCC}
+        id={local.CC}
+        label={local.CC_LABEL}
+        setHasInteracted={setHasInteracted}
+        hasInteracted={hasInteracted}
       />
     ),
-    [inputCCValue, toError, handleChangeCC]
+    [showCC, composedEmail, loadState, hasInteracted]
   )
 
-  const BccField = useMemo(
+  const memoizedBCCField = useMemo(
     () => (
-      <RecipientField
-        recipientFieldValue={bccValue}
-        fieldId={local.BCC}
-        fieldLabel={local.BCC_LABEL}
-        toError={toError}
-        handleChangeRecipients={handleChangeBCC}
-        inputValue={inputBCCValue}
-        setInputValue={setInputBCCValue}
-        handleDelete={handleDelete}
+      <ContactField
+        updateComposeEmail={updateComposeEmail}
+        composeValue={composedEmail?.bcc}
+        loadState={loadState}
         showField={showBCC}
+        id={local.BCC}
+        label={local.BCC_LABEL}
+        setHasInteracted={setHasInteracted}
+        hasInteracted={hasInteracted}
       />
     ),
-    [inputBCCValue, toError, handleChangeBCC]
+    [showBCC, composedEmail, loadState, hasInteracted]
   )
 
-  const SubjectField = useMemo(
+  const memoizedSubjectField = useMemo(
     () => (
-      <StyledTextField
-        id={local.SUBJECT}
-        value={subjectValue ?? ''}
-        onChange={handleChangeSubject}
-        fullWidth
-        variant="outlined"
+      <SubjectField
+        composeValue={composedEmail?.subject}
+        updateComposeEmail={updateComposeEmail}
+        loadState={loadState}
       />
     ),
-    [subjectValue, handleChangeSubject]
+    [composedEmail, loadState]
   )
 
-  const BodyField = useMemo(
-    () => <TipTap fetchedBodyValue={bodyValue} callback={updateComposeEmail} />,
-    [bodyValue, composedEmail]
+  const memoizedBodyField = useMemo(
+    () => (
+      <BodyField
+        composeValue={composedEmail?.body}
+        updateComposeEmail={updateComposeEmail}
+        loadState={loadState}
+      />
+    ),
+    [composedEmail, loadState]
+  )
+
+  const memoizedAttachmentField = useMemo(
+    () => (
+      <Attachments
+        messageId={composedEmail?.id}
+        composeValue={composedEmail?.files}
+        updateComposeEmail={updateComposeEmail}
+        loadState={loadState}
+        setHasInteracted={setHasInteracted}
+        hasInteracted={hasInteracted}
+      />
+    ),
+    [composedEmail, loadState, hasInteracted]
+  )
+
+  const memoizedSignatureField = useMemo(
+    () => (
+      <SignatureEmail
+        updateComposeEmail={updateComposeEmail}
+        loadState={loadState}
+      />
+    ),
+    [composedEmail, loadState]
   )
 
   const memoizedButtons = useMemo(
@@ -551,11 +438,6 @@ const ComposeEmail = ({
     [isReplying, isForwarding, draftDetails]
   )
 
-  const SignatureField = useMemo(
-    () => <SignatureEmail callback={updateComposeEmail} />,
-    [composedEmail]
-  )
-
   useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
 
   return (
@@ -573,7 +455,7 @@ const ComposeEmail = ({
               <div style={{ marginBottom: `7px` }}>
                 <GS.Base>
                   <S.Row>
-                    {ToField}
+                    {memoizedToField}
                     <S.CcBccContainer>
                       {!showCC && (
                         <CustomButton
@@ -591,25 +473,16 @@ const ComposeEmail = ({
                       )}
                     </S.CcBccContainer>
                   </S.Row>
-                  {showCC && <S.Row>{CcField}</S.Row>}
-                  {showBCC && <S.Row>{BccField}</S.Row>}
-                  <S.Row>
-                    <S.Label hasValue={Boolean(subjectValue)}>
-                      <label htmlFor={local.SUBJECT}>
-                        {local.SUBJECT_LABEL}
-                      </label>
-                    </S.Label>
-                    {SubjectField}
-                  </S.Row>
-                  <S.Row>{BodyField}</S.Row>
-                  <S.Row>{SignatureField}</S.Row>
+                  {showCC && <S.Row>{memoizedCCField}</S.Row>}
+                  {showBCC && <S.Row>{memoizedBCCField}</S.Row>}
+                  <S.Row>{memoizedSubjectField}</S.Row>
+                  <S.Row>{memoizedBodyField}</S.Row>
+                  <S.Row>{memoizedSignatureField}</S.Row>
                 </GS.Base>
               </div>
               {memoizedButtons}
             </form>
-            <Attachments
-              onChange={setUploadedFiles}
-            />
+            {memoizedAttachmentField}
           </GS.Base>
         </S.ComposerContainer>
       </S.Wrapper>

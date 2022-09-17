@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
-import { fetchDrafts, openDraftEmail } from './draftsSlice'
+import { fetchDrafts, openDraftEmail, resetDraftDetails } from './draftsSlice'
 import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
 import type { AppThunk, RootState } from './store'
 import RouteConstants from '../constants/routes.json'
@@ -204,6 +204,10 @@ export const navigateTo =
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
   const { labelIds } = getState().labels
+  const { draftDetails } = getState().drafts
+  if (draftDetails?.id) {
+    dispatch(resetDraftDetails())
+  }
   if (!coreStatus) {
     if (labelIds.includes(global.INBOX_LABEL)) {
       dispatch(push(RouteConstants.TODO))

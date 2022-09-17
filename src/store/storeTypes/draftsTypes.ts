@@ -17,6 +17,7 @@ export interface FullEmailType {
   payload: {
     body: any
     headers: any
+    files: any
   }
   mimeType: string
   threadId: string

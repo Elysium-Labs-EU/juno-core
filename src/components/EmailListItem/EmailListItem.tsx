@@ -106,7 +106,7 @@ const EmailListItem = ({
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.to,
+        ]?.payload?.headers?.to,
         emailAddress
       ),
     []
@@ -116,7 +116,7 @@ const EmailListItem = ({
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.from,
+        ]?.payload?.headers?.from,
         emailAddress
       ),
     []
@@ -126,7 +126,7 @@ const EmailListItem = ({
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.from,
+        ]?.payload?.headers?.from,
         emailAddress
       ),
     []
@@ -136,7 +136,7 @@ const EmailListItem = ({
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.subject
+        ]?.payload?.headers?.subject
       ),
     []
   )
