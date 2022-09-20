@@ -31,17 +31,23 @@ const ReplyComposer = ({
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
-        to={handleContactConversion(relevantMessage?.payload.headers.from)}
-        cc={handleContactConversion(relevantMessage?.payload.headers.cc)}
-        bcc={handleContactConversion(relevantMessage?.payload.headers.bcc)}
-        subject={relevantMessage?.payload.headers.subject}
-        foundBody={
-          selectedIndex !== undefined &&
-          relevantMessage?.payload?.body?.emailHTML
-            ? emailBody(relevantMessage.payload.body.emailHTML)
-            : undefined
-        }
-        threadId={localThreadDetail.id}
+        presetValue={{
+          to: handleContactConversion(relevantMessage?.payload.headers.from),
+          cc: handleContactConversion(relevantMessage?.payload.headers.cc),
+          bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
+          subject: relevantMessage?.payload.headers.subject,
+          body:
+            selectedIndex !== undefined &&
+            relevantMessage?.payload?.body?.emailHTML
+              ? emailBody(relevantMessage.payload.body.emailHTML)
+              : undefined,
+          threadId: localThreadDetail?.id,
+          id: localThreadDetail.messages[
+            selectedIndex === undefined
+              ? localThreadDetail.messages.length - 1
+              : selectedIndex
+          ].id,
+        }}
         messageOverviewListener={messageOverviewListener}
       />
     </ES.ComposeWrapper>

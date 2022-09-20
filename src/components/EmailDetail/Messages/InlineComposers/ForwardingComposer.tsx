@@ -32,14 +32,24 @@ const ForwardingComposer = ({
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
-        subject={relevantMessage?.payload.headers.subject}
-        threadId={localThreadDetail.id}
+        presetValue={{
+          subject: relevantMessage?.payload.headers.subject,
+          body:
+            relevantMessage !== null &&
+            relevantMessage?.payload?.body?.emailHTML
+              ? emailBody(
+                  relevantMessage?.payload?.body?.emailHTML,
+                  isForwarding
+                )
+              : undefined,
+          threadId: localThreadDetail?.id,
+          id: localThreadDetail.messages[
+            selectedIndex === undefined
+              ? localThreadDetail.messages.length - 1
+              : selectedIndex
+          ].id,
+        }}
         messageOverviewListener={messageOverviewListener}
-        foundBody={
-          relevantMessage !== null && relevantMessage?.payload?.body?.emailHTML
-            ? emailBody(relevantMessage?.payload?.body?.emailHTML, isForwarding)
-            : undefined
-        }
       />
     </ES.ComposeWrapper>
   )

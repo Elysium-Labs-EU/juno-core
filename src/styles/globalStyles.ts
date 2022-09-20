@@ -6,23 +6,23 @@ import * as themeConstants from '../constants/themeConstants'
 export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 100%;
-    --color-white: ${themeConstants.colorWhite};
-    --color-white-off: ${themeConstants.colorOffWhite};
-    --color-white-slight: ${themeConstants.colorSlightWhite};
-    --color-grey-ultra-light: ${themeConstants.colorUltraLightGrey};
-    --color-grey-light: ${themeConstants.colorLightGrey};
-    --color-grey: ${themeConstants.colorGrey};
+    --color-black-off: ${themeConstants.colorOffBlack};
+    --color-black: ${themeConstants.colorBlack};
+    --color-blue-dark: ${themeConstants.colorBlueDark};
+    --color-blue: ${themeConstants.colorBlue};
+    --color-grey-border: ${themeConstants.colorGreyBorder};
     --color-grey-dark: ${themeConstants.colorDarkGrey};
     --color-grey-hover: ${themeConstants.colorGreyHover};
-    --color-grey-border: ${themeConstants.colorGreyBorder};
-    --color-black: ${themeConstants.colorBlack};
-    --color-black-off: ${themeConstants.colorOffBlack};
+    --color-grey-light: ${themeConstants.colorLightGrey};
+    --color-grey-ultra-light: ${themeConstants.colorUltraLightGrey};
+    --color-grey: ${themeConstants.colorGrey};
     --color-purple-dark: ${themeConstants.colorPurpleDark};
-    --color-purple: ${themeConstants.colorPurple};
     --color-purple-soft: ${themeConstants.colorPurpleSoft};
+    --color-purple: ${themeConstants.colorPurple};
     --color-red: ${themeConstants.colorRed};
-    --color-blue: ${themeConstants.colorBlue};
-    --color-blue-dark: ${themeConstants.colorBlueDark};
+    --color-white-off: ${themeConstants.colorOffWhite};
+    --color-white-slight: ${themeConstants.colorSlightWhite};
+    --color-white: ${themeConstants.colorWhite};
     --h1: ${themeConstants.h1FontSize};
     --h2: ${themeConstants.h2FontSize};
     --h3: ${themeConstants.h3FontSize};

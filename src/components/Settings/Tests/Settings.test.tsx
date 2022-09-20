@@ -7,7 +7,6 @@ import * as global from '../../../constants/globalConstants'
 const initiaUtilsState = {
   inSearch: false,
   isLoading: false,
-  isProcessing: false,
   serviceUnavailable: null,
   isSilentLoading: false,
   isAvatarVisible: true,

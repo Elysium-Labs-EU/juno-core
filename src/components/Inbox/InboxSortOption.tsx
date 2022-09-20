@@ -38,6 +38,8 @@ const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const InboxSortOption = () => {
   // An abstracted hook to fetch the required emails
+
+  // TODO: Double check this hook to not collide with useFetchEmailsDrafts
   useFetchEmailsSimple()
 
   const emailList = useAppSelector(selectEmailList)

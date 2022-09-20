@@ -21,7 +21,6 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const handleEvent = useCallback(() => {
     if (threadDetail.messages) {
       return isForwardingListener({
-        messageId: threadDetail.messages[threadDetail.messages.length - 1].id,
         messageIndex,
         dispatch,
         isReplying,

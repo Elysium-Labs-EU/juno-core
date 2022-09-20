@@ -17,7 +17,6 @@ describe('Baseloader tests', () => {
     const initialUtilsSlice = {
       inSearch: false,
       isLoading: false,
-      isProcessing: false,
       serviceUnavailable: null,
       isSilentLoading: false,
       isSettingsOpen: false,
@@ -52,7 +51,6 @@ describe('Baseloader tests', () => {
     const initialUtilsSlice = {
       inSearch: false,
       isLoading: false,
-      isProcessing: false,
       serviceUnavailable: 'Test',
       isSilentLoading: false,
       isSettingsOpen: false,

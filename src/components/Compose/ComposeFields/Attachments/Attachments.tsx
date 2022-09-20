@@ -15,6 +15,21 @@ import { IEmailAttachmentType } from '../../../EmailDetail/Attachment/EmailAttac
 
 const ATTACHMENTS = 'Attachments'
 
+const customIsEqual = (
+  composeValue: File[] | IEmailAttachmentType[],
+  uploadedFiles: File[]
+) =>
+  !isEqual(
+    composeValue?.map((item: File | IEmailAttachmentType) => ({
+      size: 'size' in item ? item.size : item.body.size,
+      name: 'name' in item ? item.name : item.filename,
+    })),
+    uploadedFiles.map((item: File) => ({
+      size: item.size,
+      name: item.name,
+    }))
+  )
+
 const Attachments = ({
   messageId,
   composeValue,
@@ -46,16 +61,7 @@ const Attachments = ({
     if (
       composeValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !isEqual(
-        composeValue.map((item: File | IEmailAttachmentType) => ({
-          size: 'size' in item ? item.size : item.body.size,
-          name: 'name' in item ? item.name : item.filename,
-        })),
-        uploadedFiles.map((item: File) => ({
-          size: item.size,
-          name: item.name,
-        }))
-      )
+      customIsEqual(composeValue, uploadedFiles)
     ) {
       if (composeValue.some((value: any) => 'partId' in value) && messageId) {
         setLocalLoadState(global.LOAD_STATE_MAP.loading)
@@ -133,16 +139,7 @@ const Attachments = ({
   useEffect(() => {
     if (
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !isEqual(
-        composeValue.map((item: File | IEmailAttachmentType) => ({
-          size: 'size' in item ? item.size : item.body.size,
-          name: 'name' in item ? item.name : item.filename,
-        })),
-        uploadedFiles.map((item: File) => ({
-          size: item.size,
-          name: item.name,
-        }))
-      )
+      customIsEqual(composeValue, uploadedFiles)
     ) {
       const updateEventObject = {
         id: local.FILES,

@@ -39,7 +39,7 @@ const EmailList = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
 
-  useFetchEmailsDrafts()
+  useFetchEmailsDrafts(labelIds, Date.now())
 
   // Run a clean up function to ensure that the email detail values are always back to base values.
   useEffect(() => {

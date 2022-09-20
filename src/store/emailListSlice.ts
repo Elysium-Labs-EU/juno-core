@@ -5,7 +5,6 @@ import threadApi, { EmailQueryObject } from '../data/threadApi'
 import {
   navigateBack,
   setIsLoading,
-  setIsProcessing,
   setIsSilentLoading,
   setServiceUnavailable,
 } from './utilsSlice'
@@ -274,6 +273,19 @@ export const emailListSlice = createSlice({
       ].threads.filter((item) => item.id !== threadId)
       state.emailList = currentState
     },
+    listRemoveItemDetailDraft: (state, { payload }) => {
+      const {
+        threadId,
+      }: {
+        threadId: string
+      } = payload
+      const currentState = state.emailList
+      // Index 4 is used, this is the static predefined array based on BASE_ARRAY
+      currentState[4].threads = state.emailList[
+        state.activeEmailListIndex
+      ].threads.filter((item) => item.id !== threadId)
+      state.emailList = currentState
+    },
     /**
      * @function listRemoveItemMessage
      * Takes in a the state and payload, to return a updated version of an emailList.
@@ -419,6 +431,7 @@ export const {
   setBaseEmailList,
   listAddEmailList,
   listRemoveItemDetail,
+  listRemoveItemDetailDraft,
   listRemoveItemMessage,
   listRemoveItemDetailBatch,
   listUpdateSearchResults,
@@ -603,7 +616,6 @@ export const updateEmailLabel = (
         // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
         if (!request.delete) {
           try {
-            dispatch(setIsProcessing(true))
             let response = null
             if (threadId) {
               response = await threadApi({}).updateThread({
@@ -617,9 +629,6 @@ export const updateEmailLabel = (
             //     request,
             //   })
             // }
-            if (response) {
-              dispatch(setIsProcessing(false))
-            }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }
@@ -734,7 +743,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       if (history) {
         const { loadedInbox, storageLabels } = getState().labels
         const sortedFeeds = handleHistoryObject({ history, storageLabels })
-        // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS.
+        // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS - since a draft can be added to any box, as a messsage in a thread.
         for (let i = 0; i < sortedFeeds.length; i += 1) {
           for (let j = 0; j < loadedInbox.length; j += 1) {
             if (

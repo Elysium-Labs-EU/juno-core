@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
-import qs from 'qs'
 import { useLocation } from 'react-router-dom'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
@@ -15,7 +14,6 @@ import {
   sendComposedEmail,
 } from '../../store/draftsSlice'
 import {
-  selectCurrentMessage,
   selectIsForwarding,
   selectIsReplying,
   setIsForwarding,
@@ -33,15 +31,14 @@ import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
-import { handleContactConversion } from '../../utils/convertToContact'
 import { QiSend } from '../../images/svgIcons/quillIcons'
 import Attachments from './ComposeFields/Attachments/Attachments'
 import useFetchDraftList from '../../hooks/useFetchDraftList'
-import convertB64AttachmentToFile from '../../utils/convertB64AttachmentToFile'
 import ContactField from './ComposeFields/ContactField'
 import SubjectField from './ComposeFields/SubjectField'
 import BodyField from './ComposeFields/BodyField/BodyField'
 import * as global from '../../constants/globalConstants'
+import useParsePresetValues from './Hooks/useParsePresetValues'
 
 export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
@@ -50,35 +47,23 @@ export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   ),
 })
 
-// Props are coming from MessageOverview (email detail view)
+// Props are coming from ReplyComposer or ForwardComposer
 interface IComposeEmailProps {
-  to?: IContact[] | null
-  bcc?: IContact[] | null
-  cc?: IContact[] | null
-  subject?: string | null
-  threadId?: string | null
-  foundBody?: string | null
-  files?: any
+  presetValue?: IComposeEmailReceive
   messageOverviewListener?: (value: string) => void
 }
 
 const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
 
 const ComposeEmail = ({
-  to = null,
-  bcc = null,
-  cc = null,
-  subject = null,
-  threadId = null,
-  foundBody = null,
-  files = null,
+  presetValue = undefined,
   messageOverviewListener = undefined,
 }: IComposeEmailProps) => {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
-  const currentMessage = useAppSelector(selectCurrentMessage)
+  // TODO: Set draft details to a local state?
   const draftDetails = useAppSelector(selectDraftDetails)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
@@ -90,18 +75,28 @@ const ComposeEmail = ({
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
   const userInteractedRef = useRef(false)
-  useFetchDraftList(draftDetails)
 
   useEffect(() => {
     console.log('composedEmail', composedEmail)
   }, [composedEmail])
 
+  // Use this hook to keep the draft list in sync with Gmail
+  useFetchDraftList(draftDetails)
+
+  // Use this hook to parse possible preset values at component mount
+  useParsePresetValues({
+    setShowCC,
+    setShowBCC,
+    setComposedEmail,
+    setLoadState,
+    loadState,
+    presetValueObject: presetValue || location.state as IComposeEmailReceive,
+  })
+
   const updateComposeEmail = useCallback(
     (action: { id: string; value: string | IContact[] | null | File[] }) => {
       if ('id' in action && 'value' in action) {
         const { id, value } = action
-        console.log('pre action composedEmail', composedEmail)
-        console.log('action', action)
         setComposedEmail({
           ...composedEmail,
           [id]: value,
@@ -125,20 +120,19 @@ const ComposeEmail = ({
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
   // The flag is used to allow the system to update the draft.
   useEffect(() => {
-    if (!userInteractedRef.current) {
-      if (keysPressed.length > 0 || hasInteracted) {
-        userInteractedRef.current = true
-      }
+    if (
+      !userInteractedRef.current &&
+      (keysPressed.length > 0 || hasInteracted)
+    ) {
+      userInteractedRef.current = true
     }
   }, [keysPressed, hasInteracted])
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
-    console.log('TO SEND AS UPDATE PRE', composedEmail)
     let mounted = true
     if (!isEmpty(composedEmail) && userInteractedRef.current) {
-      console.log('TO SEND AS UPDATE', composedEmail)
-      // mounted && dispatch(createUpdateDraft({ composedEmail }))
+      mounted && dispatch(createUpdateDraft({ composedEmail }))
     }
     return () => {
       mounted = false
@@ -161,125 +155,6 @@ const ComposeEmail = ({
       mounted = false
     }
   }, [draftDetails])
-
-  // Set the form values that come either from the location state or the URL.
-  useEffect(() => {
-    let mounted = true
-    if (mounted && loadState === global.LOAD_STATE_MAP.idle) {
-      // const { mailto, body }: { mailto?: string; body?: string } = qs.parse(
-      //   window.location.search,
-      //   {
-      //     ignoreQueryPrefix: true,
-      //   }
-      // )
-      // if (mailto || (body && isEmpty(composedEmail))) {
-      //   if (mailto?.includes('@')) {
-      //     setPresetToValue(handleContactConversion(mailto))
-      //   }
-      //   if (mailto?.includes('subject')) {
-      //     setPresetSubjectValue(mailto.replace('?subject=', ''))
-      //   }
-      //   if (body) {
-      //     setPresetBodyValue(body)
-      //   }
-      // }
-      // composeEmail object coming from a draft item on the draft list via the pushed route
-      if (location?.state) {
-        const state = location.state as IComposeEmailReceive
-        const handlePresetvalueConversions = () => {
-          const presetValueBody: any = {}
-          if (state.id && state.id.length > 0) {
-            presetValueBody.id = state.id
-          }
-          if (state.to && state.to.length > 0) {
-            presetValueBody.to = handleContactConversion(state.to)
-          }
-          if (state.cc && state.cc.length > 0) {
-            setShowCC(true)
-            presetValueBody.cc = handleContactConversion(state.cc)
-          }
-          if (state.bcc && state.bcc.length > 0) {
-            setShowBCC(true)
-            presetValueBody.bcc = handleContactConversion(state.bcc)
-          }
-          if (state.subject) {
-            presetValueBody.subject = state.subject
-          }
-          if (state.body) {
-            presetValueBody.body = state.body
-          }
-          if (state.files && state.files.length > 0) {
-            presetValueBody.files = state.files
-          }
-          return presetValueBody
-        }
-        const output = handlePresetvalueConversions()
-        setComposedEmail(output)
-      }
-    }
-    setLoadState(global.LOAD_STATE_MAP.loaded)
-    return () => {
-      mounted = false
-    }
-  }, [])
-
-  // Set the form values via the passed props from the email detail
-  // useEffect(() => {
-  //   let mounted = true
-  //   if (mounted) {
-  //     // Form values coming from a new reply via MessagesOverview (EmailDetail)
-  //     if (to && to.length > 0) {
-  //       setPresetToValue(to)
-  //     }
-  //     if (cc && cc.length > 0) {
-  //       setShowCC(true)
-  //       setPresetCCValue(cc)
-  //     }
-  //     if (bcc && bcc.length > 0) {
-  //       setShowBCC(true)
-  //       setPresetBCCValue(bcc)
-  //     }
-  //     if (subject) {
-  //       setPresetSubjectValue(subject)
-  //     }
-  //     if (foundBody) {
-  //       setPresetBodyValue(foundBody)
-  //     }
-  //     // if (files && files.length > 0) {
-  //     // TODO: Find the ID value from the message overview
-  //     //   const convertFiles = async () => {
-  //     //     const response = await convertB64AttachmentToFile({ id: state.id, files: state.files })
-  //     //     if (response && response.length > 0) {
-  //     //       setUploadedFiles(response)
-  //     //     }
-  //     //   }
-  //     //   convertFiles()
-  //     // }
-  //   }
-  //   return () => {
-  //     mounted = false
-  //   }
-  // }, [to, cc, bcc, subject, foundBody])
-
-  useEffect(() => {
-    if (currentMessage) {
-      const updateEventObject = {
-        id: 'id',
-        value: currentMessage,
-      }
-      updateComposeEmail(updateEventObject)
-    }
-  }, [currentMessage])
-
-  useEffect(() => {
-    if (threadId) {
-      const updateEventObject = {
-        id: 'threadId',
-        value: threadId,
-      }
-      updateComposeEmail(updateEventObject)
-    }
-  }, [threadId])
 
   const handleSubmit = useCallback(
     (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -393,7 +268,7 @@ const ComposeEmail = ({
         hasInteracted={hasInteracted}
       />
     ),
-    [composedEmail, loadState, hasInteracted]
+    [composedEmail, loadState, hasInteracted, updateComposeEmail]
   )
 
   const memoizedSignatureField = useMemo(

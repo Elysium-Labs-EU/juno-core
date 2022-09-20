@@ -17,6 +17,7 @@ import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
   listRemoveItemDetail,
   listRemoveItemDetailBatch,
+  listRemoveItemDetailDraft,
   setSelectedEmails,
 } from './emailListSlice'
 import * as global from '../constants/globalConstants'
@@ -113,14 +114,12 @@ export const createUpdateDraft =
   async (dispatch, getState) => {
     try {
       const { id, message } = getState().drafts.draftDetails
-      const { currEmail } = getState().emailDetail
       const { emailAddress, name } = getState().base.profile
 
       const formData = new FormData()
       formData.append('draftId', id)
-      formData.append('threadId', currEmail)
+      formData.append('threadId', message?.threadId)
       formData.append('messageId', message?.id)
-      formData.append('labelIds', message?.labelIds)
       formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
       formData.append(
         'to',
@@ -151,6 +150,8 @@ export const createUpdateDraft =
         const {
           data: { data },
         } = response
+        // Remove the previous entry from Redux. History will create a new one.
+        dispatch(listRemoveItemDetailDraft({ threadId: message?.threadId }))
         dispatch(listUpdateDraft(data))
       } else {
         dispatch(setServiceUnavailable('Cannot create or update draft.'))

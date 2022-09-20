@@ -55,7 +55,7 @@ const ContactField = ({
         setHasInteracted(true)
       }
     },
-    [value, hasInteracted]
+    [id, value, hasInteracted, composeValue, updateComposeEmail]
   )
 
   const handleChange = useCallback(
@@ -78,7 +78,7 @@ const ContactField = ({
         setHasInteracted(true)
       }
     },
-    [error, composeValue, id, hasInteracted]
+    [error, composeValue, id, hasInteracted, updateComposeEmail]
   )
 
   const memoizedField = useMemo(

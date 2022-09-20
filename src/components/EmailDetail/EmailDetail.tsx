@@ -104,10 +104,10 @@ const EmailDetail = () => {
       dispatch(setIsForwarding(false))
     }
     return () => {
-      if (isForwarding) {
+      if (isForwarding && currentEmail && currentEmail === threadId) {
         dispatch(setIsForwarding(false))
       }
-      if (isReplying) {
+      if (isReplying && currentEmail && currentEmail === threadId) {
         dispatch(setIsReplying(false))
       }
     }

@@ -30,7 +30,7 @@ export const LOAD_STATE_MAP = {
 }
 export const MAX_RESULTS = 20
 export const MIME_TYPE_NO_INLINE = 'application/octet-stream'
-export const MIN_DELAY_REFRESH = 2500
+export const MIN_DELAY_REFRESH = 3500
 export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'
 export const SENT_LABEL = 'SENT'

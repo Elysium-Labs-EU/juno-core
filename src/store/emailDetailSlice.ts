@@ -19,7 +19,7 @@ export const fetchEmailDetail = createAsyncThunk(
     return { response: { threads: [response] }, labels: labelIds, q }
   },
   {
-    condition: (arg, { getState }) => {
+    condition: (arg, { getState }: { getState: any }) => {
       const { fetchStatus } = getState().emailDetail
       // Don't retry a request that's currently in-flight
       if (fetchStatus === 'pending') {
@@ -34,7 +34,6 @@ export const fetchEmailDetail = createAsyncThunk(
 const initialState: IEmailDetailState = Object.freeze({
   coreStatus: null,
   currEmail: '',
-  currMessage: '',
   viewIndex: -1,
   sessionViewIndex: -1,
   isReplying: false,
@@ -52,9 +51,6 @@ export const emailDetailSlice = createSlice({
     },
     setCurrentEmail: (state, { payload }: PayloadAction<string>) => {
       state.currEmail = payload
-    },
-    setCurrentMessage: (state, { payload }: PayloadAction<string>) => {
-      state.currMessage = payload
     },
     setViewIndex: (state, { payload }: PayloadAction<number>) => {
       state.viewIndex = payload
@@ -86,7 +82,6 @@ export const {
   resetEmailDetail,
   setCoreStatus,
   setCurrentEmail,
-  setCurrentMessage,
   setViewIndex,
   setSessionViewIndex,
   setIsReplying,
@@ -97,8 +92,6 @@ export const selectCoreStatus = (state: RootState) =>
   state.emailDetail.coreStatus
 export const selectCurrentEmail = (state: RootState) =>
   state.emailDetail.currEmail
-export const selectCurrentMessage = (state: RootState) =>
-  state.emailDetail.currMessage
 export const selectViewIndex = (state: RootState) => state.emailDetail.viewIndex
 export const selectSessionViewIndex = (state: RootState) =>
   state.emailDetail.sessionViewIndex
