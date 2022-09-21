@@ -2,12 +2,13 @@ import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListType
 import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
 import ComposeEmail from '../../../Compose/ComposeEmail'
 import * as ES from '../../EmailDetailStyles'
+import getRelevantMessage from './getRelevantMessage'
 
 /**
  *
  * @param localThreadDetail - the relevant thread detail object
  * @param selectedIndex - the selected index is the index of the selected message, NOTE - the message list on display is flipped
- * @param messageOverviewListener a callback that
+ * @param messageOverviewListener  A callback function that will listen to the discard or cancel event on the composer
  * @returns
  */
 
@@ -19,35 +20,25 @@ const ForwardingComposer = ({
 }: {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
-  messageOverviewListener: (messageId: string) => void
+  messageOverviewListener: (evenType: 'cancel' | 'discard', messageId?: string) => void
   isForwarding: boolean
 }) => {
-  const relevantMessage =
-    selectedIndex !== undefined
-      ? localThreadDetail.messages[
-          localThreadDetail.messages.length - 1 - selectedIndex
-        ]
-      : localThreadDetail.messages[localThreadDetail.messages.length - 1]
+  const relevantMessage = getRelevantMessage({
+    selectedIndex,
+    localThreadDetail,
+  })
 
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
         presetValue={{
           subject: relevantMessage?.payload.headers.subject,
-          body:
-            relevantMessage !== null &&
-            relevantMessage?.payload?.body?.emailHTML
-              ? emailBody(
-                  relevantMessage?.payload?.body?.emailHTML,
-                  isForwarding
-                )
-              : undefined,
-          threadId: localThreadDetail?.id,
-          id: localThreadDetail.messages[
-            selectedIndex === undefined
-              ? localThreadDetail.messages.length - 1
-              : selectedIndex
-          ].id,
+          body: emailBody(
+            relevantMessage?.payload?.body?.emailHTML,
+            isForwarding
+          ),
+          threadId: relevantMessage?.threadId,
+          id: relevantMessage?.id,
         }}
         messageOverviewListener={messageOverviewListener}
       />

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
-import filterIllegalLabels from '../../../utils/filterIllegalLabels'
+import { onlyLegalLabelStrings } from '../../../utils/onlyLegalLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
 import { setModifierKey } from '../../../utils/setModifierKey'
@@ -28,7 +28,7 @@ const DeleteOption = ({
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
-  const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+  const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
   const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {

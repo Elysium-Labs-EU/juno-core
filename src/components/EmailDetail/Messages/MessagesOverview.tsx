@@ -7,7 +7,6 @@ import * as global from '../../../constants/globalConstants'
 import * as ES from '../EmailDetailStyles'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import markEmailAsRead from '../../../utils/markEmailAsRead'
 import ReplyComposer from './InlineComposers/ReplyComposer'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
 import { openDraftEmail } from '../../../store/draftsSlice'
@@ -16,6 +15,7 @@ import {
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
 
 const MappedMessages = ({
   threadDetail,
@@ -29,14 +29,26 @@ const MappedMessages = ({
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
 
-  const handleClick = useCallback(
-    (id: string, messageId: string, draftIndex: number) => {
+  const handleClickDraft = useCallback(
+    ({
+      id,
+      messageId,
+      dIndex,
+    }: {
+      id: string
+      messageId: string
+      dIndex: number
+    }) => {
       dispatch(openDraftEmail({ id, messageId }))
-      setHideDraft(draftIndex)
-      indexMessageListener(draftIndex)
+      setHideDraft(dIndex)
+      indexMessageListener(dIndex)
     },
     []
   )
+
+  const handleClickMessage = useCallback(({ mIndex }: { mIndex: number }) => {
+    indexMessageListener(mIndex)
+  }, [])
 
   /**
    * This function unhides the draft when neither forwarding or replying mode is active
@@ -62,13 +74,14 @@ const MappedMessages = ({
             <DraftMessage
               message={message}
               draftIndex={index}
-              handleClickListener={handleClick}
+              handleClickListener={handleClickDraft}
               hideDraft={hideDraft === index}
             />
           ) : (
             <ReadUnreadMessage
               message={message}
               threadDetail={threadDetail}
+              handleClickListener={handleClickMessage}
               messageIndex={index}
               setUnsubscribeLink={setUnsubscribeLink}
             />
@@ -96,7 +109,6 @@ const MessagesOverview = ({
   isForwarding,
   labelIds,
 }: IMessagesOverview) => {
-  const dispatch = useAppDispatch()
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
   // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
   const [localThreadDetail, setLocalThreadDetail] =
@@ -115,40 +127,28 @@ const MessagesOverview = ({
     }
   }, [threadDetail])
 
-  // A callback function that will listen to the discard event on the composer
+  // On mount of the email detail - mark the email as read when it is unread.
+  useMarkEmailAsRead({ localThreadDetail, labelIds })
+
+  // A callback function that will listen to the discard or cancel event on the composer
   const messageOverviewListener = useCallback(
-    (messageId: string) => {
-      if (localThreadDetail && localThreadDetail?.messages) {
-        setLocalThreadDetail({
-          ...localThreadDetail,
-          messages: localThreadDetail.messages.filter(
-            (message) => message.id !== messageId
-          ),
-        })
+    (eventType: 'cancel' | 'discard', messageId?: string) => {
+      if (eventType === 'discard') {
+        if (localThreadDetail && localThreadDetail?.messages) {
+          setLocalThreadDetail({
+            ...localThreadDetail,
+            messages: localThreadDetail.messages.filter(
+              (message) => message.id !== messageId
+            ),
+          })
+        }
+      }
+      if (eventType === 'cancel') {
+        setSelectedIndex(undefined)
       }
     },
     [localThreadDetail]
   )
-
-  // On mount of the email detail - mark the email as read when it is unread.s
-  useEffect(() => {
-    if (localThreadDetail && Object.keys(localThreadDetail).length > 0) {
-      if (localThreadDetail.messages && localThreadDetail.messages.length > 0) {
-        if (
-          localThreadDetail.messages.filter(
-            (message) =>
-              message.labelIds?.includes(global.UNREAD_LABEL) === true
-          ).length > 0
-        ) {
-          markEmailAsRead({
-            threadId: localThreadDetail.id,
-            dispatch,
-            labelIds,
-          })
-        }
-      }
-    }
-  }, [localThreadDetail])
 
   /**
    * @function indexMessageListener

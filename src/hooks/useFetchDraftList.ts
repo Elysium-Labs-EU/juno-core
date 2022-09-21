@@ -2,15 +2,24 @@ import { useEffect } from 'react'
 
 import { fetchDrafts } from '../store/draftsSlice'
 import { useAppDispatch } from '../store/hooks'
+import isPromise from '../utils/isPromise'
 
-export default function useFetchDraftList(draftDetails: any) {
+export default function useFetchDraftList({
+  shouldFetchDrafts,
+}: {
+  shouldFetchDrafts: boolean
+}) {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const draftPromise = dispatch(fetchDrafts())
-
-    return () => {
-      draftPromise.abort()
+    let draftPromise: any
+    if (shouldFetchDrafts) {
+      draftPromise = dispatch(fetchDrafts())
     }
-  }, [draftDetails])
+    return () => {
+      if (isPromise(draftPromise)) {
+        draftPromise.abort()
+      }
+    }
+  }, [shouldFetchDrafts])
 }

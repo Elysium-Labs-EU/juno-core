@@ -3,21 +3,24 @@ import { AppDispatch } from '../../store/store'
 
 interface IIsReplyingListener {
   dispatch: AppDispatch
-  messageIndex: number
   isForwarding?: boolean
 }
 
+/**
+ * @function isReplyingListener
+ * @param dispatch
+ * @param isForwarding a boolean stating if the app is in forwarding mode
+ * @returns {void} sets the state for replying and turns off forwarding if needed.
+ */
+
 const isReplyingListener = ({
   dispatch,
-  messageIndex,
   isForwarding,
 }: IIsReplyingListener) => {
   if (isForwarding) {
     dispatch(setIsForwarding(false))
   }
-  if (messageIndex > -1) {
-    dispatch(setIsReplying(true))
-  }
+  dispatch(setIsReplying(true))
 }
 
 export default isReplyingListener

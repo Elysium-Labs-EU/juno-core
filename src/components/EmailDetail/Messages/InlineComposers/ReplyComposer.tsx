@@ -3,12 +3,14 @@ import { handleContactConversion } from '../../../../utils/convertToContact'
 import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
 import ComposeEmail from '../../../Compose/ComposeEmail'
 import * as ES from '../../EmailDetailStyles'
+import getRelevantMessage from './getRelevantMessage'
+import * as global from '../../../../constants/globalConstants'
 
 /**
  *
  * @param localThreadDetail - the relevant thread detail object
  * @param selectedIndex - the selected index is the index of the selected message, NOTE - the message list on display is flipped
- * @param messageOverviewListener a callback that
+ * @param messageOverviewListener  A callback function that will listen to the discard or cancel event on the composer
  * @returns
  */
 
@@ -19,15 +21,12 @@ const ReplyComposer = ({
 }: {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
-  messageOverviewListener: (messageId: string) => void
+  messageOverviewListener: (evenType: 'cancel' | 'discard', messageId?: string) => void
 }) => {
-  const relevantMessage =
-    selectedIndex !== undefined
-      ? localThreadDetail.messages[
-          localThreadDetail.messages.length - 1 - selectedIndex
-        ]
-      : localThreadDetail.messages[localThreadDetail.messages.length - 1]
-
+  const relevantMessage = getRelevantMessage({
+    selectedIndex,
+    localThreadDetail,
+  })
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
@@ -36,17 +35,12 @@ const ReplyComposer = ({
           cc: handleContactConversion(relevantMessage?.payload.headers.cc),
           bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
           subject: relevantMessage?.payload.headers.subject,
-          body:
-            selectedIndex !== undefined &&
-            relevantMessage?.payload?.body?.emailHTML
-              ? emailBody(relevantMessage.payload.body.emailHTML)
-              : undefined,
-          threadId: localThreadDetail?.id,
-          id: localThreadDetail.messages[
-            selectedIndex === undefined
-              ? localThreadDetail.messages.length - 1
-              : selectedIndex
-          ].id,
+          // This should only be used when the message is a draft
+          body: relevantMessage?.labelIds.includes(global.DRAFT_LABEL)
+            ? emailBody(relevantMessage?.payload?.body?.emailHTML)
+            : undefined,
+          threadId: relevantMessage?.threadId,
+          id: relevantMessage?.id,
         }}
         messageOverviewListener={messageOverviewListener}
       />

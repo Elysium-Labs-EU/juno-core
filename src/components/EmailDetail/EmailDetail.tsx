@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
@@ -31,6 +31,7 @@ import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
+import useFetchDraftList from '../../hooks/useFetchDraftList'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -51,12 +52,35 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
+  const isComposerActiveRef = useRef(false)
+  const [refreshEmailDetail, setRefreshEmailDetail] = useState(false)
   const { threadId, overviewId } = useParams<{
     threadId: string
     overviewId: string
   }>()
   const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
-  useFetchEmailDetail({ threadId, activeEmailList })
+  useFetchEmailDetail({
+    threadId,
+    activeEmailList,
+    forceRefresh: refreshEmailDetail,
+    setRefreshEmailDetail,
+  })
+  useFetchDraftList({
+    shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
+      thread.messages.some((message) =>
+        message.labelIds.includes(global.DRAFT_LABEL)
+      )
+    ),
+  })
+
+  useEffect(() => {
+    if ((isForwarding || isReplying) && !isComposerActiveRef.current) {
+      isComposerActiveRef.current = true
+    } else if (isComposerActiveRef.current) {
+      isComposerActiveRef.current = false
+      setRefreshEmailDetail(true)
+    }
+  }, [isForwarding, isReplying])
 
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.

@@ -3,7 +3,7 @@
  * @param body - takes in the complete body of the email
  * @returns the selected message's body or undefined.
  */
-const emailBody = (body: string, isForwarding?: boolean) => {
+const emailBody = (body: string | undefined, isForwarding?: boolean) => {
   if (body) {
     if (isForwarding) {
       const FORWARD_LABEL =

@@ -40,7 +40,7 @@ import handleHistoryObject, {
   HISTORY_TIME_STAMP,
 } from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
-import onlyLegalLabels from '../utils/onlyLegalLabelObjects'
+import { onlyLegalLabelObjects } from '../utils/onlyLegalLabels'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
@@ -110,6 +110,7 @@ const handleAdditionToExistingEmailArray = (
       )
 
       // Here we create the final object that will be pushed to the Redux state
+      // If the timestamp and/or nextPageToken are history values, maintain the original version.
       const newObject: IEmailListObject = {
         labels,
         threads: undoubleThreads(sortedThreads),
@@ -117,7 +118,10 @@ const handleAdditionToExistingEmailArray = (
           nextPageToken === HISTORY_NEXT_PAGETOKEN
             ? targetEmailListObject.nextPageToken
             : nextPageToken,
-        timestamp,
+        timestamp:
+          timestamp === HISTORY_TIME_STAMP
+            ? targetEmailListObject.timestamp
+            : timestamp,
         q,
       }
       targetEmailListObject = newObject
@@ -477,11 +481,12 @@ export const loadEmailDetails =
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
         if (threads.length > 0) {
-          const buffer: any = []
+          const buffer: Promise<IEmailListThreadItem>[] = []
           threads.forEach((thread) =>
             // TODO: Alter all input to have the threadId as input
             buffer.push(threadApi({}).getThreadDetail(thread.id))
           )
+          // TODO: Since the history api doesn't give back any other label information than Draft - we need to check for the original source and create i
           const resolvedThreads = await Promise.all(buffer)
           const onlyObjectThreads = resolvedThreads.filter(
             (thread) => typeof thread !== 'string'
@@ -495,7 +500,10 @@ export const loadEmailDetails =
           ) {
             const { storageLabels } = getState().labels
             const labelNames = onlyObjectThreads[0].messages[0].labelIds
-            const legalLabels = onlyLegalLabels({ storageLabels, labelNames })
+            const legalLabels = onlyLegalLabelObjects({
+              storageLabels,
+              labelNames,
+            })
             if (legalLabels.length > 0) {
               legalLabels.forEach((label) =>
                 dispatch(
@@ -551,16 +559,14 @@ export const loadEmailDetails =
  * @param props - takes in an object with the default properties of request and labelIds. The other properties are optional.
  * @returns {void} - based on the properties other Redux actions and/or Gmail API requests are made.
  */
-export const updateEmailLabel = (
-  props: UpdateRequestParamsSingle
-): AppThunk => {
-  const {
+export const updateEmailLabel =
+  ({
     threadId,
     request,
     request: { removeLabelIds },
     labelIds,
-  } = props
-  return async (dispatch, getState) => {
+  }: UpdateRequestParamsSingle): AppThunk =>
+  async (dispatch, getState) => {
     try {
       const { coreStatus } = getState().emailDetail
       const { activeEmailListIndex, emailList, searchList } = getState().email
@@ -618,6 +624,7 @@ export const updateEmailLabel = (
           try {
             let response = null
             if (threadId) {
+              console.log('here', threadId)
               response = await threadApi({}).updateThread({
                 threadId,
                 request,
@@ -648,7 +655,7 @@ export const updateEmailLabel = (
             dispatch(setServiceUnavailable('Error updating label.'))
           }
         }
-        // If the request is to delete the thread or message, or to remove a label (expect the unread label)
+        // If the request is to delete the thread or message, or to remove a label (except the unread label)
         if (
           (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
           request.delete
@@ -666,7 +673,6 @@ export const updateEmailLabel = (
       dispatch(setServiceUnavailable('Error updating label.'))
     }
   }
-}
 
 export const updateEmailLabelBatch = (
   props: UpdateRequestParamsBatch

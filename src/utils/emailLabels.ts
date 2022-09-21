@@ -1,7 +1,7 @@
 import * as global from '../constants/globalConstants'
 import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
 import { LabelIdName } from '../store/storeTypes/labelsTypes'
-import filterIllegalLabels from './filterIllegalLabels'
+import { onlyLegalLabelStrings } from './onlyLegalLabels'
 
 /**
  * @function emailLabels
@@ -21,7 +21,10 @@ const emailLabels = (
       )
       return [
         ...new Set(
-          filterIllegalLabels(foundLabels, storageLabels).filter(
+          onlyLegalLabelStrings({
+            labelIds: foundLabels,
+            storageLabels,
+          }).filter(
             (label) =>
               label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
           )

@@ -3,12 +3,15 @@ import { IContact } from './contactsTypes'
 
 export interface IComposePayload {
   bcc?: IContact[]
-  body?: string | string[]
+  body?: string
   cc?: IContact[]
+  files?: File[] | undefined
   id?: string
   subject?: string
+  threadId?: string | undefined
   to?: IContact[]
   value?: string
+  signature?: string
 }
 
 export interface IComposeEmail {

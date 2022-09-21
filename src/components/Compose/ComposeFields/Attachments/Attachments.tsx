@@ -39,7 +39,7 @@ const Attachments = ({
   hasInteracted,
 }: {
   messageId: string | undefined
-  composeValue: File[] | IEmailAttachmentType[]
+  composeValue: File[] | IEmailAttachmentType[] | undefined
   updateComposeEmail: (action: { id: string; value: File[] }) => void
   loadState: string
   setHasInteracted: (value: boolean) => void
@@ -138,6 +138,7 @@ const Attachments = ({
   // Sync the local state with the parent component state
   useEffect(() => {
     if (
+      composeValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
       customIsEqual(composeValue, uploadedFiles)
     ) {

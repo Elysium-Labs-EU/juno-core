@@ -5,7 +5,7 @@ import * as local from '../../../../constants/draftConstants'
 import * as global from '../../../../constants/globalConstants'
 import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
 import { selectProfile } from '../../../../store/baseSlice'
-import { selectDraft } from '../../../../store/draftsSlice'
+import { selectDraftList } from '../../../../store/draftsSlice'
 import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
@@ -30,17 +30,21 @@ const DraftMessage = ({
 }: {
   message: IEmailMessage
   draftIndex: number
-  handleClickListener: (
-    id: string,
-    messageId: string,
-    draftIndex: number
-  ) => void
+  handleClickListener: ({
+    id,
+    messageId,
+    dIndex,
+  }: {
+    id: string
+    messageId: string
+    dIndex: number
+  }) => void
   hideDraft: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(true)
   const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
-  const draftList = useAppSelector(selectDraft)
+  const draftList = useAppSelector(selectDraftList)
   const dispatch = useAppDispatch()
 
   const EmailSnippet =
@@ -60,19 +64,27 @@ const DraftMessage = ({
     []
   )
 
+  const draftMessage = useCallback(
+    () => draftList.find((draft) => draft.message.id === message.id),
+    [message]
+  )
+
   // Send back detail to the parent component to hide the draft from the list and open the composer
   const handleEditLocal = () => {
-    handleClickListener(id, message?.id, draftIndex)
+    const foundDraft = draftMessage()
+    if (foundDraft) {
+      handleClickListener({
+        id: foundDraft.message.id,
+        messageId: foundDraft.message.id,
+        dIndex: draftIndex,
+      })
+      // handleClickListener({ id, messageId: message?.id, draftIndex })
+    }
   }
 
   const handleOpenClose = () => {
     setOpen((currState) => !currState)
   }
-
-  const draftMessage = useCallback(
-    () => draftList.find((draft) => draft.message.id === message.id),
-    [message]
-  )
 
   const handleDiscardDraft = useCallback(() => {
     const foundDraft = draftMessage()

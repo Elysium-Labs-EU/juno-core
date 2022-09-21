@@ -9,11 +9,13 @@ import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import * as S from './SpecificEmailOptionsStyles'
 
-interface ISpecificEmailOptions {
+const SpecificEmailOptions = ({
+  messageIndex,
+  handleClickListener,
+}: {
   messageIndex: number
-}
-
-const SpecificEmailOptions = ({ messageIndex }: ISpecificEmailOptions) => {
+  handleClickListener: ({ mIndex }: { mIndex: number }) => void
+}) => {
   const dispatch = useAppDispatch()
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
@@ -23,24 +25,24 @@ const SpecificEmailOptions = ({ messageIndex }: ISpecificEmailOptions) => {
       <S.Inner>
         <CustomButton
           label="Reply to this message"
-          onClick={() =>
+          onClick={() => {
+            handleClickListener({ mIndex: messageIndex })
             isReplyingListener({
-              messageIndex,
               dispatch,
               isForwarding,
             })
-          }
+          }}
           title="Reply to this message"
         />
         <CustomButton
           label="Forward this message"
-          onClick={() =>
+          onClick={() => {
+            handleClickListener({ mIndex: messageIndex })
             isForwardingListener({
-              messageIndex,
               dispatch,
               isReplying,
             })
-          }
+          }}
           title="Forward this message"
         />
       </S.Inner>

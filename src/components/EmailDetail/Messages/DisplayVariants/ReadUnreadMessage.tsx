@@ -35,17 +35,19 @@ import SpecificEmailOptions from '../SpecificEmailOptions'
 import LinkedContacts from './Recipients/LinkedContacts'
 
 interface IReadMessage {
+  handleClickListener: ({ mIndex }: { mIndex: number }) => void
   message: IEmailMessage
-  threadDetail: IEmailListThreadItem
   messageIndex: number
   setUnsubscribeLink: (value: string | null) => void
+  threadDetail: IEmailListThreadItem
 }
 
 const ReadUnreadMessage = ({
+  handleClickListener,
   message,
-  threadDetail,
   messageIndex,
   setUnsubscribeLink,
+  threadDetail,
 }: IReadMessage) => {
   const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
@@ -230,8 +232,8 @@ const ReadUnreadMessage = ({
                   ref={ref}
                 >
                   <SpecificEmailOptions
-                    messageId={message?.id}
                     messageIndex={messageIndex}
+                    handleClickListener={handleClickListener}
                   />
                 </Popper>
               </S.TimeAttachmentContainer>

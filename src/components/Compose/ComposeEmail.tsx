@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import * as React from 'react'
 import isEmpty from 'lodash/isEmpty'
+import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router-dom'
 import * as S from './ComposeStyles'
 import * as GS from '../../styles/globalStyles'
@@ -9,8 +10,7 @@ import * as keyConstants from '../../constants/keyConstants'
 import {
   createUpdateDraft,
   fetchDrafts,
-  resetDraftDetails,
-  selectDraftDetails,
+  selectDraftList,
   sendComposedEmail,
 } from '../../store/draftsSlice'
 import {
@@ -25,7 +25,10 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import Seo from '../Elements/Seo'
 import DiscardDraftButton from './DiscardDraftButton'
-import { IComposeEmailReceive } from '../../store/storeTypes/composeTypes'
+import {
+  IComposeEmailReceive,
+  IComposePayload,
+} from '../../store/storeTypes/composeTypes'
 import { refreshEmailFeed } from '../../store/emailListSlice'
 import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 import { setModifierKey } from '../../utils/setModifierKey'
@@ -33,12 +36,13 @@ import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import { IRecipientsList } from './ComposeEmailTypes'
 import { QiSend } from '../../images/svgIcons/quillIcons'
 import Attachments from './ComposeFields/Attachments/Attachments'
-import useFetchDraftList from '../../hooks/useFetchDraftList'
 import ContactField from './ComposeFields/ContactField'
 import SubjectField from './ComposeFields/SubjectField'
 import BodyField from './ComposeFields/BodyField/BodyField'
 import * as global from '../../constants/globalConstants'
 import useParsePresetValues from './Hooks/useParsePresetValues'
+import { IDraftDetailObject } from '../../store/storeTypes/draftsTypes'
+import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
 
 export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
@@ -50,10 +54,11 @@ export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
 // Props are coming from ReplyComposer or ForwardComposer
 interface IComposeEmailProps {
   presetValue?: IComposeEmailReceive
-  messageOverviewListener?: (value: string) => void
+  messageOverviewListener?: (evenType: 'cancel' | 'discard', messageId?: string) => void
 }
 
 const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
+let snapshotComposeEmail: any = null
 
 const ComposeEmail = ({
   presetValue = undefined,
@@ -63,25 +68,22 @@ const ComposeEmail = ({
   const dispatch = useAppDispatch()
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
-  // TODO: Set draft details to a local state?
-  const draftDetails = useAppSelector(selectDraftDetails)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
+  const draftList = useAppSelector(selectDraftList)
   const [showCC, setShowCC] = useState<boolean>(false)
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const keysPressed = useMultiKeyPress()
-  const [composedEmail, setComposedEmail] = useState<any>(undefined)
+  const [composedEmail, setComposedEmail] = useState<
+    undefined | IComposePayload
+  >(undefined)
+  const [localDraftDetails, setLocalDraftDetails] = useState<
+    IDraftDetailObject | undefined
+  >(undefined)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
   const userInteractedRef = useRef(false)
-
-  useEffect(() => {
-    console.log('composedEmail', composedEmail)
-  }, [composedEmail])
-
-  // Use this hook to keep the draft list in sync with Gmail
-  useFetchDraftList(draftDetails)
 
   // Use this hook to parse possible preset values at component mount
   useParsePresetValues({
@@ -90,7 +92,7 @@ const ComposeEmail = ({
     setComposedEmail,
     setLoadState,
     loadState,
-    presetValueObject: presetValue || location.state as IComposeEmailReceive,
+    presetValueObject: presetValue || (location.state as IComposeEmailReceive),
   })
 
   const updateComposeEmail = useCallback(
@@ -106,17 +108,6 @@ const ComposeEmail = ({
     [composedEmail]
   )
 
-  // Why is this?
-  // useEffect(() => {
-  //   if (
-  //     draftDetails &&
-  //     Object.keys(draftDetails).length > 0 &&
-  //     userInteractedRef.current
-  //   ) {
-  //     dispatch(resetDraftDetails())
-  //   }
-  // }, [])
-
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
   // The flag is used to allow the system to update the draft.
   useEffect(() => {
@@ -131,18 +122,52 @@ const ComposeEmail = ({
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(composedEmail) && userInteractedRef.current) {
-      mounted && dispatch(createUpdateDraft({ composedEmail }))
+    const storedDraftDetails = draftList.find(
+      (draft) =>
+        draft.message.threadId === composedEmail?.threadId &&
+        draft.message.id === composedEmail?.id
+    )
+    // console.log('draftList', draftList)
+    // console.log('storedDraftDetails', storedDraftDetails)
+    // console.log('localDraftDetails', localDraftDetails)
+    // console.log('composedEmail', composedEmail)
+    // console.log('snapshotComposeEmail', snapshotComposeEmail)
+    // console.log(!isEqual(snapshotComposeEmail, composedEmail))
+    // if (composedEmail && userInteractedRef.current) {
+    if (
+      composedEmail &&
+      userInteractedRef.current &&
+      !isEqual(snapshotComposeEmail, composedEmail)
+    ) {
+      snapshotComposeEmail = composedEmail
+      // If the user is interacting with the draft, send an update request and set the response as the local state
+      const asyncDispatchAction = async () => {
+        const response: IDraftDetailObject = await dispatch(
+          createUpdateDraft({ composedEmail, localDraftDetails })
+        )
+        if (response && mounted) {
+          setLocalDraftDetails(response)
+        }
+      }
+      asyncDispatchAction()
+    } else if (
+      storedDraftDetails &&
+      !isEqual(localDraftDetails, storedDraftDetails) &&
+      !snapshotComposeEmail
+    ) {
+      console.log('storing it here')
+      // Otherwise, attempt to use the fetched draft object it from the draftList Redux store.
+      setLocalDraftDetails(storedDraftDetails)
     }
     return () => {
       mounted = false
     }
-  }, [composedEmail])
+  }, [composedEmail, localDraftDetails])
 
   // Based on the changes in the draftDetails, notify the user that the save was successful
   useEffect(() => {
     let mounted = true
-    if (!isEmpty(draftDetails) && mounted && userInteractedRef.current) {
+    if (localDraftDetails && mounted && userInteractedRef.current) {
       setSaveSuccess(true)
       const timer = setTimeout(() => {
         setSaveSuccess(false)
@@ -154,28 +179,25 @@ const ComposeEmail = ({
     return () => {
       mounted = false
     }
-  }, [draftDetails])
+  }, [localDraftDetails])
 
   const handleSubmit = useCallback(
     (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (e) {
         e.preventDefault()
       }
-      dispatch(sendComposedEmail({ composedEmail }))
-      dispatch(resetDraftDetails())
-      // dispatch(
-      //   listRemoveDraft({ threadId: draftDetails?.message?.threadId })
-      // )
-      // archiveMail({
-      //   messageId: threadDetail.id,
-      //   labelIds,
-      //   dispatch,
-      // })
+      if (localDraftDetails && composedEmail) {
+        dispatch(sendComposedEmail({ composedEmail, localDraftDetails }))
+      }
     },
     [composedEmail]
   )
 
+  // Return all the values to base, and refetch the email states
   const handleCancelButton = useCallback(() => {
+    if (messageOverviewListener) {
+      messageOverviewListener('cancel')
+    }
     if (isReplying) {
       dispatch(setIsReplying(false))
     }
@@ -184,7 +206,7 @@ const ComposeEmail = ({
     }
     dispatch(refreshEmailFeed())
     dispatch(fetchDrafts())
-    dispatch(resetDraftDetails())
+    snapshotComposeEmail = null
   }, [isReplying, isForwarding, dispatch])
 
   const memoizedToField = useMemo(
@@ -291,6 +313,7 @@ const ComposeEmail = ({
           title="Send email"
           suppressed
           onClick={(e) => handleSubmit(e)}
+          disabled={!localDraftDetails}
         />
         {(isReplying || isForwarding) && (
           <CustomButton
@@ -300,17 +323,19 @@ const ComposeEmail = ({
             title="Cancel"
           />
         )}
-        {draftDetails?.id && (
+        {localDraftDetails?.id && (
           <S.DiscardContainer>
             <DiscardDraftButton
-              draftId={draftDetails.id}
+              draftId={localDraftDetails.id}
+              threadId={localDraftDetails.message.threadId}
+              id={localDraftDetails.message.id}
               messageOverviewListener={messageOverviewListener}
             />
           </S.DiscardContainer>
         )}
       </S.ButtonContainer>
     ),
-    [isReplying, isForwarding, draftDetails]
+    [isReplying, isForwarding, localDraftDetails, composedEmail]
   )
 
   useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
