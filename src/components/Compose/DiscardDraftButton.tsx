@@ -22,7 +22,10 @@ const DiscardDraftButton = ({
   draftId: string
   threadId: string
   id: string
-  messageOverviewListener?: (evenType: 'cancel' | 'discard', messageId?: string) => void
+  messageOverviewListener?: (
+    evenType: 'cancel' | 'discard',
+    messageId?: string
+  ) => void
 }) => {
   const dispatch = useAppDispatch()
   const draftList = useAppSelector(selectDraftList)

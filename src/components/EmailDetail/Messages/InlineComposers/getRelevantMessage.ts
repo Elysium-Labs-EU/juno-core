@@ -13,8 +13,6 @@ export default function getRelevantMessage({
   selectedIndex: number | undefined
   localThreadDetail: IEmailListThreadItem
 }) {
-  // console.log('localThreadDetail.messages', localThreadDetail.messages)
-  // console.log('selectedIndex', selectedIndex)
   if (selectedIndex !== undefined) {
     return localThreadDetail.messages[
       localThreadDetail.messages.length - 1 - selectedIndex

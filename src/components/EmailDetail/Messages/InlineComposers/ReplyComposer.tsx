@@ -21,26 +21,31 @@ const ReplyComposer = ({
 }: {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
-  messageOverviewListener: (evenType: 'cancel' | 'discard', messageId?: string) => void
+  messageOverviewListener: (
+    evenType: 'cancel' | 'discard',
+    messageId?: string
+  ) => void
 }) => {
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
+
   return (
     <ES.ComposeWrapper>
       <ComposeEmail
         presetValue={{
-          to: handleContactConversion(relevantMessage?.payload.headers.from),
-          cc: handleContactConversion(relevantMessage?.payload.headers.cc),
-          bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
-          subject: relevantMessage?.payload.headers.subject,
           // This should only be used when the message is a draft
+          bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
           body: relevantMessage?.labelIds.includes(global.DRAFT_LABEL)
             ? emailBody(relevantMessage?.payload?.body?.emailHTML)
             : undefined,
-          threadId: relevantMessage?.threadId,
+          cc: handleContactConversion(relevantMessage?.payload.headers.cc),
+          files: relevantMessage?.payload?.files,
           id: relevantMessage?.id,
+          subject: relevantMessage?.payload.headers.subject,
+          threadId: relevantMessage?.threadId,
+          to: handleContactConversion(relevantMessage?.payload.headers.from),
         }}
         messageOverviewListener={messageOverviewListener}
       />

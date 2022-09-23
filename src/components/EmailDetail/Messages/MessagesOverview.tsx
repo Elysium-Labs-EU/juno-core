@@ -110,7 +110,6 @@ const MessagesOverview = ({
   labelIds,
 }: IMessagesOverview) => {
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
-  // Create a local copy of threadDetail to manipulate. Is used by discarding and opening a threadDetail draft.
   const [localThreadDetail, setLocalThreadDetail] =
     useState<IEmailListThreadItem | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
@@ -120,6 +119,7 @@ const MessagesOverview = ({
   useEffect(() => {
     let mounted = true
     if (mounted) {
+      // Create a local copy of threadDetail to manipulate. Is used by opening a threadDetail draft, and reversing the message order.
       setLocalThreadDetail(threadDetail)
     }
     return () => {
@@ -132,17 +132,8 @@ const MessagesOverview = ({
 
   // A callback function that will listen to the discard or cancel event on the composer
   const messageOverviewListener = useCallback(
-    (eventType: 'cancel' | 'discard', messageId?: string) => {
-      if (eventType === 'discard') {
-        if (localThreadDetail && localThreadDetail?.messages) {
-          setLocalThreadDetail({
-            ...localThreadDetail,
-            messages: localThreadDetail.messages.filter(
-              (message) => message.id !== messageId
-            ),
-          })
-        }
-      }
+    (eventType: 'cancel' | 'discard') => {
+      // TODO: Discard eventType is currently unused.
       if (eventType === 'cancel') {
         setSelectedIndex(undefined)
       }

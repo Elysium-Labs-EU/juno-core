@@ -10,6 +10,7 @@ import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
 import * as GS from '../../../../styles/globalStyles'
+import findDraftMessageInList from '../../../../utils/findDraftMessageInList'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import CustomButton from '../../../Elements/Buttons/CustomButton'
 import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
@@ -18,6 +19,7 @@ import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
 import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
 import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
 import discardDraft from '../../../EmailOptions/DiscardDraft'
+import EmailAttachment from '../../Attachment/EmailAttachment'
 import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import LinkedContacts from './Recipients/LinkedContacts'
@@ -64,30 +66,24 @@ const DraftMessage = ({
     []
   )
 
-  const draftMessage = useCallback(
-    () => draftList.find((draft) => draft.message.id === message.id),
-    [message]
-  )
-
   // Send back detail to the parent component to hide the draft from the list and open the composer
-  const handleEditLocal = () => {
-    const foundDraft = draftMessage()
+  const handleEditLocal = useCallback(() => {
+    const foundDraft = findDraftMessageInList({ draftList, target: message })
     if (foundDraft) {
       handleClickListener({
         id: foundDraft.message.id,
         messageId: foundDraft.message.id,
         dIndex: draftIndex,
       })
-      // handleClickListener({ id, messageId: message?.id, draftIndex })
     }
-  }
+  }, [draftList, message])
 
   const handleOpenClose = () => {
     setOpen((currState) => !currState)
   }
 
   const handleDiscardDraft = useCallback(() => {
-    const foundDraft = draftMessage()
+    const foundDraft = findDraftMessageInList({ draftList, target: message })
     if (foundDraft) {
       discardDraft({
         messageId: foundDraft.message.id,
@@ -96,7 +92,7 @@ const DraftMessage = ({
         draftId: foundDraft.id,
       })
     }
-  }, [message])
+  }, [draftList, message])
 
   return !open ? (
     <S.EmailClosedWrapper
@@ -185,6 +181,7 @@ const DraftMessage = ({
             />
           )}
         </S.EmailBody>
+        <EmailAttachment message={message} />
       </div>
     </S.EmailOpenWrapper>
   )

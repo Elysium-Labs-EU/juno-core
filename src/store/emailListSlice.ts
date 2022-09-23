@@ -624,7 +624,6 @@ export const updateEmailLabel =
           try {
             let response = null
             if (threadId) {
-              console.log('here', threadId)
               response = await threadApi({}).updateThread({
                 threadId,
                 request,

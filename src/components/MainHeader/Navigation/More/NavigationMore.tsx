@@ -31,18 +31,22 @@ interface IMenuItemOnClick {
 export const MenuItemComponent = ({
   item,
   absoluteIndex,
-  focusedItemIndex,
-  setFocusedItemIndex,
+  focusedItemIndex = undefined,
+  setFocusedItemIndex = undefined,
 }: {
   item: IMenuItemOnClick
   absoluteIndex: number
-  focusedItemIndex: number
-  setFocusedItemIndex: (newIndex: number) => void
+  focusedItemIndex?: number
+  setFocusedItemIndex?: (newIndex: number) => void
 }) => (
   <MenuItem
     onClick={() => item.onClick()}
-    onFocus={() => setFocusedItemIndex(absoluteIndex)}
-    onMouseOver={() => setFocusedItemIndex(absoluteIndex)}
+    onFocus={
+      setFocusedItemIndex ? () => setFocusedItemIndex(absoluteIndex) : undefined
+    }
+    onMouseOver={
+      setFocusedItemIndex ? () => setFocusedItemIndex(absoluteIndex) : undefined
+    }
     isFocused={focusedItemIndex === absoluteIndex}
   >
     <MenuItemContentMain data-test-id="item-title">
@@ -60,12 +64,12 @@ export const MenuItemComponent = ({
 
 export const MenuSectionComponent = ({
   menuItems,
-  focusedItemIndex,
-  setFocusedItemIndex,
+  focusedItemIndex = undefined,
+  setFocusedItemIndex = undefined,
 }: {
   menuItems: IMenuItemOnClick[][]
-  focusedItemIndex: number
-  setFocusedItemIndex: (newIndex: number) => void
+  focusedItemIndex?: number
+  setFocusedItemIndex?: (newIndex: number) => void
 }) => {
   const menuItemsFlatArray = menuItems.flat(1)
   return (

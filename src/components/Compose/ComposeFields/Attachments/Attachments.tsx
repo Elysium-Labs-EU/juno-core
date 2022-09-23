@@ -1,4 +1,5 @@
 /* eslint-disable react/no-array-index-key */
+import prettyBytes from 'pretty-bytes'
 import { isEqual } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import AttachmentBubble from '../../../Elements/AttachmentBubble/AttachmentBubble'
@@ -14,12 +15,13 @@ import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
 import { IEmailAttachmentType } from '../../../EmailDetail/Attachment/EmailAttachmentTypes'
 
 const ATTACHMENTS = 'Attachments'
+const MAX_MB_UPLOAD_DIRECT = 25000000
 
 const customIsEqual = (
-  composeValue: File[] | IEmailAttachmentType[],
+  composeValue: File[] | IEmailAttachmentType[] | undefined,
   uploadedFiles: File[]
 ) =>
-  !isEqual(
+  isEqual(
     composeValue?.map((item: File | IEmailAttachmentType) => ({
       size: 'size' in item ? item.size : item.body.size,
       name: 'name' in item ? item.name : item.filename,
@@ -46,7 +48,6 @@ const Attachments = ({
   hasInteracted: boolean
 }) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
-  const [fileTypeError, setFileTypeError] = useState<string | null>(null)
   const [localLoadState, setLocalLoadState] = useState(
     global.LOAD_STATE_MAP.idle
   )
@@ -61,7 +62,7 @@ const Attachments = ({
     if (
       composeValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      customIsEqual(composeValue, uploadedFiles)
+      !customIsEqual(composeValue, uploadedFiles)
     ) {
       if (composeValue.some((value: any) => 'partId' in value) && messageId) {
         setLocalLoadState(global.LOAD_STATE_MAP.loading)
@@ -104,21 +105,20 @@ const Attachments = ({
 
   const onDropHandeler = useCallback(
     (data: File[]) => {
+      if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
+        dispatch(
+          setServiceUnavailable(
+            `File size can not exceed ${prettyBytes(MAX_MB_UPLOAD_DIRECT)}`
+          )
+        )
+        return
+      }
       // if (data.every((item) => item.type.includes('image'))) {
       //     if (data.every((item) => !/bmp|x-icon|tiff/.test(item.type))) {
       setUploadedFiles((prevState) => [...prevState, ...data])
       if (!hasInteracted) {
         setHasInteracted(true)
       }
-
-      //         return
-      //     }
-      //     setFileTypeError(
-      //         'Image cannot be of type .bmp .ico, or .tiff - all others are allowed.'
-      //     )
-      //     return
-      // }
-      // setFileTypeError('File must be an image')
     },
     [uploadedFiles, composeValue, hasInteracted]
   )
@@ -138,9 +138,8 @@ const Attachments = ({
   // Sync the local state with the parent component state
   useEffect(() => {
     if (
-      composeValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      customIsEqual(composeValue, uploadedFiles)
+      !customIsEqual(composeValue, uploadedFiles)
     ) {
       const updateEventObject = {
         id: local.FILES,
@@ -148,7 +147,7 @@ const Attachments = ({
       }
       updateComposeEmail(updateEventObject)
     }
-  }, [uploadedFiles, loadState])
+  }, [uploadedFiles, loadState, composeValue, updateComposeEmail])
 
   return (
     <S.Wrapper>

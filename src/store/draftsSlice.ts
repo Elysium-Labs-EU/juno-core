@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
-import { closeMail, setServiceUnavailable } from './utilsSlice'
+import { closeMail, setIsProcessing, setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
@@ -143,8 +143,6 @@ export const createUpdateDraft =
       } else {
         formData.append('files', '')
       }
-
-      console.log('localDraftDetails', localDraftDetails)
 
       const response = !localDraftDetails
         ? await draftApi().createDrafts(formData)
@@ -293,10 +291,13 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
 export const deleteDraft =
   (id: string): AppThunk =>
   async (dispatch) => {
+    dispatch(setIsProcessing(true))
     try {
-      draftApi().deleteDraft(id)
+      await draftApi().deleteDraft(id)
     } catch (err) {
       dispatch(setServiceUnavailable('Error deleting draft.'))
+    } finally {
+      dispatch(setIsProcessing(false))
     }
   }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { fetchEmailDetail } from '../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { selectLabelIds } from '../store/labelsSlice'
@@ -17,7 +17,6 @@ export default function useFetchEmailDetail({
 }) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
-  // const [hasFired, setHasFired] = useState(false)
 
   // The hook may fire to update the emaildetail, whenever no thread has a body element, or whenever the composer closes (forceRefresh).
   useEffect(() => {
@@ -32,7 +31,6 @@ export default function useFetchEmailDetail({
           Object.prototype.hasOwnProperty.call(message.payload, 'body')
         )
         if (!someThreadHasBody || forceRefresh) {
-          // setHasFired(true)
           setRefreshEmailDetail(false)
           mounted &&
             dispatch(

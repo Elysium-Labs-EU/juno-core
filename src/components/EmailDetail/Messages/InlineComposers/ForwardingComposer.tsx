@@ -20,7 +20,10 @@ const ForwardingComposer = ({
 }: {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
-  messageOverviewListener: (evenType: 'cancel' | 'discard', messageId?: string) => void
+  messageOverviewListener: (
+    evenType: 'cancel' | 'discard',
+    messageId?: string
+  ) => void
   isForwarding: boolean
 }) => {
   const relevantMessage = getRelevantMessage({
