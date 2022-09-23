@@ -7,7 +7,7 @@ import * as local from '../../constants/composeEmailConstants'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import { QiSend } from '../../images/svgIcons/quillIcons'
+import { QiEscape, QiSend } from '../../images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
   fetchDrafts,
@@ -303,6 +303,23 @@ const ComposeEmail = ({
   const memoizedButtons = useMemo(
     () => (
       <S.ButtonContainer>
+        {localDraftDetails?.id && (
+          <DiscardDraftButton
+            draftId={localDraftDetails.id}
+            threadId={localDraftDetails.message.threadId}
+            id={localDraftDetails.message.id}
+            messageOverviewListener={messageOverviewListener}
+          />
+        )}
+        {(isReplying || isForwarding) && (
+          <CustomButton
+            label={local.CANCEL_BUTTON}
+            onClick={() => handleCancelButton()}
+            suppressed
+            title="Cancel"
+            icon={<QiEscape />}
+          />
+        )}
         <CustomButton
           type="button"
           label={local.SEND_BUTTON}
@@ -312,24 +329,6 @@ const ComposeEmail = ({
           onClick={(e) => handleSubmit(e)}
           disabled={!localDraftDetails}
         />
-        {(isReplying || isForwarding) && (
-          <CustomButton
-            label={local.CANCEL_BUTTON}
-            onClick={() => handleCancelButton()}
-            suppressed
-            title="Cancel"
-          />
-        )}
-        {localDraftDetails?.id && (
-          <S.DiscardContainer>
-            <DiscardDraftButton
-              draftId={localDraftDetails.id}
-              threadId={localDraftDetails.message.threadId}
-              id={localDraftDetails.message.id}
-              messageOverviewListener={messageOverviewListener}
-            />
-          </S.DiscardContainer>
-        )}
       </S.ButtonContainer>
     ),
     [isReplying, isForwarding, localDraftDetails, composedEmail]
@@ -341,15 +340,18 @@ const ComposeEmail = ({
     <>
       <Seo title={local.COMPOSE} />
       <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
-        <S.UpdateContainer>
-          {saveSuccess && (
-            <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
-          )}
-        </S.UpdateContainer>
         <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
           <GS.Base>
             <form autoComplete="off">
-              <div style={{ marginBottom: `7px` }}>
+              <S.TopRowControls>
+                <S.UpdateContainer>
+                  {saveSuccess && (
+                    <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
+                  )}
+                </S.UpdateContainer>
+                {memoizedButtons}
+              </S.TopRowControls>
+              <div style={{ marginBottom: `20px` }}>
                 <GS.Base>
                   <S.Row>
                     {memoizedToField}
@@ -377,7 +379,6 @@ const ComposeEmail = ({
                   <S.Row>{memoizedSignatureField}</S.Row>
                 </GS.Base>
               </div>
-              {memoizedButtons}
             </form>
             {memoizedAttachmentField}
           </GS.Base>

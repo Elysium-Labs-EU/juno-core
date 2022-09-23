@@ -151,11 +151,13 @@ const Attachments = ({
 
   return (
     <S.Wrapper>
-      <S.AttachmentHeaderContainer>
-        <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">
-          <S.AttachmentHeader>{ATTACHMENTS}</S.AttachmentHeader>
-        </S.StyledBadge>
-      </S.AttachmentHeaderContainer>
+      {uploadedFiles.length > 0 && (
+        <S.AttachmentHeaderContainer>
+          <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">
+            <S.AttachmentHeader>{ATTACHMENTS}</S.AttachmentHeader>
+          </S.StyledBadge>
+        </S.AttachmentHeaderContainer>
+      )}
       {localLoadState === global.LOAD_STATE_MAP.loading ? (
         <StyledCircularProgress />
       ) : (

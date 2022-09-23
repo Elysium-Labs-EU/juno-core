@@ -23,7 +23,6 @@ export const AttachmentHeader = styled.p`
 `
 
 export const UploadedFiles = styled.div`
-  margin-top: 40px;
   display: flex;
   flex-wrap: wrap;
   margin-left: -8px;

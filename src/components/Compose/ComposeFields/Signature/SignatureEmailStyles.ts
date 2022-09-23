@@ -1,17 +1,28 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  color: rgb(83, 83, 88);
-  opacity: 0.3;
+  align-items: flex-start;
+  color: var(--color-grey);
   display: flex;
   flex-flow: row;
-  position: absolute;
   left: -40px;
-  text-align: right;
   min-height: 51px;
+  position: relative;
+  /* text-align: right; */
+  p {
+    font-size: var(--small-size);
+  }
 `
 
 export const SettingsInner = styled.div`
   color: var(--color-white);
+`
+
+// We are using the small font size as margin to mimic the selected signatures padding
+export const SettingsButtonContainer = styled.div`
+  margin-top: var(--small-size);
+`
+
+export const ActiveSignatureContainer = styled.div`
+  position: relative;
 `

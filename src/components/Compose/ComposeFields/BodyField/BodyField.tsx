@@ -121,7 +121,8 @@ const BodyField = ({
   const memoizedBodyField = useMemo(
     () => (
       <>
-        <Compose.Label hasValue={Boolean(value)}>
+        {/* The value will be set to a minimal length of 7 by the instantiated paragraph tags */}
+        <Compose.Label hasValue={value.length > 7}>
           <label htmlFor={local.BODY}>{local.BODY_LABEL}</label>
         </Compose.Label>
         <S.Wrapper isFocused={isFocused}>

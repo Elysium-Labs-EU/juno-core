@@ -1,11 +1,10 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
   background-color: var(--color-white-off);
   border: 2px solid transparent;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 10px 20px;
+  border-radius: var(--radius-m);
   color: var(--color-grey);
   &:hover,
   &:focus {
@@ -24,6 +23,8 @@ export const Inner = styled.div`
   flex-flow: row;
   align-items: center;
   p {
-    margin-left: 8px;
+    margin-left: 10px;
+    text-align: center;
+    font-size: var(--small-size);
   }
 `

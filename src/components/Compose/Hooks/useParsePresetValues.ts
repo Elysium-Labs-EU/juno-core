@@ -72,7 +72,6 @@ export default function useParsePresetValues({
   loadState: string
   presetValueObject?: IComposeEmailReceive
 }) {
-  // console.log('presetValueObject', presetValueObject)
   // Set the form values that come either from the location state, the URL, or passed props.
   useEffect(() => {
     let mounted = true

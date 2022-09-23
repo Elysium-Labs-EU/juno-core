@@ -40,7 +40,7 @@ const SignatureEmail = ({
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
-        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        ? `<div data-juno=${ global.JUNO_SIGNATURE }>${ selectedSignature }</div>`
         : null,
     }
     updateComposeEmail(updateEventObject)
@@ -56,12 +56,14 @@ const SignatureEmail = ({
 
   return (
     <S.Wrapper>
-      <CustomIconButton
-        icon={<QiChevronDown />}
-        title="Show signature options"
-        onClick={handleClick}
-        style={{ marginRight: '20px' }}
-      />
+      <S.SettingsButtonContainer>
+        <CustomIconButton
+          icon={<QiChevronDown />}
+          title="Show signature options"
+          onClick={handleClick}
+          style={{ marginRight: '20px' }}
+        />
+      </S.SettingsButtonContainer>
       <Popper
         id="signature-options"
         open={open}
@@ -75,7 +77,11 @@ const SignatureEmail = ({
           setSelectedSignature={setSelectedSignature}
         />
       </Popper>
-      {selectedSignature && sanitizeAndParseHtmlContent(selectedSignature)}
+      {selectedSignature && (
+        <S.ActiveSignatureContainer>
+          {sanitizeAndParseHtmlContent(selectedSignature)}
+        </S.ActiveSignatureContainer>
+      )}
     </S.Wrapper>
   )
 }

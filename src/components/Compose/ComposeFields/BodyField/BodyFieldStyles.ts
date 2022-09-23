@@ -14,7 +14,9 @@ export const Wrapper = styled.div<IWrapper>`
   position: relative;
   min-height: 200px;
   height: 100%;
-  border-radius: 4px;
+  max-height: calc(100vh - 500px);
+  overflow-y: auto;
+  border-radius: var(--radius-m);
   div {
     .ProseMirror {
       min-height: 200px;
