@@ -18,17 +18,17 @@ const SignatureEmail = ({
   updateComposeEmail: (action: { id: string; value: string | null }) => void
   loadState: string
 }) => {
+  const { signature } = useAppSelector(selectProfile)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [selectedSignature, setSelectedSignature] = useState<string | null>(
+    null
+  )
   const open = Boolean(anchorEl)
   const { ref } = useClickOutside({
     onClickOutside: () => {
       setAnchorEl(null)
     },
   })
-  const [selectedSignature, setSelectedSignature] = useState<string | null>(
-    null
-  )
-  const { signature } = useAppSelector(selectProfile)
 
   useEffect(() => {
     if (global.LOAD_STATE_MAP.loaded === loadState) {

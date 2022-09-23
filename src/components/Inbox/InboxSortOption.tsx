@@ -1,7 +1,5 @@
 import { useCallback } from 'react'
 
-import { CircularProgress } from '@mui/material'
-
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useFetchThreadsTotalNumber from '../../hooks/useFetchThreadsTotalNumber'
@@ -32,32 +30,32 @@ import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 
 import InboxSortPopper from './InboxSortPopper'
 import useFetchEmailsSimple from '../../hooks/useFetchEmailsSimple'
+import StyledCircularProgress from '../Elements/StyledCircularProgress'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const InboxSortOption = () => {
-  // An abstracted hook to fetch the required emails
-
-  // TODO: Double check this hook to not collide with useFetchEmailsDrafts
-  useFetchEmailsSimple()
-
-  const emailList = useAppSelector(selectEmailList)
-  const labelIds = useAppSelector(selectLabelIds)
-  const isLoading = useAppSelector(selectIsLoading)
-  const activeModal = useAppSelector(selectActiveModal)
-  const inSearch = useAppSelector(selectInSearch)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
+  const emailList = useAppSelector(selectEmailList)
+  const inSearch = useAppSelector(selectInSearch)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
   const { totalThreads, loadingState } = useFetchThreadsTotalNumber([
     global.INBOX_LABEL,
   ])
 
+  // An hook to fetch the required emails for the INBOX feed
+  useFetchEmailsSimple()
+
   const resultMap = {
-    [global.LOAD_STATE_MAP.loaded]: `(${totalThreads})`,
-    [global.LOAD_STATE_MAP.loading]: <CircularProgress size={10} />,
-    [global.LOAD_STATE_MAP.idle]: <CircularProgress size={10} />,
+    [global.LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${ totalThreads })`,
+    [global.LOAD_STATE_MAP.loading]: <StyledCircularProgress size={10} />,
+    [global.LOAD_STATE_MAP.error]: undefined,
+    [global.LOAD_STATE_MAP.idle]: undefined,
   }
 
   const handleEventStrictFlow = useCallback(() => {
