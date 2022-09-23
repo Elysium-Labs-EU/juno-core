@@ -1,23 +1,27 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useCallback, useEffect, useState } from 'react'
-import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
-import StyledTextField from './EmailInputStyles'
-import RecipientChip from '../../../../Elements/RecipientChip/RecipientChip'
-import { IContact } from '../../../../../store/storeTypes/contactsTypes'
-import { useAppDispatch, useAppSelector } from '../../../../../store/hooks'
+import { useCallback, useEffect, useState } from 'react'
+
+import Autocomplete from '@mui/material/Autocomplete'
+
+import contactApi from '../../../../../data/contactApi'
+import useDebounce from '../../../../../hooks/useDebounce'
 import {
   selectAllContacts,
   selectContactsLoaded,
   setAllContacts,
   setContactsLoaded,
 } from '../../../../../store/contactsSlice'
-import contactApi from '../../../../../data/contactApi'
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks'
+import { IContact } from '../../../../../store/storeTypes/contactsTypes'
 import { setServiceUnavailable } from '../../../../../store/utilsSlice'
-import useDebounce from '../../../../../hooks/useDebounce'
 import emailValidation from '../../../../../utils/emailValidation'
-import type { AppDispatch } from '../../../../../store/store'
+import RecipientChip from '../../../../Elements/RecipientChip/RecipientChip'
 import { IRecipientsList } from '../../../ComposeEmailTypes'
+import StyledTextField from './EmailInputStyles'
+
+import type { AppDispatch } from '../../../../../store/store'
+import StyledCircularProgress from '../../../../Elements/StyledCircularProgress'
 
 interface IEmailInputProps {
   id: string
@@ -74,10 +78,11 @@ const fetchContacts = async ({
 
       dispatch(setAllContacts(mappedResults))
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))
-      setCompletedSearch(true)
     }
   } catch (err) {
     dispatch(setServiceUnavailable('Error fetching contacts.'))
+  } finally {
+    setCompletedSearch(true)
   }
 }
 
@@ -98,7 +103,7 @@ const EmailInput = (props: IEmailInputProps) => {
   } = props
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly IContact[]>([])
-  const [completedSearch, setCompletedSearch] = useState(false)
+  const [completedSearch, setCompletedSearch] = useState(true)
   const debouncedInputValue: string = useDebounce(inputValue, 500)
   const availableContacts: IContact[] = useAppSelector(selectAllContacts)
   const contactsLoaded: string = useAppSelector(selectContactsLoaded)
@@ -137,7 +142,7 @@ const EmailInput = (props: IEmailInputProps) => {
 
   // Only attempt a fetch for details when the user changes the input again
   useEffect(() => {
-    if (completedSearch) {
+    if (completedSearch && debouncedInputValue.length > 0) {
       setCompletedSearch(false)
     }
   }, [debouncedInputValue])
@@ -225,6 +230,15 @@ const EmailInput = (props: IEmailInputProps) => {
           variant="outlined"
           fullWidth
           autoFocus={willAutoFocus}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {!completedSearch ? <StyledCircularProgress size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
         />
       )}
     />

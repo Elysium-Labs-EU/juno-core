@@ -34,13 +34,9 @@ const FileUpload = ({
         <input {...getInputProps()} />
         {icon}
         {isDragActive ? (
-          <p>
-            {dropTextActive ?? DROP_TEXT_ACTIVE}
-          </p>
+          <p>{dropTextActive ?? DROP_TEXT_ACTIVE}</p>
         ) : (
-          <p>
-            {dropTextInactive ?? DROP_TEXT_INACTIVE}
-          </p>
+          <p>{dropTextInactive ?? DROP_TEXT_INACTIVE}</p>
         )}
       </S.Inner>
     </S.Wrapper>

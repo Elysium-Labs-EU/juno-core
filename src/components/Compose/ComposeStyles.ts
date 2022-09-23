@@ -38,6 +38,13 @@ export const ComposerContainer = styled.div<IComposerContainer>`
   padding-bottom: ${({ tabbedView }) => (tabbedView ? '0' : '120px')};
 `
 
+export const TopRowControls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-grey-border);
+  margin-bottom: 20px;
+`
+
 interface ILabel {
   hasValue?: boolean
 }
@@ -78,8 +85,9 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-flow: row;
   align-items: center;
-`
-
-export const DiscardContainer = styled.div`
-  margin-left: auto;
+  justify-content: flex-end;
+  button:not(first-child) {
+    margin-left: 10px;
+  }
+  margin-bottom: 10px;
 `

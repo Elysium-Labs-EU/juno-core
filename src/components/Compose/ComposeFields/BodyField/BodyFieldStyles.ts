@@ -23,9 +23,6 @@ export const Wrapper = styled.div<IWrapper>`
       height: 100%;
       outline: 0;
       padding: 0 12px;
-      p {
-        font-size: var(--small-size);
-      }
     }
   }
 `
