@@ -349,7 +349,7 @@ const ComposeEmail = ({
         <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
           <GS.Base>
             <form autoComplete="off">
-              <div style={{ marginBottom: `7px` }}>
+              <div style={{ marginBottom: `20px` }}>
                 <GS.Base>
                   <S.Row>
                     {memoizedToField}

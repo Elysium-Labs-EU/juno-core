@@ -108,7 +108,7 @@ const Attachments = ({
       if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
         dispatch(
           setServiceUnavailable(
-            `File size can not exceed ${prettyBytes(MAX_MB_UPLOAD_DIRECT)}`
+            `File size can not exceed ${ prettyBytes(MAX_MB_UPLOAD_DIRECT) }`
           )
         )
         return
@@ -151,11 +151,12 @@ const Attachments = ({
 
   return (
     <S.Wrapper>
-      <S.AttachmentHeaderContainer>
-        <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">
-          <S.AttachmentHeader>{ATTACHMENTS}</S.AttachmentHeader>
-        </S.StyledBadge>
-      </S.AttachmentHeaderContainer>
+      {uploadedFiles.length > 0 &&
+        <S.AttachmentHeaderContainer>
+          <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">
+            <S.AttachmentHeader>{ATTACHMENTS}</S.AttachmentHeader>
+          </S.StyledBadge>
+        </S.AttachmentHeaderContainer>}
       {localLoadState === global.LOAD_STATE_MAP.loading ? (
         <StyledCircularProgress />
       ) : (

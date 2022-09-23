@@ -21,7 +21,7 @@ const FileUpload = ({
   dropTextActive = undefined,
   dropTextInactive = undefined,
   customWidth = undefined,
-  icon = <FiFile size={24} />,
+  icon = <FiFile size={16} />,
 }: IFileUpload) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onDropHandeler(acceptedFiles)
@@ -34,11 +34,11 @@ const FileUpload = ({
         <input {...getInputProps()} />
         {icon}
         {isDragActive ? (
-          <p style={{ textAlign: 'center' }}>
+          <p>
             {dropTextActive ?? DROP_TEXT_ACTIVE}
           </p>
         ) : (
-          <p style={{ textAlign: 'center' }}>
+          <p>
             {dropTextInactive ?? DROP_TEXT_INACTIVE}
           </p>
         )}
