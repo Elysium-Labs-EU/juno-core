@@ -3,7 +3,7 @@ import { updateEmailLabel } from '../../store/emailListSlice'
 import { AppDispatch } from '../../store/store'
 import { LabelIdName } from '../../store/storeTypes/labelsTypes'
 import { setServiceUnavailable } from '../../store/utilsSlice'
-import filterIllegalLabels from '../../utils/filterIllegalLabels'
+import { onlyLegalLabelStrings } from '../../utils/onlyLegalLabels'
 import { findLabelByName } from '../../utils/findLabel'
 
 interface ISetToDoMail {
@@ -24,9 +24,12 @@ const setToDoMail = ({
     LABEL_NAME: global.TODO_LABEL_NAME,
   })
   if (toDoLabel) {
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+    const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
     const request = {
-      removeLabelIds: onlyLegalLabels,
+      // Take out the SENT label, since that label can never be removed.
+      removeLabelIds: onlyLegalLabels.filter(
+        (label) => label !== global.SENT_LABEL
+      ),
       addLabelIds: [toDoLabel?.id],
     }
     dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))

@@ -10,7 +10,6 @@ import { selectIsReplying } from '../../../store/emailDetailSlice'
 import { QiForward } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
 
-const messageIndex = 0
 const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
 
 const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
@@ -19,16 +18,14 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const isReplying = useAppSelector(selectIsReplying)
 
   const handleEvent = useCallback(() => {
-    if (threadDetail.messages) {
+    if (threadDetail?.messages) {
       return isForwardingListener({
-        messageId: threadDetail.messages[threadDetail.messages.length - 1].id,
-        messageIndex,
         dispatch,
         isReplying,
       })
     }
     return null
-  }, [threadDetail, messageIndex, dispatch])
+  }, [threadDetail, dispatch])
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
 

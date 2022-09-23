@@ -59,7 +59,13 @@ const threadApi = ({
       return errorHandling(err)
     }
   },
-  updateThread: async ({ threadId, request }: any) => {
+  updateThread: async ({
+    threadId,
+    request,
+  }: {
+    threadId: string
+    request: { removeLabelIds?: string[] }
+  }) => {
     try {
       const res: AxiosResponse<any> = await instance.patch(
         `/api/thread/${threadId}`,

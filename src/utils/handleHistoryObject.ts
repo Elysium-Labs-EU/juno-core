@@ -1,6 +1,6 @@
 import * as global from '../constants/globalConstants'
 import { LabelIdName } from '../store/storeTypes/labelsTypes'
-import onlyLegalLabelObjects from './onlyLegalLabelObjects'
+import { onlyLegalLabelObjects } from './onlyLegalLabels'
 
 export const HISTORY_NEXT_PAGETOKEN = 'history'
 export const HISTORY_TIME_STAMP = 0
@@ -57,9 +57,12 @@ export default function handleHistoryObject({
     threads: [],
     nextPageToken: HISTORY_NEXT_PAGETOKEN,
   }
-  const toDoLabelId = storageLabels.filter(
+  const toDoLabelId = storageLabels.find(
     (label) => label.name === 'Juno/To Do'
-  )[0]?.id
+  )?.id
+  if (!toDoLabelId) {
+    throw Error('Cannot find the to do label')
+  }
   const todoFeed: IFeedModel = {
     labels: [toDoLabelId],
     threads: [],

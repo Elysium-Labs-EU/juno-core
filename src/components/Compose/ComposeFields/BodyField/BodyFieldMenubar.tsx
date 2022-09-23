@@ -8,7 +8,7 @@ import {
   MdOutlineRedo,
   MdOutlineUndo,
 } from 'react-icons/md'
-import * as S from './TipTapBodyStyles'
+import * as S from './BodyFieldStyles'
 
 const PARAGRAPH = 'paragraph'
 const H1 = 'h1'

@@ -7,13 +7,18 @@ import { IEmailListObject } from '../store/storeTypes/emailListTypes'
 export default function useFetchEmailDetail({
   threadId,
   activeEmailList,
+  forceRefresh,
+  setRefreshEmailDetail,
 }: {
   threadId: string | undefined
   activeEmailList: IEmailListObject | undefined
+  forceRefresh: boolean
+  setRefreshEmailDetail: (value: boolean) => void
 }) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
 
+  // The hook may fire to update the emaildetail, whenever no thread has a body element, or whenever the composer closes (forceRefresh).
   useEffect(() => {
     let mounted = true
     if (threadId && activeEmailList) {
@@ -25,7 +30,8 @@ export default function useFetchEmailDetail({
         const someThreadHasBody = emailThreadObject.messages.some((message) =>
           Object.prototype.hasOwnProperty.call(message.payload, 'body')
         )
-        if (!someThreadHasBody) {
+        if (!someThreadHasBody || forceRefresh) {
+          setRefreshEmailDetail(false)
           mounted &&
             dispatch(
               fetchEmailDetail({
@@ -40,5 +46,5 @@ export default function useFetchEmailDetail({
     return () => {
       mounted = false
     }
-  }, [threadId, activeEmailList])
+  }, [threadId, activeEmailList, forceRefresh])
 }

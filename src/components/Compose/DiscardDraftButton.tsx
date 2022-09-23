@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import * as local from '../../constants/composeEmailConstants'
 import { QiDiscard } from '../../images/svgIcons/quillIcons'
-import { selectDraft } from '../../store/draftsSlice'
+import { selectDraftList } from '../../store/draftsSlice'
 import {
   selectIsReplying,
   selectIsForwarding,
@@ -15,47 +15,45 @@ import discardDraft from '../EmailOptions/DiscardDraft'
 
 const DiscardDraftButton = ({
   draftId,
+  threadId,
+  id,
   messageOverviewListener = undefined,
 }: {
   draftId: string
-  messageOverviewListener?: (value: string) => void
+  threadId: string
+  id: string
+  messageOverviewListener?: (
+    evenType: 'cancel' | 'discard',
+    messageId?: string
+  ) => void
 }) => {
   const dispatch = useAppDispatch()
-  const draftList = useAppSelector(selectDraft)
+  const draftList = useAppSelector(selectDraftList)
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
 
-  const draftMessage = useCallback(
-    () => draftList.find((draft) => draft.id === draftId)?.message,
-    [draftId]
-  )
-
   const handleClick = useCallback(() => {
-    const foundDraft = draftMessage()
-    if (foundDraft) {
-      const { id, threadId } = foundDraft
-      discardDraft({
-        messageId: isReplying || isForwarding ? id : undefined,
-        threadId,
-        dispatch,
-        draftId,
-      })
-      if (messageOverviewListener) {
-        messageOverviewListener(id)
-      }
-      if (isReplying) {
-        dispatch(setIsReplying(false))
-        return
-      }
-      if (isForwarding) {
-        dispatch(setIsForwarding(false))
-        return
-      }
-      dispatch(navigateBack())
+    discardDraft({
+      messageId: isReplying || isForwarding ? id : undefined,
+      threadId,
+      dispatch,
+      draftId,
+    })
+    if (messageOverviewListener) {
+      messageOverviewListener('discard', id)
     }
-  }, [draftId, isForwarding, isReplying])
+    if (isReplying) {
+      dispatch(setIsReplying(false))
+      return
+    }
+    if (isForwarding) {
+      dispatch(setIsForwarding(false))
+      return
+    }
+    dispatch(navigateBack())
+  }, [draftId, draftList, isForwarding, isReplying])
 
-  return draftMessage() ? (
+  return (
     <CustomButton
       label={local.DISCARD_DRAFT_BUTTON}
       icon={<QiDiscard />}
@@ -63,7 +61,7 @@ const DiscardDraftButton = ({
       onClick={handleClick}
       title="Delete"
     />
-  ) : null
+  )
 }
 
 export default DiscardDraftButton

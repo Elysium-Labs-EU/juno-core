@@ -12,12 +12,11 @@ import * as global from '../../../../constants/globalConstants'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 
 const SignatureEmail = ({
-  callback,
+  updateComposeEmail,
+  loadState,
 }: {
-  callback: (
-    action: { id: string; value: string | null },
-    mounted: boolean
-  ) => void
+  updateComposeEmail: (action: { id: string; value: string | null }) => void
+  loadState: string
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
@@ -32,21 +31,19 @@ const SignatureEmail = ({
   const { signature } = useAppSelector(selectProfile)
 
   useEffect(() => {
-    setSelectedSignature(signature)
-  }, [signature])
+    if (global.LOAD_STATE_MAP.loaded === loadState) {
+      setSelectedSignature(signature)
+    }
+  }, [signature, loadState])
 
   useEffect(() => {
-    let mounted = true
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
         ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
         : null,
     }
-    callback(updateEventObject, mounted)
-    return () => {
-      mounted = false
-    }
+    updateComposeEmail(updateEventObject)
   }, [selectedSignature])
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

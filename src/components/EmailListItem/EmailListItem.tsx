@@ -78,9 +78,9 @@ const EmailListItem = ({
   const storageLabels = useAppSelector(selectStorageLabels)
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
-  const { id } = email
   const dispatch = useAppDispatch()
   const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const { id } = email
 
   useEffect(() => {
     if (!isFocused && activeIndex === index) {
@@ -106,39 +106,39 @@ const EmailListItem = ({
       RecipientName(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.to,
+        ]?.payload?.headers?.to,
         emailAddress
       ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
   const staticSenderPartial = useMemo(
     () =>
       SenderNamePartial(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.from,
+        ]?.payload?.headers?.from,
         emailAddress
       ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
   const staticSenderFull = useMemo(
     () =>
       SenderNameFull(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.from,
+        ]?.payload?.headers?.from,
         emailAddress
       ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
   const staticSubject = useMemo(
     () =>
       EmailSubject(
         staticShouldUseDraftOrRegular.messages![
           staticShouldUseDraftOrRegular.messages!.length - 1
-        ].payload.headers?.subject
+        ]?.payload?.headers?.subject
       ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
   const staticSnippet = useMemo(
     () =>
@@ -147,7 +147,7 @@ const EmailListItem = ({
           staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
   const staticHasAttachment = useMemo(
     () => (
@@ -159,7 +159,7 @@ const EmailListItem = ({
         }
       />
     ),
-    []
+    [staticShouldUseDraftOrRegular]
   )
 
   const handleOpenEvent = useCallback(() => {
@@ -169,7 +169,7 @@ const EmailListItem = ({
         email: staticShouldUseDraftOrRegular,
       })
     )
-  }, [])
+  }, [staticShouldUseDraftOrRegular])
 
   useEffect(() => {
     // This is not triggered in search mode.

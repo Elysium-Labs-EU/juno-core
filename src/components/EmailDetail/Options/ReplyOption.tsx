@@ -12,7 +12,6 @@ import { QiReply } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
-const messageIndex = 0
 
 const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -20,10 +19,8 @@ const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const isForwarding = useAppSelector(selectIsForwarding)
 
   const handleEvent = useCallback(() => {
-    if (threadDetail.messages) {
+    if (threadDetail?.messages) {
       return isReplyingListener({
-        messageId: threadDetail.messages[threadDetail.messages.length - 1].id,
-        messageIndex,
         dispatch,
         isForwarding,
       })

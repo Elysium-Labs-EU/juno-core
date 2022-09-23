@@ -15,6 +15,7 @@ export interface FullEmailType {
   payload: {
     body: any
     headers: any
+    files: any
   }
   mimeType: string
   threadId: string
@@ -33,21 +34,7 @@ export interface MessagePayload {
   value?: string
 }
 
-export interface ComposedEmail {
-  draftId: string
-  threadId: string
-  messageId: string
-  labelIds: string[]
-  to: string
-  cc: string
-  bcc: string
-  subject: string
-  body: string
-  signature: string
-  from?: string
-}
-
-export interface DraftDetailObject {
+export interface IDraftDetailObject {
   id: string
   message: {
     id: string
@@ -56,15 +43,6 @@ export interface DraftDetailObject {
   }
 }
 
-export interface DraftListObject {
-  id: string
-  message: {
-    id: string
-    threadId: string
-  }
-}
-
 export interface DraftsState {
-  draftList: DraftListObject[]
-  draftDetails: any
+  draftList: IDraftDetailObject[]
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 import {
@@ -12,7 +12,7 @@ import {
   setIsReplying,
   setViewIndex,
 } from '../../store/emailDetailSlice'
-import { selectIsLoading } from '../../store/utilsSlice'
+import { selectIsLoading, selectIsProcessing } from '../../store/utilsSlice'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
   selectEmailList,
@@ -31,6 +31,7 @@ import MessagesOverview from './Messages/MessagesOverview'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
+import useFetchDraftList from '../../hooks/useFetchDraftList'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -38,25 +39,50 @@ import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
  */
 
 const EmailDetail = () => {
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const coreStatus = useAppSelector(selectCoreStatus)
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
-  const searchList = useAppSelector(selectSearchList)
-  const isLoading = useAppSelector(selectIsLoading)
-  const labelIds = useAppSelector(selectLabelIds)
-  const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
+  const isLoading = useAppSelector(selectIsLoading)
+  const isProcessing = useAppSelector(selectIsProcessing)
+  const isReplying = useAppSelector(selectIsReplying)
+  const labelIds = useAppSelector(selectLabelIds)
+  const searchList = useAppSelector(selectSearchList)
   const viewIndex = useAppSelector(selectViewIndex)
-  const coreStatus = useAppSelector(selectCoreStatus)
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
+  const isComposerActiveRef = useRef(false)
+  const [refreshEmailDetail, setRefreshEmailDetail] = useState(false)
   const { threadId, overviewId } = useParams<{
     threadId: string
     overviewId: string
   }>()
   const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
-  useFetchEmailDetail({ threadId, activeEmailList })
+  useFetchEmailDetail({
+    threadId,
+    activeEmailList,
+    forceRefresh: refreshEmailDetail,
+    setRefreshEmailDetail,
+  })
+  useFetchDraftList({
+    shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
+      thread.messages.some((message) =>
+        message.labelIds.includes(global.DRAFT_LABEL)
+      )
+    ),
+  })
+
+  // On closing of the composer refresh the message feed
+  useEffect(() => {
+    if ((isForwarding || isReplying) && !isComposerActiveRef.current) {
+      isComposerActiveRef.current = true
+    } else if (isComposerActiveRef.current && !isProcessing) {
+      isComposerActiveRef.current = false
+      setRefreshEmailDetail(true)
+    }
+  }, [isForwarding, isReplying, isProcessing])
 
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
@@ -104,10 +130,10 @@ const EmailDetail = () => {
       dispatch(setIsForwarding(false))
     }
     return () => {
-      if (isForwarding) {
+      if (isForwarding && currentEmail && currentEmail === threadId) {
         dispatch(setIsForwarding(false))
       }
-      if (isReplying) {
+      if (isReplying && currentEmail && currentEmail === threadId) {
         dispatch(setIsReplying(false))
       }
     }

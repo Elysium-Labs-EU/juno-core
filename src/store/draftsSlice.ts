@@ -3,27 +3,28 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
-import { closeMail, setServiceUnavailable } from './utilsSlice'
+import { closeMail, setIsProcessing, setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
   DraftDetails,
   DraftsState,
-  ComposedEmail,
   EnhancedDraftDetails,
   OpenDraftEmailType,
-  DraftListObject,
+  IDraftDetailObject,
 } from './storeTypes/draftsTypes'
 import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
   listRemoveItemDetail,
   listRemoveItemDetailBatch,
+  listRemoveItemDetailDraft,
   setSelectedEmails,
 } from './emailListSlice'
 import * as global from '../constants/globalConstants'
 import archiveMail from '../components/EmailOptions/ArchiveMail'
 import messageApi from '../data/messageApi'
 import getEmailListIndex from '../utils/getEmailListIndex'
+import { IComposePayload } from './storeTypes/composeTypes'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
@@ -35,7 +36,6 @@ export const fetchDrafts = createAsyncThunk(
 
 const initialState: DraftsState = Object.freeze({
   draftList: [],
-  draftDetails: {},
 })
 
 export const draftsSlice = createSlice({
@@ -45,7 +45,7 @@ export const draftsSlice = createSlice({
     listRemoveDraftThread: (state, { payload }: PayloadAction<any>) => {
       const { threadId }: { threadId: string } = payload
       const copyCurrentDraftList = state.draftList
-      const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
+      const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.threadId !== threadId
       )
       state.draftList = newDraftList
@@ -53,7 +53,7 @@ export const draftsSlice = createSlice({
     listRemoveDraftMessage: (state, { payload }: PayloadAction<any>) => {
       const { messageId }: { messageId: string } = payload
       const copyCurrentDraftList = state.draftList
-      const newDraftList: DraftListObject[] = copyCurrentDraftList.filter(
+      const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.id !== messageId
       )
       state.draftList = newDraftList
@@ -70,64 +70,99 @@ export const draftsSlice = createSlice({
       }
       state.draftList = filterArray()
     },
-    listUpdateDraft: (state, { payload }: PayloadAction<any>) => {
-      state.draftDetails = payload
-    },
-    resetDraftDetails: (state) => {
-      state.draftDetails = {}
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchDrafts.fulfilled, (state, { payload }) => {
-      state.draftList = payload.drafts
+      // Only update the state whenever there is something.
+      if (payload.resultSizeEstimate > 0) {
+        state.draftList = payload.drafts
+      }
     })
   },
 })
 
 export const {
-  listUpdateDraft,
   listRemoveDraftThread,
   listRemoveDraftMessage,
   listRemoveDraftBatch,
-  resetDraftDetails,
 } = draftsSlice.actions
 
+const prepareFilesForSave = async ({
+  files,
+  formData,
+}: {
+  files: File[]
+  formData: FormData
+}) => {
+  try {
+    files.forEach((file) => formData.append('file', file, file.name))
+    return formData
+  } catch (err) {
+    return []
+  }
+}
 export const createUpdateDraft =
-  ({ composedEmail }: any): AppThunk =>
+  ({
+    composedEmail,
+    localDraftDetails,
+  }: {
+    composedEmail: IComposePayload
+    localDraftDetails: IDraftDetailObject | undefined
+  }): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { id, message } = getState().drafts.draftDetails
-      const { currEmail } = getState().emailDetail
-      // const { emailAddress } = getState().base.profile
+      const { emailAddress, name } = getState().base.profile
 
-      const baseComposedEmail: ComposedEmail = {
-        draftId: id,
-        threadId: currEmail,
-        messageId: message?.id,
-        labelIds: message?.labelIds,
-        to: composedEmail?.to ? convertToGmailEmail(composedEmail.to) : '',
-        cc: composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : '',
-        bcc: composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : '',
-        subject: composedEmail?.subject ?? '',
-        body: composedEmail?.body ?? '',
-        signature: composedEmail?.signature ?? '',
-        // from: emailAddress,
-      }
-
-      const response = isEmpty(getState().drafts.draftDetails)
-        ? await draftApi().createDrafts(baseComposedEmail)
-        : await draftApi().updateDrafts(baseComposedEmail)
-
-      if (response && response.status === 200) {
-        const {
-          data: { data },
-        } = response
-        dispatch(listUpdateDraft(data))
+      const formData = new FormData()
+      formData.append('draftId', localDraftDetails?.id ?? '')
+      formData.append(
+        'threadId',
+        composedEmail?.threadId
+          ? composedEmail.threadId
+          : localDraftDetails?.message?.threadId ?? ''
+      )
+      formData.append('messageId', localDraftDetails?.message?.id ?? '')
+      formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
+      formData.append(
+        'to',
+        composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
+      )
+      formData.append(
+        'cc',
+        composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
+      )
+      formData.append(
+        'bcc',
+        composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
+      )
+      formData.append('subject', composedEmail?.subject ?? '')
+      formData.append('body', composedEmail?.body ?? '')
+      formData.append('signature', composedEmail?.signature ?? '')
+      if (composedEmail?.files && composedEmail.files.length > 0) {
+        await prepareFilesForSave({ files: composedEmail?.files, formData })
       } else {
-        dispatch(setServiceUnavailable('Cannot create or update draft.'))
+        formData.append('files', '')
       }
-    } catch (err) {
+
+      const response = !localDraftDetails
+        ? await draftApi().createDrafts(formData)
+        : await draftApi().updateDrafts({ id: localDraftDetails?.id, formData })
+
+      if (response && response?.status === 200) {
+        // Remove the previous entry from Redux Emaillist. History will create a new one.
+        dispatch(
+          listRemoveItemDetailDraft({
+            threadId: localDraftDetails?.message?.threadId,
+          })
+        )
+        return response.data.data
+      }
       dispatch(setServiceUnavailable('Cannot create or update draft.'))
+      return null
+    } catch (err) {
+      console.error(err)
+      dispatch(setServiceUnavailable('Cannot create or update draft.'))
+      return null
     }
   }
 
@@ -135,25 +170,22 @@ const pushDraftDetails =
   ({ draft, draft: { message } }: EnhancedDraftDetails): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const draftDetails = {
-        id: draft?.id,
-        message: {
-          id: message?.id,
-          threadId: message?.threadId,
-        },
-      }
-      if (draft.id && message.threadId) {
-        dispatch(listUpdateDraft(draftDetails))
+      if (draft?.id && message?.threadId) {
         dispatch(setCurrentEmail(message.threadId))
         if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
           dispatch(setIsReplying(true))
         } else {
+          // From headers are not taken in account here - since we only allow for one account
           const loadEmail = {
+            id: message?.id,
+            threadId: message?.threadId,
             to: message?.payload?.headers?.to,
             cc: message?.payload?.headers?.cc,
             bcc: message?.payload?.headers?.bcc,
             subject: message?.payload?.headers?.subject,
             body: message?.payload?.body?.emailHTML,
+            // Push the files as B64 objects to the state, to be decoded on the component. Files cannot be stored into Redux.
+            files: message.payload?.files,
           }
           dispatch(push(`/compose/${draft.id}`, loadEmail))
         }
@@ -190,10 +222,9 @@ export const openDraftEmail =
       if (isEmpty(getState().drafts.draftList)) {
         const { payload } = await dispatch(fetchDrafts())
         if (payload?.drafts && payload.drafts.length > 0) {
-          const { drafts } = payload
-          dispatch(listUpdateDraft(drafts))
+          const { drafts }: { drafts: IDraftDetailObject[] } = payload
           const draftIdFilter = drafts.filter(
-            (draft: any) => draft.message.id === messageId
+            (draft) => draft.message.id === messageId
           )
           const draftId = draftIdFilter[0].id
           if (!isEmpty(draftId)) {
@@ -210,11 +241,11 @@ export const openDraftEmail =
         // Search the draftList on message.threadId to get the id. Use that Id to fetch all the details of the draft.
         const selectedEmail =
           draftList && messageId
-            ? draftList.filter((draft) => draft.message.id === messageId)
-            : draftList.filter((draft) => draft.message.threadId === id)
+            ? draftList.find((draft) => draft.message.id === messageId)
+            : draftList.find((draft) => draft.message.threadId === id)
 
-        if (selectedEmail.length > 0) {
-          const draftId = selectedEmail[0].id
+        if (selectedEmail) {
+          const draftId = selectedEmail.id
           if (!isEmpty(draftId)) {
             dispatch(loadDraftDetails({ draftId }))
           } else {
@@ -241,7 +272,9 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
     try {
       const draftObject =
         draftList.length > 0 &&
-        draftList.find((draft) => draft.message.threadId === selectedEmails[i])
+        draftList.find(
+          (draft) => draft?.message?.threadId === selectedEmails[i]
+        )
       if (
         typeof draftObject === 'object' &&
         !Array.isArray(draftObject) &&
@@ -258,33 +291,41 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
 export const deleteDraft =
   (id: string): AppThunk =>
   async (dispatch) => {
+    dispatch(setIsProcessing(true))
     try {
-      draftApi().deleteDraft(id)
+      await draftApi().deleteDraft(id)
     } catch (err) {
       dispatch(setServiceUnavailable('Error deleting draft.'))
+    } finally {
+      dispatch(setIsProcessing(false))
     }
   }
 
 export const sendComposedEmail =
-  ({ composedEmail }: any): AppThunk =>
+  ({
+    composedEmail,
+    localDraftDetails,
+  }: {
+    composedEmail: IComposePayload
+    localDraftDetails: IDraftDetailObject
+  }): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const sender = getState().base.profile.emailAddress
-      const {
-        id,
-        message: { threadId },
-      } = getState().drafts.draftDetails
       const { emailList } = getState().email
-      const completeEmail = { ...composedEmail, sender }
-      // If the id is found on the draft details, send the draft email via the Google servers.
-      if (id) {
-        const body = { id }
-        const response = await draftApi().sendDraft(body)
+      // If the id is found on the draft details, send the draft email via the Google servers as a draft.
+      if (localDraftDetails?.id) {
+        const response = await draftApi().sendDraft({
+          id: localDraftDetails?.id,
+        })
+        // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
         if (response?.status === 200) {
           const { labelIds } = getState().labels
           dispatch(setCurrentEmail(''))
-          dispatch(resetDraftDetails())
-          archiveMail({ threadId, dispatch, labelIds })
+          archiveMail({
+            threadId: localDraftDetails?.message?.threadId,
+            dispatch,
+            labelIds,
+          })
           const staticIndexActiveEmailList: number = getEmailListIndex({
             emailList,
             labelIds: [global.DRAFT_LABEL],
@@ -292,7 +333,7 @@ export const sendComposedEmail =
           if (staticIndexActiveEmailList > -1)
             dispatch(
               listRemoveItemDetail({
-                messageId: threadId,
+                messageId: localDraftDetails?.message?.id,
                 staticIndexActiveEmailList,
               })
             )
@@ -302,8 +343,8 @@ export const sendComposedEmail =
         }
       }
       // If the id cannot be found on the draft details, send the email via the sendMessage function
-      if (id === undefined) {
-        const response = await messageApi().sendMessage(completeEmail)
+      if (!localDraftDetails?.id) {
+        const response = await messageApi().sendMessage(composedEmail)
         if (response?.status === 200) {
           dispatch(setCurrentEmail(''))
           dispatch(push(`/`))
@@ -312,13 +353,11 @@ export const sendComposedEmail =
         }
       }
     } catch (err) {
+      console.error(err)
       dispatch(setServiceUnavailable('Error sending email.'))
     }
-    return null
   }
 
-export const selectDraft = (state: RootState) => state.drafts.draftList
-export const selectDraftDetails = (state: RootState) =>
-  state.drafts.draftDetails
+export const selectDraftList = (state: RootState) => state.drafts.draftList
 
 export default draftsSlice.reducer

@@ -3,27 +3,27 @@ import { useCallback, useEffect, useState } from 'react'
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import StyledTextField from './EmailInputStyles'
-import RecipientChip from '../../../Elements/RecipientChip/RecipientChip'
-import { IContact } from '../../../../store/storeTypes/contactsTypes'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import RecipientChip from '../../../../Elements/RecipientChip/RecipientChip'
+import { IContact } from '../../../../../store/storeTypes/contactsTypes'
+import { useAppDispatch, useAppSelector } from '../../../../../store/hooks'
 import {
   selectAllContacts,
   selectContactsLoaded,
   setAllContacts,
   setContactsLoaded,
-} from '../../../../store/contactsSlice'
-import contactApi from '../../../../data/contactApi'
-import { setServiceUnavailable } from '../../../../store/utilsSlice'
-import useDebounce from '../../../../hooks/useDebounce'
-import emailValidation from '../../../../utils/emailValidation'
-import type { AppDispatch } from '../../../../store/store'
-import { IRecipientsList } from '../../ComposeEmailTypes'
+} from '../../../../../store/contactsSlice'
+import contactApi from '../../../../../data/contactApi'
+import { setServiceUnavailable } from '../../../../../store/utilsSlice'
+import useDebounce from '../../../../../hooks/useDebounce'
+import emailValidation from '../../../../../utils/emailValidation'
+import type { AppDispatch } from '../../../../../store/store'
+import { IRecipientsList } from '../../../ComposeEmailTypes'
 
 interface IEmailInputProps {
   id: string
   valueState: IContact[]
   handleChange: (recipientListRaw: IRecipientsList) => void
-  handleDelete: Function
+  handleDelete: (value: any) => void
   inputValue: string
   setInputValue: (value: string) => void
   willAutoFocus: boolean
@@ -213,7 +213,6 @@ const EmailInput = (props: IEmailInputProps) => {
                 getTagProps={getTagProps}
                 handleDelete={handleDelete}
                 index={index}
-                id={id}
               />
             )
           }

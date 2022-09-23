@@ -1,8 +1,8 @@
 import {
+  Action,
   combineReducers,
   configureStore,
   ThunkAction,
-  Action,
 } from '@reduxjs/toolkit'
 import type { PreloadedState } from '@reduxjs/toolkit'
 import { createReduxHistoryContext } from 'redux-first-history'
@@ -42,7 +42,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   })
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
-export type AppThunk<ReturnType = void> = ThunkAction<
+export type AppThunk<ReturnType = void | Promise<any | void>> = ThunkAction<
   ReturnType,
   RootState,
   any,

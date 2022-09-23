@@ -16,41 +16,53 @@ import {
 import labelURL from '../utils/createLabelURL'
 import { getRouteByLabelMap } from '../constants/labelMapConstant'
 import { findLabelById } from '../utils/findLabel'
-import filterIllegalLabels from '../utils/filterIllegalLabels'
+import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
 
 interface IUtilsState {
-  inSearch: boolean
-  isLoading: boolean
-  isProcessing: boolean
-  serviceUnavailable: string | null
-  isSilentLoading: boolean
-  isAvatarVisible: boolean
-  isFlexibleFlowActive: boolean
+  activeModal: null | string
   alternateActions: boolean
   emailFetchSize: number
+  inSearch: boolean
+  isAvatarVisible: boolean
+  isFlexibleFlowActive: boolean
+  isLoading: boolean
+  isProcessing: boolean
+  isSilentLoading: boolean
+  serviceUnavailable: string | null
   settingsLabelId: string | null
-  activeModal: null | string
 }
 
 export const initialState: IUtilsState = Object.freeze({
-  inSearch: false,
-  isLoading: false,
-  isProcessing: false,
-  serviceUnavailable: null,
-  isSilentLoading: false,
-  isAvatarVisible: true,
-  isFlexibleFlowActive: false,
+  activeModal: null,
   alternateActions: true,
   emailFetchSize: 20,
+  inSearch: false,
+  isAvatarVisible: true,
+  isFlexibleFlowActive: false,
+  isLoading: false,
+  isProcessing: false,
+  isSilentLoading: false,
+  serviceUnavailable: null,
   settingsLabelId: null,
-  activeModal: null,
 })
 
 export const utilsSlice = createSlice({
   name: 'utils',
   initialState,
   reducers: {
+    setActiveModal(state, { payload }: PayloadAction<string | null>) {
+      state.activeModal = payload
+    },
+    setAlternateActions: (state, { payload }: PayloadAction<boolean>) => {
+      state.alternateActions = payload
+    },
+    setEmailFetchSize(state, { payload }: PayloadAction<number>) {
+      state.emailFetchSize = payload
+    },
+    setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
+      state.isFlexibleFlowActive = payload
+    },
     setInSearch: (state, { payload }: PayloadAction<boolean>) => {
       state.inSearch = payload
     },
@@ -60,11 +72,11 @@ export const utilsSlice = createSlice({
     setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
       state.isProcessing = payload
     },
-    setServiceUnavailable: (state, { payload }: PayloadAction<string>) => {
-      state.serviceUnavailable = payload
-    },
     setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isSilentLoading = payload
+    },
+    setServiceUnavailable: (state, { payload }: PayloadAction<string>) => {
+      state.serviceUnavailable = payload
     },
     setSettings: (state, { payload }) => {
       state.isAvatarVisible = payload.isAvatarVisible
@@ -75,23 +87,11 @@ export const utilsSlice = createSlice({
       state.isFlexibleFlowActive = payload.isFlexibleFlowActive
       state.alternateActions = payload.alternateActions
     },
-    setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
-      state.isAvatarVisible = payload
-    },
-    setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
-      state.isFlexibleFlowActive = payload
-    },
-    setAlternateActions: (state, { payload }: PayloadAction<boolean>) => {
-      state.alternateActions = payload
-    },
-    setEmailFetchSize(state, { payload }: PayloadAction<number>) {
-      state.emailFetchSize = payload
-    },
     setSettingsLabelId(state, { payload }: PayloadAction<string>) {
       state.settingsLabelId = payload
     },
-    setActiveModal(state, { payload }: PayloadAction<string | null>) {
-      state.activeModal = payload
+    setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
+      state.isAvatarVisible = payload
     },
   },
   extraReducers: (builder) => {
@@ -144,18 +144,18 @@ export const utilsSlice = createSlice({
 })
 
 export const {
+  setActiveModal,
+  setAlternateActions,
+  setEmailFetchSize,
+  setFlexibleFlow,
   setInSearch,
   setIsLoading,
   setIsProcessing,
-  setServiceUnavailable,
   setIsSilentLoading,
+  setServiceUnavailable,
   setSettings,
-  setShowAvatar,
-  setFlexibleFlow,
-  setAlternateActions,
-  setEmailFetchSize,
   setSettingsLabelId,
-  setActiveModal,
+  setShowAvatar,
 } = utilsSlice.actions
 
 // TODO: Refactor this with the BackButton
@@ -174,7 +174,7 @@ export const openEmail =
   (dispatch, getState) => {
     const { labelIds, storageLabels } = getState().labels
 
-    const onlyLegalLabels = filterIllegalLabels(labelIds, storageLabels)
+    const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
 
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
     if (
@@ -276,7 +276,6 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
 export const selectIsAvatarVisible = (state: RootState) =>
   state.utils.isAvatarVisible
 export const selectInSearch = (state: RootState) => state.utils.inSearch
-export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
 export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectServiceUnavailable = (state: RootState) =>
   state.utils.serviceUnavailable
@@ -290,6 +289,7 @@ export const selectIsFlexibleFlowActive = (state: RootState) =>
   state.utils.isFlexibleFlowActive
 export const selectAlternateActions = (state: RootState) =>
   state.utils.alternateActions
+export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
 export const selectActiveModal = (state: RootState) => state.utils.activeModal
 
 export default utilsSlice.reducer

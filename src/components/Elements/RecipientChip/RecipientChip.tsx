@@ -6,12 +6,15 @@ interface IRecipientChip {
   option: any
   getTagProps: any
   handleDelete: (data: any) => void
-  id: string
   index: number
 }
 
-const RecipientChip = (props: IRecipientChip) => {
-  const { option, getTagProps, handleDelete, id, index } = props
+const RecipientChip = ({
+  option,
+  getTagProps,
+  handleDelete,
+  index,
+}: IRecipientChip) => {
   const [showFull, setShowFull] = useState(false)
 
   const chipLabel = () => {
@@ -30,7 +33,7 @@ const RecipientChip = (props: IRecipientChip) => {
       variant="filled"
       label={chipLabel()}
       {...getTagProps({ index })}
-      onDelete={() => handleDelete({ option, fieldId: id })}
+      onDelete={() => handleDelete(option)}
       onClick={() => setShowFull(!showFull)}
       title={option.emailAddress}
     />

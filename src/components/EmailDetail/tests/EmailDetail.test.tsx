@@ -67,7 +67,6 @@ describe('EmailDetail tests', () => {
     const initialUtilsSlice = {
       inSearch: false,
       isLoading: false,
-      isProcessing: false,
       serviceUnavailable: '',
       isSilentLoading: false,
       isSettingsOpen: false,
@@ -120,7 +119,6 @@ describe('EmailDetail tests', () => {
     const initialUtilsSlice = {
       inSearch: false,
       isLoading: false,
-      isProcessing: false,
       serviceUnavailable: '',
       isSilentLoading: false,
       isSettingsOpen: false,

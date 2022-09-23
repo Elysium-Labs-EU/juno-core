@@ -2,14 +2,14 @@ import * as S from './InlineThreadActionsStyles'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import discardDraft from '../EmailOptions/DiscardDraft'
-import { selectDraft } from '../../store/draftsSlice'
+import { selectDraftList } from '../../store/draftsSlice'
 import { QiDiscard } from '../../images/svgIcons/quillIcons'
 
 const ICON_SIZE = 16
 
 const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
   const dispatch = useAppDispatch()
-  const draftList = useAppSelector(selectDraft)
+  const draftList = useAppSelector(selectDraftList)
 
   const draftId =
     draftList.length > 0 &&
