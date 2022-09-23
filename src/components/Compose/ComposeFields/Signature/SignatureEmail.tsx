@@ -40,7 +40,7 @@ const SignatureEmail = ({
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
-        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        ? `<div data-juno=${ global.JUNO_SIGNATURE }>${ selectedSignature }</div>`
         : null,
     }
     updateComposeEmail(updateEventObject)
@@ -53,8 +53,6 @@ const SignatureEmail = ({
   const handleClose = () => {
     setAnchorEl(null)
   }
-
-  console.log(selectedSignature)
 
   return (
     <S.Wrapper>
