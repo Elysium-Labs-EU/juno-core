@@ -7,6 +7,7 @@ import LogoutOption, {
   handleLogout,
 } from '../MainHeader/Navigation/More/Options/LogoutOption'
 import { useAppSelector } from '../../store/hooks'
+import useCountDownTimer from '../../hooks/useCountDownTimer'
 
 export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '
@@ -28,7 +29,7 @@ const AnimatedMountUnmount = ({
 
 const Baseloader = () => {
   const serviceUnavailable = useAppSelector(selectServiceUnavailable)
-  const [countDown, setCountDown] = useState(5)
+  const { countDown } = useCountDownTimer({ startSeconds: 5 })
 
   useEffect(() => {
     let mounted = true
@@ -39,17 +40,6 @@ const Baseloader = () => {
       mounted = false
     }
   }, [countDown])
-
-  useEffect(() => {
-    let mounted = true
-    const timer = setTimeout(() => {
-      mounted && setCountDown((currState) => currState - 1)
-    }, 1000)
-    return () => {
-      mounted = false
-      clearTimeout(timer)
-    }
-  })
 
   return (
     <S.Wrapper data-testid="base-loader">
