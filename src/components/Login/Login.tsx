@@ -8,6 +8,7 @@ import * as GS from '../../styles/globalStyles'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import GoogleButton from './GoogleButton/GoogleButton'
 import userApi from '../../data/userApi'
+import useCountDownTimer from '../../hooks/useCountDownTimer'
 
 const TITLE = 'Login'
 const SUB_HEADER = 'To get started with Juno'
@@ -16,6 +17,24 @@ const ENTER_HINT = 'use Enter to start'
 const Login = () => {
   const dispatch = useAppDispatch()
   const [loginUrl, setLoginUrl] = useState<string | null>(null)
+  const { countDown } = useCountDownTimer({ startSeconds: 5 })
+
+  const fetchUrl = async () => {
+    const response = await userApi().authGoogle()
+    if (response?.status === 200) {
+      setLoginUrl(response.data)
+    }
+  }
+
+  useEffect(() => {
+    let mounted = true
+    if (mounted && countDown === 0 && !loginUrl) {
+      fetchUrl()
+    }
+    return () => {
+      mounted = false
+    }
+  }, [countDown, loginUrl])
 
   const signInWithGoogle = () => {
     if (loginUrl) {
@@ -26,12 +45,6 @@ const Login = () => {
   }
 
   useEffect(() => {
-    const fetchUrl = async () => {
-      const response = await userApi().authGoogle()
-      if (response?.status === 200) {
-        setLoginUrl(response.data)
-      }
-    }
     fetchUrl()
   }, [])
 
