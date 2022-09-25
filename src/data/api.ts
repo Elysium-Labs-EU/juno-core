@@ -24,7 +24,8 @@ export const fetchToken = () => {
   return null
 }
 export const instance = axios.create({
-  withCredentials: true,
+  withCredentials:
+    import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND !== 'true',
   baseURL: BASE_API_URL,
 })
 
