@@ -20,7 +20,8 @@ const Login = () => {
   const { countDown } = useCountDownTimer({ startSeconds: 5 })
 
   const fetchUrl = async () => {
-    const response = await userApi().authGoogle()
+    // A flag that can be set via the .env variable. If this is set, and witht the value of true, the auth mechanism will be changed.
+    const response = await userApi().authGoogle(import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true')
     if (response?.status === 200) {
       setLoginUrl(response.data)
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import * as S from './BaseLoaderStyles'
 import { selectServiceUnavailable } from '../../store/utilsSlice'

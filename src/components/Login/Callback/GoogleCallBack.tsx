@@ -20,15 +20,21 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const { code }: { code?: string } = qs.parse(window.location.search, {
+      const { code, state }: { code?: string, state?: string } = qs.parse(window.location.search, {
         ignoreQueryPrefix: true,
       })
       const body = {
         code,
+        state
       }
       const response = await userApi().authGoogleCallback(body)
+      // If the cloud backend is used with the local frontend, the authorization requires these additional values.
       if (response?.status === 200) {
-        handleUserTokens(response).setIdToken()
+        if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {
+          handleUserTokens(response).setCredentials()
+        } else {
+          handleUserTokens(response).setIdToken()
+        }
         dispatch(setIsAuthenticated(true))
         dispatch(push(RoutesConstants.TODO))
       } else {

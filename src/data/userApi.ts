@@ -21,17 +21,18 @@ interface UserPromise {
 }
 
 const userApi = () => ({
-  authGoogle: async () => {
+  authGoogle: async (noSession?: boolean) => {
     try {
-      const res: AxiosResponse<UserPromise> = await instance.get(
-        `/api/auth/oauth/google/`
+      const res: AxiosResponse<UserPromise> = await instance.post(
+        `/api/auth/oauth/google/`,
+        { noSession }
       )
       return res
     } catch (err: any) {
       return errorHandling(err)
     }
   },
-  authGoogleCallback: async (body: any) => {
+  authGoogleCallback: async (body: { code?: string; state?: string }) => {
     try {
       const res: AxiosResponse<UserPromise> = await instance.post(
         `/api/auth/oauth/google/callback/`,
