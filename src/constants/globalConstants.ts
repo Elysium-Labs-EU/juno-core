@@ -1,4 +1,5 @@
 // SYSTEM CODE
+export const ACCESS_TOKEN = 'accessToken'
 export const ACTIVE_MODAL_MAP = {
   feedback: 'feedback',
   help: 'help',
@@ -12,6 +13,7 @@ export const ARCHIVE_LABEL = 'ARCHIVE'
 export const CORE_STATUS_FOCUSED = 'isFocused'
 export const CORE_STATUS_SEARCHING = 'isSearching'
 export const CORE_STATUS_SORTING = 'isSorting'
+export const CREDENTIALS = 'credentials'
 export const DRAFT_LABEL = 'DRAFT'
 export const EMAIL_BODY_INVISIBLE = 'invisible'
 export const EMAIL_BODY_VISIBLE = 'visible'

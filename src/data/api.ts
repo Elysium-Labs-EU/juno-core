@@ -10,11 +10,18 @@ assertNonNullish(
 export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
+  if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {
+    const credentials = localStorage.getItem(global.CREDENTIALS)
+    if (credentials) {
+      return credentials
+    }
+    return null
+  }
   const token = localStorage.getItem(global.ID_TOKEN)
   if (token) {
     return token
   }
-  return ''
+  return null
 }
 export const instance = axios.create({
   withCredentials: true,
