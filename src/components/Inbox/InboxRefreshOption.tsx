@@ -21,7 +21,7 @@ const rotate = keyframes`
 `
 
 const rotatingIcon = css`
-  animation: ${rotate} 1s ease infinite;
+  animation: ${ rotate } 1s ease infinite;
 `
 
 interface IRotatingIcon {
@@ -29,7 +29,7 @@ interface IRotatingIcon {
 }
 
 const RotatingIcon = styled.div<IRotatingIcon>`
-  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
+  ${ ({ disableRefresh }) => (disableRefresh ? rotatingIcon : null) };
 `
 
 const refreshFeed = (dispatch: AppDispatch) => {
