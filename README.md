@@ -14,7 +14,7 @@ Juno is an Open Source React based Gmail application.
 3.  Create a file called `.env` in the root of the project
 4.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
 5.  Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
-6.  If you wish to work with our hosted cloud backend, so you don't have to manage the backend you have to set: `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-backend-service-dev.herokuapp.com`.
+6.  If you wish to work with our hosted cloud backend, so you don't have to manage the backend you have to set: `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-backend-service-dev.herokuapp.com`. And request to be added to the Google Test users via [Discord](https://discord.gg/peRDGMn9xa)
 7.  All the other values given as an example in `.env.example` are optional.
 8.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser
 
