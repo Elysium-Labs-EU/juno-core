@@ -742,6 +742,39 @@ export const QiJump = ({
     </svg>
   )
 }
+
+export const QiLinkOut = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M22 3h7v7m-1.5-5.5L20 12m-3-7H8a3 3 0 0 0-3 3v16a3 3 0 0 0 3 3h16a3 3 0 0 0 3-3v-9"
+      />
+    </svg>
+  )
+}
+
 export const QiMailUnsub = ({
   size = 0,
   color = 'currentColor',

@@ -20,12 +20,15 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const { code, state }: { code?: string, state?: string } = qs.parse(window.location.search, {
-        ignoreQueryPrefix: true,
-      })
+      const { code, state }: { code?: string; state?: string } = qs.parse(
+        window.location.search,
+        {
+          ignoreQueryPrefix: true,
+        }
+      )
       const body = {
         code,
-        state
+        state,
       }
       const response = await userApi().authGoogleCallback(body)
       // If the cloud backend is used with the local frontend, the authorization requires these additional values.
