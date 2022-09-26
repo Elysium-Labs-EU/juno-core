@@ -34,11 +34,17 @@ export const SubmitButton = styled.button`
 
 export const StyledLink = styled.a`
   align-items: center;
-  color: var(--color-grey-dark);
+  color: var(--color-black);
   display: flex;
   flex-direction: row;
   font-weight: 400;
   span {
     margin-left: 5px;
   }
+`
+
+export const SuccessMessage = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
 `
