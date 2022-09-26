@@ -10,9 +10,27 @@ export const Wrapper = styled.div`
   width: 100vw;
 `
 
+export const LoginHeader = styled.h1`
+  margin: 40px 0 0;
+  font-weight: 200;
+  user-select: none;
+  /* text-transform: capitalize; */
+  font-size: var(--h1);
+  font-family: var(--font-family) !important;
+  line-height: 1.3;
+  color: var(--color-black) !important;
+`
+
+export const AdditionalOptions = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+`
+
 export const LoginContainer = styled.div`
   padding: 20px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  box-shadow: var(--box-shadow-low);
   background-color: var(--color-white);
   border-radius: 5px;
   min-width: 300px;
