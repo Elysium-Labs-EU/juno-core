@@ -84,14 +84,14 @@ const Login = () => {
             label="Join Discord Community"
             suppressed
           />
-          {/* <CustomButton
+          <CustomButton
             onClick={() => setBetaFormOpen(true)}
             icon={<QiArrowRight />}
             title="Show beta form to request access"
             label="Request beta access"
             suppressed
           />
-          {betaFormOpen && <BetaAccesForm betaFormOpen={betaFormOpen} setBetaFormOpen={setBetaFormOpen} />} */}
+          {betaFormOpen && <BetaAccesForm betaFormOpen={betaFormOpen} setBetaFormOpen={setBetaFormOpen} />}
         </S.AdditionalOptions>
       </AnimatedMountUnmount>
     </S.Wrapper>

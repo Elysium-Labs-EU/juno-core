@@ -56,10 +56,10 @@ const BetaAccesForm = ({ betaFormOpen, setBetaFormOpen }: { betaFormOpen: boolea
                         </>
                     )}
                     {complete && (
-                        <div>
+                        <S.SuccessMessage>
                             <FiCheck size={20} />
                             <span>You will be contacted shortly</span>
-                        </div>
+                        </S.SuccessMessage>
                     )}
                 </S.StyledForm>
                 {error && (
