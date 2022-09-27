@@ -17,6 +17,7 @@
     "url": "https://github.com/Elysium-Labs-EU/juno-core/issues"
   },
   "dependencies": {
+    "@botpoison/browser": "^0.1.30",
     "@emotion/react": "11.10.0",
     "@emotion/styled": "11.10.0",
     "@formspark/use-formspark": "^0.1.39",

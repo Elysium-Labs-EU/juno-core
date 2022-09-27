@@ -84,15 +84,23 @@ const Login = () => {
             label="Join Discord Community"
             suppressed
           />
-          {import.meta.env.VITE_FORMSPARK_FORM_ID && <>
-            <CustomButton
-              onClick={() => setBetaFormOpen(true)}
-              icon={<QiArrowRight />}
-              title="Show beta form to request access"
-              label="Request beta access"
-              suppressed
-            />
-            {betaFormOpen && <BetaAccesForm betaFormOpen={betaFormOpen} setBetaFormOpen={setBetaFormOpen} />}</>}
+          {import.meta.env.VITE_FORMSPARK_FORM_ID && (
+            <>
+              <CustomButton
+                onClick={() => setBetaFormOpen(true)}
+                icon={<QiArrowRight />}
+                title="Show beta form to request access"
+                label="Request beta access"
+                suppressed
+              />
+              {betaFormOpen && (
+                <BetaAccesForm
+                  betaFormOpen={betaFormOpen}
+                  setBetaFormOpen={setBetaFormOpen}
+                />
+              )}
+            </>
+          )}
         </S.AdditionalOptions>
       </AnimatedMountUnmount>
     </S.Wrapper>

@@ -18,10 +18,12 @@ const DIALOG_HEADER_INTRODUCTION = 'How it works'
 const DIALOG_CONTENT_INTRODUCTION_1 =
   'Your homepage is your To Do list of emails. You can populate it by marking emails from your Inbox as To Do.'
 const DIALOG_CONTENT_INTRODUCTION_2 =
-  'On top of the To Do, there are two buttons you should give it a shot. Also, you can navigate between pages via the top-right menu.'
+  'On top of the To Do, there are two buttons, one for going through all your To-Do and one for going through all your Inbox emails. You should give it a shot. Also, you can navigate between pages via the top-right menu.'
 const DIALOG_HEADER_PRIVACY = 'Privacy'
 const DIALOG_CONTENT_PRIVACY =
   'Juno does not store any of your personal information, outside an authorization token. It only serves as an interaction layer between you and your Gmail!'
+const DIALOG_CONTENT_PRIVACY_1 =
+  'We have Sentry (bug/error tracking software) running by default, this software helps us understand what is breaking when it does. You can opt out of this by switching the setting in Settings.'
 const CONFIRM_BUTTON = "Let's go"
 
 const Introduction = () => {
@@ -49,6 +51,7 @@ const Introduction = () => {
           <p>{DIALOG_CONTENT_INTRODUCTION_2}</p>
           <S.DialogSubHeader>{DIALOG_HEADER_PRIVACY}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_PRIVACY}</p>
+          <p>{DIALOG_CONTENT_PRIVACY_1}</p>
         </S.InnerContent>
         <S.ButtonContainer>
           <CustomButton

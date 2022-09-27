@@ -14,6 +14,7 @@ import GoogleCallback from './components/Login/Callback/GoogleCallBack'
 import PageNotFound from './components/PageNotFound/PageNotFound'
 import Archive from './components/Archive/Archive'
 import { selectIsFlexibleFlowActive } from './store/utilsSlice'
+import useSentry from './hooks/useSentry'
 
 const ProtectedRoute = ({
   children,
@@ -44,6 +45,7 @@ const ProtectedRouteTemplate = ({ children }: { children: JSX.Element }) => {
 
 const RoutesComponent = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+  useSentry(import.meta.env.VITE_SENTRY_DSN)
 
   return (
     <Routes>

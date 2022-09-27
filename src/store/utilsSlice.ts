@@ -28,6 +28,7 @@ interface IUtilsState {
   isFlexibleFlowActive: boolean
   isLoading: boolean
   isProcessing: boolean
+  isSentryActive: boolean
   isSilentLoading: boolean
   serviceUnavailable: string | null
   settingsLabelId: string | null
@@ -42,6 +43,7 @@ export const initialState: IUtilsState = Object.freeze({
   isFlexibleFlowActive: false,
   isLoading: false,
   isProcessing: false,
+  isSentryActive: true,
   isSilentLoading: false,
   serviceUnavailable: null,
   settingsLabelId: null,
@@ -71,6 +73,9 @@ export const utilsSlice = createSlice({
     },
     setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
       state.isProcessing = payload
+    },
+    setIsSentryActive: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSentryActive = payload
     },
     setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isSilentLoading = payload
@@ -152,6 +157,7 @@ export const {
   setIsLoading,
   setIsProcessing,
   setIsSilentLoading,
+  setIsSentryActive,
   setServiceUnavailable,
   setSettings,
   setSettingsLabelId,
@@ -273,23 +279,25 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   return dispatch(navigateBack())
 }
 
-export const selectIsAvatarVisible = (state: RootState) =>
-  state.utils.isAvatarVisible
-export const selectInSearch = (state: RootState) => state.utils.inSearch
-export const selectIsLoading = (state: RootState) => state.utils.isLoading
-export const selectServiceUnavailable = (state: RootState) =>
-  state.utils.serviceUnavailable
-export const selectIsSilentLoading = (state: RootState) =>
-  state.utils.isSilentLoading
-export const selectEmailListSize = (state: RootState) =>
-  state.utils.emailFetchSize
-export const selectSettingsLabelId = (state: RootState) =>
-  state.utils.settingsLabelId
-export const selectIsFlexibleFlowActive = (state: RootState) =>
-  state.utils.isFlexibleFlowActive
+export const selectActiveModal = (state: RootState) => state.utils.activeModal
 export const selectAlternateActions = (state: RootState) =>
   state.utils.alternateActions
+export const selectEmailListSize = (state: RootState) =>
+  state.utils.emailFetchSize
+export const selectInSearch = (state: RootState) => state.utils.inSearch
+export const selectIsAvatarVisible = (state: RootState) =>
+  state.utils.isAvatarVisible
+export const selectIsFlexibleFlowActive = (state: RootState) =>
+  state.utils.isFlexibleFlowActive
+export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
-export const selectActiveModal = (state: RootState) => state.utils.activeModal
+export const selectIsSentryActive = (state: RootState) =>
+  state.utils.isSentryActive
+export const selectIsSilentLoading = (state: RootState) =>
+  state.utils.isSilentLoading
+export const selectServiceUnavailable = (state: RootState) =>
+  state.utils.serviceUnavailable
+export const selectSettingsLabelId = (state: RootState) =>
+  state.utils.settingsLabelId
 
 export default utilsSlice.reducer

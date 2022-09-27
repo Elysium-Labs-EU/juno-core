@@ -32,6 +32,14 @@ export const SubmitButton = styled.button`
   }
 `
 
+export const LoadingIconContainer = styled.div`
+  display: flex;
+  place-content: center;
+  span {
+    margin-right: 10px;
+  }
+`
+
 export const StyledLink = styled.a`
   align-items: center;
   color: var(--color-black);
