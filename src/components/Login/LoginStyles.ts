@@ -1,24 +1,24 @@
 import styled from 'styled-components'
+import { breakPoint } from '../../constants/themeConstants'
 
 export const Wrapper = styled.div`
+  align-content: center;
   display: flex;
   flex-flow: column;
   flex-wrap: wrap;
-  justify-content: center;
-  align-content: center;
   height: 100vh;
+  justify-content: center;
   width: 100vw;
 `
 
 export const LoginHeader = styled.h1`
-  margin: 40px 0 0;
-  font-weight: 200;
-  user-select: none;
-  /* text-transform: capitalize; */
-  font-size: var(--h1);
-  font-family: var(--font-family) !important;
-  line-height: 1.3;
   color: var(--color-black) !important;
+  font-family: var(--font-family) !important;
+  font-size: var(--h1);
+  font-weight: 200;
+  line-height: 1.3;
+  margin: 40px 0 0;
+  user-select: none;
 `
 
 export const AdditionalOptions = styled.div`
@@ -29,17 +29,19 @@ export const AdditionalOptions = styled.div`
 `
 
 export const LoginContainer = styled.div`
-  padding: 20px;
-  box-shadow: var(--box-shadow-low);
   background-color: var(--color-white);
-  border-radius: 5px;
-  min-width: 300px;
+  border-radius: var(--radius-m);
+  box-shadow: var(--box-shadow-low);
+  padding: 10px;
+  @media only screen and (min-width: ${breakPoint.md}) {
+    padding: 20px;
+  }
 `
 
 export const Inner = styled.div`
+  align-items: center;
   display: flex;
   flex-flow: column;
-  align-items: center;
   padding: 40px 20px;
 `
 
