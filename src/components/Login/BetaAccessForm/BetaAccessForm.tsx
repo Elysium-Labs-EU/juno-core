@@ -37,7 +37,6 @@ const BetaAccesForm = ({
   const [submit, submitting] = useFormspark({
     formId: FORMSPARK_FORM_ID,
   })
-  const submitting2 = true
   const [complete, setComplete] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState(false)
