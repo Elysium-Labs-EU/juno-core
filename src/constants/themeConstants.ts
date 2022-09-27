@@ -1,6 +1,5 @@
 export const colorWhite = '#ffffff'
 export const colorOffWhite = '#F6F6F6'
-// export const colorOffWhite = '#f0f0f0'
 export const colorSlightWhite = '#f7f7f7'
 export const colorUltraLightGrey = '#d9d9d9'
 export const colorLightGrey = '#aeaeb4'
@@ -24,3 +23,10 @@ export const h5FontSize = '1.25rem'
 export const smallFontSize = '0.8rem'
 export const fontFamily =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
+export const breakPoint = {
+  sm: '640px',
+  md: '768px',
+  lg: '1024px',
+  xl: '1280px',
+  twoXL: '1536px',
+}
