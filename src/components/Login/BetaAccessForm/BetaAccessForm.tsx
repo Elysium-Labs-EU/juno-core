@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'production') {
   )
 }
 const botpoison = new Botpoison({
-  publicKey: import.meta.env.VITE_BOTPOISON_PUBLIC_KEY,
+  publicKey: import.meta.env.VITE_BOTPOISON_PUBLIC_KEY ?? '',
 })
 
 const FORMSPARK_FORM_ID = import.meta.env.VITE_FORMSPARK_FORM_ID
