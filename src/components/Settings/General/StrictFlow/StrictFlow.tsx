@@ -25,7 +25,7 @@ const StrictFlow = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const location = useLocation()
 
-  const switchWorkFlow = (event: any) => {
+  const switchWorkFlow = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) {
       localStorage.setItem('isFlexibleFlowActive', 'false')
       dispatch(setFlexibleFlow(false))
@@ -55,7 +55,7 @@ const StrictFlow = () => {
         label={SWITCH_LABEL}
         control={
           <Switch
-            onClick={switchWorkFlow}
+            onChange={switchWorkFlow}
             checked={isFlexibleFlowActive}
             color="secondary"
           />
