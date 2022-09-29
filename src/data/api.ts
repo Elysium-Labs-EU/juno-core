@@ -5,7 +5,7 @@ import validateLocalSetup from '../utils/validateLocalSetup'
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
-  'Unable to find API key in environment'
+  'Unable to find backend URL in environment'
 )
 
 validateLocalSetup(
