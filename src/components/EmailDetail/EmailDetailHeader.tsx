@@ -15,16 +15,20 @@ import EmailPosition from './EmailPosition/EmailPosition'
 import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import { edgeLoadingNextPage } from '../../utils/loadNextPage'
 import { selectCoreStatus, selectViewIndex } from '../../store/emailDetailSlice'
+import { selectSearchList } from '../../store/emailListSlice'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
+  setInSearch
 } from '../../store/utilsSlice'
+import CustomButton from '../Elements/Buttons/CustomButton'
 
 const EmailDetailHeader = ({
   activeEmailList,
 }: {
   activeEmailList: IEmailListObject
 }) => {
+  const searchList = useAppSelector(selectSearchList)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const labelIds = useAppSelector(selectLabelIds)
@@ -83,6 +87,17 @@ const EmailDetailHeader = ({
           <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
           </S.HeaderCenter>
+          <S.SearchQuery>
+            {labelIds.includes(global.SEARCH_LABEL) && (
+                  <CustomButton
+                    label={`Search Query: "${searchList?.q}"`}
+                    onClick={() => dispatch(setInSearch(true))}
+                    suppressed
+                    title="searchQuery"
+                    icon={null}
+                  />
+                )}
+          </S.SearchQuery>
           <S.BackButtonWithNavgationContainer>
             <BackButton />
             <Navigation />

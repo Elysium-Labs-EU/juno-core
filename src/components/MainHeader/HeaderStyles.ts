@@ -65,3 +65,9 @@ export const PageTitle = styled.h2`
   line-height: 1.3;
   color: var(--color-black) !important;
 `
+
+export const SearchQuery = styled.div`
+  display: flex;
+  width: 100%;
+  place-content: center;
+`
