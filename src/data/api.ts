@@ -1,10 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import * as global from '../constants/globalConstants'
 import assertNonNullish from '../utils/assertNonNullish'
+import validateLocalSetup from '../utils/validateLocalSetup'
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
   'Unable to find API key in environment'
+)
+
+validateLocalSetup(
+  import.meta.env.VITE_BACKEND_URL,
+  import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND
 )
 
 export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
@@ -25,7 +31,7 @@ export const fetchToken = () => {
 }
 export const instance = axios.create({
   withCredentials:
-    import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND !== 'true',
+    import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'false',
   baseURL: BASE_API_URL,
 })
 
