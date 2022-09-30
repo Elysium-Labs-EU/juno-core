@@ -8,7 +8,7 @@ Juno is an Open Source React based Gmail application.
 
 ## Getting Started
 
-1.  Download the code to your local machine abd run `yarn` to install all packages
+1.  Download the code to your local machine - and run `yarn` to install all packages
 2.  Create a file called `.env` in the root of the project
 3.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
 4.  Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`- If you wish to work with our hosted cloud backend, so you don't have to manage the backend you have to set: `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-backend-service-dev.herokuapp.com`. And request to be added to the Google Test users via [Discord](https://discord.gg/peRDGMn9xa)
