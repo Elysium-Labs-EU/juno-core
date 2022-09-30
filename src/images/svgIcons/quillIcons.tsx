@@ -477,6 +477,45 @@ export const QiEscape = ({
     </svg>
   )
 }
+export const QiEye = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M29 16c0 3-5.82 9-13 9S3 19 3 16s5.82-9 13-9 13 6 13 9z"
+      />
+      <circle
+        cx={16}
+        cy={16}
+        r={5}
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+      />
+    </svg>
+  )
+}
 export const QiFolderArchive = ({
   size = 0,
   color = 'currentColor',
