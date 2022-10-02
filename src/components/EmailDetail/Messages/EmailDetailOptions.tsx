@@ -7,7 +7,7 @@ import {
   selectIsForwarding,
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../store/hooks'
+import { useAppSelector,useAppDispatch } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { selectAlternateActions } from '../../../store/utilsSlice'
@@ -30,10 +30,12 @@ interface IEmailDetailOptions {
 
 const ICON_SIZE = 16
 
+
 const EmailDetailOptions = ({
   threadDetail,
   unsubscribeLink,
 }: IEmailDetailOptions) => {
+  const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -103,6 +105,7 @@ const EmailDetailOptions = ({
             <>
               <S.Spacer />
               <UnsubscribeOption
+                dispatch={dispatch}
                 unsubscribeLink={unsubscribeLink}
                 iconSize={ICON_SIZE}
               />
