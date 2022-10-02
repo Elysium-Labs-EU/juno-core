@@ -21,10 +21,12 @@ const MappedMessages = ({
   threadDetail,
   setUnsubscribeLink,
   indexMessageListener,
+  setShouldRefreshDetail,
 }: {
   threadDetail: IEmailListThreadItem
   setUnsubscribeLink: (value: string | null) => void
   indexMessageListener: (value: number) => void
+  setShouldRefreshDetail: (value: boolean) => void
 }) => {
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
@@ -61,8 +63,12 @@ const MappedMessages = ({
     }
   }, [isReplying, isForwarding])
 
+  const removedTrashMessages = threadDetail.messages.filter(
+    (m) => !m.labelIds.includes(global.TRASH_LABEL)
+  )
+
   const reversedMessagesOrder = useMemo(
-    () => threadDetail.messages.slice(0).reverse(),
+    () => removedTrashMessages.slice(0).reverse(),
     [threadDetail]
   )
 
@@ -84,6 +90,7 @@ const MappedMessages = ({
               handleClickListener={handleClickMessage}
               messageIndex={index}
               setUnsubscribeLink={setUnsubscribeLink}
+              setShouldRefreshDetail={setShouldRefreshDetail}
             />
           )}
         </div>
@@ -100,6 +107,7 @@ interface IMessagesOverview {
   isReplying: boolean
   isForwarding: boolean
   labelIds: string[]
+  setShouldRefreshDetail: (value: boolean) => void
 }
 
 const MessagesOverview = ({
@@ -108,6 +116,7 @@ const MessagesOverview = ({
   isReplying,
   isForwarding,
   labelIds,
+  setShouldRefreshDetail,
 }: IMessagesOverview) => {
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
   const [localThreadDetail, setLocalThreadDetail] =
@@ -162,6 +171,7 @@ const MessagesOverview = ({
                   threadDetail={localThreadDetail}
                   setUnsubscribeLink={setUnsubscribeLink}
                   indexMessageListener={indexMessageListener}
+                  setShouldRefreshDetail={setShouldRefreshDetail}
                 />
               ) : (
                 <ES.LoadingErrorWrapper>

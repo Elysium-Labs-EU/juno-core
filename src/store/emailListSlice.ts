@@ -18,6 +18,7 @@ import {
   TBaseEmailList,
 } from './storeTypes/emailListTypes'
 import {
+  UpdateRequest,
   UpdateRequestParamsBatch,
   UpdateRequestParamsSingle,
 } from './storeTypes/metaEmailListTypes'
@@ -41,6 +42,7 @@ import handleHistoryObject, {
 } from '../utils/handleHistoryObject'
 import handleSessionStorage from '../utils/handleSessionStorage'
 import { onlyLegalLabelObjects } from '../utils/onlyLegalLabels'
+import messageApi from '../data/messageApi'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
@@ -297,14 +299,18 @@ export const emailListSlice = createSlice({
      * @param {payload}
      * @returns {void} returns an updated message array inside an thread inside an emailListItem
      */
-    listRemoveItemMessage: (state, { payload }) => {
-      const {
-        threadId,
-        messageId,
+    listRemoveItemMessage: (
+      state,
+      {
+        payload,
       }: {
-        threadId: string
-        messageId: string
-      } = payload
+        payload: {
+          threadId: string
+          messageId: string
+        }
+      }
+    ) => {
+      const { threadId, messageId } = payload
 
       const filteredMessages = () => {
         const relevantThreads =
@@ -731,6 +737,51 @@ export const updateEmailLabelBatch = (
     }
   }
 }
+
+export const updateMessageLabel =
+  ({
+    threadId,
+    messageId,
+    request,
+    request: { removeLabelIds },
+  }: {
+    messageId: string
+    threadId: string
+    request: UpdateRequest
+  }): AppThunk =>
+  async (dispatch) => {
+    if (
+      (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
+      request.delete
+    ) {
+      dispatch(
+        listRemoveItemMessage({
+          messageId,
+          threadId,
+        })
+      )
+    }
+
+    if (request.delete) {
+      try {
+        await messageApi().thrashMessage({ messageId })
+      } catch {
+        dispatch(setServiceUnavailable('Error updating label.'))
+      }
+    }
+
+    if (!request.delete) {
+      try {
+        await messageApi().updateMessage({
+          messageId,
+          threadId,
+          request,
+        })
+      } catch {
+        dispatch(setServiceUnavailable('Error updating label.'))
+      }
+    }
+  }
 
 /**
  * @function refreshEmailFeed
