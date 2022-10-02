@@ -9,7 +9,9 @@ import { IContact } from '../store/storeTypes/contactsTypes'
 const convertToGmailEmail = (data: IContact[]) => {
   if (data.length > 0 && typeof data !== 'string') {
     const convertedData = data
-      .map((item) => `${item.name}<${item.emailAddress}>`)
+      .map(
+        (item) => `${item?.name ?? item?.emailAddress}<${item?.emailAddress}>`
+      )
       .toString()
 
     return convertedData

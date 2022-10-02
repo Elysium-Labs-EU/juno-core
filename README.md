@@ -1,6 +1,5 @@
 # Juno - [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8cf13c07c4294ab9acad70f593c88259)](https://www.codacy.com/gh/Elysium-Labs-EU/juno-core/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Elysium-Labs-EU/juno-core&utm_campaign=Badge_Grade) [![CodeQL](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Elysium-Labs-EU/react-gmail-core/actions/workflows/codeql-analysis.yml) [![CircleCI](https://circleci.com/gh/Elysium-Labs-EU/juno-core/tree/main.svg?style=svg)](https://circleci.com/gh/Elysium-Labs-EU/juno-core/tree/main) [![Maintainability](https://api.codeclimate.com/v1/badges/c56ab6903c629b68bd70/maintainability)](https://codeclimate.com/github/Elysium-Labs-EU/juno-core/maintainability) [![discord](https://img.shields.io/badge/Discord-Community-blueviolet)](https://discord.gg/peRDGMn9xa) [![Juno Core](https://img.shields.io/endpoint?url=https://dashboard.cypress.io/badge/simple/g45j5p&style=flat&logo=cypress)](https://dashboard.cypress.io/projects/g45j5p/runs)
 
-
 Juno is an Open Source React based Gmail application.
 
 - A minimalistic design for less cognitive load, so you can use your brain for the needed work.
@@ -9,14 +8,12 @@ Juno is an Open Source React based Gmail application.
 
 ## Getting Started
 
-1.  Download the code to your local machine
-2.  Run `yarn` to install all packages
-3.  Create a file called `.env` in the root of the project
-4.  Set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
-5.  Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`
-6.  If you wish to work with our hosted cloud backend, so you don't have to manage the backend you have to set: `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-backend-service-dev.herokuapp.com`. And request to be added to the Google Test users via [Discord](https://discord.gg/peRDGMn9xa)
-7.  All the other values given as an example in `.env.example` are optional.
-8.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser
+1.  Download the code to your local machine - and run `yarn` to install all packages
+2.  Create a file called `.env` in the root of the project
+3.  If you want to run the backend on your local - set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md), else continue to the next step.
+4.  Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file - the current default is `http://localhost:5001`- If you wish to work with our hosted cloud backend, so you don't have to manage the backend you have to set: `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-backend-service-dev.herokuapp.com`. And request to be added to the Google Test users via [Discord](https://discord.gg/peRDGMn9xa)
+5.  All the other values given as an example in `.env.example` are optional.
+6.  Run the app via `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in the browser
 
 ## Contributing
 
