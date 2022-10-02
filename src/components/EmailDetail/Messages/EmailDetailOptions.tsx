@@ -7,7 +7,7 @@ import {
   selectIsForwarding,
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
-import { useAppSelector,useAppDispatch } from '../../../store/hooks'
+import { useAppSelector, useAppDispatch } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { selectAlternateActions } from '../../../store/utilsSlice'
@@ -29,7 +29,6 @@ interface IEmailDetailOptions {
 }
 
 const ICON_SIZE = 16
-
 
 const EmailDetailOptions = ({
   threadDetail,
