@@ -39,16 +39,18 @@ interface IReadMessage {
   handleClickListener: ({ mIndex }: { mIndex: number }) => void
   message: IEmailMessage
   messageIndex: number
-  setUnsubscribeLink: (value: string | null) => void
   threadDetail: IEmailListThreadItem
+  setUnsubscribeLink: (value: string | null) => void
+  setShouldRefreshDetail: (value: boolean) => void
 }
 
 const ReadUnreadMessage = ({
   handleClickListener,
   message,
   messageIndex,
-  setUnsubscribeLink,
   threadDetail,
+  setUnsubscribeLink,
+  setShouldRefreshDetail,
 }: IReadMessage) => {
   const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
@@ -247,6 +249,8 @@ const ReadUnreadMessage = ({
                   <SpecificEmailOptions
                     messageIndex={messageIndex}
                     handleClickListener={handleClickListener}
+                    threadDetail={threadDetail}
+                    setShouldRefreshDetail={setShouldRefreshDetail}
                   />
                 </Popper>
               </S.TimeAttachmentContainer>

@@ -19,7 +19,7 @@ import { selectSearchList } from '../../store/emailListSlice'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
-  setInSearch
+  setInSearch,
 } from '../../store/utilsSlice'
 import CustomButton from '../Elements/Buttons/CustomButton'
 
@@ -89,14 +89,14 @@ const EmailDetailHeader = ({
           </S.HeaderCenter>
           <S.SearchQuery>
             {labelIds.includes(global.SEARCH_LABEL) && (
-                  <CustomButton
-                    label={`Search Query: "${searchList?.q}"`}
-                    onClick={() => dispatch(setInSearch(true))}
-                    suppressed
-                    title="searchQuery"
-                    icon={null}
-                  />
-                )}
+              <CustomButton
+                label={`Search Query: "${searchList?.q}"`}
+                onClick={() => dispatch(setInSearch(true))}
+                suppressed
+                title="searchQuery"
+                icon={null}
+              />
+            )}
           </S.SearchQuery>
           <S.BackButtonWithNavgationContainer>
             <BackButton />

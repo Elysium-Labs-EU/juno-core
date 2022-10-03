@@ -38,6 +38,7 @@ export const SEARCH_LABEL = 'SEARCH'
 export const SENT_LABEL = 'SENT'
 export const SPAM_LABEL = 'SPAM'
 export const UNREAD_LABEL = 'UNREAD'
+export const TRASH_LABEL = 'TRASH'
 
 // DISPLAY
 export const BUTTON_BACK = 'Back'
