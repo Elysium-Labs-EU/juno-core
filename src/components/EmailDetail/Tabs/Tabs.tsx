@@ -7,7 +7,6 @@ import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import { selectViewIndex } from '../../../store/emailDetailSlice'
 import MessagesTab from './MessagesTab'
 import FilesTab from './FilesTab'
-import filterTrashMessages from '../../../utils/filterTrashMessages'
 
 interface ITabItem {
   name: string
@@ -40,12 +39,12 @@ const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
         <MessagesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(activeEmailList.threads[viewIndex])}
+          activeThread={activeEmailList.threads[viewIndex]}
         />
         <FilesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(activeEmailList.threads[viewIndex])}
+          activeThread={activeEmailList.threads[viewIndex]}
         />
       </S.ItemsContainer>
     </S.TabContainer>

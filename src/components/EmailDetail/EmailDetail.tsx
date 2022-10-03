@@ -32,7 +32,6 @@ import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import Baseloader from '../BaseLoader/BaseLoader'
 import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
 import useFetchDraftList from '../../hooks/useFetchDraftList'
-import filterTrashMessages from '../../utils/filterTrashMessages'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -166,9 +165,7 @@ const EmailDetail = () => {
               viewIndex > -1 && (
                 <>
                   <MessagesOverview
-                    threadDetail={filterTrashMessages(
-                      activeEmailList.threads[viewIndex]
-                    )}
+                    threadDetail={activeEmailList.threads[viewIndex]}
                     isLoading={isLoading}
                     isReplying={isReplying}
                     isForwarding={isForwarding}
@@ -186,9 +183,7 @@ const EmailDetail = () => {
             {overviewId === local.FILES &&
               activeEmailList.threads.length > 0 && (
                 <FilesOverview
-                  threadDetail={filterTrashMessages(
-                    activeEmailList.threads[viewIndex]
-                  )}
+                  threadDetail={activeEmailList.threads[viewIndex]}
                   isLoading={isLoading}
                 />
               )}
