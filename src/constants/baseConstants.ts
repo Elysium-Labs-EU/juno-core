@@ -7,6 +7,7 @@ export const BASE_ARRAY = [
   global.SPAM_LABEL,
   global.DRAFT_LABEL,
   global.SENT_LABEL,
+  global.TRASH_LABEL,
 ]
 // 'Juno/Reminder',
 

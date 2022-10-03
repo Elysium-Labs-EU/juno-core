@@ -3,15 +3,13 @@ import {
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+import { selectLabelIds } from '../../../store/labelsSlice'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import * as GS from '../../../styles/globalStyles'
-import emailLabels from '../../../utils/emailLabels'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
 import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import * as S from './SpecificEmailOptionsStyles'
-import * as global from '../../../constants/globalConstants'
 import { updateMessageLabel } from '../../../store/emailListSlice'
 import thrashMail from '../../EmailOptions/ThrashMail'
 
@@ -28,29 +26,11 @@ const SpecificEmailOptions = ({
 }) => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
-  const storageLabels = useAppSelector(selectStorageLabels)
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
-  const staticEmailLabels = emailLabels(threadDetail, storageLabels)
   const activeMessage = threadDetail.messages[messageIndex]
 
-  const request = {
-    removeLabelIds: [
-      ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
-    ],
-  }
-
-  const archiveMessage = () => {
-    dispatch(
-      updateMessageLabel({
-        threadId: threadDetail.id,
-        messageId: activeMessage.id,
-        request,
-      })
-    )
-  }
-
-  const deleteMessage = () => {
+  const thrashMessage = () => {
     if (threadDetail.messages.length > 1) {
       dispatch(
         updateMessageLabel({
@@ -94,21 +74,11 @@ const SpecificEmailOptions = ({
         <CustomButton
           label="Delete this message"
           onClick={() => {
-            deleteMessage()
+            thrashMessage()
             forceRefreshEmailDetail()
           }}
           title="Delete this message"
         />
-        {staticEmailLabels.length > 0 && (
-          <CustomButton
-            label="Archive this message"
-            onClick={() => {
-              archiveMessage()
-              forceRefreshEmailDetail()
-            }}
-            title="Archive this message"
-          />
-        )}
       </S.Inner>
     </GS.MenuPopper>
   )

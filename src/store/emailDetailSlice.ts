@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IEmailDetailState } from './storeTypes/emailDetailTypes'
 import type { RootState } from './store'
 import threadApi from '../data/threadApi'
-import filterTrashMessages from '../utils/filterTrashMessages'
 
 export const fetchEmailDetail = createAsyncThunk(
   'emailDetail/fetchEmailDetail',
@@ -16,9 +15,8 @@ export const fetchEmailDetail = createAsyncThunk(
     { signal }
   ) => {
     const response = await threadApi({ signal }).getThreadDetail(threadId)
-    const filteredResponse = filterTrashMessages(response)
     // Convert the output to facilite the current code to update and email in the emaillist.
-    return { response: { threads: [filteredResponse] }, labels: labelIds, q }
+    return { response: { threads: [response] }, labels: labelIds, q }
   },
   {
     condition: (arg, { getState }: { getState: any }) => {

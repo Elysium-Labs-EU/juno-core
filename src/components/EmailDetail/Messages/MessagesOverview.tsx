@@ -63,12 +63,8 @@ const MappedMessages = ({
     }
   }, [isReplying, isForwarding])
 
-  const removedTrashMessages = threadDetail.messages.filter(
-    (m) => !m.labelIds.includes(global.TRASH_LABEL)
-  )
-
   const reversedMessagesOrder = useMemo(
-    () => removedTrashMessages.slice(0).reverse(),
+    () => threadDetail.messages.slice(0).reverse(),
     [threadDetail]
   )
 

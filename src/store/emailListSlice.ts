@@ -628,19 +628,12 @@ export const updateEmailLabel =
         // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
         if (!request.delete) {
           try {
-            let response = null
             if (threadId) {
-              response = await threadApi({}).updateThread({
+              await threadApi({}).updateThread({
                 threadId,
                 request,
               })
             }
-            // if (messageId) {
-            //   response = await messageApi().updateMessage({
-            //     messageId,
-            //     request,
-            //   })
-            // }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }
@@ -653,9 +646,6 @@ export const updateEmailLabel =
                 threadId,
               })
             }
-            // if (messageId) {
-            //   await messageApi().thrashMessage({ messageId })
-            // }
           } catch (err) {
             dispatch(setServiceUnavailable('Error updating label.'))
           }
@@ -743,40 +733,21 @@ export const updateMessageLabel =
     threadId,
     messageId,
     request,
-    request: { removeLabelIds },
   }: {
     messageId: string
     threadId: string
     request: UpdateRequest
   }): AppThunk =>
   async (dispatch) => {
-    if (
-      (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
-      request.delete
-    ) {
+    if (request.delete) {
       dispatch(
         listRemoveItemMessage({
           messageId,
           threadId,
         })
       )
-    }
-
-    if (request.delete) {
       try {
         await messageApi().thrashMessage({ messageId })
-      } catch {
-        dispatch(setServiceUnavailable('Error updating label.'))
-      }
-    }
-
-    if (!request.delete) {
-      try {
-        await messageApi().updateMessage({
-          messageId,
-          threadId,
-          request,
-        })
       } catch {
         dispatch(setServiceUnavailable('Error updating label.'))
       }
