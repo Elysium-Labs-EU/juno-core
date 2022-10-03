@@ -69,6 +69,7 @@ export default function useMultiKeyPress(
      * ensures that there is only one version of it on the array.
      */
     const keyDownHandler = (event: KeyboardEvent): void => {
+      if (event.key === undefined) return
       mounted &&
         setKeyPressed((prevState) => [
           ...new Set([...prevState, event.key.toUpperCase()]),
