@@ -8,12 +8,12 @@ export default function useFetchEmailDetail({
   threadId,
   activeEmailList,
   forceRefresh,
-  setRefreshEmailDetail,
+  setShouldRefreshDetail,
 }: {
   threadId: string | undefined
   activeEmailList: IEmailListObject | undefined
   forceRefresh: boolean
-  setRefreshEmailDetail: (value: boolean) => void
+  setShouldRefreshDetail: (value: boolean) => void
 }) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
@@ -31,7 +31,7 @@ export default function useFetchEmailDetail({
           Object.prototype.hasOwnProperty.call(message.payload, 'body')
         )
         if (!someThreadHasBody || forceRefresh) {
-          setRefreshEmailDetail(false)
+          setShouldRefreshDetail(false)
           mounted &&
             dispatch(
               fetchEmailDetail({

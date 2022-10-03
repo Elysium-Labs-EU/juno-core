@@ -178,7 +178,7 @@ const Search = () => {
   const fetchSearchThreads = useCallback(
     async (searchBody: { q: string; nextPageToken?: string }) => {
       const searchBodyWithNextPageToken = {
-        q: searchBody.q,
+        q: `${searchBody.q} in:all -label:spam`,
         nextPageToken: searchBody?.nextPageToken ?? null,
       }
       try {
@@ -232,6 +232,7 @@ const Search = () => {
   }
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event?.code === undefined) return
     if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
