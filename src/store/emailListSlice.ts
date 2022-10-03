@@ -740,18 +740,19 @@ export const updateMessageLabel =
   }): AppThunk =>
   async (dispatch) => {
     if (request.delete) {
-      dispatch(
-        listRemoveItemMessage({
-          messageId,
-          threadId,
-        })
-      )
       try {
         await messageApi().thrashMessage({ messageId })
       } catch {
         dispatch(setServiceUnavailable('Error updating label.'))
       }
     }
+
+    dispatch(
+      listRemoveItemMessage({
+        messageId,
+        threadId,
+      })
+    )
   }
 
 /**

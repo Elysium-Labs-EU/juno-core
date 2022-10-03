@@ -44,8 +44,6 @@ const SpecificEmailOptions = ({
     }
   }
 
-  const forceRefreshEmailDetail = () => setShouldRefreshDetail(true)
-
   return (
     <GS.MenuPopper>
       <S.Inner>
@@ -74,8 +72,8 @@ const SpecificEmailOptions = ({
         <CustomButton
           label="Delete this message"
           onClick={() => {
+            setShouldRefreshDetail(true)
             thrashMessage()
-            forceRefreshEmailDetail()
           }}
           title="Delete this message"
         />
