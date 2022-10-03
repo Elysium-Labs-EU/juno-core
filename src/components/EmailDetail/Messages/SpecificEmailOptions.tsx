@@ -12,6 +12,7 @@ import isReplyingListener from '../../EmailOptions/IsReplyingListener'
 import * as S from './SpecificEmailOptionsStyles'
 import { updateMessageLabel } from '../../../store/emailListSlice'
 import thrashMail from '../../EmailOptions/ThrashMail'
+import * as global from '../../../constants/globalConstants'
 
 const SpecificEmailOptions = ({
   messageIndex,
@@ -29,6 +30,7 @@ const SpecificEmailOptions = ({
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
   const activeMessage = threadDetail.messages[messageIndex]
+  const isTrash = activeMessage.labelIds.includes(global.TRASH_LABEL)
 
   const thrashMessage = () => {
     if (threadDetail.messages.length > 1) {
@@ -69,14 +71,16 @@ const SpecificEmailOptions = ({
           }}
           title="Forward this message"
         />
-        <CustomButton
-          label="Delete this message"
-          onClick={() => {
-            setShouldRefreshDetail(true)
-            thrashMessage()
-          }}
-          title="Delete this message"
-        />
+        {!isTrash && (
+          <CustomButton
+            label="Delete this message"
+            onClick={() => {
+              setShouldRefreshDetail(true)
+              thrashMessage()
+            }}
+            title="Delete this message"
+          />
+        )}
       </S.Inner>
     </GS.MenuPopper>
   )
