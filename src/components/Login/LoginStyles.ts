@@ -34,6 +34,7 @@ export const LoginContainer = styled.div`
   box-shadow: var(--box-shadow-low);
   padding: 10px;
   @media only screen and (min-width: ${breakPoint.md}) {
+    min-width: 375px;
     padding: 20px;
   }
 `
