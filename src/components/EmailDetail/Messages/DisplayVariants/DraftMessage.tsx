@@ -13,6 +13,7 @@ import * as GS from '../../../../styles/globalStyles'
 import findDraftMessageInList from '../../../../utils/findDraftMessageInList'
 import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import CustomButton from '../../../Elements/Buttons/CustomButton'
+import ContactCard from '../../../Elements/ContactCard/ContactCard'
 import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
 import EmailSubject from '../../../Elements/EmailSubject'
 import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
@@ -105,7 +106,13 @@ const DraftMessage = ({
       <S.ClosedMessageWrapper>
         <S.TopContainer>
           <S.ClosedAvatarSender>
-            <EmailAvatar avatarURL={staticSenderNameFull} />
+            <ContactCard
+              offset={[30, 10]}
+              avatarURL={staticSenderNameFull}
+              contact={staticSenderNamePartial}
+            >
+              <EmailAvatar avatarURL={staticSenderNameFull} />
+            </ContactCard>
             <S.ClosedSender>
               <span
                 style={{ fontStyle: 'italic' }}
@@ -157,7 +164,13 @@ const DraftMessage = ({
       >
         <S.TopContainer>
           <S.HeaderFullWidth>
-            <EmailAvatar avatarURL={staticSenderNameFull} />
+            <ContactCard
+              offset={[30, 10]}
+              avatarURL={staticSenderNameFull}
+              contact={staticSenderNamePartial}
+            >
+              <EmailAvatar avatarURL={staticSenderNameFull} />
+            </ContactCard>
             <S.EmailDetailTitle title={staticEmailSubject}>
               {staticEmailSubject}
             </S.EmailDetailTitle>

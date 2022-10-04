@@ -1,6 +1,7 @@
 import { useAppSelector } from '../../../store/hooks'
 import { selectIsAvatarVisible } from '../../../store/utilsSlice'
 import getRandomColor from '../../../utils/getRandomColor'
+import getUserInitials from '../../../utils/getUserInitials'
 import * as S from './EmailAvatarStyles'
 
 /**
@@ -10,29 +11,6 @@ import * as S from './EmailAvatarStyles'
  * @returns if successful it will return the first character of both sections, otherwise a default case.
  */
 
-const FALLBACK_AVATAR = '##'
-
-const intialCreator = (avatarURL: string) => {
-  const splittedURL = avatarURL.split('<')
-  if (splittedURL) {
-    const name = () => {
-      if (splittedURL[0] && splittedURL[0].length > 0) {
-        return splittedURL[0]
-      }
-      if (splittedURL[1] && splittedURL[1].length > 0) {
-        return splittedURL[1]
-      }
-      return FALLBACK_AVATAR
-    }
-    const initials = name().match(/\b\w/g) || []
-    const finalIntials = (
-      (initials.shift() || '') + (initials.pop() || '')
-    ).toUpperCase()
-    return finalIntials
-  }
-  return FALLBACK_AVATAR
-}
-
 /**
  * @component EmailAvatar
  * @param avatarURL - the string representing the email of the user
@@ -40,7 +18,7 @@ const intialCreator = (avatarURL: string) => {
  */
 
 const EmailAvatar = ({ avatarURL }: { avatarURL: string }) => {
-  const staticInitials = intialCreator(avatarURL)
+  const staticInitials = getUserInitials(avatarURL)
   const isAatarVisible = useAppSelector(selectIsAvatarVisible)
 
   return isAatarVisible ? (

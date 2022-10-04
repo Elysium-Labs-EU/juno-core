@@ -8,7 +8,9 @@ import { useAppSelector } from '../../../store/hooks'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import countUniqueFiles from '../../../utils/countUniqueFiles'
 import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
+import ContactCard from '../../Elements/ContactCard/ContactCard'
 import senderNameFull from '../../Elements/SenderName/senderNameFull'
+import senderNamePartial from '../../Elements/SenderName/senderNamePartial'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
@@ -46,12 +48,23 @@ const MappedFiles = ({
               message.payload.headers?.from,
               emailAddress
             )
+            const staticSenderNamePartial = senderNamePartial(
+              message.payload.headers?.from,
+              emailAddress
+            )
+
             if (message?.payload?.files && message.payload.files.length > 0) {
               return (
                 <S.FileEmailRow key={message.id}>
                   <S.NameOptionsRow>
                     <S.AvatarName>
-                      <EmailAvatar avatarURL={staticSenderNameFull} />
+                      <ContactCard
+                        offset={[30, 10]}
+                        avatarURL={staticSenderNameFull}
+                        contact={staticSenderNamePartial}
+                      >
+                        <EmailAvatar avatarURL={staticSenderNameFull} />
+                      </ContactCard>
                       <span>{staticSenderNameFull}</span>
                     </S.AvatarName>
                     <S.DownloadTimestampRow>

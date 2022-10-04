@@ -17,8 +17,9 @@ import {
   IEmailListThreadItem,
   IEmailMessage,
 } from '../../../../store/storeTypes/emailListTypes'
-import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
+import ContactCard from '../../../Elements/ContactCard/ContactCard'
 import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
+import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
 import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
 import EmailLabel from '../../../Elements/EmailLabel'
 import EmailSnippet from '../../../Elements/EmailSnippet'
@@ -128,7 +129,7 @@ const ReadUnreadMessage = ({
       setShowMenu((prev) => placement !== newPlacement || !prev)
       setPlacement(newPlacement)
     }
-  const popperId = showMenu ? 'specifc-email-popper' : undefined
+  const menuPopperId = showMenu ? 'specifc-email-popper' : undefined
 
   /**
    * Open or close the email detail - if there is a Popper active, close it.
@@ -167,7 +168,13 @@ const ReadUnreadMessage = ({
       <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
         <S.ClosedMessageWrapper>
           <S.ClosedAvatarSender>
-            <EmailAvatar avatarURL={staticSenderNameFull} />
+            <ContactCard
+              offset={[30, 10]}
+              avatarURL={staticSenderNameFull}
+              contact={staticSenderNamePartial}
+            >
+              <EmailAvatar avatarURL={staticSenderNameFull} />
+            </ContactCard>
             <S.ClosedSender>
               <span
                 style={{ fontWeight: 'bold' }}
@@ -201,7 +208,13 @@ const ReadUnreadMessage = ({
           <S.TopContainer>
             <S.HeaderFullWidth>
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
-                <EmailAvatar avatarURL={staticSenderNameFull} />
+                <ContactCard
+                  offset={[30, 10]}
+                  avatarURL={staticSenderNameFull}
+                  contact={staticSenderNamePartial}
+                >
+                  <EmailAvatar avatarURL={staticSenderNameFull} />
+                </ContactCard>
                 <S.EmailDetailTitle title={staticEmailSubject}>
                   {staticEmailSubject}
                 </S.EmailDetailTitle>
@@ -222,12 +235,12 @@ const ReadUnreadMessage = ({
                   <CustomIconButton
                     onClick={handleSpecificMenu('bottom-start')}
                     icon={<QiChevronDown />}
-                    aria-describedby={popperId}
+                    aria-describedby={menuPopperId}
                     title="Show message options"
                   />
                 </S.ChildDiv>
                 <Popper
-                  id={popperId}
+                  id={menuPopperId}
                   open={showMenu}
                   anchorEl={anchorEl}
                   placement={placement}
