@@ -5,15 +5,15 @@ import CardContent from '@mui/material/CardContent'
 import getUserInitials from '../../../utils/getUserInitials'
 import getRandomColor from '../../../utils/getRandomColor'
 import { IContact } from '../../../store/storeTypes/contactsTypes'
-import * as CS from './ContactCardStyles'
+import * as S from './ContactCardStyles'
 import { QiMail } from '../../../images/svgIcons/quillIcons'
 
 interface IContactCard {
-  offset?: [number, number]
-  placement?: PopperPlacementType
-  contact: IContact
   avatarURL: string
   children: JSX.Element
+  contact: IContact
+  offset?: [number, number]
+  placement?: PopperPlacementType
 }
 
 const NO_EMAIL = 'No address available'
@@ -39,7 +39,7 @@ const ContactCard = ({
     if (cardDelay.current) {
       clearTimeout(cardDelay.current)
     }
-    cardDelay.current = setTimeout(() => setIsHovering(hover), 1000)
+    cardDelay.current = setTimeout(() => setIsHovering(hover), 500)
   }
 
   const staticInitials = getUserInitials(avatarURL)
@@ -76,21 +76,21 @@ const ContactCard = ({
         anchorEl={contactCardWrapper.current}
         placement={placement}
       >
-        <CS.ContactCard>
-          <CS.ContactCardAvatar $randomColor={getRandomColor(staticInitials)}>
+        <S.ContactCard>
+          <S.ContactCardAvatar randomColor={getRandomColor(staticInitials)}>
             <span>{staticInitials}</span>
-          </CS.ContactCardAvatar>
+          </S.ContactCardAvatar>
           <CardContent>
-            <CS.ContactCardName title={name}>
+            <S.ContactCardName title={name}>
               {name || NO_NAME}
-            </CS.ContactCardName>
-            <CS.ContactCardDetails>
-              <CS.ContactCardEmailButton
+            </S.ContactCardName>
+            <S.ContactCardDetails>
+              <S.ContactCardEmailButton
                 disabled={!emailAddress}
-                $randomColor={getRandomColor(staticInitials)}
+                randomColor={getRandomColor(staticInitials)}
               >
                 <QiMail size={20} />
-              </CS.ContactCardEmailButton>
+              </S.ContactCardEmailButton>
               <Box
                 display="flex"
                 sx={{
@@ -100,13 +100,13 @@ const ContactCard = ({
                 }}
               >
                 <span style={{ fontSize: '0.8rem' }}>Email</span>
-                <CS.ContactCardEmail title={emailAddress}>
+                <S.ContactCardEmail title={emailAddress}>
                   {emailAddress || NO_EMAIL}
-                </CS.ContactCardEmail>
+                </S.ContactCardEmail>
               </Box>
-            </CS.ContactCardDetails>
+            </S.ContactCardDetails>
           </CardContent>
-        </CS.ContactCard>
+        </S.ContactCard>
       </Popper>
     </Box>
   )

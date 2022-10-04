@@ -1,6 +1,12 @@
 const FALLBACK_AVATAR = '##'
 
-const getUserInitials = (avatarURL: string) => {
+/**
+ * @function getUserInitials
+ * @param avatarURL - takes in a string for the avatar
+ * @returns the first letter of the first word and the first letter of the second word
+ */
+
+export default function getUserInitials(avatarURL: string) {
   const splittedURL = avatarURL.split('<')
   if (splittedURL) {
     const name = () => {
@@ -20,5 +26,3 @@ const getUserInitials = (avatarURL: string) => {
   }
   return FALLBACK_AVATAR
 }
-
-export default getUserInitials
