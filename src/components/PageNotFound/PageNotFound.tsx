@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import RouteConstants from '../../constants/routes.json'
-import Logo from '../../images/Juno_logo.png'
+import Logo from '../../images/Juno_logo_dark.png'
 import * as S from './PageNotFoundStyles'
 import * as GS from '../../styles/globalStyles'
 

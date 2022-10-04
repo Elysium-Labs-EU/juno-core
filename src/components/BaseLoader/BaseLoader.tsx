@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import * as S from './BaseLoaderStyles'
 import { selectServiceUnavailable } from '../../store/utilsSlice'
-import Logo from '../../images/Juno_logo.png'
+import Logo from '../../images/Juno_logo_dark.png'
 import LogoutOption, {
   handleLogout,
 } from '../MainHeader/Navigation/More/Options/LogoutOption'
