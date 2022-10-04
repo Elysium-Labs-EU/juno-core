@@ -1,14 +1,14 @@
-import { Card, CardMedia, IconButton } from '@mui/material'
+import { Card, CardMedia } from '@mui/material'
 import styled from 'styled-components'
 
 interface IContactCardColors {
   $randomColor: string
 }
 
-export const ContactAvatarCard = styled(Card)`
+export const ContactCard = styled(Card)`
   position: relative;
   box-shadow: var(--box-shadow-low) !important;
-  background-color: var(--color-white);
+  background-color: var(--color-black);
   border-radius: var(--radius-m);
   width: 14rem;
 `
@@ -34,6 +34,8 @@ export const ContactCardName = styled.div`
   line-height: 1.21;
   color: var(--color-black);
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 export const ContactCardEmail = styled.span`

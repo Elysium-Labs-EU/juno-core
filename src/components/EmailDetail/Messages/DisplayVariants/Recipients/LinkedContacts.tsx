@@ -5,6 +5,7 @@ import * as GS from '../../../../../styles/globalStyles'
 import * as compose from '../../../../../constants/composeEmailConstants'
 import * as emailDetail from '../../../../../constants/emailDetailConstants'
 import senderNameFull from '../../../../Elements/SenderName/senderNameFull'
+import ContactCard from '../../../../Elements/ContactCard/ContactCard'
 import { selectProfile } from '../../../../../store/baseSlice'
 import { useAppSelector } from '../../../../../store/hooks'
 import { IEmailMessage } from '../../../../../store/storeTypes/emailListTypes'
@@ -36,9 +37,14 @@ const MappedContacts = ({
                   key={contact.emailAddress}
                   showComma={index !== (showAll ? contactsMap.length : 3) - 1}
                 >
-                  <S.SmallTextTruncated title={contact.emailAddress}>
-                    {contact.name}
-                  </S.SmallTextTruncated>
+                  <ContactCard
+                    avatarURL={contact.emailAddress}
+                    contact={contact}
+                  >
+                    <S.SmallTextTruncated title={contact.emailAddress}>
+                      {contact.name}
+                    </S.SmallTextTruncated>
+                  </ContactCard>
                 </S.SmallTextTruncated>
               ))}
             {!showAll && (
@@ -58,9 +64,9 @@ const MappedContacts = ({
               key={contact.emailAddress}
               showComma={index !== contactsMap.length - 1}
             >
-              <S.SmallTextTruncated title={contact.emailAddress}>
-                {contact.name}
-              </S.SmallTextTruncated>
+              <ContactCard avatarURL={contact.name} contact={contact}>
+                <S.SmallTextTruncated>{contact.name}</S.SmallTextTruncated>
+              </ContactCard>
             </S.SmallTextTruncated>
           ))
         )}
@@ -72,6 +78,7 @@ const MappedContacts = ({
 const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
+  const senderContact = handleContactConversion(message?.payload?.headers?.from)
   const toNameFull = handleContactConversion(message?.payload?.headers?.to)
   const ccNameFull = handleContactConversion(message?.payload?.headers?.cc)
   const bccNameFull = handleContactConversion(message?.payload?.headers?.bcc)
@@ -83,7 +90,9 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
           <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
           </GS.TextMutedSpanSmall>
-          <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
+          <ContactCard avatarURL={senderName} contact={senderContact[0]}>
+            <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
+          </ContactCard>
         </S.ToFromBCCInner>
       </S.ContactsContainer>
       <S.ContactsContainer>

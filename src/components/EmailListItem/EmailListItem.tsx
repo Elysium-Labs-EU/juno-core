@@ -33,6 +33,7 @@ import {
 } from '../../store/emailListSlice'
 import useKeyPress from '../../hooks/useKeyPress'
 import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
+import ContactCard from '../Elements/ContactCard/ContactCard'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -206,9 +207,21 @@ const EmailListItem = ({
           <S.CellName onClick={handleOpenEvent} aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(global.DRAFT_LABEL) ? (
-                <EmailAvatar avatarURL={staticSenderFull} />
+                <ContactCard
+                  offset={[30, 10]}
+                  avatarURL={staticSenderFull}
+                  contact={staticSenderPartial}
+                >
+                  <EmailAvatar avatarURL={staticSenderFull} />
+                </ContactCard>
               ) : (
-                <EmailAvatar avatarURL={staticRecipientName.name} />
+                <ContactCard
+                  offset={[30, 10]}
+                  avatarURL={staticRecipientName.name}
+                  contact={staticSenderPartial}
+                >
+                  <EmailAvatar avatarURL={staticRecipientName.name} />
+                </ContactCard>
               )}
             </S.Avatars>
             {!labelIds.includes(global.DRAFT_LABEL) ? (

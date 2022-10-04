@@ -1,5 +1,4 @@
 import { Children, useRef, useState } from 'react'
-import { MdMailOutline } from 'react-icons/md'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import { Box } from '@mui/system'
 import CardContent from '@mui/material/CardContent'
@@ -7,11 +6,13 @@ import getUserInitials from '../../../utils/getUserInitials'
 import getRandomColor from '../../../utils/getRandomColor'
 import { IContact } from '../../../store/storeTypes/contactsTypes'
 import * as CS from './ContactCardStyles'
+import { QiMail } from '../../../images/svgIcons/quillIcons'
 
 interface IContactCard {
+  offset?: [number, number]
+  placement?: PopperPlacementType
   contact: IContact
   avatarURL: string
-  offset?: [number, number]
   children: JSX.Element
 }
 
@@ -23,50 +24,47 @@ const ContactCard = ({
   contact,
   offset = [20, 10],
   children,
+  placement = 'bottom-start',
 }: IContactCard) => {
   const [isHovering, setIsHovering] = useState(false)
-  const [placement, setPlacement] = useState<PopperPlacementType>()
-  const [cardDelay, setCardDelay] = useState<ReturnType<
-    typeof setTimeout
-  > | null>(null)
+
+  const cardDelay = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const contactCardWrapper = useRef<HTMLElement | null>(null)
 
   const { name, emailAddress } = contact
 
   const contactCardPopperId = isHovering ? 'contact-popper' : undefined
 
-  const handleMouseOver = () => {
-    setIsHovering(true)
-    setPlacement('bottom-start')
-  }
-  const handleMouseOut = () => {
-    setIsHovering(false)
+  const showContactCard = (hover: boolean) => {
+    if (cardDelay.current) {
+      clearTimeout(cardDelay.current)
+    }
+    cardDelay.current = setTimeout(() => setIsHovering(hover), 1000)
   }
 
-  const contactCardWrapper = useRef<HTMLElement>(null)
   const staticInitials = getUserInitials(avatarURL)
 
   return (
-    <>
-      <Box
-        onMouseOver={() => {
-          cardDelay && !isHovering && clearTimeout(cardDelay)
-          setCardDelay(setTimeout(() => handleMouseOver(), 500))
-        }}
-        onMouseOut={() => {
-          setIsHovering(false)
-          cardDelay && clearTimeout(cardDelay)
-          handleMouseOut()
-        }}
-        ref={contactCardWrapper}
-        sx={{
-          cursor: 'pointer',
-        }}
-      >
-        {Children.only(children)}
-      </Box>
+    <Box
+      onMouseOver={() => {
+        showContactCard(true)
+      }}
+      onMouseOut={() => {
+        showContactCard(false)
+      }}
+      ref={contactCardWrapper}
+      sx={{
+        cursor: 'pointer',
+        display: 'inherit',
+      }}
+    >
+      {Children.only(children)}
       <Popper
         id={contactCardPopperId}
         open={isHovering}
+        sx={{
+          zIndex: 2000,
+        }}
         modifiers={[
           {
             name: 'offset',
@@ -78,18 +76,20 @@ const ContactCard = ({
         anchorEl={contactCardWrapper.current}
         placement={placement}
       >
-        <CS.ContactAvatarCard sx={{ maxWidth: 345 }}>
+        <CS.ContactCard>
           <CS.ContactCardAvatar $randomColor={getRandomColor(staticInitials)}>
             <span>{staticInitials}</span>
           </CS.ContactCardAvatar>
           <CardContent>
-            <CS.ContactCardName>{name || NO_NAME}</CS.ContactCardName>
+            <CS.ContactCardName title={name}>
+              {name || NO_NAME}
+            </CS.ContactCardName>
             <CS.ContactCardDetails>
               <CS.ContactCardEmailButton
                 disabled={!emailAddress}
                 $randomColor={getRandomColor(staticInitials)}
               >
-                <MdMailOutline size="20" />
+                <QiMail size={20} />
               </CS.ContactCardEmailButton>
               <Box
                 display="flex"
@@ -100,15 +100,15 @@ const ContactCard = ({
                 }}
               >
                 <span style={{ fontSize: '0.8rem' }}>Email</span>
-                <CS.ContactCardEmail>
+                <CS.ContactCardEmail title={emailAddress}>
                   {emailAddress || NO_EMAIL}
                 </CS.ContactCardEmail>
               </Box>
             </CS.ContactCardDetails>
           </CardContent>
-        </CS.ContactAvatarCard>
+        </CS.ContactCard>
       </Popper>
-    </>
+    </Box>
   )
 }
 
