@@ -8,6 +8,16 @@ Juno is an Open Source React based Gmail application.
 
 ## Getting Started
 
+There are two ways to get started. With installer or without installer.
+
+### With installer
+
+1. Fork the juno-core repository
+2. Run `npx create-juno-dev-env` in the same parent folder as where you forked the repository
+3. When using cloud backend request to be added to the Google Test users via [Discord](https://discord.gg/peRDGMn9xa), if you want to run local follow the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md)
+
+### Without installer
+
 1.  Download the code to your local machine - and run `yarn` to install all packages
 2.  Create a file called `.env` in the root of the project
 3.  If you want to run the backend on your local - set up the backend server via the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md), else continue to the next step.
