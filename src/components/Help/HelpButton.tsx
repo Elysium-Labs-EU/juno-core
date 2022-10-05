@@ -18,7 +18,7 @@ const actionKeysFeedback = [setModifierKey, keyConstants.KEY_DOT]
 
 const customStyles = {
   background: 'var(--color-white)',
-  border: '1px solid var(--color-grey-ultra-light)',
+  border: '1px solid var(--color-neutral-200)',
   borderRadius: '4px',
   boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
   lineHeight: 1,

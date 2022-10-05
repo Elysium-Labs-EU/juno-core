@@ -48,7 +48,7 @@ export const Container = styled.div`
 
 export const MenuSection = styled.div`
   padding: 4px 0px;
-  border-bottom: 1px solid var(--color-black-off);
+  border-bottom: 1px solid var(--color-neutral-800);
   display: flex;
   flex-direction: column;
   div:last-child {
@@ -77,9 +77,9 @@ export const MenuItem = styled.button<IMenuItem>`
   text-overflow: ellipsis;
   text-align: left;
   background-color: ${({ isFocused }) =>
-    isFocused ? `var(--color-black-off)` : 'transparent'};
+    isFocused ? `var(--color-neutral-800)` : 'transparent'};
   &:hover {
-    background-color: var(--color-black-off);
+    background-color: var(--color-neutral-800);
   }
 `
 
@@ -89,7 +89,7 @@ export const MenuItemContentMain = styled.div`
 `
 
 export const MenuItemContentSide = styled.div`
-  color: var(--color-grey);
+  color: var(--color-neutral-500);
   span:not(:last-child) {
     margin-right: 8px;
   }

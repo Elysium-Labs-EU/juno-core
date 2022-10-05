@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
 
   &:hover {
     opacity: 1;
-    background: var(--color-grey-hover);
+    background: var(--color-neutral-200);
     background: linear-gradient(
       90deg,
       rgba(2, 0, 36, 0) 0%,

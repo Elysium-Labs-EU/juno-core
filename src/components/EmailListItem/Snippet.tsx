@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import convertStringToHTML from '../../utils/convertStringToHTML'
 
 const StyledSnippet = styled.span`
-  color: var(--color-grey-light);
+  color: var(--color-neutral-400);
   font-weight: 400;
 `
 

@@ -38,7 +38,7 @@ export const StyledButton = styled.button<IStyledButton>`
 
   user-select: none;
   background-color: ${({ isActive }) =>
-    isActive ? `var(--color-grey-dark)` : `var(--color-black)`};
+    isActive ? `var(--color-neutral-800)` : `var(--color-black)`};
   cursor: pointer;
 
   &:hover {
@@ -46,7 +46,7 @@ export const StyledButton = styled.button<IStyledButton>`
   }
 
   &:active {
-    background-color: var(--color-grey-dark);
+    background-color: var(--color-neutral-800);
   }
 
   &:focus {
@@ -55,7 +55,7 @@ export const StyledButton = styled.button<IStyledButton>`
   }
 
   &:disabled {
-    background-color: var(--color-grey-hover);
+    background-color: var(--color-neutral-200);
     box-shadow: none;
     cursor: default;
   }

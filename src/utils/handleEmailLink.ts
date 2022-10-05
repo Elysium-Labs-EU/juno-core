@@ -28,7 +28,7 @@ export default function handleEmailLink(
           )
           element.setAttribute(
             'style',
-            'cursor: pointer; background: var(--color-grey-border); border-radius: 5px; padding: 3px 6px; border: 1px solid var(--color-grey-ultra-light); color: var(--color-black) !important;'
+            'cursor: pointer; background: var(--color-neutral-300); border-radius: 5px; padding: 3px 6px; border: 1px solid var(--color-neutral-200); color: var(--color-black) !important;'
           )
           element.setAttribute('title', CLICK_EMAIL)
           return element

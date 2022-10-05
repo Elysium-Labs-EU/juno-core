@@ -361,6 +361,7 @@ const ComposeEmail = ({
                           label={local.CC_LABEL}
                           onClick={() => setShowCC(true)}
                           title="Show CC recipients"
+                          suppressed
                         />
                       )}
                       {!showBCC && (
@@ -368,6 +369,7 @@ const ComposeEmail = ({
                           label={local.BCC_LABEL}
                           onClick={() => setShowBCC(true)}
                           title="Show BCC recipients"
+                          suppressed
                         />
                       )}
                     </S.CcBccContainer>

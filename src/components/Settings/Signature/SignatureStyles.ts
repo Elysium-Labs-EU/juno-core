@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const EditorWrapper = styled.div`
   background-color: var(--color-white);
   width: 100%;
-  border: 2px solid var(--color-grey-border);
+  border: 2px solid var(--color-neutral-300);
   display: flex;
   flex-flow: column;
   min-height: 200px;

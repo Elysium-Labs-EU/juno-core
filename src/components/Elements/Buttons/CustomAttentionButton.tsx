@@ -18,8 +18,8 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  background-color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-black)` : `var(--color-white)`};
+  background-color: ${ ({ variant }) =>
+    variant === 'primary' ? `var(--color-black)` : `var(--color-white)` };
   border-radius: var(--radius-l);
   border: none;
   font-family: var(--font-family);
@@ -29,24 +29,24 @@ const Button = styled.button<IButton>`
   div {
     margin: 10px 14px;
     span {
-      color: ${({ variant }) =>
-        variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
+      color: ${ ({ variant }) =>
+    variant === 'primary' ? `var(--color-white)` : `var(--color-black)` };
       font-size: 1rem;
       line-height: 1rem;
     }
   }
 
   &:hover {
-    background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `var(--color-black-off)`
-        : `var(--color-grey-border)`};
+    background-color: ${ ({ variant }) =>
+    variant === 'primary'
+      ? `var(--color-neutral-800)`
+      : `var(--color-neutral-200)` };
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   }
 
   &:disabled {
-    background-color: var(--color-grey-hover);
+    background-color: var(--color-neutral-200);
     opacity: 38%;
     div {
       span {

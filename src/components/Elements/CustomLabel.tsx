@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  background-color: var(--color-grey-border);
-  border-color: var(--color-grey-border);
+  background-color: var(--color-neutral-300);
+  border-color: var(--color-neutral-300);
   display: inline-flex;
   height: 21px;
   padding: 0px 8px;

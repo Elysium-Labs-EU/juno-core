@@ -11,7 +11,7 @@ const MULTI_DRAFT = 'Drafts'
 const SINGLE_DRAFT = 'Draft'
 
 const StyledMessageCount = styled.div`
-  color: var(--color-grey-light);
+  color: var(--color-neutral-400);
   font-weight: 400;
   display: flex;
   flex-flow: row;
@@ -25,7 +25,7 @@ const CountWrapper = styled.div`
 const IconWrapper = styled.div`
   display: flex;
   margin: 0 4px;
-  height: var(--small-size);
+  height: var(--small);
 `
 
 const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
@@ -39,9 +39,8 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
   return (
     <StyledMessageCount>
       <StyledTooltip
-        title={`${regularCount} ${
-          regularCount > 1 ? MULTI_MESSAGE : SINGLE_MESSAGE
-        }`}
+        title={`${ regularCount } ${ regularCount > 1 ? MULTI_MESSAGE : SINGLE_MESSAGE
+          }`}
       >
         <CountWrapper>
           {regularCount}
@@ -52,7 +51,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
       </StyledTooltip>
       {draftCount > 0 && (
         <StyledTooltip
-          title={`${draftCount} ${draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT}`}
+          title={`${ draftCount } ${ draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT }`}
         >
           <CountWrapper>
             / {draftCount}

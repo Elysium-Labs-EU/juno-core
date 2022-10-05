@@ -22,7 +22,7 @@ export const MenuItem = styled.button<IMenuItem>`
   align-items: center;
   padding: 12px;
   background-color: ${({ active }) =>
-    active ? `var(--color-grey-ultra-light)` : 'transparent'};
+    active ? `var(--color-neutral-200)` : 'transparent'};
   color: var(--color-black);
   border: 0;
   border-radius: var(--radius-m);
@@ -34,7 +34,7 @@ export const MenuItem = styled.button<IMenuItem>`
   text-overflow: ellipsis;
   text-align: left;
   &:hover {
-    background-color: var(--color-grey-ultra-light);
+    background-color: var(--color-neutral-200);
   }
 `
 export const MenuItemContentMain = styled.div`

@@ -22,8 +22,8 @@ export const KeyComboContainer = styled.div`
 
 export const KeyBindShortcut = styled.div`
   span {
-    background-color: var(--color-grey-border);
-    border: 1px solid var(--color-grey);
+    background-color: var(--color-neutral-300);
+    border: 1px solid var(--color-neutral-500);
     display: block;
     padding: 2px 9px 5px;
     margin-right: 3px;
@@ -32,8 +32,8 @@ export const KeyBindShortcut = styled.div`
     min-width: 14px;
     min-height: 14px;
     text-align: center;
-    -webkit-box-shadow: inset 0 -4px 0 var(--color-grey);
-    box-shadow: inset 0 -4px 0 var(--color-grey);
+    -webkit-box-shadow: inset 0 -4px 0 var(--color-neutral-500);
+    box-shadow: inset 0 -4px 0 var(--color-neutral-500);
     box-sizing: border-box;
   }
   display: flex;
