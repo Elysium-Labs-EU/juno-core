@@ -2,6 +2,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
+import RoutesConstant from '../constants/routes.json'
 import draftApi from '../data/draftApi'
 import { closeMail, setIsProcessing, setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
@@ -337,7 +338,15 @@ export const sendComposedEmail =
                 staticIndexActiveEmailList,
               })
             )
-          dispatch(closeMail())
+          const { isFlexibleFlowActive } = getState().utils
+          const status = labelIds.includes('INBOX')
+          if (isFlexibleFlowActive && status) {
+            dispatch(push(RoutesConstant.INBOX))
+          } else if (!isFlexibleFlowActive && status) {
+            dispatch(push(`/`))
+          } else {
+            dispatch(closeMail())
+          }
         } else {
           dispatch(setServiceUnavailable('Error sending email.'))
         }
