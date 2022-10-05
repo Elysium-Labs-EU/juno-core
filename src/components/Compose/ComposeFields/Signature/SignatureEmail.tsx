@@ -30,6 +30,8 @@ const SignatureEmail = ({
     },
   })
 
+  const signatureStyles = 'color: #D1D5DB;'
+
   useEffect(() => {
     if (global.LOAD_STATE_MAP.loaded === loadState) {
       setSelectedSignature(signature)
@@ -40,7 +42,7 @@ const SignatureEmail = ({
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
-        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        ? `<div data-juno=${global.JUNO_SIGNATURE} style="${signatureStyles}">${selectedSignature}</div>`
         : null,
     }
     updateComposeEmail(updateEventObject)
