@@ -26,12 +26,12 @@ const Button = styled.button<IButton>`
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-grey) ` : `var(--color-black) `};
+  color: ${ ({ suppressed }) =>
+    suppressed ? `var(--color-neutral-400) ` : `var(--color-black) ` };
   cursor: pointer;
   display: inline-block;
   font-family: var(--font-family);
-  font-size: var(--small-size);
+  font-size: var(--small);
   font-weight: 400;
   line-height: 1.5;
   padding: 0.375rem 0.75rem;
@@ -42,7 +42,7 @@ const Button = styled.button<IButton>`
   vertical-align: middle;
 
   &:hover {
-    border-color: var(--color-grey);
+    border-color: var(--color-neutral-600);
     box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
     color: var(--color-black);
   }
@@ -62,7 +62,7 @@ const InnerButton = styled.div<IInnerButton>`
 
   .icon {
     line-height: 0;
-    margin-right: ${({ hasLabel }) => hasLabel && '13px'};
+    margin-right: ${ ({ hasLabel }) => hasLabel && '13px' };
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }

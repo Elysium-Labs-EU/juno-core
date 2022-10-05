@@ -35,7 +35,7 @@ export const LoaderContainer = styled.div`
 `
 
 export const StyledLinearProgress = styled(LinearProgress)`
-  background-color: var(--color-white-off) !important;
+  background-color: var(--color-neutral-100) !important;
   .MuiLinearProgress-bar1Indeterminate {
     background-color: var(--color-black);
   }

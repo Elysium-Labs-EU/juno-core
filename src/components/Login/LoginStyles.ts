@@ -52,7 +52,7 @@ export const Header = styled.div`
 `
 
 export const ErrorBox = styled.div`
-  background-color: var(--color-purple-soft);
+  background-color: var(--color-blue-100);
   padding: 1rem;
   border-radius: 5px;
   text-align: center;

@@ -30,7 +30,7 @@ const EmailDetailOptionStacker = ({
       </S.ButtonWrapper>
       <StyledTooltip title="This is a stack - press ALT to show the alternative">
         <S.StackIndicator>
-          <QiAlt color="var(--color-grey)" />
+          <QiAlt color="var(--color-neutral-400)" />
         </S.StackIndicator>
       </StyledTooltip>
     </S.Wrapper>

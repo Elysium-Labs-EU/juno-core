@@ -8,7 +8,7 @@ export const Wrapper = styled.div<IWrapper>`
   background: var(--color-white);
   width: 100%;
   border: ${({ isFocused }) =>
-    isFocused ? `2px var(--color-purple-soft) solid` : '2px solid transparent'};
+    isFocused ? `2px var(--color-blue-100) solid` : '2px solid transparent'};
   display: flex;
   flex-flow: column;
   position: relative;
@@ -33,7 +33,7 @@ interface IMenuBar {
 
 export const MenuBar = styled.div<IMenuBar>`
   margin: 0 auto;
-  border: 1px solid var(--color-grey-ultra-light);
+  border: 1px solid var(--color-neutral-200);
   background: var(--color-white);
   border-radius: 4px;
   z-index: 10;
@@ -51,6 +51,6 @@ export const Button = styled.button`
   line-height: 16px;
   border-radius: 4px;
   &:hover {
-    background-color: var(--color-white-off);
+    background-color: var(--color-neutral-100);
   }
 `

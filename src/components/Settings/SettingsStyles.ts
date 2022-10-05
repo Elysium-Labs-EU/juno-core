@@ -25,5 +25,5 @@ export const StyledSelect = styled(Select)<SelectProps>`
 `
 
 export const PageSection = styled.div`
-  border-top: 1px solid var(--color-grey-ultra-light);
+  border-top: 1px solid var(--color-neutral-200);
 `

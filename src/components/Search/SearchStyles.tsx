@@ -52,7 +52,7 @@ export const SearchResults = styled.div`
   -webkit-box-flex: 1;
   flex-grow: 1;
   overflow-y: auto;
-  border-top: 1px solid var(--color-grey-ultra-light);
+  border-top: 1px solid var(--color-neutral-200);
 `
 
 export const FooterRow = styled.div`

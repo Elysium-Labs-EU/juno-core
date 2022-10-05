@@ -55,12 +55,12 @@ export const ButtonWrapper = styled.div<IButtonWrapper>`
 
 export const FirstOptionContainer = styled.div`
   position: relative;
-  background-color: var(--color-white-off);
+  background-color: var(--color-neutral-100);
 `
 
 export const SecondOptionContainer = styled.div`
   position: absolute;
-  background-color: var(--color-white-off);
+  background-color: var(--color-neutral-100);
   left: 0;
   top: 0;
 `

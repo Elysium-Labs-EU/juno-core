@@ -32,7 +32,7 @@ export const StyedListItem = styled.li<StyledListItem>`
   letter-spacing: normal;
   text-align: left;
   color: ${({ isActive }) =>
-    isActive ? `var(--color-black)` : `var(--color-grey)`};
+    isActive ? `var(--color-black)` : `var(--color-neutral-400)`};
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -52,14 +52,14 @@ export const StyedListItem = styled.li<StyledListItem>`
   }
 
   &:disabled {
-    color: var(--color-grey-ultra-light);
+    color: var(--color-neutral-200);
     cursor: not-allowed;
   }
 `
 
 export const StyledBadge = styled(Badge)`
   .MuiBadge-badge {
-    background-color: var(--color-grey);
+    background-color: var(--color-neutral-400);
     top: 10px;
     right: -16px;
     transition: background-color 0.1s ease-in;

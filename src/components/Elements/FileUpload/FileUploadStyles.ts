@@ -1,14 +1,14 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  background-color: var(--color-white-off);
+  background-color: var(--color-neutral-100);
   border: 2px solid transparent;
   padding: 10px 20px;
   border-radius: var(--radius-m);
-  color: var(--color-grey);
+  color: var(--color-neutral-500);
   &:hover,
   &:focus {
-    border-color: var(--color-purple-soft);
+    border-color: var(--color-blue-100);
     color: var(--color-black);
     cursor: pointer;
   }
@@ -25,6 +25,6 @@ export const Inner = styled.div`
   p {
     margin-left: 10px;
     text-align: center;
-    font-size: var(--small-size);
+    font-size: var(--small);
   }
 `

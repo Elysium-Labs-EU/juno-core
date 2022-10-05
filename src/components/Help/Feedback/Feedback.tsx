@@ -43,7 +43,7 @@ const customStyles = {
   borderRadius: '4px',
   boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
   lineHeight: 1,
-  border: '1px solid var(--color-grey-ultra-light)',
+  border: '1px solid var(--color-neutral-200)',
 }
 const customStylesActive = {
   background: 'var(--color-black)',
@@ -52,7 +52,7 @@ const customStylesActive = {
   borderRadius: '4px',
   boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
   lineHeight: 1,
-  border: '1px solid var(--color-grey-ultra-light)',
+  border: '1px solid var(--color-neutral-200)',
 }
 
 const MODAL_TITLE = 'Send feedback'
@@ -163,7 +163,7 @@ const Feedback = () => {
           </S.Wrapper>
           <S.ButtonContainer>
             <CustomButton
-              label={`Submit ${selectedType.type.toLowerCase()}`}
+              label={`Submit ${ selectedType.type.toLowerCase() }`}
               title="Submit feedback form"
               onClick={() => handleSubmit()}
               disabled={textAreaValue.length === 0}

@@ -16,7 +16,7 @@ export const Wrapper = styled.div<IWrapper>`
 `
 
 export const InfoWarningContainer = styled.div`
-  background-color: var(--color-purple-soft);
+  background-color: var(--color-blue-100);
   padding: 6px 12px;
   border-radius: 10px;
   margin-bottom: 20px;
@@ -41,7 +41,7 @@ export const ComposerContainer = styled.div<IComposerContainer>`
 export const TopRowControls = styled.div`
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid var(--color-grey-border);
+  border-bottom: 1px solid var(--color-neutral-200);
   margin-bottom: 20px;
 `
 
@@ -55,7 +55,7 @@ export const Label = styled.div<ILabel>`
   width: 100px;
   text-align: right;
   top: 25px;
-  font-size: var(--small-size);
+  font-size: var(--small);
   label {
     cursor: default;
     user-select: none;

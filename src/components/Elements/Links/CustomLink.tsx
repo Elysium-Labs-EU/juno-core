@@ -14,7 +14,7 @@ const Wrapper = styled(Link)`
   line-height: 1.13;
   letter-spacing: normal;
   text-align: left;
-  color: var(--color-grey);
+  color: var(--color-neutral-500);
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -29,7 +29,7 @@ const Wrapper = styled(Link)`
   }
 
   &:disabled {
-    color: var(--color-grey-ultra-light);
+    color: var(--color-neutral-200);
     cursor: not-allowed;
   }
 `

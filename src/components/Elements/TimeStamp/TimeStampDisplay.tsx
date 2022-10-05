@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import StyledTooltip from '../StyledTooltip'
 
 const StyledTimeStamp = styled.span`
-  color: var(--color-grey-light);
+  color: var(--color-neutral-400);
   white-space: nowrap;
 `
 

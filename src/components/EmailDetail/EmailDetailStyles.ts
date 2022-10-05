@@ -43,7 +43,7 @@ export const EmailClosedWrapper = styled.div<IEmailWrapper>`
   border-radius: var(--radius-l);
   &:hover {
     background-color: ${({ isDraft }) =>
-      isDraft ? `var(--color-purple-soft)` : `var(--color-grey-hover)`};
+      isDraft ? `var(--color-blue-100)` : `var(--color-neutral-200)`};
     border-radius: var(--radius-l);
   }
 `
@@ -61,7 +61,7 @@ export const DraftHeaderControls = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 1px solid var(--color-purple-soft);
+  border-bottom: 1px solid var(--color-blue-100);
   padding-bottom: 20px;
   margin-bottom: 20px;
 `
@@ -208,7 +208,7 @@ export const BlockedTrackersContainer = styled.div`
 `
 
 export const GreyDivider = styled.div`
-  border-bottom: 1px solid var(--color-grey-border);
+  border-bottom: 1px solid var(--color-neutral-100);
 `
 
 export const EmailBody = styled.div`
@@ -262,7 +262,7 @@ export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--small-size);
+  font-size: var(--small);
   ${({ showComma }) => showComma && commaSeperator};
   margin-right: ${({ showComma }) => (showComma ? '6px' : '0')};
 `

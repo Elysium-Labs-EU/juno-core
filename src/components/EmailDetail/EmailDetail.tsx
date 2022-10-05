@@ -70,7 +70,7 @@ const EmailDetail = () => {
   useFetchDraftList({
     shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
       thread.messages.some((message) =>
-        message.labelIds.includes(global.DRAFT_LABEL)
+        message?.labelIds?.includes(global.DRAFT_LABEL)
       )
     ),
   })

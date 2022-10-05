@@ -9,9 +9,9 @@ export const StyledForm = styled.form`
 `
 
 export const StyledInput = styled.input`
-  background-color: var(--color-white-off);
+  background-color: var(--color-neutral-100);
   border-radius: var(--radius-m);
-  border: 1px solid var(--color-grey);
+  border: 1px solid var(--color-neutral-500);
   box-sizing: border-box;
   flex-grow: 1;
   height: 60px;

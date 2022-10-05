@@ -28,16 +28,16 @@ export const ThreadRow = styled.div<IThreadRow>`
     !showLabel
       ? '30px 20px 215px auto max-content 105px 20px 30px'
       : '30px 20px 215px fit-content(450px) auto max-content 105px 20px 30px'};
-  font-size: var(--small-size);
+  font-size: var(--small);
   height: 56px;
   background-color: ${({ isFocused }) =>
-    isFocused ? `var(--color-grey-hover)` : 'transparent'};
+    isFocused ? `var(--color-neutral-200)` : 'transparent'};
   transition: background-color ease-in 0.125s;
   z-index: 2;
   border-radius: 5px;
 
   &:hover {
-    background-color: var(--color-grey-hover);
+    background-color: var(--color-neutral-200);
     z-index: 2;
     border-radius: 5px;
   }
@@ -80,41 +80,41 @@ export const Avatars = styled.div`
 `
 
 export const CellName = styled.div`
-  display: flex;
-  flex-direction: row;
   -webkit-box-align: center;
   align-items: center;
+  display: flex;
+  flex-direction: row;
   user-select: none;
 `
 
 export const CellLabels = styled.div`
-  display: flex;
-  flex-direction: row;
   -webkit-box-align: center;
   align-items: center;
-  min-width: 0px;
-  white-space: nowrap;
   cursor: default;
-  user-select: none;
-  padding-left: 15px;
+  display: flex;
+  flex-direction: row;
+  min-width: 0px;
   overflow: hidden;
+  padding-left: 15px;
+  user-select: none;
+  white-space: nowrap;
 `
 
 export const CellMessage = styled.div`
-  display: flex;
-  flex-direction: row;
   -webkit-box-align: center;
   align-items: center;
+  display: flex;
+  flex-direction: row;
   min-width: 0;
   padding-left: 15px;
   white-space: nowrap;
 `
 
 export const CellAttachment = styled.div`
-  display: flex;
-  flex-direction: row;
   -webkit-box-align: center;
   align-items: center;
+  display: flex;
+  flex-direction: row;
   justify-self: end;
   padding-left: 10px;
 `
@@ -124,12 +124,12 @@ export const CellDate = styled.div`
 `
 
 export const DatePosition = styled.div`
-  height: 100%;
+  -webkit-box-align: center;
+  -webkit-box-pack: end;
+  align-items: center;
   display: flex;
   flex-direction: row;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: end;
+  height: 100%;
   justify-content: flex-end;
 `
 
@@ -140,8 +140,8 @@ export const TruncatedSpan = styled.span`
 `
 
 export const TruncatedDiv = styled.div`
+  display: flex;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: flex;
 `

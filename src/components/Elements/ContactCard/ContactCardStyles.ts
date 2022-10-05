@@ -53,7 +53,7 @@ export const ContactCardName = styled.div`
 `
 
 export const ContactCardEmail = styled.span`
-  font-size: var(--small-size);
+  font-size: var(--small);
   display: block;
   font-weight: bold;
   color: var(--color-black);
@@ -88,8 +88,8 @@ export const ContactCardEmailButton = styled.button<IContactCardColors>`
   }
 
   &:disabled {
-    color: var(--color-grey-light);
-    background-color: var(--color-grey-ultra-light) !important;
+    color: var(--color-neutral-400);
+    background-color: var(--color-neutral-200) !important;
     cursor: not-allowed;
   }
 `

@@ -116,7 +116,7 @@ const InlineThreadActionsRegular = ({
         onClick={() => thrashMail({ threadId: id, dispatch, labelIds })}
         icon={<QiFolderTrash size={ICON_SIZE} />}
         title="Delete"
-        hoverColor={themeConstants.colorRed}
+        hoverColor={themeConstants.color.red[500]}
       />
     ),
     [id, labelIds]

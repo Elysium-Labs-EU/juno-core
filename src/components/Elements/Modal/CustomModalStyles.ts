@@ -20,7 +20,7 @@ export const Inner = styled.div`
 `
 
 export const ModalHeader = styled.div`
-  border-bottom: 1px solid var(--color-grey-ultra-light);
+  border-bottom: 1px solid var(--color-neutral-200);
 `
 
 export const HeaderRow = styled.div`

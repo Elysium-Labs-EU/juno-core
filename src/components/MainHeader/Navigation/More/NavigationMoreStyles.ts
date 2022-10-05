@@ -13,7 +13,7 @@ export const TopMenu = styled.ul`
 export const MenuItemButton = styled.button`
   background-color: transparent;
   border: none;
-  color: var(--color-grey);
+  color: var(--color-neutral-500);
   font-size: 1rem;
   text-align: left;
   font-weight: normal;
@@ -33,7 +33,7 @@ export const MenuItemButton = styled.button`
   }
 
   &:disabled {
-    color: var(--color-grey-ultra-light);
+    color: var(--color-neutral-200);
     cursor: not-allowed;
   }
 `
