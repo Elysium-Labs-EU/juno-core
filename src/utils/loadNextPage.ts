@@ -1,7 +1,7 @@
 import { fetchEmailsSimple } from '../store/emailListSlice'
 import { IEmailListObject } from '../store/storeTypes/emailListTypes'
 import { AppDispatch } from '../store/store'
-import { HISTORY_NEXT_PAGETOKEN } from './handleHistoryObject'
+import * as global from '../constants/globalConstants'
 
 interface ILoadNextPage {
   q?: string
@@ -21,7 +21,7 @@ const loadNextPage = ({
   silentLoading = false,
   maxResults,
 }: ILoadNextPage) => {
-  if (nextPageToken && nextPageToken !== HISTORY_NEXT_PAGETOKEN) {
+  if (nextPageToken && nextPageToken !== global.HISTORY_NEXT_PAGETOKEN) {
     const params = {
       q,
       labelIds,
