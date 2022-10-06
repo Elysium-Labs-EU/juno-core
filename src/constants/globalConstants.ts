@@ -17,6 +17,8 @@ export const CREDENTIALS = 'credentials'
 export const DRAFT_LABEL = 'DRAFT'
 export const EMAIL_BODY_INVISIBLE = 'invisible'
 export const EMAIL_BODY_VISIBLE = 'visible'
+export const HISTORY_NEXT_PAGETOKEN = 'history'
+export const HISTORY_TIME_STAMP = 0
 export const ID_TOKEN = 'idToken'
 export const INBOX_LABEL = 'INBOX'
 export const TODO_LABEL_NAME = 'Juno/To Do'
@@ -31,7 +33,6 @@ export const LOAD_STATE_MAP = {
   error: 'error',
 }
 export const MAX_RESULTS = 20
-export const MIME_TYPE_NO_INLINE = 'application/octet-stream'
 export const MIN_DELAY_REFRESH = 3500
 export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'

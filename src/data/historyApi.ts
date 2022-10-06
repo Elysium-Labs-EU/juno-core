@@ -1,12 +1,14 @@
 import { AxiosResponse } from 'axios'
+import { LabelIdName } from '../store/storeTypes/labelsTypes'
 import { errorHandling, instance } from './api'
 
 const historyApi = () => ({
-  listHistory: async (startHistoryId: number) => {
+  listHistory: async (startHistoryId: number, storageLabels: LabelIdName[]) => {
     try {
-      const res: AxiosResponse<any> = await instance.get(`/api/history`, {
+      const res: AxiosResponse<any> = await instance.post(`/api/history`, {
         params: {
           startHistoryId,
+          storageLabels,
         },
       })
       return res
