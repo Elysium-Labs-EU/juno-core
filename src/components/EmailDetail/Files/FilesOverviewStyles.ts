@@ -25,7 +25,7 @@ export const NameOptionsRow = styled.div`
   justify-content: space-between;
   margin-bottom: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-neutral-300);
+  border-bottom: 1px solid var(--color-neutral-200);
 `
 
 export const DownloadTimestampRow = styled.div`
