@@ -2,7 +2,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
-import RoutesConstant from '../constants/routes.json'
 import draftApi from '../data/draftApi'
 import { closeMail, setIsProcessing, setServiceUnavailable } from './utilsSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
