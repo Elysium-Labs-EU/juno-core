@@ -13,7 +13,6 @@ import { QiArrowRight } from '../../images/svgIcons/quillIcons'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
 
-const TITLE = 'Login'
 // const SUB_HEADER = 'To get started'
 const ENTER_HINT = 'use Enter to start'
 
