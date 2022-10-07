@@ -68,16 +68,25 @@ const initialState: IEmailListState = Object.freeze({
   isFetching: false,
 })
 
-const handleAdditionToExistingEmailArray = (
-  targetEmailListObject: IEmailListObject,
-  state: IEmailListState,
-  labels: string[],
-  threads: IEmailListThreadItem[],
-  timestamp: number,
-  arrayIndex?: number,
-  nextPageToken?: undefined | string | null,
+const handleAdditionToExistingEmailArray = ({
+  targetEmailListObject,
+  state,
+  labels,
+  threads,
+  timestamp,
+  arrayIndex,
+  nextPageToken,
+  q,
+}: {
+  targetEmailListObject: IEmailListObject
+  state: IEmailListState
+  labels: string[]
+  threads: IEmailListThreadItem[]
+  timestamp: number
+  arrayIndex?: number
+  nextPageToken?: undefined | string | null
   q?: undefined | string
-) => {
+}) => {
   const tempArray: IEmailListThreadItem[] = []
   let activeCount: number = 0
   const completeCount: number = threads.length
@@ -109,6 +118,7 @@ const handleAdditionToExistingEmailArray = (
 
       // Here we create the final object that will be pushed to the Redux state
       // If the timestamp and/or nextPageToken are history values, maintain the original version.
+      // TODO: Verify if the removal of the nextPageToken on the object is detrimental to the behavior, e.g. will it be able to readd the nextPageToken once it does have one?
       const newObject: IEmailListObject = {
         labels,
         threads: undoubleThreads(sortedThreads),
@@ -147,19 +157,49 @@ const handleEmailListChange = ({
   nextPageToken?: undefined | string | null
   q?: string
 }) => {
-  if (labels && threads && threads.length > 0) {
+  // The flow can only work if there are labels to use
+  if (labels) {
     // Find emailList sub-array index
     const arrayIndex: number = state.emailList
       .map((emailArray) => emailArray.labels)
       .flat(1)
       .findIndex((obj) => (obj ? obj.includes(labels[0]) : null))
-    // If the input contains a q - it is search request.
-    if (q) {
-      // This function is used to update the search List.
-      // If there is one, use the function, otherwise just assign the state.
-      const targetEmailListObject = state.searchList
-      if (targetEmailListObject && q === targetEmailListObject?.q) {
-        handleAdditionToExistingEmailArray(
+    if (threads && threads.length > 0) {
+      // If the input contains a q - it is search request.
+      if (q) {
+        // This function is used to update the search List.
+        // If there is one, use the function, otherwise just assign the state.
+        const targetEmailListObject = state.searchList
+        if (targetEmailListObject && q === targetEmailListObject?.q) {
+          handleAdditionToExistingEmailArray({
+            targetEmailListObject,
+            state,
+            labels,
+            threads,
+            timestamp,
+            arrayIndex,
+            nextPageToken,
+            q,
+          })
+        } else {
+          const sortedThreads = sortThreads(threads)
+          const sortedEmailList: IEmailListObject = {
+            nextPageToken,
+            labels,
+            threads: sortedThreads,
+            q,
+          }
+          state.searchList = sortedEmailList
+        }
+        return
+      }
+      // If emailList sub-array index exists, if exists concat threads.
+      // If not, push the new emailList
+      if (arrayIndex > -1) {
+        const targetEmailListObject = state.emailList[arrayIndex]
+        // It loops through all the newly fetched threads, and if check what to do with this.
+        // Either push it to the tempArray, or update the entry in the emailList state.
+        handleAdditionToExistingEmailArray({
           targetEmailListObject,
           state,
           labels,
@@ -167,56 +207,37 @@ const handleEmailListChange = ({
           timestamp,
           arrayIndex,
           nextPageToken,
-          q
-        )
-      } else {
+        })
+        return
+      }
+      if (arrayIndex === -1 && !labels.includes(global.SEARCH_LABEL)) {
         const sortedThreads = sortThreads(threads)
+
         const sortedEmailList: IEmailListObject = {
           nextPageToken,
           labels,
-          threads: sortedThreads,
-          q,
+          threads: undoubleThreads(sortedThreads),
         }
-        state.searchList = sortedEmailList
+        state.emailList.push(sortedEmailList)
       }
       return
     }
-    // If emailList sub-array index exists, if exists concat threads.
-    // If not, push the new emailList
-    if (arrayIndex > -1) {
-      const targetEmailListObject = state.emailList[arrayIndex]
-      // It loops through all the newly fetched threads, and if check what to do with this.
-      // Either push it to the tempArray, or update the entry in the emailList state.
-      handleAdditionToExistingEmailArray(
-        targetEmailListObject,
-        state,
+    // if (arrayIndex > -1 && (!threads || threads.length === 0)) {
+    //   const emptyResultObject = {
+    //     labels,
+    //     threads: [],
+    //     nextPageToken: null,
+    //   }
+    //   state.emailList.push(emptyResultObject)
+    // }
+    if (arrayIndex === -1 && (!threads || threads.length === 0)) {
+      const emptyResultObject = {
         labels,
-        threads,
-        timestamp,
-        arrayIndex,
-        nextPageToken
-      )
-      return
-    }
-    if (arrayIndex === -1 && !labels.includes(global.SEARCH_LABEL)) {
-      const sortedThreads = sortThreads(threads)
-
-      const sortedEmailList: IEmailListObject = {
-        nextPageToken,
-        labels,
-        threads: undoubleThreads(sortedThreads),
+        threads: [],
+        nextPageToken: null,
       }
-      state.emailList.push(sortedEmailList)
+      state.emailList.push(emptyResultObject)
     }
-    return
-  }
-  if (labels && (!threads || threads.length === 0)) {
-    const emptyResultObject = {
-      labels,
-      threads: [],
-      nextPageToken: null,
-    }
-    state.emailList.push(emptyResultObject)
   }
 }
 
@@ -487,7 +508,7 @@ export const loadEmailDetails = (
           // TODO: Alter all input to have the threadId as input
           buffer.push(threadApi({}).getThreadDetail(thread.id))
         )
-        // TODO: Since the history api doesn't give back any other label information than Draft - we need to check for the original source and create i
+        // TODO: Since the history api doesn't give back any other label information than Draft - we need to check for the original source and create it
         const resolvedThreads = await Promise.all(buffer)
         const onlyObjectThreads = resolvedThreads.filter(
           (thread) => typeof thread !== 'string'
@@ -753,7 +774,7 @@ export const updateMessageLabel = ({
 export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
   try {
     dispatch(setIsFetching(true))
-    const { loadedInbox, storageLabels } = getState().labels
+    const { storageLabels } = getState().labels
     const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
     const response = await historyApi().listHistory(
       savedHistoryId,
@@ -762,16 +783,8 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     if (response?.status === 200) {
       const { history } = response.data
       if (history) {
-        // Skip the feed, if the feed hasn't loaded yet - except for DRAFTS - since a draft can be added to any box, as a messsage in a thread.
         for (let i = 0; i < history.length; i += 1) {
-          for (let j = 0; j < loadedInbox.length; j += 1) {
-            if (
-              history[i].labels.includes(loadedInbox[j][0]) ||
-              history[i].labels.includes(global.DRAFT_LABEL)
-            ) {
-              dispatch(loadEmailDetails(history[i]))
-            }
-          }
+          dispatch(loadEmailDetails(history[i]))
         }
       }
       const { data } = await userApi().fetchUser()
