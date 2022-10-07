@@ -39,6 +39,7 @@ export const ComposerContainer = styled.div<IComposerContainer>`
 `
 
 export const TopRowControls = styled.div`
+  align-items: center;
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid var(--color-neutral-200);

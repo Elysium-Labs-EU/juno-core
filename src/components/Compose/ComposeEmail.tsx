@@ -187,7 +187,7 @@ const ComposeEmail = ({
         dispatch(sendComposedEmail({ composedEmail, localDraftDetails }))
       }
     },
-    [composedEmail]
+    [composedEmail, localDraftDetails]
   )
 
   // Return all the values to base, and refetch the email states
@@ -346,7 +346,7 @@ const ComposeEmail = ({
               <S.TopRowControls>
                 <S.UpdateContainer>
                   {saveSuccess && (
-                    <GS.TextMutedSpan>{local.DRAFT_SAVED}</GS.TextMutedSpan>
+                    <GS.TextMutedSpanSmall>{local.DRAFT_SAVED}</GS.TextMutedSpanSmall>
                   )}
                 </S.UpdateContainer>
                 {memoizedButtons}
