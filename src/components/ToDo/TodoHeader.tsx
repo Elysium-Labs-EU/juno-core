@@ -1,4 +1,3 @@
-import format from 'date-fns/format'
 import Navigation from '../MainHeader/Navigation/Navigation'
 import TodoFocusOption from './TodoFocusOption'
 import * as local from '../../constants/todoConstants'
@@ -8,22 +7,18 @@ import { useAppSelector } from '../../store/hooks'
 import { selectIsFlexibleFlowActive } from '../../store/utilsSlice'
 import { selectEmailList,selectActiveEmailListIndex } from '../../store/emailListSlice'
 import InboxSortOption from '../Inbox/InboxSortOption'
-
+import getEmailListTimeStamp from '../../utils/getEmailListTimeStamp'
 
 const TodoHeader = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
-  const timeStamp = emailList[activeEmailListIndex]?.timestamp 
-  let unixTimeStamp
-  if (timeStamp !== undefined){
-  unixTimeStamp = format(timeStamp,"dd mm yyyy")
-  }
+  
   return (
     <GS.OuterContainer>
       <S.NavContainer>
         <S.HeaderCenter>
-          <S.PageTitle title={unixTimeStamp}>{local.HEADER_TODO}</S.PageTitle>
+          <S.PageTitle title={getEmailListTimeStamp(emailList,activeEmailListIndex)}>{local.HEADER_TODO}</S.PageTitle>
         </S.HeaderCenter>
         <Navigation />
       </S.NavContainer>
