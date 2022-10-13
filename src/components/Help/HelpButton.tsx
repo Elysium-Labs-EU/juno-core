@@ -25,7 +25,7 @@ const customStyles = {
   padding: '10px 12px',
 }
 
-const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
+const HelpButton = ({ activeModal, handleEvent }: { activeModal: string | null, handleEvent: (activeModal: string | null) => void }) => {
   const inSearch = useAppSelector(selectInSearch)
   const dispatch = useAppDispatch()
 
@@ -46,7 +46,7 @@ const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
       <S.StartButtonWrapper>
         <CustomIconButton
           icon={<QiInfo size={SIZE} />}
-          onClick={() => handleEvent()}
+          onClick={() => handleEvent(activeModal)}
           style={customStyles}
           title=""
         />

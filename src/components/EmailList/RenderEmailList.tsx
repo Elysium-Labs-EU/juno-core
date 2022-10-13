@@ -39,6 +39,8 @@ const RenderEmailList = ({
   const KeyKListener = useKeyPress(keyConstants.KEY_K)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
 
+  // console.log('focusedItemIndex', focusedItemIndex)
+
   const { threads, nextPageToken } = filteredOnLabel
 
   const handleLoadMore = useCallback(
@@ -55,6 +57,9 @@ const RenderEmailList = ({
 
   useEffect(() => {
     if (EscapeListener && !inSearch && !activeModal) {
+      setFocusedItemIndex(-1)
+    }
+    if (activeModal) {
       setFocusedItemIndex(-1)
     }
   }, [EscapeListener, inSearch, activeModal])
