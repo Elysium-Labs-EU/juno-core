@@ -34,12 +34,12 @@ export const ThreadRow = styled.div<IThreadRow>`
     isFocused ? `var(--color-neutral-200)` : 'transparent'};
   transition: background-color ease-in 0.125s;
   z-index: 2;
-  border-radius: 5px;
+  border-radius: var(--radius-m);
 
   &:hover {
     background-color: var(--color-neutral-200);
     z-index: 2;
-    border-radius: 5px;
+    border-radius: var(--radius-m);
   }
 `
 

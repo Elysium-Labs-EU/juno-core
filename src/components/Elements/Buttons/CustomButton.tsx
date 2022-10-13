@@ -22,7 +22,7 @@ const Button = styled.button<IButton>`
   background-color: transparent;
   border-bottom-color: transparent;
   border-left-color: transparent;
-  border-radius: 4px;
+  border-radius: var(--radius-m);
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;

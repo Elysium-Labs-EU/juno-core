@@ -35,7 +35,7 @@ export const MenuBar = styled.div<IMenuBar>`
   margin: 0 auto;
   border: 1px solid var(--color-neutral-200);
   background: var(--color-white);
-  border-radius: 4px;
+  border-radius: var(--radius-m);
   z-index: 10;
   box-shadow: ${({ isFocused }) =>
     isFocused ? `rgba(0, 0, 0, 0.1) 0px 0px 10px` : 'none'};
@@ -49,7 +49,7 @@ export const Button = styled.button`
   height: 32px;
   padding: 8px;
   line-height: 16px;
-  border-radius: 4px;
+  border-radius: var(--radius-m);
   &:hover {
     background-color: var(--color-neutral-100);
   }

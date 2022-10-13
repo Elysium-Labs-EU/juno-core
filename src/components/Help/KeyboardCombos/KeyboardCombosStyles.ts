@@ -27,7 +27,7 @@ export const KeyBindShortcut = styled.div`
     display: block;
     padding: 2px 9px 5px;
     margin-right: 3px;
-    border-radius: 4px;
+    border-radius: var(--radius-m);
     cursor: default;
     min-width: 14px;
     min-height: 14px;

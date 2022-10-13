@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   height: 21px;
   padding: 0px 8px;
   line-height: 21px;
-  border-radius: 5px;
+  border-radius: var(--radius-m);
   cursor: default;
   font-size: 10px;
   font-weight: 500;

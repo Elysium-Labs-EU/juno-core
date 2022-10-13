@@ -10,7 +10,7 @@ export const EditorWrapper = styled.div`
   max-height: 400px;
   flex: 1;
   margin: 20px 0;
-  border-radius: 4px;
+  border-radius: var(--radius-m);
   div {
     .ProseMirror {
       min-height: 200px;

@@ -7,7 +7,7 @@ export const Modal = styled.div`
   z-index: var(--z-index-modal);
   transform: translate(-50%, -50%);
   width: 825px;
-  border-radius: 5px;
+  border-radius: var(--radius-m);
   background-color: var(--color-white);
   box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
   outline: 0;
