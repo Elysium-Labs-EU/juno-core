@@ -73,7 +73,7 @@
   },
   "scripts": {
     "start": "vite",
-    "build": "yarn add vite@3.0.X && yarn add @vitejs/plugin-react && vite build",
+    "build": "yarn add -D vite@3.0.X && yarn -D add @vitejs/plugin-react && vite build",
     "type": "tsc && vite",
     "test": "vite test",
     "preview": "vite preview",
