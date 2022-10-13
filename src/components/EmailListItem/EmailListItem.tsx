@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
@@ -71,7 +71,6 @@ const EmailListItem = ({
   index: number
   activeIndex: number
 }) => {
-  const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
@@ -81,15 +80,7 @@ const EmailListItem = ({
   const dispatch = useAppDispatch()
   const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
   const { id } = email
-
-  useEffect(() => {
-    if (!isFocused && activeIndex === index) {
-      setIsFocused(true)
-    }
-    if (isFocused && activeIndex !== index) {
-      setIsFocused(false)
-    }
-  }, [activeIndex, index, isFocused])
+  const isFocused = activeIndex === index
 
   const staticShouldUseDraftOrRegular = useMemo(
     () => shouldUseDraftOrRegular(labelIds, email),
@@ -144,7 +135,7 @@ const EmailListItem = ({
     () =>
       EmailSnippet(
         staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
+        staticShouldUseDraftOrRegular.messages!.length - 1
         ]
       ),
     [staticShouldUseDraftOrRegular]

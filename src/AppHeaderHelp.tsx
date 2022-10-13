@@ -23,7 +23,11 @@ const AppHeaderHelp = () => {
   const inSearch = useAppSelector(selectInSearch)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
   const { ref } = useClickOutside({
-    onClickOutside: () => dispatch(setActiveModal(null)),
+    onClickOutside: () => {
+      if (activeModal === global.ACTIVE_MODAL_MAP.help) {
+        dispatch(setActiveModal(null))
+      }
+    },
   })
 
   // Close help menu whenever a ESC is pressed and menu is opened.
@@ -33,7 +37,8 @@ const AppHeaderHelp = () => {
     }
   }, [EscapeListener, activeModal])
 
-  const handleEvent = useCallback(() => {
+  const handleEvent = useCallback((passedActiveModal: string | null) => {
+    console.log(passedActiveModal)
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.help))
   }, [])
   useMultiKeyPress(handleEvent, actionKeys, inSearch)
@@ -43,7 +48,7 @@ const AppHeaderHelp = () => {
       <GS.OuterContainer>
         <Header data-test-id="header" />
       </GS.OuterContainer>
-      <HelpButton handleEvent={handleEvent} data-test-id="help-button" />
+      <HelpButton handleEvent={handleEvent} data-test-id="help-button" activeModal={activeModal} />
       {activeModal === global.ACTIVE_MODAL_MAP.help && <HelpMenu ref={ref} />}
     </>
   )
