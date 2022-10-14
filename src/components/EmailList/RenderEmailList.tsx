@@ -98,6 +98,7 @@ const RenderEmailList = ({
               threads={threads}
               focusedItemIndex={focusedItemIndex}
               setFocusedItemIndex={setFocusedItemIndex}
+              showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
             />
           </GS.Base>
         )}

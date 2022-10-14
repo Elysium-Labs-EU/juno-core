@@ -5,7 +5,7 @@ import useSetCurrentLabel from '../../hooks/useSetCurrentLabel'
 
 const ARCHIVE_HEADER = 'Archive'
 
-const Sent = () => {
+const Archive = () => {
   useSetCurrentLabel()
 
   return (
@@ -18,4 +18,4 @@ const Sent = () => {
   )
 }
 
-export default Sent
+export default Archive

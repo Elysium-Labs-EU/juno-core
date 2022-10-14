@@ -62,7 +62,6 @@ export const errorHandling = async (err: any) => {
   const originalRequest = err.config
   if (
     err?.response?.data === global.INVALID_TOKEN &&
-    !err?.response?.request?.responseURL.includes('/refresh') &&
     !originalRequest.isRetry
   ) {
     originalRequest.isRetry = true
