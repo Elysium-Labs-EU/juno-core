@@ -101,6 +101,53 @@ const prepareFilesForSave = async ({
     return []
   }
 }
+
+const prepareFormData = async ({
+  composedEmail,
+  emailAddress,
+  localDraftDetails,
+  name,
+}: {
+  composedEmail: IComposePayload
+  emailAddress: string
+  localDraftDetails: IDraftDetailObject | undefined
+  name: string
+}) => {
+  const formData = new FormData()
+  formData.append('draftId', localDraftDetails?.id ?? '')
+  formData.append(
+    'threadId',
+    composedEmail?.threadId
+      ? composedEmail.threadId
+      : localDraftDetails?.message?.threadId ?? ''
+  )
+  formData.append('messageId', localDraftDetails?.message?.id ?? '')
+  formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
+  formData.append(
+    'to',
+    composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
+  )
+  formData.append(
+    'cc',
+    composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
+  )
+  formData.append(
+    'bcc',
+    composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
+  )
+  formData.append('subject', composedEmail?.subject ?? '')
+  formData.append('body', composedEmail?.body ?? '')
+  formData.append('signature', composedEmail?.signature ?? '')
+  console.log('composedEmail.files.length', composedEmail?.files?.length)
+  if (composedEmail?.files && composedEmail.files.length > 0) {
+    await prepareFilesForSave({ files: composedEmail?.files, formData })
+  } else {
+    formData.append('files', '')
+  }
+  console.log('HERE WE ARE', formData)
+  return formData
+}
+
 export const createUpdateDraft = ({
   composedEmail,
   localDraftDetails,
@@ -110,37 +157,12 @@ export const createUpdateDraft = ({
 }): AppThunk => async (dispatch, getState) => {
   try {
     const { emailAddress, name } = getState().base.profile
-
-    const formData = new FormData()
-    formData.append('draftId', localDraftDetails?.id ?? '')
-    formData.append(
-      'threadId',
-      composedEmail?.threadId
-        ? composedEmail.threadId
-        : localDraftDetails?.message?.threadId ?? ''
-    )
-    formData.append('messageId', localDraftDetails?.message?.id ?? '')
-    formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
-    formData.append(
-      'to',
-      composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
-    )
-    formData.append(
-      'cc',
-      composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
-    )
-    formData.append(
-      'bcc',
-      composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
-    )
-    formData.append('subject', composedEmail?.subject ?? '')
-    formData.append('body', composedEmail?.body ?? '')
-    formData.append('signature', composedEmail?.signature ?? '')
-    if (composedEmail?.files && composedEmail.files.length > 0) {
-      await prepareFilesForSave({ files: composedEmail?.files, formData })
-    } else {
-      formData.append('files', '')
-    }
+    const formData = await prepareFormData({
+      composedEmail,
+      emailAddress,
+      localDraftDetails,
+      name,
+    })
 
     const response = !localDraftDetails
       ? await draftApi().createDrafts(formData)
@@ -304,7 +326,7 @@ export const sendComposedEmail = ({
   localDraftDetails,
 }: {
   composedEmail: IComposePayload
-  localDraftDetails: IDraftDetailObject
+  localDraftDetails: IDraftDetailObject | undefined
 }): AppThunk => async (dispatch, getState) => {
   try {
     const { emailList } = getState().email
@@ -341,7 +363,16 @@ export const sendComposedEmail = ({
     }
     // If the id cannot be found on the draft details, send the email via the sendMessage function
     if (!localDraftDetails?.id) {
-      const response = await messageApi().sendMessage(composedEmail)
+      const { emailAddress, name } = getState().base.profile
+      console.log({ composedEmail, emailAddress, localDraftDetails, name })
+      const formData = await prepareFormData({
+        composedEmail,
+        emailAddress,
+        localDraftDetails,
+        name,
+      })
+      console.log('formData', formData)
+      const response = await messageApi().sendMessage(formData)
       if (response?.status === 200) {
         dispatch(setCurrentEmail(''))
         dispatch(closeMail())

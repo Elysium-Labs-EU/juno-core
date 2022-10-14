@@ -88,20 +88,23 @@ export default function useParsePresetValues({
         setComposedEmail(output)
       }
       // composeEmail object coming from a draft item on the draft list via the pushed route
-      const { mailto, body }: { mailto?: string; body?: string } = qs.parse(
+      const {
+        mailto,
+        subject,
+        body,
+      }: { mailto?: string; subject?: string; body?: string } = qs.parse(
         window.location.search,
         {
+          delimiter: /[?&]/,
           ignoreQueryPrefix: true,
         }
       )
-      if (mailto || body) {
+      if (mailto || subject || body) {
         const output = handlePresetvalueConversions({
           to: mailto?.includes('@')
             ? handleContactConversion(mailto)
             : undefined,
-          subject: mailto?.includes('subject')
-            ? mailto.replace('?subject=', '')
-            : undefined,
+          subject,
           body,
         })
         setComposedEmail(output)

@@ -129,6 +129,7 @@ const ComposeEmail = ({
       draftList,
       target: composedEmail,
     })
+    console.log({ composedEmail, localDraftDetails, storedDraftDetails })
     // For the first time running
     if (
       storedDraftDetails &&
@@ -183,7 +184,7 @@ const ComposeEmail = ({
       if (e) {
         e.preventDefault()
       }
-      if (localDraftDetails && composedEmail) {
+      if (composedEmail) {
         dispatch(sendComposedEmail({ composedEmail, localDraftDetails }))
       }
     },
@@ -327,7 +328,6 @@ const ComposeEmail = ({
           title="Send email"
           suppressed
           onClick={(e) => handleSubmit(e)}
-          disabled={!localDraftDetails}
         />
       </S.ButtonContainer>
     ),
