@@ -13,12 +13,16 @@ const TodoHeader = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  let titleValue:string|undefined = ""
+  const addTitleOnHover = () =>{
+    titleValue = getEmailListTimeStamp(emailList,activeEmailListIndex)
+  }
   
   return (
     <GS.OuterContainer>
       <S.NavContainer>
         <S.HeaderCenter>
-          <S.PageTitle title={getEmailListTimeStamp(emailList,activeEmailListIndex)}>{local.HEADER_TODO}</S.PageTitle>
+          <S.PageTitle title = {titleValue} onMouseOver={addTitleOnHover}>{local.HEADER_TODO}</S.PageTitle>
         </S.HeaderCenter>
         <Navigation />
       </S.NavContainer>
