@@ -1,6 +1,5 @@
 import format from 'date-fns/format'
 
-
 export default function getEmailListTimeStamp(emailList: any, activeEmailListIndex:number) {
     const timeStamp = emailList[activeEmailListIndex]?.timestamp
     let unixTimeStamp
@@ -9,4 +8,3 @@ export default function getEmailListTimeStamp(emailList: any, activeEmailListInd
     } 
   return unixTimeStamp
   }
-  
