@@ -1,22 +1,27 @@
 import styled from 'styled-components'
+import { breakPoint } from '../../../constants/themeConstants'
 
 export const Modal = styled.div`
+  background-color: var(--color-white);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow-low);
+  left: 50%;
+  outline: 0;
   position: absolute;
   top: 50%;
-  left: 50%;
-  z-index: var(--z-index-modal);
   transform: translate(-50%, -50%);
   width: 825px;
-  border-radius: 5px;
-  background-color: var(--color-white);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  outline: 0;
+  z-index: var(--z-index-modal);
+  @media only screen and (max-width: ${breakPoint.md}) {
+    min-height: 50%;
+    width: 100%;
+  }
 `
 
 export const Inner = styled.div`
-  margin: 20px;
   display: flex;
   flex-flow: column;
+  margin: 20px;
 `
 
 export const ModalHeader = styled.div`
@@ -24,10 +29,10 @@ export const ModalHeader = styled.div`
 `
 
 export const HeaderRow = styled.div`
+  align-items: center;
   display: flex;
   flex-flow: row;
   justify-content: space-between;
-  align-items: center;
 `
 
 export const ModalTitle = styled.h2`
