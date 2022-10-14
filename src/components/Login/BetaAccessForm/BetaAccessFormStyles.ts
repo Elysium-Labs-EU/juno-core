@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { breakPoint } from '../../../constants/themeConstants'
 
 export const StyledForm = styled.form`
   align-items: center;
@@ -6,6 +7,11 @@ export const StyledForm = styled.form`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 10px;
+  @media only screen and (max-width: ${breakPoint.md}) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 `
 
 export const StyledInput = styled.input`
@@ -18,17 +24,25 @@ export const StyledInput = styled.input`
   margin-right: 10px;
   outline-width: 0;
   padding: 10px;
+  @media only screen and (max-width: ${breakPoint.md}) {
+    margin: 10px 0 20px;
+    width: 100%;
+  }
 `
 
 export const SubmitButton = styled.button`
   background-color: rgb(251, 146, 60);
   border-radius: var(--radius-m);
-  border: none;
+  border: 1px solid transparent;
   color: var(--color-white);
   font-size: 1rem;
   padding: 20px;
   &:hover {
     background-color: rgb(249, 115, 22);
+  }
+  @media only screen and (max-width: ${breakPoint.md}) {
+    padding: 10px;
+    width: 100%;
   }
 `
 
