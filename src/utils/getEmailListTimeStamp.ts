@@ -1,12 +1,15 @@
 import format from 'date-fns/format'
+import { IEmailListObject } from '../store/storeTypes/emailListTypes'
 
+export default function getEmailListTimeStamp(emailList: IEmailListObject[], activeEmailListIndex:number) {
+    const timeStamp = ():string|undefined => {
+        const value = emailList[activeEmailListIndex]?.timestamp
+        if(value === undefined){ 
+            return undefined
+        }
+        return format(value,"dd mm yyyy")
+    }
+    return timeStamp()
+    }
 
-export default function getEmailListTimeStamp(emailList: any, activeEmailListIndex:number) {
-    const timeStamp = emailList[activeEmailListIndex]?.timestamp
-    let unixTimeStamp
-    if (timeStamp !== undefined){
-    unixTimeStamp = format(timeStamp,"dd mm yyyy")
-    } 
-  return unixTimeStamp
-  }
-  
+    
