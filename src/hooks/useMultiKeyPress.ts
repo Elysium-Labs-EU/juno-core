@@ -30,6 +30,10 @@ export default function useMultiKeyPress(
    * If the pressed keys are list in the in action keys, and if the system is not inSearch mode.
    * If all checks pass, the event is handled and the pressed key array is reset.
    */
+
+  // TODO: Rewrite function to take in the event directly on the keydownhandeler, so we can implement:
+  // e.preventDefault();
+  // e.stopPropagation()
   useEffect(() => {
     let mounted = true
     if (handleEvent) {
@@ -69,7 +73,9 @@ export default function useMultiKeyPress(
      * ensures that there is only one version of it on the array.
      */
     const keyDownHandler = (event: KeyboardEvent): void => {
-      if (event.key === undefined) return
+      if (event.key === undefined) {
+        return
+      }
       mounted &&
         setKeyPressed((prevState) => [
           ...new Set([...prevState, event.key.toUpperCase()]),

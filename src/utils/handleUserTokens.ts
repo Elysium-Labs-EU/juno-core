@@ -1,4 +1,5 @@
 import * as global from '../constants/globalConstants'
+import removeCookie from './cookie/removeCookie'
 
 const handleUserTokens = (response?: any) => ({
   setIdToken: () => {
@@ -13,6 +14,7 @@ const handleUserTokens = (response?: any) => ({
   },
   removeAllTokens: () => {
     localStorage.clear()
+    removeCookie('connect.sid')
   },
 })
 
