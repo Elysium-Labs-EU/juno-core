@@ -7,7 +7,7 @@ import EmailListItem from '../EmailListItem/EmailListItem'
  * @param focusedItemIndex - the index of the focused item
  * @param setFocusedItemIndex - callback function to the parent component to keep track of the focused item
  * @param showLabel - an optional flag to show labels on the EmaillistItem, defaults to false
- * @param keySuffix - an optional strsing to add to the key of the thread - to remove conflict with other rendered items
+ * @param keySuffix - an optional string to add to the key of the thread - to remove conflict with other rendered items
  * @param searchOnClickHandeler - an optional onClick callback handeler - used by the Search component
  * @returns {JSX.Element}
  */

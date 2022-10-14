@@ -5,16 +5,20 @@ import * as S from '../MainHeader/HeaderStyles'
 import * as GS from '../../styles/globalStyles'
 import { useAppSelector } from '../../store/hooks'
 import { selectIsFlexibleFlowActive } from '../../store/utilsSlice'
+import { selectEmailList, selectActiveEmailListIndex } from '../../store/emailListSlice'
 import InboxSortOption from '../Inbox/InboxSortOption'
+import getEmailListTimeStamp from '../../utils/getEmailListTimeStamp'
 
 const TodoHeader = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+  const emailList = useAppSelector(selectEmailList)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
 
   return (
     <GS.OuterContainer>
       <S.NavContainer>
         <S.HeaderCenter>
-          <S.PageTitle>{local.HEADER_TODO}</S.PageTitle>
+          <S.PageTitle title={getEmailListTimeStamp(emailList, activeEmailListIndex)}>{local.HEADER_TODO}</S.PageTitle>
         </S.HeaderCenter>
         <Navigation />
       </S.NavContainer>
