@@ -1,6 +1,6 @@
 import { push } from 'redux-first-history'
 import { AppDispatch } from '../store/store'
-import { setServiceUnavailable } from '../store/utilsSlice'
+import { setSystemStatusUpdate } from '../store/utilsSlice'
 
 interface IStartSort {
   dispatch: AppDispatch
@@ -22,7 +22,12 @@ const startSort = ({
       )
     )
   }
-  return dispatch(setServiceUnavailable('Cannot start sorting'))
+  return dispatch(
+    setSystemStatusUpdate({
+      type: 'error',
+      message: 'Unable to start sorting.',
+    })
+  )
 }
 
 export default startSort

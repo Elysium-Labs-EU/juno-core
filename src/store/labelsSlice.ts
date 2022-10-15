@@ -1,12 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
-import type { AppThunk, RootState } from './store'
-import labelApi from '../data/labelApi'
-import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
-import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
+
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
-import { fetchEmailsSimple } from './emailListSlice'
 import { getLabelByRoute } from '../constants/labelMapConstant'
+import labelApi from '../data/labelApi'
+import { fetchEmailsSimple } from './emailListSlice'
+import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
+import { setSettingsLabelId, setSystemStatusUpdate } from './utilsSlice'
+
+import type { AppThunk, RootState } from './store'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],
@@ -80,10 +82,20 @@ export const createLabel =
           dispatch(setSettingsLabelId(response.data.data.id))
         }
       } else {
-        dispatch(setServiceUnavailable('Error creating label.'))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to create the label.',
+          })
+        )
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error creating label.'))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to create the label.',
+        })
+      )
     }
     return null
   }
@@ -94,10 +106,20 @@ export const removeLabel =
     try {
       const response = await labelApi().deleteLabel(labelId)
       if (response?.status !== 204) {
-        dispatch(setServiceUnavailable('Error removing label.'))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to remove the label.',
+          })
+        )
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error removing label.'))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to remove the label.',
+        })
+      )
     }
     return null
   }
@@ -115,13 +137,28 @@ export const fetchLabelIds =
           dispatch(setCurrentLabels([labelObject[0].id]))
           dispatch(setStorageLabels([labelObject[0].id]))
         } else {
-          dispatch(setServiceUnavailable('Error fetching label.'))
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Unable to fetch the label.',
+            })
+          )
         }
       } else {
-        dispatch(setServiceUnavailable('Error fetching label.'))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to fetch the label.',
+          })
+        )
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error fetching label.'))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to fetch the label.',
+        })
+      )
     }
   }
 
@@ -138,13 +175,19 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
       dispatch(setCurrentLabels([labelObject.id]))
     } else {
       dispatch(
-        setServiceUnavailable(
-          'Error setting current label - label is not found'
-        )
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to set current label - label is not found.',
+        })
       )
     }
   } else {
-    dispatch(setServiceUnavailable('Error setting getting current location'))
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Error getting the current location',
+      })
+    )
   }
 }
 

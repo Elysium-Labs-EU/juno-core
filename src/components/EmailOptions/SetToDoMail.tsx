@@ -2,9 +2,9 @@ import * as global from '../../constants/globalConstants'
 import { updateEmailLabel } from '../../store/emailListSlice'
 import { AppDispatch } from '../../store/store'
 import { LabelIdName } from '../../store/storeTypes/labelsTypes'
-import { setServiceUnavailable } from '../../store/utilsSlice'
-import { onlyLegalLabelStrings } from '../../utils/onlyLegalLabels'
+import { setSystemStatusUpdate } from '../../store/utilsSlice'
 import { findLabelByName } from '../../utils/findLabel'
+import { onlyLegalLabelStrings } from '../../utils/onlyLegalLabels'
 
 interface ISetToDoMail {
   threadId: string
@@ -34,7 +34,12 @@ const setToDoMail = ({
     }
     dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
   } else {
-    dispatch(setServiceUnavailable('Cannot find to do label'))
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: "Cannot find 'To Do' label",
+      })
+    )
   }
 }
 

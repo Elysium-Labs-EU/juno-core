@@ -1,11 +1,15 @@
+import { push } from 'redux-first-history'
+
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { push } from 'redux-first-history'
-import { fetchDrafts, openDraftEmail } from './draftsSlice'
-import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
-import type { AppThunk, RootState } from './store'
-import RouteConstants from '../constants/routes.json'
+
 import * as global from '../constants/globalConstants'
+import { getRouteByLabelMap } from '../constants/labelMapConstant'
+import RouteConstants from '../constants/routes.json'
+import labelURL from '../utils/createLabelURL'
+import { findLabelById } from '../utils/findLabel'
+import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
+import { fetchDrafts, openDraftEmail } from './draftsSlice'
 import {
   setCoreStatus,
   setIsForwarding,
@@ -13,26 +17,11 @@ import {
   setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
-import labelURL from '../utils/createLabelURL'
-import { getRouteByLabelMap } from '../constants/labelMapConstant'
-import { findLabelById } from '../utils/findLabel'
-import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
+import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
+import { ISystemStatusUpdate, IUtilsState } from './storeTypes/utilsTypes'
 
-interface IUtilsState {
-  activeModal: null | string
-  alternateActions: boolean
-  emailFetchSize: number
-  inSearch: boolean
-  isAvatarVisible: boolean
-  isFlexibleFlowActive: boolean
-  isLoading: boolean
-  isProcessing: boolean
-  isSentryActive: boolean
-  isSilentLoading: boolean
-  serviceUnavailable: string | null
-  settingsLabelId: string | null
-}
+import type { AppThunk, RootState } from './store'
 
 export const initialState: IUtilsState = Object.freeze({
   activeModal: null,
@@ -45,8 +34,8 @@ export const initialState: IUtilsState = Object.freeze({
   isProcessing: false,
   isSentryActive: true,
   isSilentLoading: false,
-  serviceUnavailable: null,
   settingsLabelId: null,
+  systemStatusUpdate: null,
 })
 
 export const utilsSlice = createSlice({
@@ -80,8 +69,21 @@ export const utilsSlice = createSlice({
     setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
       state.isSilentLoading = payload
     },
-    setServiceUnavailable: (state, { payload }: PayloadAction<string>) => {
-      state.serviceUnavailable = payload
+    setSystemStatusUpdate: (
+      state,
+      { payload }: PayloadAction<ISystemStatusUpdate | null>
+    ) => {
+      if (payload) {
+        // Create an object with a timestamp. The timestamp is used to track it.
+        state.systemStatusUpdate = {
+          message: payload.message,
+          type: payload.type,
+          timestamp: new Date().getTime(),
+        }
+      } else {
+        // If a null is received, reset the state.
+        state.systemStatusUpdate = null
+      }
     },
     setSettings: (state, { payload }) => {
       state.isAvatarVisible = payload.isAvatarVisible
@@ -102,7 +104,11 @@ export const utilsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDrafts.rejected, (state, { meta }) => {
       if (!meta.aborted) {
-        state.serviceUnavailable = global.SOMETHING_WRONG
+        state.systemStatusUpdate = {
+          type: 'error',
+          message: global.SOMETHING_WRONG,
+          timestamp: new Date().getTime(),
+        }
       }
     })
     builder.addCase(fetchEmailsSimple.pending, (state, { meta: { arg } }) => {
@@ -122,7 +128,11 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = global.SOMETHING_WRONG
+        state.systemStatusUpdate = {
+          type: 'error',
+          message: global.SOMETHING_WRONG,
+          timestamp: new Date().getTime(),
+        }
       }
     })
     builder.addCase(fetchEmailsFull.pending, (state, { meta: { arg } }) => {
@@ -142,7 +152,11 @@ export const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        state.serviceUnavailable = global.SOMETHING_WRONG
+        state.systemStatusUpdate = {
+          type: 'error',
+          message: global.SOMETHING_WRONG,
+          timestamp: new Date().getTime(),
+        }
       }
     })
   },
@@ -156,12 +170,12 @@ export const {
   setInSearch,
   setIsLoading,
   setIsProcessing,
-  setIsSilentLoading,
   setIsSentryActive,
-  setServiceUnavailable,
+  setIsSilentLoading,
   setSettings,
   setSettingsLabelId,
   setShowAvatar,
+  setSystemStatusUpdate,
 } = utilsSlice.actions
 
 export const closeMail = (): AppThunk => (dispatch, getState) => {
@@ -180,42 +194,37 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
   dispatch(push(RouteConstants.TODO))
 }
 
-export const openEmail = ({
-  email,
-  id,
-}: {
-  email?: IEmailListThreadItem
-  id: string
-}): AppThunk => (dispatch, getState) => {
-  const { labelIds, storageLabels } = getState().labels
+export const openEmail =
+  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
+  (dispatch, getState) => {
+    const { labelIds, storageLabels } = getState().labels
 
-  const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
+    const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
 
-  // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-  if (
-    email?.messages?.length === 1 &&
-    onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-    email
-  ) {
-    const messageId = email.messages[email.messages.length - 1].id
-    dispatch(openDraftEmail({ id, messageId }))
-    return
+    // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
+    if (
+      email?.messages?.length === 1 &&
+      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
+      email
+    ) {
+      const messageId = email.messages[email.messages.length - 1].id
+      dispatch(openDraftEmail({ id, messageId }))
+      return
+    }
+    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
   }
-  dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
-}
 
-export const navigateTo = (destination: string): AppThunk => (
-  dispatch,
-  getState
-) => {
-  if (getState().emailDetail.isReplying) {
-    dispatch(setIsReplying(false))
+export const navigateTo =
+  (destination: string): AppThunk =>
+  (dispatch, getState) => {
+    if (getState().emailDetail.isReplying) {
+      dispatch(setIsReplying(false))
+    }
+    if (getState().emailDetail.isForwarding) {
+      dispatch(setIsForwarding(false))
+    }
+    dispatch(push(destination))
   }
-  if (getState().emailDetail.isForwarding) {
-    dispatch(setIsForwarding(false))
-  }
-  dispatch(push(destination))
-}
 
 export const navigateBack = (): AppThunk => (dispatch, getState) => {
   const { coreStatus } = getState().emailDetail
@@ -278,8 +287,8 @@ export const selectIsSentryActive = (state: RootState) =>
   state.utils.isSentryActive
 export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
-export const selectServiceUnavailable = (state: RootState) =>
-  state.utils.serviceUnavailable
+export const selectSystemStatusUpdate = (state: RootState) =>
+  state.utils.systemStatusUpdate
 export const selectSettingsLabelId = (state: RootState) =>
   state.utils.settingsLabelId
 

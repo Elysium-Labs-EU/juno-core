@@ -1,26 +1,28 @@
-import { useEditor, EditorContent, generateHTML } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
+import DOMPurify from 'dompurify'
 import { useCallback, useEffect, useState } from 'react'
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
+
 import BlockQuote from '@tiptap/extension-blockquote'
-import HardBreak from '@tiptap/extension-hard-break'
-import Italic from '@tiptap/extension-italic'
-import Heading from '@tiptap/extension-heading'
 import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
-import OrderedList from '@tiptap/extension-ordered-list'
+import Document from '@tiptap/extension-document'
+import HardBreak from '@tiptap/extension-hard-break'
+import Heading from '@tiptap/extension-heading'
+import Italic from '@tiptap/extension-italic'
 import ListItem from '@tiptap/extension-list-item'
-import DOMPurify from 'dompurify'
-import * as S from './SignatureStyles'
+import OrderedList from '@tiptap/extension-ordered-list'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+
+import * as global from '../../../constants/globalConstants'
 import settingsApi from '../../../data/settingsApi'
+import useDebounce from '../../../hooks/useDebounce'
 import { selectProfile, setProfile } from '../../../store/baseSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import useDebounce from '../../../hooks/useDebounce'
-import { setServiceUnavailable } from '../../../store/utilsSlice'
-import * as global from '../../../constants/globalConstants'
+import { setSystemStatusUpdate } from '../../../store/utilsSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import * as S from './SignatureStyles'
 
 const TITLE = 'Signature'
 
@@ -69,14 +71,24 @@ const Signature = () => {
           request
         )
         if (response?.status !== 200) {
-          dispatch(setServiceUnavailable('Cannot update signature'))
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Cannot update signature.',
+            })
+          )
           return
         }
         dispatch(
           setProfile({ ...profile, signature: response?.data?.signature })
         )
       } catch (err) {
-        dispatch(setServiceUnavailable('Cannot update signature'))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Cannot update signature.',
+          })
+        )
       }
     }
     if (

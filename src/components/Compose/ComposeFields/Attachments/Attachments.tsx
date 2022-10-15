@@ -10,7 +10,7 @@ import * as S from './AttachmentsStyles'
 import * as global from '../../../../constants/globalConstants'
 import convertB64AttachmentToFile from '../../../../utils/convertB64AttachmentToFile'
 import { useAppDispatch } from '../../../../store/hooks'
-import { setServiceUnavailable } from '../../../../store/utilsSlice'
+import { setSystemStatusUpdate } from '../../../../store/utilsSlice'
 import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
 import { IEmailAttachmentType } from '../../../EmailDetail/Attachment/EmailAttachmentTypes'
 
@@ -91,7 +91,12 @@ const Attachments = ({
             ])
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           } else {
-            dispatch(setServiceUnavailable('Unable to restore attachments'))
+            dispatch(
+              setSystemStatusUpdate({
+                type: 'error',
+                message: 'Unable to restore attachments.',
+              })
+            )
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           }
         }
@@ -107,9 +112,12 @@ const Attachments = ({
     (data: File[]) => {
       if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
         dispatch(
-          setServiceUnavailable(
-            `File size can not exceed ${prettyBytes(MAX_MB_UPLOAD_DIRECT)}`
-          )
+          setSystemStatusUpdate({
+            type: 'error',
+            message: `File size can not exceed ${prettyBytes(
+              MAX_MB_UPLOAD_DIRECT
+            )}`,
+          })
         )
         return
       }
