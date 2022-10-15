@@ -13,7 +13,6 @@ import {
   OpenDraftEmailType,
   IDraftDetailObject,
 } from './storeTypes/draftsTypes'
-import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
   listRemoveItemDetail,
   listRemoveItemDetailBatch,
@@ -25,10 +24,11 @@ import archiveMail from '../components/EmailOptions/ArchiveMail'
 import messageApi from '../data/messageApi'
 import getEmailListIndex from '../utils/getEmailListIndex'
 import { IComposePayload } from './storeTypes/composeTypes'
+import { prepareFormData } from '../utils/prepareMessage'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
-  async (obj, { signal }) => {
+  async (_, { signal }) => {
     const response = await draftApi(signal).getDrafts()
     return response
   }
@@ -87,20 +87,6 @@ export const {
   listRemoveDraftBatch,
 } = draftsSlice.actions
 
-const prepareFilesForSave = async ({
-  files,
-  formData,
-}: {
-  files: File[]
-  formData: FormData
-}) => {
-  try {
-    files.forEach((file) => formData.append('file', file, file.name))
-    return formData
-  } catch (err) {
-    return []
-  }
-}
 export const createUpdateDraft = ({
   composedEmail,
   localDraftDetails,
@@ -110,37 +96,12 @@ export const createUpdateDraft = ({
 }): AppThunk => async (dispatch, getState) => {
   try {
     const { emailAddress, name } = getState().base.profile
-
-    const formData = new FormData()
-    formData.append('draftId', localDraftDetails?.id ?? '')
-    formData.append(
-      'threadId',
-      composedEmail?.threadId
-        ? composedEmail.threadId
-        : localDraftDetails?.message?.threadId ?? ''
-    )
-    formData.append('messageId', localDraftDetails?.message?.id ?? '')
-    formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
-    formData.append(
-      'to',
-      composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
-    )
-    formData.append(
-      'cc',
-      composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
-    )
-    formData.append(
-      'bcc',
-      composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
-    )
-    formData.append('subject', composedEmail?.subject ?? '')
-    formData.append('body', composedEmail?.body ?? '')
-    formData.append('signature', composedEmail?.signature ?? '')
-    if (composedEmail?.files && composedEmail.files.length > 0) {
-      await prepareFilesForSave({ files: composedEmail?.files, formData })
-    } else {
-      formData.append('files', '')
-    }
+    const formData = await prepareFormData({
+      composedEmail,
+      emailAddress,
+      localDraftDetails,
+      name,
+    })
 
     const response = !localDraftDetails
       ? await draftApi().createDrafts(formData)
@@ -304,7 +265,7 @@ export const sendComposedEmail = ({
   localDraftDetails,
 }: {
   composedEmail: IComposePayload
-  localDraftDetails: IDraftDetailObject
+  localDraftDetails: IDraftDetailObject | undefined
 }): AppThunk => async (dispatch, getState) => {
   try {
     const { emailList } = getState().email
@@ -341,7 +302,15 @@ export const sendComposedEmail = ({
     }
     // If the id cannot be found on the draft details, send the email via the sendMessage function
     if (!localDraftDetails?.id) {
-      const response = await messageApi().sendMessage(composedEmail)
+      const { emailAddress, name } = getState().base.profile
+      const formData = await prepareFormData({
+        composedEmail,
+        emailAddress,
+        localDraftDetails,
+        name,
+      })
+
+      const response = await messageApi().sendMessage(formData)
       if (response?.status === 200) {
         dispatch(setCurrentEmail(''))
         dispatch(closeMail())
