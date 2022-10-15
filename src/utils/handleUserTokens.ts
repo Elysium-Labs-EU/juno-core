@@ -3,7 +3,7 @@ import removeCookie from './cookie/removeCookie'
 
 const handleUserTokens = (response?: any) => ({
   setIdToken: () => {
-    localStorage.setItem(global.ID_TOKEN, JSON.stringify(response.data.idToken))
+    localStorage.setItem(global.ID_TOKEN, response.data.idToken)
   },
   // Only used when the VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND is true
   setCredentials: () => {
@@ -14,7 +14,7 @@ const handleUserTokens = (response?: any) => ({
   },
   removeAllTokens: () => {
     localStorage.clear()
-    removeCookie('connect.sid')
+    removeCookie('junoSession')
   },
 })
 

@@ -106,14 +106,12 @@ const handleAdditionToExistingEmailArray = ({
     // The object exists in the Redux store
     if (threadIndex > -1) {
       activeCount += 1
-      // const currentState = state.emailList
       targetEmailListObject.threads[threadIndex] = threads[i]
-      // state.emailList = currentState
     }
 
     if (activeCount === completeCount) {
       const sortedThreads = sortThreads(
-        targetEmailListObject.threads.concat(tempArray)
+        targetEmailListObject.threads.concat(tempArray), labels.includes(global.DRAFT_LABEL)
       )
 
       // Here we create the final object that will be pushed to the Redux state

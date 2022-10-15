@@ -11,7 +11,7 @@ import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
-import GetTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
+import getTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
 import RecipientName from '../Elements/RecipientName'
 import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
 import SenderNameFull from '../Elements/SenderName/senderNameFull'
@@ -264,7 +264,7 @@ const EmailListItem = ({
           <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
-              <TimeStampDisplay threadTimeStamp={GetTimeStamp(email)} />
+              <TimeStampDisplay threadTimeStamp={getTimeStamp(email, labelIds.includes(global.DRAFT_LABEL))} />
             </S.DatePosition>
           </S.CellDate>
           <div />
