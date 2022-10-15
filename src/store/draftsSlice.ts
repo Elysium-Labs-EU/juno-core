@@ -13,7 +13,6 @@ import {
   OpenDraftEmailType,
   IDraftDetailObject,
 } from './storeTypes/draftsTypes'
-import convertToGmailEmail from '../utils/convertToGmailEmail'
 import {
   listRemoveItemDetail,
   listRemoveItemDetailBatch,
@@ -25,10 +24,11 @@ import archiveMail from '../components/EmailOptions/ArchiveMail'
 import messageApi from '../data/messageApi'
 import getEmailListIndex from '../utils/getEmailListIndex'
 import { IComposePayload } from './storeTypes/composeTypes'
+import { prepareFormData } from '../utils/prepareMessage'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
-  async (obj, { signal }) => {
+  async (_, { signal }) => {
     const response = await draftApi(signal).getDrafts()
     return response
   }
@@ -86,67 +86,6 @@ export const {
   listRemoveDraftMessage,
   listRemoveDraftBatch,
 } = draftsSlice.actions
-
-const prepareFilesForSave = async ({
-  files,
-  formData,
-}: {
-  files: File[]
-  formData: FormData
-}) => {
-  try {
-    files.forEach((file) => formData.append('file', file, file.name))
-    return formData
-  } catch (err) {
-    return []
-  }
-}
-
-const prepareFormData = async ({
-  composedEmail,
-  emailAddress,
-  localDraftDetails,
-  name,
-}: {
-  composedEmail: IComposePayload
-  emailAddress: string
-  localDraftDetails: IDraftDetailObject | undefined
-  name: string
-}) => {
-  const formData = new FormData()
-  formData.append('draftId', localDraftDetails?.id ?? '')
-  formData.append(
-    'threadId',
-    composedEmail?.threadId
-      ? composedEmail.threadId
-      : localDraftDetails?.message?.threadId ?? ''
-  )
-  formData.append('messageId', localDraftDetails?.message?.id ?? '')
-  formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
-  formData.append(
-    'to',
-    composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
-  )
-  formData.append(
-    'cc',
-    composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
-  )
-  formData.append(
-    'bcc',
-    composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
-  )
-  formData.append('subject', composedEmail?.subject ?? '')
-  formData.append('body', composedEmail?.body ?? '')
-  formData.append('signature', composedEmail?.signature ?? '')
-  console.log('composedEmail.files.length', composedEmail?.files?.length)
-  if (composedEmail?.files && composedEmail.files.length > 0) {
-    await prepareFilesForSave({ files: composedEmail?.files, formData })
-  } else {
-    formData.append('files', '')
-  }
-  console.log('HERE WE ARE', formData)
-  return formData
-}
 
 export const createUpdateDraft = ({
   composedEmail,
@@ -364,14 +303,13 @@ export const sendComposedEmail = ({
     // If the id cannot be found on the draft details, send the email via the sendMessage function
     if (!localDraftDetails?.id) {
       const { emailAddress, name } = getState().base.profile
-      console.log({ composedEmail, emailAddress, localDraftDetails, name })
       const formData = await prepareFormData({
         composedEmail,
         emailAddress,
         localDraftDetails,
         name,
       })
-      console.log('formData', formData)
+
       const response = await messageApi().sendMessage(formData)
       if (response?.status === 200) {
         dispatch(setCurrentEmail(''))

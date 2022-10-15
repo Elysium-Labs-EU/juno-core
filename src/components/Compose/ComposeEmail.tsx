@@ -129,7 +129,6 @@ const ComposeEmail = ({
       draftList,
       target: composedEmail,
     })
-    console.log({ composedEmail, localDraftDetails, storedDraftDetails })
     // For the first time running
     if (
       storedDraftDetails &&
