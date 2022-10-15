@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import * as S from './BaseLoaderStyles'
-import { selectServiceUnavailable } from '../../store/utilsSlice'
+import { selectSystemStatusUpdate } from '../../store/utilsSlice'
 import Logo from '../../images/Juno_logo_dark.png'
 import LogoutOption, {
   handleLogout,
@@ -28,7 +28,7 @@ const AnimatedMountUnmount = ({
 )
 
 const Baseloader = () => {
-  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
+  const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)
   const { countDown } = useCountDownTimer({ startSeconds: 15 })
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const Baseloader = () => {
   return (
     <S.Wrapper data-testid="base-loader">
       <S.Inner>
-        {!serviceUnavailable && (
+        {!systemStatusUpdate && (
           <>
             <AnimatedMountUnmount>
               <S.Container>
@@ -60,10 +60,10 @@ const Baseloader = () => {
             </S.LoaderContainer>
           </>
         )}
-        {serviceUnavailable && (
+        {systemStatusUpdate && systemStatusUpdate.type === 'error' && (
           <>
             <S.ServiceUnavailableParagraph>
-              {serviceUnavailable}
+              {systemStatusUpdate.message}
             </S.ServiceUnavailableParagraph>
             <S.ServiceUnavailableParagraph>
               {REDIRECTED}

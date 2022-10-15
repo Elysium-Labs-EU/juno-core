@@ -1,25 +1,27 @@
 import { useCallback, useEffect, useState } from 'react'
+
 import TextareaAutosize from '@mui/material/TextareaAutosize'
-import * as S from './FeedbackStyles'
-import * as GS from '../../../styles/globalStyles'
-import feedbackApi, { ISendFeedback } from '../../../data/feedbackApi'
+
 import * as global from '../../../constants/globalConstants'
-import {
-  selectActiveModal,
-  setActiveModal,
-  setServiceUnavailable,
-} from '../../../store/utilsSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import CustomModal from '../../Elements/Modal/CustomModal'
-import { selectProfile } from '../../../store/baseSlice'
+import feedbackApi, { ISendFeedback } from '../../../data/feedbackApi'
 import {
   QiChat,
   QiCheckmark,
   QiGift,
   QiWarningAlt,
 } from '../../../images/svgIcons/quillIcons'
+import { selectProfile } from '../../../store/baseSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import {
+  selectActiveModal,
+  setActiveModal,
+  setSystemStatusUpdate,
+} from '../../../store/utilsSlice'
+import * as GS from '../../../styles/globalStyles'
+import CustomButton from '../../Elements/Buttons/CustomButton'
+import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
+import CustomModal from '../../Elements/Modal/CustomModal'
+import * as S from './FeedbackStyles'
 
 interface IFeedbackTypeMapItem {
   [key: string]: 'BUG' | 'FEEDBACK' | 'IDEA'
@@ -85,10 +87,20 @@ const Feedback = () => {
       if (response?.status === 200) {
         setShowSuccess(true)
       } else {
-        dispatch(setServiceUnavailable(global.NETWORK_ERROR))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: global.NETWORK_ERROR,
+          })
+        )
       }
     } catch (err) {
-      dispatch(setServiceUnavailable(global.NETWORK_ERROR))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: global.NETWORK_ERROR,
+        })
+      )
     }
   }, [])
 
@@ -163,7 +175,7 @@ const Feedback = () => {
           </S.Wrapper>
           <S.ButtonContainer>
             <CustomButton
-              label={`Submit ${ selectedType.type.toLowerCase() }`}
+              label={`Submit ${selectedType.type.toLowerCase()}`}
               title="Submit feedback form"
               onClick={() => handleSubmit()}
               disabled={textAreaValue.length === 0}

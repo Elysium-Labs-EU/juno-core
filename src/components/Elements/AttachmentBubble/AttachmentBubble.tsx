@@ -1,20 +1,21 @@
 import prettyBytes from 'pretty-bytes'
 import { useCallback, useState } from 'react'
+
+import * as global from '../../../constants/globalConstants'
 import {
-  QiDownload,
   QiCheckmark,
+  QiDownload,
   QiEscape,
 } from '../../../images/svgIcons/quillIcons'
 import { useAppDispatch } from '../../../store/hooks'
-import EmailAttachmentIcon from './AttachmentIcon'
+import { setSystemStatusUpdate } from '../../../store/utilsSlice'
+import * as GS from '../../../styles/globalStyles'
+import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
 import { IEmailAttachmentType } from '../../EmailDetail/Attachment/EmailAttachmentTypes'
 import CustomIconButton from '../Buttons/CustomIconButton'
 import StyledCircularProgress from '../StyledCircularProgress'
 import * as S from './AttachmentBubbleStyles'
-import * as GS from '../../../styles/globalStyles'
-import * as global from '../../../constants/globalConstants'
-import { setServiceUnavailable } from '../../../store/utilsSlice'
-import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
+import EmailAttachmentIcon from './AttachmentIcon'
 
 const ICON_SIZE = 20
 
@@ -42,7 +43,12 @@ const DownloadButton = ({
         return
       }
       setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(setServiceUnavailable(response.message ?? global.NETWORK_ERROR))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: response.message ?? global.NETWORK_ERROR,
+        })
+      )
     }
   }, [attachmentData, messageId])
 

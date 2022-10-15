@@ -16,7 +16,7 @@ import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
 import {
   selectInSearch,
   setInSearch,
-  setServiceUnavailable,
+  setSystemStatusUpdate,
 } from '../../store/utilsSlice'
 import * as GS from '../../styles/globalStyles'
 import sortThreads from '../../utils/sortThreads'
@@ -215,7 +215,12 @@ const Search = () => {
         }
       } catch (err) {
         setLoadState(global.LOAD_STATE_MAP.error)
-        dispatch(setServiceUnavailable(global.ERROR_MESSAGE))
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: global.ERROR_MESSAGE,
+          })
+        )
       }
     },
     [loadState, searchValueRef, searchValue, searchResults]

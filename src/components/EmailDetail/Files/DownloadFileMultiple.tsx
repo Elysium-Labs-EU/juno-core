@@ -4,7 +4,7 @@ import * as global from '../../../constants/globalConstants'
 import { QiCheckmark, QiDownload } from '../../../images/svgIcons/quillIcons'
 import { useAppDispatch } from '../../../store/hooks'
 import { IEmailMessagePayloadRaw } from '../../../store/storeTypes/emailListTypes'
-import { setServiceUnavailable } from '../../../store/utilsSlice'
+import { setSystemStatusUpdate } from '../../../store/utilsSlice'
 import { downloadAttachmentMultiple } from '../../../utils/downloadAttachment'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
@@ -60,11 +60,19 @@ const DownloadButtonMultiple = ({
       }
       setLoadState(global.LOAD_STATE_MAP.error)
       dispatch(
-        setServiceUnavailable(response[0].message ?? global.NETWORK_ERROR)
+        setSystemStatusUpdate({
+          type: 'error',
+          message: response[0].message ?? global.NETWORK_ERROR,
+        })
       )
     } catch (err) {
       setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(setServiceUnavailable(global.NETWORK_ERROR))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: global.NETWORK_ERROR,
+        })
+      )
     }
   }, [])
 

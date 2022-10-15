@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import { IContact } from './storeTypes/contactsTypes'
-import { setServiceUnavailable } from './utilsSlice'
+import { setSystemStatusUpdate } from './utilsSlice'
 import type { AppThunk, RootState } from './store'
 import contactApi from '../data/contactApi'
 
@@ -66,7 +66,12 @@ export const getAllContacts =
         dispatch(setContactsLoaded(true))
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error fetching contacts.'))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Error fetching contacts.',
+        })
+      )
     }
   }
 
@@ -99,7 +104,12 @@ export const querySpecificContacts =
         dispatch(setContactsLoaded(true))
       }
     } catch (err) {
-      dispatch(setServiceUnavailable('Error fetching contacts.'))
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Error fetching contacts.',
+        })
+      )
     }
   }
 

@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import labelApi from '../data/labelApi'
 import userApi from '../data/userApi'
-import { setServiceUnavailable, setSettingsLabelId } from './utilsSlice'
+import { setSettingsLabelId, setSystemStatusUpdate } from './utilsSlice'
 import { createLabel, setStorageLabels } from './labelsSlice'
 import { BASE_ARRAY } from '../constants/baseConstants'
 import type { AppThunk, RootState } from './store'
@@ -158,27 +158,35 @@ export const checkBase = (): AppThunk => async (dispatch) => {
           }
         } else {
           dispatch(
-            setServiceUnavailable(
-              `Network Error. ${labelResponse}. Please try again later.`
-            )
+            setSystemStatusUpdate({
+              type: 'error',
+              message: `Network Error. ${labelResponse}. Please try again later.`,
+            })
           )
         }
       } else {
         dispatch(
-          setServiceUnavailable(
-            `Network Error. ${sendAsResponse}. Please try again later.`
-          )
+          setSystemStatusUpdate({
+            type: 'error',
+            message: `Network Error. ${sendAsResponse}. Please try again later.`,
+          })
         )
       }
     } else {
       dispatch(
-        setServiceUnavailable(
-          `Network Error. ${userResponse}. Please try again later.`
-        )
+        setSystemStatusUpdate({
+          type: 'error',
+          message: `Network Error. ${userResponse}. Please try again later.`,
+        })
       )
     }
   } catch (err) {
-    dispatch(setServiceUnavailable('An error occured during loading the base.'))
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'An error occured during loading the base.',
+      })
+    )
   }
 }
 

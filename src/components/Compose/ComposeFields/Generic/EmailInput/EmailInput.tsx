@@ -14,7 +14,7 @@ import {
 } from '../../../../../store/contactsSlice'
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks'
 import { IContact } from '../../../../../store/storeTypes/contactsTypes'
-import { setServiceUnavailable } from '../../../../../store/utilsSlice'
+import { setSystemStatusUpdate } from '../../../../../store/utilsSlice'
 import emailValidation from '../../../../../utils/emailValidation'
 import RecipientChip from '../../../../Elements/RecipientChip/RecipientChip'
 import { IRecipientsList } from '../../../ComposeEmailTypes'
@@ -80,7 +80,12 @@ const fetchContacts = async ({
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))
     }
   } catch (err) {
-    dispatch(setServiceUnavailable('Error fetching contacts.'))
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Error fetching contacts.',
+      })
+    )
   } finally {
     setCompletedSearch(true)
   }

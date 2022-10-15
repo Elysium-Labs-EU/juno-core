@@ -16,8 +16,7 @@ import { selectStorageLabels } from './store/labelsSlice'
 import { BASE_ARRAY } from './constants/baseConstants'
 import { history } from './store/store'
 import { fetchToken } from './data/api'
-import { selectServiceUnavailable } from './store/utilsSlice'
-import SnackbarNotification from './components/Elements/SnackbarNotification/SnackbarNotification'
+import SnackbarOrchestrator from './components/SnackbarOrchestrator/SnackbarOrchestrator'
 import RoutesComponent from './Routes'
 import AppHeaderHelp from './AppHeaderHelp'
 
@@ -26,7 +25,6 @@ const App = () => {
   const baseLoaded = useAppSelector(selectBaseLoaded)
   const storageLabels = useAppSelector(selectStorageLabels)
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
-  const serviceUnavailable = useAppSelector(selectServiceUnavailable)
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
@@ -64,9 +62,7 @@ const App = () => {
       <GS.Base>
         {baseLoaded && memoizedHeaderHelp}
         {memoizedRoutesComponent}
-        {serviceUnavailable && (
-          <SnackbarNotification text={serviceUnavailable} />
-        )}
+        <SnackbarOrchestrator />
       </GS.Base>
     </HistoryRouter>
   )
