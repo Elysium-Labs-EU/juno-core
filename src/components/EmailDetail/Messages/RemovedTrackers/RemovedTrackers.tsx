@@ -74,7 +74,7 @@ const RemovedTrackers = ({
             <S.StyledButton onClick={() => setShowDialog(true)}>
               <S.InnerButton>
                 <div className="icon">
-                  <FiShield size={10} color={themeConstants.color.gray[200]} />
+                  <FiShield size={10} color={themeConstants.color.gray[300]} />
                 </div>
                 <GS.TextSpanSmall>{REMOVED_TRACKERS}</GS.TextSpanSmall>
               </S.InnerButton>

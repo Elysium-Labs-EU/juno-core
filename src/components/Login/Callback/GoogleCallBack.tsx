@@ -9,6 +9,7 @@ import { useAppDispatch } from '../../../store/hooks'
 import { setSystemStatusUpdate } from '../../../store/utilsSlice'
 import handleUserTokens from '../../../utils/handleUserTokens'
 import Baseloader from '../../BaseLoader/BaseLoader'
+import * as global from '../../../constants/globalConstants'
 
 /**
  * @component GoogleCallBack
@@ -27,28 +28,39 @@ const GoogleCallBack = () => {
           ignoreQueryPrefix: true,
         }
       )
-      const body = {
-        code,
-        state,
-      }
-      const response = await userApi().authGoogleCallback(body)
-      // If the cloud backend is used with the local frontend, the authorization requires these additional values.
-      if (response?.status === 200) {
-        if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {
-          handleUserTokens(response).setCredentials()
-        } else {
-          handleUserTokens(response).setIdToken()
+      try {
+        const body = {
+          code,
+          state,
         }
-        dispatch(setIsAuthenticated(true))
-        dispatch(push(RoutesConstants.TODO))
-      } else {
+        const response = await userApi().authGoogleCallback(body)
+        // If the cloud backend is used with the local frontend, the authorization requires these additional values.
+        if (response?.status === 200) {
+          if (
+            import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
+          ) {
+            handleUserTokens(response).setCredentials()
+          } else {
+            handleUserTokens(response).setIdToken()
+          }
+          dispatch(setIsAuthenticated(true))
+          dispatch(push(RoutesConstants.TODO))
+        } else {
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: response?.error ?? global.SOMETHING_WRONG,
+            })
+          )
+          dispatch(push(RoutesConstants.LOGIN))
+        }
+      } catch (err) {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: response.error,
+            message: global.SOMETHING_WRONG,
           })
         )
-        dispatch(push(RoutesConstants.LOGIN))
       }
     }
     getTokens()

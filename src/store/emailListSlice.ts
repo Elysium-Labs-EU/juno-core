@@ -643,7 +643,11 @@ export const updateEmailLabel =
                 })
               }
             }
-            if (!coreStatus || (coreStatus && !nextID)) {
+            if (
+              !coreStatus ||
+              (coreStatus && !nextID) ||
+              coreStatus === global.CORE_STATUS_SEARCHING
+            ) {
               dispatch(navigateBack())
             }
           }
