@@ -32,6 +32,7 @@ export const initialState: IUtilsState = Object.freeze({
   isFlexibleFlowActive: false,
   isLoading: false,
   isProcessing: false,
+  isSending: false,
   isSentryActive: true,
   isSilentLoading: false,
   settingsLabelId: null,
@@ -62,6 +63,9 @@ export const utilsSlice = createSlice({
     },
     setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
       state.isProcessing = payload
+    },
+    setIsSending: (state, { payload }: PayloadAction<boolean>) => {
+      state.isSending = payload
     },
     setIsSentryActive: (state, { payload }: PayloadAction<boolean>) => {
       state.isSentryActive = payload
@@ -170,6 +174,7 @@ export const {
   setInSearch,
   setIsLoading,
   setIsProcessing,
+  setIsSending,
   setIsSentryActive,
   setIsSilentLoading,
   setSettings,
@@ -249,9 +254,9 @@ export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
       ? emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
       : searchList?.threads[viewIndex + 1]?.id
   if (nextID) {
-    return dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
+    dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
   }
-  return dispatch(navigateBack())
+  dispatch(navigateBack())
 }
 
 export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
@@ -266,9 +271,9 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
       ? emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
       : searchList?.threads[viewIndex - 1]?.id
   if (prevID) {
-    return dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
+    dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
   }
-  return dispatch(navigateBack())
+  dispatch(navigateBack())
 }
 
 export const selectActiveModal = (state: RootState) => state.utils.activeModal

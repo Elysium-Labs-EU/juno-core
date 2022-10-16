@@ -58,7 +58,16 @@ const Login = () => {
       <AnimatedMountUnmount>
         <S.Header>
           <S.LoginHeader>Juno</S.LoginHeader>
-          <GS.TextMutedSpan>Private Beta</GS.TextMutedSpan>
+          <S.SubHeaderContainer>
+            <S.StyledLink
+              href="https://elysiumlabs.io"
+              target="_blank"
+              rel="noreferrer"
+            >
+              By Elysium Labs
+            </S.StyledLink>
+            <GS.TextMutedSpan>Private Beta</GS.TextMutedSpan>
+          </S.SubHeaderContainer>
         </S.Header>
         <S.LoginContainer>
           <S.Inner>

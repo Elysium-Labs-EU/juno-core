@@ -14,11 +14,23 @@ export const Wrapper = styled.div`
 export const LoginHeader = styled.h1`
   color: var(--color-black) !important;
   font-family: var(--font-family) !important;
-  font-size: var(--h1);
-  font-weight: 200;
-  line-height: 1.3;
+  font-size: 4rem;
+  line-height: 1;
+  font-weight: 400;
   margin: 40px 0 0;
   user-select: none;
+`
+
+export const SubHeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const StyledLink = styled.a`
+  color: var(--color-black) !important;
+  margin-bottom: 20px;
+  font-weight: 500;
+  text-decoration: none;
 `
 
 export const AdditionalOptions = styled.div`
