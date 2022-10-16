@@ -302,7 +302,7 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
 export const deleteDraft =
   (id: string): AppThunk =>
   async (dispatch, getState) => {
-    const { labelIds } = getState().labels
+    const { coreStatus } = getState().emailDetail
     dispatch(setIsProcessing(true))
     try {
       await draftApi().deleteDraft(id)
@@ -316,7 +316,7 @@ export const deleteDraft =
     } finally {
       dispatch(setIsProcessing(false))
       // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
-      if (labelIds.includes(global.SEARCH_LABEL)) {
+      if (coreStatus === global.CORE_STATUS_SEARCHING) {
         dispatch(
           setSystemStatusUpdate({
             type: 'info',
