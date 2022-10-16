@@ -1,16 +1,13 @@
-import styled from 'styled-components'
 import * as S from './noMobileOverlayStyles'
 import * as local from '../../constants/noMobileOverlayConstants'
-
-const H1 = styled.h1`
-  font-size: var(--h1);
-`
+import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
 
 const NoMobileOverlay = () => (
   <S.Wrapper>
     <S.Inner>
-      <H1>{local.HEADER}</H1>
+      <h1>{local.HEADER}</h1>
       <p className="text_muxed">{local.CONTENT}</p>
+      <LogoutOption />
     </S.Inner>
   </S.Wrapper>
 )

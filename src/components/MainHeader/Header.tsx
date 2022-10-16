@@ -1,23 +1,23 @@
-import { memo } from 'react'
 import { useLocation } from 'react-router-dom'
-import ComposeHeader from '../Compose/ComposeHeader'
-import InboxHeader from '../Inbox/InboxHeader'
-import TodoHeader from '../ToDo/TodoHeader'
-import DraftHeader from '../Draft/DraftHeader'
-import SpamHeader from '../Spam/SpamHeader'
-import SentHeader from '../Sent/SentHeader'
-import NoMobileOverlay from '../NoMobileOverlay'
-import Search from '../Search/Search'
-import Settings from '../Settings/Settings'
-import Introduction from '../Introduction/Introduction'
-import { useAppSelector } from '../../store/hooks'
-import { selectSelectedEmails } from '../../store/emailListSlice'
-import SelectedOptions from './SelectedOptions/SelectedOptions'
-import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
-import Feedback from '../Help/Feedback/Feedback'
-import ArchiveHeader from '../Archive/ArchiveHeader'
 
-const SetHeader = memo(() => {
+import { selectSelectedEmails } from '../../store/emailListSlice'
+import { useAppSelector } from '../../store/hooks'
+import ArchiveHeader from '../Archive/ArchiveHeader'
+import ComposeHeader from '../Compose/ComposeHeader'
+import DraftHeader from '../Draft/DraftHeader'
+import Feedback from '../Help/Feedback/Feedback'
+import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
+import InboxHeader from '../Inbox/InboxHeader'
+import Introduction from '../Introduction/Introduction'
+import NoMobileOverlay from '../NoMobileOverlay/noMobileOverlay'
+import Search from '../Search/Search'
+import SentHeader from '../Sent/SentHeader'
+import Settings from '../Settings/Settings'
+import SpamHeader from '../Spam/SpamHeader'
+import TodoHeader from '../ToDo/TodoHeader'
+import SelectedOptions from './SelectedOptions/SelectedOptions'
+
+const SetHeader = () => {
   const location = useLocation()
 
   // The email detail header is coming from EmailDetail.
@@ -43,16 +43,16 @@ const SetHeader = memo(() => {
     return <ArchiveHeader />
   }
   return null
-})
+}
 
-const ShowIntroduction = memo(() => {
+const ShowIntroduction = () => {
   const location = useLocation()
 
   if (location.pathname === '/') {
     return <Introduction />
   }
   return null
-})
+}
 
 const Header = () => {
   const selectedEmails = useAppSelector(selectSelectedEmails)
