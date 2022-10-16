@@ -10,17 +10,17 @@ export interface ISystemStatusUpdateTimestamp extends ISystemStatusUpdate {
 }
 
 export interface IUtilsState {
-    activeModal: null | string
-    alternateActions: boolean
-    emailFetchSize: number
-    inSearch: boolean
-    isAvatarVisible: boolean
-    isFlexibleFlowActive: boolean
-    isLoading: boolean
-    isProcessing: boolean
-    isSentryActive: boolean
-    isSilentLoading: boolean
-    settingsLabelId: string | null
-    systemStatusUpdate: ISystemStatusUpdateTimestamp | null
-  }
-
+  activeModal: null | string
+  alternateActions: boolean
+  emailFetchSize: number
+  inSearch: boolean
+  isAvatarVisible: boolean
+  isFlexibleFlowActive: boolean
+  isLoading: boolean
+  isProcessing: boolean
+  isSending: boolean
+  isSentryActive: boolean
+  isSilentLoading: boolean
+  settingsLabelId: string | null
+  systemStatusUpdate: ISystemStatusUpdateTimestamp | null
+}

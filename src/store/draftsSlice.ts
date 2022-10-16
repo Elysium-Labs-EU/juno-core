@@ -126,7 +126,6 @@ export const createUpdateDraft =
       )
       return null
     } catch (err) {
-      console.error(err)
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
