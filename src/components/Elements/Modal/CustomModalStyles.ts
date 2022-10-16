@@ -6,15 +6,19 @@ export const Modal = styled.div`
   border-radius: 5px;
   box-shadow: var(--box-shadow-low);
   left: 50%;
+  max-height: calc(100% - 64px);
   outline: 0;
+  overflow-y: auto;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 825px;
   z-index: var(--z-index-modal);
+  @media only screen and (max-width: ${breakPoint.lg}) {
+    width: 100%;
+  }
   @media only screen and (max-width: ${breakPoint.md}) {
     min-height: 50%;
-    width: 100%;
   }
 `
 
