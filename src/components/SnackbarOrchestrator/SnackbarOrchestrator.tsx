@@ -6,16 +6,14 @@ import Snackbar from '@mui/material/Snackbar'
 
 import { QiEscape } from '../../images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { TUpdateType } from '../../store/storeTypes/utilsTypes'
+import { ISystemStatusUpdate } from '../../store/storeTypes/utilsTypes'
 import {
   selectSystemStatusUpdate,
   setSystemStatusUpdate,
 } from '../../store/utilsSlice'
 
-interface ISnackbarMessage {
-  message: string
+interface ISnackbarMessage extends ISystemStatusUpdate {
   key: number
-  type: TUpdateType
 }
 
 const SIX_SECONDS = 6000

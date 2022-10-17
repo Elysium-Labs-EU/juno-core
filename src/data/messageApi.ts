@@ -30,12 +30,18 @@ const messageApi = () => ({
     }
   },
 
-  sendMessage: async (data: any) => {
+  sendMessage: async ({
+    data,
+    timeOut,
+  }: {
+    data: FormData
+    timeOut: number
+  }) => {
     try {
-      const res: AxiosResponse<any> = await instance.post(
-        `/api/send-message`,
-        data
-      )
+      const res: AxiosResponse<any> = await instance.post(`/api/send-message`, {
+        data,
+        timeOut,
+      })
       return res
     } catch (err) {
       return errorHandling(err)

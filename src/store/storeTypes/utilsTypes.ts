@@ -9,6 +9,17 @@ export interface ISystemStatusUpdateTimestamp extends ISystemStatusUpdate {
   timestamp: number
 }
 
+export type TSendStatusType = 'success' | 'info' | 'error'
+
+export interface IMessageSendStatus {
+  message: string
+  type: TUpdateType
+}
+
+export interface IMessageSendStatusTimestamp extends IMessageSendStatus {
+  timestamp: number
+}
+
 export interface IUtilsState {
   activeModal: null | string
   alternateActions: boolean
@@ -18,7 +29,7 @@ export interface IUtilsState {
   isFlexibleFlowActive: boolean
   isLoading: boolean
   isProcessing: boolean
-  isSending: boolean
+  isSending: IMessageSendStatusTimestamp | null
   isSentryActive: boolean
   isSilentLoading: boolean
   settingsLabelId: string | null

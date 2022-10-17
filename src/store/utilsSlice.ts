@@ -19,7 +19,11 @@ import {
 } from './emailDetailSlice'
 import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
-import { ISystemStatusUpdate, IUtilsState } from './storeTypes/utilsTypes'
+import {
+  IMessageSendStatus,
+  ISystemStatusUpdate,
+  IUtilsState,
+} from './storeTypes/utilsTypes'
 
 import type { AppThunk, RootState } from './store'
 
@@ -32,7 +36,8 @@ export const initialState: IUtilsState = Object.freeze({
   isFlexibleFlowActive: false,
   isLoading: false,
   isProcessing: false,
-  isSending: false,
+  isSending: null,
+  // isSending: { message: 'Sending your mail...', type: 'info', timestamp: 0 },
   isSentryActive: true,
   isSilentLoading: false,
   settingsLabelId: null,
@@ -64,8 +69,21 @@ export const utilsSlice = createSlice({
     setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
       state.isProcessing = payload
     },
-    setIsSending: (state, { payload }: PayloadAction<boolean>) => {
-      state.isSending = payload
+    setIsSending: (
+      state,
+      { payload }: PayloadAction<IMessageSendStatus | null>
+    ) => {
+      if (payload) {
+        // Create an object with a timestamp. The timestamp is used to track it.
+        state.isSending = {
+          message: payload.message,
+          type: payload.type,
+          timestamp: new Date().getTime(),
+        }
+      } else {
+        // If a null is received, reset the state.
+        state.isSending = null
+      }
     },
     setIsSentryActive: (state, { payload }: PayloadAction<boolean>) => {
       state.isSentryActive = payload
@@ -290,6 +308,7 @@ export const selectIsLoading = (state: RootState) => state.utils.isLoading
 export const selectIsProcessing = (state: RootState) => state.utils.isProcessing
 export const selectIsSentryActive = (state: RootState) =>
   state.utils.isSentryActive
+export const selectIsSending = (state: RootState) => state.utils.isSending
 export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
 export const selectSystemStatusUpdate = (state: RootState) =>

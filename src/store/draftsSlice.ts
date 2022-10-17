@@ -3,7 +3,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
-import { closeMail, setIsProcessing, setSystemStatusUpdate } from './utilsSlice'
+import {
+  closeMail,
+  setIsProcessing,
+  setIsSending,
+  setSystemStatusUpdate,
+} from './utilsSlice'
 import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
@@ -42,24 +47,33 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {
-    listRemoveDraftThread: (state, { payload }: PayloadAction<any>) => {
-      const { threadId }: { threadId: string } = payload
+    listRemoveDraftThread: (
+      state,
+      { payload }: PayloadAction<{ threadId: string }>
+    ) => {
+      const { threadId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.threadId !== threadId
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftMessage: (state, { payload }: PayloadAction<any>) => {
-      const { messageId }: { messageId: string } = payload
+    listRemoveDraftMessage: (
+      state,
+      { payload }: PayloadAction<{ messageId: string }>
+    ) => {
+      const { messageId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.id !== messageId
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftBatch: (state, { payload }: PayloadAction<any>) => {
-      const { threadIds }: { threadIds: string[] } = payload
+    listRemoveDraftBatch: (
+      state,
+      { payload }: PayloadAction<{ threadIds: string[] }>
+    ) => {
+      const { threadIds } = payload
       const copyCurrentDraftList = state.draftList
 
       const filterArray = () => {
@@ -136,6 +150,7 @@ export const createUpdateDraft =
     }
   }
 
+const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 const pushDraftDetails =
   ({ draft, draft: { message } }: EnhancedDraftDetails): AppThunk =>
   async (dispatch, getState) => {
@@ -166,7 +181,7 @@ const pushDraftDetails =
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: 'Error setting up compose email.',
+          message: ERROR_OPEN_DRAFT_EMAIL,
         })
       )
     }
@@ -183,7 +198,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: 'Error setting up compose email.',
+            message: ERROR_OPEN_DRAFT_EMAIL,
           })
         )
       }
@@ -191,14 +206,13 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: 'Error setting up compose email.',
+          message: ERROR_OPEN_DRAFT_EMAIL,
         })
       )
     }
   }
 }
 
-const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 export const openDraftEmail =
   ({ messageId, id }: OpenDraftEmailType): AppThunk =>
   async (dispatch, getState) => {
@@ -208,12 +222,11 @@ export const openDraftEmail =
         const { payload } = await dispatch(fetchDrafts())
         if (payload?.drafts && payload.drafts.length > 0) {
           const { drafts }: { drafts: IDraftDetailObject[] } = payload
-          const draftIdFilter = drafts.filter(
+          const getDraft = drafts.find(
             (draft) => draft.message.id === messageId
           )
-          const draftId = draftIdFilter[0].id
-          if (!isEmpty(draftId)) {
-            dispatch(loadDraftDetails({ draftId }))
+          if (getDraft && !isEmpty(getDraft)) {
+            dispatch(loadDraftDetails({ draftId: getDraft.id }))
           } else {
             dispatch(
               setSystemStatusUpdate({
@@ -337,11 +350,18 @@ export const sendComposedEmail =
   async (dispatch, getState) => {
     try {
       const { emailList } = getState().email
+      dispatch(setIsSending({ message: 'Sending your mail...', type: 'info' }))
+
+      // TODO: Set the timeout for sending on the backend.
       // If the id is found on the draft details, send the draft email via the Google servers as a draft.
       if (localDraftDetails?.id) {
+        dispatch(setCurrentEmail(''))
+        dispatch(closeMail())
         const response = await draftApi().sendDraft({
           id: localDraftDetails?.id,
+          timeOut: global.MESSAGE_SEND_DELAY,
         })
+
         // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
         if (response?.status === 200) {
           const { labelIds } = getState().labels
@@ -361,15 +381,9 @@ export const sendComposedEmail =
                 staticIndexActiveEmailList,
               })
             )
-
-          dispatch(setCurrentEmail(''))
-          dispatch(closeMail())
         } else {
           dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: 'Error sending email.',
-            })
+            setIsSending({ message: 'Error sending your mail', type: 'error' })
           )
         }
       }
@@ -383,26 +397,22 @@ export const sendComposedEmail =
           name,
         })
 
-        const response = await messageApi().sendMessage(formData)
-        if (response?.status === 200) {
-          dispatch(setCurrentEmail(''))
-          dispatch(closeMail())
-        } else {
+        const response = await messageApi().sendMessage({
+          data: formData,
+          timeOut: global.MESSAGE_SEND_DELAY,
+        })
+        dispatch(setCurrentEmail(''))
+        dispatch(closeMail())
+        if (response?.status !== 200) {
           dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: 'Error sending email.',
-            })
+            setIsSending({ message: 'Error sending your mail', type: 'error' })
           )
         }
       }
     } catch (err) {
       console.error(err)
       dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error sending email.',
-        })
+        setIsSending({ message: 'Error sending your mail', type: 'error' })
       )
     }
   }
