@@ -33,6 +33,7 @@ export const LOAD_STATE_MAP = {
   error: 'error',
 }
 export const MAX_RESULTS = 20
+export const MESSAGE_SEND_DELAY = 3000
 export const MIN_DELAY_REFRESH = 3500
 export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'
