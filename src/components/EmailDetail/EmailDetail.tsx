@@ -89,7 +89,7 @@ const EmailDetail = () => {
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
-    if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
+    if (coreStatus === global.CORE_STATUS_MAP.searching && searchList) {
       setActiveEmailList(searchList)
       return
     }

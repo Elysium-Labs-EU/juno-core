@@ -5,11 +5,16 @@ import { push } from 'redux-first-history'
 import draftApi from '../data/draftApi'
 import {
   closeMail,
+  navigateNextMail,
   setIsProcessing,
   setIsSending,
   setSystemStatusUpdate,
 } from './utilsSlice'
-import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
+import {
+  setCurrentEmail,
+  setIsForwarding,
+  setIsReplying,
+} from './emailDetailSlice'
 import type { AppThunk, RootState } from './store'
 import {
   DraftDetails,
@@ -328,7 +333,7 @@ export const deleteDraft =
     } finally {
       dispatch(setIsProcessing(false))
       // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
-      if (coreStatus === global.CORE_STATUS_SEARCHING) {
+      if (coreStatus === global.CORE_STATUS_MAP.searching) {
         dispatch(
           setSystemStatusUpdate({
             type: 'info',
@@ -350,13 +355,35 @@ export const sendComposedEmail =
   async (dispatch, getState) => {
     try {
       const { emailList } = getState().email
+      const { coreStatus, isForwarding, isReplying } = getState().emailDetail
       dispatch(setIsSending({ message: 'Sending your mail...', type: 'info' }))
+      // Reset the replying state to false on sending, to close the composer.
+      if (isReplying) {
+        dispatch(setIsReplying(false))
+      }
+      // Reset the forwarding state to false on sending, to close the composer.
+      if (isForwarding) {
+        dispatch(setIsForwarding(false))
+      }
+      // Reset the emailDetail state and return to the main page on sending whenever the user is not in sorting or focused mode.
+      if (
+        coreStatus !== global.CORE_STATUS_MAP.sorting &&
+        coreStatus !== global.CORE_STATUS_MAP.focused
+      ) {
+        dispatch(setCurrentEmail(''))
+        dispatch(closeMail())
+      }
 
+      // Send the user to the next email when it is sorting of focused
+      if (
+        coreStatus === global.CORE_STATUS_MAP.sorting ||
+        coreStatus === global.CORE_STATUS_MAP.focused
+      ) {
+        dispatch(navigateNextMail())
+      }
       // TODO: Set the timeout for sending on the backend.
       // If the id is found on the draft details, send the draft email via the Google servers as a draft.
       if (localDraftDetails?.id) {
-        dispatch(setCurrentEmail(''))
-        dispatch(closeMail())
         const response = await draftApi().sendDraft({
           id: localDraftDetails?.id,
           timeOut: global.MESSAGE_SEND_DELAY,
@@ -401,8 +428,6 @@ export const sendComposedEmail =
           data: formData,
           timeOut: global.MESSAGE_SEND_DELAY,
         })
-        dispatch(setCurrentEmail(''))
-        dispatch(closeMail())
         if (response?.status !== 200) {
           dispatch(
             setIsSending({ message: 'Error sending your mail', type: 'error' })

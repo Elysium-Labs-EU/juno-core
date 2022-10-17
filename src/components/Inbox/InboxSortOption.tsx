@@ -52,7 +52,7 @@ const InboxSortOption = () => {
   useFetchEmailsSimple()
 
   const resultMap = {
-    [global.LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${ totalThreads })`,
+    [global.LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${totalThreads})`,
     [global.LOAD_STATE_MAP.loading]: <StyledCircularProgress size={10} />,
     [global.LOAD_STATE_MAP.error]: undefined,
     [global.LOAD_STATE_MAP.idle]: undefined,
@@ -75,7 +75,7 @@ const InboxSortOption = () => {
         activeEmailListIndex: emailListIndex,
       })
 
-      dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
+      dispatch(setCoreStatus(global.CORE_STATUS_MAP.sorting))
       dispatch(setSessionViewIndex(0))
     }
   }, [dispatch, emailList])
@@ -90,7 +90,7 @@ const InboxSortOption = () => {
         activeEmailListIndex,
       })
 
-      dispatch(setCoreStatus(global.CORE_STATUS_SORTING))
+      dispatch(setCoreStatus(global.CORE_STATUS_MAP.sorting))
       dispatch(setSessionViewIndex(0))
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
@@ -125,7 +125,9 @@ const InboxSortOption = () => {
           ) : (
             <>
               {INBOX_BUTTON}{' '}
-              <span style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}>
+              <span
+                style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}
+              >
                 {resultMap[loadingState]}
               </span>
             </>

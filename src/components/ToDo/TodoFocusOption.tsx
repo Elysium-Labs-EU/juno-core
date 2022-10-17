@@ -44,7 +44,7 @@ const TodoFocusOption = () => {
         emailList,
         activeEmailListIndex,
       })
-      dispatch(setCoreStatus(global.CORE_STATUS_FOCUSED))
+      dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
       dispatch(setSessionViewIndex(0))
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds])
