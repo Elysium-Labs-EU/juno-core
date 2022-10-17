@@ -96,8 +96,8 @@ const EmailDetailOptions = ({
               noArchive
             />
           )}
-          {(coreStatus === global.CORE_STATUS_FOCUSED ||
-            coreStatus === global.CORE_STATUS_SORTING) && (
+          {(coreStatus === global.CORE_STATUS_MAP.focused ||
+            coreStatus === global.CORE_STATUS_MAP.sorting) && (
             <SkipOption iconSize={ICON_SIZE} />
           )}
           {unsubscribeLink && (

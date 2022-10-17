@@ -268,13 +268,14 @@ export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
   }
 
   const nextID =
-    coreStatus !== global.CORE_STATUS_SEARCHING
+    coreStatus !== global.CORE_STATUS_MAP.searching
       ? emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
       : searchList?.threads[viewIndex + 1]?.id
   if (nextID) {
     dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
+  } else {
+    dispatch(navigateBack())
   }
-  dispatch(navigateBack())
 }
 
 export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
@@ -285,13 +286,14 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   dispatch(setViewIndex(viewIndex - 1))
 
   const prevID =
-    coreStatus !== global.CORE_STATUS_SEARCHING
+    coreStatus !== global.CORE_STATUS_MAP.searching
       ? emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
       : searchList?.threads[viewIndex - 1]?.id
   if (prevID) {
     dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
+  } else {
+    dispatch(navigateBack())
   }
-  dispatch(navigateBack())
 }
 
 export const selectActiveModal = (state: RootState) => state.utils.activeModal

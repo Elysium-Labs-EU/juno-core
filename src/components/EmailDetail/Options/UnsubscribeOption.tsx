@@ -8,11 +8,30 @@ import { selectInSearch } from '../../../store/utilsSlice'
 import createComposeViaURL from '../../../utils/createComposeViaURL'
 import { setModifierKey } from '../../../utils/setModifierKey'
 import CustomButton from '../../Elements/Buttons/CustomButton'
+import * as global from '../../../constants/globalConstants'
+import {
+  selectCoreStatus,
+  setCoreStatus,
+} from '../../../store/emailDetailSlice'
 
 import type { AppDispatch } from '../../../store/store'
 
-const handleUnsubscribe = (unsubscribeLink: string, dispatch: AppDispatch) => {
+const handleUnsubscribe = ({
+  coreStatus,
+  dispatch,
+  unsubscribeLink,
+}: {
+  dispatch: AppDispatch
+  coreStatus: string | null
+  unsubscribeLink: string
+}) => {
   if (unsubscribeLink.includes('mailto:')) {
+    if (
+      coreStatus === global.CORE_STATUS_MAP.focused ||
+      coreStatus === global.CORE_STATUS_MAP.sorting
+    ) {
+      dispatch(setCoreStatus(null))
+    }
     createComposeViaURL({ dispatch, mailToLink: unsubscribeLink })
   } else {
     window.open(unsubscribeLink)
@@ -32,9 +51,10 @@ const UnsubscribeOption = ({
   iconSize: number
 }) => {
   const inSearch = useAppSelector(selectInSearch)
+  const coreStatus = useAppSelector(selectCoreStatus)
 
   const handleEvent = useCallback(() => {
-    handleUnsubscribe(unsubscribeLink, dispatch)
+    handleUnsubscribe({ unsubscribeLink, dispatch, coreStatus })
   }, [unsubscribeLink])
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch)

@@ -480,8 +480,8 @@ export const useSearchResults =
     if (searchList !== searchResults) {
       dispatch(listUpdateSearchResults(searchResults))
     }
-    if (coreStatus !== global.CORE_STATUS_SEARCHING) {
-      dispatch(setCoreStatus(global.CORE_STATUS_SEARCHING))
+    if (coreStatus !== global.CORE_STATUS_MAP.searching) {
+      dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
       dispatch(setCurrentLabels([global.SEARCH_LABEL]))
     }
     dispatch(
@@ -646,7 +646,7 @@ export const updateEmailLabel =
             if (
               !coreStatus ||
               (coreStatus && !nextID) ||
-              coreStatus === global.CORE_STATUS_SEARCHING
+              coreStatus === global.CORE_STATUS_MAP.searching
             ) {
               dispatch(navigateBack())
             }

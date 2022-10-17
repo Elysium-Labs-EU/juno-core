@@ -10,9 +10,11 @@ export const ACTIVE_MODAL_MAP = {
   settings: 'settings',
 }
 export const ARCHIVE_LABEL = 'ARCHIVE'
-export const CORE_STATUS_FOCUSED = 'isFocused'
-export const CORE_STATUS_SEARCHING = 'isSearching'
-export const CORE_STATUS_SORTING = 'isSorting'
+export const CORE_STATUS_MAP = {
+  focused: 'isFocused',
+  searching: 'isSearching',
+  sorting: 'isSorting',
+}
 export const CREDENTIALS = 'credentials'
 export const DRAFT_LABEL = 'DRAFT'
 export const EMAIL_BODY_INVISIBLE = 'invisible'

@@ -8,7 +8,7 @@ import { QiSend, QiWarningAlt } from '../../images/svgIcons/quillIcons'
 // import * as themeConstants from '../../constants/themeConstants'
 import { IMessageSendStatus } from '../../store/storeTypes/utilsTypes'
 
-const SIX_SECONDS = 6000
+const THREE_SECONDS = 3000
 
 interface IMessageSendStatusWithKey extends IMessageSendStatus {
   key: number
@@ -89,7 +89,7 @@ const SendingBanner = () => {
         vertical: 'top',
         horizontal: 'center',
       }}
-      autoHideDuration={SIX_SECONDS}
+      autoHideDuration={THREE_SECONDS}
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
     >
