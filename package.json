@@ -72,7 +72,7 @@
     "typescript": "4.7.4"
   },
   "scripts": {
-    "start": "vite",
+    "start": "yarn add -D vite@2.9.15 && yarn -D add @vitejs/plugin-react@1.3.2 && vite",
     "build": "yarn add -D vite@3.0.X && yarn -D add @vitejs/plugin-react && vite build",
     "type": "tsc && vite",
     "test": "vite test",
