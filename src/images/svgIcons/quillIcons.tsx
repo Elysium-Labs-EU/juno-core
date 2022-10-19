@@ -334,6 +334,36 @@ export const QiCog = ({
     </svg>
   )
 }
+export const QiCommand = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeWidth={strokeWidth}
+        d="M9 13h-.007m0 0A4 4 0 1 1 13 9v14a4 4 0 1 1-4-4h14a4 4 0 1 1-4 4V9a4 4 0 1 1 4 4H8.993z"
+      />
+    </svg>
+  )
+}
 export const QiCompose = ({
   size = 0,
   color = 'currentColor',

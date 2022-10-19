@@ -1,57 +1,55 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { push } from 'redux-first-history'
 // import isElectron from 'is-electron'
-import { useAppDispatch } from '../../store/hooks'
 import * as S from './LoginStyles'
 import * as GS from '../../styles/globalStyles'
+import * as global from '../../constants/globalConstants'
 import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import GoogleButton from './GoogleButton/GoogleButton'
 import userApi from '../../data/userApi'
-import useCountDownTimer from '../../hooks/useCountDownTimer'
 import { QiArrowRight } from '../../images/svgIcons/quillIcons'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
+import { useAppDispatch } from '../../store/hooks'
+import { setSystemStatusUpdate } from '../../store/utilsSlice'
 
 // const SUB_HEADER = 'To get started'
 const ENTER_HINT = 'use Enter to start'
+const ERROR_LOGIN = 'Unable use Google login'
 
 const Login = () => {
   const dispatch = useAppDispatch()
-  const [loginUrl, setLoginUrl] = useState<string | null>(null)
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [betaFormOpen, setBetaFormOpen] = useState(false)
-  const { countDown } = useCountDownTimer({ startSeconds: 5 })
 
   const fetchUrl = async () => {
-    // A flag that can be set via the .env variable. If this is set, and witht the value of true, the auth mechanism will be changed.
-    const response = await userApi().authGoogle(
-      import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
-    )
-    if (response?.status === 200) {
-      setLoginUrl(response.data)
+    try {
+      setLoadState(global.LOAD_STATE_MAP.loading)
+      // A flag that can be set via the .env variable. If this is set, and witht the value of true, the auth mechanism will be changed.
+      const response = await userApi().authGoogle(
+        import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
+      )
+      if (response?.status === 200 && response?.data) {
+        dispatch(push(response.data))
+      } else {
+        setLoadState(global.LOAD_STATE_MAP.error)
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: ERROR_LOGIN,
+          })
+        )
+      }
+    } catch (err) {
+      setLoadState(global.LOAD_STATE_MAP.error)
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: ERROR_LOGIN,
+        })
+      )
     }
   }
-
-  useEffect(() => {
-    let mounted = true
-    if (mounted && countDown === 0 && !loginUrl) {
-      fetchUrl()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [countDown, loginUrl])
-
-  const signInWithGoogle = () => {
-    if (loginUrl) {
-      // return isElectron()  :
-      dispatch(push(loginUrl))
-    }
-    // return null
-  }
-
-  useEffect(() => {
-    fetchUrl()
-  }, [])
 
   return (
     <S.Wrapper>
@@ -74,8 +72,10 @@ const Login = () => {
             <div style={{ marginBottom: '40px' }} />
             <GoogleButton
               renderProps={{
-                onClick: signInWithGoogle,
-                disabled: loginUrl === null,
+                onClick: fetchUrl,
+                disabled:
+                  loadState === global.LOAD_STATE_MAP.error ||
+                  loadState === global.LOAD_STATE_MAP.loading,
               }}
             />
             <GS.TextMutedSmall>{ENTER_HINT}</GS.TextMutedSmall>
