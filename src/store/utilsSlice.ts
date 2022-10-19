@@ -12,6 +12,7 @@ import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
 import { fetchDrafts, openDraftEmail } from './draftsSlice'
 import {
   setCoreStatus,
+  setCurrentEmail,
   setIsForwarding,
   setIsReplying,
   setSessionViewIndex,
@@ -234,6 +235,7 @@ export const openEmail =
       dispatch(openDraftEmail({ id, messageId }))
       return
     }
+    dispatch(setCurrentEmail(id))
     dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
   }
 
@@ -257,26 +259,54 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
   }
 }
 
-export const navigateNextMail = (): AppThunk => (dispatch, getState) => {
-  const { emailList, activeEmailListIndex, searchList } = getState().email
-  const { coreStatus, sessionViewIndex, viewIndex } = getState().emailDetail
-  const { labelIds } = getState().labels
+/**
+ * @function navigateNextMail
+ * @param blockViewIndexUpdate an optional paramater
+ * @param forceNavigateBack an optional parameter
+ * @returns
+ */
 
-  dispatch(setViewIndex(viewIndex + 1))
-  if (coreStatus) {
-    dispatch(setSessionViewIndex(sessionViewIndex + 1))
-  }
+export const navigateNextMail =
+  (blockViewIndexUpdate?: boolean, forceNavigateBack?: boolean): AppThunk =>
+  (dispatch, getState) => {
+    const { emailList, activeEmailListIndex, searchList, selectedEmails } =
+      getState().email
+    const { coreStatus, sessionViewIndex, viewIndex } = getState().emailDetail
+    const { labelIds } = getState().labels
+    const { isFlexibleFlowActive } = getState().utils
 
-  const nextID =
-    coreStatus !== global.CORE_STATUS_MAP.searching
-      ? emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
-      : searchList?.threads[viewIndex + 1]?.id
-  if (nextID) {
-    dispatch(push(`/mail/${labelURL(labelIds)}/${nextID}/messages`))
-  } else {
-    dispatch(navigateBack())
+    if (!blockViewIndexUpdate) {
+      dispatch(setViewIndex(viewIndex + 1))
+    }
+    if (coreStatus && coreStatus !== global.CORE_STATUS_MAP.searching) {
+      dispatch(setSessionViewIndex(sessionViewIndex + 1))
+    }
+
+    const nextID = () => {
+      if (coreStatus !== global.CORE_STATUS_MAP.searching) {
+        if (
+          (coreStatus === global.CORE_STATUS_MAP.focused ||
+            (isFlexibleFlowActive &&
+              coreStatus === global.CORE_STATUS_MAP.sorting)) &&
+          selectedEmails &&
+          selectedEmails.length > 0
+        ) {
+          return selectedEmails[viewIndex + 1]
+        }
+        return emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
+      }
+      return searchList?.threads[viewIndex + 1]?.id
+    }
+
+    const staticNextID = nextID()
+    if (staticNextID && !forceNavigateBack) {
+      // TODO: Check if we want this to happen
+      dispatch(setCurrentEmail(staticNextID))
+      dispatch(push(`/mail/${labelURL(labelIds)}/${staticNextID}/messages`))
+    } else {
+      dispatch(navigateBack())
+    }
   }
-}
 
 export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   const { emailList, activeEmailListIndex, searchList } = getState().email
@@ -290,6 +320,8 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
       ? emailList[activeEmailListIndex]?.threads[viewIndex - 1]?.id
       : searchList?.threads[viewIndex - 1]?.id
   if (prevID) {
+    // TODO: Check if we want this to happen
+    // dispatch(setCurrentEmail(prevID))
     dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
   } else {
     dispatch(navigateBack())

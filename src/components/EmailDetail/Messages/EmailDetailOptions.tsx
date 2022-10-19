@@ -8,7 +8,7 @@ import {
   selectIsReplying,
 } from '../../../store/emailDetailSlice'
 import { useAppSelector, useAppDispatch } from '../../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+import { selectStorageLabels } from '../../../store/labelsSlice'
 import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 import { selectAlternateActions } from '../../../store/utilsSlice'
 import emailLabels from '../../../utils/emailLabels'
@@ -35,7 +35,6 @@ const EmailDetailOptions = ({
   unsubscribeLink,
 }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
-  const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const alternateActions = useAppSelector(selectAlternateActions)
@@ -53,23 +52,27 @@ const EmailDetailOptions = ({
     [threadDetail]
   )
 
+  const memoizedToDoOption = useMemo(
+    () =>
+      staticEmailLabels &&
+      !staticEmailLabels.some(
+        (item) =>
+          item ===
+          findLabelByName({
+            storageLabels,
+            LABEL_NAME: global.TODO_LABEL_NAME,
+          })?.id
+      ) && <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />,
+    [threadDetail, staticEmailLabels]
+  )
+
   return (
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           {memoizedReplyOption}
           {memoizedForwardOption}
-          {labelIds &&
-            !labelIds.some(
-              (item) =>
-                item ===
-                findLabelByName({
-                  storageLabels,
-                  LABEL_NAME: global.TODO_LABEL_NAME,
-                })?.id
-            ) && (
-              <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
-            )}
+          {memoizedToDoOption}
           {staticEmailLabels.length > 0 ? (
             <EmailDetailOptionStacker
               firstOption={

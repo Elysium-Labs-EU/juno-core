@@ -1,7 +1,12 @@
 import { push } from 'redux-first-history'
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createSlice,
+  current,
+  PayloadAction,
+} from '@reduxjs/toolkit'
 
 import * as global from '../constants/globalConstants'
 import historyApi from '../data/historyApi'
@@ -36,6 +41,7 @@ import {
 } from './storeTypes/metaEmailListTypes'
 import {
   navigateBack,
+  navigateNextMail,
   setIsLoading,
   setIsSilentLoading,
   setSystemStatusUpdate,
@@ -254,7 +260,8 @@ export const emailListSlice = createSlice({
           if (event === 'add') {
             const currentState = state.selectedEmails
             currentState.push(id)
-            state.selectedEmails = currentState
+            const uniqueIds = [...new Set(currentState)]
+            state.selectedEmails = uniqueIds
           }
           if (event === 'remove') {
             const currentState = state.selectedEmails
@@ -598,7 +605,7 @@ export const updateEmailLabel =
   }: UpdateRequestParamsSingle): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const { coreStatus } = getState().emailDetail
+      const { coreStatus, viewIndex } = getState().emailDetail
       const { activeEmailListIndex, emailList, searchList } = getState().email
       const { isSilentLoading } = getState().utils
       const staticActiveEmailList =
@@ -621,34 +628,19 @@ export const updateEmailLabel =
               !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request?.delete
           ) {
-            const { viewIndex, sessionViewIndex } = getState().emailDetail
-            const nextID =
-              staticActiveEmailList.threads[viewIndex + 1] !== undefined
-                ? staticActiveEmailList.threads[viewIndex + 1].id
-                : null
-
-            const staticLabelURL = labelURL(labelIds)
-            if (coreStatus && nextID) {
-              dispatch(setCurrentEmail(nextID))
-              dispatch(setSessionViewIndex(sessionViewIndex + 1))
-              dispatch(push(`/mail/${staticLabelURL}/${nextID}/messages`))
-              if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
-                const { emailFetchSize } = getState().utils
-                edgeLoadingNextPage({
-                  isSilentLoading,
-                  dispatch,
-                  labelIds,
-                  emailFetchSize,
-                  activeEmailList: staticActiveEmailList,
-                })
-              }
-            }
-            if (
-              !coreStatus ||
-              (coreStatus && !nextID) ||
-              coreStatus === global.CORE_STATUS_MAP.searching
-            ) {
-              dispatch(navigateBack())
+            const blockViewIndexUpdate = true
+            const forceNavigateBack =
+              !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
+            dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
+            if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
+              const { emailFetchSize } = getState().utils
+              edgeLoadingNextPage({
+                isSilentLoading,
+                dispatch,
+                labelIds,
+                emailFetchSize,
+                activeEmailList: staticActiveEmailList,
+              })
             }
           }
         }

@@ -2,7 +2,9 @@ import { useEffect } from 'react'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
+  selectSelectedEmails,
   setActiveEmailListIndex,
+  setSelectedEmails,
 } from '../../store/emailListSlice'
 import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
 import EmptyState from '../Elements/EmptyState'
@@ -16,6 +18,7 @@ import {
 } from '../../store/emailDetailSlice'
 import RenderEmailList from './RenderEmailList'
 import useFetchEmailsDrafts from '../../hooks/useFetchEmailsDrafts'
+import SelectedOptions from '../MainHeader/SelectedOptions/SelectedOptions'
 
 const LabeledInbox = ({
   emailList,
@@ -36,6 +39,7 @@ const EmailList = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
   const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
 
@@ -48,6 +52,13 @@ const EmailList = () => {
     }
   }, [currentEmail])
 
+  // Run a clean up function to ensure that the selected email values are always back to base values.
+  useEffect(() => {
+    if (selectedEmails.length > 0) {
+      dispatch(setSelectedEmails([]))
+    }
+  }, [])
+
   // Sync the emailListIndex with Redux
   useEffect(() => {
     const emailListIndex = getEmailListIndex({ emailList, labelIds })
@@ -58,10 +69,13 @@ const EmailList = () => {
 
   return labelIds.some((val) => loadedInbox.indexOf(val) > -1) &&
     activeEmailListIndex > -1 ? (
-    <LabeledInbox
-      emailList={emailList}
-      activeEmailListIndex={activeEmailListIndex}
-    />
+    <>
+      {selectedEmails.length > 0 && <SelectedOptions />}
+      <LabeledInbox
+        emailList={emailList}
+        activeEmailListIndex={activeEmailListIndex}
+      />
+    </>
   ) : (
     <LoadingState />
   )

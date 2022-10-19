@@ -1,4 +1,7 @@
-import { selectSessionViewIndex } from '../../../store/emailDetailSlice'
+import {
+  selectCoreStatus,
+  selectSessionViewIndex,
+} from '../../../store/emailDetailSlice'
 import { useAppSelector } from '../../../store/hooks'
 import * as S from './EmailPositionStyles'
 import * as GS from '../../../styles/globalStyles'
@@ -8,13 +11,18 @@ import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import useFetchThreadsTotalNumber from '../../../hooks/useFetchThreadsTotalNumber'
 import { QiWarningAlt } from '../../../images/svgIcons/quillIcons'
+import { selectSelectedEmails } from '../../../store/emailListSlice'
+import { selectIsFlexibleFlowActive } from '../../../store/utilsSlice'
 
 const EXPLANATION =
   'This shows on what email you are of all the emails in this Gmail box.'
 
 const EmailPosition = () => {
-  const sessionViewIndex = useAppSelector(selectSessionViewIndex)
+  const coreStatus = useAppSelector(selectCoreStatus)
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const labelIds = useAppSelector(selectLabelIds)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const sessionViewIndex = useAppSelector(selectSessionViewIndex)
   const { totalThreads, loadingState } = useFetchThreadsTotalNumber(labelIds)
 
   return (
@@ -22,7 +30,14 @@ const EmailPosition = () => {
       {loadingState === global.LOAD_STATE_MAP.loaded && (
         <StyledTooltip title={EXPLANATION}>
           <GS.TextMutedParagraph style={{ fontSize: 13 }}>
-            {sessionViewIndex + 1} / {totalThreads}
+            {sessionViewIndex + 1} /{' '}
+            {(coreStatus === global.CORE_STATUS_MAP.focused ||
+              (isFlexibleFlowActive &&
+                coreStatus === global.CORE_STATUS_MAP.sorting)) &&
+            selectedEmails &&
+            selectedEmails.length > 0
+              ? selectedEmails.length
+              : totalThreads}
           </GS.TextMutedParagraph>
         </StyledTooltip>
       )}

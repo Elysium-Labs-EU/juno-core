@@ -8,7 +8,10 @@ import {
   QiChevronRight,
   QiEscape,
 } from '../../../images/svgIcons/quillIcons'
-import { selectViewIndex } from '../../../store/emailDetailSlice'
+import {
+  selectCoreStatus,
+  selectViewIndex,
+} from '../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
 import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
@@ -37,12 +40,13 @@ const DetailNavigationView = ({
   isDisabledNext,
   activeEmailList,
 }: IDetailNavigationView) => {
+  const coreStatus = useAppSelector(selectCoreStatus)
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(selectIsLoading)
-  const labelIds = useAppSelector(selectLabelIds)
-  const isSilentLoading = useAppSelector(selectIsSilentLoading)
-  const viewIndex = useAppSelector(selectViewIndex)
   const emailFetchSize = useAppSelector(selectEmailListSize)
+  const isLoading = useAppSelector(selectIsLoading)
+  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const viewIndex = useAppSelector(selectViewIndex)
   const ArrowLeftListener = useKeyPress(keyConstants.KEY_ARROW_LEFT)
   const ArrowRightListener = useKeyPress(keyConstants.KEY_ARROW_RIGHT)
   const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
@@ -71,12 +75,11 @@ const DetailNavigationView = ({
     const nextButtonSelector = () => {
       if (
         activeEmailList.threads.length > 0 &&
-        activeEmailList.threads[viewIndex + 1] !== undefined &&
-        labelIds
+        activeEmailList.threads[viewIndex + 1] !== undefined
       ) {
         dispatch(navigateNextMail())
       }
-      if (!labelIds.includes(global.SEARCH_LABEL)) {
+      if (coreStatus !== global.CORE_STATUS_MAP.searching) {
         // If loading isn't already happening, load the nextPage
         const { nextPageToken } = activeEmailList as IEmailListObject
         if (

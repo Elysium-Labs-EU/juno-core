@@ -12,19 +12,28 @@ import {
   setIsReplying,
   setViewIndex,
 } from '../../store/emailDetailSlice'
-import { selectIsLoading, selectIsProcessing } from '../../store/utilsSlice'
+import {
+  selectIsFlexibleFlowActive,
+  selectIsLoading,
+  selectIsProcessing,
+} from '../../store/utilsSlice'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
   selectEmailList,
   selectSearchList,
   selectActiveEmailListIndex,
+  selectSelectedEmails,
 } from '../../store/emailListSlice'
 import * as local from '../../constants/emailDetailConstants'
 import * as global from '../../constants/globalConstants'
 import * as S from './EmailDetailStyles'
+import * as RoutesConstants from '../../constants/routes.json'
 import FilesOverview from './Files/FilesOverview'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
+import {
+  IEmailListObject,
+  IEmailListThreadItem,
+} from '../../store/storeTypes/emailListTypes'
 import EmailDetailHeader from './EmailDetailHeader'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
@@ -44,12 +53,14 @@ const EmailDetail = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const isForwarding = useAppSelector(selectIsForwarding)
   const isLoading = useAppSelector(selectIsLoading)
   const isProcessing = useAppSelector(selectIsProcessing)
   const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
   const searchList = useAppSelector(selectSearchList)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
@@ -94,6 +105,27 @@ const EmailDetail = () => {
       return
     }
     if (
+      (coreStatus === global.CORE_STATUS_MAP.focused ||
+        (isFlexibleFlowActive &&
+          coreStatus === global.CORE_STATUS_MAP.sorting)) &&
+      selectedEmails &&
+      selectedEmails.length > 0
+    ) {
+      const activeThreadList = emailList[activeEmailListIndex].threads
+      const relevantThreadsFeed: IEmailListThreadItem[] = []
+      selectedEmails.forEach((email) => {
+        const resultIndex = activeThreadList.findIndex((t) => t.id === email)
+        if (resultIndex > -1) {
+          relevantThreadsFeed.push(activeThreadList[resultIndex])
+        }
+      })
+      setActiveEmailList({
+        ...emailList[activeEmailListIndex],
+        threads: relevantThreadsFeed,
+      })
+      return
+    }
+    if (
       emailList &&
       activeEmailListIndex > -1 &&
       emailList[activeEmailListIndex]
@@ -102,7 +134,7 @@ const EmailDetail = () => {
     }
   }, [emailList, activeEmailListIndex, searchList])
 
-  // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
+  // If the current email is found, set the id to the store. Otherwise reroute user to ToDo page.
   useEffect(() => {
     if (
       currentEmail !== currentLocal &&
@@ -111,17 +143,17 @@ const EmailDetail = () => {
       if (activeEmailList) {
         setCurrentLocal(currentEmail)
       } else {
-        dispatch(push('/'))
+        dispatch(push(RoutesConstants.TODO))
       }
     }
   }, [currentEmail, activeEmailList, baseState])
 
   // If the found threadId doesn't match with the Redux version - it will set it.
   useEffect(() => {
-    if (threadId) {
+    if (threadId && !currentEmail) {
       dispatch(setCurrentEmail(threadId))
     }
-  }, [threadId])
+  }, [threadId, currentEmail])
 
   useEffect(() => {
     if (isReplying && currentEmail && currentEmail !== threadId) {

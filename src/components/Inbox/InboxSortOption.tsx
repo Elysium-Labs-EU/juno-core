@@ -12,6 +12,7 @@ import {
 import {
   selectActiveEmailListIndex,
   selectEmailList,
+  selectSelectedEmails,
   setActiveEmailListIndex,
 } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -38,12 +39,13 @@ const actionKeys = [setModifierKey, keyConstants.KEY_E]
 const InboxSortOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const activeModal = useAppSelector(selectActiveModal)
-  const dispatch = useAppDispatch()
   const emailList = useAppSelector(selectEmailList)
   const inSearch = useAppSelector(selectInSearch)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const dispatch = useAppDispatch()
   const { totalThreads, loadingState } = useFetchThreadsTotalNumber([
     global.INBOX_LABEL,
   ])
@@ -87,13 +89,14 @@ const InboxSortOption = () => {
         dispatch,
         labelURL: staticLabelURL,
         emailList,
+        selectedEmails,
         activeEmailListIndex,
       })
 
       dispatch(setCoreStatus(global.CORE_STATUS_MAP.sorting))
       dispatch(setSessionViewIndex(0))
     }
-  }, [activeEmailListIndex, dispatch, emailList, labelIds])
+  }, [activeEmailListIndex, selectedEmails, dispatch, emailList, labelIds])
 
   useMultiKeyPress(
     isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow,
@@ -112,6 +115,28 @@ const InboxSortOption = () => {
     return isLoading || totalThreads === 0
   }
 
+  const selectLabel = useCallback(() => {
+    if (isFlexibleFlowActive) {
+      if (selectedEmails.length > 0) {
+        return (
+          <>
+            {INBOX_BUTTON}
+            <span> ({selectedEmails.length})</span>
+          </>
+        )
+      }
+      return INBOX_BUTTON
+    }
+    return (
+      <>
+        {INBOX_BUTTON}{' '}
+        <span style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}>
+          {resultMap[loadingState]}
+        </span>
+      </>
+    )
+  }, [isFlexibleFlowActive, loadingState, selectedEmails])
+
   return (
     <>
       <CustomAttentionButton
@@ -119,20 +144,7 @@ const InboxSortOption = () => {
           isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow
         }
         disabled={isDisabled()}
-        label={
-          isFlexibleFlowActive ? (
-            INBOX_BUTTON
-          ) : (
-            <>
-              {INBOX_BUTTON}{' '}
-              <span
-                style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}
-              >
-                {resultMap[loadingState]}
-              </span>
-            </>
-          )
-        }
+        label={selectLabel()}
         variant="secondary"
         title={
           !isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'
