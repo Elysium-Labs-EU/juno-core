@@ -22,6 +22,7 @@ import {
   selectIsFlexibleFlowActive,
   setInSearch,
 } from '../../../store/utilsSlice'
+import multipleIncludes from '../../../utils/multipleIncludes'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import NavigationMore from './More/NavigationMore'
@@ -71,10 +72,12 @@ const Navigation = () => {
       ) {
         dispatch(navigateTo(RoutesConstants.INBOX))
       }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_3)) {
+      if (
+        multipleIncludes([keyConstants.KEY_K, keyConstants.KEY_OS], keysPressed)
+      ) {
         dispatch(setInSearch(true))
       }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_4)) {
+      if (keysPressed.includes(keyConstants.KEY_C)) {
         dispatch(navigateTo('/compose'))
       }
     }

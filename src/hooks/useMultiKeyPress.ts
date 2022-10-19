@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import multipleIncludes from '../utils/multipleIncludes'
 
+let eventConstant: KeyboardEvent | null = null
+
 export default function useMultiKeyPress(
-  handleEvent?: Function,
+  handleEvent?: () => void,
   actionKeys?: string[],
   disabled?: boolean
 ) {
   const [keysPressed, setKeyPressed] = useState<string[]>([])
+  // TODO: Add option to let use press it again and override the blocking of the action. This is reset whenever the action is performed?
 
   /**
    * A timeout based function to ensure that the array of the pressed keys is always clean.
@@ -31,12 +34,20 @@ export default function useMultiKeyPress(
    * If all checks pass, the event is handled and the pressed key array is reset.
    */
 
-  // TODO: Rewrite function to take in the event directly on the keydownhandeler, so we can implement:
-  // e.preventDefault();
-  // e.stopPropagation()
+  // TODO: The listener should be listening when the disabled is false
+  // If the disabled is true, it should
+
   useEffect(() => {
+    // console.log({ disabled, eventConstant, handleEvent })
     let mounted = true
-    if (handleEvent) {
+    if (eventConstant && disabled === true) {
+      // if (eventConstant && disabled !== false) {
+      // console.log('here', { disabled, eventConstant, handle/ent })
+      eventConstant?.preventDefault()
+      eventConstant?.stopImmediatePropagation()
+      // eventConstant?.stopPropagation()
+    }
+    if (disabled === false && handleEvent) {
       if (
         keysPressed.length > 0 &&
         multipleIncludes(actionKeys, keysPressed) &&
@@ -45,6 +56,7 @@ export default function useMultiKeyPress(
       ) {
         setKeyPressed([])
         handleEvent()
+        eventConstant = null
       }
     }
     return () => {
@@ -52,40 +64,41 @@ export default function useMultiKeyPress(
     }
   }, [keysPressed, handleEvent])
 
-  useEffect(() => {
-    let mounted = true
+  /**
+   * @function keyUpHandler
+   * @param event - takes in a keyboard event
+   * @returns {void} - removes the event key from the array of pressed keys
+   */
+  const keyUpHandler = (event: KeyboardEvent): void => {
+    !disabled &&
+      setKeyPressed((prevState) =>
+        prevState.filter((item) => item !== event.key)
+      )
+  }
+  /**
+   * @function keyDownHandler
+   * @param event - takes in a keyboard event
+   * @returns {void} - add the event key from the array of pressed keys,
+   * ensures that there is only one version of it on the array.
+   */
+  const keyDownHandler = (event: KeyboardEvent): void => {
+    if (event.key === undefined) {
+      return
+    }
+    // Set the eventConstant to enable event related functions
+    eventConstant = event
 
-    /**
-     * @function keyUpHandler
-     * @param event - takes in a keyboard event
-     * @returns {void} - removes the event key from the array of pressed keys
-     */
-    const keyUpHandler = (event: KeyboardEvent): void => {
-      mounted &&
-        setKeyPressed((prevState) =>
-          prevState.filter((item) => item !== event.key)
-        )
-    }
-    /**
-     * @function keyDownHandler
-     * @param event - takes in a keyboard event
-     * @returns {void} - add the event key from the array of pressed keys,
-     * ensures that there is only one version of it on the array.
-     */
-    const keyDownHandler = (event: KeyboardEvent): void => {
-      if (event.key === undefined) {
-        return
-      }
-      mounted &&
-        setKeyPressed((prevState) => [
-          ...new Set([...prevState, event.key.toUpperCase()]),
-        ])
-    }
+    setKeyPressed((prevState) => [
+      ...new Set([...prevState, event.key.toUpperCase()]),
+    ])
+  }
+
+  useEffect(() => {
+    // console.log({ disabled, eventConstant, handleEvent })
     window.addEventListener('keydown', keyDownHandler)
     window.addEventListener('keyup', keyUpHandler)
     return () => {
       setKeyPressed([])
-      mounted = false
       window.removeEventListener('keydown', keyDownHandler)
       window.removeEventListener('keyup', keyUpHandler)
     }

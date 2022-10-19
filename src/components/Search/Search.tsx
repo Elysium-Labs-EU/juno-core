@@ -237,6 +237,7 @@ const Search = () => {
   }
 
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    console.log('event', event)
     if (event?.code === undefined) return
     if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
@@ -330,7 +331,7 @@ const Search = () => {
             placeholder="Search"
             value={searchValue}
             onChange={handleSearchChange}
-            autoFocus={isSearching}
+            autoFocus
             inputRef={searchInputRef}
             onKeyDown={keyDownHandler}
             fullWidth

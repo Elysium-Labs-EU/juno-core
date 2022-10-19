@@ -1,4 +1,5 @@
 export const KEY_OS = 'META'
+export const KEY_C = 'C'
 export const KEY_E = 'E'
 export const KEY_X = 'X'
 export const KEY_K = 'K'

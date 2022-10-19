@@ -1,14 +1,11 @@
+import * as global from '../../../constants/globalConstants'
+import * as local from '../../../constants/keycomboConstants'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectActiveModal, setActiveModal } from '../../../store/utilsSlice'
-import * as S from './KeyboardCombosStyles'
-import * as local from '../../../constants/keycomboConstants'
-import * as global from '../../../constants/globalConstants'
 import * as GS from '../../../styles/globalStyles'
 import getUserAgent from '../../../utils/getUserAgent'
-import { AppDispatch } from '../../../store/store'
 import CustomModal from '../../Elements/Modal/CustomModal'
-
-const handleClose = (dispatch: AppDispatch) => dispatch(setActiveModal(null))
+import * as S from './KeyboardCombosStyles'
 
 interface IKeyCombos {
   title: string
@@ -49,11 +46,12 @@ const CreateSectionWithKeys = ({
 const KeyboardCombos = () => {
   const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
+  const handleClose = () => dispatch(setActiveModal(null))
 
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.keyboard}
-      handleClose={() => handleClose(dispatch)}
+      handleClose={handleClose}
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
