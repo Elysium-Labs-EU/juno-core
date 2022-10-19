@@ -1,18 +1,7 @@
 import DOMPurify from 'dompurify'
 import { useCallback, useEffect, useState } from 'react'
 
-import BlockQuote from '@tiptap/extension-blockquote'
-import Bold from '@tiptap/extension-bold'
-import BulletList from '@tiptap/extension-bullet-list'
-import Document from '@tiptap/extension-document'
-import HardBreak from '@tiptap/extension-hard-break'
-import Heading from '@tiptap/extension-heading'
-import Italic from '@tiptap/extension-italic'
-import ListItem from '@tiptap/extension-list-item'
-import OrderedList from '@tiptap/extension-ordered-list'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
 import * as global from '../../../constants/globalConstants'
@@ -23,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { setSystemStatusUpdate } from '../../../store/utilsSlice'
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as S from './SignatureStyles'
+import sanitizeAndParseHtmlContent from '../../../utils/sanitizeAndParseHtmlContent'
 
 const TITLE = 'Signature'
 
@@ -44,21 +34,8 @@ const Signature = () => {
   const editorInstance = useEditor({
     extensions: [StarterKit],
     onUpdate: ({ editor }) => {
-      const json = editor.getJSON()
-      const htlmlOutput = generateHTML(json, [
-        Document,
-        Paragraph,
-        Text,
-        Bold,
-        Italic,
-        Heading,
-        BlockQuote,
-        HardBreak,
-        BulletList,
-        OrderedList,
-        ListItem,
-      ])
-      handleBodyChange(htlmlOutput)
+      const textContent = editor.getText()
+      handleBodyChange(textContent)
     },
   })
 
@@ -111,7 +88,20 @@ const Signature = () => {
       editorInstance
     ) {
       setValue(profile?.signature)
-      editorInstance.commands.setContent(profile?.signature)
+      editorInstance.commands.setContent({
+        type: 'doc',
+        content: [
+          {
+            type: 'paragraph',
+            content: [
+              {
+                type: 'text',
+                text: profile?.signature,
+              },
+            ],
+          },
+        ],
+      })
       setLoadState(global.LOAD_STATE_MAP.loaded)
     }
   }, [profile?.signature, editorInstance])
@@ -119,6 +109,7 @@ const Signature = () => {
   return (
     <div>
       {TITLE}
+      {sanitizeAndParseHtmlContent(value)}
       <S.EditorWrapper>
         {loadState === global.LOAD_STATE_MAP.loaded && (
           <EditorContent editor={editorInstance} />
