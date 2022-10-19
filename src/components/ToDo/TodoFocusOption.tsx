@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
@@ -13,6 +13,7 @@ import startSort from '../../utils/startSort'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
+  selectSelectedEmails,
 } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import labelURL from '../../utils/createLabelURL'
@@ -27,12 +28,13 @@ import { QiJump } from '../../images/svgIcons/quillIcons'
 const actionKeys = [setModifierKey, keyConstants.KEY_E]
 
 const TodoFocusOption = () => {
-  const labelIds = useAppSelector(selectLabelIds)
-  const isLoading = useAppSelector(selectIsLoading)
-  const inSearch = useAppSelector(selectInSearch)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const activeModal = useAppSelector(selectActiveModal)
   const emailList = useAppSelector(selectEmailList)
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const inSearch = useAppSelector(selectInSearch)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
   const dispatch = useAppDispatch()
 
   const handleEvent = useCallback(() => {
@@ -42,12 +44,13 @@ const TodoFocusOption = () => {
         dispatch,
         labelURL: staticLabelURL,
         emailList,
+        selectedEmails,
         activeEmailListIndex,
       })
       dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
       dispatch(setSessionViewIndex(0))
     }
-  }, [activeEmailListIndex, dispatch, emailList, labelIds])
+  }, [activeEmailListIndex, dispatch, emailList, labelIds, selectedEmails])
 
   useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
 
@@ -60,7 +63,16 @@ const TodoFocusOption = () => {
     <CustomAttentionButton
       onClick={handleEvent}
       disabled={isDisabled}
-      label={local.BUTTON_FOCUS}
+      label={
+        selectedEmails.length > 0 ? (
+          <>
+            {local.BUTTON_FOCUS}
+            <span> ({selectedEmails.length})</span>
+          </>
+        ) : (
+          local.BUTTON_FOCUS
+        )
+      }
       title={
         !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
       }

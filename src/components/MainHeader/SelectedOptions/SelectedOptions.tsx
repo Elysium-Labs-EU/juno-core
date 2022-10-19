@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useCallback } from 'react'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -23,21 +22,8 @@ const SelectedOptions = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
   const selectedEmails = useAppSelector(selectSelectedEmails)
-  const location = useLocation()
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const emailList = useAppSelector(selectEmailList)
-  const [currentLocation, setCurrentLocation] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (location.pathname !== currentLocation) {
-      setCurrentLocation(location.pathname)
-    }
-    if (currentLocation !== null && currentLocation !== location.pathname) {
-      if (selectedEmails.length > 0) {
-        dispatch(setSelectedEmails([]))
-      }
-    }
-  }, [location])
 
   const handleCancel = useCallback(() => {
     dispatch(setSelectedEmails([]))

@@ -1,7 +1,5 @@
 import { useLocation } from 'react-router-dom'
 
-import { selectSelectedEmails } from '../../store/emailListSlice'
-import { useAppSelector } from '../../store/hooks'
 import ArchiveHeader from '../Archive/ArchiveHeader'
 import ComposeHeader from '../Compose/ComposeHeader'
 import DraftHeader from '../Draft/DraftHeader'
@@ -15,7 +13,6 @@ import SentHeader from '../Sent/SentHeader'
 import Settings from '../Settings/Settings'
 import SpamHeader from '../Spam/SpamHeader'
 import TodoHeader from '../ToDo/TodoHeader'
-import SelectedOptions from './SelectedOptions/SelectedOptions'
 
 const SetHeader = () => {
   const location = useLocation()
@@ -54,21 +51,16 @@ const ShowIntroduction = () => {
   return null
 }
 
-const Header = () => {
-  const selectedEmails = useAppSelector(selectSelectedEmails)
-
-  return (
-    <>
-      <ShowIntroduction />
-      <NoMobileOverlay />
-      <SetHeader />
-      <Search />
-      <Settings />
-      <KeyboardCombos />
-      <Feedback />
-      {selectedEmails.length > 0 && <SelectedOptions />}
-    </>
-  )
-}
+const Header = () => (
+  <>
+    <ShowIntroduction />
+    <NoMobileOverlay />
+    <SetHeader />
+    <Search />
+    <Settings />
+    <KeyboardCombos />
+    <Feedback />
+  </>
+)
 
 export default Header
