@@ -35,12 +35,12 @@ const LabeledInbox = ({
 }
 
 const EmailList = () => {
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const selectedEmails = useAppSelector(selectSelectedEmails)
-  const currentEmail = useAppSelector(selectCurrentEmail)
   const dispatch = useAppDispatch()
 
   useFetchEmailsDrafts(labelIds, Date.now())
