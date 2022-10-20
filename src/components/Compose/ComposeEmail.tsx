@@ -60,7 +60,7 @@ interface IComposeEmailProps {
   ) => void
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
+const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.ENTER]
 
 const ComposeEmail = ({
   presetValue = undefined,
@@ -345,7 +345,9 @@ const ComposeEmail = ({
               <S.TopRowControls>
                 <S.UpdateContainer>
                   {saveSuccess && (
-                    <GS.TextMutedSpanSmall>{local.DRAFT_SAVED}</GS.TextMutedSpanSmall>
+                    <GS.TextMutedSpanSmall>
+                      {local.DRAFT_SAVED}
+                    </GS.TextMutedSpanSmall>
                   )}
                 </S.UpdateContainer>
                 {memoizedButtons}

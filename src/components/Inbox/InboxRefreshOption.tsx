@@ -48,7 +48,7 @@ const InboxRefresh = ({
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
   const inSearch = useAppSelector(selectInSearch)
-  const KeyListener = useKeyPress(keyConstants.KEY_R)
+  const KeyListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.R)
   const dispatch = useAppDispatch()
 
   const handleClick = useCallback(() => {

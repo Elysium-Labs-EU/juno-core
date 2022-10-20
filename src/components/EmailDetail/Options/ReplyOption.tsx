@@ -11,7 +11,7 @@ import { selectIsForwarding } from '../../../store/emailDetailSlice'
 import { QiReply } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
 
-const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
+const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.ENTER]
 
 const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()

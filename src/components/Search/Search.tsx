@@ -124,9 +124,9 @@ const Search = () => {
   const dispatch = useAppDispatch()
   const isSearching = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROWS.down)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROWS.up)
+  const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
 
   useEffect(() => {
     if (EscapeListener) {
@@ -239,7 +239,7 @@ const Search = () => {
   const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
     console.log('event', event)
     if (event?.code === undefined) return
-    if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
+    if (event.code.toUpperCase() === keyConstants.KEY_SPECIAL.enter) {
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
           searchValue,

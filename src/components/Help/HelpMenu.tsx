@@ -58,11 +58,11 @@ const HelpMenu = forwardRef((_props, ref) => {
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const KeyJListener = useKeyPress(keyConstants.KEY_J)
-  const KeyKListener = useKeyPress(keyConstants.KEY_K)
-  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROWS.down)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROWS.up)
+  const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.J)
+  const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.K)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
 
   const MENU_ITEMS_HELP = useMemo(
     () => [

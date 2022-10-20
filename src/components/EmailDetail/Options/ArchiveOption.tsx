@@ -11,7 +11,7 @@ import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
 import { QiFolderArchive } from '../../../images/svgIcons/quillIcons'
 
-const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
 
 const ArchiveOption = ({
   iconSize,

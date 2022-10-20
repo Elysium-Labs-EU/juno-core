@@ -17,7 +17,7 @@ interface IDeleteOption {
   noArchive?: boolean
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
 
 const DeleteOption = ({
   threadId,

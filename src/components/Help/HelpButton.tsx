@@ -13,8 +13,11 @@ import { QiInfo } from '../../images/svgIcons/quillIcons'
 const SIZE = 16
 const BUTTON_TITLE = 'Feedback and help'
 
-const actionKeysKeyboard = [setModifierKey, keyConstants.KEY_FORWARD_SLASH]
-const actionKeysFeedback = [setModifierKey, keyConstants.KEY_DOT]
+const actionKeysKeyboard = [
+  setModifierKey,
+  keyConstants.KEY_SPECIAL.forwardSlash,
+]
+const actionKeysFeedback = [setModifierKey, keyConstants.KEY_SPECIAL.dot]
 
 const customStyles = {
   background: 'var(--color-white)',

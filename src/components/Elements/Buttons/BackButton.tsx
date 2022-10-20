@@ -8,7 +8,7 @@ import { navigateBack } from '../../../store/utilsSlice'
 import { selectCoreStatus } from '../../../store/emailDetailSlice'
 import { QiChevronLeft } from '../../../images/svgIcons/quillIcons'
 
-const actionKeys = [keyConstants.KEY_ESCAPE]
+const actionKeys = [keyConstants.keyConstants.KEY_LETTERS.ESCAPE]
 
 const BackButton = () => {
   const coreStatus = useAppSelector(selectCoreStatus)

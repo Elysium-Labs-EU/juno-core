@@ -38,7 +38,11 @@ const handleUnsubscribe = ({
   }
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_SHIFT, keyConstants.KEY_U]
+const actionKeys = [
+  setModifierKey,
+  keyConstants.KEY_SPECIAL.shift,
+  keyConstants.KEY_LETTERS.U,
+]
 const UNSUBSCRIBE = 'Unsubscribe'
 
 const UnsubscribeOption = ({

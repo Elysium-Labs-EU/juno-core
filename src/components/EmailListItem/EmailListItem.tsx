@@ -80,7 +80,9 @@ const EmailListItem = ({
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const EnterKeyListener = useKeyPress(
+    keyConstants.keyConstants.KEY_LETTERS.ENTER
+  )
   const { id } = email
 
   useEffect(() => {
@@ -264,7 +266,12 @@ const EmailListItem = ({
           <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
-              <TimeStampDisplay threadTimeStamp={getTimeStamp(email, labelIds.includes(global.DRAFT_LABEL))} />
+              <TimeStampDisplay
+                threadTimeStamp={getTimeStamp(
+                  email,
+                  labelIds.includes(global.DRAFT_LABEL)
+                )}
+              />
             </S.DatePosition>
           </S.CellDate>
           <div />

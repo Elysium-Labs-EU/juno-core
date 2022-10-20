@@ -10,7 +10,10 @@ import { selectIsReplying } from '../../../store/emailDetailSlice'
 import { QiForward } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
 
-const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
+const actionKeys = [
+  keyConstants.KEY_SPECIAL.shift,
+  keyConstants.KEY_SPECIAL.enter,
+]
 
 const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()

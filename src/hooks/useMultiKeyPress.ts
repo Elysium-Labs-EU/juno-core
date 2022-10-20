@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import multipleIncludes from '../utils/multipleIncludes'
 
+const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']
+const WHITELISTED_SYSTEM_KEY_COMBOS = [[]]
 let eventConstant: KeyboardEvent | null = null
 
 export default function useMultiKeyPress(
@@ -38,14 +40,26 @@ export default function useMultiKeyPress(
   // If the disabled is true, it should
 
   useEffect(() => {
-    // console.log({ disabled, eventConstant, handleEvent })
+    console.log({ disabled, eventConstant })
     let mounted = true
-    if (eventConstant && disabled === true) {
-      // if (eventConstant && disabled !== false) {
-      // console.log('here', { disabled, eventConstant, handle/ent })
-      eventConstant?.preventDefault()
-      eventConstant?.stopImmediatePropagation()
-      // eventConstant?.stopPropagation()
+    if (eventConstant) {
+      const { target } = eventConstant as any
+      if (target) {
+        // console.log('BOYAH', target.tagName)
+        // console.log('KASHA', BLACKLISTED_DOM_TARGETS.indexOf(target.tagName))
+        // TODO: We need to allow system combinations, some of them.
+        if (
+          disabled === true ||
+          BLACKLISTED_DOM_TARGETS.indexOf(target.tagName) >= 0 ||
+          WHITELISTED_SYSTEM_KEY_COMBOS
+        ) {
+          console.log('here')
+          // console.log('%%%', BLACKLISTED_DOM_TARGETS.indexOf(target.tagName))
+        } else {
+          eventConstant?.preventDefault()
+          eventConstant?.stopImmediatePropagation()
+        }
+      }
     }
     if (disabled === false && handleEvent) {
       if (
@@ -69,10 +83,10 @@ export default function useMultiKeyPress(
    * @param event - takes in a keyboard event
    * @returns {void} - removes the event key from the array of pressed keys
    */
-  const keyUpHandler = (event: KeyboardEvent): void => {
+  const keyUpHandler = (keyUpEvent: KeyboardEvent): void => {
     !disabled &&
       setKeyPressed((prevState) =>
-        prevState.filter((item) => item !== event.key)
+        prevState.filter((item) => item !== keyUpEvent.key)
       )
   }
   /**
@@ -81,21 +95,25 @@ export default function useMultiKeyPress(
    * @returns {void} - add the event key from the array of pressed keys,
    * ensures that there is only one version of it on the array.
    */
-  const keyDownHandler = (event: KeyboardEvent): void => {
-    if (event.key === undefined) {
+  const keyDownHandler = (keydownEvent: KeyboardEvent): void => {
+    console.log('keydownEvent', keydownEvent)
+    if (keydownEvent.key === undefined) {
       return
     }
+
+    // if (keydownEvent.repeat && !options.repeatOnHold) return;
+
     // Set the eventConstant to enable event related functions
-    eventConstant = event
+    eventConstant = keydownEvent
 
     setKeyPressed((prevState) => [
-      ...new Set([...prevState, event.key.toUpperCase()]),
+      ...new Set([...prevState, keydownEvent.key.toUpperCase()]),
     ])
   }
 
   useEffect(() => {
     // console.log({ disabled, eventConstant, handleEvent })
-    window.addEventListener('keydown', keyDownHandler)
+    window.addEventListener('keydown', keyDownHandler, true)
     window.addEventListener('keyup', keyUpHandler)
     return () => {
       setKeyPressed([])

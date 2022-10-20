@@ -15,13 +15,16 @@ import * as keyConstants from './constants/keyConstants'
 import useClickOutside from './hooks/useClickOutside'
 import * as global from './constants/globalConstants'
 
-const actionKeys = [keyConstants.KEY_ARROW_RIGHT, keyConstants.KEY_SHIFT]
+const actionKeys = [
+  keyConstants.KEY_ARROWS.right,
+  keyConstants.KEY_SPECIAL.shift,
+]
 
 const AppHeaderHelp = () => {
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
   const inSearch = useAppSelector(selectInSearch)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
   const { ref } = useClickOutside({
     onClickOutside: () => dispatch(setActiveModal(null)),
   })

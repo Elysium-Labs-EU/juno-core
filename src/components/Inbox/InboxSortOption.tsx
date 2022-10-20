@@ -34,7 +34,7 @@ import useFetchEmailsSimple from '../../hooks/useFetchEmailsSimple'
 import StyledCircularProgress from '../Elements/StyledCircularProgress'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeys = [setModifierKey, keyConstants.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.E]
 
 const InboxSortOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)

@@ -63,21 +63,24 @@ const Navigation = () => {
       !isReplying &&
       !isForwarding
     ) {
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_1)) {
+      if (keysPressed.includes(keyConstants.KEY_NUMBERS[1])) {
         dispatch(navigateTo(RoutesConstants.TODO))
       }
       if (
-        keysPressed.includes(keyConstants.KEY_DIGIT_2) &&
+        keysPressed.includes(keyConstants.KEY_NUMBERS[2]) &&
         isFlexibleFlowActive
       ) {
         dispatch(navigateTo(RoutesConstants.INBOX))
       }
       if (
-        multipleIncludes([keyConstants.KEY_K, keyConstants.KEY_OS], keysPressed)
+        multipleIncludes(
+          [keyConstants.KEY_LETTERS.K, keyConstants.KEY_SPECIAL.os],
+          keysPressed
+        )
       ) {
         dispatch(setInSearch(true))
       }
-      if (keysPressed.includes(keyConstants.KEY_C)) {
+      if (keysPressed.includes(keyConstants.KEY_LETTERS.C)) {
         dispatch(navigateTo('/compose'))
       }
     }

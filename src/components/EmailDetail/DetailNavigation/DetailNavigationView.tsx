@@ -47,9 +47,15 @@ const DetailNavigationView = ({
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const viewIndex = useAppSelector(selectViewIndex)
-  const ArrowLeftListener = useKeyPress(keyConstants.KEY_ARROW_LEFT)
-  const ArrowRightListener = useKeyPress(keyConstants.KEY_ARROW_RIGHT)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const ArrowLeftListener = useKeyPress(
+    keyConstants.KEY_SPECIAL.KEY_ARROWS.left
+  )
+  const ArrowRightListener = useKeyPress(
+    keyConstants.KEY_SPECIAL.KEY_ARROWS.right
+  )
+  const EscapeListener = useKeyPress(
+    keyConstants.keyConstants.KEY_LETTERS.ESCAPE
+  )
 
   const handleCloseEvent = useCallback(() => {
     dispatch(closeMail())

@@ -33,11 +33,15 @@ const RenderEmailList = ({
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const KeyJListener = useKeyPress(keyConstants.KEY_J)
-  const KeyKListener = useKeyPress(keyConstants.KEY_K)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const ArrowDownListener = useKeyPress(
+    keyConstants.KEY_SPECIAL.KEY_ARROWS.down
+  )
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_SPECIAL.KEY_ARROWS.up)
+  const KeyJListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.J)
+  const KeyKListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.K)
+  const EscapeListener = useKeyPress(
+    keyConstants.keyConstants.KEY_LETTERS.ESCAPE
+  )
 
   const { threads, nextPageToken } = filteredOnLabel
 

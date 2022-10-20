@@ -13,7 +13,7 @@ const EmailDetailOptionStacker = ({
   secondOption: JSX.Element
   prioritizeSecondOption: boolean
 }) => {
-  const KeyALtListener = useKeyPress(keyConstants.KEY_ALT)
+  const KeyALtListener = useKeyPress(keyConstants.KEY_SPECIAL.alt)
   const prioritization = prioritizeSecondOption
     ? [secondOption, firstOption]
     : [firstOption, secondOption]

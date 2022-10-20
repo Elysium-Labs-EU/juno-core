@@ -7,7 +7,7 @@ import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { navigateNextMail, selectInSearch } from '../../../store/utilsSlice'
 import { QiSkip } from '../../../images/svgIcons/quillIcons'
 
-const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_K]
+const actionKeys = [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.k]
 
 const SkipOption = ({ iconSize }: { iconSize: number }) => {
   const dispatch = useAppDispatch()
