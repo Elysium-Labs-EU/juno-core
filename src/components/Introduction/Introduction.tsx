@@ -9,7 +9,7 @@ import {
   setActiveModal,
 } from '../../store/utilsSlice'
 import CustomModal from '../Elements/Modal/CustomModal'
-import { QiArrowRight } from '../../images/svgIcons/quillIcons'
+import { QiArrowRight, QiCommand } from '../../images/svgIcons/quillIcons'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -36,6 +36,10 @@ const Introduction = () => {
     dispatch(setActiveModal(null))
   }
 
+  const openKeyboardShortcuts = () => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard))
+  }
+
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.intro}
@@ -54,6 +58,13 @@ const Introduction = () => {
           <p>{DIALOG_CONTENT_PRIVACY_1}</p>
         </S.InnerContent>
         <S.ButtonContainer>
+          <CustomButton
+            onClick={openKeyboardShortcuts}
+            suppressed
+            icon={<QiCommand />}
+            label="View keyboard shortcuts"
+            title="Show keyboard shortcuts"
+          />
           <CustomButton
             onClick={handleClose}
             label={CONFIRM_BUTTON}

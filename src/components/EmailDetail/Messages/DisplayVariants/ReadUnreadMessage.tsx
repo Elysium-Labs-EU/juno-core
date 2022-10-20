@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from 'react'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 
 import * as global from '../../../../constants/globalConstants'
-import * as local from '../../../../constants/unreadConstants'
 import useClickOutside from '../../../../hooks/useClickOutside'
 import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
 import { selectProfile } from '../../../../store/baseSlice'
@@ -72,7 +71,7 @@ const ReadUnreadMessage = ({
     let mounted = true
     if (threadDetail && threadDetail?.messages) {
       if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message?.labelIds?.includes(local.UNREAD)) {
+        if (message && message?.labelIds?.includes(global.UNREAD_LABEL)) {
           setOpen(true)
         }
         if (
@@ -224,9 +223,7 @@ const ReadUnreadMessage = ({
                   <EmailHasAttachmentSimple files={message?.payload?.files} />
                 </S.ChildDiv>
                 {labelIds.includes(global.SEARCH_LABEL) && (
-                  <EmailLabel
-                    labelNames={threadDetail.messages[messageIndex].labelIds}
-                  />
+                  <EmailLabel labelNames={message.labelIds} />
                 )}
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />

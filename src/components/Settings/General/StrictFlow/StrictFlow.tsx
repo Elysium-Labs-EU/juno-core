@@ -1,11 +1,13 @@
 import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
+import { useCallback } from 'react'
 
 import { FormControlLabel, Switch } from '@mui/material'
 
 import RoutesConstants from '../../../../constants/routes.json'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import {
+  selectEmailListSize,
   selectIsFlexibleFlowActive,
   selectSettingsLabelId,
   setFlexibleFlow,
@@ -13,6 +15,8 @@ import {
 import * as GS from '../../../../styles/globalStyles'
 import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
 import * as S from '../../SettingsStyles'
+import * as global from '../../../../constants/globalConstants'
+import { fetchEmailsSimple } from '../../../../store/emailListSlice'
 
 const HEADER = 'Workflow mode'
 const BODY =
@@ -21,9 +25,20 @@ const SWITCH_LABEL = 'Flexible flow'
 
 const StrictFlow = () => {
   const dispatch = useAppDispatch()
-  const settingsLabelId = useAppSelector(selectSettingsLabelId)
+  const emailFetchSize = useAppSelector(selectEmailListSize)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
+  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const location = useLocation()
+
+  // In case the flexibleFlow is activated, rehydrate the inbox.
+  const rehydrateInbox = useCallback(() => {
+    const params = {
+      labelIds: [global.INBOX_LABEL],
+      maxResults: emailFetchSize,
+      nextPageToken: null,
+    }
+    dispatch(fetchEmailsSimple(params))
+  }, [])
 
   const switchWorkFlow = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.checked) {
@@ -40,6 +55,7 @@ const StrictFlow = () => {
     } else {
       localStorage.setItem('isFlexibleFlowActive', 'true')
       dispatch(setFlexibleFlow(true))
+      rehydrateInbox()
       updateSettingsLabel({
         settingsLabelId,
         isFlexibleFlowActive: true,
