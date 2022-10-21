@@ -11,7 +11,7 @@ import { setModifierKey } from '../../../utils/setModifierKey'
 import { QiToDo } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
 
-const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.E]
+const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
 
 const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)

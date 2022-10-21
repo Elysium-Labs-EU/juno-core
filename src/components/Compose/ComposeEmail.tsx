@@ -60,7 +60,7 @@ interface IComposeEmailProps {
   ) => void
 }
 
-const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.ENTER]
+const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.enter]
 
 const ComposeEmail = ({
   presetValue = undefined,

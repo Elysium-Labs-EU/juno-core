@@ -25,7 +25,7 @@ import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { setModifierKey } from '../../utils/setModifierKey'
 import { QiJump } from '../../images/svgIcons/quillIcons'
 
-const actionKeys = [setModifierKey, keyConstants.keyConstants.KEY_LETTERS.E]
+const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
 
 const TodoFocusOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
