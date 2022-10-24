@@ -3,6 +3,7 @@ import root from 'react-shadow/styled-components'
 import { useAppDispatch } from '../../../../store/hooks'
 import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
 import cleanLink from '../../../../utils/cleanLink'
+import changeSignatureColor from '../../../../utils/changeSignatureColor'
 import handleEmailLink from '../../../../utils/handleEmailLink'
 import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
 import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
@@ -42,6 +43,7 @@ const postTreatmentBody = ({
   openLinkInNewTab(activeDocument)
   handleEmailLink(activeDocument, dispatch)
   cleanLink()
+  changeSignatureColor(activeDocument)
   // Only fetch the unsubscribe link if there isn't one passed from the backend - the setUnsubscribe callback will be undefined if backend provided link already.
   setUnsubscribeLink && fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
 }
