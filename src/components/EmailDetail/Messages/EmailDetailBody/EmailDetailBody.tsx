@@ -43,7 +43,7 @@ const postTreatmentBody = ({
   openLinkInNewTab(activeDocument)
   handleEmailLink(activeDocument, dispatch)
   cleanLink()
-  changeSignatureColor()
+  changeSignatureColor(activeDocument)
   // Only fetch the unsubscribe link if there isn't one passed from the backend - the setUnsubscribe callback will be undefined if backend provided link already.
   setUnsubscribeLink && fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
 }

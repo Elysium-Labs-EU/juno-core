@@ -40,7 +40,7 @@ const SignatureEmail = ({
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
-        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        ? `<div class=${global.JUNO_SIGNATURE} data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
         : null,
     }
     updateComposeEmail(updateEventObject)
