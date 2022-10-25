@@ -16,7 +16,7 @@ const SkipOption = ({ iconSize }: { iconSize: number }) => {
   const handleEvent = useCallback(() => {
     dispatch(navigateNextMail())
   }, [dispatch])
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

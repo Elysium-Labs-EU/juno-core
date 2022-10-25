@@ -11,7 +11,7 @@ export const Dialog = styled.div`
   max-height: calc(100vh - 225px);
   min-height: 400px;
   background-color: var(--color-white);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  box-shadow: var(--box-shadow-low);
   border-radius: 5px;
   overflow: hidden;
   z-index: 1;
@@ -19,7 +19,7 @@ export const Dialog = styled.div`
 `
 
 export const Icon = styled.div`
-  padding-right: 1rem;
+  padding-right: 10px;
   display: flex;
   place-items: center;
 `
@@ -39,15 +39,9 @@ export const InfoAndButton = styled.div`
 export const NoSearchResults = styled.div`
   display: flex;
   flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  div {
-    margin-top: 20px;
-    text-align: center;
-  }
 `
 
-export const SearchResults = styled.div`
+export const SearchOuput = styled.div`
   position: relative;
   -webkit-box-flex: 1;
   flex-grow: 1;

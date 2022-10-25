@@ -38,7 +38,6 @@ export const initialState: IUtilsState = Object.freeze({
   isLoading: false,
   isProcessing: false,
   isSending: null,
-  // isSending: { message: 'Sending your mail...', type: 'info', timestamp: 0 },
   isSentryActive: true,
   isSilentLoading: false,
   settingsLabelId: null,

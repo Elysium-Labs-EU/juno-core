@@ -106,15 +106,11 @@ const NavigationMoreMenu = ({
 }) => {
   const dispatch = useAppDispatch()
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
-  const ArrowDownListener = useKeyPress(
-    keyConstants.KEY_SPECIAL.KEY_ARROWS.down
-  )
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_SPECIAL.KEY_ARROWS.up)
-  const KeyJListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.J)
-  const KeyKListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.K)
-  const EnterKeyListener = useKeyPress(
-    keyConstants.keyConstants.KEY_LETTERS.ENTER
-  )
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROWS.down)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROWS.up)
+  const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.j)
+  const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.k)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
 
   const MENU_OPTIONS = useMemo(
     () => [
@@ -205,9 +201,7 @@ const SIZE = 16
 
 const NavigationMore = () => {
   const activeModal = useAppSelector(selectActiveModal)
-  const EscapeListener = useKeyPress(
-    keyConstants.keyConstants.KEY_LETTERS.ESCAPE
-  )
+  const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
   const dispatch = useAppDispatch()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)

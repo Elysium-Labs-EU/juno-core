@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import { selectLabelIds } from '../../store/labelsSlice'
 import {
@@ -52,7 +52,11 @@ const TodoFocusOption = () => {
     }
   }, [activeEmailListIndex, dispatch, emailList, labelIds, selectedEmails])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
+  useMultiKeyPress({
+    handleEvent,
+    actionKeys,
+    disabled: inSearch || Boolean(activeModal),
+  })
 
   const isDisabled =
     isLoading ||

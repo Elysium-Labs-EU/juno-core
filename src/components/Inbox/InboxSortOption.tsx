@@ -98,11 +98,13 @@ const InboxSortOption = () => {
     }
   }, [activeEmailListIndex, selectedEmails, dispatch, emailList, labelIds])
 
-  useMultiKeyPress(
-    isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow,
+  useMultiKeyPress({
+    handleEvent: isFlexibleFlowActive
+      ? handleEventFlexibleFlow
+      : handleEventStrictFlow,
     actionKeys,
-    inSearch || Boolean(activeModal)
-  )
+    disabled: inSearch || Boolean(activeModal),
+  })
 
   const isDisabled = () => {
     if (isFlexibleFlowActive) {

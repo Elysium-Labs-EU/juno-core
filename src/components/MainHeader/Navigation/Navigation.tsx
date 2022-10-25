@@ -39,7 +39,7 @@ const Navigation = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
+  const keysPressed = useMultiKeyPress({})
 
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
@@ -74,13 +74,13 @@ const Navigation = () => {
       }
       if (
         multipleIncludes(
-          [keyConstants.KEY_LETTERS.K, keyConstants.KEY_SPECIAL.os],
+          [keyConstants.KEY_LETTERS.k, keyConstants.KEY_SPECIAL.os],
           keysPressed
         )
       ) {
         dispatch(setInSearch(true))
       }
-      if (keysPressed.includes(keyConstants.KEY_LETTERS.C)) {
+      if (keysPressed.includes(keyConstants.KEY_LETTERS.c)) {
         dispatch(navigateTo('/compose'))
       }
     }

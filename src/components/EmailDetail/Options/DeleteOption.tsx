@@ -39,7 +39,7 @@ const DeleteOption = ({
     })
   }, [onlyLegalLabels, labelIds, dispatch])
 
-  noArchive && useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  noArchive && useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

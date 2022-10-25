@@ -76,7 +76,7 @@ const ComposeEmail = ({
   const [showCC, setShowCC] = useState<boolean>(false)
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const keysPressed = useMultiKeyPress()
+  const keysPressed = useMultiKeyPress({})
   const [composedEmail, setComposedEmail] = useState<
     undefined | IComposePayload
   >(undefined)
@@ -333,7 +333,11 @@ const ComposeEmail = ({
     [isReplying, isForwarding, localDraftDetails, composedEmail]
   )
 
-  useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
+  useMultiKeyPress({
+    handleEvent: handleSubmit,
+    actionKeys,
+    disabled: inSearch || Boolean(activeModal),
+  })
 
   return (
     <>

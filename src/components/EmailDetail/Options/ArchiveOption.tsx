@@ -32,7 +32,7 @@ const ArchiveOption = ({
     })
   }, [threadDetail, labelIds, dispatch])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

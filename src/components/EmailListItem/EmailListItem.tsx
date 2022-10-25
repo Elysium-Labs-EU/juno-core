@@ -80,9 +80,7 @@ const EmailListItem = ({
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(
-    keyConstants.keyConstants.KEY_LETTERS.ENTER
-  )
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
   const { id } = email
 
   useEffect(() => {
@@ -194,7 +192,7 @@ const EmailListItem = ({
 
   const memoizedEmailListItem = useMemo(
     () => (
-      <S.ThreadBase emailLabels={staticEmailLabels}>
+      <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
           <S.CellCheckbox inSelect={selectedEmails.length > 0}>
             <Checkbox

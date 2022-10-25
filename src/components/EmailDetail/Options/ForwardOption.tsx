@@ -30,7 +30,7 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, dispatch])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

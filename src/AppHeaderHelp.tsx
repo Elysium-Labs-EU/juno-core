@@ -39,7 +39,7 @@ const AppHeaderHelp = () => {
   const handleEvent = useCallback(() => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.help))
   }, [])
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <>

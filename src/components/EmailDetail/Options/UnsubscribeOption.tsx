@@ -41,7 +41,7 @@ const handleUnsubscribe = ({
 const actionKeys = [
   setModifierKey,
   keyConstants.KEY_SPECIAL.shift,
-  keyConstants.KEY_LETTERS.U,
+  keyConstants.KEY_LETTERS.u,
 ]
 const UNSUBSCRIBE = 'Unsubscribe'
 
@@ -61,7 +61,7 @@ const UnsubscribeOption = ({
     handleUnsubscribe({ unsubscribeLink, dispatch, coreStatus })
   }, [unsubscribeLink])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

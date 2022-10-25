@@ -8,7 +8,7 @@ import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
 import InboxHeader from '../Inbox/InboxHeader'
 import Introduction from '../Introduction/Introduction'
 import NoMobileOverlay from '../NoMobileOverlay/noMobileOverlay'
-import Search from '../Search/Search'
+import CommandPallette from '../CommandPallette/CommandPallette'
 import SentHeader from '../Sent/SentHeader'
 import Settings from '../Settings/Settings'
 import SpamHeader from '../Spam/SpamHeader'
@@ -56,7 +56,7 @@ const Header = () => (
     <ShowIntroduction />
     <NoMobileOverlay />
     <SetHeader />
-    <Search />
+    <CommandPallette />
     <Settings />
     <KeyboardCombos />
     <Feedback />

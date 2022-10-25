@@ -28,7 +28,7 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
 
   return (
     <CustomButton

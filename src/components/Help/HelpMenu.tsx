@@ -60,8 +60,8 @@ const HelpMenu = forwardRef((_props, ref) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROWS.down)
   const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROWS.up)
-  const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.J)
-  const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.K)
+  const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.j)
+  const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.k)
   const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
 
   const MENU_ITEMS_HELP = useMemo(

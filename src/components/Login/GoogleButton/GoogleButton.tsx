@@ -17,7 +17,7 @@ interface IGoogleButton {
  */
 
 const GoogleButton = ({ renderProps }: { renderProps: IGoogleButton }) => {
-  const EnterListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.ENTER)
+  const EnterListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
 
   useEffect(() => {
     let mounted = true

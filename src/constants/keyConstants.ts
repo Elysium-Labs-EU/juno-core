@@ -6,32 +6,32 @@ export const KEY_NUMBERS = {
 }
 
 export const KEY_ARROWS = {
-  down: 'ARROWDOWN',
-  left: 'ARROWLEFT',
-  right: 'ARROWRIGHT',
-  up: 'ARROWUP',
+  down: 'ArrowDown',
+  left: 'ArrowLeft',
+  right: 'ArrowRight',
+  up: 'ArrowUp',
 }
 
 export const KEY_LETTERS = {
-  c: 'C',
-  e: 'E',
-  j: 'J',
-  k: 'K',
-  r: 'R',
-  u: 'U',
-  x: 'X',
+  c: 'c',
+  e: 'e',
+  j: 'j',
+  k: 'k',
+  r: 'r',
+  u: 'u',
+  x: 'x',
 }
 
 export const KEY_SPECIAL = {
-  alt: 'ALT',
-  backspace: 'BACKSPACE',
-  control: 'CONTROL',
+  alt: 'Alt',
+  backspace: 'Backspace',
+  control: 'Control',
   dot: '.',
-  enter: 'ENTER',
-  escape: 'ESCAPE',
+  enter: 'Enter',
+  escape: 'Escape',
   forwardSlash: '/',
-  os: 'META',
-  shift: 'SHIFT',
+  os: 'Meta',
+  shift: 'Shift',
 }
 
 export const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']

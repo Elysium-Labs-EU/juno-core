@@ -18,7 +18,7 @@ const BackButton = () => {
     dispatch(navigateBack())
   }, [coreStatus, dispatch])
 
-  useMultiKeyPress(handleEvent, actionKeys)
+  useMultiKeyPress({ handleEvent, actionKeys })
 
   return (
     <CustomButton

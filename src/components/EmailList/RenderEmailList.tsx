@@ -33,15 +33,11 @@ const RenderEmailList = ({
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
-  const ArrowDownListener = useKeyPress(
-    keyConstants.KEY_SPECIAL.KEY_ARROWS.down
-  )
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_SPECIAL.KEY_ARROWS.up)
-  const KeyJListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.J)
-  const KeyKListener = useKeyPress(keyConstants.keyConstants.KEY_LETTERS.K)
-  const EscapeListener = useKeyPress(
-    keyConstants.keyConstants.KEY_LETTERS.ESCAPE
-  )
+  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROWS.down)
+  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROWS.up)
+  const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.j)
+  const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.k)
+  const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
 
   const { threads, nextPageToken } = filteredOnLabel
 
@@ -70,6 +66,12 @@ const RenderEmailList = ({
       !activeModal &&
       focusedItemIndex < filteredOnLabel.threads.length - 1
     ) {
+      document
+        ?.getElementById(filteredOnLabel.threads[focusedItemIndex]?.id)
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: focusedItemIndex + 1 ? 'center' : 'end',
+        })
       setFocusedItemIndex((prevState) => prevState + 1)
     }
   }, [ArrowDownListener, inSearch, activeModal, KeyJListener])
@@ -81,6 +83,12 @@ const RenderEmailList = ({
       !activeModal &&
       focusedItemIndex > -1
     ) {
+      document
+        ?.getElementById(filteredOnLabel.threads[focusedItemIndex - 1]?.id)
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: focusedItemIndex - 1 ? 'center' : 'start',
+        })
       setFocusedItemIndex((prevState) => prevState - 1)
     }
   }, [ArrowUpListener, inSearch, activeModal, KeyKListener])

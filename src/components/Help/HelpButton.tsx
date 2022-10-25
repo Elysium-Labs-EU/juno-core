@@ -36,13 +36,21 @@ const HelpButton = ({ handleEvent }: { handleEvent: () => void }) => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard))
   }, [dispatch])
 
-  useMultiKeyPress(handleShowKeyboardShortcuts, actionKeysKeyboard, inSearch)
+  useMultiKeyPress({
+    handleEvent: handleShowKeyboardShortcuts,
+    actionKeys: actionKeysKeyboard,
+    disabled: inSearch,
+  })
 
   const handleShowFeedback = useCallback(() => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback))
   }, [dispatch])
 
-  useMultiKeyPress(handleShowFeedback, actionKeysFeedback, inSearch)
+  useMultiKeyPress({
+    handleEvent: handleShowFeedback,
+    actionKeys: actionKeysFeedback,
+    disabled: inSearch,
+  })
 
   return (
     <StyledTooltip title={BUTTON_TITLE}>

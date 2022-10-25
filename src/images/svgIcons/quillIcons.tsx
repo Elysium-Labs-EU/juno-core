@@ -1226,6 +1226,52 @@ export const QiSort = ({
   )
 }
 
+export const QiStack = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M9 25v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2h-2"
+      />
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 9h4m-4 6h10M9 19h8"
+      />
+      <circle cx={19} cy={9} r={1} fill={color} />
+      <path
+        stroke={color}
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M5 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v17a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6z"
+      />
+    </svg>
+  )
+}
+
 export const QiToDo = ({
   size = 0,
   color = 'currentColor',
