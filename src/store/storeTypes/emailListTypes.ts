@@ -1,3 +1,14 @@
+export interface ISelectedEmail {
+  labelIds: string[]
+  selectedIds: string[]
+}
+
+export interface ISelectedEmailAction {
+  event: 'add' | 'remove'
+  id: string
+  labelIds: string[]
+}
+
 export interface IEmailMessageHeaders {
   date: string
   from: string
@@ -59,15 +70,15 @@ export interface IEmailListObject {
 }
 
 export interface IEmailListState {
-  emailList: IEmailListObject[]
-  selectedEmails: string[]
-  searchList: IEmailListObject | null
   activeEmailListIndex: number
+  emailList: IEmailListObject[]
   isFetching: boolean
+  searchList: IEmailListObject | null
+  selectedEmails: ISelectedEmail
 }
 
 export type TBaseEmailList = {
   labels: string[]
-  threads: []
   nextPageToken: null
+  threads: []
 }[]

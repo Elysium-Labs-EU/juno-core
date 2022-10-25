@@ -19,11 +19,11 @@ const EMAILS_SELECTED_SINGLE = 'emails selected'
 const EMAILS_SELECTED_PLURAL = 'email selected'
 
 const SelectedOptions = () => {
-  const labelIds = useAppSelector(selectLabelIds)
-  const dispatch = useAppDispatch()
-  const selectedEmails = useAppSelector(selectSelectedEmails)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const dispatch = useAppDispatch()
   const emailList = useAppSelector(selectEmailList)
+  const labelIds = useAppSelector(selectLabelIds)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
 
   const handleCancel = useCallback(() => {
     dispatch(setSelectedEmails([]))
@@ -35,6 +35,7 @@ const SelectedOptions = () => {
         emailList[activeEmailListIndex].threads.map((thread) => ({
           id: thread.id,
           event: 'add',
+          labelIds,
         }))
       )
     )
@@ -70,8 +71,8 @@ const SelectedOptions = () => {
         />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${selectedEmails.length} ${
-          selectedEmails.length > 1
+        <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${
+          selectedEmails.selectedIds.length > 1
             ? EMAILS_SELECTED_SINGLE
             : EMAILS_SELECTED_PLURAL
         }`}</S.SelectedLabelsText>

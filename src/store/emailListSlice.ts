@@ -32,6 +32,8 @@ import {
   IEmailListObject,
   IEmailListState,
   IEmailListThreadItem,
+  ISelectedEmail,
+  ISelectedEmailAction,
   TBaseEmailList,
 } from './storeTypes/emailListTypes'
 import {
@@ -48,6 +50,7 @@ import {
 } from './utilsSlice'
 
 import type { AppThunk, RootState } from './store'
+import multipleIncludes from '../utils/multipleIncludes'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
@@ -71,7 +74,7 @@ export const fetchEmailsFull = createAsyncThunk(
 
 const initialState: IEmailListState = Object.freeze({
   emailList: [],
-  selectedEmails: [],
+  selectedEmails: { labelIds: [], selectedIds: [] },
   searchList: null,
   activeEmailListIndex: -1,
   isFetching: false,
@@ -253,22 +256,36 @@ export const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {
-    setSelectedEmails: (state, { payload }: PayloadAction<any>) => {
+    setSelectedEmails: (
+      state,
+      { payload }: PayloadAction<ISelectedEmailAction[]>
+    ) => {
+      console.log('payload', payload)
       if (payload.length > 0) {
-        for (let i = 0; i < payload.length; i += 1) {
-          const { event, id } = payload[i]
-          if (event === 'add') {
-            const currentState = state.selectedEmails
-            currentState.push(id)
-            const uniqueIds = [...new Set(currentState)]
-            state.selectedEmails = uniqueIds
+        if (
+          state.selectedEmails?.labelIds &&
+          multipleIncludes(payload[0]?.labelIds, state.selectedEmails.labelIds)
+        ) {
+          for (let i = 0; i < payload.length; i += 1) {
+            const { event, id } = payload[i]
+            if (event === 'add') {
+              const currentState = state.selectedEmails
+              currentState.selectedIds.push(id)
+              const uniqueIds = [...new Set(currentState.selectedIds)]
+              state.selectedEmails.selectedIds = uniqueIds
+            }
+            if (event === 'remove') {
+              const currentState = state.selectedEmails
+              const filteredResult = currentState.selectedIds.filter(
+                (selectedId) => selectedId !== id
+              )
+              state.selectedEmails.selectedIds = filteredResult
+            }
           }
-          if (event === 'remove') {
-            const currentState = state.selectedEmails
-            const filteredResult = currentState.filter((item) => item !== id)
-            state.selectedEmails = filteredResult
-          }
+          return
         }
+        const { id, labelIds } = payload[0]
+        state.selectedEmails = { labelIds, selectedIds: [id] }
         return
       }
       state.selectedEmails = initialState.selectedEmails
@@ -740,11 +757,11 @@ export const updateEmailLabelBatch = (
             })
           )
         }
-        for (let i = 0; i < selectedEmails.length; i += 1) {
+        for (let i = 0; i < selectedEmails.selectedIds.length; i += 1) {
           if (!request.delete) {
             try {
               threadApi({}).updateThread({
-                threadId: selectedEmails[i],
+                threadId: selectedEmails.selectedIds[i],
                 request,
               })
             } catch (err) {
@@ -758,7 +775,9 @@ export const updateEmailLabelBatch = (
           }
           if (request.delete) {
             try {
-              threadApi({}).thrashThread({ threadId: selectedEmails[i] })
+              threadApi({}).thrashThread({
+                threadId: selectedEmails.selectedIds[i],
+              })
             } catch (err) {
               dispatch(
                 setSystemStatusUpdate({

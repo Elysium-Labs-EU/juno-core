@@ -34,6 +34,7 @@ import {
 import useKeyPress from '../../hooks/useKeyPress'
 import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
 import ContactCard from '../Elements/ContactCard/ContactCard'
+import multipleIncludes from '../../utils/multipleIncludes'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -183,6 +184,7 @@ const EmailListItem = ({
     dispatch(
       setSelectedEmails([
         {
+          labelIds,
           id,
           event: event.target.checked ? 'add' : 'remove',
         },
@@ -194,9 +196,14 @@ const EmailListItem = ({
     () => (
       <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
-          <S.CellCheckbox inSelect={selectedEmails.length > 0}>
+          <S.CellCheckbox
+            inSelect={
+              selectedEmails.labelIds.length > 0 &&
+              multipleIncludes(selectedEmails.labelIds, labelIds)
+            }
+          >
             <Checkbox
-              checked={selectedEmails.includes(id)}
+              checked={selectedEmails.selectedIds.includes(id)}
               onChange={handleCheckBox}
               size="small"
             />

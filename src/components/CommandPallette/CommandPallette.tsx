@@ -268,11 +268,9 @@ const CommandPallette = () => {
     }
   }
 
-  const handleKeyEscape = (event: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyEscape = () => {
     if (searchResults && searchResults.threads.length > 0) {
       resetSearch()
-      event.preventDefault()
-      event.stopPropagation()
     }
   }
 
@@ -297,16 +295,22 @@ const CommandPallette = () => {
     if (event?.code === undefined) return
     if (event.code === keyConstants.KEY_ARROWS.down) {
       event.preventDefault()
+      event.stopPropagation()
       handleKeyDown()
     }
     if (event.code === keyConstants.KEY_ARROWS.up) {
       event.preventDefault()
+      event.stopPropagation()
       handleKeyUp()
     }
     if (event.code === keyConstants.KEY_SPECIAL.escape) {
-      handleKeyEscape(event)
+      event.preventDefault()
+      event.stopPropagation()
+      handleKeyEscape()
     }
     if (event.code === keyConstants.KEY_SPECIAL.enter) {
+      event.preventDefault()
+      event.stopPropagation()
       handleKeyEnter()
     }
   }
