@@ -1,31 +1,64 @@
 import { useCallback } from 'react'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { selectLabelIds } from '../../store/labelsSlice'
-import {
-  selectActiveModal,
-  selectInSearch,
-  selectIsLoading,
-} from '../../store/utilsSlice'
-import * as local from '../../constants/todoConstants'
+
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import startSort from '../../utils/startSort'
+import * as local from '../../constants/todoConstants'
+import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import { QiJump } from '../../images/svgIcons/quillIcons'
+import {
+  setCoreStatus,
+  setSessionViewIndex,
+} from '../../store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
   selectSelectedEmails,
 } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import labelURL from '../../utils/createLabelURL'
+import { selectLabelIds } from '../../store/labelsSlice'
+import { AppDispatch } from '../../store/store'
 import {
-  setCoreStatus,
-  setSessionViewIndex,
-} from '../../store/emailDetailSlice'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+  IEmailListObject,
+  ISelectedEmail,
+} from '../../store/storeTypes/emailListTypes'
+import {
+  selectActiveModal,
+  selectInSearch,
+  selectIsLoading,
+} from '../../store/utilsSlice'
+import labelURL from '../../utils/createLabelURL'
 import { setModifierKey } from '../../utils/setModifierKey'
-import { QiJump } from '../../images/svgIcons/quillIcons'
+import startSort from '../../utils/startSort'
+import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
+
+export const activateTodo = ({
+  activeEmailListIndex,
+  dispatch,
+  emailList,
+  labelIds,
+  selectedEmails,
+}: {
+  activeEmailListIndex: number
+  dispatch: AppDispatch
+  emailList: IEmailListObject[]
+  labelIds: string[]
+  selectedEmails: ISelectedEmail
+}) => {
+  const staticLabelURL = labelURL(labelIds)
+  if (staticLabelURL) {
+    startSort({
+      dispatch,
+      labelURL: staticLabelURL,
+      emailList,
+      selectedEmails,
+      activeEmailListIndex,
+    })
+    dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
+    dispatch(setSessionViewIndex(0))
+  }
+}
 
 const TodoFocusOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -38,18 +71,13 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const handleEvent = useCallback(() => {
-    const staticLabelURL = labelURL(labelIds)
-    if (staticLabelURL) {
-      startSort({
-        dispatch,
-        labelURL: staticLabelURL,
-        emailList,
-        selectedEmails,
-        activeEmailListIndex,
-      })
-      dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
-      dispatch(setSessionViewIndex(0))
-    }
+    activateTodo({
+      activeEmailListIndex,
+      dispatch,
+      emailList,
+      labelIds,
+      selectedEmails,
+    })
   }, [activeEmailListIndex, dispatch, emailList, labelIds, selectedEmails])
 
   useMultiKeyPress({
@@ -68,10 +96,10 @@ const TodoFocusOption = () => {
       onClick={handleEvent}
       disabled={isDisabled}
       label={
-        selectedEmails.length > 0 ? (
+        selectedEmails.selectedIds.length > 0 ? (
           <>
             {local.BUTTON_FOCUS}
-            <span> ({selectedEmails.length})</span>
+            <span> ({selectedEmails.selectedIds.length})</span>
           </>
         ) : (
           local.BUTTON_FOCUS

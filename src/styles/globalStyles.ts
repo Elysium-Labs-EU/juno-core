@@ -83,6 +83,9 @@ export const MenuPopper = styled.div`
 `
 
 export const theme = createTheme({
+  palette: {
+    primary: { main: themeConstants.color.black },
+  },
   typography: {
     fontFamily: [
       'system-ui',

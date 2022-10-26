@@ -3,6 +3,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useKeyPress from '../../hooks/useKeyPress'
+import {
+  selectSelectedEmails,
+  setSelectedEmails,
+} from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectLabelIds } from '../../store/labelsSlice'
 import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
@@ -14,6 +18,7 @@ import {
 } from '../../store/utilsSlice'
 import * as GS from '../../styles/globalStyles'
 import loadNextPage from '../../utils/loadNextPage'
+import multipleIncludes from '../../utils/multipleIncludes'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
@@ -38,6 +43,7 @@ const RenderEmailList = ({
   const KeyJListener = useKeyPress(keyConstants.KEY_LETTERS.j)
   const KeyKListener = useKeyPress(keyConstants.KEY_LETTERS.k)
   const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
 
   const { threads, nextPageToken } = filteredOnLabel
 
@@ -56,8 +62,14 @@ const RenderEmailList = ({
   useEffect(() => {
     if (EscapeListener && !inSearch && !activeModal) {
       setFocusedItemIndex(-1)
+      if (
+        selectedEmails.selectedIds.length > 0 &&
+        multipleIncludes(selectedEmails.labelIds, labelIds)
+      ) {
+        dispatch(setSelectedEmails([]))
+      }
     }
-  }, [EscapeListener, inSearch, activeModal])
+  }, [EscapeListener, inSearch, activeModal, selectedEmails, labelIds])
 
   useEffect(() => {
     if (
@@ -66,12 +78,13 @@ const RenderEmailList = ({
       !activeModal &&
       focusedItemIndex < filteredOnLabel.threads.length - 1
     ) {
-      document
-        ?.getElementById(filteredOnLabel.threads[focusedItemIndex]?.id)
-        ?.scrollIntoView({
-          behavior: 'smooth',
-          block: focusedItemIndex + 1 ? 'center' : 'end',
-        })
+      // TODO: Fix this
+      // document
+      //   ?.getElementById(filteredOnLabel.threads[focusedItemIndex]?.id)
+      //   ?.scrollIntoView({
+      //     behavior: 'smooth',
+      //     block: focusedItemIndex + 1 ? 'center' : 'end',
+      //   })
       setFocusedItemIndex((prevState) => prevState + 1)
     }
   }, [ArrowDownListener, inSearch, activeModal, KeyJListener])
@@ -83,12 +96,13 @@ const RenderEmailList = ({
       !activeModal &&
       focusedItemIndex > -1
     ) {
-      document
-        ?.getElementById(filteredOnLabel.threads[focusedItemIndex - 1]?.id)
-        ?.scrollIntoView({
-          behavior: 'smooth',
-          block: focusedItemIndex - 1 ? 'center' : 'start',
-        })
+      // TODO: Fix this
+      // document
+      //   ?.getElementById(filteredOnLabel.threads[focusedItemIndex - 1]?.id)
+      //   ?.scrollIntoView({
+      //     behavior: 'smooth',
+      //     block: focusedItemIndex - 1 ? 'center' : 'start',
+      //   })
       setFocusedItemIndex((prevState) => prevState - 1)
     }
   }, [ArrowUpListener, inSearch, activeModal, KeyKListener])

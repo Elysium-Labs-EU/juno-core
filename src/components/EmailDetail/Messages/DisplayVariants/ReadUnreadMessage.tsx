@@ -169,10 +169,10 @@ const ReadUnreadMessage = ({
           <S.ClosedAvatarSender>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
               <span
@@ -209,10 +209,10 @@ const ReadUnreadMessage = ({
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticSenderNameFull}
+                  userEmail={staticSenderNameFull}
                   contact={staticSenderNamePartial}
                 >
-                  <EmailAvatar avatarURL={staticSenderNameFull} />
+                  <EmailAvatar userEmail={staticSenderNameFull} />
                 </ContactCard>
                 <S.EmailDetailTitle title={staticEmailSubject}>
                   {staticEmailSubject}

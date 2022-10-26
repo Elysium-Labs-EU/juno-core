@@ -1,6 +1,9 @@
 import { push } from 'redux-first-history'
 import { AppDispatch } from '../store/store'
-import { IEmailListObject } from '../store/storeTypes/emailListTypes'
+import {
+  IEmailListObject,
+  ISelectedEmail,
+} from '../store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from '../store/utilsSlice'
 
 interface IStartSort {
@@ -8,8 +11,15 @@ interface IStartSort {
   dispatch: AppDispatch
   emailList: IEmailListObject[]
   labelURL: string
-  selectedEmails?: string[]
+  selectedEmails?: ISelectedEmail
 }
+
+/**
+ * @function startSort
+ * @param {object}
+ * Bases on the labelURL the system knows the context of the email list, if it is either Focus or Inbox.
+ * @returns {void}
+ */
 
 const startSort = ({
   activeEmailListIndex,
@@ -19,8 +29,10 @@ const startSort = ({
   selectedEmails,
 }: IStartSort) => {
   if (labelURL && emailList && activeEmailListIndex > -1) {
-    if (selectedEmails && selectedEmails?.length > 0) {
-      return dispatch(push(`/mail/${labelURL}/${selectedEmails[0]}/messages`))
+    if (selectedEmails && selectedEmails.selectedIds?.length > 0) {
+      return dispatch(
+        push(`/mail/${labelURL}/${selectedEmails.selectedIds[0]}/messages`)
+      )
     }
     return dispatch(
       push(

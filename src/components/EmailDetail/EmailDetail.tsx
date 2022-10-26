@@ -109,11 +109,11 @@ const EmailDetail = () => {
         (isFlexibleFlowActive &&
           coreStatus === global.CORE_STATUS_MAP.sorting)) &&
       selectedEmails &&
-      selectedEmails.length > 0
+      selectedEmails.selectedIds.length > 0
     ) {
       const activeThreadList = emailList[activeEmailListIndex].threads
       const relevantThreadsFeed: IEmailListThreadItem[] = []
-      selectedEmails.forEach((email) => {
+      selectedEmails.selectedIds.forEach((email) => {
         const resultIndex = activeThreadList.findIndex((t) => t.id === email)
         if (resultIndex > -1) {
           relevantThreadsFeed.push(activeThreadList[resultIndex])

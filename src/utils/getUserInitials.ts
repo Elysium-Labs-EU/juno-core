@@ -7,7 +7,7 @@ const FALLBACK_AVATAR = '##'
  */
 
 export default function getUserInitials(avatarURL: string) {
-  const splittedURL = avatarURL.split('<')
+  const splittedURL = avatarURL?.split('<')
   if (splittedURL) {
     const name = () => {
       if (splittedURL[0] && splittedURL[0].length > 0) {

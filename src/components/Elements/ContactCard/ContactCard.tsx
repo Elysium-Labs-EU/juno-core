@@ -9,7 +9,7 @@ import * as S from './ContactCardStyles'
 import { QiMail } from '../../../images/svgIcons/quillIcons'
 
 interface IContactCard {
-  avatarURL: string
+  userEmail: string
   children: JSX.Element
   contact: IContact
   offset?: [number, number]
@@ -20,7 +20,7 @@ const NO_EMAIL = 'No address available'
 const NO_NAME = 'No display name'
 
 const ContactCard = ({
-  avatarURL,
+  userEmail,
   contact,
   offset = [20, 10],
   children,
@@ -42,7 +42,7 @@ const ContactCard = ({
     cardDelay.current = setTimeout(() => setIsHovering(hover), 500)
   }
 
-  const staticInitials = getUserInitials(avatarURL)
+  const staticInitials = getUserInitials(userEmail)
 
   return (
     <Box

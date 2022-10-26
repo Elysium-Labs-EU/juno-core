@@ -3,11 +3,14 @@ import { push } from 'redux-first-history'
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
+import { activateTodo } from '../components/ToDo/TodoFocusOption'
 import * as global from '../constants/globalConstants'
 import { getRouteByLabelMap } from '../constants/labelMapConstant'
 import RouteConstants from '../constants/routes.json'
 import labelURL from '../utils/createLabelURL'
 import { findLabelById } from '../utils/findLabel'
+import getSenderFromList from '../utils/getSenderFromList'
+import multipleIncludes from '../utils/multipleIncludes'
 import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
 import { fetchDrafts, openDraftEmail } from './draftsSlice'
 import {
@@ -18,7 +21,11 @@ import {
   setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
-import { fetchEmailsFull, fetchEmailsSimple } from './emailListSlice'
+import {
+  fetchEmailsFull,
+  fetchEmailsSimple,
+  setSelectedEmails,
+} from './emailListSlice'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
 import {
   IMessageSendStatus,
@@ -288,9 +295,9 @@ export const navigateNextMail =
             (isFlexibleFlowActive &&
               coreStatus === global.CORE_STATUS_MAP.sorting)) &&
           selectedEmails &&
-          selectedEmails.length > 0
+          selectedEmails.selectedIds.length > 0
         ) {
-          return selectedEmails[viewIndex + 1]
+          return selectedEmails.selectedIds[viewIndex + 1]
         }
         return emailList[activeEmailListIndex]?.threads[viewIndex + 1]?.id
       }
@@ -326,6 +333,41 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
     dispatch(navigateBack())
   }
 }
+
+export const selectAllEmailsSenderForFocusMode =
+  (): AppThunk => (dispatch, getState) => {
+    const { activeEmailListIndex, emailList, selectedEmails } = getState().email
+    const { labelIds } = getState().labels
+
+    const currentEmailSender = getSenderFromList({ selectedEmails, emailList })
+
+    const emailsFromSameSender = emailList[
+      emailList.findIndex((list) => multipleIncludes(list.labels, labelIds))
+    ]?.threads.filter((email) =>
+      currentEmailSender.includes(
+        email.messages[email.messages.length - 1].payload.headers.from
+      )
+    )
+    if (emailsFromSameSender.length > 0) {
+      activateTodo({
+        activeEmailListIndex,
+        dispatch,
+        emailList,
+        labelIds,
+        selectedEmails,
+      })
+      // Takes this action on the background, to speed up the process
+      dispatch(
+        setSelectedEmails(
+          emailsFromSameSender.map((thread) => ({
+            id: thread.id,
+            event: 'add',
+            labelIds,
+          }))
+        )
+      )
+    }
+  }
 
 export const selectActiveModal = (state: RootState) => state.utils.activeModal
 export const selectAlternateActions = (state: RootState) =>

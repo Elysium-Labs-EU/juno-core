@@ -17,8 +17,16 @@ import Modal from '@mui/material/Modal'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import threadApi from '../../data/threadApi'
-import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
-import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
+import {
+  QiArrowLeft,
+  QiEscape,
+  QiSearch,
+} from '../../images/svgIcons/quillIcons'
+import {
+  selectSearchList,
+  selectSelectedEmails,
+  useSearchResults,
+} from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { AppDispatch } from '../../store/store'
 import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
@@ -31,9 +39,10 @@ import sortThreads from '../../utils/sortThreads'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import LoadingState from '../Elements/LoadingState/LoadingState'
+import SearchResults from './Search/SearchResults'
 import * as S from './SearchStyles'
 import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
-import SearchResults from './Search/SearchResults'
+import ContextBar from './ContextBar/ContextBar'
 
 interface IShouldClearOutPreviousResults {
   searchValueRef: MutableRefObject<string>
@@ -149,6 +158,7 @@ const CommandPallette = () => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
@@ -353,7 +363,16 @@ const CommandPallette = () => {
       <S.Dialog onKeyDown={keyDownHandler}>
         <S.InputRow>
           <S.Icon>
-            <QiSearch size={20} />
+            {searchValue.length > 0 ? (
+              <CustomIconButton
+                onClick={resetSearch}
+                aria-label="clear-search"
+                icon={<QiArrowLeft size={20} />}
+                title="Clear search input and results"
+              />
+            ) : (
+              <QiSearch size={20} />
+            )}
           </S.Icon>
           <InputBase
             autoFocus
@@ -362,17 +381,9 @@ const CommandPallette = () => {
             id="search"
             inputRef={searchInputRef}
             onChange={handleSearchChange}
-            placeholder="Search"
+            placeholder="Search for emails and commands"
             value={searchValue}
           />
-          {searchValue.length > 0 && (
-            <CustomIconButton
-              onClick={resetSearch}
-              aria-label="clear-search"
-              icon={<QiDiscard size={16} />}
-              title="Clear search input and results"
-            />
-          )}
           <CustomButton
             onClick={() =>
               intitialSearch({
@@ -390,6 +401,9 @@ const CommandPallette = () => {
             label={SEARCH}
             style={{ marginRight: '10px' }}
             title="Search"
+            suppressed={
+              searchValue.length < 1 || searchValue === searchValueRef.current
+            }
           />
           <CustomIconButton
             onClick={() => handleClose(dispatch)}
@@ -398,6 +412,9 @@ const CommandPallette = () => {
             title="Close"
           />
         </S.InputRow>
+        {!searchResults && selectedEmails.selectedIds.length > 0 && (
+          <ContextBar />
+        )}
         {memoizedSearchResults}
       </S.Dialog>
     </Modal>

@@ -1,30 +1,23 @@
 import { push } from 'redux-first-history'
 
 /* eslint-disable no-param-reassign */
-import {
-  createAsyncThunk,
-  createSlice,
-  current,
-  PayloadAction,
-} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import * as global from '../constants/globalConstants'
 import historyApi from '../data/historyApi'
 import messageApi from '../data/messageApi'
 import threadApi, { EmailQueryObject } from '../data/threadApi'
 import userApi from '../data/userApi'
-import labelURL from '../utils/createLabelURL'
 import handleSessionStorage from '../utils/handleSessionStorage'
 import { edgeLoadingNextPage } from '../utils/loadNextPage'
 import { onlyLegalLabelObjects } from '../utils/onlyLegalLabels'
 import sortThreads from '../utils/sortThreads'
-import undoubleThreads from '../utils/undoubleThreads'
+import deduplicateItems from '../utils/deduplicateItems'
 import { setProfile } from './baseSlice'
 import {
   fetchEmailDetail,
   setCoreStatus,
   setCurrentEmail,
-  setSessionViewIndex,
   setViewIndex,
 } from './emailDetailSlice'
 import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
@@ -32,7 +25,6 @@ import {
   IEmailListObject,
   IEmailListState,
   IEmailListThreadItem,
-  ISelectedEmail,
   ISelectedEmailAction,
   TBaseEmailList,
 } from './storeTypes/emailListTypes'
@@ -42,7 +34,6 @@ import {
   UpdateRequestParamsSingle,
 } from './storeTypes/metaEmailListTypes'
 import {
-  navigateBack,
   navigateNextMail,
   setIsLoading,
   setIsSilentLoading,
@@ -132,7 +123,7 @@ const handleAdditionToExistingEmailArray = ({
       // TODO: Verify if the removal of the nextPageToken on the object is detrimental to the behavior, e.g. will it be able to readd the nextPageToken once it does have one?
       const newObject: IEmailListObject = {
         labels,
-        threads: undoubleThreads(sortedThreads),
+        threads: deduplicateItems(sortedThreads),
         nextPageToken:
           nextPageToken === global.HISTORY_NEXT_PAGETOKEN
             ? targetEmailListObject.nextPageToken
@@ -227,7 +218,7 @@ const handleEmailListChange = ({
         const sortedEmailList: IEmailListObject = {
           nextPageToken,
           labels,
-          threads: undoubleThreads(sortedThreads),
+          threads: deduplicateItems(sortedThreads),
         }
         state.emailList.push(sortedEmailList)
       }

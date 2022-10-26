@@ -29,6 +29,44 @@ export const QiAlt = ({
     </svg>
   )
 }
+export const QiArrowLeft = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeWidth={strokeWidth}
+        d="M6 16h21"
+      />
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="m13 8-8 8 8 8"
+      />
+    </svg>
+  )
+}
 export const QiArrowRight = ({
   size = 0,
   color = 'currentColor',
@@ -1258,7 +1296,7 @@ export const QiStack = ({
         stroke={color}
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeWidth={2}
+        strokeWidth={strokeWidth}
         d="M9 9h4m-4 6h10M9 19h8"
       />
       <circle cx={19} cy={9} r={1} fill={color} />

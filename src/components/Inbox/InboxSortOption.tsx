@@ -119,11 +119,11 @@ const InboxSortOption = () => {
 
   const selectLabel = useCallback(() => {
     if (isFlexibleFlowActive) {
-      if (selectedEmails.length > 0) {
+      if (selectedEmails.selectedIds.length > 0) {
         return (
           <>
             {INBOX_BUTTON}
-            <span> ({selectedEmails.length})</span>
+            <span> ({selectedEmails.selectedIds.length})</span>
           </>
         )
       }

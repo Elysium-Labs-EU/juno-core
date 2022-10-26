@@ -35,8 +35,8 @@ const EmailPosition = () => {
               (isFlexibleFlowActive &&
                 coreStatus === global.CORE_STATUS_MAP.sorting)) &&
             selectedEmails &&
-            selectedEmails.length > 0
-              ? selectedEmails.length
+            selectedEmails.selectedIds.length > 0
+              ? selectedEmails.selectedIds.length
               : totalThreads}
           </GS.TextMutedParagraph>
         </StyledTooltip>

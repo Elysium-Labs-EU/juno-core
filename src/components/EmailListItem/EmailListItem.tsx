@@ -216,18 +216,18 @@ const EmailListItem = ({
               {!labelIds.includes(global.DRAFT_LABEL) ? (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticSenderFull}
+                  userEmail={staticSenderFull}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticSenderFull} />
+                  <EmailAvatar userEmail={staticSenderFull} />
                 </ContactCard>
               ) : (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticRecipientName.name}
+                  userEmail={staticRecipientName.name}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticRecipientName.name} />
+                  <EmailAvatar userEmail={staticRecipientName.name} />
                 </ContactCard>
               )}
             </S.Avatars>

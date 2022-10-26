@@ -6,12 +6,23 @@ import RoutesConstants from '../../../constants/routes.json'
 import {
   QiCog,
   QiCompose,
+  QiFolderArchive,
+  QiJump,
   QiStack,
   QiToDo,
 } from '../../../images/svgIcons/quillIcons'
-import { useAppDispatch } from '../../../store/hooks'
+import {
+  selectEmailList,
+  selectSelectedEmails,
+} from '../../../store/emailListSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { AppDispatch } from '../../../store/store'
-import { navigateTo, setActiveModal } from '../../../store/utilsSlice'
+import {
+  navigateTo,
+  selectAllEmailsSenderForFocusMode,
+  setActiveModal,
+} from '../../../store/utilsSlice'
+import getSenderFromList from '../../../utils/getSenderFromList'
 import filterItems, { getItemIndex, IJsonStructure } from '../filterItems'
 import ListItem from '../ListItem/ListItem'
 import * as S from './CommandSuggestionStyles'
@@ -71,6 +82,8 @@ const CommandPalleteSuggestions = ({
 }) => {
   const dispatch = useAppDispatch()
   const location = useLocation()
+  const emailList = useAppSelector(selectEmailList)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
 
   console.log('location', location)
 
@@ -81,12 +94,30 @@ const CommandPalleteSuggestions = ({
         heading: 'Use with',
         id: 'use-with',
         items: [
-          {
-            id: 'select-all-from-sender',
-            children: 'Select all emails from sender',
-            icon: <QiStack />,
-            href: null,
-          },
+          selectedEmails.selectedIds.length === 1
+            ? {
+                id: 'select-all-from-sender',
+                children: `Select all loaded To Do emails from ${
+                  getSenderFromList({ selectedEmails, emailList })[0].split(
+                    '<'
+                  )[0]
+                } for Focus mode`,
+                icon: <QiJump />,
+                onClick: () => dispatch(selectAllEmailsSenderForFocusMode()),
+              }
+            : undefined,
+          selectedEmails.selectedIds.length === 1
+            ? {
+                id: 'archive-all-from-sender',
+                children: `Archive all loaded emails from ${
+                  getSenderFromList({ selectedEmails, emailList })[0].split(
+                    '<'
+                  )[0]
+                }`,
+                icon: <QiFolderArchive />,
+                onClick: () => dispatch(selectAllEmailsSenderForFocusMode()),
+              }
+            : undefined,
         ],
       },
     ]),

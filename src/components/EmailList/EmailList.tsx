@@ -63,7 +63,7 @@ const EmailList = () => {
   return labelIds.some((val) => loadedInbox.indexOf(val) > -1) &&
     activeEmailListIndex > -1 ? (
     <>
-      {selectedEmails.labelIds.length > 0 &&
+      {selectedEmails.selectedIds.length > 0 &&
         multipleIncludes(selectedEmails.labelIds, labelIds) && (
           <SelectedOptions />
         )}
