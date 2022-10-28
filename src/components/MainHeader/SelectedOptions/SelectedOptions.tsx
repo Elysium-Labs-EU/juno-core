@@ -1,7 +1,5 @@
 import { useCallback } from 'react'
 import {
-  selectActiveEmailListIndex,
-  selectEmailList,
   selectSelectedEmails,
   setSelectedEmails,
   updateEmailLabelBatch,
@@ -12,6 +10,11 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as S from './SelectedOptionsStyles'
 import * as global from '../../../constants/globalConstants'
 import { deleteDraftBatch } from '../../../store/draftsSlice'
+import {
+  selectAllEmailsCurrentInbox,
+  setInSearch,
+} from '../../../store/utilsSlice'
+import { QiMeatballsH } from '../../../images/svgIcons/quillIcons'
 
 const ARCHIVE_BUTTON_LABEL = 'Archive'
 const DISCARD_BUTTON_LABEL = 'Discard'
@@ -19,9 +22,7 @@ const EMAILS_SELECTED_SINGLE = 'emails selected'
 const EMAILS_SELECTED_PLURAL = 'email selected'
 
 const SelectedOptions = () => {
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const dispatch = useAppDispatch()
-  const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const selectedEmails = useAppSelector(selectSelectedEmails)
 
@@ -30,16 +31,8 @@ const SelectedOptions = () => {
   }, [])
 
   const handleSelectAll = useCallback(() => {
-    dispatch(
-      setSelectedEmails(
-        emailList[activeEmailListIndex].threads.map((thread) => ({
-          id: thread.id,
-          event: 'add',
-          labelIds,
-        }))
-      )
-    )
-  }, [activeEmailListIndex, emailList])
+    dispatch(selectAllEmailsCurrentInbox())
+  }, [])
 
   const handleArchiveAll = useCallback(() => {
     const request = {
@@ -55,6 +48,10 @@ const SelectedOptions = () => {
   const handleDiscardAll = useCallback(() => {
     dispatch(deleteDraftBatch())
   }, [labelIds])
+
+  const handleShowMoreOptions = useCallback(() => {
+    dispatch(setInSearch(true))
+  }, [])
 
   return (
     <S.Wrapper>
@@ -89,6 +86,13 @@ const SelectedOptions = () => {
             title="Discard all the selected drafts"
           />
         )}
+        <CustomButton
+          label=""
+          onClick={handleShowMoreOptions}
+          title="Show more options to use with selected emails"
+          icon={<QiMeatballsH />}
+          showIconAfterLabel
+        />
       </S.Inner>
     </S.Wrapper>
   )

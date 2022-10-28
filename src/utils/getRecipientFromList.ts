@@ -5,12 +5,12 @@ import {
 import multipleIncludes from './multipleIncludes'
 
 /**
- * @function getSenderFromList
+ * @function getRecipientFromList
  * @param {object} - takes in an selectedEmails object and an emailList object
- * @returns returns an array of email addresses of the senders of the selected emails (last message in each thread)
+ * @returns returns an array of email addresses of the recipients of the selected emails (last message in each thread)
  */
 
-export default function getSenderFromList({
+export default function getRecipientFromList({
   selectedEmails,
   emailList,
 }: {
@@ -28,7 +28,7 @@ export default function getSenderFromList({
       selectedEmails.selectedIds.includes(item.id)
     )
     return specificThreadById.map(
-      (item) => item.messages[item.messages.length - 1].payload.headers.from
+      (item) => item.messages[item.messages.length - 1].payload.headers.to
     )
   }
   return []

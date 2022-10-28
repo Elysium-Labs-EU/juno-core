@@ -8,6 +8,7 @@ interface ICustomButton {
   icon?: JSX.Element | null
   label: string | null
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  showIconAfterLabel?: boolean
   style?: any
   suppressed?: boolean
   title: string
@@ -26,8 +27,8 @@ const Button = styled.button<IButton>`
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;
-  color: ${ ({ suppressed }) =>
-    suppressed ? `var(--color-neutral-400) ` : `var(--color-black) ` };
+  color: ${({ suppressed }) =>
+    suppressed ? `var(--color-neutral-400) ` : `var(--color-black) `};
   cursor: pointer;
   display: inline-block;
   font-family: var(--font-family);
@@ -54,6 +55,7 @@ const Button = styled.button<IButton>`
 
 interface IInnerButton {
   hasLabel: boolean
+  showIconAfterLabel: boolean
 }
 
 const InnerButton = styled.div<IInnerButton>`
@@ -62,7 +64,10 @@ const InnerButton = styled.div<IInnerButton>`
 
   .icon {
     line-height: 0;
-    margin-right: ${ ({ hasLabel }) => hasLabel && '13px' };
+    margin-right: ${({ hasLabel, showIconAfterLabel }) =>
+      hasLabel && !showIconAfterLabel && '13px'};
+    margin-left: ${({ hasLabel, showIconAfterLabel }) =>
+      hasLabel && showIconAfterLabel && '13px'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
@@ -74,6 +79,7 @@ const CustomButton = ({
   icon = null,
   label,
   onClick = undefined,
+  showIconAfterLabel = false,
   style = undefined,
   suppressed = false,
   title,
@@ -88,9 +94,13 @@ const CustomButton = ({
     title={title}
     type={type ?? 'button'}
   >
-    <InnerButton hasLabel={Boolean(label)}>
-      {icon && <div className="icon">{icon}</div>}
+    <InnerButton
+      hasLabel={Boolean(label)}
+      showIconAfterLabel={showIconAfterLabel}
+    >
+      {icon && !showIconAfterLabel && <div className="icon">{icon}</div>}
       <span>{label}</span>
+      {icon && showIconAfterLabel && <div className="icon">{icon}</div>}
     </InnerButton>
   </Button>
 )

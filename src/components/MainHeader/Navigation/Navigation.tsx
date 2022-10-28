@@ -53,22 +53,22 @@ const Navigation = () => {
     }
   }, [location])
 
+  // TODO: Refactor to hook into button
   useEffect(() => {
     let mounted = true
-    if (
-      mounted &&
-      !inSearch &&
-      !activeModal &&
-      !location.pathname.includes('/compose') &&
-      !isReplying &&
-      !isForwarding
-    ) {
-      if (keysPressed.includes(keyConstants.KEY_NUMBERS[1])) {
+    if (mounted && !inSearch && !activeModal) {
+      const disableDuringComposing =
+        !location.pathname.includes('/compose') && !isReplying && !isForwarding
+      if (
+        keysPressed.includes(keyConstants.KEY_NUMBERS[1]) &&
+        disableDuringComposing
+      ) {
         dispatch(navigateTo(RoutesConstants.TODO))
       }
       if (
         keysPressed.includes(keyConstants.KEY_NUMBERS[2]) &&
-        isFlexibleFlowActive
+        isFlexibleFlowActive &&
+        disableDuringComposing
       ) {
         dispatch(navigateTo(RoutesConstants.INBOX))
       }
@@ -80,7 +80,10 @@ const Navigation = () => {
       ) {
         dispatch(setInSearch(true))
       }
-      if (keysPressed.includes(keyConstants.KEY_LETTERS.c)) {
+      if (
+        keysPressed.includes(keyConstants.KEY_LETTERS.c) &&
+        disableDuringComposing
+      ) {
         dispatch(navigateTo('/compose'))
       }
     }

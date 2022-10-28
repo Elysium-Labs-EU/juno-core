@@ -12,7 +12,7 @@ import { findLabelById } from '../utils/findLabel'
 import getSenderFromList from '../utils/getSenderFromList'
 import multipleIncludes from '../utils/multipleIncludes'
 import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
-import { fetchDrafts, openDraftEmail } from './draftsSlice'
+import { deleteDraftBatch, fetchDrafts, openDraftEmail } from './draftsSlice'
 import {
   setCoreStatus,
   setCurrentEmail,
@@ -25,6 +25,7 @@ import {
   fetchEmailsFull,
   fetchEmailsSimple,
   setSelectedEmails,
+  updateEmailLabelBatch,
 } from './emailListSlice'
 import { IEmailListThreadItem } from './storeTypes/emailListTypes'
 import {
@@ -334,9 +335,40 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
   }
 }
 
-export const selectAllEmailsSenderForFocusMode =
-  (): AppThunk => (dispatch, getState) => {
-    const { activeEmailListIndex, emailList, selectedEmails } = getState().email
+export const archiveAllEmailCMDK = (): AppThunk => (dispatch, getState) => {
+  const { labelIds } = getState().labels
+
+  const request = {
+    removeLabelIds: [
+      ...labelIds.filter((item) => item !== global.UNREAD_LABEL),
+    ],
+  }
+
+  dispatch(updateEmailLabelBatch({ request }))
+  dispatch(setSelectedEmails([]))
+}
+
+export const discardAllEmailCMDK = (): AppThunk => (dispatch) => {
+  dispatch(deleteDraftBatch())
+}
+
+export const startFocusModeCMDK = (): AppThunk => (dispatch, getState) => {
+  const { activeEmailListIndex, emailList, selectedEmails } = getState().email
+  const { labelIds } = getState().labels
+
+  activateTodo({
+    activeEmailListIndex,
+    dispatch,
+    emailList,
+    labelIds,
+    selectedEmails,
+  })
+}
+
+export const selectAllEmailsSender =
+  (callback?: () => AppThunk): AppThunk =>
+  (dispatch, getState) => {
+    const { emailList, selectedEmails } = getState().email
     const { labelIds } = getState().labels
 
     const currentEmailSender = getSenderFromList({ selectedEmails, emailList })
@@ -348,24 +380,39 @@ export const selectAllEmailsSenderForFocusMode =
         email.messages[email.messages.length - 1].payload.headers.from
       )
     )
-    if (emailsFromSameSender.length > 0) {
-      activateTodo({
-        activeEmailListIndex,
-        dispatch,
-        emailList,
-        labelIds,
-        selectedEmails,
-      })
-      // Takes this action on the background, to speed up the process
-      dispatch(
-        setSelectedEmails(
-          emailsFromSameSender.map((thread) => ({
-            id: thread.id,
-            event: 'add',
-            labelIds,
-          }))
-        )
+    dispatch(
+      setSelectedEmails(
+        emailsFromSameSender.map((thread) => ({
+          id: thread.id,
+          event: 'add',
+          labelIds,
+        }))
       )
+    )
+    if (emailsFromSameSender.length > 0 && callback) {
+      dispatch(callback())
+    }
+  }
+
+export const selectAllEmailsCurrentInbox =
+  (callback?: () => AppThunk): AppThunk =>
+  (dispatch, getState) => {
+    const { activeEmailListIndex, emailList } = getState().email
+    const { labelIds } = getState().labels
+
+    const emailsFromCurrentInbox = emailList[activeEmailListIndex]?.threads
+
+    dispatch(
+      setSelectedEmails(
+        emailsFromCurrentInbox.map((thread) => ({
+          id: thread.id,
+          event: 'add',
+          labelIds,
+        }))
+      )
+    )
+    if (emailsFromCurrentInbox.length > 0 && callback) {
+      dispatch(callback())
     }
   }
 

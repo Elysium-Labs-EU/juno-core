@@ -198,6 +198,7 @@ const EmailListItem = ({
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
           <S.CellCheckbox
             inSelect={
+              selectedEmails.selectedIds.length > 0 &&
               selectedEmails.labelIds.length > 0 &&
               multipleIncludes(selectedEmails.labelIds, labelIds)
             }

@@ -286,17 +286,17 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
   const { draftList } = getState().drafts
   dispatch(
     listRemoveItemDetailBatch({
-      messageIds: selectedEmails,
+      messageIds: selectedEmails.selectedIds,
     })
   )
   dispatch(setSelectedEmails([]))
-  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails }))
-  for (let i = 0; selectedEmails.length > i; i += 1) {
+  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails.selectedIds }))
+  for (let i = 0; selectedEmails.selectedIds.length > i; i += 1) {
     try {
       const draftObject =
         draftList.length > 0 &&
         draftList.find(
-          (draft) => draft?.message?.threadId === selectedEmails[i]
+          (draft) => draft?.message?.threadId === selectedEmails.selectedIds[i]
         )
       if (
         typeof draftObject === 'object' &&

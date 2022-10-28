@@ -7,7 +7,12 @@
 export default function deduplicateItems<T>(undoubleObject: T[]) {
   if (undoubleObject && undoubleObject.length > 0) {
     return [...new Set(undoubleObject.map((item) => JSON.stringify(item)))].map(
-      (string) => JSON.parse(string)
+      (string) => {
+        if (string) {
+          return JSON.parse(string)
+        }
+        return undefined
+      }
     )
   }
   return []

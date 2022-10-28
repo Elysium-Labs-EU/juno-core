@@ -1,11 +1,10 @@
-/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 interface IListItem {
   isFocused: boolean
 }
 
-export const ListItem = styled.button<IListItem>`
+export const ListItemButton = styled.button<IListItem>`
   align-items: center;
   background-color: ${({ isFocused }) =>
     isFocused ? 'var(--color-neutral-100)' : 'transparent'};
@@ -13,7 +12,7 @@ export const ListItem = styled.button<IListItem>`
   border-radius: var(--radius-m);
   display: flex;
   justify-content: space-between;
-  padding: 5px 30px;
+  padding: 15px 30px;
   transition: background-color ease-in 0.125s;
   width: 100%;
 
@@ -32,4 +31,13 @@ export const IconTitleContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
+`
+
+export const ChildrenAsText = styled.span`
+  margin: auto;
+`
+
+export const Label = styled.span`
+  color: var(--color-neutral-500);
+  font-size: var(--small);
 `

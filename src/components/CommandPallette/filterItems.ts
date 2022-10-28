@@ -6,19 +6,22 @@ import React, {
   SetStateAction,
   useEffect,
 } from 'react'
+import { TListItemType } from './ListItem/ListItem'
 
 export interface IJsonStructureItem {
   children: ReactNode
+  href?: string | null | undefined
   icon?: JSX.Element | null | undefined
   id: string
+  index?: number
+  keywords?: string[]
   onClick?: () =>
     | void
     | undefined
     | Promise<any>
     | { payload: string | null; type: string }
-  index?: number
-  keywords?: string[]
-  href?: string | null | undefined
+  showType?: boolean
+  type?: TListItemType
 }
 
 export interface IJsonStructure {
@@ -43,7 +46,7 @@ export function getItemIndex(
 function getLabelFromChildren(children: ReactNode) {
   let label = ''
 
-  Children.map(children, (child) => {
+  Children.forEach(children, (child) => {
     if (typeof child === 'string') {
       label += child
     }

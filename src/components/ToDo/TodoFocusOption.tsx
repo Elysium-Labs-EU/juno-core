@@ -15,7 +15,7 @@ import {
   selectSelectedEmails,
 } from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectLabelIds } from '../../store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
 import { AppDispatch } from '../../store/store'
 import {
   IEmailListObject,
@@ -27,6 +27,7 @@ import {
   selectIsLoading,
 } from '../../store/utilsSlice'
 import labelURL from '../../utils/createLabelURL'
+import { findLabelByName } from '../../utils/findLabel'
 import { setModifierKey } from '../../utils/setModifierKey'
 import startSort from '../../utils/startSort'
 import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
@@ -44,7 +45,7 @@ export const activateTodo = ({
   dispatch: AppDispatch
   emailList: IEmailListObject[]
   labelIds: string[]
-  selectedEmails: ISelectedEmail
+  selectedEmails?: ISelectedEmail
 }) => {
   const staticLabelURL = labelURL(labelIds)
   if (staticLabelURL) {
@@ -68,6 +69,7 @@ const TodoFocusOption = () => {
   const isLoading = useAppSelector(selectIsLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const selectedEmails = useAppSelector(selectSelectedEmails)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
   const handleEvent = useCallback(() => {
@@ -76,7 +78,14 @@ const TodoFocusOption = () => {
       dispatch,
       emailList,
       labelIds,
-      selectedEmails,
+      selectedEmails: selectedEmails.labelIds.includes(
+        findLabelByName({
+          storageLabels,
+          LABEL_NAME: global.TODO_LABEL_NAME,
+        })?.id ?? ''
+      )
+        ? selectedEmails
+        : undefined,
     })
   }, [activeEmailListIndex, dispatch, emailList, labelIds, selectedEmails])
 
@@ -96,7 +105,13 @@ const TodoFocusOption = () => {
       onClick={handleEvent}
       disabled={isDisabled}
       label={
-        selectedEmails.selectedIds.length > 0 ? (
+        selectedEmails.selectedIds.length > 0 &&
+        selectedEmails.labelIds.includes(
+          findLabelByName({
+            storageLabels,
+            LABEL_NAME: global.TODO_LABEL_NAME,
+          })?.id ?? ''
+        ) ? (
           <>
             {local.BUTTON_FOCUS}
             <span> ({selectedEmails.selectedIds.length})</span>

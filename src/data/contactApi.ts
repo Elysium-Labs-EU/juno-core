@@ -22,6 +22,7 @@ const contactApi = () => ({
           pageSize: query.pageSize ?? 1000,
           pageToken: query.nextPageToken ?? undefined,
         },
+        // TODO: Simplify this code
         paramsSerializer: (params) =>
           qs.stringify(params, { arrayFormat: 'repeat' }),
       })
@@ -39,6 +40,7 @@ const contactApi = () => ({
             readMask: query.readMask,
             query: query.query,
           },
+          // TODO: Simplify this code
           paramsSerializer: (params) =>
             qs.stringify(params, { arrayFormat: 'repeat' }),
         }

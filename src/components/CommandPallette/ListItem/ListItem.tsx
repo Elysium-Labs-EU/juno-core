@@ -1,14 +1,48 @@
+import { ReactNode } from 'react'
 import { useAppDispatch } from '../../../store/hooks'
 import { setInSearch } from '../../../store/utilsSlice'
 import * as S from './ListItemStyles'
 
+export type TListItemType = 'Link' | 'Command'
+
+const ListItemContent = ({
+  children,
+  itemType = 'Command',
+  showType = true,
+  icon,
+}: {
+  children: ReactNode
+  showType?: boolean
+  itemType?: TListItemType
+  icon: JSX.Element
+}) => (
+  // Test
+  <>
+    <S.IconTitleContainer>
+      {icon && <S.IconContainer>{icon}</S.IconContainer>}
+      {typeof children === 'string' ? (
+        <span className="truncate max-w-md">{children}</span>
+      ) : (
+        children
+      )}
+    </S.IconTitleContainer>
+    {showType && <S.Label>{itemType}</S.Label>}
+  </>
+)
+
 const ListItem = ({
   closeOnSelect = true,
+  showType = true,
+  itemType = 'Command',
+  keywords = [],
   item: { onClick, icon, children },
   focusedItemIndex,
   index,
 }: {
   closeOnSelect?: boolean
+  keywords?: string[]
+  showType?: boolean
+  itemType?: TListItemType
   item: any
   focusedItemIndex: number
   index: number
@@ -28,17 +62,16 @@ const ListItem = ({
   }
 
   return (
-    <S.ListItem
+    <S.ListItemButton
       isFocused={index === focusedItemIndex}
       onClick={clickAndClose}
       // The className is used to target it.
       className="command-palette-list-item"
     >
-      <S.IconTitleContainer>
-        {icon && <S.IconContainer>{icon}</S.IconContainer>}
-        <p>{children}</p>
-      </S.IconTitleContainer>
-    </S.ListItem>
+      <ListItemContent showType={showType} itemType={itemType} icon={icon}>
+        {children}
+      </ListItemContent>
+    </S.ListItemButton>
   )
 }
 
