@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const EditorWrapper = styled.div`
+  overflow-y: auto;
   background-color: var(--color-white);
   width: 100%;
   border: 2px solid var(--color-neutral-300);
