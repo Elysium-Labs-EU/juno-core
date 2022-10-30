@@ -6,12 +6,18 @@ import {
   QiCheckmark,
   QiDownload,
   QiEscape,
+  QiEye,
 } from '../../../images/svgIcons/quillIcons'
-import { useAppDispatch } from '../../../store/hooks'
-import { setSystemStatusUpdate } from '../../../store/utilsSlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { 
+  setSystemStatusUpdate,
+  setActiveModal,
+} from '../../../store/utilsSlice'
 import * as GS from '../../../styles/globalStyles'
 import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
+import { viewAttachment } from '../../../utils/viewAttachment'
 import { IEmailAttachmentType } from '../../EmailDetail/Attachment/EmailAttachmentTypes'
+import AttachmentModal from '../AttachmentModal/AttachmentModal'
 import CustomIconButton from '../Buttons/CustomIconButton'
 import StyledCircularProgress from '../StyledCircularProgress'
 import * as S from './AttachmentBubbleStyles'
@@ -83,6 +89,60 @@ const DeleteButton = ({
   />
 )
 
+const ViewAttachmentButton = ({
+  attachmentData,
+  messageId = undefined,
+} : {
+  attachmentData: IEmailAttachmentType
+  messageId?: string
+}) => {
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [blobUrl, setBlobUrl] = useState("")
+  const [mimeType, setMimeType] = useState("")
+  const dispatch = useAppDispatch()
+  
+  const handleClick = async () => {
+    setLoadState(global.LOAD_STATE_MAP.loading)
+    if (messageId) {
+      const response = await viewAttachment({
+        messageId,
+        attachmentData,
+      })
+      if (response?.success) {
+        setLoadState(global.LOAD_STATE_MAP.loaded)
+        response?.blobUrl ? setBlobUrl(response?.blobUrl) : null
+        response?.mimeType ? setMimeType(response?.mimeType) : null
+        dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.attachment))
+        
+        return
+      }
+      setLoadState(global.LOAD_STATE_MAP.error)
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: response.message ?? global.NETWORK_ERROR,
+        })
+      )
+    }
+  }
+
+  return loadState !== global.LOAD_STATE_MAP.loading ? (
+    <>
+      {blobUrl !== "" ? (
+        <AttachmentModal blobUrl={blobUrl} mimeType={mimeType} />
+      ) : null}
+      <CustomIconButton
+        onClick={handleClick}
+        icon={
+          <QiEye />
+        }
+        title='View attachment'
+      />
+    </>
+  ) : (
+    <StyledCircularProgress size={ICON_SIZE} />
+  )
+}
 const AttachmentBubble = ({
   attachmentData,
   messageId = undefined,
@@ -108,7 +168,7 @@ const AttachmentBubble = ({
     'body' in attachmentData
       ? attachmentData.body?.size
       : attachmentData?.size ?? 0
-
+  
   return (
     <S.Attachment>
       <EmailAttachmentIcon mimeType={mimeType} />
@@ -120,7 +180,10 @@ const AttachmentBubble = ({
         </GS.TextMutedSpanSmall>
       </S.AttachmentInner>
       {hasDownload && 'body' in attachmentData && (
-        <DownloadButton attachmentData={attachmentData} messageId={messageId} />
+        <>
+          <ViewAttachmentButton attachmentData={attachmentData} messageId={messageId} />
+          <DownloadButton attachmentData={attachmentData} messageId={messageId} />
+        </>
       )}
       {handleDelete && index !== undefined && (
         <DeleteButton handleDelete={handleDelete} index={index} />

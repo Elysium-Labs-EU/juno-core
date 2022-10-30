@@ -10,7 +10,7 @@ export const Attachment = styled.div`
   padding: 4px 8px;
   align-items: center;
   margin-bottom: 8px;
-  grid-template-columns: 30px auto 30px;
+  grid-template-columns: 30px auto 30px 30px;
   &:hover {
     background-color: var(--color-neutral-200);
     box-shadow: var(--box-shadow-low);
