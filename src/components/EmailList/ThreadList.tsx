@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react'
 import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
 import EmailListItem from '../EmailListItem/EmailListItem'
 
@@ -7,7 +8,7 @@ import EmailListItem from '../EmailListItem/EmailListItem'
  * @param focusedItemIndex - the index of the focused item
  * @param setFocusedItemIndex - callback function to the parent component to keep track of the focused item
  * @param showLabel - an optional flag to show labels on the EmaillistItem, defaults to false
- * @param keySuffix - an optional string to add to the key of the thread - to remove conflict with other rendered items
+ * @param keySuffix - a string to add to the key of the thread - to remove conflict with other rendered items
  * @param searchOnClickHandeler - an optional onClick callback handeler - used by the Search component
  * @returns {JSX.Element}
  */
@@ -17,14 +18,14 @@ const ThreadList = ({
   focusedItemIndex,
   setFocusedItemIndex,
   showLabel = false,
-  keySuffix = undefined,
+  keySuffix,
   searchOnClickHandeler = undefined,
 }: {
   threads: IEmailListThreadItem[]
   focusedItemIndex: number
-  setFocusedItemIndex: (newIndex: number) => void
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
   showLabel?: boolean
-  keySuffix?: string
+  keySuffix: 'search' | 'emailList'
   searchOnClickHandeler?: (id: string) => void
 }) => (
   <>
@@ -39,6 +40,8 @@ const ThreadList = ({
         onFocus={() => setFocusedItemIndex(index)}
         onMouseOver={() => setFocusedItemIndex(index)}
         aria-hidden="true"
+        // The className is used to target it.
+        className={`${keySuffix}-thread-list-item`}
       >
         <EmailListItem
           email={thread}

@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
 import MessageCount from '../Elements/MessageCount'
@@ -35,6 +34,7 @@ import useKeyPress from '../../hooks/useKeyPress'
 import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
 import ContactCard from '../Elements/ContactCard/ContactCard'
 import multipleIncludes from '../../utils/multipleIncludes'
+import CustomCheckbox from '../Elements/StyledCheckbox'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -180,13 +180,13 @@ const EmailListItem = ({
     }
   }, [EnterKeyListener, isFocused, inSearch, activeModal])
 
-  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckBox = (isChecked: boolean) => {
     dispatch(
       setSelectedEmails([
         {
           labelIds,
           id,
-          event: event.target.checked ? 'add' : 'remove',
+          event: isChecked ? 'add' : 'remove',
         },
       ])
     )
@@ -203,10 +203,9 @@ const EmailListItem = ({
               multipleIncludes(selectedEmails.labelIds, labelIds)
             }
           >
-            <Checkbox
-              checked={selectedEmails.selectedIds.includes(id)}
+            <CustomCheckbox
+              isChecked={selectedEmails.selectedIds.includes(id)}
               onChange={handleCheckBox}
-              size="small"
             />
           </S.CellCheckbox>
           <S.CelUnread>

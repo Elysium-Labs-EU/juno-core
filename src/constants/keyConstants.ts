@@ -18,6 +18,7 @@ export const KEY_LETTERS = {
   j: 'j',
   k: 'k',
   r: 'r',
+  s: 's',
   u: 'u',
   x: 'x',
 }

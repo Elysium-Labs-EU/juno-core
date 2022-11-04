@@ -128,7 +128,6 @@ const Feedback = () => {
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.feedback}
-      handleClose={handleClose}
       modalTitle={MODAL_TITLE}
       modalAriaLabel="feedback"
       subTitle={

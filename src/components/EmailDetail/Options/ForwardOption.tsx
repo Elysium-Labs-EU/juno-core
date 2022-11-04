@@ -4,11 +4,11 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import isForwardingListener from '../../EmailOptions/IsForwardingListener'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { selectIsReplying } from '../../../store/emailDetailSlice'
 import { QiForward } from '../../../images/svgIcons/quillIcons'
 import { IEmailDetailOptions } from './optionTypes'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 
 const actionKeys = [
   keyConstants.KEY_SPECIAL.shift,
@@ -30,7 +30,7 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, dispatch])
 
-  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
+  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
 
   return (
     <CustomButton

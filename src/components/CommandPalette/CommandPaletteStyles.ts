@@ -1,26 +1,25 @@
 import styled from 'styled-components'
 
 export const Dialog = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-m);
+  box-shadow: var(--box-shadow-low);
   display: flex;
   flex-direction: column;
-  transform: translate(-50%, -50%);
-  width: 825px;
+  left: 50%;
   max-height: calc(100vh - 225px);
   min-height: 400px;
-  background-color: var(--color-white);
-  box-shadow: var(--box-shadow-low);
-  border-radius: 5px;
   overflow: hidden;
-  z-index: 1;
-  outline: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 825px;
+  z-index: var(--z-index-modal);
 `
 
 export const Icon = styled.div`
-  padding-right: 10px;
   display: flex;
+  padding-right: 10px;
   place-items: center;
 `
 
@@ -42,11 +41,11 @@ export const NoSearchResults = styled.div`
 `
 
 export const SearchOuput = styled.div`
-  position: relative;
   -webkit-box-flex: 1;
+  border-top: 1px solid var(--color-neutral-200);
   flex-grow: 1;
   overflow-y: auto;
-  border-top: 1px solid var(--color-neutral-200);
+  position: relative;
 `
 
 export const FooterRow = styled.div`

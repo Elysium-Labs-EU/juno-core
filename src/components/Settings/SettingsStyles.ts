@@ -7,17 +7,19 @@ export const SettingsContainer = styled.div`
   margin-bottom: 20px;
 `
 export const SettingsSubHeader = styled.h3`
-  font-weight: 200;
+  font-weight: 300;
   margin: 0;
 `
 
 export const SettingsSidebar = styled.div``
 
+// TODO: Convert select to radix version
+
 export const StyledSelect = styled(Select)<SelectProps>`
   border: 0;
   width: 64px;
   height: 32px;
-  font-size: 0.9rem;
+  font-size: var(--small);
   color: var(--color-black);
   background-color: transparent;
   margin-top: 16px;

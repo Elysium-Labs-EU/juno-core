@@ -16,6 +16,7 @@ interface IRecipientField {
   setInputValue: (value: string) => void
   handleDelete: (value: any) => void
   showField: boolean
+  registerOnKeyDown: () => void
 }
 
 /**
@@ -34,6 +35,7 @@ const RecipientField = ({
   setInputValue,
   handleDelete,
   showField,
+  registerOnKeyDown,
 }: IRecipientField) => (
   <>
     <S.Label
@@ -51,6 +53,7 @@ const RecipientField = ({
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleDelete={handleDelete}
+        registerOnKeyDown={registerOnKeyDown}
         willAutoFocus={
           showField &&
           recipientFieldValue &&

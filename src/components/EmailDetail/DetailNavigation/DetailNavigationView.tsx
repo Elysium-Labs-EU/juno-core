@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import * as global from '../../../constants/globalConstants'
 import * as keyConstants from '../../../constants/keyConstants'
-import useKeyPress from '../../../hooks/useKeyPress'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 import {
   QiChevronLeft,
   QiChevronRight,
-  QiEscape,
 } from '../../../images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
@@ -16,7 +15,6 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds } from '../../../store/labelsSlice'
 import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
 import {
-  closeMail,
   navigateNextMail,
   navigatePreviousMail,
   selectEmailListSize,
@@ -47,29 +45,10 @@ const DetailNavigationView = ({
   const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const labelIds = useAppSelector(selectLabelIds)
   const viewIndex = useAppSelector(selectViewIndex)
-  const ArrowLeftListener = useKeyPress(keyConstants.KEY_ARROWS.left)
-  const ArrowRightListener = useKeyPress(keyConstants.KEY_ARROWS.right)
-  const EscapeListener = useKeyPress(keyConstants.KEY_SPECIAL.escape)
-
-  const handleCloseEvent = useCallback(() => {
-    dispatch(closeMail())
-  }, [])
-
-  useEffect(() => {
-    if (EscapeListener) {
-      handleCloseEvent()
-    }
-  }, [EscapeListener])
 
   const handleNavPrevEvent = useCallback(() => {
     dispatch(navigatePreviousMail())
   }, [])
-
-  useEffect(() => {
-    if (ArrowLeftListener) {
-      handleNavPrevEvent()
-    }
-  }, [ArrowLeftListener])
 
   const handleNavNextEvent = useCallback(() => {
     const nextButtonSelector = () => {
@@ -101,11 +80,16 @@ const DetailNavigationView = ({
     nextButtonSelector()
   }, [])
 
-  useEffect(() => {
-    if (ArrowRightListener) {
-      handleNavNextEvent()
-    }
-  }, [ArrowRightListener])
+  useKeyboardShortcut({
+    handleEvent: handleNavNextEvent,
+    actionKeys: [keyConstants.KEY_ARROWS.right],
+    refreshOnDeps: [activeEmailList, coreStatus, viewIndex],
+  })
+
+  useKeyboardShortcut({
+    handleEvent: handleNavPrevEvent,
+    actionKeys: [keyConstants.KEY_ARROWS.left],
+  })
 
   const NavigationView = useMemo(
     () => (
@@ -130,13 +114,6 @@ const DetailNavigationView = ({
                 <StyledCircularProgress size={10} />
               )
             }
-          />
-        </S.NavButton>
-        <S.NavButton>
-          <CustomIconButton
-            title="Close view"
-            onClick={handleCloseEvent}
-            icon={<QiEscape size={ICON_SIZE} />}
           />
         </S.NavButton>
       </S.Wrapper>

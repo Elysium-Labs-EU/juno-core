@@ -3,9 +3,9 @@ import CustomButton from '../../Elements/Buttons/CustomButton'
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { navigateNextMail, selectInSearch } from '../../../store/utilsSlice'
 import { QiSkip } from '../../../images/svgIcons/quillIcons'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 
 const actionKeys = [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.k]
 
@@ -16,7 +16,7 @@ const SkipOption = ({ iconSize }: { iconSize: number }) => {
   const handleEvent = useCallback(() => {
     dispatch(navigateNextMail())
   }, [dispatch])
-  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
+  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
 
   return (
     <CustomButton

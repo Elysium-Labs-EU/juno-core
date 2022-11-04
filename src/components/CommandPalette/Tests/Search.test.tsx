@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react'
 import renderWithProviders from '../../../utils/ForTesting/testUtils'
-import Search from '../CommandPallette'
+import Search from '../CommandPalette'
 
 describe('Search tests', () => {
   test('To render modal', () => {

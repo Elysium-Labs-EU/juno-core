@@ -1,9 +1,7 @@
-import { useCallback } from 'react'
-
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import * as local from '../../constants/todoConstants'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
 import { QiJump } from '../../images/svgIcons/quillIcons'
 import {
   setCoreStatus,
@@ -72,7 +70,7 @@ const TodoFocusOption = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
-  const handleEvent = useCallback(() => {
+  const handleEvent = () => {
     activateTodo({
       activeEmailListIndex,
       dispatch,
@@ -87,12 +85,13 @@ const TodoFocusOption = () => {
         ? selectedEmails
         : undefined,
     })
-  }, [activeEmailListIndex, dispatch, emailList, labelIds, selectedEmails])
+  }
 
-  useMultiKeyPress({
-    handleEvent,
+  useKeyboardShortcut({
     actionKeys,
-    disabled: inSearch || Boolean(activeModal),
+    handleEvent,
+    isDisabled: inSearch || Boolean(activeModal),
+    refreshOnDeps: [labelIds],
   })
 
   const isDisabled =
@@ -102,6 +101,7 @@ const TodoFocusOption = () => {
 
   return (
     <CustomAttentionButton
+      tabIndex={-1}
       onClick={handleEvent}
       disabled={isDisabled}
       label={

@@ -6,10 +6,10 @@ import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import archiveMail from '../../EmailOptions/ArchiveMail'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
 import { QiFolderArchive } from '../../../images/svgIcons/quillIcons'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
 
@@ -32,7 +32,7 @@ const ArchiveOption = ({
     })
   }, [threadDetail, labelIds, dispatch])
 
-  useMultiKeyPress({ handleEvent, actionKeys, disabled: inSearch })
+  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
 
   return (
     <CustomButton

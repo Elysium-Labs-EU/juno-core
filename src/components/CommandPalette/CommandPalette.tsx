@@ -40,9 +40,10 @@ import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import SearchResults from './Search/SearchResults'
-import * as S from './SearchStyles'
+import * as S from './CommandPaletteStyles'
 import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
 import ContextBar from './ContextBar/ContextBar'
+import handleChangeFocus from '../../utils/handleChangeFocus'
 
 interface IShouldClearOutPreviousResults {
   searchValueRef: MutableRefObject<string>
@@ -66,6 +67,7 @@ interface ILoadMoreSearchResults {
 }
 
 const SEARCH = 'Search'
+const COMMAND_PALLETE = 'command-palette-list-item'
 
 const shouldClearOutPreviousResults = ({
   searchValueRef,
@@ -116,33 +118,25 @@ export const loadMoreSearchResults = ({
 }
 
 const openDetail = ({
+  currentEmail,
   dispatch,
   searchResults,
-  currentEmail,
 }: {
+  currentEmail: string
   dispatch: AppDispatch
   searchResults: IEmailListObject
-  currentEmail: string
 }) => {
   dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
 }
 
-// TODO: Convert this to grab the suggested item from the CMD pallette
 function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
-  const items = document.querySelectorAll(
-    '.command-palette-list-item'
-  ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
+  const items = document.querySelectorAll(`.${COMMAND_PALLETE}`) as NodeListOf<
+    HTMLButtonElement | HTMLAnchorElement
+  >
 
   if (items[focusedItemIndex]) {
     items[focusedItemIndex].click()
-
-    // if (
-    //   items[focusedItemIndex].attributes.getNamedItem('data-close-on-select')?.value ===
-    //   'true'
-    // ) {
-    //   onChangeOpen(false)
-    // }
   }
 }
 
@@ -240,7 +234,7 @@ const CommandPallette = () => {
     [loadState, searchValueRef, searchValue, searchResults]
   )
 
-  const handleOpenEvent = (threadId: string) => {
+  const handleOpenEmailEvent = (threadId: string) => {
     if (searchResults) {
       openDetail({
         dispatch,
@@ -250,82 +244,87 @@ const CommandPallette = () => {
     }
   }
 
-  const handleKeyDown = () => {
-    if (
-      searchValue &&
-      searchResults &&
-      searchResults.threads.length - 1 > focusedItemIndex
-    ) {
-      setFocusedItemIndex((prevState) => prevState + 1)
-      return
-    }
-    if (
-      !searchValue &&
-      document.querySelectorAll('.command-palette-list-item').length - 1 >
-        focusedItemIndex
-    ) {
-      setFocusedItemIndex((prevState) => prevState + 1)
-    }
-  }
-
-  const handleKeyUp = () => {
-    if (searchValue && searchResults && focusedItemIndex > 0) {
-      setFocusedItemIndex((prevState) => prevState - 1)
-      return
-    }
-    if (!searchValue && focusedItemIndex > 0) {
-      setFocusedItemIndex((prevState) => prevState - 1)
-    }
+  const handleResetIndexOnNewSearch = () => {
+    handleChangeFocus({
+      focusedItemIndex,
+      setFocusedItemIndex,
+      sourceTag: COMMAND_PALLETE,
+      doNotMoveFocus: true,
+    })
   }
 
   const handleKeyEscape = () => {
-    if (searchResults && searchResults.threads.length > 0) {
-      resetSearch()
+    if (inSearch) {
+      if (searchResults && searchResults.threads.length > 0) {
+        resetSearch()
+      } else {
+        dispatch(setInSearch(false))
+      }
     }
   }
 
   const handleKeyEnter = () => {
-    if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
-      intitialSearch({
-        searchValue,
-        setLoadState,
-        fetchSearchThreads,
-        searchValueRef,
-        setSearchResults,
-        dispatch,
-      })
-    } else if (searchResults && focusedItemIndex > -1) {
-      handleOpenEvent(searchResults.threads[focusedItemIndex].id)
-      return
+    if (inSearch) {
+      if (focusedItemIndex > 0) {
+        handleSelect({ focusedItemIndex })
+        return
+      }
+      if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
+        intitialSearch({
+          searchValue,
+          setLoadState,
+          fetchSearchThreads,
+          searchValueRef,
+          setSearchResults,
+          dispatch,
+        })
+        return
+      }
+      if (searchResults && focusedItemIndex > -1) {
+        handleOpenEmailEvent(searchResults.threads[focusedItemIndex].id)
+      }
     }
-    handleSelect({ focusedItemIndex })
   }
 
   const keyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event?.code === undefined) return
-    if (event.code === keyConstants.KEY_ARROWS.down) {
-      event.preventDefault()
-      event.stopPropagation()
-      handleKeyDown()
-    }
-    if (event.code === keyConstants.KEY_ARROWS.up) {
-      event.preventDefault()
-      event.stopPropagation()
-      handleKeyUp()
-    }
-    if (event.code === keyConstants.KEY_SPECIAL.escape) {
-      event.preventDefault()
-      event.stopPropagation()
-      handleKeyEscape()
-    }
-    if (event.code === keyConstants.KEY_SPECIAL.enter) {
-      event.preventDefault()
-      event.stopPropagation()
-      handleKeyEnter()
+    if (inSearch) {
+      if (event?.code === undefined) return
+      if (event.code === keyConstants.KEY_ARROWS.down) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleChangeFocus({
+          direction: 'down',
+          focusedItemIndex,
+          setFocusedItemIndex,
+          sourceTag: COMMAND_PALLETE,
+          doNotMoveFocus: true,
+        })
+      }
+      if (event.code === keyConstants.KEY_ARROWS.up) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleChangeFocus({
+          direction: 'up',
+          focusedItemIndex,
+          setFocusedItemIndex,
+          sourceTag: COMMAND_PALLETE,
+          doNotMoveFocus: true,
+        })
+      }
+      if (event.code === keyConstants.KEY_SPECIAL.escape) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleKeyEscape()
+      }
+      if (event.code === keyConstants.KEY_SPECIAL.enter) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleKeyEnter()
+      }
     }
   }
 
-  const memoizedSearchResults = useMemo(
+  const memoizedCommandSuggestionsAndSearchResults = useMemo(
     () => (
       <S.SearchOuput>
         {searchResults && searchResults?.threads ? (
@@ -375,13 +374,15 @@ const CommandPallette = () => {
             )}
           </S.Icon>
           <InputBase
-            autoFocus
             autoComplete="off"
             fullWidth
             id="search"
+            autoFocus
+            onKeyDown={handleResetIndexOnNewSearch}
             inputRef={searchInputRef}
             onChange={handleSearchChange}
             placeholder="Search for emails and commands"
+            spellCheck={false}
             value={searchValue}
           />
           <CustomButton
@@ -415,7 +416,7 @@ const CommandPallette = () => {
         {!searchResults && selectedEmails.selectedIds.length > 0 && (
           <ContextBar />
         )}
-        {memoizedSearchResults}
+        {memoizedCommandSuggestionsAndSearchResults}
       </S.Dialog>
     </Modal>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import * as global from '../../../constants/globalConstants'
 import { useSearchResults } from '../../../store/emailListSlice'
@@ -10,7 +10,7 @@ import * as GS from '../../../styles/globalStyles'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import LoadingState from '../../Elements/LoadingState/LoadingState'
 import ThreadList from '../../EmailList/ThreadList'
-import * as S from '../SearchStyles'
+import * as S from '../CommandPaletteStyles'
 
 const openDetail = ({
   dispatch,
@@ -28,8 +28,11 @@ const openDetail = ({
 interface ILoadMoreSearchResults {
   searchValue: string
   searchResults: IEmailListObject
-  setLoadState: (value: string) => void
-  fetchSearchThreads: Function
+  setLoadState: Dispatch<SetStateAction<string>>
+  fetchSearchThreads: (value: {
+    q: string
+    nextPageToken: string | null | undefined
+  }) => void
 }
 
 export const loadMoreSearchResults = ({
@@ -54,10 +57,10 @@ const SearchResults = ({
   setFocusedItemIndex,
 }: {
   fetchSearchThreads: any
-  focusedItemIndex: any
+  focusedItemIndex: number
   searchResults: any
-  searchValue: any
-  setFocusedItemIndex: any
+  searchValue: string
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
 }) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const dispatch = useAppDispatch()

@@ -20,6 +20,7 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
+  all: unset;
   background-color: transparent;
   border-bottom-color: transparent;
   border-left-color: transparent;
@@ -44,7 +45,7 @@ const Button = styled.button<IButton>`
 
   &:hover {
     border-color: var(--color-neutral-600);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+    box-shadow: (--box-shadow-low);
     color: var(--color-black);
   }
 

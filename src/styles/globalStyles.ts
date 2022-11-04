@@ -1,5 +1,5 @@
-import createTheme from '@mui/material/styles/createTheme'
 import styled, { createGlobalStyle } from 'styled-components'
+
 import * as themeConstants from '../constants/themeConstants'
 
 /* 16px */
@@ -36,10 +36,10 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 100%;
   }
   body {
-    margin: 0;
+    -webkit-font-smoothing: antialiased !important;
     background-color: var(--color-neutral-100) !important;
     font-family: var(--font-family);
-    -webkit-font-smoothing: antialiased !important;
+    margin: 0;
   }
 `
 
@@ -62,43 +62,6 @@ export const OuterContainer = styled.div<IOuterContainer>`
   flex: 1 1 0%;
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
-
-export const StyledMenu = styled.div`
-  animation: fadeInUp 0.2s both;
-  min-width: 260px;
-  max-width: 800px;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  border-radius: var(--radius-l);
-  background: var(--color-black);
-  box-shadow: var(--box-shadow-low);
-`
-
-export const MenuPopper = styled.div`
-  position: relative;
-  padding: 10px;
-  box-shadow: var(--box-shadow-low);
-  background-color: var(--color-white);
-  border-radius: var(--radius-m);
-`
-
-export const theme = createTheme({
-  palette: {
-    primary: { main: themeConstants.color.black },
-  },
-  typography: {
-    fontFamily: [
-      'system-ui',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-  },
-})
 
 export const TextSmall = styled.p`
   font-size: var(--small);

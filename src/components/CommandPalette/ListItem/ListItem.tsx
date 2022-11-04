@@ -9,14 +9,13 @@ const ListItemContent = ({
   children,
   itemType = 'Command',
   showType = true,
-  icon,
+  icon = null,
 }: {
   children: ReactNode
   showType?: boolean
   itemType?: TListItemType
-  icon: JSX.Element
+  icon?: JSX.Element | null
 }) => (
-  // Test
   <>
     <S.IconTitleContainer>
       {icon && <S.IconContainer>{icon}</S.IconContainer>}
@@ -34,16 +33,20 @@ const ListItem = ({
   closeOnSelect = true,
   showType = true,
   itemType = 'Command',
-  keywords = [],
+  // keywords = [],
   item: { onClick, icon, children },
   focusedItemIndex,
   index,
 }: {
   closeOnSelect?: boolean
-  keywords?: string[]
+  // keywords?: string[]
   showType?: boolean
   itemType?: TListItemType
-  item: any
+  item: {
+    onClick?: any
+    icon?: JSX.Element | null | undefined
+    children: ReactNode
+  } // TODO: type this better
   focusedItemIndex: number
   index: number
 }) => {

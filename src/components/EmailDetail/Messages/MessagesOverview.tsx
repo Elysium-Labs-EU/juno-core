@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import EmailDetailOptions from './EmailDetailOptions'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
@@ -24,9 +31,9 @@ const MappedMessages = ({
   setShouldRefreshDetail,
 }: {
   threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: (value: string | null) => void
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
   indexMessageListener: (value: number) => void
-  setShouldRefreshDetail: (value: boolean) => void
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }) => {
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
@@ -103,7 +110,7 @@ interface IMessagesOverview {
   isReplying: boolean
   isForwarding: boolean
   labelIds: string[]
-  setShouldRefreshDetail: (value: boolean) => void
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
 const MessagesOverview = ({

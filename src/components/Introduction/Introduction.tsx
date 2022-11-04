@@ -1,15 +1,15 @@
-import * as S from './IntroductionStyles'
 import * as global from '../../constants/globalConstants'
-import CustomButton from '../Elements/Buttons/CustomButton'
+import { QiArrowRight, QiCommand } from '../../images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import {
-  selectSettingsLabelId,
   selectActiveModal,
+  selectSettingsLabelId,
   setActiveModal,
 } from '../../store/utilsSlice'
+import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
+import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomModal from '../Elements/Modal/CustomModal'
-import { QiArrowRight, QiCommand } from '../../images/svgIcons/quillIcons'
+import * as S from './IntroductionStyles'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -43,7 +43,6 @@ const Introduction = () => {
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.intro}
-      handleClose={handleClose}
       modalTitle={DIALOG_HEADER}
       modalAriaLabel="introduction"
     >

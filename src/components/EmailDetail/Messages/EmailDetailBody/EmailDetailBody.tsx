@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import root from 'react-shadow/styled-components'
 import { useAppDispatch } from '../../../../store/hooks'
 import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
@@ -14,8 +14,8 @@ interface IEmailDetailBody {
   threadDetailBody: any
   // threadDetailBody: IEmailMessagePayload
   detailBodyCSS: 'visible' | 'invisible'
-  setUnsubscribeLink?: (value: string | null) => void
-  setBlockedTrackers?: (value: string[] | []) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
+  setBlockedTrackers?: Dispatch<SetStateAction<string[] | []>>
 }
 
 interface IBodyState {
@@ -36,7 +36,7 @@ const postTreatmentBody = ({
   activeDocument,
 }: {
   dispatch: AppDispatch
-  setUnsubscribeLink?: (value: string | null) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
   activeDocument: HTMLDivElement | null
 }): void => {
   openLinkInNewTab(activeDocument)
@@ -48,13 +48,12 @@ const postTreatmentBody = ({
 
 // Use the shadowRoot body and trigger all the postTreatment functions
 // Otherwise just return an empty div
-
 const ShadowBody = ({
   bodyState,
   setUnsubscribeLink = undefined,
 }: {
   bodyState: IBodyState
-  setUnsubscribeLink?: (value: string | null) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
 }) => {
   const dispatch = useAppDispatch()
   const [enhancedBody, setEnhancedBody] = useState(false)

@@ -31,16 +31,16 @@ interface IEmailWrapper {
 }
 
 export const EmailClosedWrapper = styled.div<IEmailWrapper>`
-  padding: 20px;
-  transition: background-color ease-in 0.125s;
   background-color: ${({ isDraft }) =>
     isDraft ? '#c2a6ff17' : `var(--color-white)`};
+  border-radius: var(--radius-l);
+  box-shadow: var(--box-shadow-low);
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
   display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
   margin-bottom: 20px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
-  border-radius: var(--radius-l);
+  padding: 20px;
+  transition: all 0.2s ease-in-out;
+  transition: background-color ease-in 0.125s;
   &:hover {
     background-color: ${({ isDraft }) =>
       isDraft ? `var(--color-blue-100)` : `var(--color-neutral-200)`};
@@ -48,22 +48,22 @@ export const EmailClosedWrapper = styled.div<IEmailWrapper>`
   }
 `
 export const EmailOpenWrapper = styled.div<IEmailWrapper>`
-  padding: 20px;
-  margin-bottom: 20px;
   background-color: ${({ isDraft }) =>
     isDraft ? '#c2a6ff17' : `var(--color-white)`};
   border-radius: var(--radius-l);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  box-shadow: var(--box-shadow-low);
   display: ${({ hideDraft }) => (hideDraft ? 'none' : 'inherit')};
+  margin-bottom: 20px;
+  padding: 20px;
 `
 
 export const DraftHeaderControls = styled.div`
-  display: flex;
-  justify-content: center;
   align-items: center;
   border-bottom: 1px solid var(--color-blue-100);
-  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
   margin-bottom: 20px;
+  padding-bottom: 20px;
 `
 
 export const EmailOptionsContainer = styled.div<IEmailDetail>`
@@ -94,18 +94,18 @@ export const OpenMessageWrapper = styled.div`
 `
 
 export const ClosedMessageWrapper = styled.div`
+  align-items: center;
+  column-gap: 15px;
   display: grid;
   grid-template-columns: max-content auto 95px;
-  column-gap: 15px;
-  align-items: center;
 `
 
 export const LoadingErrorWrapper = styled.div`
-  display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
+  display: flex;
   height: 50vh;
+  justify-content: center;
+  width: 100%;
 `
 
 export const DetailBase = styled.div`

@@ -1,5 +1,12 @@
 import { isEqual } from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import * as global from '../../../constants/globalConstants'
 import { IContact } from '../../../store/storeTypes/contactsTypes'
@@ -24,7 +31,7 @@ const ContactField = ({
   showField: boolean
   id: string
   label: string
-  setHasInteracted: (value: boolean) => void
+  setHasInteracted: Dispatch<SetStateAction<boolean>>
   hasInteracted: boolean
 }) => {
   const [inputValue, setInputValue] = useState<string>('')
@@ -81,6 +88,13 @@ const ContactField = ({
     [error, composeValue, id, hasInteracted, updateComposeEmail]
   )
 
+  const registerOnKeyDown = useCallback(() => {
+    console.log('triggered')
+    if (!hasInteracted) {
+      setHasInteracted(true)
+    }
+  }, [hasInteracted, setHasInteracted])
+
   const memoizedField = useMemo(
     () => (
       <RecipientField
@@ -93,6 +107,7 @@ const ContactField = ({
         setInputValue={setInputValue}
         handleDelete={handleDelete}
         showField={showField}
+        registerOnKeyDown={registerOnKeyDown}
       />
     ),
     [inputValue, error, handleChange, value, id, label]

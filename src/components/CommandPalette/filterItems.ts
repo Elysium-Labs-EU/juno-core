@@ -1,11 +1,4 @@
-import React, {
-  Children,
-  Dispatch,
-  FC,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-} from 'react'
+import { Children, ReactElement, ReactNode } from 'react'
 import { TListItemType } from './ListItem/ListItem'
 
 export interface IJsonStructureItem {
@@ -30,17 +23,60 @@ export interface IJsonStructure {
   items: (IJsonStructureItem | undefined)[]
 }
 
+function retrieveChildrenFromElement(item: ReactElement) {
+  if (typeof item === 'object' && item !== null) {
+    const fetchedChildren = item.props.children
+    if (
+      Array.isArray(fetchedChildren) &&
+      fetchedChildren.some(
+        (child) => typeof child === 'object' && child !== null
+      )
+    ) {
+      let output = ''
+      const recursiveChildrenCheck = (input: (string | ReactElement)[]) => {
+        input.forEach((child) => {
+          if (typeof child === 'string') {
+            output += child
+          }
+          if (Array.isArray(child)) {
+            recursiveChildrenCheck(child)
+          }
+          if (typeof child === 'object' && child !== null) {
+            if (Array.isArray(child.props.children)) {
+              recursiveChildrenCheck(child.props.children)
+            }
+            if (typeof child.props.children === 'string') {
+              output += child.props.children
+            }
+          }
+        })
+      }
+      recursiveChildrenCheck(fetchedChildren)
+      return output
+    }
+    let output = ''
+    if (Array.isArray(fetchedChildren)) {
+      fetchedChildren.forEach((child) => {
+        if (typeof child === 'string') {
+          output += child
+        }
+      })
+    }
+    return output
+  }
+  return item
+}
+
+export function getAllItems(items: IJsonStructure[]) {
+  return items.map((list) => list.items).reduce((a, b) => a.concat(b))
+}
+
 export function getItemIndex(
   items: IJsonStructure[],
   id: string,
   startIndex: number = 0
 ) {
-  return (
-    items
-      .map((list) => list.items)
-      .reduce((a, b) => a.concat(b))
-      .findIndex((i) => i?.id === id) + startIndex
-  )
+  return getAllItems(items).findIndex((i) => i?.id === id) + startIndex
 }
 
 function getLabelFromChildren(children: ReactNode) {
@@ -49,9 +85,12 @@ function getLabelFromChildren(children: ReactNode) {
   Children.forEach(children, (child) => {
     if (typeof child === 'string') {
       label += child
+    } else if (child !== null && typeof child === 'object') {
+      const typeCastChild = child as ReactElement
+      const foundNestedLabel = retrieveChildrenFromElement(typeCastChild)
+      label += foundNestedLabel
     }
   })
-
   return label
 }
 
