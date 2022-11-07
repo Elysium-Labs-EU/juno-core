@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
 
 import * as themeConstants from '../constants/themeConstants'
 
@@ -63,27 +63,33 @@ export const OuterContainer = styled.div<IOuterContainer>`
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 
-export const TextSmall = styled.p`
-  font-size: var(--small);
+interface ITextProps {
+  muted?: boolean
+  small?: boolean
+}
+
+export const P = styled.p<ITextProps>`
+  ${({ small }) =>
+    small &&
+    css`
+      font-size: var(--small);
+    `}
+  ${({ muted }) =>
+    muted &&
+    css`
+      color: var(--color-neutral-400);
+    `}
 `
 
-export const TextMutedSmall = styled.p`
-  color: var(--color-neutral-400);
-  font-size: var(--small);
-`
-
-export const TextMutedSpan = styled.span`
-  color: var(--color-neutral-400);
-`
-export const TextSpanSmall = styled.span`
-  font-size: var(--small);
-`
-
-export const TextMutedSpanSmall = styled.span`
-  color: var(--color-neutral-400);
-  font-size: var(--small);
-`
-
-export const TextMutedParagraph = styled.p`
-  color: var(--color-neutral-400);
+export const Span = styled.span<ITextProps>`
+  ${({ small }) =>
+    small &&
+    css`
+      font-size: var(--small);
+    `}
+  ${({ muted }) =>
+    muted &&
+    css`
+      color: var(--color-neutral-400);
+    `}
 `

@@ -135,9 +135,9 @@ const DraftMessage = ({
   ) : (
     <S.EmailOpenWrapper isDraft hideDraft={hideDraft}>
       <S.DraftHeaderControls>
-        <GS.TextMutedSmall style={{ marginRight: '40px' }}>
+        <GS.P muted small style={{ marginRight: '40px' }}>
           {local.DRAFT_INDICATOR_HEADER}
-        </GS.TextMutedSmall>
+        </GS.P>
         <CustomButton
           style={{ marginRight: '10px' }}
           label="Edit"

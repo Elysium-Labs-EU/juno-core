@@ -114,10 +114,10 @@ const AttachmentBubble = ({
       <EmailAttachmentIcon mimeType={mimeType} />
       <S.AttachmentInner>
         <span className="file_name">{fileName}</span>
-        <GS.TextMutedSpanSmall>
+        <GS.Span muted small>
           {global.FILE}
           {prettyBytes(fileSize)}
-        </GS.TextMutedSpanSmall>
+        </GS.Span>
       </S.AttachmentInner>
       {hasDownload && 'body' in attachmentData && (
         <DownloadButton attachmentData={attachmentData} messageId={messageId} />

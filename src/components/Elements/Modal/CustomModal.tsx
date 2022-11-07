@@ -42,7 +42,7 @@ export const DialogTitle = S.StyledTitle
 export const DialogDescription = S.StyledDescription
 export const DialogClose = DialogPrimitive.Close
 
-const DialogDemo = ({
+const CustomDialog = ({
   children,
   modalAriaLabel,
   modalTitle,
@@ -91,4 +91,4 @@ const DialogDemo = ({
   )
 }
 
-export default DialogDemo
+export default CustomDialog

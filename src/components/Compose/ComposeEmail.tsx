@@ -355,9 +355,9 @@ const ComposeEmail = ({
               <S.TopRowControls>
                 <S.UpdateContainer>
                   {saveSuccess && (
-                    <GS.TextMutedSpanSmall>
+                    <GS.Span small muted>
                       {local.DRAFT_SAVED}
-                    </GS.TextMutedSpanSmall>
+                    </GS.Span>
                   )}
                 </S.UpdateContainer>
                 {memoizedButtons}

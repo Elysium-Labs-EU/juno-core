@@ -332,6 +332,38 @@ export const QiChevronRight = ({
     </svg>
   )
 }
+export const QiChevronUp = ({
+  size = 0,
+  color = 'currentColor',
+  strokeWidth = 2,
+}: {
+  size?: number
+  color?: string
+  strokeWidth?: number
+}) => {
+  const preserveAspectRatio = 'xMidYMid meet'
+  const width = size === 0 ? '1em' : size
+  const height = size === 0 ? '1em' : size
+
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 32 32"
+      preserveAspectRatio={preserveAspectRatio}
+    >
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth}
+        d="M26 20 16 10 6 20"
+      />
+    </svg>
+  )
+}
 export const QiCog = ({
   size = 0,
   color = 'currentColor',

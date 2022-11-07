@@ -30,9 +30,7 @@ const CreateSectionWithKeys = ({
     {keyCombos.map((combo) => (
       <S.KeyComboContainer key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && (
-          <GS.TextMutedSpan>{combo?.subTitle}</GS.TextMutedSpan>
-        )}
+        {combo?.subTitle && <GS.Span muted>{combo?.subTitle}</GS.Span>}
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
             <span key={JSON.stringify(oneKey)}>{oneKey}</span>
@@ -52,10 +50,10 @@ const KeyboardCombos = () => {
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <GS.TextMutedParagraph style={{ marginBottom: '10px' }}>
+        <GS.P muted style={{ marginBottom: '10px' }}>
           {local.MODAL_OS_SUB}{' '}
           <span style={{ color: `var(--color-black)` }}>{getUserAgent()}</span>
-        </GS.TextMutedParagraph>
+        </GS.P>
       }
     >
       <S.Columns>

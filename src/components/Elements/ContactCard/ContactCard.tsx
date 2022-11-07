@@ -77,7 +77,7 @@ const ContactCard = ({
         placement={placement}
       >
         <S.ContactCard>
-          <S.ContactCardAvatar randomColor={getRandomColor(staticInitials)}>
+          <S.ContactCardAvatar $randomColor={getRandomColor(staticInitials)}>
             <span>{staticInitials}</span>
           </S.ContactCardAvatar>
           <CardContent>
@@ -87,7 +87,7 @@ const ContactCard = ({
             <S.ContactCardDetails>
               <S.ContactCardEmailButton
                 disabled={!emailAddress}
-                randomColor={getRandomColor(staticInitials)}
+                $randomColor={getRandomColor(staticInitials)}
               >
                 <QiMail size={20} />
               </S.ContactCardEmailButton>

@@ -1,6 +1,7 @@
 // SYSTEM CODE
 export const ACCESS_TOKEN = 'accessToken'
 export const ACTIVE_MODAL_MAP = {
+  betaAccess: 'betaAccess',
   feedback: 'feedback',
   help: 'help',
   intro: 'intro',

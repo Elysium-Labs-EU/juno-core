@@ -106,7 +106,9 @@ const SearchResults = ({
         </S.FooterRow>
       ) : (
         <S.FooterRow>
-          <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
+          <GS.P small muted>
+            {global.NO_MORE_RESULTS}
+          </GS.P>
         </S.FooterRow>
       )}
     </>

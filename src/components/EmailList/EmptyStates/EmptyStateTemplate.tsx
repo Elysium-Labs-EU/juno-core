@@ -28,9 +28,9 @@ const EmptyStateTemplate = ({
   <Wrapper>
     <SVGWrapper>{SVG}</SVGWrapper>
     <p>{header}</p>
-    <GS.TextMutedParagraph style={{ marginTop: 0 }}>
+    <GS.P muted style={{ marginTop: 0 }}>
       {paragraph}
-    </GS.TextMutedParagraph>
+    </GS.P>
   </Wrapper>
 )
 

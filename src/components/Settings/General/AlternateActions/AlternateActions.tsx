@@ -43,8 +43,8 @@ const AlternateActions = () => {
     <S.PageSection>
       <p>{HEADER}</p>
       <QiAlt />
-      <GS.TextMutedParagraph>{BODY}</GS.TextMutedParagraph>
-      <GS.TextMutedParagraph>{BODY_1}</GS.TextMutedParagraph>
+      <GS.P muted>{BODY}</GS.P>
+      <GS.P muted>{BODY_1}</GS.P>
       <FormControlLabel
         label={SWITCH_LABEL}
         control={

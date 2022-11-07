@@ -18,7 +18,7 @@ export const EmailAvatarComponent = ({ userEmail }: { userEmail: string }) => {
       data-testid="avatar"
       randomColor={getRandomColor(staticInitials)}
     >
-      <GS.TextSpanSmall>{staticInitials}</GS.TextSpanSmall>
+      <GS.Span small>{staticInitials}</GS.Span>
     </S.EmailAvatarContainer>
   )
 }

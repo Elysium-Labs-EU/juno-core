@@ -178,7 +178,9 @@ const RenderEmailList = ({
         {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
-            <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
+            <GS.P small muted>
+              {global.NO_MORE_RESULTS}
+            </GS.P>
           </S.LoadMoreContainer>
         )}
       </GS.OuterContainer>

@@ -49,7 +49,10 @@ const ContextBar = () => {
   return multipleIncludes(selectedEmails.labelIds, labelIds) ? (
     <S.Wrapper>
       <S.Inner>
-        <GS.TextMutedSpanSmall> Selected emails by: </GS.TextMutedSpanSmall>
+        <GS.Span muted small>
+          {' '}
+          Selected emails by:{' '}
+        </GS.Span>
         {filteredUsers.map((user) => (
           <S.FromContainer key={user}>
             <EmailAvatarComponent userEmail={user} />

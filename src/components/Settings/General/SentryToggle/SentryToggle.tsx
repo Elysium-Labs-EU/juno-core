@@ -30,7 +30,7 @@ const SentryToggle = () => {
   return (
     <S.PageSection>
       <p>{HEADER}</p>
-      <GS.TextMutedParagraph>{BODY}</GS.TextMutedParagraph>
+      <GS.P muted>{BODY}</GS.P>
       <FormControlLabel
         label={SWITCH_LABEL}
         control={

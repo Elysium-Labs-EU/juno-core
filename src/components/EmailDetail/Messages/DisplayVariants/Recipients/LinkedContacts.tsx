@@ -22,9 +22,9 @@ const MappedContacts = ({
 
   return (
     <S.ToFromBCCInner>
-      <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+      <GS.Span muted small style={{ marginRight: '4px' }}>
         {title}
-      </GS.TextMutedSpanSmall>
+      </GS.Span>
       <S.SmallTextTruncated>
         {contactsMap.length > 2 ? (
           <div
@@ -38,7 +38,7 @@ const MappedContacts = ({
                   showComma={index !== (showAll ? contactsMap.length : 3) - 1}
                 >
                   <ContactCard
-                    avatarURL={contact.emailAddress}
+                    userEmail={contact.emailAddress}
                     contact={contact}
                   >
                     <S.SmallTextTruncated title={contact.emailAddress}>
@@ -64,7 +64,7 @@ const MappedContacts = ({
               key={contact.emailAddress}
               showComma={index !== contactsMap.length - 1}
             >
-              <ContactCard avatarURL={contact.name} contact={contact}>
+              <ContactCard userEmail={contact.name} contact={contact}>
                 <S.SmallTextTruncated>{contact.name}</S.SmallTextTruncated>
               </ContactCard>
             </S.SmallTextTruncated>
@@ -87,10 +87,10 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
     <>
       <S.ContactsContainer>
         <S.ToFromBCCInner>
-          <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+          <GS.Span muted small style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
-          </GS.TextMutedSpanSmall>
-          <ContactCard avatarURL={senderName} contact={senderContact[0]}>
+          </GS.Span>
+          <ContactCard userEmail={senderName} contact={senderContact[0]}>
             <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
           </ContactCard>
         </S.ToFromBCCInner>
