@@ -146,7 +146,6 @@ const HelpMenu = () => {
     <Menu
       activeModalTag={global.ACTIVE_MODAL_MAP.help}
       handleClose={handleClose}
-      isModalActive={isOpen}
       menuItems={combinedMenuItems()}
       triggerButton={
         <S.StartButtonWrapper>

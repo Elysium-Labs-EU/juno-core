@@ -9,6 +9,7 @@ import {
 import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomModal from '../Elements/Modal/CustomModal'
+import StrictFlow from '../Settings/General/StrictFlow/StrictFlow'
 import * as S from './IntroductionStyles'
 
 const DIALOG_HEADER = 'Welcome to Juno'
@@ -52,6 +53,7 @@ const Introduction = () => {
           <S.DialogSubHeader>{DIALOG_HEADER_INTRODUCTION}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_INTRODUCTION_1}</p>
           <p>{DIALOG_CONTENT_INTRODUCTION_2}</p>
+          <StrictFlow />
           <S.DialogSubHeader>{DIALOG_HEADER_PRIVACY}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_PRIVACY}</p>
           <p>{DIALOG_CONTENT_PRIVACY_1}</p>

@@ -57,6 +57,7 @@ const Navigation = () => {
     handleEvent: () => dispatch(setInSearch(true)),
     actionKeys: [setModifierKey, keyConstants.KEY_LETTERS.k],
     isDisabled: inSearch,
+    refreshOnDeps: [inSearch],
   })
   useKeyboardShortcut({
     handleEvent: () => dispatch(push(RoutesConstants.TODO)),

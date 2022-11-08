@@ -1,4 +1,3 @@
-import prettyBytes from 'pretty-bytes'
 import { useCallback, useState } from 'react'
 
 import * as global from '../../../constants/globalConstants'
@@ -11,6 +10,7 @@ import { useAppDispatch } from '../../../store/hooks'
 import { setSystemStatusUpdate } from '../../../store/utilsSlice'
 import * as GS from '../../../styles/globalStyles'
 import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
+import formatBytes from '../../../utils/prettierBytes'
 import { IEmailAttachmentType } from '../../EmailDetail/Attachment/EmailAttachmentTypes'
 import CustomIconButton from '../Buttons/CustomIconButton'
 import StyledCircularProgress from '../StyledCircularProgress'
@@ -116,7 +116,7 @@ const AttachmentBubble = ({
         <span className="file_name">{fileName}</span>
         <GS.Span muted small>
           {global.FILE}
-          {prettyBytes(fileSize)}
+          {formatBytes(fileSize)}
         </GS.Span>
       </S.AttachmentInner>
       {hasDownload && 'body' in attachmentData && (

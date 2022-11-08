@@ -22,7 +22,7 @@ export const MenuItem = styled.button<IMenuItem>`
     active ? `var(--color-neutral-100)` : 'transparent'};
   border-radius: var(--radius-m);
   border: 1px solid
-    ${({ active }) => (active ? `var(--color-neutral-200)` : 'transparent')};
+    ${({ active }) => (active ? `var(--color-neutral-100)` : 'transparent')};
   color: var(--color-black);
   display: flex;
   justify-content: space-between;
@@ -35,8 +35,8 @@ export const MenuItem = styled.button<IMenuItem>`
   white-space: nowrap;
   width: 100%;
   &:hover {
-    background-color: var(--color-neutral-200);
-    border: 1px solid var(--color-neutral-200);
+    background-color: var(--color-neutral-100);
+    border: 1px solid var(--color-neutral-100);
   }
 `
 export const MenuItemContentMain = styled.div`

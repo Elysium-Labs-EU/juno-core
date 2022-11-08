@@ -6,10 +6,18 @@ export const SettingsContainer = styled.div`
   grid-template-columns: 200px auto;
   margin-bottom: 20px;
 `
+
+export const SettingsInnerContainer = styled.div`
+  display: grid;
+  gap: 10px;
+`
+
 export const SettingsSubHeader = styled.h3`
   font-weight: 300;
   margin: 0;
 `
+
+export const SettingsItems = styled.div``
 
 export const SettingsSidebar = styled.div``
 

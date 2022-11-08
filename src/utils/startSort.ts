@@ -28,7 +28,6 @@ const startSort = ({
   labelURL,
   selectedEmails,
 }: IStartSort) => {
-  console.log('selectedEmails', selectedEmails)
   if (labelURL && emailList && activeEmailListIndex > -1) {
     if (selectedEmails && selectedEmails.selectedIds?.length > 0) {
       return dispatch(

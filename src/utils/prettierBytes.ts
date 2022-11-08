@@ -9,5 +9,3 @@ export default function formatBytes(bytes: number, decimals: number = 2) {
 
   return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`
 }
-
-// TODO: Replace the NPM package for this

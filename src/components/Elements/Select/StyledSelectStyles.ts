@@ -3,25 +3,28 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 
 export const StyledTrigger = styled(SelectPrimitive.SelectTrigger)`
   all: unset;
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-m);
-  padding: 0 15px;
-  font-size: 13px;
-  line-height: 1;
-  height: 35px;
-  gap: 5px;
   background-color: var(--color-white);
+  border-radius: var(--radius-m);
   box-shadow: var(--box-shadow-low);
-  /* color: violet.violet11 */
+  display: inline-flex;
+  gap: 5px;
+  height: 35px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 15px;
+  min-width: 150px;
+  max-width: max-content;
+
   &:hover: {
     background-color: var(--color-neutral-300);
   }
   &:focus: {
     box-shadow: 0 0 0 2px black;
   }
-  /* '&[data-placeholder]': { color: violet.violet9 },; */
+  &[data-placeholder] {
+    color: var(--color-neutral-700);
+  }
 `
 
 export const StyledIcon = styled(SelectPrimitive.SelectIcon)`
@@ -29,13 +32,13 @@ export const StyledIcon = styled(SelectPrimitive.SelectIcon)`
 `
 
 export const StyledContent = styled(SelectPrimitive.Content)`
-  overflow: hidden;
-  position: relative;
-  z-index: calc(var(--z-index-modal) + 1);
   background-color: var(--color-white);
   border-radius: var(--radius-l);
   box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  overflow: hidden;
+  position: relative;
+  z-index: calc(var(--z-index-modal) + 1);
 `
 
 export const StyledViewport = styled(SelectPrimitive.Viewport)`
@@ -44,7 +47,6 @@ export const StyledViewport = styled(SelectPrimitive.Viewport)`
 
 export const StyledItem = styled(SelectPrimitive.Item)`
   all: unset;
-  font-size: 13px;
   line-height: 1;
   border-radius: var(--radius-s);
   display: flex;
@@ -67,9 +69,8 @@ export const StyledItem = styled(SelectPrimitive.Item)`
 
 export const StyledLabel = styled(SelectPrimitive.Label)`
   padding: 0 25px;
-  font-size: 12px;
   line-height: 25px;
-  /* color: mauve.mauve11, */
+  color: var(--color-neutral-500);
 `
 export const StyledSeparator = styled(SelectPrimitive.Separator)`
   height: 1px;
@@ -78,12 +79,12 @@ export const StyledSeparator = styled(SelectPrimitive.Separator)`
 `
 
 export const StyledItemIndicator = styled(SelectPrimitive.ItemIndicator)`
-  position: absolute;
-  left: 0;
-  width: 25px;
-  display: inline-flex;
   align-items: center;
+  display: inline-flex;
   justify-content: center;
+  left: 0;
+  position: absolute;
+  width: 25px;
 `
 
 const scrollButtonStyles = {
@@ -92,7 +93,6 @@ const scrollButtonStyles = {
   justifyContent: 'center',
   height: 25,
   backgroundColor: 'white',
-  //   color: violet.violet11,
   cursor: 'default',
 }
 
