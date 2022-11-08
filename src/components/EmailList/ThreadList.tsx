@@ -18,6 +18,7 @@ const ThreadList = ({
   focusedItemIndex,
   setFocusedItemIndex,
   showLabel = false,
+  showCheckbox = true,
   keySuffix,
   searchOnClickHandeler = undefined,
 }: {
@@ -25,6 +26,7 @@ const ThreadList = ({
   focusedItemIndex: number
   setFocusedItemIndex: Dispatch<SetStateAction<number>>
   showLabel?: boolean
+  showCheckbox?: boolean
   keySuffix: 'search' | 'emailList'
   searchOnClickHandeler?: (id: string) => void
 }) => (
@@ -44,10 +46,11 @@ const ThreadList = ({
         className={`${keySuffix}-thread-list-item`}
       >
         <EmailListItem
-          email={thread}
-          showLabel={showLabel}
-          index={index}
           activeIndex={focusedItemIndex}
+          email={thread}
+          index={index}
+          showCheckbox={showCheckbox}
+          showLabel={showLabel}
         />
       </div>
     ))}

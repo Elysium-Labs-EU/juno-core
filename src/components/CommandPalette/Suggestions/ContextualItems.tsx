@@ -22,7 +22,7 @@ import deduplicateItems from '../../../utils/deduplicateItems'
 import getRecipientFromList from '../../../utils/getRecipientFromList'
 import getSenderFromList from '../../../utils/getSenderFromList'
 import multipleIncludes from '../../../utils/multipleIncludes'
-import { IJsonStructure } from '../filterItems'
+import { IJsonStructure } from '../commandPaletteUtils'
 import defaultItems from './DefaultItems'
 
 export default function contextualItems({

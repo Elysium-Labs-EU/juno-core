@@ -78,12 +78,13 @@ const SearchResults = ({
   return (
     <>
       <ThreadList
-        threads={searchResults.threads}
         focusedItemIndex={focusedItemIndex}
-        setFocusedItemIndex={setFocusedItemIndex}
-        showLabel
         keySuffix="search"
         searchOnClickHandeler={handleOpenEvent}
+        setFocusedItemIndex={setFocusedItemIndex}
+        showCheckbox={false}
+        showLabel
+        threads={searchResults.threads}
       />
       {searchResults.nextPageToken ? (
         <S.FooterRow>

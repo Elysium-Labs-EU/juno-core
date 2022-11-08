@@ -62,16 +62,26 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
+const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) => {
+  const foundLabels: string[] = []
+  emailListThreadItem.messages.forEach((message) =>
+    message?.labelIds?.forEach((label) => foundLabels.push(label))
+  )
+  return foundLabels.includes(global.UNREAD_LABEL)
+}
+
 const EmailListItem = ({
-  email,
-  showLabel,
-  index,
   activeIndex,
+  email,
+  index,
+  showCheckbox,
+  showLabel,
 }: {
-  email: IEmailListThreadItem
-  showLabel: boolean
-  index: number
   activeIndex: number
+  email: IEmailListThreadItem
+  index: number
+  showCheckbox: boolean
+  showLabel: boolean
 }) => {
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
@@ -203,14 +213,14 @@ const EmailListItem = ({
               multipleIncludes(selectedEmails.labelIds, labelIds)
             }
           >
-            <CustomCheckbox
-              isChecked={selectedEmails.selectedIds.includes(id)}
-              onChange={handleCheckBox}
-            />
+            {showCheckbox && (
+              <CustomCheckbox
+                isChecked={selectedEmails.selectedIds.includes(id)}
+                onChange={handleCheckBox}
+              />
+            )}
           </S.CellCheckbox>
-          <S.CelUnread>
-            {staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />}
-          </S.CelUnread>
+          <S.CelUnread>{hasUnreadLabel(email) && <S.UnreadDot />}</S.CelUnread>
           <S.CellName onClick={handleOpenEvent} aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(global.DRAFT_LABEL) ? (

@@ -27,9 +27,7 @@ const MappedContacts = ({
       </GS.Span>
       <S.SmallTextTruncated>
         {contactsMap.length > 2 ? (
-          <div
-            style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
-          >
+          <div>
             {contactsMap
               .slice(0, showAll ? contactsMap.length : 3)
               .map((contact, index) => (

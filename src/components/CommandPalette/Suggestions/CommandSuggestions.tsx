@@ -13,7 +13,10 @@ import {
   selectIsFlexibleFlowActive,
   setActiveModal,
 } from '../../../store/utilsSlice'
-import filterItems, { getItemIndex, IJsonStructure } from '../filterItems'
+import filterItems, {
+  getItemIndex,
+  IJsonStructure,
+} from '../commandPaletteUtils'
 import ListItem from '../ListItem/ListItem'
 import * as S from './SuggestionStyles'
 import contextualItems from './ContextualItems'

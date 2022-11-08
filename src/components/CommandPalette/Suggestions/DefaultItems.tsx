@@ -20,7 +20,7 @@ import {
   selectAllEmailsSender,
   setActiveModal,
 } from '../../../store/utilsSlice'
-import { IJsonStructure } from '../filterItems'
+import { IJsonStructure } from '../commandPaletteUtils'
 import * as global from '../../../constants/globalConstants'
 
 export default function defaultItems({
