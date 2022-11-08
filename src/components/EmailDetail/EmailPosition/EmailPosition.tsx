@@ -29,16 +29,16 @@ const EmailPosition = () => {
     <S.Wrapper>
       {loadingState === global.LOAD_STATE_MAP.loaded && (
         <StyledTooltip title={EXPLANATION}>
-          <GS.TextMutedParagraph style={{ fontSize: 13 }}>
+          <GS.P muted style={{ fontSize: 13 }}>
             {sessionViewIndex + 1} /{' '}
             {(coreStatus === global.CORE_STATUS_MAP.focused ||
               (isFlexibleFlowActive &&
                 coreStatus === global.CORE_STATUS_MAP.sorting)) &&
             selectedEmails &&
-            selectedEmails.length > 0
-              ? selectedEmails.length
+            selectedEmails.selectedIds.length > 0
+              ? selectedEmails.selectedIds.length
               : totalThreads}
-          </GS.TextMutedParagraph>
+          </GS.P>
         </StyledTooltip>
       )}
       {loadingState === global.LOAD_STATE_MAP.loading && (

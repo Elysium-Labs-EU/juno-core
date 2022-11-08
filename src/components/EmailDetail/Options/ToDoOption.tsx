@@ -1,17 +1,18 @@
 import { useCallback } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import setToDoMail from '../../EmailOptions/SetToDoMail'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
+import { QiToDo } from '../../../images/svgIcons/quillIcons'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
 import { selectInSearch } from '../../../store/utilsSlice'
 import { setModifierKey } from '../../../utils/setModifierKey'
-import { QiToDo } from '../../../images/svgIcons/quillIcons'
+import CustomButton from '../../Elements/Buttons/CustomButton'
+import setToDoMail from '../../EmailOptions/SetToDoMail'
 import { IEmailDetailOptions } from './optionTypes'
 
-const actionKeys = [setModifierKey, keyConstants.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
 
 const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -28,7 +29,11 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     })
   }, [threadDetail, labelIds, dispatch, storageLabels])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useKeyboardShortcut({
+    handleEvent,
+    actionKeys,
+    isDisabled: inSearch,
+  })
 
   return (
     <CustomButton

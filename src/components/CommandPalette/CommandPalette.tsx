@@ -1,5 +1,15 @@
-import * as React from 'react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  MutableRefObject,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
 import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
@@ -7,9 +17,16 @@ import Modal from '@mui/material/Modal'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import threadApi from '../../data/threadApi'
-import useKeyPress from '../../hooks/useKeyPress'
-import { QiDiscard, QiEscape, QiSearch } from '../../images/svgIcons/quillIcons'
-import { selectSearchList, useSearchResults } from '../../store/emailListSlice'
+import {
+  QiArrowLeft,
+  QiEscape,
+  QiSearch,
+} from '../../images/svgIcons/quillIcons'
+import {
+  selectSearchList,
+  selectSelectedEmails,
+  useSearchResults,
+} from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { AppDispatch } from '../../store/store'
 import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
@@ -18,38 +35,39 @@ import {
   setInSearch,
   setSystemStatusUpdate,
 } from '../../store/utilsSlice'
-import * as GS from '../../styles/globalStyles'
 import sortThreads from '../../utils/sortThreads'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import CustomIconButton from '../Elements/Buttons/CustomIconButton'
 import LoadingState from '../Elements/LoadingState/LoadingState'
-import ThreadList from '../EmailList/ThreadList'
-import * as S from './SearchStyles'
-
-const ENTER_TO_SEARCH = 'Enter to Search'
+import SearchResults from './Search/SearchResults'
+import * as S from './CommandPaletteStyles'
+import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
+import ContextBar from './ContextBar/ContextBar'
+import handleChangeFocus from '../../utils/handleChangeFocus'
 
 interface IShouldClearOutPreviousResults {
-  searchValueRef: any
+  searchValueRef: MutableRefObject<string>
   searchValue: string
-  setSearchResults: Function
+  setSearchResults: Dispatch<SetStateAction<IEmailListObject | undefined>>
   dispatch: AppDispatch
 }
 interface IIntitialSearch {
   searchValue: string
-  setLoadState: (value: string) => void
-  fetchSearchThreads: Function
-  searchValueRef: any
-  setSearchResults: Function
+  setLoadState: Dispatch<SetStateAction<string>>
+  fetchSearchThreads: (searchBody: { q: string }) => void
+  searchValueRef: MutableRefObject<string>
+  setSearchResults: Dispatch<SetStateAction<IEmailListObject | undefined>>
   dispatch: AppDispatch
 }
 interface ILoadMoreSearchResults {
   searchValue: string
   searchResults: IEmailListObject
-  setLoadState: (value: string) => void
-  fetchSearchThreads: Function
+  setLoadState: Dispatch<SetStateAction<string>>
+  fetchSearchThreads: (searchBody: { q: string }) => void
 }
 
 const SEARCH = 'Search'
+const COMMAND_PALLETE = 'command-palette-list-item'
 
 const shouldClearOutPreviousResults = ({
   searchValueRef,
@@ -100,53 +118,43 @@ export const loadMoreSearchResults = ({
 }
 
 const openDetail = ({
+  currentEmail,
   dispatch,
   searchResults,
-  currentEmail,
 }: {
+  currentEmail: string
   dispatch: AppDispatch
   searchResults: IEmailListObject
-  currentEmail: string
 }) => {
   dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
 }
 
+function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
+  const items = document.querySelectorAll(`.${COMMAND_PALLETE}`) as NodeListOf<
+    HTMLButtonElement | HTMLAnchorElement
+  >
+
+  if (items[focusedItemIndex]) {
+    items[focusedItemIndex].click()
+  }
+}
+
 const handleClose = (dispatch: AppDispatch) => dispatch(setInSearch(false))
 
-const Search = () => {
-  const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
-  const [searchValue, setSearchValue] = useState('')
-  const searchValueRef = useRef('')
-  const searchInputRef = useRef<HTMLInputElement | null>(null)
-  const [searchResults, setSearchResults] = useState<IEmailListObject>()
+const CommandPallette = () => {
+  const [focusedItemIndex, setFocusedItemIndex] = useState(0)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [searchResults, setSearchResults] = useState<IEmailListObject>()
+  const [searchValue, setSearchValue] = useState('')
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
+  const searchValueRef = useRef('')
   const dispatch = useAppDispatch()
-  const isSearching = useAppSelector(selectInSearch)
+  const inSearch = useAppSelector(selectInSearch)
   const searchList = useAppSelector(selectSearchList)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
 
-  useEffect(() => {
-    if (EscapeListener) {
-      setFocusedItemIndex(-1)
-    }
-  }, [EscapeListener])
-
-  useEffect(() => {
-    if (ArrowDownListener) {
-      setFocusedItemIndex((prevState) => prevState + 1)
-    }
-  }, [ArrowDownListener])
-
-  useEffect(() => {
-    if (ArrowUpListener) {
-      setFocusedItemIndex((prevState) => prevState - 1)
-    }
-  }, [ArrowUpListener])
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
   }
 
@@ -226,7 +234,7 @@ const Search = () => {
     [loadState, searchValueRef, searchValue, searchResults]
   )
 
-  const handleOpenEvent = (threadId: string) => {
+  const handleOpenEmailEvent = (threadId: string) => {
     if (searchResults) {
       openDetail({
         dispatch,
@@ -236,9 +244,31 @@ const Search = () => {
     }
   }
 
-  const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event?.code === undefined) return
-    if (event.code.toUpperCase() === keyConstants.KEY_ENTER) {
+  const handleResetIndexOnNewSearch = () => {
+    handleChangeFocus({
+      focusedItemIndex,
+      setFocusedItemIndex,
+      sourceTag: COMMAND_PALLETE,
+      doNotMoveFocus: true,
+    })
+  }
+
+  const handleKeyEscape = () => {
+    if (inSearch) {
+      if (searchResults && searchResults.threads.length > 0) {
+        resetSearch()
+      } else {
+        dispatch(setInSearch(false))
+      }
+    }
+  }
+
+  const handleKeyEnter = () => {
+    if (inSearch) {
+      if (focusedItemIndex > 0) {
+        handleSelect({ focusedItemIndex })
+        return
+      }
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
         intitialSearch({
           searchValue,
@@ -248,110 +278,122 @@ const Search = () => {
           setSearchResults,
           dispatch,
         })
-      } else if (searchResults && focusedItemIndex > -1) {
-        handleOpenEvent(searchResults.threads[focusedItemIndex].id)
+        return
+      }
+      if (searchResults && focusedItemIndex > -1) {
+        handleOpenEmailEvent(searchResults.threads[focusedItemIndex].id)
       }
     }
   }
 
-  const memoizedSearchResults = useMemo(
+  const keyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (inSearch) {
+      if (event?.code === undefined) return
+      if (event.code === keyConstants.KEY_ARROWS.down) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleChangeFocus({
+          direction: 'down',
+          focusedItemIndex,
+          setFocusedItemIndex,
+          sourceTag: COMMAND_PALLETE,
+          doNotMoveFocus: true,
+        })
+      }
+      if (event.code === keyConstants.KEY_ARROWS.up) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleChangeFocus({
+          direction: 'up',
+          focusedItemIndex,
+          setFocusedItemIndex,
+          sourceTag: COMMAND_PALLETE,
+          doNotMoveFocus: true,
+        })
+      }
+      if (event.code === keyConstants.KEY_SPECIAL.escape) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleKeyEscape()
+      }
+      if (event.code === keyConstants.KEY_SPECIAL.enter) {
+        event.preventDefault()
+        event.stopPropagation()
+        handleKeyEnter()
+      }
+    }
+  }
+
+  const memoizedCommandSuggestionsAndSearchResults = useMemo(
     () => (
-      <S.SearchResults>
+      <S.SearchOuput>
         {searchResults && searchResults?.threads ? (
-          <>
-            <ThreadList
-              threads={searchResults.threads}
-              focusedItemIndex={focusedItemIndex}
-              setFocusedItemIndex={setFocusedItemIndex}
-              showLabel
-              keySuffix="search"
-              searchOnClickHandeler={handleOpenEvent}
-            />
-            {searchResults.nextPageToken ? (
-              <S.FooterRow>
-                {loadState !== global.LOAD_STATE_MAP.loading && (
-                  <CustomButton
-                    onClick={() =>
-                      loadMoreSearchResults({
-                        searchValue,
-                        searchResults,
-                        setLoadState,
-                        fetchSearchThreads,
-                      })
-                    }
-                    label={global.LOAD_MORE}
-                    suppressed
-                    title="Load more results"
-                  />
-                )}
-                {loadState === global.LOAD_STATE_MAP.loading && (
-                  <LoadingState />
-                )}
-              </S.FooterRow>
-            ) : (
-              <S.FooterRow>
-                <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
-              </S.FooterRow>
-            )}
-          </>
+          <SearchResults
+            fetchSearchThreads={fetchSearchThreads}
+            focusedItemIndex={focusedItemIndex}
+            searchResults={searchResults}
+            searchValue={searchValue}
+            setFocusedItemIndex={setFocusedItemIndex}
+          />
         ) : (
           <S.NoSearchResults>
             {loadState === global.LOAD_STATE_MAP.loading ? (
               <LoadingState />
             ) : (
-              <div>
-                <span>{ENTER_TO_SEARCH}</span>
-                <GS.TextMutedParagraph>
-                  {global.NOTHING_TO_SEE}
-                </GS.TextMutedParagraph>
-              </div>
+              <CommandPalleteSuggestions
+                focusedItemIndex={focusedItemIndex}
+                searchValue={searchValue}
+              />
             )}
           </S.NoSearchResults>
         )}
-      </S.SearchResults>
+      </S.SearchOuput>
     ),
-    [loadState, searchResults, focusedItemIndex]
+    [loadState, searchResults, searchValue, focusedItemIndex]
   )
 
   return (
     <Modal
-      open={isSearching}
+      open={inSearch}
       onClose={() => handleClose(dispatch)}
-      aria-labelledby="modal-search"
-      aria-describedby="modal-search-box"
+      aria-labelledby="modal-command-pallette"
+      aria-describedby="modal-command-pallette-box"
     >
-      <S.Dialog>
+      <S.Dialog onKeyDown={keyDownHandler}>
         <S.InputRow>
           <S.Icon>
-            <QiSearch size={24} />
+            {searchValue.length > 0 ? (
+              <CustomIconButton
+                onClick={resetSearch}
+                aria-label="clear-search"
+                icon={<QiArrowLeft size={20} />}
+                title="Clear search input and results"
+              />
+            ) : (
+              <QiSearch size={20} />
+            )}
           </S.Icon>
           <InputBase
-            id="search"
-            placeholder="Search"
-            value={searchValue}
-            onChange={handleSearchChange}
-            autoFocus={isSearching}
-            inputRef={searchInputRef}
-            onKeyDown={keyDownHandler}
+            autoComplete="off"
             fullWidth
+            id="search"
+            autoFocus
+            onKeyDown={handleResetIndexOnNewSearch}
+            inputRef={searchInputRef}
+            onChange={handleSearchChange}
+            placeholder="Search for emails and commands"
+            spellCheck={false}
+            value={searchValue}
           />
-          {searchValue.length > 0 && (
-            <CustomIconButton
-              onClick={resetSearch}
-              aria-label="clear-search"
-              icon={<QiDiscard size={16} />}
-              title="Clear search input and results"
-            />
-          )}
           <CustomButton
             onClick={() =>
               intitialSearch({
-                searchValue,
-                setLoadState,
-                fetchSearchThreads,
-                searchValueRef,
-                setSearchResults,
                 dispatch,
+                fetchSearchThreads,
+                searchValue,
+                searchValueRef,
+                setLoadState,
+                setSearchResults,
               })
             }
             disabled={
@@ -360,6 +402,9 @@ const Search = () => {
             label={SEARCH}
             style={{ marginRight: '10px' }}
             title="Search"
+            suppressed={
+              searchValue.length < 1 || searchValue === searchValueRef.current
+            }
           />
           <CustomIconButton
             onClick={() => handleClose(dispatch)}
@@ -368,10 +413,13 @@ const Search = () => {
             title="Close"
           />
         </S.InputRow>
-        {memoizedSearchResults}
+        {!searchResults && selectedEmails.selectedIds.length > 0 && (
+          <ContextBar />
+        )}
+        {memoizedCommandSuggestionsAndSearchResults}
       </S.Dialog>
     </Modal>
   )
 }
 
-export default Search
+export default CommandPallette

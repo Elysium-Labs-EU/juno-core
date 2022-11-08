@@ -1,12 +1,18 @@
 import isEqual from 'lodash/isEqual'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import * as React from 'react'
+import {
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 
 import * as local from '../../constants/composeEmailConstants'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
+import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
 import { QiEscape, QiSend } from '../../images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
@@ -30,6 +36,7 @@ import { IContact } from '../../store/storeTypes/contactsTypes'
 import { IDraftDetailObject } from '../../store/storeTypes/draftsTypes'
 import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
 import * as GS from '../../styles/globalStyles'
+import findDraftMessageInList from '../../utils/findDraftMessageInList'
 import { setModifierKey } from '../../utils/setModifierKey'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import Seo from '../Elements/Seo'
@@ -42,7 +49,6 @@ import SubjectField from './ComposeFields/SubjectField'
 import * as S from './ComposeStyles'
 import DiscardDraftButton from './DiscardDraftButton'
 import useParsePresetValues from './Hooks/useParsePresetValues'
-import findDraftMessageInList from '../../utils/findDraftMessageInList'
 
 export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
@@ -60,7 +66,7 @@ interface IComposeEmailProps {
   ) => void
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_ENTER]
+const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.enter]
 
 const ComposeEmail = ({
   presetValue = undefined,
@@ -76,7 +82,6 @@ const ComposeEmail = ({
   const [showCC, setShowCC] = useState<boolean>(false)
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const keysPressed = useMultiKeyPress()
   const [composedEmail, setComposedEmail] = useState<
     undefined | IComposePayload
   >(undefined)
@@ -114,13 +119,10 @@ const ComposeEmail = ({
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
   // The flag is used to allow the system to update the draft.
   useEffect(() => {
-    if (
-      !userInteractedRef.current &&
-      (keysPressed.length > 0 || hasInteracted)
-    ) {
+    if (!userInteractedRef.current && hasInteracted) {
       userInteractedRef.current = true
     }
-  }, [keysPressed, hasInteracted])
+  }, [hasInteracted])
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
@@ -179,7 +181,7 @@ const ComposeEmail = ({
   }, [localDraftDetails])
 
   const handleSubmit = useCallback(
-    (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    (e?: MouseEvent<HTMLButtonElement>) => {
       if (e) {
         e.preventDefault()
       }
@@ -209,14 +211,14 @@ const ComposeEmail = ({
   const memoizedToField = useMemo(
     () => (
       <ContactField
-        updateComposeEmail={updateComposeEmail}
         composeValue={composedEmail?.to}
-        loadState={loadState}
-        showField={!isReplying}
+        hasInteracted={hasInteracted}
         id={local.TO}
         label={local.TO_LABEL}
+        loadState={loadState}
         setHasInteracted={setHasInteracted}
-        hasInteracted={hasInteracted}
+        showField={!isReplying}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
     [isReplying, composedEmail, loadState, hasInteracted]
@@ -225,14 +227,14 @@ const ComposeEmail = ({
   const memoizedCCField = useMemo(
     () => (
       <ContactField
-        updateComposeEmail={updateComposeEmail}
         composeValue={composedEmail?.cc}
-        loadState={loadState}
-        showField={showCC}
+        hasInteracted={hasInteracted}
         id={local.CC}
         label={local.CC_LABEL}
+        loadState={loadState}
         setHasInteracted={setHasInteracted}
-        hasInteracted={hasInteracted}
+        showField={showCC}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
     [showCC, composedEmail, loadState, hasInteracted]
@@ -241,14 +243,14 @@ const ComposeEmail = ({
   const memoizedBCCField = useMemo(
     () => (
       <ContactField
-        updateComposeEmail={updateComposeEmail}
         composeValue={composedEmail?.bcc}
-        loadState={loadState}
-        showField={showBCC}
+        hasInteracted={hasInteracted}
         id={local.BCC}
         label={local.BCC_LABEL}
+        loadState={loadState}
         setHasInteracted={setHasInteracted}
-        hasInteracted={hasInteracted}
+        showField={showBCC}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
     [showBCC, composedEmail, loadState, hasInteracted]
@@ -258,33 +260,37 @@ const ComposeEmail = ({
     () => (
       <SubjectField
         composeValue={composedEmail?.subject}
-        updateComposeEmail={updateComposeEmail}
+        hasInteracted={hasInteracted}
         loadState={loadState}
+        setHasInteracted={setHasInteracted}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
-    [composedEmail, loadState]
+    [composedEmail, loadState, hasInteracted]
   )
 
   const memoizedBodyField = useMemo(
     () => (
       <BodyField
         composeValue={composedEmail?.body}
-        updateComposeEmail={updateComposeEmail}
+        hasInteracted={hasInteracted}
         loadState={loadState}
+        setHasInteracted={setHasInteracted}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
-    [composedEmail, loadState]
+    [composedEmail, loadState, hasInteracted]
   )
 
   const memoizedAttachmentField = useMemo(
     () => (
       <Attachments
-        messageId={composedEmail?.id}
         composeValue={composedEmail?.files}
-        updateComposeEmail={updateComposeEmail}
-        loadState={loadState}
-        setHasInteracted={setHasInteracted}
         hasInteracted={hasInteracted}
+        loadState={loadState}
+        messageId={composedEmail?.id}
+        setHasInteracted={setHasInteracted}
+        updateComposeEmail={updateComposeEmail}
       />
     ),
     [composedEmail, loadState, hasInteracted, updateComposeEmail]
@@ -333,7 +339,11 @@ const ComposeEmail = ({
     [isReplying, isForwarding, localDraftDetails, composedEmail]
   )
 
-  useMultiKeyPress(handleSubmit, actionKeys, inSearch || Boolean(activeModal))
+  useKeyboardShortcut({
+    handleEvent: handleSubmit,
+    actionKeys,
+    isDisabled: inSearch || Boolean(activeModal),
+  })
 
   return (
     <>
@@ -345,7 +355,9 @@ const ComposeEmail = ({
               <S.TopRowControls>
                 <S.UpdateContainer>
                   {saveSuccess && (
-                    <GS.TextMutedSpanSmall>{local.DRAFT_SAVED}</GS.TextMutedSpanSmall>
+                    <GS.Span small muted>
+                      {local.DRAFT_SAVED}
+                    </GS.Span>
                   )}
                 </S.UpdateContainer>
                 {memoizedButtons}

@@ -1,5 +1,5 @@
-import createTheme from '@mui/material/styles/createTheme'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, css } from 'styled-components'
+
 import * as themeConstants from '../constants/themeConstants'
 
 /* 16px */
@@ -36,10 +36,10 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 100%;
   }
   body {
-    margin: 0;
+    -webkit-font-smoothing: antialiased !important;
     background-color: var(--color-neutral-100) !important;
     font-family: var(--font-family);
-    -webkit-font-smoothing: antialiased !important;
+    margin: 0;
   }
 `
 
@@ -63,61 +63,33 @@ export const OuterContainer = styled.div<IOuterContainer>`
   display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
 `
 
-export const StyledMenu = styled.div`
-  animation: fadeInUp 0.2s both;
-  min-width: 260px;
-  max-width: 800px;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  border-radius: var(--radius-l);
-  background: var(--color-black);
-  box-shadow: var(--box-shadow-low);
+interface ITextProps {
+  muted?: boolean
+  small?: boolean
+}
+
+export const P = styled.p<ITextProps>`
+  ${({ small }) =>
+    small &&
+    css`
+      font-size: var(--small);
+    `}
+  ${({ muted }) =>
+    muted &&
+    css`
+      color: var(--color-neutral-400);
+    `}
 `
 
-export const MenuPopper = styled.div`
-  position: relative;
-  padding: 10px;
-  box-shadow: var(--box-shadow-low);
-  background-color: var(--color-white);
-  border-radius: var(--radius-m);
-`
-
-export const theme = createTheme({
-  typography: {
-    fontFamily: [
-      'system-ui',
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-  },
-})
-
-export const TextSmall = styled.p`
-  font-size: var(--small);
-`
-
-export const TextMutedSmall = styled.p`
-  color: var(--color-neutral-400);
-  font-size: var(--small);
-`
-
-export const TextMutedSpan = styled.span`
-  color: var(--color-neutral-400);
-`
-export const TextSpanSmall = styled.span`
-  font-size: var(--small);
-`
-
-export const TextMutedSpanSmall = styled.span`
-  color: var(--color-neutral-400);
-  font-size: var(--small);
-`
-
-export const TextMutedParagraph = styled.p`
-  color: var(--color-neutral-400);
+export const Span = styled.span<ITextProps>`
+  ${({ small }) =>
+    small &&
+    css`
+      font-size: var(--small);
+    `}
+  ${({ muted }) =>
+    muted &&
+    css`
+      color: var(--color-neutral-400);
+    `}
 `

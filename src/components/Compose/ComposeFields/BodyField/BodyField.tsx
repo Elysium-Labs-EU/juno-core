@@ -1,6 +1,13 @@
 import DOMPurify from 'dompurify'
 import { isEqual } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { compareTwoStrings } from 'string-similarity'
 
 import BlockQuote from '@tiptap/extension-blockquote'
@@ -37,16 +44,20 @@ const BodyField = ({
   autofocus = false,
   updateComposeEmail,
   loadState,
+  hasInteracted,
+  setHasInteracted,
 }: {
   composeValue?: string
   autofocus?: boolean
+  hasInteracted: boolean
   updateComposeEmail: (object: { id: string; value: string }) => void
   loadState: string
+  setHasInteracted: Dispatch<SetStateAction<boolean>>
 }) => {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedValue = useDebounce(value, 500)
-  const tipTapRef = useRef<any | null>(null)
+  // const tipTapRef = useRef<any | null>(null)
 
   const handleChange = useCallback((incomingValue: string) => {
     setValue(
@@ -129,11 +140,18 @@ const BodyField = ({
           <S.MenuBar isFocused={isFocused}>
             <MenuBar editor={editorInstance} />
           </S.MenuBar>
-          <EditorContent editor={editorInstance} ref={tipTapRef} />
+          <EditorContent
+            editor={editorInstance}
+            onKeyDown={() => {
+              if (!hasInteracted) {
+                setHasInteracted(true)
+              }
+            }}
+          />
         </S.Wrapper>
       </>
     ),
-    [value, isFocused, editorInstance, tipTapRef]
+    [value, isFocused, editorInstance, hasInteracted, setHasInteracted]
   )
 
   return memoizedBodyField

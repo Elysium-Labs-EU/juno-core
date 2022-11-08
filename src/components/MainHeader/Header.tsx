@@ -1,6 +1,9 @@
 import { useLocation } from 'react-router-dom'
 
+import { useAppSelector } from '../../store/hooks'
+import { selectActiveModal } from '../../store/utilsSlice'
 import ArchiveHeader from '../Archive/ArchiveHeader'
+import CommandPallette from '../CommandPalette/CommandPalette'
 import ComposeHeader from '../Compose/ComposeHeader'
 import DraftHeader from '../Draft/DraftHeader'
 import Feedback from '../Help/Feedback/Feedback'
@@ -8,11 +11,11 @@ import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
 import InboxHeader from '../Inbox/InboxHeader'
 import Introduction from '../Introduction/Introduction'
 import NoMobileOverlay from '../NoMobileOverlay/noMobileOverlay'
-import Search from '../Search/Search'
 import SentHeader from '../Sent/SentHeader'
 import Settings from '../Settings/Settings'
 import SpamHeader from '../Spam/SpamHeader'
 import TodoHeader from '../ToDo/TodoHeader'
+import * as global from '../../constants/globalConstants'
 
 const SetHeader = () => {
   const location = useLocation()
@@ -42,25 +45,20 @@ const SetHeader = () => {
   return null
 }
 
-const ShowIntroduction = () => {
-  const location = useLocation()
+const Header = () => {
+  const activeModal = useAppSelector(selectActiveModal)
 
-  if (location.pathname === '/') {
-    return <Introduction />
-  }
-  return null
+  return (
+    <>
+      <CommandPallette />
+      {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
+      {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
+      <NoMobileOverlay />
+      <SetHeader />
+      {global.ACTIVE_MODAL_MAP.settings === activeModal && <Settings />}
+      {global.ACTIVE_MODAL_MAP.intro === activeModal && <Introduction />}
+    </>
+  )
 }
-
-const Header = () => (
-  <>
-    <ShowIntroduction />
-    <NoMobileOverlay />
-    <SetHeader />
-    <Search />
-    <Settings />
-    <KeyboardCombos />
-    <Feedback />
-  </>
-)
 
 export default Header

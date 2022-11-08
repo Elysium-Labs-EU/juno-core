@@ -1,6 +1,7 @@
 // SYSTEM CODE
 export const ACCESS_TOKEN = 'accessToken'
 export const ACTIVE_MODAL_MAP = {
+  betaAccess: 'betaAccess',
   feedback: 'feedback',
   help: 'help',
   intro: 'intro',
@@ -8,6 +9,7 @@ export const ACTIVE_MODAL_MAP = {
   navigation: 'navigation',
   search: 'search',
   settings: 'settings',
+  signature: 'signature',
 }
 export const ARCHIVE_LABEL = 'ARCHIVE'
 export const CORE_STATUS_MAP = {

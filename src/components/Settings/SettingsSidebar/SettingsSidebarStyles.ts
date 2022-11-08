@@ -17,24 +17,26 @@ interface IMenuItem {
 }
 
 export const MenuItem = styled.button<IMenuItem>`
+  align-items: center;
+  background-color: ${({ active }) =>
+    active ? `var(--color-neutral-100)` : 'transparent'};
+  border-radius: var(--radius-m);
+  border: 1px solid
+    ${({ active }) => (active ? `var(--color-neutral-100)` : 'transparent')};
+  color: var(--color-black);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  background-color: ${({ active }) =>
-    active ? `var(--color-neutral-200)` : 'transparent'};
-  color: var(--color-black);
-  border: 0;
-  border-radius: var(--radius-m);
-  width: 100%;
-  line-height: 8px;
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  line-height: 8px;
   overflow: hidden;
-  text-overflow: ellipsis;
+  padding: 12px;
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
   &:hover {
-    background-color: var(--color-neutral-200);
+    background-color: var(--color-neutral-100);
+    border: 1px solid var(--color-neutral-100);
   }
 `
 export const MenuItemContentMain = styled.div`

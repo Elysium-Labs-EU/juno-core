@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react'
 import { QiCog, QiSign, QiSignature } from '../../../images/svgIcons/quillIcons'
 import * as S from './SettingsSidebarStyles'
 
@@ -8,18 +9,22 @@ const SETTINGS_OPTIONS = [
 ]
 
 const SettingsSidebar = ({
-  activeMenuItem,
-  setActiveMenuItem,
+  focusedItemIndex,
+  setFocusedItemIndex,
 }: {
-  activeMenuItem: number
-  setActiveMenuItem: (value: number) => void
+  focusedItemIndex: number
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
 }) => (
   <S.Wrapper data-test-id="settings-menu">
     {SETTINGS_OPTIONS.map((item, index) => (
-      <li key={item.title}>
+      <li
+        key={item.title}
+        // The className is used to target it.
+        className="settings-sidebar-list-item"
+      >
         <S.MenuItem
-          onClick={() => setActiveMenuItem(index)}
-          active={activeMenuItem === index}
+          onClick={() => setFocusedItemIndex(index)}
+          active={focusedItemIndex === index}
         >
           <S.MenuItemContentSide>{item.icon}</S.MenuItemContentSide>
           <S.MenuItemContentMain>

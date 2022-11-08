@@ -31,6 +31,7 @@ interface IEmailInputProps {
   inputValue: string
   setInputValue: (value: string) => void
   willAutoFocus: boolean
+  registerOnKeyDown: () => void
 }
 
 interface IHandleIncompleteInput {
@@ -105,6 +106,7 @@ const EmailInput = (props: IEmailInputProps) => {
     setInputValue,
     handleDelete,
     willAutoFocus,
+    registerOnKeyDown,
   } = props
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly IContact[]>([])
@@ -235,6 +237,7 @@ const EmailInput = (props: IEmailInputProps) => {
           variant="outlined"
           fullWidth
           autoFocus={willAutoFocus}
+          onKeyDown={registerOnKeyDown}
           InputProps={{
             ...params.InputProps,
             endAdornment: (

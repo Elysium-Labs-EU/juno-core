@@ -10,8 +10,8 @@ export const GLOBAL_KEY_SUB_TITLE = 'Use these shortcuts to navigate.'
 export const GLOBAL_KEY_COMBOS = [
   { title: "Open Todo's", keys: ['1'] },
   { title: 'Open Inbox', keys: ['2'] },
-  { title: 'Open Search', keys: ['3'] },
-  { title: 'Open Compose', keys: ['4'] },
+  { title: 'Open Search', keys: [modifierKeyDisplay, 'K'] },
+  { title: 'Open Compose', keys: ['C'] },
   { title: 'Open Help', keys: ['SHIFT', '→'] },
   { title: 'Open Feedback', keys: [modifierKeyDisplay, '.'] },
   { title: 'Open Keyboard shortcuts', keys: [modifierKeyDisplay, '/'] },

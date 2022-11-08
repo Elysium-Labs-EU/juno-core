@@ -1,104 +1,99 @@
-import { forwardRef, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import useKeyPress from '../../hooks/useKeyPress'
+import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
+import { QiInfo } from '../../images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectActiveModal, setActiveModal } from '../../store/utilsSlice'
-import { modifierKeyDisplay } from '../../utils/setModifierKey'
-import * as S from './HelpStyles'
+import {
+  selectActiveModal,
+  selectInSearch,
+  setActiveModal,
+} from '../../store/utilsSlice'
+import { modifierKeyDisplay, setModifierKey } from '../../utils/setModifierKey'
+import CustomIconButton from '../Elements/Buttons/CustomIconButton'
+import Menu from '../Elements/Menu/Menu'
+import * as S from '../Elements/Menu/MenuStyles'
+import { IMenuItemCollection } from '../Elements/Menu/MenuTypes'
 
-const MenuSection = ({
-  menuItems,
-  focusedItemIndex,
-  setFocusedItemIndex,
-}: {
-  menuItems: { title: string; onClick: () => void; hint?: string[] }[][]
-  focusedItemIndex: number
-  setFocusedItemIndex: (newIndex: number) => void
-}) => {
-  const menuItemsFlatArray = menuItems.flat(1)
-  return (
-    <>
-      {menuItems.map((section, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <S.MenuSection key={index}>
-          {section.map((item) => {
-            const absoluteIndex = menuItemsFlatArray.findIndex(
-              (mItem) => mItem.title === item.title
-            )
-            return (
-              <S.MenuItem
-                key={item.title}
-                onClick={() => item.onClick()}
-                onFocus={() => setFocusedItemIndex(absoluteIndex)}
-                onMouseOver={() => setFocusedItemIndex(absoluteIndex)}
-                isFocused={focusedItemIndex === absoluteIndex}
-              >
-                <S.MenuItemContentMain data-test-id="item-title">
-                  {item.title}
-                </S.MenuItemContentMain>
-                {item?.hint && (
-                  <S.MenuItemContentSide data-test-id="item-hint">
-                    {item.hint.map((it) => (
-                      <span key={it}>{it}</span>
-                    ))}
-                  </S.MenuItemContentSide>
-                )}
-              </S.MenuItem>
-            )
-          })}
-        </S.MenuSection>
-      ))}
-    </>
-  )
+const actionKeysHelp = [
+  keyConstants.KEY_SPECIAL.shift,
+  keyConstants.KEY_ARROWS.right,
+]
+
+const actionKeysKeyboard = [
+  setModifierKey,
+  keyConstants.KEY_SPECIAL.forwardSlash,
+]
+const actionKeysFeedback = [setModifierKey, keyConstants.KEY_SPECIAL.dot]
+
+const SIZE = 16
+const customStyles = {
+  background: 'var(--color-white)',
+  border: '1px solid var(--color-neutral-200)',
+  borderRadius: '4px',
+  boxShadow: 'var(--box-shadow-low)',
+  lineHeight: 1,
+  padding: '10px 12px',
 }
 
-const HelpMenu = forwardRef((_props, ref) => {
+const HelpMenu = () => {
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
-  const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const KeyJListener = useKeyPress(keyConstants.KEY_J)
-  const KeyKListener = useKeyPress(keyConstants.KEY_K)
-  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const inSearch = useAppSelector(selectInSearch)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const isOpen = activeModal === global.ACTIVE_MODAL_MAP.help
 
   const MENU_ITEMS_HELP = useMemo(
-    () => [
-      {
-        title: 'Keyboard shortcuts',
-        onClick: () =>
-          dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard)),
-        hint: [modifierKeyDisplay, '/'],
-      },
-      {
-        title: 'Introduction',
-        onClick: () => dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
-      },
-    ],
+    (): IMenuItemCollection => ({
+      id: 'help-menu-keyboard-shortcuts',
+      items: [
+        {
+          id: 'keyboard-shortcuts',
+          title: 'Keyboard shortcuts',
+          onClick: () =>
+            dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard)),
+          hint: [modifierKeyDisplay, '/'],
+        },
+        {
+          id: 'introduction',
+          title: 'Introduction',
+          onClick: () =>
+            dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
+        },
+      ],
+    }),
     []
   )
 
   const MENU_ITEMS_FEEDBACK = useMemo(
-    () => [
-      {
-        title: 'Send feedback',
-        onClick: () =>
-          dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback)),
-        hint: [modifierKeyDisplay, '.'],
-      },
-    ],
+    (): IMenuItemCollection => ({
+      id: 'help-menu-feedback',
+      items: [
+        {
+          id: 'send-feedback',
+          title: 'Send feedback',
+          onClick: () =>
+            dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback)),
+          hint: [modifierKeyDisplay, '.'],
+        },
+      ],
+    }),
     []
   )
   const MENU_ITEMS_SOCIAL = useMemo(
-    () => [
-      {
-        title: 'Join us @ Discord',
-        onClick: () =>
-          window.open(import.meta.env.VITE_DISCORD_SOCIAL_URL, '_blank'),
-      },
-    ],
+    (): IMenuItemCollection => ({
+      id: 'help-menu-social',
+      items: [
+        {
+          id: 'discord-social',
+          title: 'Join us @ Discord',
+          onClick: () =>
+            window.open(import.meta.env.VITE_DISCORD_SOCIAL_URL, '_blank'),
+        },
+      ],
+    }),
     []
   )
 
@@ -113,47 +108,61 @@ const HelpMenu = forwardRef((_props, ref) => {
     return [MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
   }, [])
 
-  useEffect(() => {
-    if (focusedItemIndex > -1 && EnterKeyListener) {
-      const menuItemsFlatArray = combinedMenuItems().flat(1)
-      menuItemsFlatArray[focusedItemIndex].onClick()
-    }
-  }, [focusedItemIndex, EnterKeyListener])
+  const handleOpenHelpMenu = useCallback(() => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.help))
+  }, [])
+  useKeyboardShortcut({
+    actionKeys: actionKeysHelp,
+    handleEvent: handleOpenHelpMenu,
+    isDisabled: inSearch || !activeModal,
+  })
 
-  useEffect(() => {
-    if (
-      (ArrowDownListener || KeyJListener) &&
-      activeModal === global.ACTIVE_MODAL_MAP.help &&
-      focusedItemIndex < combinedMenuItems().flat(1).length - 1
-    ) {
-      setFocusedItemIndex((prevState) => prevState + 1)
-    }
-  }, [ArrowDownListener, activeModal, KeyJListener])
+  const handleClose = () => {
+    buttonRef.current!.focus()
+    dispatch(setActiveModal(null))
+  }
 
-  useEffect(() => {
-    if (
-      (ArrowUpListener || KeyKListener) &&
-      activeModal === global.ACTIVE_MODAL_MAP.help &&
-      focusedItemIndex > -1
-    ) {
-      setFocusedItemIndex((prevState) => prevState - 1)
-    }
-  }, [ArrowUpListener, activeModal, KeyKListener])
+  const handleShowKeyboardShortcuts = useCallback(() => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard))
+  }, [dispatch])
+
+  useKeyboardShortcut({
+    handleEvent: handleShowKeyboardShortcuts,
+    actionKeys: actionKeysKeyboard,
+    isDisabled: inSearch,
+  })
+
+  const handleShowFeedback = useCallback(() => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback))
+  }, [dispatch])
+
+  useKeyboardShortcut({
+    handleEvent: handleShowFeedback,
+    actionKeys: actionKeysFeedback,
+    isDisabled: inSearch,
+  })
 
   return (
-    <S.Layer ref={ref}>
-      <S.InnerLayer>
-        <S.Container>
-          <MenuSection
-            data-test-id="help-menu"
-            menuItems={combinedMenuItems()}
-            focusedItemIndex={focusedItemIndex}
-            setFocusedItemIndex={setFocusedItemIndex}
+    <Menu
+      activeModalTag={global.ACTIVE_MODAL_MAP.help}
+      handleClose={handleClose}
+      menuItems={combinedMenuItems()}
+      triggerButton={
+        <S.StartButtonWrapper>
+          <CustomIconButton
+            icon={<QiInfo size={SIZE} />}
+            onClick={handleOpenHelpMenu}
+            style={customStyles}
+            title="More menu"
+            ref={buttonRef}
+            ariaHaspopup="true"
+            ariaControls={isOpen ? 'menu' : undefined}
+            ariaExpanded={isOpen || undefined}
           />
-        </S.Container>
-      </S.InnerLayer>
-    </S.Layer>
+        </S.StartButtonWrapper>
+      }
+    />
   )
-})
+}
 
 export default HelpMenu

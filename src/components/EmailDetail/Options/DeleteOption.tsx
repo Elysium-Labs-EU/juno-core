@@ -1,14 +1,15 @@
 import { useCallback } from 'react'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+
 import * as local from '../../../constants/emailDetailConstants'
 import * as keyConstants from '../../../constants/keyConstants'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
+import { selectInSearch } from '../../../store/utilsSlice'
 import { onlyLegalLabelStrings } from '../../../utils/onlyLegalLabels'
+import { setModifierKey } from '../../../utils/setModifierKey'
 import CustomButton from '../../Elements/Buttons/CustomButton'
 import thrashMail from '../../EmailOptions/ThrashMail'
-import { setModifierKey } from '../../../utils/setModifierKey'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../store/utilsSlice'
 
 interface IDeleteOption {
   threadId: string
@@ -17,7 +18,7 @@ interface IDeleteOption {
   noArchive?: boolean
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_BACKSPACE]
+const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
 
 const DeleteOption = ({
   threadId,
@@ -39,7 +40,8 @@ const DeleteOption = ({
     })
   }, [onlyLegalLabels, labelIds, dispatch])
 
-  noArchive && useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  noArchive &&
+    useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
 
   return (
     <CustomButton

@@ -1,17 +1,22 @@
 import { useState } from 'react'
 import { push } from 'redux-first-history'
-// import isElectron from 'is-electron'
-import * as S from './LoginStyles'
-import * as GS from '../../styles/globalStyles'
+
 import * as global from '../../constants/globalConstants'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import GoogleButton from './GoogleButton/GoogleButton'
 import userApi from '../../data/userApi'
 import { QiArrowRight } from '../../images/svgIcons/quillIcons'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+  selectActiveModal,
+  setActiveModal,
+  setSystemStatusUpdate,
+} from '../../store/utilsSlice'
+import * as GS from '../../styles/globalStyles'
+import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
-import { useAppDispatch } from '../../store/hooks'
-import { setSystemStatusUpdate } from '../../store/utilsSlice'
+import GoogleButton from './GoogleButton/GoogleButton'
+// import isElectron from 'is-electron'
+import * as S from './LoginStyles'
 
 // const SUB_HEADER = 'To get started'
 const ENTER_HINT = 'use Enter to start'
@@ -20,7 +25,7 @@ const ERROR_LOGIN = 'Unable use Google login'
 const Login = () => {
   const dispatch = useAppDispatch()
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-  const [betaFormOpen, setBetaFormOpen] = useState(false)
+  const activeModal = useAppSelector(selectActiveModal)
 
   const fetchUrl = async () => {
     try {
@@ -64,7 +69,7 @@ const Login = () => {
             >
               By Elysium Labs
             </S.StyledLink>
-            <GS.TextMutedSpan>Private Beta</GS.TextMutedSpan>
+            <GS.Span muted>Private Beta</GS.Span>
           </S.SubHeaderContainer>
         </S.Header>
         <S.LoginContainer>
@@ -78,7 +83,9 @@ const Login = () => {
                   loadState === global.LOAD_STATE_MAP.loading,
               }}
             />
-            <GS.TextMutedSmall>{ENTER_HINT}</GS.TextMutedSmall>
+            <GS.P muted small>
+              {ENTER_HINT}
+            </GS.P>
           </S.Inner>
         </S.LoginContainer>
         <S.AdditionalOptions>
@@ -94,17 +101,16 @@ const Login = () => {
           {import.meta.env.VITE_FORMSPARK_FORM_ID && (
             <>
               <CustomButton
-                onClick={() => setBetaFormOpen(true)}
+                onClick={() =>
+                  dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.betaAccess))
+                }
                 icon={<QiArrowRight />}
                 title="Show beta form to request access"
                 label="Request beta access"
                 suppressed
               />
-              {betaFormOpen && (
-                <BetaAccesForm
-                  betaFormOpen={betaFormOpen}
-                  setBetaFormOpen={setBetaFormOpen}
-                />
+              {activeModal === global.ACTIVE_MODAL_MAP.betaAccess && (
+                <BetaAccesForm />
               )}
             </>
           )}

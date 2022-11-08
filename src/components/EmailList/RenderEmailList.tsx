@@ -2,7 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
-import useKeyPress from '../../hooks/useKeyPress'
+import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
+import {
+  selectSelectedEmails,
+  setSelectedEmails,
+} from '../../store/emailListSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { selectLabelIds } from '../../store/labelsSlice'
 import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
@@ -13,13 +17,17 @@ import {
   selectIsLoading,
 } from '../../store/utilsSlice'
 import * as GS from '../../styles/globalStyles'
+import handleChangeFocus from '../../utils/handleChangeFocus'
 import loadNextPage from '../../utils/loadNextPage'
+import multipleIncludes from '../../utils/multipleIncludes'
 import CustomButton from '../Elements/Buttons/CustomButton'
 import EmptyState from '../Elements/EmptyState'
 import LoadingState from '../Elements/LoadingState/LoadingState'
 import * as S from './EmailListStyles'
 import EmailListEmptyStates from './EmptyStates/EmailListEmptyStates'
 import ThreadList from './ThreadList'
+
+const SOURCE_TAG_EMAILLIST = 'emailList-thread-list-item'
 
 const RenderEmailList = ({
   filteredOnLabel,
@@ -33,11 +41,71 @@ const RenderEmailList = ({
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
-  const ArrowDownListener = useKeyPress(keyConstants.KEY_ARROW_DOWN)
-  const ArrowUpListener = useKeyPress(keyConstants.KEY_ARROW_UP)
-  const KeyJListener = useKeyPress(keyConstants.KEY_J)
-  const KeyKListener = useKeyPress(keyConstants.KEY_K)
-  const EscapeListener = useKeyPress(keyConstants.KEY_ESCAPE)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+
+  const handleEscapeKeyDown = useCallback(() => {
+    handleChangeFocus({
+      focusedItemIndex,
+      setFocusedItemIndex,
+      sourceTag: SOURCE_TAG_EMAILLIST,
+    })
+    if (
+      selectedEmails.selectedIds.length > 0 &&
+      multipleIncludes(selectedEmails.labelIds, labelIds)
+    ) {
+      dispatch(setSelectedEmails([]))
+    }
+  }, [focusedItemIndex, selectedEmails, labelIds, dispatch])
+
+  const handleFocusDown = useCallback(() => {
+    handleChangeFocus({
+      direction: 'down',
+      focusedItemIndex,
+      setFocusedItemIndex,
+      sourceTag: SOURCE_TAG_EMAILLIST,
+    })
+  }, [focusedItemIndex])
+
+  const handleFocusUp = useCallback(() => {
+    handleChangeFocus({
+      direction: 'up',
+      focusedItemIndex,
+      setFocusedItemIndex,
+      sourceTag: SOURCE_TAG_EMAILLIST,
+    })
+  }, [focusedItemIndex])
+
+  useKeyboardShortcut({
+    handleEvent: handleEscapeKeyDown,
+    actionKeys: [keyConstants.KEY_SPECIAL.escape],
+    isDisabled: inSearch || !!activeModal,
+    refreshOnDeps: [selectedEmails],
+  })
+
+  useKeyboardShortcut({
+    handleEvent: handleFocusDown,
+    actionKeys: [keyConstants.KEY_ARROWS.down],
+    isDisabled: inSearch || !!activeModal,
+    refreshOnDeps: [focusedItemIndex],
+  })
+  useKeyboardShortcut({
+    handleEvent: handleFocusDown,
+    actionKeys: [keyConstants.KEY_LETTERS.j],
+    isDisabled: inSearch || !!activeModal,
+    refreshOnDeps: [focusedItemIndex],
+  })
+  useKeyboardShortcut({
+    handleEvent: handleFocusUp,
+    actionKeys: [keyConstants.KEY_ARROWS.up],
+    isDisabled: inSearch || !!activeModal,
+    refreshOnDeps: [focusedItemIndex],
+  })
+  useKeyboardShortcut({
+    handleEvent: handleFocusUp,
+    actionKeys: [keyConstants.KEY_LETTERS.k],
+    isDisabled: inSearch || !!activeModal,
+    refreshOnDeps: [focusedItemIndex],
+  })
 
   const { threads, nextPageToken } = filteredOnLabel
 
@@ -52,34 +120,6 @@ const RenderEmailList = ({
       }),
     [nextPageToken, labelIds, emailFetchSize]
   )
-
-  useEffect(() => {
-    if (EscapeListener && !inSearch && !activeModal) {
-      setFocusedItemIndex(-1)
-    }
-  }, [EscapeListener, inSearch, activeModal])
-
-  useEffect(() => {
-    if (
-      (ArrowDownListener || KeyJListener) &&
-      !inSearch &&
-      !activeModal &&
-      focusedItemIndex < filteredOnLabel.threads.length - 1
-    ) {
-      setFocusedItemIndex((prevState) => prevState + 1)
-    }
-  }, [ArrowDownListener, inSearch, activeModal, KeyJListener])
-
-  useEffect(() => {
-    if (
-      (ArrowUpListener || KeyKListener) &&
-      !inSearch &&
-      !activeModal &&
-      focusedItemIndex > -1
-    ) {
-      setFocusedItemIndex((prevState) => prevState - 1)
-    }
-  }, [ArrowUpListener, inSearch, activeModal, KeyKListener])
 
   // Listen to the thread count, if it reaches 0, but there is a nextPageToken
   // trigger automatically to load the next page.
@@ -96,6 +136,7 @@ const RenderEmailList = ({
           <GS.Base>
             <ThreadList
               threads={threads}
+              keySuffix="emailList"
               focusedItemIndex={focusedItemIndex}
               setFocusedItemIndex={setFocusedItemIndex}
               showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
@@ -137,7 +178,9 @@ const RenderEmailList = ({
         {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
-            <GS.TextMutedSmall>{global.NO_MORE_RESULTS}</GS.TextMutedSmall>
+            <GS.P small muted>
+              {global.NO_MORE_RESULTS}
+            </GS.P>
           </S.LoadMoreContainer>
         )}
       </GS.OuterContainer>

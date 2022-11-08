@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { push } from 'redux-first-history'
 
 import * as keyConstants from '../../../constants/keyConstants'
 import RoutesConstants from '../../../constants/routes.json'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
+import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 import {
   QiCompose,
   QiInbox,
@@ -22,6 +23,7 @@ import {
   selectIsFlexibleFlowActive,
   setInSearch,
 } from '../../../store/utilsSlice'
+import { setModifierKey } from '../../../utils/setModifierKey'
 import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
 import StyledTooltip from '../../Elements/StyledTooltip'
 import NavigationMore from './More/NavigationMore'
@@ -30,7 +32,7 @@ import * as S from './NavigationStyles'
 const ICON_SIZE = 18
 
 const Navigation = () => {
-  const [active, setActive] = useState('')
+  const [active, setActive] = useState<string | null>(null)
   const inSearch = useAppSelector(selectInSearch)
   const activeModal = useAppSelector(selectActiveModal)
   const isReplying = useAppSelector(selectIsReplying)
@@ -38,7 +40,6 @@ const Navigation = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const keysPressed = useMultiKeyPress()
 
   useEffect(() => {
     if (location.pathname.includes('inbox')) {
@@ -52,44 +53,29 @@ const Navigation = () => {
     }
   }, [location])
 
-  useEffect(() => {
-    let mounted = true
-    if (
-      mounted &&
-      !inSearch &&
-      !activeModal &&
-      !location.pathname.includes('/compose') &&
-      !isReplying &&
-      !isForwarding
-    ) {
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_1)) {
-        dispatch(navigateTo(RoutesConstants.TODO))
-      }
-      if (
-        keysPressed.includes(keyConstants.KEY_DIGIT_2) &&
-        isFlexibleFlowActive
-      ) {
-        dispatch(navigateTo(RoutesConstants.INBOX))
-      }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_3)) {
-        dispatch(setInSearch(true))
-      }
-      if (keysPressed.includes(keyConstants.KEY_DIGIT_4)) {
-        dispatch(navigateTo('/compose'))
-      }
-    }
-    return () => {
-      mounted = false
-    }
-  }, [
-    keysPressed,
-    inSearch,
-    activeModal,
-    location,
-    isReplying,
-    isForwarding,
-    isFlexibleFlowActive,
-  ])
+  useKeyboardShortcut({
+    handleEvent: () => dispatch(setInSearch(true)),
+    actionKeys: [setModifierKey, keyConstants.KEY_LETTERS.k],
+    isDisabled: inSearch,
+    refreshOnDeps: [inSearch],
+  })
+  useKeyboardShortcut({
+    handleEvent: () => dispatch(push(RoutesConstants.TODO)),
+    actionKeys: [setModifierKey, keyConstants.KEY_NUMBERS[1]],
+    isDisabled: inSearch && !!activeModal,
+  })
+  useKeyboardShortcut({
+    handleEvent: () => dispatch(push(RoutesConstants.INBOX)),
+    actionKeys: [setModifierKey, keyConstants.KEY_NUMBERS[2]],
+    isDisabled: (inSearch || !!activeModal) && !isFlexibleFlowActive,
+  })
+  useKeyboardShortcut({
+    handleEvent: () => dispatch(push(RoutesConstants.COMPOSE_EMAIL)),
+    actionKeys: [setModifierKey, keyConstants.KEY_LETTERS.c],
+    isDisabled:
+      (inSearch || !!activeModal) &&
+      (location.pathname.includes('compose') || isReplying || isForwarding),
+  })
 
   const NavControllers = useMemo(
     () => (
@@ -143,9 +129,11 @@ const Navigation = () => {
             </S.NavItem>
           </StyledTooltip>
 
-          <S.NavItem>
-            <NavigationMore />
-          </S.NavItem>
+          <StyledTooltip title="More options">
+            <S.NavItem>
+              <NavigationMore />
+            </S.NavItem>
+          </StyledTooltip>
         </S.NavList>
       </S.NavControls>
     ),

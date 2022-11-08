@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Checkbox from '@mui/material/Checkbox'
 import EmailAvatar from '../Elements/Avatar/EmailAvatar'
 import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
 import MessageCount from '../Elements/MessageCount'
@@ -34,6 +33,8 @@ import {
 import useKeyPress from '../../hooks/useKeyPress'
 import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
 import ContactCard from '../Elements/ContactCard/ContactCard'
+import multipleIncludes from '../../utils/multipleIncludes'
+import CustomCheckbox from '../Elements/StyledCheckbox'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -80,7 +81,7 @@ const EmailListItem = ({
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
   const { id } = email
 
   useEffect(() => {
@@ -179,12 +180,13 @@ const EmailListItem = ({
     }
   }, [EnterKeyListener, isFocused, inSearch, activeModal])
 
-  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckBox = (isChecked: boolean) => {
     dispatch(
       setSelectedEmails([
         {
+          labelIds,
           id,
-          event: event.target.checked ? 'add' : 'remove',
+          event: isChecked ? 'add' : 'remove',
         },
       ])
     )
@@ -192,13 +194,18 @@ const EmailListItem = ({
 
   const memoizedEmailListItem = useMemo(
     () => (
-      <S.ThreadBase emailLabels={staticEmailLabels}>
+      <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
-          <S.CellCheckbox inSelect={selectedEmails.length > 0}>
-            <Checkbox
-              checked={selectedEmails.includes(id)}
+          <S.CellCheckbox
+            inSelect={
+              selectedEmails.selectedIds.length > 0 &&
+              selectedEmails.labelIds.length > 0 &&
+              multipleIncludes(selectedEmails.labelIds, labelIds)
+            }
+          >
+            <CustomCheckbox
+              isChecked={selectedEmails.selectedIds.includes(id)}
               onChange={handleCheckBox}
-              size="small"
             />
           </S.CellCheckbox>
           <S.CelUnread>
@@ -209,18 +216,18 @@ const EmailListItem = ({
               {!labelIds.includes(global.DRAFT_LABEL) ? (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticSenderFull}
+                  userEmail={staticSenderFull}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticSenderFull} />
+                  <EmailAvatar userEmail={staticSenderFull} />
                 </ContactCard>
               ) : (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticRecipientName.name}
+                  userEmail={staticRecipientName.name}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticRecipientName.name} />
+                  <EmailAvatar userEmail={staticRecipientName.name} />
                 </ContactCard>
               )}
             </S.Avatars>
@@ -264,7 +271,12 @@ const EmailListItem = ({
           <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
-              <TimeStampDisplay threadTimeStamp={getTimeStamp(email, labelIds.includes(global.DRAFT_LABEL))} />
+              <TimeStampDisplay
+                threadTimeStamp={getTimeStamp(
+                  email,
+                  labelIds.includes(global.DRAFT_LABEL)
+                )}
+              />
             </S.DatePosition>
           </S.CellDate>
           <div />

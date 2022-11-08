@@ -3,7 +3,6 @@ import { useCallback } from 'react'
 import * as global from '../../constants/globalConstants'
 import * as keyConstants from '../../constants/keyConstants'
 import useFetchThreadsTotalNumber from '../../hooks/useFetchThreadsTotalNumber'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
 import { QiSort } from '../../images/svgIcons/quillIcons'
 import {
   setCoreStatus,
@@ -32,9 +31,11 @@ import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
 import InboxSortPopper from './InboxSortPopper'
 import useFetchEmailsSimple from '../../hooks/useFetchEmailsSimple'
 import StyledCircularProgress from '../Elements/StyledCircularProgress'
+import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeys = [setModifierKey, keyConstants.KEY_E]
+const actionKeysStrictFlow = [setModifierKey, keyConstants.KEY_LETTERS.s]
+const actionKeysFlexibleFlow = [setModifierKey, keyConstants.KEY_LETTERS.e]
 
 const InboxSortOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -98,11 +99,16 @@ const InboxSortOption = () => {
     }
   }, [activeEmailListIndex, selectedEmails, dispatch, emailList, labelIds])
 
-  useMultiKeyPress(
-    isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow,
-    actionKeys,
-    inSearch || Boolean(activeModal)
-  )
+  useKeyboardShortcut({
+    actionKeys: isFlexibleFlowActive
+      ? actionKeysFlexibleFlow
+      : actionKeysStrictFlow,
+    handleEvent: isFlexibleFlowActive
+      ? handleEventFlexibleFlow
+      : handleEventStrictFlow,
+    isDisabled: inSearch || Boolean(activeModal),
+    refreshOnDeps: [emailList, activeEmailListIndex, selectedEmails],
+  })
 
   const isDisabled = () => {
     if (isFlexibleFlowActive) {
@@ -117,11 +123,14 @@ const InboxSortOption = () => {
 
   const selectLabel = useCallback(() => {
     if (isFlexibleFlowActive) {
-      if (selectedEmails.length > 0) {
+      if (
+        selectedEmails.selectedIds.length > 0 &&
+        selectedEmails.labelIds.includes(global.INBOX_LABEL)
+      ) {
         return (
           <>
             {INBOX_BUTTON}
-            <span> ({selectedEmails.length})</span>
+            <span> ({selectedEmails.selectedIds.length})</span>
           </>
         )
       }
@@ -143,6 +152,7 @@ const InboxSortOption = () => {
         onClick={
           isFlexibleFlowActive ? handleEventFlexibleFlow : handleEventStrictFlow
         }
+        tabIndex={isFlexibleFlowActive ? -1 : 0}
         disabled={isDisabled()}
         label={selectLabel()}
         variant="secondary"

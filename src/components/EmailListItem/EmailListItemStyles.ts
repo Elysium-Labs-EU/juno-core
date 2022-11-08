@@ -22,24 +22,26 @@ interface IThreadRow {
 }
 
 export const ThreadRow = styled.div<IThreadRow>`
-  position: relative;
+  background-color: ${({ isFocused }) =>
+    isFocused ? `var(--color-neutral-200)` : 'transparent'};
+  border-radius: var(--radius-m);
+  border: 1px solid
+    ${({ isFocused }) =>
+      isFocused ? `var(--color-neutral-300)` : 'transparent'};
   display: grid;
+  font-size: var(--small);
   grid-template-columns: ${({ showLabel }) =>
     !showLabel
       ? '30px 20px 215px auto max-content 105px 20px 30px'
       : '30px 20px 215px fit-content(450px) auto max-content 105px 20px 30px'};
-  font-size: var(--small);
   height: 56px;
-  background-color: ${({ isFocused }) =>
-    isFocused ? `var(--color-neutral-200)` : 'transparent'};
+  position: relative;
   transition: background-color ease-in 0.125s;
   z-index: 2;
-  border-radius: 5px;
 
   &:hover {
     background-color: var(--color-neutral-200);
     z-index: 2;
-    border-radius: 5px;
   }
 `
 
@@ -48,10 +50,10 @@ interface ICellCheckbox {
 }
 
 export const CellCheckbox = styled.div<ICellCheckbox>`
-  opacity: ${({ inSelect }) => (inSelect ? 100 : 0)};
-  margin-right: 16px;
   display: flex;
+  opacity: ${({ inSelect }) => (inSelect ? 100 : 0)};
   place-items: center;
+  transition: opacity ease-in 0.125s;
 
   &:hover {
     opacity: 100;

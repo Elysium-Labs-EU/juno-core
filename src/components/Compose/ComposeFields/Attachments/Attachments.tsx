@@ -1,5 +1,4 @@
 /* eslint-disable react/no-array-index-key */
-import prettyBytes from 'pretty-bytes'
 import { isEqual } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import AttachmentBubble from '../../../Elements/AttachmentBubble/AttachmentBubble'
@@ -13,6 +12,7 @@ import { useAppDispatch } from '../../../../store/hooks'
 import { setSystemStatusUpdate } from '../../../../store/utilsSlice'
 import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
 import { IEmailAttachmentType } from '../../../EmailDetail/Attachment/EmailAttachmentTypes'
+import formatBytes from '../../../../utils/prettierBytes'
 
 const ATTACHMENTS = 'Attachments'
 const MAX_MB_UPLOAD_DIRECT = 25000000
@@ -114,7 +114,7 @@ const Attachments = ({
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: `File size can not exceed ${prettyBytes(
+            message: `File size can not exceed ${formatBytes(
               MAX_MB_UPLOAD_DIRECT
             )}`,
           })

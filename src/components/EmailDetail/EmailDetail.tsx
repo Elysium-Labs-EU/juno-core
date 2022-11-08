@@ -17,7 +17,7 @@ import {
   selectIsLoading,
   selectIsProcessing,
 } from '../../store/utilsSlice'
-import { selectLabelIds } from '../../store/labelsSlice'
+import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
 import {
   selectEmailList,
   selectSearchList,
@@ -42,6 +42,7 @@ import Baseloader from '../BaseLoader/BaseLoader'
 import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
 import useFetchDraftList from '../../hooks/useFetchDraftList'
 import filterTrashMessages from '../../utils/filterTrashMessages'
+import { findLabelByName } from '../../utils/findLabel'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -61,12 +62,13 @@ const EmailDetail = () => {
   const labelIds = useAppSelector(selectLabelIds)
   const searchList = useAppSelector(selectSearchList)
   const selectedEmails = useAppSelector(selectSelectedEmails)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
-  const isComposerActiveRef = useRef(false)
   const [shouldRefreshDetail, setShouldRefreshDetail] = useState(false)
+  const isComposerActiveRef = useRef(false)
   const { threadId, overviewId } = useParams<{
     threadId: string
     overviewId: string
@@ -109,11 +111,18 @@ const EmailDetail = () => {
         (isFlexibleFlowActive &&
           coreStatus === global.CORE_STATUS_MAP.sorting)) &&
       selectedEmails &&
-      selectedEmails.length > 0
+      selectedEmails.selectedIds.length > 0 &&
+      (selectedEmails.labelIds.includes(
+        findLabelByName({
+          storageLabels,
+          LABEL_NAME: global.TODO_LABEL_NAME,
+        })?.id ?? ''
+      ) ||
+        selectedEmails.labelIds.includes(global.INBOX_LABEL))
     ) {
       const activeThreadList = emailList[activeEmailListIndex].threads
       const relevantThreadsFeed: IEmailListThreadItem[] = []
-      selectedEmails.forEach((email) => {
+      selectedEmails.selectedIds.forEach((email) => {
         const resultIndex = activeThreadList.findIndex((t) => t.id === email)
         if (resultIndex > -1) {
           relevantThreadsFeed.push(activeThreadList[resultIndex])

@@ -48,7 +48,7 @@ const DetailModal = ({
             return (
               <S.BlockedItemInformation key={convertedToString.href}>
                 <p>{convertedToString.host}</p>
-                <GS.TextMutedSpan>{convertedToString.href}</GS.TextMutedSpan>
+                <GS.Span muted>{convertedToString.href}</GS.Span>
               </S.BlockedItemInformation>
             )
           }
@@ -76,7 +76,7 @@ const RemovedTrackers = ({
                 <div className="icon">
                   <FiShield size={10} color={themeConstants.color.gray[300]} />
                 </div>
-                <GS.TextSpanSmall>{REMOVED_TRACKERS}</GS.TextSpanSmall>
+                <GS.Span small>{REMOVED_TRACKERS}</GS.Span>
               </S.InnerButton>
             </S.StyledButton>
           </StyledTooltip>

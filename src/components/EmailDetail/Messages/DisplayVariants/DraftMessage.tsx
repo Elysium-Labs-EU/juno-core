@@ -6,7 +6,6 @@ import * as global from '../../../../constants/globalConstants'
 import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
 import { selectProfile } from '../../../../store/baseSlice'
 import { selectDraftList } from '../../../../store/draftsSlice'
-import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
 import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
 import * as GS from '../../../../styles/globalStyles'
@@ -45,7 +44,6 @@ const DraftMessage = ({
   hideDraft: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(true)
-  const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
   const draftList = useAppSelector(selectDraftList)
   const dispatch = useAppDispatch()
@@ -108,10 +106,10 @@ const DraftMessage = ({
           <S.ClosedAvatarSender>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
               <span
@@ -137,9 +135,9 @@ const DraftMessage = ({
   ) : (
     <S.EmailOpenWrapper isDraft hideDraft={hideDraft}>
       <S.DraftHeaderControls>
-        <GS.TextMutedSmall style={{ marginRight: '40px' }}>
+        <GS.P muted small style={{ marginRight: '40px' }}>
           {local.DRAFT_INDICATOR_HEADER}
-        </GS.TextMutedSmall>
+        </GS.P>
         <CustomButton
           style={{ marginRight: '10px' }}
           label="Edit"
@@ -166,10 +164,10 @@ const DraftMessage = ({
           <S.HeaderFullWidth>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.EmailDetailTitle title={staticEmailSubject}>
               {staticEmailSubject}

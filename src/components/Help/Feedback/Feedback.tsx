@@ -128,12 +128,9 @@ const Feedback = () => {
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.feedback}
-      handleClose={handleClose}
       modalTitle={MODAL_TITLE}
       modalAriaLabel="feedback"
-      subTitle={
-        <GS.TextMutedParagraph>{MODAL_SUB_TITLE}</GS.TextMutedParagraph>
-      }
+      subTitle={<GS.P muted>{MODAL_SUB_TITLE}</GS.P>}
     >
       {showSuccess ? (
         <S.SuccessContainer>
