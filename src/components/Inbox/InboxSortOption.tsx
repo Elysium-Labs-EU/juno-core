@@ -1,37 +1,33 @@
+import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useFetchEmailsSimple from 'hooks/useFetchEmailsSimple'
+import useFetchThreadsTotalNumber from 'hooks/useFetchThreadsTotalNumber'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiSort } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import useFetchThreadsTotalNumber from '../../hooks/useFetchThreadsTotalNumber'
-import { QiSort } from '../../images/svgIcons/quillIcons'
-import {
-  setCoreStatus,
-  setSessionViewIndex,
-} from '../../store/emailDetailSlice'
+import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
   selectSelectedEmails,
   setActiveEmailListIndex,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectLabelIds, setCurrentLabels } from '../../store/labelsSlice'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, setCurrentLabels } from 'store/labelsSlice'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsFlexibleFlowActive,
   selectIsLoading,
-} from '../../store/utilsSlice'
-import labelURL from '../../utils/createLabelURL'
-import getEmailListIndex from '../../utils/getEmailListIndex'
-import { setModifierKey } from '../../utils/setModifierKey'
-import startSort from '../../utils/startSort'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
+} from 'store/utilsSlice'
+import labelURL from 'utils/createLabelURL'
+import getEmailListIndex from 'utils/getEmailListIndex'
+import { setModifierKey } from 'utils/setModifierKey'
+import startSort from 'utils/startSort'
 
 import InboxSortPopper from './InboxSortPopper'
-import useFetchEmailsSimple from '../../hooks/useFetchEmailsSimple'
-import StyledCircularProgress from '../Elements/StyledCircularProgress'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
 
 const INBOX_BUTTON = 'Sort inbox'
 const actionKeysStrictFlow = [setModifierKey, keyConstants.KEY_LETTERS.s]

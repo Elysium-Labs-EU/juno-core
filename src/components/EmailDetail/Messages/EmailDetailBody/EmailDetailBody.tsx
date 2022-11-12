@@ -1,15 +1,16 @@
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import root from 'react-shadow/styled-components'
-import { useAppDispatch } from '../../../../store/hooks'
-import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
-import cleanLink from '../../../../utils/cleanLink'
-import changeSignatureColor from '../../../../utils/changeSignatureColor'
-import handleEmailLink from '../../../../utils/handleEmailLink'
-import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
-import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
+import { useAppDispatch } from 'store/hooks'
+import { AppDispatch } from 'store/store'
+import changeSignatureColor from 'utils/changeSignatureColor'
+import cleanLink from 'utils/cleanLink'
+import fetchUnsubscribeLink from 'utils/fetchUnsubscribeLink'
+import handleEmailLink from 'utils/handleEmailLink'
+import openLinkInNewTab from 'utils/openLinkInNewTab'
+import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
+
 import Wrapper from './EmailDetailBodyStyles'
-import { AppDispatch } from '../../../../store/store'
-import sanitizeAndParseHtmlContent from '../../../../utils/sanitizeAndParseHtmlContent'
 
 interface IEmailDetailBody {
   threadDetailBody: any

@@ -1,3 +1,10 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import threadApi from 'data/threadApi'
+import { QiArrowLeft, QiEscape, QiSearch } from 'images/svgIcons/quillIcons'
 import {
   ChangeEvent,
   Dispatch,
@@ -10,40 +17,29 @@ import {
   useRef,
   useState,
 } from 'react'
-
-import InputBase from '@mui/material/InputBase'
-import Modal from '@mui/material/Modal'
-
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import threadApi from '../../data/threadApi'
-import {
-  QiArrowLeft,
-  QiEscape,
-  QiSearch,
-} from '../../images/svgIcons/quillIcons'
 import {
   selectSearchList,
   selectSelectedEmails,
   useSearchResults,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { AppDispatch } from '../../store/store'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { AppDispatch } from 'store/store'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectInSearch,
   setInSearch,
   setSystemStatusUpdate,
-} from '../../store/utilsSlice'
-import sortThreads from '../../utils/sortThreads'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import LoadingState from '../Elements/LoadingState/LoadingState'
-import SearchResults from './Search/SearchResults'
+} from 'store/utilsSlice'
+import handleChangeFocus from 'utils/handleChangeFocus'
+import sortThreads from 'utils/sortThreads'
+
+import InputBase from '@mui/material/InputBase'
+import Modal from '@mui/material/Modal'
+
 import * as S from './CommandPaletteStyles'
-import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
 import ContextBar from './ContextBar/ContextBar'
-import handleChangeFocus from '../../utils/handleChangeFocus'
+import SearchResults from './Search/SearchResults'
+import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
 
 interface IShouldClearOutPreviousResults {
   searchValueRef: MutableRefObject<string>

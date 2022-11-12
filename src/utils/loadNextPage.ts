@@ -1,7 +1,7 @@
-import { fetchEmailsSimple } from '../store/emailListSlice'
-import { IEmailListObject } from '../store/storeTypes/emailListTypes'
-import { AppDispatch } from '../store/store'
-import * as global from '../constants/globalConstants'
+import * as global from 'constants/globalConstants'
+import { fetchEmailsSimple } from 'store/emailListSlice'
+import { AppDispatch } from 'store/store'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 
 interface ILoadNextPage {
   q?: string

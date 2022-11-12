@@ -1,6 +1,7 @@
+import { QiCheckmark } from 'images/svgIcons/quillIcons'
 import styled from 'styled-components'
+
 import { Indicator, Root } from '@radix-ui/react-checkbox'
-import { QiCheckmark } from '../../images/svgIcons/quillIcons'
 
 const StyledCheckbox = styled(Root)`
   all: unset;

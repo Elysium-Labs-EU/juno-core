@@ -1,10 +1,11 @@
+import * as global from 'constants/globalConstants'
+import { useAppSelector } from 'store/hooks'
+import { selectStorageLabels } from 'store/labelsSlice'
 import styled from 'styled-components'
-import { useAppSelector } from '../../store/hooks'
-import { selectStorageLabels } from '../../store/labelsSlice'
-import { onlyLegalLabelObjects } from '../../utils/onlyLegalLabels'
+import capFirstLetterOnly from 'utils/capFirstLetterOnly'
+import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
+
 import CustomLabel from './CustomLabel'
-import * as global from '../../constants/globalConstants'
-import capFirstLetterOnly from '../../utils/capFirstLetterOnly'
 
 const Wrapper = styled.div`
   div:not(:first-child) {

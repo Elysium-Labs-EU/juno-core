@@ -1,28 +1,25 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import EmptyState from 'components/Elements/EmptyState'
+import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
-import {
-  selectSelectedEmails,
-  setSelectedEmails,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectLabelIds } from '../../store/labelsSlice'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
+import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectEmailListSize,
   selectInSearch,
   selectIsLoading,
-} from '../../store/utilsSlice'
-import * as GS from '../../styles/globalStyles'
-import handleChangeFocus from '../../utils/handleChangeFocus'
-import loadNextPage from '../../utils/loadNextPage'
-import multipleIncludes from '../../utils/multipleIncludes'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import EmptyState from '../Elements/EmptyState'
-import LoadingState from '../Elements/LoadingState/LoadingState'
+} from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import handleChangeFocus from 'utils/handleChangeFocus'
+import loadNextPage from 'utils/loadNextPage'
+import multipleIncludes from 'utils/multipleIncludes'
+
 import * as S from './EmailListStyles'
 import EmailListEmptyStates from './EmptyStates/EmailListEmptyStates'
 import ThreadList from './ThreadList'

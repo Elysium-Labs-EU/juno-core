@@ -1,7 +1,7 @@
 /* eslint-disable react/button-has-type */
 import { CSSProperties, forwardRef, MouseEvent } from 'react'
 import styled from 'styled-components'
-import type { TAriaHaspopup } from '../../../globalTypes'
+import type { TAriaHaspopup } from 'globalTypes'
 
 interface ICustomIconButton {
   ariaControls?: string | undefined

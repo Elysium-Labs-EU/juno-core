@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import * as GS from '../../../styles/globalStyles'
+import * as GS from 'styles/globalStyles'
 
 const Wrapper = styled.div`
   display: flex;

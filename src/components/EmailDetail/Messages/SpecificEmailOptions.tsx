@@ -1,26 +1,23 @@
-import { Dispatch, SetStateAction, useState } from 'react'
-
-import * as global from '../../../constants/globalConstants'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledPopover from 'components/Elements/StyledPopover'
+import isForwardingListener from 'components/EmailOptions/IsForwardingListener'
+import isReplyingListener from 'components/EmailOptions/IsReplyingListener'
+import thrashMail from 'components/EmailOptions/ThrashMail'
+import * as global from 'constants/globalConstants'
 import {
   QiChevronDown,
   QiFolderTrash,
   QiForward,
   QiReply,
-} from '../../../images/svgIcons/quillIcons'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import { updateMessageLabel } from '../../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import StyledPopover from '../../Elements/StyledPopover'
-import isForwardingListener from '../../EmailOptions/IsForwardingListener'
-import isReplyingListener from '../../EmailOptions/IsReplyingListener'
-import thrashMail from '../../EmailOptions/ThrashMail'
+} from 'images/svgIcons/quillIcons'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
+import { updateMessageLabel } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+
 import * as S from './SpecificEmailOptionsStyles'
 
 const SpecificEmailOptions = ({

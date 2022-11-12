@@ -1,15 +1,16 @@
-import * as local from '../../constants/todoConstants'
+import InboxSortOption from 'components/Inbox/InboxSortOption'
+import * as S from 'components/MainHeader/HeaderStyles'
+import Navigation from 'components/MainHeader/Navigation/Navigation'
+import * as local from 'constants/todoConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
-} from '../../store/emailListSlice'
-import { useAppSelector } from '../../store/hooks'
-import { selectIsFlexibleFlowActive } from '../../store/utilsSlice'
-import * as GS from '../../styles/globalStyles'
-import getEmailListTimeStamp from '../../utils/getEmailListTimeStamp'
-import InboxSortOption from '../Inbox/InboxSortOption'
-import * as S from '../MainHeader/HeaderStyles'
-import Navigation from '../MainHeader/Navigation/Navigation'
+} from 'store/emailListSlice'
+import { useAppSelector } from 'store/hooks'
+import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
+
 import TodoFocusOption from './TodoFocusOption'
 
 const TodoHeader = () => {

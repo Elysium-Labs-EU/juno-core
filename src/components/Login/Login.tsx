@@ -1,21 +1,20 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as global from 'constants/globalConstants'
+import userApi from 'data/userApi'
+import { QiArrowRight } from 'images/svgIcons/quillIcons'
 import { useState } from 'react'
 import { push } from 'redux-first-history'
-
-import * as global from '../../constants/globalConstants'
-import userApi from '../../data/userApi'
-import { QiArrowRight } from '../../images/svgIcons/quillIcons'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,
   setActiveModal,
   setSystemStatusUpdate,
-} from '../../store/utilsSlice'
-import * as GS from '../../styles/globalStyles'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import CustomButton from '../Elements/Buttons/CustomButton'
+} from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
 import GoogleButton from './GoogleButton/GoogleButton'
-// import isElectron from 'is-electron'
 import * as S from './LoginStyles'
 
 // const SUB_HEADER = 'To get started'

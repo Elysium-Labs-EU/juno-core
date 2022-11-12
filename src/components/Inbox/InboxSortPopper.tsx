@@ -1,7 +1,8 @@
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import { QiChevronDown } from '../../images/svgIcons/quillIcons'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledPopover from 'components/Elements/StyledPopover'
+import { QiChevronDown } from 'images/svgIcons/quillIcons'
+
 import InboxRefresh from './InboxRefreshOption'
-import StyledPopover from '../Elements/StyledPopover'
 
 // TODO: Add more options, such as preview latest 4 senders. Archive all, delete all
 

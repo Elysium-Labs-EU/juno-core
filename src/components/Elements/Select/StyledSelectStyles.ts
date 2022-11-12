@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+
 import * as SelectPrimitive from '@radix-ui/react-select'
 
 export const StyledTrigger = styled(SelectPrimitive.SelectTrigger)`

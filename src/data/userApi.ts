@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, instance } from './api'
+import { errorHandling, instance } from 'data/api'
 
 interface UserType {
   emailAddress?: string | null

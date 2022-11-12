@@ -1,6 +1,7 @@
+import * as local from 'constants/menuConstants'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+
 import * as S from './TabsStyles'
-import * as local from '../../../constants/menuConstants'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
 
 const MessagesTab = ({
   activeThread,

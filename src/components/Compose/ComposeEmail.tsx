@@ -1,3 +1,10 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import Seo from 'components/Elements/Seo'
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiEscape, QiSend } from 'images/svgIcons/quillIcons'
 import isEqual from 'lodash/isEqual'
 import {
   MouseEvent,
@@ -8,38 +15,31 @@ import {
   useState,
 } from 'react'
 import { useLocation } from 'react-router-dom'
-
-import * as local from '../../constants/composeEmailConstants'
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
-import { QiEscape, QiSend } from '../../images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
   fetchDrafts,
   selectDraftList,
   sendComposedEmail,
-} from '../../store/draftsSlice'
+} from 'store/draftsSlice'
 import {
   selectIsForwarding,
   selectIsReplying,
   setIsForwarding,
   setIsReplying,
-} from '../../store/emailDetailSlice'
-import { refreshEmailFeed } from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+} from 'store/emailDetailSlice'
+import { refreshEmailFeed } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   IComposeEmailReceive,
   IComposePayload,
-} from '../../store/storeTypes/composeTypes'
-import { IContact } from '../../store/storeTypes/contactsTypes'
-import { IDraftDetailObject } from '../../store/storeTypes/draftsTypes'
-import { selectActiveModal, selectInSearch } from '../../store/utilsSlice'
-import * as GS from '../../styles/globalStyles'
-import findDraftMessageInList from '../../utils/findDraftMessageInList'
-import { setModifierKey } from '../../utils/setModifierKey'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import Seo from '../Elements/Seo'
+} from 'store/storeTypes/composeTypes'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import findDraftMessageInList from 'utils/findDraftMessageInList'
+import { setModifierKey } from 'utils/setModifierKey'
+
 import { IRecipientsList } from './ComposeEmailTypes'
 import Attachments from './ComposeFields/Attachments/Attachments'
 import BodyField from './ComposeFields/BodyField/BodyField'

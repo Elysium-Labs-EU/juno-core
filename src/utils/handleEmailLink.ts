@@ -1,5 +1,5 @@
-import type { AppDispatch } from '../store/store'
-import createComposeViaURL from './createComposeViaURL'
+import type { AppDispatch } from 'store/store'
+import createComposeViaURL from 'utils/createComposeViaURL'
 
 const CLICK_EMAIL = 'Click to start new mail'
 

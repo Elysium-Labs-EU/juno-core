@@ -1,6 +1,5 @@
+import * as themeConstants from 'constants/themeConstants'
 import styled, { createGlobalStyle, css } from 'styled-components'
-
-import * as themeConstants from '../constants/themeConstants'
 
 /* 16px */
 export const GlobalStyle = createGlobalStyle`

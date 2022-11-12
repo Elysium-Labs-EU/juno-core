@@ -1,10 +1,11 @@
-import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListTypes'
-import { handleContactConversion } from '../../../../utils/convertToContact'
-import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
-import ComposeEmail from '../../../Compose/ComposeEmail'
-import * as ES from '../../EmailDetailStyles'
+import ComposeEmail from 'components/Compose/ComposeEmail'
+import * as ES from 'components/EmailDetail/EmailDetailStyles'
+import * as global from 'constants/globalConstants'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { handleContactConversion } from 'utils/convertToContact'
+import emailBody from 'utils/emailDetailDisplayData/emailBody'
+
 import getRelevantMessage from './getRelevantMessage'
-import * as global from '../../../../constants/globalConstants'
 
 /**
  *

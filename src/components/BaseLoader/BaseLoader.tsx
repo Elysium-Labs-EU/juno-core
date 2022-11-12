@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
-import { motion } from 'framer-motion'
-import * as S from './BaseLoaderStyles'
-import { selectSystemStatusUpdate } from '../../store/utilsSlice'
-import Logo from '../../images/Juno_logo_dark.png'
+import * as S from 'components/BaseLoader/BaseLoaderStyles'
 import LogoutOption, {
   handleLogout,
-} from '../MainHeader/Navigation/More/Options/LogoutOption'
-import { useAppSelector } from '../../store/hooks'
-import useCountDownTimer from '../../hooks/useCountDownTimer'
+} from 'components/MainHeader/Navigation/More/Options/LogoutOption'
+import { motion } from 'framer-motion'
+import useCountDownTimer from 'hooks/useCountDownTimer'
+import Logo from 'images/Juno_logo_dark.png'
+import { useEffect } from 'react'
+import { useAppSelector } from 'store/hooks'
+import { selectSystemStatusUpdate } from 'store/utilsSlice'
 
 export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '

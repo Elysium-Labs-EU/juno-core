@@ -1,9 +1,11 @@
+import * as keyConstants from 'constants/keyConstants'
 import { Dispatch, KeyboardEvent, SetStateAction } from 'react'
+import handleChangeFocus from 'utils/handleChangeFocus'
+
 import MenuItemComponent from './MenuItemComponent'
-import { MenuSectionContainer, MenuSection } from './MenuStyles'
+import { MenuSection, MenuSectionContainer } from './MenuStyles'
+
 import type { IMenuItemCollection } from './MenuTypes'
-import * as keyConstants from '../../../constants/keyConstants'
-import handleChangeFocus from '../../../utils/handleChangeFocus'
 
 function getAllItems(items: IMenuItemCollection[]) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))

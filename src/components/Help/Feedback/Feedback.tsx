@@ -1,26 +1,26 @@
-import { useCallback, useEffect, useState } from 'react'
-
-import TextareaAutosize from '@mui/material/TextareaAutosize'
-
-import * as global from '../../../constants/globalConstants'
-import feedbackApi, { ISendFeedback } from '../../../data/feedbackApi'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import * as global from 'constants/globalConstants'
+import feedbackApi, { ISendFeedback } from 'data/feedbackApi'
 import {
   QiChat,
   QiCheckmark,
   QiGift,
   QiWarningAlt,
-} from '../../../images/svgIcons/quillIcons'
-import { selectProfile } from '../../../store/baseSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+} from 'images/svgIcons/quillIcons'
+import { useCallback, useEffect, useState } from 'react'
+import { selectProfile } from 'store/baseSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,
   setActiveModal,
   setSystemStatusUpdate,
-} from '../../../store/utilsSlice'
-import * as GS from '../../../styles/globalStyles'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import CustomModal from '../../Elements/Modal/CustomModal'
+} from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+
+import TextareaAutosize from '@mui/material/TextareaAutosize'
+
 import * as S from './FeedbackStyles'
 
 interface IFeedbackTypeMapItem {

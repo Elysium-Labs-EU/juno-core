@@ -1,7 +1,7 @@
-import EmailList from '../EmailList/EmailList'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import Seo from '../Elements/Seo'
-import useSetCurrentLabel from '../../hooks/useSetCurrentLabel'
+import Seo from 'components/Elements/Seo'
+import EmailList from 'components/EmailList/EmailList'
+import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
 const HEADER_INBOX = 'Inbox'
 

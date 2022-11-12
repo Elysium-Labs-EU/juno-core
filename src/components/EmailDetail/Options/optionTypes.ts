@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 export interface IEmailDetailOptions {
   iconSize: number

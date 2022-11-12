@@ -1,5 +1,5 @@
-import { QiAttachment } from '../../images/svgIcons/quillIcons'
-import { IEmailMessagePayloadRaw } from '../../store/storeTypes/emailListTypes'
+import { QiAttachment } from 'images/svgIcons/quillIcons'
+import { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
 
 /**
  * @component EmailHasAttachmentSimple

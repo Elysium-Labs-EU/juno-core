@@ -1,11 +1,11 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as local from 'constants/emailDetailConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiSkip } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import * as local from '../../../constants/emailDetailConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { navigateNextMail, selectInSearch } from '../../../store/utilsSlice'
-import { QiSkip } from '../../../images/svgIcons/quillIcons'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { navigateNextMail, selectInSearch } from 'store/utilsSlice'
 
 const actionKeys = [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.k]
 

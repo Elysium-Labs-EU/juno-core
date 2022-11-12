@@ -1,8 +1,8 @@
 import qs from 'qs'
 import { useEffect } from 'react'
-import { IComposeEmailReceive } from '../../../store/storeTypes/composeTypes'
-import { handleContactConversion } from '../../../utils/convertToContact'
-import * as global from '../../../constants/globalConstants'
+import { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import { handleContactConversion } from 'utils/convertToContact'
+import * as global from 'constants/globalConstants'
 
 /**
  * @function handlePresetvalueConversions

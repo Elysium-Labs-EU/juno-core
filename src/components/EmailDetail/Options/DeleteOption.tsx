@@ -1,15 +1,14 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import thrashMail from 'components/EmailOptions/ThrashMail'
+import * as local from 'constants/emailDetailConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { useCallback } from 'react'
-
-import * as local from '../../../constants/emailDetailConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
-import { selectInSearch } from '../../../store/utilsSlice'
-import { onlyLegalLabelStrings } from '../../../utils/onlyLegalLabels'
-import { setModifierKey } from '../../../utils/setModifierKey'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import thrashMail from '../../EmailOptions/ThrashMail'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { selectInSearch } from 'store/utilsSlice'
+import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
+import { setModifierKey } from 'utils/setModifierKey'
 
 interface IDeleteOption {
   threadId: string

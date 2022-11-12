@@ -1,17 +1,17 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import discardDraft from 'components/EmailOptions/DiscardDraft'
+import * as local from 'constants/composeEmailConstants'
+import { QiDiscard } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-import * as local from '../../constants/composeEmailConstants'
-import { QiDiscard } from '../../images/svgIcons/quillIcons'
-import { selectDraftList } from '../../store/draftsSlice'
+import { selectDraftList } from 'store/draftsSlice'
 import {
-  selectIsReplying,
   selectIsForwarding,
-  setIsReplying,
+  selectIsReplying,
   setIsForwarding,
-} from '../../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { navigateBack } from '../../store/utilsSlice'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import discardDraft from '../EmailOptions/DiscardDraft'
+  setIsReplying,
+} from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { navigateBack } from 'store/utilsSlice'
 
 const DiscardDraftButton = ({
   draftId,

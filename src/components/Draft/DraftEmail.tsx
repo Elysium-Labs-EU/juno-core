@@ -1,8 +1,8 @@
-import EmailList from '../EmailList/EmailList'
-import * as local from '../../constants/draftConstants'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import Seo from '../Elements/Seo'
-import useSetCurrentLabel from '../../hooks/useSetCurrentLabel'
+import Seo from 'components/Elements/Seo'
+import EmailList from 'components/EmailList/EmailList'
+import * as local from 'constants/draftConstants'
+import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
 const DraftEmail = () => {
   useSetCurrentLabel()

@@ -1,9 +1,10 @@
+import StyledPopover from 'components/Elements/StyledPopover'
 import { useState } from 'react'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
+
 import MenuSectionComponent from './MenuSectionComponent'
 import { IMenuItemCollection } from './MenuTypes'
-import StyledPopover from '../StyledPopover'
-import { useAppSelector } from '../../../store/hooks'
-import { selectActiveModal } from '../../../store/utilsSlice'
 
 const Menu = ({
   activeModalTag,

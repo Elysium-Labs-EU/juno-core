@@ -1,24 +1,32 @@
-import Navigation from '../MainHeader/Navigation/Navigation'
-import InboxSortOption from './InboxSortOption'
-import InboxRefreshOption from './InboxRefreshOption'
-import * as S from '../MainHeader/HeaderStyles'
+import * as S from 'components/MainHeader/HeaderStyles'
+import Navigation from 'components/MainHeader/Navigation/Navigation'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+} from 'store/emailListSlice'
+import { useAppSelector } from 'store/hooks'
+import * as GS from 'styles/globalStyles'
+import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
+
 import * as InboxS from './InboxHeaderStyles'
-import * as GS from '../../styles/globalStyles'
-import { useAppSelector } from '../../store/hooks'
-import { selectEmailList,selectActiveEmailListIndex } from '../../store/emailListSlice'
-import getEmailListTimeStamp from '../../utils/getEmailListTimeStamp'
+import InboxRefreshOption from './InboxRefreshOption'
+import InboxSortOption from './InboxSortOption'
 
 const INBOX_HEADER = 'Inbox'
 
 const InboxHeader = () => {
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
-  
+
   return (
     <GS.OuterContainer>
       <S.NavContainer>
         <S.HeaderCenter>
-          <S.PageTitle title={getEmailListTimeStamp(emailList,activeEmailListIndex)}>{INBOX_HEADER}</S.PageTitle>
+          <S.PageTitle
+            title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
+          >
+            {INBOX_HEADER}
+          </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />
       </S.NavContainer>
@@ -34,6 +42,5 @@ const InboxHeader = () => {
     </GS.OuterContainer>
   )
 }
-
 
 export default InboxHeader

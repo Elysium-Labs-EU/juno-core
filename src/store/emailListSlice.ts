@@ -1,52 +1,52 @@
+import * as global from 'constants/globalConstants'
+import historyApi from 'data/historyApi'
+import messageApi from 'data/messageApi'
+import threadApi, { EmailQueryObject } from 'data/threadApi'
+import userApi from 'data/userApi'
 import { push } from 'redux-first-history'
-
-/* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-import * as global from '../constants/globalConstants'
-import historyApi from '../data/historyApi'
-import messageApi from '../data/messageApi'
-import threadApi, { EmailQueryObject } from '../data/threadApi'
-import userApi from '../data/userApi'
-import handleSessionStorage from '../utils/handleSessionStorage'
-import { edgeLoadingNextPage } from '../utils/loadNextPage'
-import { onlyLegalLabelObjects } from '../utils/onlyLegalLabels'
-import sortThreads from '../utils/sortThreads'
-import deduplicateItems from '../utils/deduplicateItems'
-import { setProfile } from './baseSlice'
+import { setProfile } from 'store/baseSlice'
 import {
   fetchEmailDetail,
   setCoreStatus,
   setCurrentEmail,
   setViewIndex,
-} from './emailDetailSlice'
-import { setCurrentLabels, setLoadedInbox } from './labelsSlice'
+} from 'store/emailDetailSlice'
+import { setCurrentLabels, setLoadedInbox } from 'store/labelsSlice'
 import {
   IEmailListObject,
   IEmailListState,
   IEmailListThreadItem,
   ISelectedEmailAction,
   TBaseEmailList,
-} from './storeTypes/emailListTypes'
+} from 'store/storeTypes/emailListTypes'
 import {
   UpdateRequest,
   UpdateRequestParamsBatch,
   UpdateRequestParamsSingle,
-} from './storeTypes/metaEmailListTypes'
+} from 'store/storeTypes/metaEmailListTypes'
 import {
   navigateNextMail,
   setIsLoading,
   setIsSilentLoading,
   setSystemStatusUpdate,
-} from './utilsSlice'
+} from 'store/utilsSlice'
+import deduplicateItems from 'utils/deduplicateItems'
+import handleSessionStorage from 'utils/handleSessionStorage'
+import { edgeLoadingNextPage } from 'utils/loadNextPage'
+import multipleIncludes from 'utils/multipleIncludes'
+import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
+import sortThreads from 'utils/sortThreads'
 
-import type { AppThunk, RootState } from './store'
-import multipleIncludes from '../utils/multipleIncludes'
+/* eslint-disable no-param-reassign */
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import type { AppThunk, RootState } from 'store/store'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
   async (query: EmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
+    console.log('response', response)
     return { response: response.data, labels: query.labelIds, q: query?.q }
   }
 )
@@ -64,11 +64,11 @@ export const fetchEmailsFull = createAsyncThunk(
 )
 
 const initialState: IEmailListState = Object.freeze({
-  emailList: [],
-  selectedEmails: { labelIds: [], selectedIds: [] },
-  searchList: null,
   activeEmailListIndex: -1,
+  emailList: [],
   isFetching: false,
+  searchList: null,
+  selectedEmails: { labelIds: [], selectedIds: [] },
 })
 
 const handleAdditionToExistingEmailArray = ({

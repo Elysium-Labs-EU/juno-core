@@ -1,3 +1,8 @@
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
+import * as RoutesConstants from 'constants/routes.json'
+import useFetchDraftList from 'hooks/useFetchDraftList'
+import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
@@ -11,38 +16,34 @@ import {
   setIsForwarding,
   setIsReplying,
   setViewIndex,
-} from '../../store/emailDetailSlice'
+} from 'store/emailDetailSlice'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+  selectSearchList,
+  selectSelectedEmails,
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import {
+  IEmailListObject,
+  IEmailListThreadItem,
+} from 'store/storeTypes/emailListTypes'
 import {
   selectIsFlexibleFlowActive,
   selectIsLoading,
   selectIsProcessing,
-} from '../../store/utilsSlice'
-import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
-import {
-  selectEmailList,
-  selectSearchList,
-  selectActiveEmailListIndex,
-  selectSelectedEmails,
-} from '../../store/emailListSlice'
-import * as local from '../../constants/emailDetailConstants'
-import * as global from '../../constants/globalConstants'
-import * as S from './EmailDetailStyles'
-import * as RoutesConstants from '../../constants/routes.json'
-import FilesOverview from './Files/FilesOverview'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import {
-  IEmailListObject,
-  IEmailListThreadItem,
-} from '../../store/storeTypes/emailListTypes'
+} from 'store/utilsSlice'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+import filterTrashMessages from 'utils/filterTrashMessages'
+import { findLabelByName } from 'utils/findLabel'
+
+import Baseloader from '../BaseLoader/BaseLoader'
 import EmailDetailHeader from './EmailDetailHeader'
+import * as S from './EmailDetailStyles'
+import FilesOverview from './Files/FilesOverview'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import Baseloader from '../BaseLoader/BaseLoader'
-import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
-import useFetchDraftList from '../../hooks/useFetchDraftList'
-import filterTrashMessages from '../../utils/filterTrashMessages'
-import { findLabelByName } from '../../utils/findLabel'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.

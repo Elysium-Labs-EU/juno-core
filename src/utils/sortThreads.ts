@@ -1,5 +1,5 @@
-import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
-import * as global from '../constants/globalConstants'
+import * as global from 'constants/globalConstants'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function sortThreads
@@ -8,13 +8,34 @@ import * as global from '../constants/globalConstants'
  * @returns a sorted array or empty arry
  */
 
-export default function sortThreads (sortObject: IEmailListThreadItem[], forceSort?: boolean) {
+export default function sortThreads(
+  sortObject: IEmailListThreadItem[],
+  forceSort?: boolean
+) {
   if (sortObject && sortObject.length > 0) {
     return sortObject.sort((a, b) => {
       if (a.messages && b.messages) {
         return (
-          parseInt(b.messages[forceSort ? b.messages.length - 1 : b.messages.filter((message) => !message.labelIds.includes(global.DRAFT_LABEL)).length - 1].internalDate, 10) -
-          parseInt(a.messages[forceSort ? a.messages.length - 1 : a.messages.filter((message) => !message.labelIds.includes(global.DRAFT_LABEL)).length - 1].internalDate, 10)
+          parseInt(
+            b.messages[
+              forceSort
+                ? b.messages.length - 1
+                : b.messages.filter(
+                    (message) => !message.labelIds.includes(global.DRAFT_LABEL)
+                  ).length - 1
+            ].internalDate,
+            10
+          ) -
+          parseInt(
+            a.messages[
+              forceSort
+                ? a.messages.length - 1
+                : a.messages.filter(
+                    (message) => !message.labelIds.includes(global.DRAFT_LABEL)
+                  ).length - 1
+            ].internalDate,
+            10
+          )
         )
       }
       return 0

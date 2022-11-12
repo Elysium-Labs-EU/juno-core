@@ -1,14 +1,14 @@
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Menu from 'components/Elements/Menu/Menu'
+import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import * as global from 'constants/globalConstants'
+import Routes from 'constants/routes.json'
+import { QiMeatballsH } from 'images/svgIcons/quillIcons'
 import { useMemo } from 'react'
 import { push } from 'redux-first-history'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
 
-import * as global from '../../../../constants/globalConstants'
-import Routes from '../../../../constants/routes.json'
-import { QiMeatballsH } from '../../../../images/svgIcons/quillIcons'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
-import { selectActiveModal, setActiveModal } from '../../../../store/utilsSlice'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import Menu from '../../../Elements/Menu/Menu'
-import { IMenuItemCollection } from '../../../Elements/Menu/MenuTypes'
 import { handleLogout } from './Options/LogoutOption'
 
 const SIZE = 16

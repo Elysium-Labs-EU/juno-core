@@ -1,7 +1,8 @@
-import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListTypes'
-import emailBody from '../../../../utils/emailDetailDisplayData/emailBody'
-import ComposeEmail from '../../../Compose/ComposeEmail'
-import * as ES from '../../EmailDetailStyles'
+import ComposeEmail from 'components/Compose/ComposeEmail'
+import * as ES from 'components/EmailDetail/EmailDetailStyles'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import emailBody from 'utils/emailDetailDisplayData/emailBody'
+
 import getRelevantMessage from './getRelevantMessage'
 
 /**

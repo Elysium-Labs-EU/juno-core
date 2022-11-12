@@ -1,17 +1,17 @@
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import * as global from 'constants/globalConstants'
+import { QiLinkOut } from 'images/svgIcons/quillIcons'
 import { FormEvent, useState } from 'react'
 import { FiCheck } from 'react-icons/fi'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import assertNonNullish from 'utils/assertNonNullish'
 
 import Botpoison from '@botpoison/browser'
 import { useFormspark } from '@formspark/use-formspark'
 
-import * as global from '../../../constants/globalConstants'
-import { QiLinkOut } from '../../../images/svgIcons/quillIcons'
-import { useAppSelector } from '../../../store/hooks'
-import { selectActiveModal } from '../../../store/utilsSlice'
-import * as GS from '../../../styles/globalStyles'
-import assertNonNullish from '../../../utils/assertNonNullish'
-import CustomModal from '../../Elements/Modal/CustomModal'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as S from './BetaAccessFormStyles'
 
 if (process.env.NODE_ENV === 'production') {

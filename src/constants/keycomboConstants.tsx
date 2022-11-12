@@ -1,4 +1,4 @@
-import { modifierKeyDisplay } from '../utils/setModifierKey'
+import { modifierKeyDisplay } from 'utils/setModifierKey'
 
 export const MODAL_TITLE = 'Keyboard Combos'
 export const MODAL_OS_SUB =

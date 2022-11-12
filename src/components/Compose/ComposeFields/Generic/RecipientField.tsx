@@ -1,10 +1,13 @@
+import * as S from 'components/Compose/ComposeStyles'
+import * as local from 'constants/composeEmailConstants'
+
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import * as S from '../../ComposeStyles'
-import * as local from '../../../../constants/composeEmailConstants'
+
+import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
+
 import EmailInput from './EmailInput/EmailInput'
-import type { IContact } from '../../../../store/storeTypes/contactsTypes'
-import type { IRecipientsList } from '../../ComposeEmailTypes'
 
 interface IRecipientField {
   recipientFieldValue: IContact[]

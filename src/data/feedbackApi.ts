@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
-import assertNonNullish from '../utils/assertNonNullish'
-import { errorHandling } from './api'
+import { errorHandling } from 'data/api'
+import assertNonNullish from 'utils/assertNonNullish'
 
 export interface ISendFeedback {
   type: 'BUG' | 'FEEDBACK' | 'IDEA'

@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios'
-import qs from 'qs'
-import { errorHandling, instance } from './api'
+import { errorHandling, instance } from 'data/api'
 
 interface AllContactsQueryObject {
   readMask: string
@@ -22,9 +21,6 @@ const contactApi = () => ({
           pageSize: query.pageSize ?? 1000,
           pageToken: query.nextPageToken ?? undefined,
         },
-        // TODO: Simplify this code
-        paramsSerializer: (params) =>
-          qs.stringify(params, { arrayFormat: 'repeat' }),
       })
       return res
     } catch (err) {
@@ -40,9 +36,6 @@ const contactApi = () => ({
             readMask: query.readMask,
             query: query.query,
           },
-          // TODO: Simplify this code
-          paramsSerializer: (params) =>
-            qs.stringify(params, { arrayFormat: 'repeat' }),
         }
       )
       return res

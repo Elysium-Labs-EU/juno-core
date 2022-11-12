@@ -1,6 +1,7 @@
-import * as global from '../constants/globalConstants'
-import { IEmailListThreadItem } from '../store/storeTypes/emailListTypes'
-import { LabelIdName } from '../store/storeTypes/labelsTypes'
+import * as global from 'constants/globalConstants'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { LabelIdName } from 'store/storeTypes/labelsTypes'
+
 import { onlyLegalLabelStrings } from './onlyLegalLabels'
 
 /**

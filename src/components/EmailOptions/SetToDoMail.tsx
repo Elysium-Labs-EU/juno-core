@@ -1,10 +1,10 @@
-import * as global from '../../constants/globalConstants'
-import { updateEmailLabel } from '../../store/emailListSlice'
-import { AppDispatch } from '../../store/store'
-import { LabelIdName } from '../../store/storeTypes/labelsTypes'
-import { setSystemStatusUpdate } from '../../store/utilsSlice'
-import { findLabelByName } from '../../utils/findLabel'
-import { onlyLegalLabelStrings } from '../../utils/onlyLegalLabels'
+import * as global from 'constants/globalConstants'
+import { updateEmailLabel } from 'store/emailListSlice'
+import { AppDispatch } from 'store/store'
+import { LabelIdName } from 'store/storeTypes/labelsTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import { findLabelByName } from 'utils/findLabel'
+import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 interface ISetToDoMail {
   threadId: string

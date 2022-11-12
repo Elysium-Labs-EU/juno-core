@@ -1,3 +1,4 @@
+import * as global from 'constants/globalConstants'
 import { isEqual } from 'lodash'
 import {
   Dispatch,
@@ -7,10 +8,9 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import emailValidation from 'utils/emailValidation'
 
-import * as global from '../../../constants/globalConstants'
-import { IContact } from '../../../store/storeTypes/contactsTypes'
-import emailValidation from '../../../utils/emailValidation'
 import { recipientListTransform } from '../ComposeEmail'
 import { IRecipientsList } from '../ComposeEmailTypes'
 import RecipientField from './Generic/RecipientField'

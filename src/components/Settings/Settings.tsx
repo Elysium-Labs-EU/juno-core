@@ -1,8 +1,8 @@
+import * as global from 'constants/globalConstants'
 import { useMemo, useState } from 'react'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
 
-import * as global from '../../constants/globalConstants'
-import { useAppSelector } from '../../store/hooks'
-import { selectActiveModal } from '../../store/utilsSlice'
 import CustomModal from '../Elements/Modal/CustomModal'
 import Contributions from './Contributions/Contributions'
 import General from './General/General'

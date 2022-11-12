@@ -1,3 +1,5 @@
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
 import {
   Dispatch,
   SetStateAction,
@@ -6,23 +8,19 @@ import {
   useMemo,
   useState,
 } from 'react'
-import EmailDetailOptions from './EmailDetailOptions'
+import { openDraftEmail } from 'store/draftsSlice'
+import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+
+import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
-import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
-import * as ES from '../EmailDetailStyles'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import ReplyComposer from './InlineComposers/ReplyComposer'
-import ForwardingComposer from './InlineComposers/ForwardingComposer'
-import { openDraftEmail } from '../../../store/draftsSlice'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import EmailDetailOptions from './EmailDetailOptions'
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
+import ForwardingComposer from './InlineComposers/ForwardingComposer'
+import ReplyComposer from './InlineComposers/ReplyComposer'
 
 const MappedMessages = ({
   threadDetail,

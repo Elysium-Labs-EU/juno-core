@@ -1,5 +1,5 @@
-import { IEmailAttachmentType } from '../../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { IContact } from './contactsTypes'
+import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import { IContact } from 'store/storeTypes/contactsTypes'
 
 export interface IComposePayload {
   bcc?: IContact[]

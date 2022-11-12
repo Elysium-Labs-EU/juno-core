@@ -1,8 +1,8 @@
-import EmailList from '../EmailList/EmailList'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import Seo from '../Elements/Seo'
-import * as local from '../../constants/todoConstants'
-import useSetCurrentLabel from '../../hooks/useSetCurrentLabel'
+import Seo from 'components/Elements/Seo'
+import EmailList from 'components/EmailList/EmailList'
+import * as local from 'constants/todoConstants'
+import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
 const Todo = () => {
   useSetCurrentLabel()

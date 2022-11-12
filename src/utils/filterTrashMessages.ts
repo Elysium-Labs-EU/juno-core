@@ -1,8 +1,8 @@
+import * as global from 'constants/globalConstants'
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../store/storeTypes/emailListTypes'
-import * as global from '../constants/globalConstants'
+} from 'store/storeTypes/emailListTypes'
 
 const filterTrashMessages = (
   thread: IEmailListThreadItem,

@@ -1,26 +1,25 @@
+import AppHeaderHelp from 'AppHeaderHelp'
+import SendingBanner from 'components/SendingBanner/SendingBanner'
+import SnackbarOrchestrator from 'components/SnackbarOrchestrator/SnackbarOrchestrator'
+import { BASE_ARRAY } from 'constants/baseConstants'
+import RoutesConstants from 'constants/routes.json'
+import { fetchToken } from 'data/api'
 import { AnimatePresence } from 'framer-motion'
 import { useEffect, useMemo } from 'react'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
-
-import AppHeaderHelp from './AppHeaderHelp'
-import SendingBanner from './components/SendingBanner/SendingBanner'
-import SnackbarOrchestrator from './components/SnackbarOrchestrator/SnackbarOrchestrator'
-import { BASE_ARRAY } from './constants/baseConstants'
-import RoutesConstants from './constants/routes.json'
-import { fetchToken } from './data/api'
-import RoutesComponent from './Routes'
+import RoutesComponent from 'Routes'
 import {
   checkBase,
   recheckBase,
   selectBaseLoaded,
   selectIsAuthenticated,
   setIsAuthenticated,
-} from './store/baseSlice'
-import { useAppDispatch, useAppSelector } from './store/hooks'
-import { selectStorageLabels } from './store/labelsSlice'
-import { history } from './store/store'
-import * as GS from './styles/globalStyles'
+} from 'store/baseSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectStorageLabels } from 'store/labelsSlice'
+import { history } from 'store/store'
+import * as GS from 'styles/globalStyles'
 
 const App = () => {
   const dispatch = useAppDispatch()

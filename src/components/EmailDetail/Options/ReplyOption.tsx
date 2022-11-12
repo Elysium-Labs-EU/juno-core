@@ -1,15 +1,16 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import isReplyingListener from 'components/EmailOptions/IsReplyingListener'
+import * as local from 'constants/emailDetailConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiReply } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import * as local from '../../../constants/emailDetailConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import isReplyingListener from '../../EmailOptions/IsReplyingListener'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectInSearch } from '../../../store/utilsSlice'
-import { setModifierKey } from '../../../utils/setModifierKey'
-import { selectIsForwarding } from '../../../store/emailDetailSlice'
-import { QiReply } from '../../../images/svgIcons/quillIcons'
+import { selectIsForwarding } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectInSearch } from 'store/utilsSlice'
+import { setModifierKey } from 'utils/setModifierKey'
+
 import { IEmailDetailOptions } from './optionTypes'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.enter]
 

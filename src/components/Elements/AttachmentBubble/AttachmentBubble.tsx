@@ -1,19 +1,15 @@
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import * as global from 'constants/globalConstants'
+import { QiCheckmark, QiDownload, QiEscape } from 'images/svgIcons/quillIcons'
 import { useCallback, useState } from 'react'
+import { useAppDispatch } from 'store/hooks'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import { downloadAttachmentSingle } from 'utils/downloadAttachment'
+import formatBytes from 'utils/prettierBytes'
 
-import * as global from '../../../constants/globalConstants'
-import {
-  QiCheckmark,
-  QiDownload,
-  QiEscape,
-} from '../../../images/svgIcons/quillIcons'
-import { useAppDispatch } from '../../../store/hooks'
-import { setSystemStatusUpdate } from '../../../store/utilsSlice'
-import * as GS from '../../../styles/globalStyles'
-import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
-import formatBytes from '../../../utils/prettierBytes'
-import { IEmailAttachmentType } from '../../EmailDetail/Attachment/EmailAttachmentTypes'
-import CustomIconButton from '../Buttons/CustomIconButton'
-import StyledCircularProgress from '../StyledCircularProgress'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
 

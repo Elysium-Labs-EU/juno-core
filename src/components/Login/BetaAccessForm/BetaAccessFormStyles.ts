@@ -1,5 +1,5 @@
+import { breakPoint } from 'constants/themeConstants'
 import styled from 'styled-components'
-import { breakPoint } from '../../../constants/themeConstants'
 
 export const StyledForm = styled.form`
   align-items: center;

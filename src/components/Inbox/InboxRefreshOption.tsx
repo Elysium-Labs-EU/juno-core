@@ -1,18 +1,17 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
-import styled, { css, keyframes } from 'styled-components'
-
-import * as keyConstants from '../../constants/keyConstants'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
-import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { AppDispatch } from '../../store/store'
+import { refreshEmailFeed, selectIsFetching } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { AppDispatch } from 'store/store'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsLoading,
-} from '../../store/utilsSlice'
-import CustomButton from '../Elements/Buttons/CustomButton'
+} from 'store/utilsSlice'
+import styled, { css, keyframes } from 'styled-components'
 
 const rotate = keyframes`
   from {

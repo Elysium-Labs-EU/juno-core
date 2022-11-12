@@ -1,13 +1,12 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import * as global from 'constants/globalConstants'
+import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import { useCallback, useState } from 'react'
-
-import * as global from '../../../constants/globalConstants'
-import { QiCheckmark, QiDownload } from '../../../images/svgIcons/quillIcons'
-import { useAppDispatch } from '../../../store/hooks'
-import { IEmailMessagePayloadRaw } from '../../../store/storeTypes/emailListTypes'
-import { setSystemStatusUpdate } from '../../../store/utilsSlice'
-import { downloadAttachmentMultiple } from '../../../utils/downloadAttachment'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import { useAppDispatch } from 'store/hooks'
+import { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
 
 const ICON_SIZE = 13
 

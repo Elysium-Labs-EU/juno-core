@@ -1,9 +1,10 @@
-import { useAppSelector } from '../../../store/hooks'
-import { selectIsAvatarVisible } from '../../../store/utilsSlice'
-import getRandomColor from '../../../utils/getRandomColor'
-import getUserInitials from '../../../utils/getUserInitials'
+import { useAppSelector } from 'store/hooks'
+import { selectIsAvatarVisible } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import getRandomColor from 'utils/getRandomColor'
+import getUserInitials from 'utils/getUserInitials'
+
 import * as S from './EmailAvatarStyles'
-import * as GS from '../../../styles/globalStyles'
 
 /**
  * @component EmailAvatar

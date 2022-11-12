@@ -1,12 +1,14 @@
-import { useState, useEffect, useCallback } from 'react'
-import Snackbar from '@mui/material/Snackbar'
-import { selectIsSending, setIsSending } from '../../store/utilsSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import * as S from './SendingBannerStyles'
-import { QiSend, QiWarningAlt } from '../../images/svgIcons/quillIcons'
+import { QiSend, QiWarningAlt } from 'images/svgIcons/quillIcons'
+import { useCallback, useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 // import CustomButton from '../Elements/Buttons/CustomButton'
-// import * as themeConstants from '../../constants/themeConstants'
-import { IMessageSendStatus } from '../../store/storeTypes/utilsTypes'
+// import * as themeConstants from 'constants/themeConstants'
+import { IMessageSendStatus } from 'store/storeTypes/utilsTypes'
+import { selectIsSending, setIsSending } from 'store/utilsSlice'
+
+import Snackbar from '@mui/material/Snackbar'
+
+import * as S from './SendingBannerStyles'
 
 const THREE_SECONDS = 3000
 
