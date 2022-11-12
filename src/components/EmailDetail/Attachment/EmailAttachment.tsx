@@ -1,6 +1,7 @@
+import { IEmailMessage } from 'store/storeTypes/emailListTypes'
+
 import EmailAttachmentBubble from './EmailAttachmentBubble'
 import * as S from './EmailAttachmentStyles'
-import { IEmailMessage } from '../../../store/storeTypes/emailListTypes'
 
 const EmailAttachment = ({ message }: { message: IEmailMessage }) =>
   message?.payload?.files && message.payload.files.length > 0 ? (

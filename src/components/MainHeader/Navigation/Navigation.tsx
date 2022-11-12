@@ -1,31 +1,28 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { push } from 'redux-first-history'
-
-import * as keyConstants from '../../../constants/keyConstants'
-import RoutesConstants from '../../../constants/routes.json'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledTooltip from 'components/Elements/StyledTooltip'
+import * as keyConstants from 'constants/keyConstants'
+import RoutesConstants from 'constants/routes.json'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import {
   QiCompose,
   QiInbox,
   QiSearch,
   QiToDo,
-} from '../../../images/svgIcons/quillIcons'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+} from 'images/svgIcons/quillIcons'
+import { useEffect, useMemo, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { push } from 'redux-first-history'
+import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   navigateTo,
   selectActiveModal,
   selectInSearch,
   selectIsFlexibleFlowActive,
   setInSearch,
-} from '../../../store/utilsSlice'
-import { setModifierKey } from '../../../utils/setModifierKey'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import StyledTooltip from '../../Elements/StyledTooltip'
+} from 'store/utilsSlice'
+import { setModifierKey } from 'utils/setModifierKey'
+
 import NavigationMore from './More/NavigationMore'
 import * as S from './NavigationStyles'
 

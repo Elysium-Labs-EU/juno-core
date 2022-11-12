@@ -1,10 +1,10 @@
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+
 /**
  * @function getRelevantMessage
- * Based on the selected index fetch the matching message in the thread.
+ * @description Based on the selected index fetch the matching message in the thread.
  * @returns a message object from the input thread
  * */
-
-import { IEmailListThreadItem } from '../../../../store/storeTypes/emailListTypes'
 
 export default function getRelevantMessage({
   selectedIndex,

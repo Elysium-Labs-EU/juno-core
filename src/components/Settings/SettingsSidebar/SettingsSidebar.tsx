@@ -1,5 +1,6 @@
+import { QiCog, QiSign, QiSignature } from 'images/svgIcons/quillIcons'
 import { Dispatch, SetStateAction } from 'react'
-import { QiCog, QiSign, QiSignature } from '../../../images/svgIcons/quillIcons'
+
 import * as S from './SettingsSidebarStyles'
 
 const SETTINGS_OPTIONS = [

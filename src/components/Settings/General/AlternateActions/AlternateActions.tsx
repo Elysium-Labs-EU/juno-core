@@ -1,14 +1,15 @@
-import { FormControlLabel, Switch } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
-import * as S from '../../SettingsStyles'
-import * as GS from '../../../../styles/globalStyles'
+import * as S from 'components/Settings/SettingsStyles'
+import { QiAlt } from 'images/svgIcons/quillIcons'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectAlternateActions,
   selectSettingsLabelId,
   setAlternateActions,
-} from '../../../../store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
-import { QiAlt } from '../../../../images/svgIcons/quillIcons'
+} from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
+
+import { FormControlLabel, Switch } from '@mui/material'
 
 const HEADER = 'Alternate actions'
 const BODY =

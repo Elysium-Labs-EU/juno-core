@@ -1,4 +1,4 @@
-import convertStringToHTML from './convertStringToHTML'
+import convertStringToHTML from 'utils/convertStringToHTML'
 
 export default function removeSignature(emailBody: string) {
   const converted = convertStringToHTML(emailBody)

@@ -1,24 +1,22 @@
+import EmptyState from 'components/Elements/EmptyState'
+import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import SelectedOptions from 'components/MainHeader/SelectedOptions/SelectedOptions'
+import useFetchEmailsDrafts from 'hooks/useFetchEmailsDrafts'
 import { useEffect } from 'react'
+import { resetEmailDetail, selectCurrentEmail } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
   selectSelectedEmails,
   setActiveEmailListIndex,
-} from '../../store/emailListSlice'
-import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
-import EmptyState from '../Elements/EmptyState'
-import LoadingState from '../Elements/LoadingState/LoadingState'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
-import getEmailListIndex from '../../utils/getEmailListIndex'
-import {
-  resetEmailDetail,
-  selectCurrentEmail,
-} from '../../store/emailDetailSlice'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import getEmailListIndex from 'utils/getEmailListIndex'
+import multipleIncludes from 'utils/multipleIncludes'
+
 import RenderEmailList from './RenderEmailList'
-import useFetchEmailsDrafts from '../../hooks/useFetchEmailsDrafts'
-import SelectedOptions from '../MainHeader/SelectedOptions/SelectedOptions'
-import multipleIncludes from '../../utils/multipleIncludes'
 
 const LabeledInbox = ({
   emailList,

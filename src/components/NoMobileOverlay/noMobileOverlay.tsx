@@ -1,6 +1,7 @@
+import LogoutOption from 'components/MainHeader/Navigation/More/Options/LogoutOption'
+import * as local from 'constants/noMobileOverlayConstants'
+
 import * as S from './noMobileOverlayStyles'
-import * as local from '../../constants/noMobileOverlayConstants'
-import LogoutOption from '../MainHeader/Navigation/More/Options/LogoutOption'
 
 const NoMobileOverlay = () => (
   <S.Wrapper>

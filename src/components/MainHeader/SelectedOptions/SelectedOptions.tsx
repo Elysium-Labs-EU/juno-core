@@ -1,20 +1,18 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as global from 'constants/globalConstants'
+import { QiMeatballsH } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
+import { deleteDraftBatch } from 'store/draftsSlice'
 import {
   selectSelectedEmails,
   setSelectedEmails,
   updateEmailLabelBatch,
-} from '../../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import CustomButton from '../../Elements/Buttons/CustomButton'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { selectAllEmailsCurrentInbox, setInSearch } from 'store/utilsSlice'
+
 import * as S from './SelectedOptionsStyles'
-import * as global from '../../../constants/globalConstants'
-import { deleteDraftBatch } from '../../../store/draftsSlice'
-import {
-  selectAllEmailsCurrentInbox,
-  setInSearch,
-} from '../../../store/utilsSlice'
-import { QiMeatballsH } from '../../../images/svgIcons/quillIcons'
 
 const ARCHIVE_BUTTON_LABEL = 'Archive'
 const DISCARD_BUTTON_LABEL = 'Discard'

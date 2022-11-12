@@ -1,4 +1,4 @@
-import * as global from '../constants/globalConstants'
+import * as global from 'constants/globalConstants'
 
 /**
  * @function getUserAgent

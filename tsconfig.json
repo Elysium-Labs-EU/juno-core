@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": "src",
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -14,9 +15,9 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "types": ["vitest/globals"],
+    "types": ["vite/client", "vitest/globals"],
     "useDefineForClassFields": true
   },
-  "include": ["src"],
+  "include": ["src", "env.d.ts", "global.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

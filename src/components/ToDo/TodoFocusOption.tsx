@@ -1,34 +1,31 @@
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import * as local from '../../constants/todoConstants'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
-import { QiJump } from '../../images/svgIcons/quillIcons'
-import {
-  setCoreStatus,
-  setSessionViewIndex,
-} from '../../store/emailDetailSlice'
+import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import * as local from 'constants/todoConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiJump } from 'images/svgIcons/quillIcons'
+import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
   selectSelectedEmails,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
-import { AppDispatch } from '../../store/store'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { AppDispatch } from 'store/store'
 import {
   IEmailListObject,
   ISelectedEmail,
-} from '../../store/storeTypes/emailListTypes'
+} from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsLoading,
-} from '../../store/utilsSlice'
-import labelURL from '../../utils/createLabelURL'
-import { findLabelByName } from '../../utils/findLabel'
-import { setModifierKey } from '../../utils/setModifierKey'
-import startSort from '../../utils/startSort'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
+} from 'store/utilsSlice'
+import labelURL from 'utils/createLabelURL'
+import { findLabelByName } from 'utils/findLabel'
+import { setModifierKey } from 'utils/setModifierKey'
+import startSort from 'utils/startSort'
 
 const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
 

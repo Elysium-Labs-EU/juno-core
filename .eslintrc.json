@@ -6,6 +6,7 @@
     },
     "import/resolver": {
       "node": {
+        "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
@@ -39,7 +40,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["import", "react", "@typescript-eslint"],
+  "plugins": ["import", "@typescript-eslint"],
   "rules": {
     "import/extensions": [
       "error",

@@ -1,29 +1,23 @@
 import { useCallback, useMemo } from 'react'
 
-import * as global from '../../../constants/globalConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
-import {
-  QiChevronLeft,
-  QiChevronRight,
-} from '../../../images/svgIcons/quillIcons'
-import {
-  selectCoreStatus,
-  selectViewIndex,
-} from '../../../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiChevronLeft, QiChevronRight } from 'images/svgIcons/quillIcons'
+import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   navigateNextMail,
   navigatePreviousMail,
   selectEmailListSize,
   selectIsLoading,
   selectIsSilentLoading,
-} from '../../../store/utilsSlice'
-import loadNextPage from '../../../utils/loadNextPage'
-import CustomIconButton from '../../Elements/Buttons/CustomIconButton'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+} from 'store/utilsSlice'
+import loadNextPage from 'utils/loadNextPage'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import * as S from './DetailNavigationStyles'
 
 const ICON_SIZE = 20

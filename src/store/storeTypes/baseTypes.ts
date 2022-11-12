@@ -1,4 +1,4 @@
-import { GoogleLabel } from './labelsTypes'
+import { GoogleLabel } from 'store/storeTypes/labelsTypes'
 
 export interface IProfile {
   signature: string

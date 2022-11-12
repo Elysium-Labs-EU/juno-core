@@ -1,6 +1,6 @@
-import getUserAgent from './getUserAgent'
-import * as global from '../constants/globalConstants'
-import * as keyConstant from '../constants/keyConstants'
+import * as global from 'constants/globalConstants'
+import * as keyConstant from 'constants/keyConstants'
+import getUserAgent from 'utils/getUserAgent'
 
 /**
  * @function modifierKeyDisplay

@@ -1,40 +1,42 @@
-/* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import archiveMail from 'components/EmailOptions/ArchiveMail'
+import * as global from 'constants/globalConstants'
+import draftApi from 'data/draftApi'
+import messageApi from 'data/messageApi'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
-import draftApi from '../data/draftApi'
+import {
+  setCurrentEmail,
+  setIsForwarding,
+  setIsReplying,
+} from 'store/emailDetailSlice'
+import {
+  listRemoveItemDetail,
+  listRemoveItemDetailBatch,
+  listRemoveItemDetailDraft,
+  setSelectedEmails,
+} from 'store/emailListSlice'
+import { IComposePayload } from 'store/storeTypes/composeTypes'
+import {
+  DraftDetails,
+  DraftsState,
+  EnhancedDraftDetails,
+  IDraftDetailObject,
+  OpenDraftEmailType,
+} from 'store/storeTypes/draftsTypes'
 import {
   closeMail,
   navigateNextMail,
   setIsProcessing,
   setIsSending,
   setSystemStatusUpdate,
-} from './utilsSlice'
-import {
-  setCurrentEmail,
-  setIsForwarding,
-  setIsReplying,
-} from './emailDetailSlice'
-import type { AppThunk, RootState } from './store'
-import {
-  DraftDetails,
-  DraftsState,
-  EnhancedDraftDetails,
-  OpenDraftEmailType,
-  IDraftDetailObject,
-} from './storeTypes/draftsTypes'
-import {
-  listRemoveItemDetail,
-  listRemoveItemDetailBatch,
-  listRemoveItemDetailDraft,
-  setSelectedEmails,
-} from './emailListSlice'
-import * as global from '../constants/globalConstants'
-import archiveMail from '../components/EmailOptions/ArchiveMail'
-import messageApi from '../data/messageApi'
-import getEmailListIndex from '../utils/getEmailListIndex'
-import { IComposePayload } from './storeTypes/composeTypes'
-import { prepareFormData } from '../utils/prepareMessage'
+} from 'store/utilsSlice'
+import getEmailListIndex from 'utils/getEmailListIndex'
+import { prepareFormData } from 'utils/prepareMessage'
+
+/* eslint-disable no-param-reassign */
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import type { AppThunk, RootState } from 'store/store'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',

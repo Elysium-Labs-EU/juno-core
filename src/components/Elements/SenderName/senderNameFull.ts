@@ -1,5 +1,6 @@
+import * as global from 'constants/globalConstants'
+
 import { NO_SENDER } from './senderNamePartial'
-import * as global from '../../../constants/globalConstants'
 
 const senderNameFull = (fromHeader: string, emailAddress: string): string => {
   if (fromHeader) {

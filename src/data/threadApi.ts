@@ -1,6 +1,5 @@
 import { AxiosResponse } from 'axios'
-import qs from 'qs'
-import { errorHandling, instance } from './api'
+import { errorHandling, instance } from 'data/api'
 
 export interface EmailQueryObject {
   labelIds?: string[]
@@ -26,8 +25,6 @@ const threadApi = ({
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,
         },
-        paramsSerializer: (params) =>
-          qs.stringify(params, { arrayFormat: 'repeat' }),
       })
       return res
     } catch (err) {
@@ -42,8 +39,6 @@ const threadApi = ({
         pageToken: query.nextPageToken ?? undefined,
         q: query.q ?? undefined,
       },
-      paramsSerializer: (params) =>
-        qs.stringify(params, { arrayFormat: 'repeat' }),
       signal: controller?.signal || signal,
     })
     return res

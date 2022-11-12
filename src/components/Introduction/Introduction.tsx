@@ -1,15 +1,16 @@
-import * as global from '../../constants/globalConstants'
-import { QiArrowRight, QiCommand } from '../../images/svgIcons/quillIcons'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import StrictFlow from 'components/Settings/General/StrictFlow/StrictFlow'
+import * as global from 'constants/globalConstants'
+import { QiArrowRight, QiCommand } from 'images/svgIcons/quillIcons'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,
   selectSettingsLabelId,
   setActiveModal,
-} from '../../store/utilsSlice'
-import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import CustomModal from '../Elements/Modal/CustomModal'
-import StrictFlow from '../Settings/General/StrictFlow/StrictFlow'
+} from 'store/utilsSlice'
+import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
+
 import * as S from './IntroductionStyles'
 
 const DIALOG_HEADER = 'Welcome to Juno'

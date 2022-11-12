@@ -1,9 +1,10 @@
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import discardDraft from 'components/EmailOptions/DiscardDraft'
+import { QiDiscard } from 'images/svgIcons/quillIcons'
+import { selectDraftList } from 'store/draftsSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+
 import * as S from './InlineThreadActionsStyles'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import discardDraft from '../EmailOptions/DiscardDraft'
-import { selectDraftList } from '../../store/draftsSlice'
-import { QiDiscard } from '../../images/svgIcons/quillIcons'
 
 const ICON_SIZE = 16
 

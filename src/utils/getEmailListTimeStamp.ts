@@ -1,5 +1,5 @@
 import format from 'date-fns/format'
-import { IEmailListObject } from '../store/storeTypes/emailListTypes'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 
 export default function getEmailListTimeStamp(
   emailList: IEmailListObject[],

@@ -1,5 +1,6 @@
 import { format, isSameDay, isThisYear } from 'date-fns'
 import styled from 'styled-components'
+
 import StyledTooltip from '../StyledTooltip'
 
 const StyledTimeStamp = styled.span`

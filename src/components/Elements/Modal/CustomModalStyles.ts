@@ -1,6 +1,7 @@
-import * as DialogPrimitive from '@radix-ui/react-dialog'
+import { breakPoint } from 'constants/themeConstants'
 import styled, { keyframes } from 'styled-components'
-import { breakPoint } from '../../../constants/themeConstants'
+
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 const overlayShow = keyframes({
   '0%': { opacity: 0 },

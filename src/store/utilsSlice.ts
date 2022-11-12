@@ -1,18 +1,13 @@
+import { activateTodo } from 'components/ToDo/TodoFocusOption'
+import * as global from 'constants/globalConstants'
+import { getRouteByLabelMap } from 'constants/labelMapConstant'
+import RouteConstants from 'constants/routes.json'
 import { push } from 'redux-first-history'
-
-/* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-
-import { activateTodo } from '../components/ToDo/TodoFocusOption'
-import * as global from '../constants/globalConstants'
-import { getRouteByLabelMap } from '../constants/labelMapConstant'
-import RouteConstants from '../constants/routes.json'
-import labelURL from '../utils/createLabelURL'
-import { findLabelById } from '../utils/findLabel'
-import getSenderFromList from '../utils/getSenderFromList'
-import multipleIncludes from '../utils/multipleIncludes'
-import { onlyLegalLabelStrings } from '../utils/onlyLegalLabels'
-import { deleteDraftBatch, fetchDrafts, openDraftEmail } from './draftsSlice'
+import {
+  deleteDraftBatch,
+  fetchDrafts,
+  openDraftEmail,
+} from 'store/draftsSlice'
 import {
   setCoreStatus,
   setCurrentEmail,
@@ -20,21 +15,29 @@ import {
   setIsReplying,
   setSessionViewIndex,
   setViewIndex,
-} from './emailDetailSlice'
+} from 'store/emailDetailSlice'
 import {
   fetchEmailsFull,
   fetchEmailsSimple,
   setSelectedEmails,
   updateEmailLabelBatch,
-} from './emailListSlice'
-import { IEmailListThreadItem } from './storeTypes/emailListTypes'
+} from 'store/emailListSlice'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import {
   IMessageSendStatus,
   ISystemStatusUpdate,
   IUtilsState,
-} from './storeTypes/utilsTypes'
+} from 'store/storeTypes/utilsTypes'
+import labelURL from 'utils/createLabelURL'
+import { findLabelById } from 'utils/findLabel'
+import getSenderFromList from 'utils/getSenderFromList'
+import multipleIncludes from 'utils/multipleIncludes'
+import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
-import type { AppThunk, RootState } from './store'
+/* eslint-disable no-param-reassign */
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import type { AppThunk, RootState } from 'store/store'
 
 export const initialState: IUtilsState = Object.freeze({
   activeModal: null,

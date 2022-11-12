@@ -1,18 +1,19 @@
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledTooltip from 'components/Elements/StyledTooltip'
+import * as global from 'constants/globalConstants'
+import useFetchThreadsTotalNumber from 'hooks/useFetchThreadsTotalNumber'
+import { QiWarningAlt } from 'images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
   selectSessionViewIndex,
-} from '../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../store/hooks'
+} from 'store/emailDetailSlice'
+import { selectSelectedEmails } from 'store/emailListSlice'
+import { useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+
 import * as S from './EmailPositionStyles'
-import * as GS from '../../../styles/globalStyles'
-import * as global from '../../../constants/globalConstants'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
-import StyledTooltip from '../../Elements/StyledTooltip'
-import useFetchThreadsTotalNumber from '../../../hooks/useFetchThreadsTotalNumber'
-import { QiWarningAlt } from '../../../images/svgIcons/quillIcons'
-import { selectSelectedEmails } from '../../../store/emailListSlice'
-import { selectIsFlexibleFlowActive } from '../../../store/utilsSlice'
 
 const EXPLANATION =
   'This shows on what email you are of all the emails in this Gmail box.'

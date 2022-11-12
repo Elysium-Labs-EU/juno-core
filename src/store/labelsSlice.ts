@@ -1,14 +1,18 @@
+import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
+import { getLabelByRoute } from 'constants/labelMapConstant'
+import labelApi from 'data/labelApi'
+import { fetchEmailsSimple } from 'store/emailListSlice'
+import {
+  GoogleLabel,
+  LabelIdName,
+  LabelState,
+} from 'store/storeTypes/labelsTypes'
+import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
+
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 
-import { SETTINGS_DELIMITER, SETTINGS_LABEL } from '../constants/baseConstants'
-import { getLabelByRoute } from '../constants/labelMapConstant'
-import labelApi from '../data/labelApi'
-import { fetchEmailsSimple } from './emailListSlice'
-import { GoogleLabel, LabelIdName, LabelState } from './storeTypes/labelsTypes'
-import { setSettingsLabelId, setSystemStatusUpdate } from './utilsSlice'
-
-import type { AppThunk, RootState } from './store'
+import type { AppThunk, RootState } from 'store/store'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],

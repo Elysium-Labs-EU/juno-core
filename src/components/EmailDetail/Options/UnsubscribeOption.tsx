@@ -1,20 +1,16 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiMailUnsub } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
+import { selectCoreStatus, setCoreStatus } from 'store/emailDetailSlice'
+import { useAppSelector } from 'store/hooks'
+import { selectInSearch } from 'store/utilsSlice'
+import createComposeViaURL from 'utils/createComposeViaURL'
+import { setModifierKey } from 'utils/setModifierKey'
 
-import * as global from '../../../constants/globalConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import useKeyboardShortcut from '../../../hooks/useKeyboardShortcut'
-import { QiMailUnsub } from '../../../images/svgIcons/quillIcons'
-import {
-  selectCoreStatus,
-  setCoreStatus,
-} from '../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../store/hooks'
-import { selectInSearch } from '../../../store/utilsSlice'
-import createComposeViaURL from '../../../utils/createComposeViaURL'
-import { setModifierKey } from '../../../utils/setModifierKey'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-
-import type { AppDispatch } from '../../../store/store'
+import type { AppDispatch } from 'store/store'
 
 const handleUnsubscribe = ({
   coreStatus,

@@ -1,12 +1,11 @@
+import App from 'App'
 import { Buffer } from 'buffer'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { HelmetProvider } from 'react-helmet-async'
 import { Provider } from 'react-redux'
-
-import App from './App'
-import { store } from './store/store'
-import { GlobalStyle } from './styles/globalStyles'
+import { store } from 'store/store'
+import { GlobalStyle } from 'styles/globalStyles'
 
 // Set a global variable for Buffer, this is used for decoding B64.
 globalThis.Buffer = Buffer

@@ -1,27 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
+import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import contactApi from 'data/contactApi'
+import useDebounce from 'hooks/useDebounce'
 import { matchSorter } from 'match-sorter'
 import { useCallback, useEffect, useState } from 'react'
-
-import Autocomplete from '@mui/material/Autocomplete'
-
-import contactApi from '../../../../../data/contactApi'
-import useDebounce from '../../../../../hooks/useDebounce'
 import {
   selectAllContacts,
   selectContactsLoaded,
   setAllContacts,
   setContactsLoaded,
-} from '../../../../../store/contactsSlice'
-import { useAppDispatch, useAppSelector } from '../../../../../store/hooks'
-import { IContact } from '../../../../../store/storeTypes/contactsTypes'
-import { setSystemStatusUpdate } from '../../../../../store/utilsSlice'
-import emailValidation from '../../../../../utils/emailValidation'
-import RecipientChip from '../../../../Elements/RecipientChip/RecipientChip'
-import { IRecipientsList } from '../../../ComposeEmailTypes'
-import StyledTextField from './EmailInputStyles'
+} from 'store/contactsSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import emailValidation from 'utils/emailValidation'
 
-import type { AppDispatch } from '../../../../../store/store'
-import StyledCircularProgress from '../../../../Elements/StyledCircularProgress'
+import Autocomplete from '@mui/material/Autocomplete'
+
+import type { AppDispatch } from 'store/store'
+import StyledTextField from './EmailInputStyles'
 
 interface IEmailInputProps {
   id: string

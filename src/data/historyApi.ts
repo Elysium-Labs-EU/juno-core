@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
-import { LabelIdName } from '../store/storeTypes/labelsTypes'
-import { errorHandling, instance } from './api'
+import { errorHandling, instance } from 'data/api'
+import { LabelIdName } from 'store/storeTypes/labelsTypes'
 
 const historyApi = () => ({
   listHistory: async (startHistoryId: number, storageLabels: LabelIdName[]) => {

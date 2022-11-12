@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
-import { push } from 'redux-first-history'
 import { useLocation } from 'react-router-dom'
-import * as S from './TabsStyles'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { IEmailListObject } from '../../../store/storeTypes/emailListTypes'
-import { selectViewIndex } from '../../../store/emailDetailSlice'
-import MessagesTab from './MessagesTab'
+import { push } from 'redux-first-history'
+import { selectViewIndex } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import filterTrashMessages from 'utils/filterTrashMessages'
+
 import FilesTab from './FilesTab'
-import filterTrashMessages from '../../../utils/filterTrashMessages'
-import { selectLabelIds } from '../../../store/labelsSlice'
+import MessagesTab from './MessagesTab'
+import * as S from './TabsStyles'
 
 interface ITabItem {
   name: string

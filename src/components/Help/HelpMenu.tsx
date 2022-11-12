@@ -1,20 +1,19 @@
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Menu from 'components/Elements/Menu/Menu'
+import * as S from 'components/Elements/Menu/MenuStyles'
+import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiInfo } from 'images/svgIcons/quillIcons'
 import { useCallback, useMemo, useRef } from 'react'
-
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import useKeyboardShortcut from '../../hooks/useKeyboardShortcut'
-import { QiInfo } from '../../images/svgIcons/quillIcons'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,
   selectInSearch,
   setActiveModal,
-} from '../../store/utilsSlice'
-import { modifierKeyDisplay, setModifierKey } from '../../utils/setModifierKey'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import Menu from '../Elements/Menu/Menu'
-import * as S from '../Elements/Menu/MenuStyles'
-import { IMenuItemCollection } from '../Elements/Menu/MenuTypes'
+} from 'store/utilsSlice'
+import { modifierKeyDisplay, setModifierKey } from 'utils/setModifierKey'
 
 const actionKeysHelp = [
   keyConstants.KEY_SPECIAL.shift,

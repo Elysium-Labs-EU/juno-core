@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
-import { useAppDispatch } from '../../../store/hooks'
-import { setInSearch } from '../../../store/utilsSlice'
+import { useAppDispatch } from 'store/hooks'
+import { setInSearch } from 'store/utilsSlice'
+
 import * as S from './ListItemStyles'
 
 export type TListItemType = 'Link' | 'Command'
@@ -20,7 +21,7 @@ const ListItemContent = ({
     <S.IconTitleContainer>
       {icon && <S.IconContainer>{icon}</S.IconContainer>}
       {typeof children === 'string' ? (
-        <span className="truncate max-w-md">{children}</span>
+        <span className="max-w-md truncate">{children}</span>
       ) : (
         children
       )}

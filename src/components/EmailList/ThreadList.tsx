@@ -1,6 +1,6 @@
+import EmailListItem from 'components/EmailListItem/EmailListItem'
 import { Dispatch, SetStateAction } from 'react'
-import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
-import EmailListItem from '../EmailListItem/EmailListItem'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 /**
  * @component ThreadList

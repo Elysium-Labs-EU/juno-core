@@ -1,12 +1,14 @@
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledTooltip from 'components/Elements/StyledTooltip'
+import * as themeConstants from 'constants/themeConstants'
+import { QiEscape } from 'images/svgIcons/quillIcons'
 import { useState } from 'react'
 import { FiShield } from 'react-icons/fi'
+import * as GS from 'styles/globalStyles'
+
 import { Modal } from '@mui/material'
+
 import * as S from './RemovedTrackersStyles'
-import * as GS from '../../../../styles/globalStyles'
-import * as themeConstants from '../../../../constants/themeConstants'
-import StyledTooltip from '../../../Elements/StyledTooltip'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import { QiEscape } from '../../../../images/svgIcons/quillIcons'
 
 const REMOVED_TRACKERS = 'Trackers removed'
 const REMOVED_TRACKER = 'Tracker removed'

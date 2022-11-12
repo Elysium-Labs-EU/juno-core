@@ -1,8 +1,8 @@
 import {
-  ISelectedEmail,
   IEmailListObject,
-} from '../store/storeTypes/emailListTypes'
-import multipleIncludes from './multipleIncludes'
+  ISelectedEmail,
+} from 'store/storeTypes/emailListTypes'
+import multipleIncludes from 'utils/multipleIncludes'
 
 /**
  * @function getSenderFromList

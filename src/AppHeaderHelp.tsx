@@ -1,7 +1,7 @@
-import StyledTooltip from './components/Elements/StyledTooltip'
-import HelpMenu from './components/Help/HelpMenu'
-import Header from './components/MainHeader/Header'
-import * as GS from './styles/globalStyles'
+import StyledTooltip from 'components/Elements/StyledTooltip'
+import HelpMenu from 'components/Help/HelpMenu'
+import Header from 'components/MainHeader/Header'
+import * as GS from 'styles/globalStyles'
 
 const BUTTON_TITLE = 'Feedback and help'
 

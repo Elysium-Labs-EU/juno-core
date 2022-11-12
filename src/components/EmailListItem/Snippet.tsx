@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify'
 import styled from 'styled-components'
-import convertStringToHTML from '../../utils/convertStringToHTML'
+import convertStringToHTML from 'utils/convertStringToHTML'
 
 const StyledSnippet = styled.span`
   color: var(--color-neutral-400);

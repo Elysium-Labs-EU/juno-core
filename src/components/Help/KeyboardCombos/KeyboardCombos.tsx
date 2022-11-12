@@ -1,10 +1,11 @@
-import * as global from '../../../constants/globalConstants'
-import * as local from '../../../constants/keycomboConstants'
-import { useAppSelector } from '../../../store/hooks'
-import { selectActiveModal } from '../../../store/utilsSlice'
-import * as GS from '../../../styles/globalStyles'
-import getUserAgent from '../../../utils/getUserAgent'
-import CustomModal from '../../Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import * as global from 'constants/globalConstants'
+import * as local from 'constants/keycomboConstants'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import getUserAgent from 'utils/getUserAgent'
+
 import * as S from './KeyboardCombosStyles'
 
 interface IKeyCombos {

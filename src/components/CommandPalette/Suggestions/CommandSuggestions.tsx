@@ -1,26 +1,20 @@
+import * as global from 'constants/globalConstants'
+import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
+import { selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
 
-import * as global from '../../../constants/globalConstants'
-import { QiGift, QiSearch } from '../../../images/svgIcons/quillIcons'
-import {
-  selectEmailList,
-  selectSelectedEmails,
-} from '../../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectLabelIds } from '../../../store/labelsSlice'
-import {
-  selectIsFlexibleFlowActive,
-  setActiveModal,
-} from '../../../store/utilsSlice'
 import filterItems, {
   getItemIndex,
   IJsonStructure,
 } from '../commandPaletteUtils'
 import ListItem from '../ListItem/ListItem'
-import * as S from './SuggestionStyles'
 import contextualItems from './ContextualItems'
 import SearchSuggestion from './SearchSuggestion'
+import * as S from './SuggestionStyles'
 
 const CommandPaletteSuggestions = ({
   focusedItemIndex,

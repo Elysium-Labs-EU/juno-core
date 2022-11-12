@@ -1,8 +1,10 @@
+import threadApi from 'data/threadApi'
+import { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IEmailDetailState } from './storeTypes/emailDetailTypes'
-import type { RootState } from './store'
-import threadApi from '../data/threadApi'
+
+import type { RootState } from 'store/store'
 
 export const fetchEmailDetail = createAsyncThunk(
   'emailDetail/fetchEmailDetail',

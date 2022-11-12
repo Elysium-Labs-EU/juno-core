@@ -1,24 +1,24 @@
-import { useCallback, useMemo } from 'react'
-import archiveMail from '../EmailOptions/ArchiveMail'
-import * as S from './InlineThreadActionsStyles'
-import * as global from '../../constants/globalConstants'
-import CustomIconButton from '../Elements/Buttons/CustomIconButton'
-import ReplyOverview from '../EmailOptions/ReplyOverview'
-import setToDoMail from '../EmailOptions/SetToDoMail'
-import { findLabelByName } from '../../utils/findLabel'
-import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import thrashMail from '../EmailOptions/ThrashMail'
-import * as themeConstants from '../../constants/themeConstants'
-import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
-import filterIllegalLabels from '../../utils/filterIllegalLabels'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import archiveMail from 'components/EmailOptions/ArchiveMail'
+import ReplyOverview from 'components/EmailOptions/ReplyOverview'
+import setToDoMail from 'components/EmailOptions/SetToDoMail'
+import thrashMail from 'components/EmailOptions/ThrashMail'
+import * as global from 'constants/globalConstants'
+import * as themeConstants from 'constants/themeConstants'
 import {
   QiFolderArchive,
   QiFolderTrash,
   QiReply,
   QiToDo,
-} from '../../images/svgIcons/quillIcons'
-import emailLabels from '../../utils/emailLabels'
+} from 'images/svgIcons/quillIcons'
+import { useCallback, useMemo } from 'react'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import emailLabels from 'utils/emailLabels'
+import { findLabelByName } from 'utils/findLabel'
+
+import * as S from './InlineThreadActionsStyles'
 
 interface IInlineThreadActionsRegular {
   id: string

@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify'
-import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
-import convertStringToHTML from '../../utils/convertStringToHTML'
+import { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import convertStringToHTML from 'utils/convertStringToHTML'
 
 const EmailSnippet = (message: IEmailMessage): string => {
   if (message?.snippet) {

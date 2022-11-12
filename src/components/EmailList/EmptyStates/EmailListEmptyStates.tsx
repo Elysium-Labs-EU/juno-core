@@ -1,6 +1,7 @@
+import * as local from 'constants/emptyStateConstants'
 import { useLocation } from 'react-router-dom'
+
 import EmptyStateTemplate from './EmptyStateTemplate'
-import * as local from '../../../constants/emptyStateConstants'
 
 const emptyStateMap: { [key: string]: JSX.Element } = {
   '/': (

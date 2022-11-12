@@ -1,12 +1,12 @@
-import { fetchSizeKeyMap } from '../../../../constants/baseConstants'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import StyledSelect from 'components/Elements/Select/StyledSelect'
+import { fetchSizeKeyMap } from 'constants/baseConstants'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectEmailListSize,
   selectSettingsLabelId,
   setEmailFetchSize,
-} from '../../../../store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
-import StyledSelect from '../../../Elements/Select/StyledSelect'
+} from 'store/utilsSlice'
+import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
 const selectOptions = {
   id: 'emailSize',
