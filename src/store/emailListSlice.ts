@@ -46,7 +46,6 @@ export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
   async (query: EmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
-    console.log('response', response)
     return { response: response.data, labels: query.labelIds, q: query?.q }
   }
 )
