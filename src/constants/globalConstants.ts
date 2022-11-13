@@ -10,7 +10,7 @@ export const ACTIVE_MODAL_MAP = {
   navigation: 'navigation',
   search: 'search',
   settings: 'settings',
-  signature: 'signature'.
+  signature: 'signature',
 }
 export const ARCHIVE_LABEL = 'ARCHIVE'
 export const CORE_STATUS_MAP = {
