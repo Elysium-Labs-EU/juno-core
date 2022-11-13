@@ -3,23 +3,23 @@ import * as S from './AttachmentBubbleStyles'
 
 const ICON_SIZE = 20
 
+const getIcon = (mimeType: string) => {
+  if (mimeType.includes('image')) {
+    return <FiImage size={ICON_SIZE} />
+  }
+  if (mimeType.includes('text')) {
+    return <FiFileText size={ICON_SIZE} />
+  }
+  if (mimeType.includes('video')) {
+    return <FiFilm size={ICON_SIZE} />
+  }
+  return <FiFile size={ICON_SIZE} />
+}
+
 export default function EmailAttachmentIcon({
   mimeType,
 }: {
   mimeType: string
 }) {
-  const iconMap: { [key: string]: JSX.Element } = {
-    'image/png': <FiImage size={ICON_SIZE} />,
-    'text/plain': <FiFileText size={ICON_SIZE} />,
-    'video/mp4': <FiFilm size={ICON_SIZE} />,
-    'application/pdf': <FiFile size={ICON_SIZE} />,
-    'application/octet-stream': <FiFile size={ICON_SIZE} />,
-    default: <FiFile size={ICON_SIZE} />,
-  }
-
-  return (
-    <S.IconContainer>
-      {mimeType ? iconMap[mimeType] : iconMap.default}
-    </S.IconContainer>
-  )
+  return <S.IconContainer>{getIcon(mimeType)}</S.IconContainer>
 }
