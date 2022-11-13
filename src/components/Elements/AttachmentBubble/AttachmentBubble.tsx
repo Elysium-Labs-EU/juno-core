@@ -1,15 +1,28 @@
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
-import { IEmailAttachmentType, IFetchedAttachment } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import {
+  IEmailAttachmentType,
+  IFetchedAttachment,
+} from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as global from 'constants/globalConstants'
-import { QiCheckmark, QiDownload, QiEscape, QiEye } from 'images/svgIcons/quillIcons'
-import { useCallback, useState } from 'react'
-import { useAppDispatch } from 'store/hooks'
-import { setActiveModal, setSystemStatusUpdate } from 'store/utilsSlice'
+import {
+  QiCheckmark,
+  QiDownload,
+  QiEscape,
+  QiEye,
+} from 'images/svgIcons/quillIcons'
+import { forwardRef, useCallback, useMemo, useRef, useState } from 'react'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import {
+  selectActiveModal,
+  setActiveModal,
+  setSystemStatusUpdate,
+} from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
 import { viewAttachment } from 'utils/viewAttachment'
+
 import AttachmentModal from '../AttachmentModal/AttachmentModal'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
@@ -80,76 +93,102 @@ const DeleteButton = ({
   />
 )
 
-const ViewAttachmentButton = ({
-  attachmentData,
-  messageId = undefined,
-}: {
-  attachmentData: IEmailAttachmentType
-  messageId?: string
-}) => {
-  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-  const [fetchedAttachmentData, setFetchedAttachmentData] =
-    useState<null | IFetchedAttachment>(null)
-  const dispatch = useAppDispatch()
+const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
+  (
+    {
+      attachmentData,
+      messageId = undefined,
+    }: {
+      attachmentData: IEmailAttachmentType
+      messageId?: string
+    },
+    ref
+  ) => {
+    const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+    const [fetchedAttachmentData, setFetchedAttachmentData] =
+      useState<null | IFetchedAttachment>(null)
+    const dispatch = useAppDispatch()
+    const activeModal = useAppSelector(selectActiveModal)
 
-  const handleClick = async () => {
-    setLoadState(global.LOAD_STATE_MAP.loading)
-    if (messageId) {
-      const response = await viewAttachment({
-        messageId,
-        attachmentData,
-      })
-      if (response?.success) {
-        setLoadState(global.LOAD_STATE_MAP.loaded)
-        setFetchedAttachmentData({
-          blobUrl: response?.blobUrl,
-          mimeType: response?.mimeType,
-        })
-        dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.attachment))
-
+    const handleClick = async () => {
+      // Do not trigger this function if the attachment is already previewed
+      if (
+        activeModal ===
+        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+      ) {
         return
       }
-      setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: response.message ?? global.NETWORK_ERROR,
+      if (messageId && fetchedAttachmentData === null) {
+        setLoadState(global.LOAD_STATE_MAP.loading)
+        const response = await viewAttachment({
+          messageId,
+          attachmentData,
         })
-      )
+        if (response?.success) {
+          setLoadState(global.LOAD_STATE_MAP.loaded)
+          setFetchedAttachmentData({
+            blobUrl: response?.blobUrl,
+            mimeType: response?.mimeType,
+          })
+          dispatch(
+            setActiveModal(
+              `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+            )
+          )
+          return
+        }
+        setLoadState(global.LOAD_STATE_MAP.error)
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: response.message ?? global.NETWORK_ERROR,
+          })
+        )
+      } else {
+        // If the data is already fetched, just open the modal
+        dispatch(
+          setActiveModal(
+            `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+          )
+        )
+      }
     }
-  }
 
-  return loadState !== global.LOAD_STATE_MAP.loading ? (
-    <>
-      {fetchedAttachmentData?.blobUrl !== '' ? (
-        <AttachmentModal
-          fetchedAttachmentData={fetchedAttachmentData}
-          attachmentData={attachmentData}
+    return loadState !== global.LOAD_STATE_MAP.loading ? (
+      <>
+        {fetchedAttachmentData && (
+          <AttachmentModal
+            fetchedAttachmentData={fetchedAttachmentData}
+            attachmentData={attachmentData}
+          />
+        )}
+        <CustomIconButton
+          ref={ref}
+          onClick={handleClick}
+          icon={<QiEye />}
+          title="View attachment"
         />
-      ) : null}
-      <CustomIconButton
-        onClick={handleClick}
-        icon={<QiEye />}
-        title="View attachment"
-      />
-    </>
-  ) : (
-    <StyledCircularProgress size={ICON_SIZE} />
-  )
-}
+      </>
+    ) : (
+      <StyledCircularProgress size={ICON_SIZE} />
+    )
+  }
+)
 const AttachmentBubble = ({
   attachmentData,
   messageId = undefined,
-  hasDownload = true,
+  hasDownloadOption = true,
   handleDelete = undefined,
   index = undefined,
 }: {
   attachmentData: IEmailAttachmentType | File
   messageId?: string
-  hasDownload?: boolean
+  hasDownloadOption?: boolean
   handleDelete?: (attachmentIndex: number) => void
   index?: number | undefined
 }) => {
+  const previewButtonRef = useRef<HTMLButtonElement>(null)
+
   const mimeType =
     'mimeType' in attachmentData
       ? attachmentData.mimeType
@@ -163,8 +202,45 @@ const AttachmentBubble = ({
       ? attachmentData.body?.size
       : attachmentData?.size ?? 0
 
+  const memoizedViewAttachmentButton = useMemo(
+    () =>
+      'body' in attachmentData ? (
+        <ViewAttachmentButton
+          attachmentData={attachmentData}
+          messageId={messageId}
+          ref={previewButtonRef}
+        />
+      ) : null,
+    [attachmentData, messageId]
+  )
+
+  const memoizedDownloadButton = useMemo(
+    () =>
+      hasDownloadOption && 'body' in attachmentData ? (
+        <DownloadButton attachmentData={attachmentData} messageId={messageId} />
+      ) : null,
+    [attachmentData, hasDownloadOption, messageId]
+  )
+
+  const memoizedDeleteButton = useMemo(
+    () =>
+      handleDelete && index !== undefined ? (
+        <DeleteButton handleDelete={handleDelete} index={index} />
+      ) : null,
+    [handleDelete, index]
+  )
+
+  // TODO: Add preview for uploaded file with file type FILE
   return (
-    <S.Attachment>
+    <S.Attachment
+      onClick={() => previewButtonRef.current?.click()}
+      aria-hidden="true"
+      id={
+        'body' in attachmentData
+          ? attachmentData?.body?.attachmentId
+          : undefined
+      }
+    >
       <EmailAttachmentIcon mimeType={mimeType} />
       <S.AttachmentInner>
         <span className="file_name">{fileName}</span>
@@ -173,21 +249,9 @@ const AttachmentBubble = ({
           {formatBytes(fileSize)}
         </GS.Span>
       </S.AttachmentInner>
-      {hasDownload && 'body' in attachmentData && (
-        <>
-          <ViewAttachmentButton
-            attachmentData={attachmentData}
-            messageId={messageId}
-          />
-          <DownloadButton
-            attachmentData={attachmentData}
-            messageId={messageId}
-          />
-        </>
-      )}
-      {handleDelete && index !== undefined && (
-        <DeleteButton handleDelete={handleDelete} index={index} />
-      )}
+      {memoizedViewAttachmentButton}
+      {memoizedDownloadButton}
+      {memoizedDeleteButton}
     </S.Attachment>
   )
 }
