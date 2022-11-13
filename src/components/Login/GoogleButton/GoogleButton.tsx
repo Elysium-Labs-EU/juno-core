@@ -1,8 +1,9 @@
+import * as keyConstants from 'constants/keyConstants'
+import useKeyPress from 'hooks/useKeyPress'
 import { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
+
 import * as S from './GoogleButtonStyles'
-import useKeyPress from '../../../hooks/useKeyPress'
-import * as keyConstants from '../../../constants/keyConstants'
 
 const GOOGLE = 'Login with Google'
 interface IGoogleButton {
@@ -17,7 +18,7 @@ interface IGoogleButton {
  */
 
 const GoogleButton = ({ renderProps }: { renderProps: IGoogleButton }) => {
-  const EnterListener = useKeyPress(keyConstants.KEY_ENTER)
+  const EnterListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
 
   useEffect(() => {
     let mounted = true

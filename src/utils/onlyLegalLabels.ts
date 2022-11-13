@@ -1,4 +1,4 @@
-import { LabelIdName } from '../store/storeTypes/labelsTypes'
+import { LabelIdName } from 'store/storeTypes/labelsTypes'
 
 interface IOnlyLegalLabelObjects {
   labelNames: string[]

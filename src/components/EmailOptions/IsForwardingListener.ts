@@ -1,5 +1,5 @@
-import { setIsForwarding, setIsReplying } from '../../store/emailDetailSlice'
-import { AppDispatch } from '../../store/store'
+import { setIsForwarding, setIsReplying } from 'store/emailDetailSlice'
+import { AppDispatch } from 'store/store'
 
 interface IIsForwardingListener {
   dispatch: AppDispatch

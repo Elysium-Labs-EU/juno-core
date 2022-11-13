@@ -1,14 +1,12 @@
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectActiveModal, setActiveModal } from '../../../store/utilsSlice'
-import * as S from './KeyboardCombosStyles'
-import * as local from '../../../constants/keycomboConstants'
-import * as global from '../../../constants/globalConstants'
-import * as GS from '../../../styles/globalStyles'
-import getUserAgent from '../../../utils/getUserAgent'
-import { AppDispatch } from '../../../store/store'
-import CustomModal from '../../Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import * as global from 'constants/globalConstants'
+import * as local from 'constants/keycomboConstants'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import getUserAgent from 'utils/getUserAgent'
 
-const handleClose = (dispatch: AppDispatch) => dispatch(setActiveModal(null))
+import * as S from './KeyboardCombosStyles'
 
 interface IKeyCombos {
   title: string
@@ -33,9 +31,7 @@ const CreateSectionWithKeys = ({
     {keyCombos.map((combo) => (
       <S.KeyComboContainer key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && (
-          <GS.TextMutedSpan>{combo?.subTitle}</GS.TextMutedSpan>
-        )}
+        {combo?.subTitle && <GS.Span muted>{combo?.subTitle}</GS.Span>}
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
             <span key={JSON.stringify(oneKey)}>{oneKey}</span>
@@ -48,19 +44,17 @@ const CreateSectionWithKeys = ({
 
 const KeyboardCombos = () => {
   const activeModal = useAppSelector(selectActiveModal)
-  const dispatch = useAppDispatch()
 
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.keyboard}
-      handleClose={() => handleClose(dispatch)}
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <GS.TextMutedParagraph style={{ marginBottom: 0 }}>
+        <GS.P muted style={{ marginBottom: '10px' }}>
           {local.MODAL_OS_SUB}{' '}
           <span style={{ color: `var(--color-black)` }}>{getUserAgent()}</span>
-        </GS.TextMutedParagraph>
+        </GS.P>
       }
     >
       <S.Columns>

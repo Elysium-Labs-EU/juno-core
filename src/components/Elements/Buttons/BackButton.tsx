@@ -1,24 +1,35 @@
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiChevronLeft } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-import CustomButton from './CustomButton'
-import * as global from '../../../constants/globalConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
-import { navigateBack } from '../../../store/utilsSlice'
-import { selectCoreStatus } from '../../../store/emailDetailSlice'
-import { QiChevronLeft } from '../../../images/svgIcons/quillIcons'
+import { selectCoreStatus } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import {
+  navigateBack,
+  selectActiveModal,
+  selectInSearch,
+} from 'store/utilsSlice'
 
-const actionKeys = [keyConstants.KEY_ESCAPE]
+import CustomButton from './CustomButton'
+
+const actionKeys = [keyConstants.KEY_SPECIAL.escape]
 
 const BackButton = () => {
+  const activeModal = useAppSelector(selectActiveModal)
   const coreStatus = useAppSelector(selectCoreStatus)
   const dispatch = useAppDispatch()
+  const inSearch = useAppSelector(selectInSearch)
 
   const handleEvent = useCallback(() => {
     dispatch(navigateBack())
   }, [coreStatus, dispatch])
 
-  useMultiKeyPress(handleEvent, actionKeys)
+  useKeyboardShortcut({
+    handleEvent,
+    actionKeys,
+    isDisabled: Boolean(activeModal) || inSearch,
+  })
 
   return (
     <CustomButton

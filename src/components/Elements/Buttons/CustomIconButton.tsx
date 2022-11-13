@@ -1,35 +1,39 @@
 /* eslint-disable react/button-has-type */
-import * as React from 'react'
+import { CSSProperties, forwardRef, MouseEvent } from 'react'
 import styled from 'styled-components'
+import type { TAriaHaspopup } from 'globalTypes'
 
 interface ICustomIconButton {
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
-  type?: 'submit' | 'reset' | 'button'
-  disabled?: boolean
-  icon: JSX.Element
-  style?: React.CSSProperties
-  title: string
+  ariaControls?: string | undefined
+  ariaExpanded?: boolean | undefined
+  ariaHaspopup?: TAriaHaspopup
   className?: string
-  isActive?: boolean
+  disabled?: boolean
   hoverColor?: string
-  // aria-describedby?: null
+  icon: JSX.Element
+  isActive?: boolean
+  onClick: (event: MouseEvent<HTMLButtonElement>) => void
+  onKeyDown?: (event: any) => void
+  style?: CSSProperties
+  title: string
+  type?: 'submit' | 'reset' | 'button'
 }
 
 interface IButton {
-  isActive: boolean | undefined
   hoverColor: string | undefined
+  isActive: boolean | undefined
 }
 
 const Button = styled.button<IButton>`
-  border: none;
-  color: ${ ({ isActive }) =>
-    isActive ? `var(--color-black) ` : `var(--color-neutral-400) ` };
-  outline: none;
+  unset: all;
   background-color: transparent;
+  border: none;
+  color: ${({ isActive }) =>
+    isActive ? `var(--color-black) ` : `var(--color-neutral-400) `};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${ ({ hoverColor }) => hoverColor || `var(--color-black)` };
+    color: ${({ hoverColor }) => hoverColor || `var(--color-black)`};
     cursor: pointer;
   }
 
@@ -38,29 +42,56 @@ const Button = styled.button<IButton>`
     cursor: not-allowed;
   }
 `
-const CustomIconButton = ({
-  onClick,
-  disabled = false,
-  icon,
-  type = 'button',
-  style = undefined,
-  title,
-  className = undefined,
-  isActive = false,
-  hoverColor = undefined,
-}: ICustomIconButton) => (
-  <Button
-    onClick={(event) => onClick(event)}
-    type={type ?? 'button'}
-    disabled={disabled}
-    style={style}
-    title={title}
-    className={className}
-    isActive={isActive}
-    hoverColor={hoverColor}
-  >
-    <span>{icon}</span>
-  </Button>
+const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
+  (
+    {
+      ariaHaspopup = undefined,
+      ariaControls = undefined,
+      ariaExpanded = undefined,
+      className = undefined,
+      disabled = false,
+      hoverColor = undefined,
+      icon,
+      isActive = false,
+      onClick,
+      onKeyDown = undefined,
+      style = undefined,
+      title,
+      type = 'button',
+    },
+    ref
+  ) => (
+    <Button
+      aria-haspopup={ariaHaspopup}
+      aria-controls={ariaControls}
+      aria-expanded={ariaExpanded}
+      className={className}
+      disabled={disabled}
+      hoverColor={hoverColor}
+      isActive={isActive}
+      onClick={(event) => onClick(event)}
+      onKeyDown={onKeyDown}
+      ref={ref}
+      style={style}
+      title={title}
+      type={type ?? 'button'}
+    >
+      <span>{icon}</span>
+    </Button>
+  )
 )
+
+CustomIconButton.defaultProps = {
+  ariaHaspopup: undefined,
+  ariaControls: undefined,
+  ariaExpanded: undefined,
+  className: undefined,
+  disabled: false,
+  hoverColor: undefined,
+  isActive: false,
+  onKeyDown: undefined,
+  style: undefined,
+  type: 'button',
+}
 
 export default CustomIconButton

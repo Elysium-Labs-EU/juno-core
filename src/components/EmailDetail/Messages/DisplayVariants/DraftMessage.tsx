@@ -1,27 +1,26 @@
+import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import ContactCard from 'components/Elements/ContactCard/ContactCard'
+import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
+import EmailSubject from 'components/Elements/EmailSubject'
+import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
+import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
+import EmailAttachment from 'components/EmailDetail/Attachment/EmailAttachment'
+import * as S from 'components/EmailDetail/EmailDetailStyles'
+import discardDraft from 'components/EmailOptions/DiscardDraft'
+import * as local from 'constants/draftConstants'
+import * as global from 'constants/globalConstants'
+import { QiFolderTrash } from 'images/svgIcons/quillIcons'
 import { useCallback, useMemo, useState } from 'react'
 import { FiEdit } from 'react-icons/fi'
+import { selectProfile } from 'store/baseSlice'
+import { selectDraftList } from 'store/draftsSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import * as GS from 'styles/globalStyles'
+import findDraftMessageInList from 'utils/findDraftMessageInList'
 
-import * as local from '../../../../constants/draftConstants'
-import * as global from '../../../../constants/globalConstants'
-import { QiFolderTrash } from '../../../../images/svgIcons/quillIcons'
-import { selectProfile } from '../../../../store/baseSlice'
-import { selectDraftList } from '../../../../store/draftsSlice'
-import { selectCurrentEmail } from '../../../../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
-import { IEmailMessage } from '../../../../store/storeTypes/emailListTypes'
-import * as GS from '../../../../styles/globalStyles'
-import findDraftMessageInList from '../../../../utils/findDraftMessageInList'
-import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
-import CustomButton from '../../../Elements/Buttons/CustomButton'
-import ContactCard from '../../../Elements/ContactCard/ContactCard'
-import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
-import EmailSubject from '../../../Elements/EmailSubject'
-import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
-import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
-import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
-import discardDraft from '../../../EmailOptions/DiscardDraft'
-import EmailAttachment from '../../Attachment/EmailAttachment'
-import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import LinkedContacts from './Recipients/LinkedContacts'
 
@@ -45,7 +44,6 @@ const DraftMessage = ({
   hideDraft: boolean
 }) => {
   const [open, setOpen] = useState<boolean>(true)
-  const id = useAppSelector(selectCurrentEmail)
   const { emailAddress } = useAppSelector(selectProfile)
   const draftList = useAppSelector(selectDraftList)
   const dispatch = useAppDispatch()
@@ -108,10 +106,10 @@ const DraftMessage = ({
           <S.ClosedAvatarSender>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
               <span
@@ -137,9 +135,9 @@ const DraftMessage = ({
   ) : (
     <S.EmailOpenWrapper isDraft hideDraft={hideDraft}>
       <S.DraftHeaderControls>
-        <GS.TextMutedSmall style={{ marginRight: '40px' }}>
+        <GS.P muted small style={{ marginRight: '40px' }}>
           {local.DRAFT_INDICATOR_HEADER}
-        </GS.TextMutedSmall>
+        </GS.P>
         <CustomButton
           style={{ marginRight: '10px' }}
           label="Edit"
@@ -166,10 +164,10 @@ const DraftMessage = ({
           <S.HeaderFullWidth>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.EmailDetailTitle title={staticEmailSubject}>
               {staticEmailSubject}

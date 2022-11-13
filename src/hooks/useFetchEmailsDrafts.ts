@@ -1,12 +1,11 @@
+import * as global from 'constants/globalConstants'
 import { useEffect } from 'react'
-
-import * as global from '../constants/globalConstants'
-import { fetchDrafts } from '../store/draftsSlice'
-import { fetchEmailsSimple, refreshEmailFeed } from '../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectLoadedInbox } from '../store/labelsSlice'
-import { selectEmailListSize } from '../store/utilsSlice'
-import isPromise from '../utils/isPromise'
+import { fetchDrafts } from 'store/draftsSlice'
+import { fetchEmailsSimple, refreshEmailFeed } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLoadedInbox } from 'store/labelsSlice'
+import { selectEmailListSize } from 'store/utilsSlice'
+import isPromise from 'utils/isPromise'
 
 let timestampLastFiredWithLabel = { labelIds: [''], timeStamp: 0 }
 

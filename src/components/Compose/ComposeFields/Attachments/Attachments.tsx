@@ -1,18 +1,18 @@
 /* eslint-disable react/no-array-index-key */
-import prettyBytes from 'pretty-bytes'
+import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
+import FileUpload from 'components/Elements/FileUpload/FileUpload'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
 import { isEqual } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-import AttachmentBubble from '../../../Elements/AttachmentBubble/AttachmentBubble'
-import FileUpload from '../../../Elements/FileUpload/FileUpload'
+import { useAppDispatch } from 'store/hooks'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'
+import formatBytes from 'utils/prettierBytes'
 
-import * as local from '../../../../constants/composeEmailConstants'
 import * as S from './AttachmentsStyles'
-import * as global from '../../../../constants/globalConstants'
-import convertB64AttachmentToFile from '../../../../utils/convertB64AttachmentToFile'
-import { useAppDispatch } from '../../../../store/hooks'
-import { setSystemStatusUpdate } from '../../../../store/utilsSlice'
-import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
-import { IEmailAttachmentType } from '../../../EmailDetail/Attachment/EmailAttachmentTypes'
 
 const ATTACHMENTS = 'Attachments'
 const MAX_MB_UPLOAD_DIRECT = 25000000
@@ -114,7 +114,7 @@ const Attachments = ({
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: `File size can not exceed ${prettyBytes(
+            message: `File size can not exceed ${formatBytes(
               MAX_MB_UPLOAD_DIRECT
             )}`,
           })

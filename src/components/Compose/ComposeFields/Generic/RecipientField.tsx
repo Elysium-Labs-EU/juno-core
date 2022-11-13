@@ -1,10 +1,13 @@
+import * as S from 'components/Compose/ComposeStyles'
+import * as local from 'constants/composeEmailConstants'
+
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import * as S from '../../ComposeStyles'
-import * as local from '../../../../constants/composeEmailConstants'
+
+import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
+
 import EmailInput from './EmailInput/EmailInput'
-import type { IContact } from '../../../../store/storeTypes/contactsTypes'
-import type { IRecipientsList } from '../../ComposeEmailTypes'
 
 interface IRecipientField {
   recipientFieldValue: IContact[]
@@ -16,6 +19,7 @@ interface IRecipientField {
   setInputValue: (value: string) => void
   handleDelete: (value: any) => void
   showField: boolean
+  registerOnKeyDown: () => void
 }
 
 /**
@@ -34,6 +38,7 @@ const RecipientField = ({
   setInputValue,
   handleDelete,
   showField,
+  registerOnKeyDown,
 }: IRecipientField) => (
   <>
     <S.Label
@@ -51,6 +56,7 @@ const RecipientField = ({
         inputValue={inputValue}
         setInputValue={setInputValue}
         handleDelete={handleDelete}
+        registerOnKeyDown={registerOnKeyDown}
         willAutoFocus={
           showField &&
           recipientFieldValue &&

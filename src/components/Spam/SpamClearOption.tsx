@@ -1,13 +1,14 @@
+import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
 import { useState } from 'react'
+import { useAppSelector } from 'store/hooks'
+import { selectIsLoading } from 'store/utilsSlice'
+
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { useAppSelector } from '../../store/hooks'
-import { selectIsLoading } from '../../store/utilsSlice'
 
 const SPAM_BUTTON = 'Clear spam'
 const DIALOG_HEADER = 'Confirm deleting messages'

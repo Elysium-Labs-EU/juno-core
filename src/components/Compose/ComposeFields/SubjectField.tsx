@@ -1,20 +1,32 @@
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
+import useDebounce from 'hooks/useDebounce'
 import { isEqual } from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
-import * as local from '../../../constants/composeEmailConstants'
-import * as global from '../../../constants/globalConstants'
-import useDebounce from '../../../hooks/useDebounce'
 import * as S from '../ComposeStyles'
 import StyledTextField from './Generic/EmailInput/EmailInputStyles'
 
 const SubjectField = ({
   composeValue = undefined,
-  updateComposeEmail,
+  hasInteracted,
   loadState,
+  setHasInteracted,
+  updateComposeEmail,
 }: {
   composeValue?: string
-  updateComposeEmail: (object: { id: string; value: string }) => void
+  hasInteracted: boolean
   loadState: string
+  setHasInteracted: Dispatch<SetStateAction<boolean>>
+  updateComposeEmail: (object: { id: string; value: string }) => void
 }) => {
   const [value, setValue] = useState('')
   const debouncedValue = useDebounce(value, 500)
@@ -44,7 +56,7 @@ const SubjectField = ({
     }
   }, [debouncedValue, loadState])
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
   }, [])
 
@@ -60,6 +72,11 @@ const SubjectField = ({
           onChange={handleChange}
           fullWidth
           variant="outlined"
+          onKeyDown={() => {
+            if (!hasInteracted) {
+              setHasInteracted(true)
+            }
+          }}
         />
       </>
     ),

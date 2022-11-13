@@ -1,5 +1,5 @@
-import RoutesConstants from './routes.json'
-import * as global from './globalConstants'
+import * as global from 'constants/globalConstants'
+import RoutesConstants from 'constants/routes.json'
 
 export const getRouteByLabelMap: { [key: string]: string } = {
   [global.INBOX_LABEL]: `${RoutesConstants.INBOX}`,

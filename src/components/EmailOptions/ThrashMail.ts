@@ -1,5 +1,5 @@
-import { updateEmailLabel } from '../../store/emailListSlice'
-import { AppDispatch } from '../../store/store'
+import { updateEmailLabel } from 'store/emailListSlice'
+import { AppDispatch } from 'store/store'
 
 interface IThrashMailProps {
   threadId: string

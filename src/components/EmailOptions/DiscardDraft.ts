@@ -2,12 +2,12 @@ import {
   deleteDraft,
   listRemoveDraftMessage,
   listRemoveDraftThread,
-} from '../../store/draftsSlice'
+} from 'store/draftsSlice'
 import {
   listRemoveItemDetail,
   listRemoveItemMessage,
-} from '../../store/emailListSlice'
-import { AppDispatch } from '../../store/store'
+} from 'store/emailListSlice'
+import { AppDispatch } from 'store/store'
 
 interface IDiscardDraft {
   threadId?: string

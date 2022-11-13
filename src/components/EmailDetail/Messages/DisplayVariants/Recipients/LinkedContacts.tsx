@@ -1,15 +1,15 @@
+import ContactCard from 'components/Elements/ContactCard/ContactCard'
+import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import * as S from 'components/EmailDetail/EmailDetailStyles'
+import * as compose from 'constants/composeEmailConstants'
+import * as emailDetail from 'constants/emailDetailConstants'
 import { useState } from 'react'
-import { handleContactConversion } from '../../../../../utils/convertToContact'
-import * as S from '../../../EmailDetailStyles'
-import * as GS from '../../../../../styles/globalStyles'
-import * as compose from '../../../../../constants/composeEmailConstants'
-import * as emailDetail from '../../../../../constants/emailDetailConstants'
-import senderNameFull from '../../../../Elements/SenderName/senderNameFull'
-import ContactCard from '../../../../Elements/ContactCard/ContactCard'
-import { selectProfile } from '../../../../../store/baseSlice'
-import { useAppSelector } from '../../../../../store/hooks'
-import { IEmailMessage } from '../../../../../store/storeTypes/emailListTypes'
-import { IContact } from '../../../../../store/storeTypes/contactsTypes'
+import { selectProfile } from 'store/baseSlice'
+import { useAppSelector } from 'store/hooks'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import * as GS from 'styles/globalStyles'
+import { handleContactConversion } from 'utils/convertToContact'
 
 const MappedContacts = ({
   contactsMap,
@@ -22,14 +22,12 @@ const MappedContacts = ({
 
   return (
     <S.ToFromBCCInner>
-      <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+      <GS.Span muted small style={{ marginRight: '4px' }}>
         {title}
-      </GS.TextMutedSpanSmall>
+      </GS.Span>
       <S.SmallTextTruncated>
         {contactsMap.length > 2 ? (
-          <div
-            style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
-          >
+          <div>
             {contactsMap
               .slice(0, showAll ? contactsMap.length : 3)
               .map((contact, index) => (
@@ -38,7 +36,7 @@ const MappedContacts = ({
                   showComma={index !== (showAll ? contactsMap.length : 3) - 1}
                 >
                   <ContactCard
-                    avatarURL={contact.emailAddress}
+                    userEmail={contact.emailAddress}
                     contact={contact}
                   >
                     <S.SmallTextTruncated title={contact.emailAddress}>
@@ -64,7 +62,7 @@ const MappedContacts = ({
               key={contact.emailAddress}
               showComma={index !== contactsMap.length - 1}
             >
-              <ContactCard avatarURL={contact.name} contact={contact}>
+              <ContactCard userEmail={contact.name} contact={contact}>
                 <S.SmallTextTruncated>{contact.name}</S.SmallTextTruncated>
               </ContactCard>
             </S.SmallTextTruncated>
@@ -87,10 +85,10 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
     <>
       <S.ContactsContainer>
         <S.ToFromBCCInner>
-          <GS.TextMutedSpanSmall style={{ marginRight: '4px' }}>
+          <GS.Span muted small style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
-          </GS.TextMutedSpanSmall>
-          <ContactCard avatarURL={senderName} contact={senderContact[0]}>
+          </GS.Span>
+          <ContactCard userEmail={senderName} contact={senderContact[0]}>
             <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
           </ContactCard>
         </S.ToFromBCCInner>

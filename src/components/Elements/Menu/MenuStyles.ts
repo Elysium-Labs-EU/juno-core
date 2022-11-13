@@ -1,36 +1,33 @@
 import styled from 'styled-components'
+import PopperUnstyled from '@mui/base/PopperUnstyled'
+
+export const Popper = styled(PopperUnstyled)`
+  z-index: var(--z-index-popover);
+`
+
+export const Wrapper = styled.nav`
+  .MuiMenuItem-root {
+    height: 32px !important;
+  }
+`
 
 export const StartButtonWrapper = styled.div`
-  position: fixed;
   bottom: 40px;
+  position: fixed;
   right: 40px;
   z-index: var(--z-index-popover);
 `
 
-export const Layer = styled.div`
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  z-index: var(--z-index-modal);
-`
-
-export const InnerLayer = styled.div`
-  bottom: calc(100px - 100vh);
-  right: calc(40px - 100vw);
-  position: absolute;
-  z-index: var(--z-index-modal);
-`
-
 export const Container = styled.div`
-  transition: all 0.2s ease-in;
   animation: fadeInUp 0.2s both;
-  min-width: 260px;
-  max-width: 800px;
-  max-height: calc(100vh - 32px);
-  overflow: auto;
-  border-radius: var(--radius-l);
   background: var(--color-black);
+  border-radius: var(--radius-l);
   box-shadow: var(--box-shadow-low);
+  max-height: calc(100vh - 32px);
+  max-width: 800px;
+  min-width: 260px;
+  overflow: auto;
+  transition: all 0.2s ease-in;
 
   /* Animation */
   @keyframes fadeInUp {
@@ -46,11 +43,16 @@ export const Container = styled.div`
   }
 `
 
+export const MenuSectionContainer = styled.div`
+  margin: 0;
+  padding: 0;
+`
+
 export const MenuSection = styled.div`
-  padding: 4px 0px;
   border-bottom: 1px solid var(--color-neutral-800);
   display: flex;
   flex-direction: column;
+  padding: 4px 0px;
   div:last-child {
     border-bottom: 0px;
   }
@@ -61,29 +63,29 @@ interface IMenuItem {
 }
 
 export const MenuItem = styled.button<IMenuItem>`
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px;
-  margin: 0px 4px;
-  color: var(--color-white);
-  border: 0;
-  border-radius: var(--radius-m);
-  width: auto;
-  line-height: 16px;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
   background-color: ${({ isFocused }) =>
     isFocused ? `var(--color-neutral-800)` : 'transparent'};
+  border-radius: var(--radius-m);
+  border: 0;
+  color: var(--color-white);
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 0.01em;
+  line-height: 16px;
+  margin: 0px 4px;
+  overflow: hidden;
+  padding: 12px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: auto;
   &:hover {
     background-color: var(--color-neutral-800);
   }
 `
 
-export const MenuItemContentMain = styled.div`
+export const MenuItemContentMain = styled.span`
   flex: 1 1 0%;
   margin-right: 16px;
 `

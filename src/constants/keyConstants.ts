@@ -1,23 +1,39 @@
-export const KEY_OS = 'META'
-export const KEY_E = 'E'
-export const KEY_X = 'X'
-export const KEY_K = 'K'
-export const KEY_J = 'J'
-export const KEY_U = 'U'
-export const KEY_R = 'R'
-export const KEY_ENTER = 'ENTER'
-export const KEY_SHIFT = 'SHIFT'
-export const KEY_CONTROL = 'CONTROL'
-export const KEY_FORWARD_SLASH = '/'
-export const KEY_ALT = 'ALT'
-export const KEY_DIGIT_1 = '1'
-export const KEY_DIGIT_2 = '2'
-export const KEY_DIGIT_3 = '3'
-export const KEY_DIGIT_4 = '4'
-export const KEY_DOT = '.'
-export const KEY_BACKSPACE = 'BACKSPACE'
-export const KEY_ESCAPE = 'ESCAPE'
-export const KEY_ARROW_DOWN = 'ARROWDOWN'
-export const KEY_ARROW_UP = 'ARROWUP'
-export const KEY_ARROW_RIGHT = 'ARROWRIGHT'
-export const KEY_ARROW_LEFT = 'ARROWLEFT'
+export const KEY_NUMBERS = {
+  1: '1',
+  2: '2',
+  3: '3',
+  4: '4',
+}
+
+export const KEY_ARROWS = {
+  down: 'ArrowDown',
+  left: 'ArrowLeft',
+  right: 'ArrowRight',
+  up: 'ArrowUp',
+}
+
+export const KEY_LETTERS = {
+  c: 'c',
+  e: 'e',
+  j: 'j',
+  k: 'k',
+  r: 'r',
+  s: 's',
+  u: 'u',
+  x: 'x',
+}
+
+export const KEY_SPECIAL = {
+  alt: 'Alt',
+  backspace: 'Backspace',
+  control: 'Control',
+  dot: '.',
+  enter: 'Enter',
+  escape: 'Escape',
+  forwardSlash: '/',
+  os: 'Meta',
+  shift: 'Shift',
+}
+
+export const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']
+export const WHITELISTED_SYSTEM_KEY_COMBOS = [[KEY_SPECIAL.os, KEY_LETTERS.r]]

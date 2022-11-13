@@ -1,15 +1,17 @@
+import { QiMail } from 'images/svgIcons/quillIcons'
 import { Children, useRef, useState } from 'react'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import getRandomColor from 'utils/getRandomColor'
+import getUserInitials from 'utils/getUserInitials'
+
+import CardContent from '@mui/material/CardContent'
 import Popper, { PopperPlacementType } from '@mui/material/Popper'
 import { Box } from '@mui/system'
-import CardContent from '@mui/material/CardContent'
-import getUserInitials from '../../../utils/getUserInitials'
-import getRandomColor from '../../../utils/getRandomColor'
-import { IContact } from '../../../store/storeTypes/contactsTypes'
+
 import * as S from './ContactCardStyles'
-import { QiMail } from '../../../images/svgIcons/quillIcons'
 
 interface IContactCard {
-  avatarURL: string
+  userEmail: string
   children: JSX.Element
   contact: IContact
   offset?: [number, number]
@@ -20,7 +22,7 @@ const NO_EMAIL = 'No address available'
 const NO_NAME = 'No display name'
 
 const ContactCard = ({
-  avatarURL,
+  userEmail,
   contact,
   offset = [20, 10],
   children,
@@ -42,7 +44,7 @@ const ContactCard = ({
     cardDelay.current = setTimeout(() => setIsHovering(hover), 500)
   }
 
-  const staticInitials = getUserInitials(avatarURL)
+  const staticInitials = getUserInitials(userEmail)
 
   return (
     <Box
@@ -77,7 +79,7 @@ const ContactCard = ({
         placement={placement}
       >
         <S.ContactCard>
-          <S.ContactCardAvatar randomColor={getRandomColor(staticInitials)}>
+          <S.ContactCardAvatar $randomColor={getRandomColor(staticInitials)}>
             <span>{staticInitials}</span>
           </S.ContactCardAvatar>
           <CardContent>
@@ -87,7 +89,7 @@ const ContactCard = ({
             <S.ContactCardDetails>
               <S.ContactCardEmailButton
                 disabled={!emailAddress}
-                randomColor={getRandomColor(staticInitials)}
+                $randomColor={getRandomColor(staticInitials)}
               >
                 <QiMail size={20} />
               </S.ContactCardEmailButton>

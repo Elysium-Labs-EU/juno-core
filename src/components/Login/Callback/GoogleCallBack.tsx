@@ -1,15 +1,14 @@
-import qs from 'qs'
+import Baseloader from 'components/BaseLoader/BaseLoader'
+import * as global from 'constants/globalConstants'
+import RoutesConstants from 'constants/routes.json'
+import userApi from 'data/userApi'
 import { useEffect } from 'react'
 import { push } from 'redux-first-history'
-
-import RoutesConstants from '../../../constants/routes.json'
-import userApi from '../../../data/userApi'
-import { setIsAuthenticated } from '../../../store/baseSlice'
-import { useAppDispatch } from '../../../store/hooks'
-import { setSystemStatusUpdate } from '../../../store/utilsSlice'
-import handleUserTokens from '../../../utils/handleUserTokens'
-import Baseloader from '../../BaseLoader/BaseLoader'
-import * as global from '../../../constants/globalConstants'
+import { setIsAuthenticated } from 'store/baseSlice'
+import { useAppDispatch } from 'store/hooks'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import handleUserTokens from 'utils/handleUserTokens'
+import parseQueryString from 'utils/parseQueryString'
 
 /**
  * @component GoogleCallBack
@@ -22,12 +21,8 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const { code, state }: { code?: string; state?: string } = qs.parse(
-        window.location.search,
-        {
-          ignoreQueryPrefix: true,
-        }
-      )
+      const { code, state }: { code?: string; state?: string } =
+        parseQueryString(window.location.search)
       try {
         const body = {
           code,

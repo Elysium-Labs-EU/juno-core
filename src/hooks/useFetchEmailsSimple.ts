@@ -1,9 +1,9 @@
+import * as global from 'constants/globalConstants'
 import { useEffect } from 'react'
-import * as global from '../constants/globalConstants'
-import { fetchEmailsSimple } from '../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectLoadedInbox } from '../store/labelsSlice'
-import { selectIsFlexibleFlowActive } from '../store/utilsSlice'
+import { fetchEmailsSimple } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLoadedInbox } from 'store/labelsSlice'
+import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
 
 /**
  * @function useFetchEmailsSimple

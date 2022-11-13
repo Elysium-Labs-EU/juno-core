@@ -61,7 +61,7 @@ export const Dialog = styled.div`
   min-width: 600px;
   min-height: 300px;
   background-color: var(--color-white);
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px;
+  box-shadow: (--box-shadow-low);
   border-radius: 5px;
   overflow: hidden;
   z-index: 1;

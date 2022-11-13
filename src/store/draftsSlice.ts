@@ -1,30 +1,42 @@
-/* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import archiveMail from 'components/EmailOptions/ArchiveMail'
+import * as global from 'constants/globalConstants'
+import draftApi from 'data/draftApi'
+import messageApi from 'data/messageApi'
 import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
-import draftApi from '../data/draftApi'
-import { closeMail, setIsProcessing, setSystemStatusUpdate } from './utilsSlice'
-import { setCurrentEmail, setIsReplying } from './emailDetailSlice'
-import type { AppThunk, RootState } from './store'
 import {
-  DraftDetails,
-  DraftsState,
-  EnhancedDraftDetails,
-  OpenDraftEmailType,
-  IDraftDetailObject,
-} from './storeTypes/draftsTypes'
+  setCurrentEmail,
+  setIsForwarding,
+  setIsReplying,
+} from 'store/emailDetailSlice'
 import {
   listRemoveItemDetail,
   listRemoveItemDetailBatch,
   listRemoveItemDetailDraft,
   setSelectedEmails,
-} from './emailListSlice'
-import * as global from '../constants/globalConstants'
-import archiveMail from '../components/EmailOptions/ArchiveMail'
-import messageApi from '../data/messageApi'
-import getEmailListIndex from '../utils/getEmailListIndex'
-import { IComposePayload } from './storeTypes/composeTypes'
-import { prepareFormData } from '../utils/prepareMessage'
+} from 'store/emailListSlice'
+import { IComposePayload } from 'store/storeTypes/composeTypes'
+import {
+  DraftDetails,
+  DraftsState,
+  EnhancedDraftDetails,
+  IDraftDetailObject,
+  OpenDraftEmailType,
+} from 'store/storeTypes/draftsTypes'
+import {
+  closeMail,
+  navigateNextMail,
+  setIsProcessing,
+  setIsSending,
+  setSystemStatusUpdate,
+} from 'store/utilsSlice'
+import getEmailListIndex from 'utils/getEmailListIndex'
+import { prepareFormData } from 'utils/prepareMessage'
+
+/* eslint-disable no-param-reassign */
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import type { AppThunk, RootState } from 'store/store'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
@@ -42,24 +54,33 @@ export const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {
-    listRemoveDraftThread: (state, { payload }: PayloadAction<any>) => {
-      const { threadId }: { threadId: string } = payload
+    listRemoveDraftThread: (
+      state,
+      { payload }: PayloadAction<{ threadId: string }>
+    ) => {
+      const { threadId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.threadId !== threadId
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftMessage: (state, { payload }: PayloadAction<any>) => {
-      const { messageId }: { messageId: string } = payload
+    listRemoveDraftMessage: (
+      state,
+      { payload }: PayloadAction<{ messageId: string }>
+    ) => {
+      const { messageId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList: IDraftDetailObject[] = copyCurrentDraftList.filter(
         (item) => item.message.id !== messageId
       )
       state.draftList = newDraftList
     },
-    listRemoveDraftBatch: (state, { payload }: PayloadAction<any>) => {
-      const { threadIds }: { threadIds: string[] } = payload
+    listRemoveDraftBatch: (
+      state,
+      { payload }: PayloadAction<{ threadIds: string[] }>
+    ) => {
+      const { threadIds } = payload
       const copyCurrentDraftList = state.draftList
 
       const filterArray = () => {
@@ -136,6 +157,7 @@ export const createUpdateDraft =
     }
   }
 
+const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 const pushDraftDetails =
   ({ draft, draft: { message } }: EnhancedDraftDetails): AppThunk =>
   async (dispatch, getState) => {
@@ -166,7 +188,7 @@ const pushDraftDetails =
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: 'Error setting up compose email.',
+          message: ERROR_OPEN_DRAFT_EMAIL,
         })
       )
     }
@@ -183,7 +205,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: 'Error setting up compose email.',
+            message: ERROR_OPEN_DRAFT_EMAIL,
           })
         )
       }
@@ -191,14 +213,13 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: 'Error setting up compose email.',
+          message: ERROR_OPEN_DRAFT_EMAIL,
         })
       )
     }
   }
 }
 
-const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 export const openDraftEmail =
   ({ messageId, id }: OpenDraftEmailType): AppThunk =>
   async (dispatch, getState) => {
@@ -208,12 +229,11 @@ export const openDraftEmail =
         const { payload } = await dispatch(fetchDrafts())
         if (payload?.drafts && payload.drafts.length > 0) {
           const { drafts }: { drafts: IDraftDetailObject[] } = payload
-          const draftIdFilter = drafts.filter(
+          const getDraft = drafts.find(
             (draft) => draft.message.id === messageId
           )
-          const draftId = draftIdFilter[0].id
-          if (!isEmpty(draftId)) {
-            dispatch(loadDraftDetails({ draftId }))
+          if (getDraft && !isEmpty(getDraft)) {
+            dispatch(loadDraftDetails({ draftId: getDraft.id }))
           } else {
             dispatch(
               setSystemStatusUpdate({
@@ -268,17 +288,17 @@ export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
   const { draftList } = getState().drafts
   dispatch(
     listRemoveItemDetailBatch({
-      messageIds: selectedEmails,
+      messageIds: selectedEmails.selectedIds,
     })
   )
   dispatch(setSelectedEmails([]))
-  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails }))
-  for (let i = 0; selectedEmails.length > i; i += 1) {
+  dispatch(listRemoveDraftBatch({ threadIds: selectedEmails.selectedIds }))
+  for (let i = 0; selectedEmails.selectedIds.length > i; i += 1) {
     try {
       const draftObject =
         draftList.length > 0 &&
         draftList.find(
-          (draft) => draft?.message?.threadId === selectedEmails[i]
+          (draft) => draft?.message?.threadId === selectedEmails.selectedIds[i]
         )
       if (
         typeof draftObject === 'object' &&
@@ -315,7 +335,7 @@ export const deleteDraft =
     } finally {
       dispatch(setIsProcessing(false))
       // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
-      if (coreStatus === global.CORE_STATUS_SEARCHING) {
+      if (coreStatus === global.CORE_STATUS_MAP.searching) {
         dispatch(
           setSystemStatusUpdate({
             type: 'info',
@@ -337,11 +357,40 @@ export const sendComposedEmail =
   async (dispatch, getState) => {
     try {
       const { emailList } = getState().email
+      const { coreStatus, isForwarding, isReplying } = getState().emailDetail
+      dispatch(setIsSending({ message: 'Sending your mail...', type: 'info' }))
+      // Reset the replying state to false on sending, to close the composer.
+      if (isReplying) {
+        dispatch(setIsReplying(false))
+      }
+      // Reset the forwarding state to false on sending, to close the composer.
+      if (isForwarding) {
+        dispatch(setIsForwarding(false))
+      }
+      // Reset the emailDetail state and return to the main page on sending whenever the user is not in sorting or focused mode.
+      if (
+        coreStatus !== global.CORE_STATUS_MAP.sorting &&
+        coreStatus !== global.CORE_STATUS_MAP.focused
+      ) {
+        dispatch(setCurrentEmail(''))
+        dispatch(closeMail())
+      }
+
+      // Send the user to the next email when it is sorting of focused
+      if (
+        coreStatus === global.CORE_STATUS_MAP.sorting ||
+        coreStatus === global.CORE_STATUS_MAP.focused
+      ) {
+        dispatch(navigateNextMail())
+      }
+      // TODO: Set the timeout for sending on the backend.
       // If the id is found on the draft details, send the draft email via the Google servers as a draft.
       if (localDraftDetails?.id) {
         const response = await draftApi().sendDraft({
           id: localDraftDetails?.id,
+          timeOut: global.MESSAGE_SEND_DELAY,
         })
+
         // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
         if (response?.status === 200) {
           const { labelIds } = getState().labels
@@ -361,15 +410,9 @@ export const sendComposedEmail =
                 staticIndexActiveEmailList,
               })
             )
-
-          dispatch(setCurrentEmail(''))
-          dispatch(closeMail())
         } else {
           dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: 'Error sending email.',
-            })
+            setIsSending({ message: 'Error sending your mail', type: 'error' })
           )
         }
       }
@@ -383,26 +426,20 @@ export const sendComposedEmail =
           name,
         })
 
-        const response = await messageApi().sendMessage(formData)
-        if (response?.status === 200) {
-          dispatch(setCurrentEmail(''))
-          dispatch(closeMail())
-        } else {
+        const response = await messageApi().sendMessage({
+          data: formData,
+          timeOut: global.MESSAGE_SEND_DELAY,
+        })
+        if (response?.status !== 200) {
           dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: 'Error sending email.',
-            })
+            setIsSending({ message: 'Error sending your mail', type: 'error' })
           )
         }
       }
     } catch (err) {
       console.error(err)
       dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error sending email.',
-        })
+        setIsSending({ message: 'Error sending your mail', type: 'error' })
       )
     }
   }

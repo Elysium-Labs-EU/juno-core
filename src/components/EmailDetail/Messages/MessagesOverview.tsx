@@ -1,21 +1,26 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import EmailDetailOptions from './EmailDetailOptions'
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import { openDraftEmail } from 'store/draftsSlice'
+import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+
+import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
-import * as local from '../../../constants/emailDetailConstants'
-import * as global from '../../../constants/globalConstants'
-import * as ES from '../EmailDetailStyles'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import ReplyComposer from './InlineComposers/ReplyComposer'
-import ForwardingComposer from './InlineComposers/ForwardingComposer'
-import { openDraftEmail } from '../../../store/draftsSlice'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import EmailDetailOptions from './EmailDetailOptions'
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
+import ForwardingComposer from './InlineComposers/ForwardingComposer'
+import ReplyComposer from './InlineComposers/ReplyComposer'
 
 const MappedMessages = ({
   threadDetail,
@@ -24,9 +29,9 @@ const MappedMessages = ({
   setShouldRefreshDetail,
 }: {
   threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: (value: string | null) => void
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
   indexMessageListener: (value: number) => void
-  setShouldRefreshDetail: (value: boolean) => void
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }) => {
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
@@ -103,7 +108,7 @@ interface IMessagesOverview {
   isReplying: boolean
   isForwarding: boolean
   labelIds: string[]
-  setShouldRefreshDetail: (value: boolean) => void
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
 const MessagesOverview = ({

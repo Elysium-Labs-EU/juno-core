@@ -1,8 +1,9 @@
+import RouteConstants from 'constants/routes.json'
+import Logo from 'images/Juno_logo_dark.png'
 import { Link } from 'react-router-dom'
-import RouteConstants from '../../constants/routes.json'
-import Logo from '../../images/Juno_logo_dark.png'
+import * as GS from 'styles/globalStyles'
+
 import * as S from './PageNotFoundStyles'
-import * as GS from '../../styles/globalStyles'
 
 const PAGE_NOT_FOUND = 'This page cannot be found'
 const SUB_TEXT = 'You may want to start over'

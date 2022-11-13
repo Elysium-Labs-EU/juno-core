@@ -1,6 +1,6 @@
-import { updateEmailLabel } from '../../store/emailListSlice'
-import * as global from '../../constants/globalConstants'
-import { AppDispatch } from '../../store/store'
+import * as global from 'constants/globalConstants'
+import { updateEmailLabel } from 'store/emailListSlice'
+import { AppDispatch } from 'store/store'
 
 interface IArchiveEmail {
   threadId: string

@@ -1,51 +1,39 @@
-import { Box, FormControlLabel, MenuItem } from '@mui/material'
-import * as S from '../../SettingsStyles'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
+import StyledSelect from 'components/Elements/Select/StyledSelect'
+import { fetchSizeKeyMap } from 'constants/baseConstants'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
-  setEmailFetchSize,
   selectEmailListSize,
   selectSettingsLabelId,
-} from '../../../../store/utilsSlice'
-import updateSettingsLabel from '../../../../utils/settings/updateSettingsLabel'
-import { fetchSizeKeyMap } from '../../../../constants/baseConstants'
+  setEmailFetchSize,
+} from 'store/utilsSlice'
+import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
-const LABEL = 'Emails fetched at a time'
-const POSSIBLE_FETCH_SIZES = ['20', '25', '30', '35']
+const selectOptions = {
+  id: 'emailSize',
+  label: 'Emails fetched at a time',
+  options: [{ value: '20' }, { value: '25' }, { value: '30' }, { value: '35' }],
+}
 
 const EmailSize = () => {
   const fetchCount = useAppSelector(selectEmailListSize)
   const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const dispatch = useAppDispatch()
 
-  const handleEmailListSizeChange = (e: any) => {
+  const handleEmailListSizeChange = (selectedValue: string) => {
     updateSettingsLabel({
       settingsLabelId,
-      fetchSize: fetchSizeKeyMap[e.target.value],
+      fetchSize: fetchSizeKeyMap[parseInt(selectedValue, 10)],
     })
-    dispatch(setEmailFetchSize(e.target.value))
+    dispatch(setEmailFetchSize(parseInt(selectedValue, 10)))
   }
 
   return (
-    <FormControlLabel
-      label={LABEL}
-      control={
-        <Box sx={{ minWidth: 25, marginRight: 0.5 }}>
-          <S.StyledSelect
-            value={fetchCount}
-            inputProps={{
-              name: 'emailSize',
-              id: 'emailSize-select',
-            }}
-            onChange={handleEmailListSizeChange}
-          >
-            {POSSIBLE_FETCH_SIZES.map((size) => (
-              <MenuItem key={size} value={size}>
-                {size}
-              </MenuItem>
-            ))}
-          </S.StyledSelect>
-        </Box>
-      }
+    <StyledSelect
+      ariaLabelTrigger="Email fetch size"
+      selectOptions={selectOptions}
+      onValueChange={handleEmailListSizeChange}
+      value={fetchCount.toString()}
+      label={selectOptions.label}
     />
   )
 }

@@ -1,55 +1,95 @@
-import { useCallback } from 'react'
-import CustomAttentionButton from '../Elements/Buttons/CustomAttentionButton'
-import { selectLabelIds } from '../../store/labelsSlice'
+import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import * as local from 'constants/todoConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiJump } from 'images/svgIcons/quillIcons'
+import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+  selectSelectedEmails,
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { AppDispatch } from 'store/store'
+import {
+  IEmailListObject,
+  ISelectedEmail,
+} from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsLoading,
-} from '../../store/utilsSlice'
-import * as local from '../../constants/todoConstants'
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import startSort from '../../utils/startSort'
-import {
-  selectActiveEmailListIndex,
-  selectEmailList,
-} from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import labelURL from '../../utils/createLabelURL'
-import {
-  setCoreStatus,
-  setSessionViewIndex,
-} from '../../store/emailDetailSlice'
-import useMultiKeyPress from '../../hooks/useMultiKeyPress'
-import { setModifierKey } from '../../utils/setModifierKey'
-import { QiJump } from '../../images/svgIcons/quillIcons'
+} from 'store/utilsSlice'
+import labelURL from 'utils/createLabelURL'
+import { findLabelByName } from 'utils/findLabel'
+import { setModifierKey } from 'utils/setModifierKey'
+import startSort from 'utils/startSort'
 
-const actionKeys = [setModifierKey, keyConstants.KEY_E]
+const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
+
+export const activateTodo = ({
+  activeEmailListIndex,
+  dispatch,
+  emailList,
+  labelIds,
+  selectedEmails,
+}: {
+  activeEmailListIndex: number
+  dispatch: AppDispatch
+  emailList: IEmailListObject[]
+  labelIds: string[]
+  selectedEmails?: ISelectedEmail
+}) => {
+  const staticLabelURL = labelURL(labelIds)
+  if (staticLabelURL) {
+    startSort({
+      dispatch,
+      labelURL: staticLabelURL,
+      emailList,
+      selectedEmails,
+      activeEmailListIndex,
+    })
+    dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
+    dispatch(setSessionViewIndex(0))
+  }
+}
 
 const TodoFocusOption = () => {
-  const labelIds = useAppSelector(selectLabelIds)
-  const isLoading = useAppSelector(selectIsLoading)
-  const inSearch = useAppSelector(selectInSearch)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const activeModal = useAppSelector(selectActiveModal)
   const emailList = useAppSelector(selectEmailList)
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const inSearch = useAppSelector(selectInSearch)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const dispatch = useAppDispatch()
 
-  const handleEvent = useCallback(() => {
-    const staticLabelURL = labelURL(labelIds)
-    if (staticLabelURL) {
-      startSort({
-        dispatch,
-        labelURL: staticLabelURL,
-        emailList,
-        activeEmailListIndex,
-      })
-      dispatch(setCoreStatus(global.CORE_STATUS_FOCUSED))
-      dispatch(setSessionViewIndex(0))
-    }
-  }, [activeEmailListIndex, dispatch, emailList, labelIds])
+  const handleEvent = () => {
+    activateTodo({
+      activeEmailListIndex,
+      dispatch,
+      emailList,
+      labelIds,
+      selectedEmails: selectedEmails.labelIds.includes(
+        findLabelByName({
+          storageLabels,
+          LABEL_NAME: global.TODO_LABEL_NAME,
+        })?.id ?? ''
+      )
+        ? selectedEmails
+        : undefined,
+    })
+  }
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch || Boolean(activeModal))
+  useKeyboardShortcut({
+    actionKeys,
+    handleEvent,
+    isDisabled: inSearch || Boolean(activeModal),
+    refreshOnDeps: [labelIds],
+  })
 
   const isDisabled =
     isLoading ||
@@ -58,9 +98,25 @@ const TodoFocusOption = () => {
 
   return (
     <CustomAttentionButton
+      tabIndex={-1}
       onClick={handleEvent}
       disabled={isDisabled}
-      label={local.BUTTON_FOCUS}
+      label={
+        selectedEmails.selectedIds.length > 0 &&
+        selectedEmails.labelIds.includes(
+          findLabelByName({
+            storageLabels,
+            LABEL_NAME: global.TODO_LABEL_NAME,
+          })?.id ?? ''
+        ) ? (
+          <>
+            {local.BUTTON_FOCUS}
+            <span> ({selectedEmails.selectedIds.length})</span>
+          </>
+        ) : (
+          local.BUTTON_FOCUS
+        )
+      }
       title={
         !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
       }

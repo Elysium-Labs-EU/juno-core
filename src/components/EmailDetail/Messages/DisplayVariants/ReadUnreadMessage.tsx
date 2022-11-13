@@ -1,33 +1,24 @@
-import * as React from 'react'
-import { useEffect, useMemo, useState } from 'react'
-import Popper, { PopperPlacementType } from '@mui/material/Popper'
-
-import * as global from '../../../../constants/globalConstants'
-import * as local from '../../../../constants/unreadConstants'
-import useClickOutside from '../../../../hooks/useClickOutside'
-import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
-import { selectProfile } from '../../../../store/baseSlice'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../../store/hooks'
-import { selectLabelIds } from '../../../../store/labelsSlice'
+import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
+import ContactCard from 'components/Elements/ContactCard/ContactCard'
+import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
+import EmailLabel from 'components/Elements/EmailLabel'
+import EmailSnippet from 'components/Elements/EmailSnippet'
+import EmailSubject from 'components/Elements/EmailSubject'
+import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
+import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import Seo from 'components/Elements/Seo'
+import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
+import * as global from 'constants/globalConstants'
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import { selectProfile } from 'store/baseSlice'
+import { selectIsReplying } from 'store/emailDetailSlice'
+import { useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
 import {
   IEmailListThreadItem,
   IEmailMessage,
-} from '../../../../store/storeTypes/emailListTypes'
-import ContactCard from '../../../Elements/ContactCard/ContactCard'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import EmailAvatar from '../../../Elements/Avatar/EmailAvatar'
-import EmailHasAttachmentSimple from '../../../Elements/EmailHasAttachmentSimple'
-import EmailLabel from '../../../Elements/EmailLabel'
-import EmailSnippet from '../../../Elements/EmailSnippet'
-import EmailSubject from '../../../Elements/EmailSubject'
-import SenderNameFull from '../../../Elements/SenderName/senderNameFull'
-import SenderNamePartial from '../../../Elements/SenderName/senderNamePartial'
-import Seo from '../../../Elements/Seo'
-import TimeStamp from '../../../Elements/TimeStamp/TimeStampDisplay'
+} from 'store/storeTypes/emailListTypes'
+
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
@@ -40,8 +31,8 @@ interface IReadMessage {
   message: IEmailMessage
   messageIndex: number
   threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: (value: string | null) => void
-  setShouldRefreshDetail: (value: boolean) => void
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
 const ReadUnreadMessage = ({
@@ -54,25 +45,15 @@ const ReadUnreadMessage = ({
 }: IReadMessage) => {
   const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [placement, setPlacement] = useState<PopperPlacementType>()
-  const [showMenu, setShowMenu] = useState<boolean>(false)
   const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
-  const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
-  const { ref } = useClickOutside({
-    onClickOutside: () => {
-      setAnchorEl(null)
-      setShowMenu(false)
-    },
-  })
 
   useEffect(() => {
     let mounted = true
     if (threadDetail && threadDetail?.messages) {
       if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message?.labelIds?.includes(local.UNREAD)) {
+        if (message && message?.labelIds?.includes(global.UNREAD_LABEL)) {
           setOpen(true)
         }
         if (
@@ -122,32 +103,9 @@ const ReadUnreadMessage = ({
     }
   }, [isReplying, open])
 
-  const handleSpecificMenu =
-    (newPlacement: PopperPlacementType) =>
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      setAnchorEl(anchorEl ? null : event.currentTarget)
-      setShowMenu((prev) => placement !== newPlacement || !prev)
-      setPlacement(newPlacement)
-    }
-  const menuPopperId = showMenu ? 'specifc-email-popper' : undefined
-
-  /**
-   * Open or close the email detail - if there is a Popper active, close it.
-   */
   const handleClick = () => {
     setOpen((currState) => !currState)
-    if (anchorEl) {
-      setAnchorEl(null)
-      setShowMenu(false)
-    }
   }
-
-  useEffect(() => {
-    if (isForwarding || isReplying) {
-      setAnchorEl(null)
-      setShowMenu(false)
-    }
-  }, [isForwarding, isReplying])
 
   const staticSenderNameFull = useMemo(
     () => SenderNameFull(message.payload.headers?.from, emailAddress),
@@ -170,10 +128,10 @@ const ReadUnreadMessage = ({
           <S.ClosedAvatarSender>
             <ContactCard
               offset={[30, 10]}
-              avatarURL={staticSenderNameFull}
+              userEmail={staticSenderNameFull}
               contact={staticSenderNamePartial}
             >
-              <EmailAvatar avatarURL={staticSenderNameFull} />
+              <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
               <span
@@ -210,10 +168,10 @@ const ReadUnreadMessage = ({
               <S.ClickHeader onClick={handleClick} aria-hidden="true">
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticSenderNameFull}
+                  userEmail={staticSenderNameFull}
                   contact={staticSenderNamePartial}
                 >
-                  <EmailAvatar avatarURL={staticSenderNameFull} />
+                  <EmailAvatar userEmail={staticSenderNameFull} />
                 </ContactCard>
                 <S.EmailDetailTitle title={staticEmailSubject}>
                   {staticEmailSubject}
@@ -224,35 +182,19 @@ const ReadUnreadMessage = ({
                   <EmailHasAttachmentSimple files={message?.payload?.files} />
                 </S.ChildDiv>
                 {labelIds.includes(global.SEARCH_LABEL) && (
-                  <EmailLabel
-                    labelNames={threadDetail.messages[messageIndex].labelIds}
-                  />
+                  <EmailLabel labelNames={message.labelIds} />
                 )}
                 <S.ChildDiv>
                   <TimeStamp threadTimeStamp={message.internalDate} />
                 </S.ChildDiv>
                 <S.ChildDiv>
-                  <CustomIconButton
-                    onClick={handleSpecificMenu('bottom-start')}
-                    icon={<QiChevronDown />}
-                    aria-describedby={menuPopperId}
-                    title="Show message options"
+                  <SpecificEmailOptions
+                    handleClickListener={handleClickListener}
+                    messageIndex={messageIndex}
+                    setShouldRefreshDetail={setShouldRefreshDetail}
+                    threadDetail={threadDetail}
                   />
                 </S.ChildDiv>
-                <Popper
-                  id={menuPopperId}
-                  open={showMenu}
-                  anchorEl={anchorEl}
-                  placement={placement}
-                  ref={ref}
-                >
-                  <SpecificEmailOptions
-                    messageIndex={messageIndex}
-                    handleClickListener={handleClickListener}
-                    threadDetail={threadDetail}
-                    setShouldRefreshDetail={setShouldRefreshDetail}
-                  />
-                </Popper>
               </S.TimeAttachmentContainer>
             </S.HeaderFullWidth>
           </S.TopContainer>

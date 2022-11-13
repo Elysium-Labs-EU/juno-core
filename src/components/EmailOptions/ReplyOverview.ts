@@ -1,6 +1,6 @@
-import { setIsReplying } from '../../store/emailDetailSlice'
-import { AppDispatch } from '../../store/store'
-import { openEmail } from '../../store/utilsSlice'
+import { setIsReplying } from 'store/emailDetailSlice'
+import { AppDispatch } from 'store/store'
+import { openEmail } from 'store/utilsSlice'
 
 interface IReplyOverview {
   id: string

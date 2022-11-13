@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectIsSentryActive, setIsSentryActive } from 'store/utilsSlice'
 
 import * as Sentry from '@sentry/react'
 import { Integrations } from '@sentry/tracing'
-
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectIsSentryActive, setIsSentryActive } from '../store/utilsSlice'
 
 export default function useSentry(sentryDSN: string | undefined) {
   const isSentryActive = useAppSelector(selectIsSentryActive)

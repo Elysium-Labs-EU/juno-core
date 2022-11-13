@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios'
-import { errorHandling, instance } from './api'
+import { errorHandling, instance } from 'data/api'
 
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (data: FormData) => {
@@ -53,7 +53,7 @@ const draftApi = (signal?: AbortSignal) => ({
     }
   },
 
-  sendDraft: async (data: { id: string }) => {
+  sendDraft: async (data: { id: string; timeOut: number }) => {
     try {
       const res: AxiosResponse<any> = await instance.post(
         `/api/send-draft`,

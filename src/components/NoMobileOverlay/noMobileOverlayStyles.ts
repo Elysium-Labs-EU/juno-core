@@ -1,3 +1,4 @@
+import { breakPoint } from 'constants/themeConstants'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
@@ -6,18 +7,17 @@ export const Wrapper = styled.div`
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: white;
+  background-color: var(--color-white);
   display: flex;
   flex-flow: column;
   place-content: center;
-  background: #f0f0f0;
-  @media only screen and (min-width: 768px) {
+  background: var(--color-neutral-100);
+  @media only screen and (min-width: ${breakPoint.md}) {
     display: none;
   }
 `
 
 export const Inner = styled.div`
   padding: 2rem;
-  width: 90%;
   max-width: 600px;
 `

@@ -1,14 +1,17 @@
-import { useState } from 'react'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import * as global from 'constants/globalConstants'
+import { QiLinkOut } from 'images/svgIcons/quillIcons'
+import { FormEvent, useState } from 'react'
 import { FiCheck } from 'react-icons/fi'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import assertNonNullish from 'utils/assertNonNullish'
 
 import Botpoison from '@botpoison/browser'
 import { useFormspark } from '@formspark/use-formspark'
 
-import { QiLinkOut } from '../../../images/svgIcons/quillIcons'
-import * as GS from '../../../styles/globalStyles'
-import assertNonNullish from '../../../utils/assertNonNullish'
-import CustomModal from '../../Elements/Modal/CustomModal'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as S from './BetaAccessFormStyles'
 
 if (process.env.NODE_ENV === 'production') {
@@ -23,13 +26,9 @@ const botpoison = new Botpoison({
 
 const FORMSPARK_FORM_ID = import.meta.env.VITE_FORMSPARK_FORM_ID
 
-const BetaAccesForm = ({
-  betaFormOpen,
-  setBetaFormOpen,
-}: {
-  betaFormOpen: boolean
-  setBetaFormOpen: (value: boolean) => void
-}) => {
+const BetaAccesForm = () => {
+  const activeModal = useAppSelector(selectActiveModal)
+
   // Only assess this when the production version is active
   if (process.env.NODE_ENV === 'production') {
     assertNonNullish(FORMSPARK_FORM_ID, 'FormSpark ID not defined')
@@ -41,7 +40,7 @@ const BetaAccesForm = ({
   const [message, setMessage] = useState('')
   const [error, setError] = useState(false)
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       const { solution } = await botpoison.challenge()
@@ -54,17 +53,16 @@ const BetaAccesForm = ({
 
   return (
     <CustomModal
-      open={betaFormOpen}
+      open={activeModal === global.ACTIVE_MODAL_MAP.betaAccess}
       modalTitle="Beta Access"
       modalAriaLabel="beta-access-form"
-      handleClose={() => setBetaFormOpen(false)}
     >
       <>
-        <GS.TextMutedParagraph>
+        <GS.P muted>
           Request access to the private beta of Juno. Your email needs to be a
           Google email address.
-        </GS.TextMutedParagraph>
-        <GS.TextMutedParagraph>
+        </GS.P>
+        <GS.P muted>
           You can expect a reply on your request within a few hours. If you want
           to get in direct contact, use the{' '}
           <S.StyledLink href={import.meta.env.VITE_DISCORD_SOCIAL_URL}>
@@ -73,7 +71,7 @@ const BetaAccesForm = ({
               Discord Community.
             </span>
           </S.StyledLink>
-        </GS.TextMutedParagraph>
+        </GS.P>
         <S.StyledForm onSubmit={onSubmit}>
           {!complete && (
             <>

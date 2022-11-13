@@ -1,4 +1,4 @@
-import { LinearProgress } from '@mui/material'
+import LinearProgress from '@mui/material/LinearProgress'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`

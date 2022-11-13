@@ -1,5 +1,5 @@
-import * as global from '../constants/globalConstants'
-import removeCookie from './cookie/removeCookie'
+import * as global from 'constants/globalConstants'
+import removeCookie from 'utils/cookie/removeCookie'
 
 const handleUserTokens = (response?: any) => ({
   setIdToken: () => {

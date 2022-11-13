@@ -1,6 +1,7 @@
+import userApi from 'data/userApi'
+import handleUserTokens from 'utils/handleUserTokens'
+
 import * as S from '../NavigationMoreStyles'
-import handleUserTokens from '../../../../../utils/handleUserTokens'
-import userApi from '../../../../../data/userApi'
 
 export const handleLogout = async () => {
   const response = await userApi().logoutUser()

@@ -1,22 +1,21 @@
-import * as S from './GeneralStyles'
-import * as SS from '../SettingsStyles'
-import EmailSize from './EmailSize/EmailSize'
-import ShowAvatar from './ShowAvatar/ShowAvatar'
-import StrictFlow from './StrictFlow/StrictFlow'
-import AlternateActions from './AlternateActions/AlternateActions'
-import SentryToggle from './SentryToggle/SentryToggle'
+import AlternateActions from 'components/Settings/General/AlternateActions/AlternateActions'
+import EmailSize from 'components/Settings/General/EmailSize/EmailSize'
+import SentryToggle from 'components/Settings/General/SentryToggle/SentryToggle'
+import ShowAvatar from 'components/Settings/General/ShowAvatar/ShowAvatar'
+import StrictFlow from 'components/Settings/General/StrictFlow/StrictFlow'
+import * as S from 'components/Settings/SettingsStyles'
 
 const TITLE = 'General'
 
 const General = () => (
-  <S.Wrapper>
-    <SS.SettingsSubHeader>{TITLE}</SS.SettingsSubHeader>
+  <S.SettingsInnerContainer>
+    <S.SettingsSubHeader>{TITLE}</S.SettingsSubHeader>
     <ShowAvatar />
     <EmailSize />
     <StrictFlow />
     <AlternateActions />
     <SentryToggle />
-  </S.Wrapper>
+  </S.SettingsInnerContainer>
 )
 
 export default General

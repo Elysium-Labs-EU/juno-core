@@ -1,6 +1,6 @@
-import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import messageApi from '../data/messageApi'
-import base64toBlob from './base64toBlob'
+import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import messageApi from 'data/messageApi'
+import base64toBlob from 'utils/base64toBlob'
 
 /**
  * @function convertB64AttachmentToFile

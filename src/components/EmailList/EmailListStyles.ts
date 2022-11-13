@@ -1,17 +1,12 @@
 import styled from 'styled-components'
 
 export const Scroll = styled.div`
-  position: relative;
-  width: 100%;
-  height: 80vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  /* scrollbar-width: none; */
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  width: 100%;
 `
 
 export const LoadMoreContainer = styled.div`

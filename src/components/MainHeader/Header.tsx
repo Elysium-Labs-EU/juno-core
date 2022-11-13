@@ -1,23 +1,22 @@
-import { memo } from 'react'
+import ArchiveHeader from 'components/Archive/ArchiveHeader'
+import CommandPallette from 'components/CommandPalette/CommandPalette'
+import ComposeHeader from 'components/Compose/ComposeHeader'
+import DraftHeader from 'components/Draft/DraftHeader'
+import Feedback from 'components/Help/Feedback/Feedback'
+import KeyboardCombos from 'components/Help/KeyboardCombos/KeyboardCombos'
+import InboxHeader from 'components/Inbox/InboxHeader'
+import Introduction from 'components/Introduction/Introduction'
+import NoMobileOverlay from 'components/NoMobileOverlay/noMobileOverlay'
+import SentHeader from 'components/Sent/SentHeader'
+import Settings from 'components/Settings/Settings'
+import SpamHeader from 'components/Spam/SpamHeader'
+import TodoHeader from 'components/ToDo/TodoHeader'
+import * as global from 'constants/globalConstants'
 import { useLocation } from 'react-router-dom'
-import ComposeHeader from '../Compose/ComposeHeader'
-import InboxHeader from '../Inbox/InboxHeader'
-import TodoHeader from '../ToDo/TodoHeader'
-import DraftHeader from '../Draft/DraftHeader'
-import SpamHeader from '../Spam/SpamHeader'
-import SentHeader from '../Sent/SentHeader'
-import NoMobileOverlay from '../NoMobileOverlay'
-import Search from '../Search/Search'
-import Settings from '../Settings/Settings'
-import Introduction from '../Introduction/Introduction'
-import { useAppSelector } from '../../store/hooks'
-import { selectSelectedEmails } from '../../store/emailListSlice'
-import SelectedOptions from './SelectedOptions/SelectedOptions'
-import KeyboardCombos from '../Help/KeyboardCombos/KeyboardCombos'
-import Feedback from '../Help/Feedback/Feedback'
-import ArchiveHeader from '../Archive/ArchiveHeader'
+import { useAppSelector } from 'store/hooks'
+import { selectActiveModal } from 'store/utilsSlice'
 
-const SetHeader = memo(() => {
+const SetHeader = () => {
   const location = useLocation()
 
   // The email detail header is coming from EmailDetail.
@@ -43,30 +42,20 @@ const SetHeader = memo(() => {
     return <ArchiveHeader />
   }
   return null
-})
-
-const ShowIntroduction = memo(() => {
-  const location = useLocation()
-
-  if (location.pathname === '/') {
-    return <Introduction />
-  }
-  return null
-})
+}
 
 const Header = () => {
-  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const activeModal = useAppSelector(selectActiveModal)
 
   return (
     <>
-      <ShowIntroduction />
+      <CommandPallette />
+      {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
+      {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
       <NoMobileOverlay />
       <SetHeader />
-      <Search />
-      <Settings />
-      <KeyboardCombos />
-      <Feedback />
-      {selectedEmails.length > 0 && <SelectedOptions />}
+      {global.ACTIVE_MODAL_MAP.settings === activeModal && <Settings />}
+      {global.ACTIVE_MODAL_MAP.intro === activeModal && <Introduction />}
     </>
   )
 }

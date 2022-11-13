@@ -1,28 +1,16 @@
-import prettyBytes from 'pretty-bytes'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import { IEmailAttachmentType, IFetchedAttachment } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import * as global from 'constants/globalConstants'
+import { QiCheckmark, QiDownload, QiEscape, QiEye } from 'images/svgIcons/quillIcons'
 import { useCallback, useState } from 'react'
-
-import * as global from '../../../constants/globalConstants'
-import {
-  QiCheckmark,
-  QiDownload,
-  QiEscape,
-  QiEye,
-} from '../../../images/svgIcons/quillIcons'
-import { useAppDispatch } from '../../../store/hooks'
-import {
-  setSystemStatusUpdate,
-  setActiveModal,
-} from '../../../store/utilsSlice'
-import * as GS from '../../../styles/globalStyles'
-import { downloadAttachmentSingle } from '../../../utils/downloadAttachment'
-import { viewAttachment } from '../../../utils/viewAttachment'
-import {
-  IEmailAttachmentType,
-  IFetchedAttachment,
-} from '../../EmailDetail/Attachment/EmailAttachmentTypes'
+import { useAppDispatch } from 'store/hooks'
+import { setActiveModal, setSystemStatusUpdate } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import { downloadAttachmentSingle } from 'utils/downloadAttachment'
+import formatBytes from 'utils/prettierBytes'
+import { viewAttachment } from 'utils/viewAttachment'
 import AttachmentModal from '../AttachmentModal/AttachmentModal'
-import CustomIconButton from '../Buttons/CustomIconButton'
-import StyledCircularProgress from '../StyledCircularProgress'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
 
@@ -180,10 +168,10 @@ const AttachmentBubble = ({
       <EmailAttachmentIcon mimeType={mimeType} />
       <S.AttachmentInner>
         <span className="file_name">{fileName}</span>
-        <GS.TextMutedSpanSmall>
+        <GS.Span muted small>
           {global.FILE}
-          {prettyBytes(fileSize)}
-        </GS.TextMutedSpanSmall>
+          {formatBytes(fileSize)}
+        </GS.Span>
       </S.AttachmentInner>
       {hasDownload && 'body' in attachmentData && (
         <>

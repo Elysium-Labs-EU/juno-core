@@ -1,18 +1,16 @@
-import * as local from '../../../constants/filesOverviewConstants'
-import { selectProfile } from '../../../store/baseSlice'
-import {
-  selectIsForwarding,
-  selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import { useAppSelector } from '../../../store/hooks'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import countUniqueFiles from '../../../utils/countUniqueFiles'
-import EmailAvatar from '../../Elements/Avatar/EmailAvatar'
-import ContactCard from '../../Elements/ContactCard/ContactCard'
-import senderNameFull from '../../Elements/SenderName/senderNameFull'
-import senderNamePartial from '../../Elements/SenderName/senderNamePartial'
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
-import TimeStampDisplay from '../../Elements/TimeStamp/TimeStampDisplay'
+import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
+import ContactCard from 'components/Elements/ContactCard/ContactCard'
+import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
+import * as local from 'constants/filesOverviewConstants'
+import { selectProfile } from 'store/baseSlice'
+import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
+import { useAppSelector } from 'store/hooks'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import countUniqueFiles from 'utils/countUniqueFiles'
+
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import * as ES from '../EmailDetailStyles'
 import DownloadButtonMultiple from './DownloadFileMultiple'
@@ -60,10 +58,10 @@ const MappedFiles = ({
                     <S.AvatarName>
                       <ContactCard
                         offset={[30, 10]}
-                        avatarURL={staticSenderNameFull}
+                        userEmail={staticSenderNameFull}
                         contact={staticSenderNamePartial}
                       >
-                        <EmailAvatar avatarURL={staticSenderNameFull} />
+                        <EmailAvatar userEmail={staticSenderNameFull} />
                       </ContactCard>
                       <span>{staticSenderNameFull}</span>
                     </S.AvatarName>

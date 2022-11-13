@@ -1,12 +1,9 @@
-import { FormControlLabel, Switch } from '@mui/material'
-import { useAppDispatch, useAppSelector } from '../../../../store/hooks'
-import {
-  selectIsSentryActive,
-  setIsSentryActive,
-} from '../../../../store/utilsSlice'
+import * as S from 'components/Settings/SettingsStyles'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectIsSentryActive, setIsSentryActive } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
 
-import * as GS from '../../../../styles/globalStyles'
-import * as S from '../../SettingsStyles'
+import { FormControlLabel, Switch } from '@mui/material'
 
 const HEADER = 'Sentry'
 const BODY =
@@ -30,7 +27,7 @@ const SentryToggle = () => {
   return (
     <S.PageSection>
       <p>{HEADER}</p>
-      <GS.TextMutedParagraph>{BODY}</GS.TextMutedParagraph>
+      <GS.P muted>{BODY}</GS.P>
       <FormControlLabel
         label={SWITCH_LABEL}
         control={

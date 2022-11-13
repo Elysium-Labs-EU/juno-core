@@ -1,21 +1,22 @@
+import EmptyState from 'components/Elements/EmptyState'
+import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import SelectedOptions from 'components/MainHeader/SelectedOptions/SelectedOptions'
+import useFetchEmailsDrafts from 'hooks/useFetchEmailsDrafts'
 import { useEffect } from 'react'
+import { resetEmailDetail, selectCurrentEmail } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
+  selectSelectedEmails,
   setActiveEmailListIndex,
-} from '../../store/emailListSlice'
-import { selectLabelIds, selectLoadedInbox } from '../../store/labelsSlice'
-import EmptyState from '../Elements/EmptyState'
-import LoadingState from '../Elements/LoadingState/LoadingState'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
-import getEmailListIndex from '../../utils/getEmailListIndex'
-import {
-  resetEmailDetail,
-  selectCurrentEmail,
-} from '../../store/emailDetailSlice'
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import getEmailListIndex from 'utils/getEmailListIndex'
+import multipleIncludes from 'utils/multipleIncludes'
+
 import RenderEmailList from './RenderEmailList'
-import useFetchEmailsDrafts from '../../hooks/useFetchEmailsDrafts'
 
 const LabeledInbox = ({
   emailList,
@@ -32,11 +33,12 @@ const LabeledInbox = ({
 }
 
 const EmailList = () => {
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
   const labelIds = useAppSelector(selectLabelIds)
   const loadedInbox = useAppSelector(selectLoadedInbox)
-  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
-  const currentEmail = useAppSelector(selectCurrentEmail)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
   const dispatch = useAppDispatch()
 
   useFetchEmailsDrafts(labelIds, Date.now())
@@ -58,10 +60,16 @@ const EmailList = () => {
 
   return labelIds.some((val) => loadedInbox.indexOf(val) > -1) &&
     activeEmailListIndex > -1 ? (
-    <LabeledInbox
-      emailList={emailList}
-      activeEmailListIndex={activeEmailListIndex}
-    />
+    <>
+      {selectedEmails.selectedIds.length > 0 &&
+        multipleIncludes(selectedEmails.labelIds, labelIds) && (
+          <SelectedOptions />
+        )}
+      <LabeledInbox
+        emailList={emailList}
+        activeEmailListIndex={activeEmailListIndex}
+      />
+    </>
   ) : (
     <LoadingState />
   )

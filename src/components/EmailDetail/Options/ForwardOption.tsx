@@ -1,16 +1,20 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import isForwardingListener from 'components/EmailOptions/IsForwardingListener'
+import * as local from 'constants/emailDetailConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiForward } from 'images/svgIcons/quillIcons'
 import { useCallback } from 'react'
-import CustomButton from '../../Elements/Buttons/CustomButton'
-import * as local from '../../../constants/emailDetailConstants'
-import * as keyConstants from '../../../constants/keyConstants'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import isForwardingListener from '../../EmailOptions/IsForwardingListener'
-import useMultiKeyPress from '../../../hooks/useMultiKeyPress'
-import { selectInSearch } from '../../../store/utilsSlice'
-import { selectIsReplying } from '../../../store/emailDetailSlice'
-import { QiForward } from '../../../images/svgIcons/quillIcons'
+import { selectIsReplying } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectInSearch } from 'store/utilsSlice'
+
 import { IEmailDetailOptions } from './optionTypes'
 
-const actionKeys = [keyConstants.KEY_SHIFT, keyConstants.KEY_ENTER]
+const actionKeys = [
+  keyConstants.KEY_SPECIAL.shift,
+  keyConstants.KEY_SPECIAL.enter,
+]
 
 const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -27,7 +31,7 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, dispatch])
 
-  useMultiKeyPress(handleEvent, actionKeys, inSearch)
+  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
 
   return (
     <CustomButton

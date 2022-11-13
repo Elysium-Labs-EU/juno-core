@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { fetchEmailDetail } from '../store/emailDetailSlice'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectLabelIds } from '../store/labelsSlice'
-import { IEmailListObject } from '../store/storeTypes/emailListTypes'
+import { fetchEmailDetail } from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 
 export default function useFetchEmailDetail({
   threadId,

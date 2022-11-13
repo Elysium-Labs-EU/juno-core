@@ -1,7 +1,19 @@
+import * as Compose from 'components/Compose/ComposeStyles'
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
 import DOMPurify from 'dompurify'
+import useDebounce from 'hooks/useDebounce'
 import { isEqual } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { compareTwoStrings } from 'string-similarity'
+import removeSignature from 'utils/removeSignature'
 
 import BlockQuote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
@@ -17,11 +29,6 @@ import Text from '@tiptap/extension-text'
 import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 
-import * as local from '../../../../constants/composeEmailConstants'
-import * as global from '../../../../constants/globalConstants'
-import useDebounce from '../../../../hooks/useDebounce'
-import removeSignature from '../../../../utils/removeSignature'
-import * as Compose from '../../ComposeStyles'
 import MenuBar from './BodyFieldMenubar'
 import * as S from './BodyFieldStyles'
 
@@ -37,16 +44,20 @@ const BodyField = ({
   autofocus = false,
   updateComposeEmail,
   loadState,
+  hasInteracted,
+  setHasInteracted,
 }: {
   composeValue?: string
   autofocus?: boolean
+  hasInteracted: boolean
   updateComposeEmail: (object: { id: string; value: string }) => void
   loadState: string
+  setHasInteracted: Dispatch<SetStateAction<boolean>>
 }) => {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedValue = useDebounce(value, 500)
-  const tipTapRef = useRef<any | null>(null)
+  // const tipTapRef = useRef<any | null>(null)
 
   const handleChange = useCallback((incomingValue: string) => {
     setValue(
@@ -129,11 +140,18 @@ const BodyField = ({
           <S.MenuBar isFocused={isFocused}>
             <MenuBar editor={editorInstance} />
           </S.MenuBar>
-          <EditorContent editor={editorInstance} ref={tipTapRef} />
+          <EditorContent
+            editor={editorInstance}
+            onKeyDown={() => {
+              if (!hasInteracted) {
+                setHasInteracted(true)
+              }
+            }}
+          />
         </S.Wrapper>
       </>
     ),
-    [value, isFocused, editorInstance, tipTapRef]
+    [value, isFocused, editorInstance, hasInteracted, setHasInteracted]
   )
 
   return memoizedBodyField

@@ -1,20 +1,22 @@
+import { BASE_ARRAY } from 'constants/baseConstants'
+import { ARCHIVE_LABEL } from 'constants/globalConstants'
+import labelApi from 'data/labelApi'
+import settingsApi from 'data/settingsApi'
+import userApi from 'data/userApi'
+import { setBaseEmailList } from 'store/emailListSlice'
+import { createLabel, setStorageLabels } from 'store/labelsSlice'
+import { IBaseState, PrefetchedBoxes } from 'store/storeTypes/baseTypes'
+import { GoogleLabel } from 'store/storeTypes/labelsTypes'
+import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
+import multipleIncludes from 'utils/multipleIncludes'
+import createSettingsLabel from 'utils/settings/createSettingsLabel'
+import findSettings from 'utils/settings/findSettings'
+import parseSettings from 'utils/settings/parseSettings'
+
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import labelApi from '../data/labelApi'
-import userApi from '../data/userApi'
-import { setSettingsLabelId, setSystemStatusUpdate } from './utilsSlice'
-import { createLabel, setStorageLabels } from './labelsSlice'
-import { BASE_ARRAY } from '../constants/baseConstants'
-import type { AppThunk, RootState } from './store'
-import { GoogleLabel } from './storeTypes/labelsTypes'
-import { IBaseState, PrefetchedBoxes } from './storeTypes/baseTypes'
-import multipleIncludes from '../utils/multipleIncludes'
-import findSettings from '../utils/settings/findSettings'
-import parseSettings from '../utils/settings/parseSettings'
-import createSettingsLabel from '../utils/settings/createSettingsLabel'
-import settingsApi from '../data/settingsApi'
-import { setBaseEmailList } from './emailListSlice'
-import { ARCHIVE_LABEL } from '../constants/globalConstants'
+
+import type { AppThunk, RootState } from 'store/store'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,

@@ -1,26 +1,27 @@
+import * as S from 'components/EmailDetail/EmailDetailStyles'
+import ArchiveOption from 'components/EmailDetail/Options/ArchiveOption'
+import DeleteOption from 'components/EmailDetail/Options/DeleteOption'
+import ForwardOption from 'components/EmailDetail/Options/ForwardOption'
+import ReplyOption from 'components/EmailDetail/Options/ReplyOption'
+import SkipOption from 'components/EmailDetail/Options/SkipOption'
+import ToDoOption from 'components/EmailDetail/Options/ToDoOption'
+import UnsubscribeOption from 'components/EmailDetail/Options/UnsubscribeOption'
+import * as global from 'constants/globalConstants'
+import { QiFolderTrash } from 'images/svgIcons/quillIcons'
 import { useMemo } from 'react'
-
-import * as global from '../../../constants/globalConstants'
-import { QiFolderTrash } from '../../../images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
   selectIsForwarding,
   selectIsReplying,
-} from '../../../store/emailDetailSlice'
-import { useAppSelector, useAppDispatch } from '../../../store/hooks'
-import { selectLabelIds, selectStorageLabels } from '../../../store/labelsSlice'
-import { IEmailListThreadItem } from '../../../store/storeTypes/emailListTypes'
-import { selectAlternateActions } from '../../../store/utilsSlice'
-import emailLabels from '../../../utils/emailLabels'
-import { findLabelByName } from '../../../utils/findLabel'
-import * as S from '../EmailDetailStyles'
-import ArchiveOption from '../Options/ArchiveOption'
-import DeleteOption from '../Options/DeleteOption'
-import ForwardOption from '../Options/ForwardOption'
-import ReplyOption from '../Options/ReplyOption'
-import SkipOption from '../Options/SkipOption'
-import ToDoOption from '../Options/ToDoOption'
-import UnsubscribeOption from '../Options/UnsubscribeOption'
+} from 'store/emailDetailSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectStorageLabels } from 'store/labelsSlice'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { selectAlternateActions } from 'store/utilsSlice'
+import emailLabels from 'utils/emailLabels'
+import { findLabelByName } from 'utils/findLabel'
+import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
+
 import EmailDetailOptionStacker from './EmailDetailOptionsStacker/EmailDetailOptionStacker'
 
 interface IEmailDetailOptions {
@@ -35,7 +36,6 @@ const EmailDetailOptions = ({
   unsubscribeLink,
 }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
-  const labelIds = useAppSelector(selectLabelIds)
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const alternateActions = useAppSelector(selectAlternateActions)
@@ -53,23 +53,38 @@ const EmailDetailOptions = ({
     [threadDetail]
   )
 
+  const memoizedToDoOption = useMemo(() => {
+    const lastMessageLabels =
+      threadDetail.messages[threadDetail.messages.length - 1].labelIds
+    const getOnlyLegalLabels = onlyLegalLabelStrings({
+      labelIds: lastMessageLabels,
+      storageLabels,
+    }).filter(
+      (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
+    )
+    if (
+      getOnlyLegalLabels &&
+      !getOnlyLegalLabels.some(
+        (item) =>
+          item ===
+          findLabelByName({
+            storageLabels,
+            LABEL_NAME: global.TODO_LABEL_NAME,
+          })?.id
+      )
+    ) {
+      return <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+    }
+    return null
+  }, [threadDetail, storageLabels])
+
   return (
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
         <S.InnerOptionsContainer>
           {memoizedReplyOption}
           {memoizedForwardOption}
-          {labelIds &&
-            !labelIds.some(
-              (item) =>
-                item ===
-                findLabelByName({
-                  storageLabels,
-                  LABEL_NAME: global.TODO_LABEL_NAME,
-                })?.id
-            ) && (
-              <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
-            )}
+          {memoizedToDoOption}
           {staticEmailLabels.length > 0 ? (
             <EmailDetailOptionStacker
               firstOption={
@@ -96,8 +111,8 @@ const EmailDetailOptions = ({
               noArchive
             />
           )}
-          {(coreStatus === global.CORE_STATUS_FOCUSED ||
-            coreStatus === global.CORE_STATUS_SORTING) && (
+          {(coreStatus === global.CORE_STATUS_MAP.focused ||
+            coreStatus === global.CORE_STATUS_MAP.sorting) && (
             <SkipOption iconSize={ICON_SIZE} />
           )}
           {unsubscribeLink && (

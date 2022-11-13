@@ -1,20 +1,21 @@
+import { createBrowserHistory } from 'history'
+import { createReduxHistoryContext } from 'redux-first-history'
+import baseReducer from 'store/baseSlice'
+import contactsReducer from 'store/contactsSlice'
+import draftsReducer from 'store/draftsSlice'
+import emailDetailReducer from 'store/emailDetailSlice'
+import emailReducer from 'store/emailListSlice'
+import labelsReducer from 'store/labelsSlice'
+import utilsReducer from 'store/utilsSlice'
+
 import {
   Action,
   combineReducers,
   configureStore,
   ThunkAction,
 } from '@reduxjs/toolkit'
-import type { PreloadedState } from '@reduxjs/toolkit'
-import { createReduxHistoryContext } from 'redux-first-history'
-import { createBrowserHistory } from 'history'
-import baseReducer from './baseSlice'
-import contactsReducer from './contactsSlice'
-import draftsReducer from './draftsSlice'
-import emailReducer from './emailListSlice'
-import emailDetailReducer from './emailDetailSlice'
-import labelsReducer from './labelsSlice'
-import utilsReducer from './utilsSlice'
 
+import type { PreloadedState } from '@reduxjs/toolkit'
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
     history: createBrowserHistory(),
@@ -38,7 +39,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
     preloadedState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(routerMiddleware),
-    // devTools: process.env.NODE_ENV !== 'production',
+    devTools: process.env.NODE_ENV !== 'production',
   })
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']

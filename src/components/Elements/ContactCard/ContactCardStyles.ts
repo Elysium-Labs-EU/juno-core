@@ -2,7 +2,7 @@ import { Card, CardMedia } from '@mui/material'
 import styled from 'styled-components'
 
 interface IContactCardColors {
-  randomColor: string
+  $randomColor: string
 }
 
 export const ContactCard = styled(Card)`
@@ -28,13 +28,13 @@ export const ContactCard = styled(Card)`
 `
 
 export const ContactCardAvatar = styled(CardMedia)<IContactCardColors>`
-  background-color: ${({ randomColor }) =>
-    randomColor || 'rgba(165, 165, 165, 0.68)'};
+  background-color: ${({ $randomColor }) =>
+    $randomColor || 'rgba(165, 165, 165, 0.68)'};
   display: flex !important;
   height: 8rem;
   justify-content: center;
-  color: ${({ randomColor }) =>
-    randomColor.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
+  color: ${({ $randomColor }) =>
+    $randomColor.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
   font-weight: 600;
   font-size: 1.8rem;
   align-items: center;
@@ -68,10 +68,10 @@ export const ContactCardDetails = styled.div`
 `
 
 export const ContactCardEmailButton = styled.button<IContactCardColors>`
-  background-color: ${({ randomColor }) =>
-    randomColor || 'rgba(165, 165, 165, 0.68)'} !important;
-  color: ${({ randomColor }) =>
-    randomColor.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
+  background-color: ${({ $randomColor }) =>
+    $randomColor || 'rgba(165, 165, 165, 0.68)'} !important;
+  color: ${({ $randomColor }) =>
+    $randomColor?.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
   border-radius: var(--radius-m);
   padding: 0.4rem;
   display: flex;

@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react'
-import labelApi from '../data/labelApi'
-import * as global from '../constants/globalConstants'
-import { selectIsFetching } from '../store/emailListSlice'
-import { useAppSelector } from '../store/hooks'
+import * as global from 'constants/globalConstants'
+import labelApi from 'data/labelApi'
+import { useEffect, useState } from 'react'
+import { selectIsFetching } from 'store/emailListSlice'
+import { useAppSelector } from 'store/hooks'
 
 export default function useFetchThreadsTotalNumber(labelIds: string[]) {
   const [totalThreads, setTotalThreads] = useState(0)

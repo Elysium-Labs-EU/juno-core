@@ -1,9 +1,10 @@
+import * as global from 'constants/globalConstants'
+import { QiMail } from 'images/svgIcons/quillIcons'
 import { FiEdit2 } from 'react-icons/fi'
+import { IEmailMessage } from 'store/storeTypes/emailListTypes'
 import styled from 'styled-components'
-import { IEmailMessage } from '../../store/storeTypes/emailListTypes'
-import * as global from '../../constants/globalConstants'
+
 import StyledTooltip from './StyledTooltip'
-import { QiMail } from '../../images/svgIcons/quillIcons'
 
 const MULTI_MESSAGE = 'Messages'
 const SINGLE_MESSAGE = 'Message'
@@ -39,8 +40,9 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
   return (
     <StyledMessageCount>
       <StyledTooltip
-        title={`${ regularCount } ${ regularCount > 1 ? MULTI_MESSAGE : SINGLE_MESSAGE
-          }`}
+        title={`${regularCount} ${
+          regularCount > 1 ? MULTI_MESSAGE : SINGLE_MESSAGE
+        }`}
       >
         <CountWrapper>
           {regularCount}
@@ -51,7 +53,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
       </StyledTooltip>
       {draftCount > 0 && (
         <StyledTooltip
-          title={`${ draftCount } ${ draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT }`}
+          title={`${draftCount} ${draftCount > 1 ? MULTI_DRAFT : SINGLE_DRAFT}`}
         >
           <CountWrapper>
             / {draftCount}

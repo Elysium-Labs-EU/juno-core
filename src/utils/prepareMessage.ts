@@ -1,6 +1,6 @@
-import { IComposePayload } from '../store/storeTypes/composeTypes'
-import { IDraftDetailObject } from '../store/storeTypes/draftsTypes'
-import convertToGmailEmail from './convertToGmailEmail'
+import { IComposePayload } from 'store/storeTypes/composeTypes'
+import { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import convertToGmailEmail from 'utils/convertToGmailEmail'
 
 export async function prepareFilesForSave({
   files,

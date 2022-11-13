@@ -1,8 +1,8 @@
-import qs from 'qs'
-import { useEffect } from 'react'
-import { IComposeEmailReceive } from '../../../store/storeTypes/composeTypes'
-import { handleContactConversion } from '../../../utils/convertToContact'
-import * as global from '../../../constants/globalConstants'
+import * as global from 'constants/globalConstants'
+import { Dispatch, SetStateAction, useEffect } from 'react'
+import { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import { handleContactConversion } from 'utils/convertToContact'
+import parseQueryString from 'utils/parseQueryString'
 
 /**
  * @function handlePresetvalueConversions
@@ -65,10 +65,10 @@ export default function useParsePresetValues({
   loadState,
   presetValueObject = undefined,
 }: {
-  setShowCC: (value: boolean) => void
-  setShowBCC: (value: boolean) => void
-  setComposedEmail: (value: any) => void
-  setLoadState: (value: string) => void
+  setShowCC: Dispatch<SetStateAction<boolean>>
+  setShowBCC: Dispatch<SetStateAction<boolean>>
+  setComposedEmail: Dispatch<SetStateAction<any>>
+  setLoadState: Dispatch<SetStateAction<string>>
   loadState: string
   presetValueObject?: IComposeEmailReceive
 }) {
@@ -92,13 +92,8 @@ export default function useParsePresetValues({
         mailto,
         subject,
         body,
-      }: { mailto?: string; subject?: string; body?: string } = qs.parse(
-        window.location.search,
-        {
-          delimiter: /[?&]/,
-          ignoreQueryPrefix: true,
-        }
-      )
+      }: { mailto?: string; subject?: string; body?: string } =
+        parseQueryString(window.location.search, /[?&]/)
       if (mailto || subject || body) {
         const output = handlePresetvalueConversions({
           to: mailto?.includes('@')

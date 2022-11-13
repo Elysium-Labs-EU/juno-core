@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Badge } from '@mui/material'
+import Badge from '@mui/material/Badge/Badge'
 
 export const TabContainer = styled.nav`
   position: relative;

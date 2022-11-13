@@ -1,6 +1,8 @@
 // SYSTEM CODE
 export const ACCESS_TOKEN = 'accessToken'
 export const ACTIVE_MODAL_MAP = {
+  attachment: 'attachment',
+  betaAccess: 'betaAccess',
   feedback: 'feedback',
   help: 'help',
   intro: 'intro',
@@ -8,12 +10,14 @@ export const ACTIVE_MODAL_MAP = {
   navigation: 'navigation',
   search: 'search',
   settings: 'settings',
-  attachment: 'attachment',
+  signature: 'signature'.
 }
 export const ARCHIVE_LABEL = 'ARCHIVE'
-export const CORE_STATUS_FOCUSED = 'isFocused'
-export const CORE_STATUS_SEARCHING = 'isSearching'
-export const CORE_STATUS_SORTING = 'isSorting'
+export const CORE_STATUS_MAP = {
+  focused: 'isFocused',
+  searching: 'isSearching',
+  sorting: 'isSorting',
+}
 export const CREDENTIALS = 'credentials'
 export const DRAFT_LABEL = 'DRAFT'
 export const EMAIL_BODY_INVISIBLE = 'invisible'
@@ -34,6 +38,7 @@ export const LOAD_STATE_MAP = {
   error: 'error',
 }
 export const MAX_RESULTS = 20
+export const MESSAGE_SEND_DELAY = 3000
 export const MIN_DELAY_REFRESH = 3500
 export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'

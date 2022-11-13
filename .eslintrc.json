@@ -6,6 +6,7 @@
     },
     "import/resolver": {
       "node": {
+        "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
@@ -39,7 +40,7 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["import", "react", "@typescript-eslint"],
+  "plugins": ["import", "@typescript-eslint"],
   "rules": {
     "import/extensions": [
       "error",
@@ -60,18 +61,13 @@
     ],
     "@typescript-eslint/no-useless-concat": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
-    "react/function-component-definition": "off",
-    "react/react-in-jsx-scope": "off",
-    "react/require-default-props": [
-      2,
-      {
-        "functions": "defaultArguments"
-      }
-    ],
-    "no-use-before-define": "warn",
+    "import/no-cycle": "off",
     "no-console": "warn",
     "no-restricted-syntax": 1,
-    "import/no-cycle": "off"
+    "no-use-before-define": "warn",
+    "react/function-component-definition": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "react/react-in-jsx-scope": "off",
+    "react/require-default-props": [2, { "functions": "defaultArguments" }]
   }
 }

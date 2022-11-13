@@ -1,6 +1,6 @@
-import { IContact } from '../../../store/storeTypes/contactsTypes'
-import { convertToContact } from '../../../utils/convertToContact'
-import * as global from '../../../constants/globalConstants'
+import * as global from 'constants/globalConstants'
+import { IContact } from 'store/storeTypes/contactsTypes'
+import { convertToContact } from 'utils/convertToContact'
 
 export const NO_SENDER = '(No sender)'
 

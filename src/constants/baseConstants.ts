@@ -1,4 +1,4 @@
-import * as global from './globalConstants'
+import * as global from 'constants/globalConstants'
 
 export const BASE_ARRAY = [
   global.JUNO_BASE_LABEL,

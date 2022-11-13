@@ -1,15 +1,17 @@
-import * as S from './IntroductionStyles'
-import * as global from '../../constants/globalConstants'
-import CustomButton from '../Elements/Buttons/CustomButton'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import updateSettingsLabel from '../../utils/settings/updateSettingsLabel'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomModal from 'components/Elements/Modal/CustomModal'
+import StrictFlow from 'components/Settings/General/StrictFlow/StrictFlow'
+import * as global from 'constants/globalConstants'
+import { QiArrowRight, QiCommand } from 'images/svgIcons/quillIcons'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
-  selectSettingsLabelId,
   selectActiveModal,
+  selectSettingsLabelId,
   setActiveModal,
-} from '../../store/utilsSlice'
-import CustomModal from '../Elements/Modal/CustomModal'
-import { QiArrowRight } from '../../images/svgIcons/quillIcons'
+} from 'store/utilsSlice'
+import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
+
+import * as S from './IntroductionStyles'
 
 const DIALOG_HEADER = 'Welcome to Juno'
 const DIALOG_CONTENT_DEVELOPMENT =
@@ -36,10 +38,13 @@ const Introduction = () => {
     dispatch(setActiveModal(null))
   }
 
+  const openKeyboardShortcuts = () => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard))
+  }
+
   return (
     <CustomModal
       open={activeModal === global.ACTIVE_MODAL_MAP.intro}
-      handleClose={handleClose}
       modalTitle={DIALOG_HEADER}
       modalAriaLabel="introduction"
     >
@@ -49,11 +54,19 @@ const Introduction = () => {
           <S.DialogSubHeader>{DIALOG_HEADER_INTRODUCTION}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_INTRODUCTION_1}</p>
           <p>{DIALOG_CONTENT_INTRODUCTION_2}</p>
+          <StrictFlow />
           <S.DialogSubHeader>{DIALOG_HEADER_PRIVACY}</S.DialogSubHeader>
           <p>{DIALOG_CONTENT_PRIVACY}</p>
           <p>{DIALOG_CONTENT_PRIVACY_1}</p>
         </S.InnerContent>
         <S.ButtonContainer>
+          <CustomButton
+            onClick={openKeyboardShortcuts}
+            suppressed
+            icon={<QiCommand />}
+            label="View keyboard shortcuts"
+            title="Show keyboard shortcuts"
+          />
           <CustomButton
             onClick={handleClose}
             label={CONFIRM_BUTTON}

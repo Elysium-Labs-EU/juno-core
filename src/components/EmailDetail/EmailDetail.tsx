@@ -1,3 +1,8 @@
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
+import * as RoutesConstants from 'constants/routes.json'
+import useFetchDraftList from 'hooks/useFetchDraftList'
+import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
@@ -11,28 +16,34 @@ import {
   setIsForwarding,
   setIsReplying,
   setViewIndex,
-} from '../../store/emailDetailSlice'
-import { selectIsLoading, selectIsProcessing } from '../../store/utilsSlice'
-import { selectLabelIds } from '../../store/labelsSlice'
+} from 'store/emailDetailSlice'
 import {
+  selectActiveEmailListIndex,
   selectEmailList,
   selectSearchList,
-  selectActiveEmailListIndex,
-} from '../../store/emailListSlice'
-import * as local from '../../constants/emailDetailConstants'
-import * as global from '../../constants/globalConstants'
+  selectSelectedEmails,
+} from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import {
+  IEmailListObject,
+  IEmailListThreadItem,
+} from 'store/storeTypes/emailListTypes'
+import {
+  selectIsFlexibleFlowActive,
+  selectIsLoading,
+  selectIsProcessing,
+} from 'store/utilsSlice'
+import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+import filterTrashMessages from 'utils/filterTrashMessages'
+import { findLabelByName } from 'utils/findLabel'
+
+import Baseloader from '../BaseLoader/BaseLoader'
+import EmailDetailHeader from './EmailDetailHeader'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
-import EmailDetailHeader from './EmailDetailHeader'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
-import AnimatedMountUnmount from '../../utils/animatedMountUnmount'
-import Baseloader from '../BaseLoader/BaseLoader'
-import useFetchEmailDetail from '../../hooks/useFetchEmailDetail'
-import useFetchDraftList from '../../hooks/useFetchDraftList'
-import filterTrashMessages from '../../utils/filterTrashMessages'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -44,18 +55,21 @@ const EmailDetail = () => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const isForwarding = useAppSelector(selectIsForwarding)
   const isLoading = useAppSelector(selectIsLoading)
   const isProcessing = useAppSelector(selectIsProcessing)
   const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
   const searchList = useAppSelector(selectSearchList)
+  const selectedEmails = useAppSelector(selectSelectedEmails)
+  const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
-  const isComposerActiveRef = useRef(false)
   const [shouldRefreshDetail, setShouldRefreshDetail] = useState(false)
+  const isComposerActiveRef = useRef(false)
   const { threadId, overviewId } = useParams<{
     threadId: string
     overviewId: string
@@ -89,8 +103,36 @@ const EmailDetail = () => {
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
-    if (coreStatus === global.CORE_STATUS_SEARCHING && searchList) {
+    if (coreStatus === global.CORE_STATUS_MAP.searching && searchList) {
       setActiveEmailList(searchList)
+      return
+    }
+    if (
+      (coreStatus === global.CORE_STATUS_MAP.focused ||
+        (isFlexibleFlowActive &&
+          coreStatus === global.CORE_STATUS_MAP.sorting)) &&
+      selectedEmails &&
+      selectedEmails.selectedIds.length > 0 &&
+      (selectedEmails.labelIds.includes(
+        findLabelByName({
+          storageLabels,
+          LABEL_NAME: global.TODO_LABEL_NAME,
+        })?.id ?? ''
+      ) ||
+        selectedEmails.labelIds.includes(global.INBOX_LABEL))
+    ) {
+      const activeThreadList = emailList[activeEmailListIndex].threads
+      const relevantThreadsFeed: IEmailListThreadItem[] = []
+      selectedEmails.selectedIds.forEach((email) => {
+        const resultIndex = activeThreadList.findIndex((t) => t.id === email)
+        if (resultIndex > -1) {
+          relevantThreadsFeed.push(activeThreadList[resultIndex])
+        }
+      })
+      setActiveEmailList({
+        ...emailList[activeEmailListIndex],
+        threads: relevantThreadsFeed,
+      })
       return
     }
     if (
@@ -102,7 +144,7 @@ const EmailDetail = () => {
     }
   }, [emailList, activeEmailListIndex, searchList])
 
-  // If the current email is found, set the id to the store. Otherwise reroute user to homepage.
+  // If the current email is found, set the id to the store. Otherwise reroute user to ToDo page.
   useEffect(() => {
     if (
       currentEmail !== currentLocal &&
@@ -111,17 +153,17 @@ const EmailDetail = () => {
       if (activeEmailList) {
         setCurrentLocal(currentEmail)
       } else {
-        dispatch(push('/'))
+        dispatch(push(RoutesConstants.TODO))
       }
     }
   }, [currentEmail, activeEmailList, baseState])
 
   // If the found threadId doesn't match with the Redux version - it will set it.
   useEffect(() => {
-    if (threadId) {
+    if (threadId && !currentEmail) {
       dispatch(setCurrentEmail(threadId))
     }
-  }, [threadId])
+  }, [threadId, currentEmail])
 
   useEffect(() => {
     if (isReplying && currentEmail && currentEmail !== threadId) {

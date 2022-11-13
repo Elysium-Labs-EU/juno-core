@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import root from 'react-shadow/styled-components'
-import { useAppDispatch } from '../../../../store/hooks'
-import openLinkInNewTab from '../../../../utils/openLinkInNewTab'
-import cleanLink from '../../../../utils/cleanLink'
-import handleEmailLink from '../../../../utils/handleEmailLink'
-import fetchUnsubscribeLink from '../../../../utils/fetchUnsubscribeLink'
-import StyledCircularProgress from '../../../Elements/StyledCircularProgress'
+import { useAppDispatch } from 'store/hooks'
+import { AppDispatch } from 'store/store'
+import changeSignatureColor from 'utils/changeSignatureColor'
+import cleanLink from 'utils/cleanLink'
+import fetchUnsubscribeLink from 'utils/fetchUnsubscribeLink'
+import handleEmailLink from 'utils/handleEmailLink'
+import openLinkInNewTab from 'utils/openLinkInNewTab'
+import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
+
 import Wrapper from './EmailDetailBodyStyles'
-import { AppDispatch } from '../../../../store/store'
-import sanitizeAndParseHtmlContent from '../../../../utils/sanitizeAndParseHtmlContent'
 
 interface IEmailDetailBody {
   threadDetailBody: any
   // threadDetailBody: IEmailMessagePayload
   detailBodyCSS: 'visible' | 'invisible'
-  setUnsubscribeLink?: (value: string | null) => void
-  setBlockedTrackers?: (value: string[] | []) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
+  setBlockedTrackers?: Dispatch<SetStateAction<string[] | []>>
 }
 
 interface IBodyState {
@@ -36,25 +38,25 @@ const postTreatmentBody = ({
   activeDocument,
 }: {
   dispatch: AppDispatch
-  setUnsubscribeLink?: (value: string | null) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
   activeDocument: HTMLDivElement | null
 }): void => {
   openLinkInNewTab(activeDocument)
   handleEmailLink(activeDocument, dispatch)
   cleanLink()
+  changeSignatureColor(activeDocument)
   // Only fetch the unsubscribe link if there isn't one passed from the backend - the setUnsubscribe callback will be undefined if backend provided link already.
   setUnsubscribeLink && fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
 }
 
 // Use the shadowRoot body and trigger all the postTreatment functions
 // Otherwise just return an empty div
-
 const ShadowBody = ({
   bodyState,
   setUnsubscribeLink = undefined,
 }: {
   bodyState: IBodyState
-  setUnsubscribeLink?: (value: string | null) => void
+  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
 }) => {
   const dispatch = useAppDispatch()
   const [enhancedBody, setEnhancedBody] = useState(false)

@@ -1,15 +1,27 @@
-import { Popper } from '@mui/material'
-import { useEffect, useState } from 'react'
-import useClickOutside from '../../../../hooks/useClickOutside'
-import { selectProfile } from '../../../../store/baseSlice'
-import { useAppSelector } from '../../../../store/hooks'
-import sanitizeAndParseHtmlContent from '../../../../utils/sanitizeAndParseHtmlContent'
-import CustomIconButton from '../../../Elements/Buttons/CustomIconButton'
-import SignatureEmailOptions from './SignatureEmailOptions'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Menu from 'components/Elements/Menu/Menu'
+import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
+import { QiChevronDown } from 'images/svgIcons/quillIcons'
+import { useEffect, useMemo, useState } from 'react'
+import { selectProfile } from 'store/baseSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
+import removeHTMLTag from 'utils/removeHTMLTag'
+import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
+
 import * as S from './SignatureEmailStyles'
-import * as local from '../../../../constants/composeEmailConstants'
-import * as global from '../../../../constants/globalConstants'
-import { QiChevronDown } from '../../../../images/svgIcons/quillIcons'
+
+const NO_SIGNATURE = 'No signature'
+const MANAGE_SIGNATURES = 'Manage signatures'
+
+const partialSignature = (signature: string) => {
+  if (signature && signature.length > 30) {
+    return `${removeHTMLTag(signature.slice(0, 40))}...`
+  }
+  return removeHTMLTag(signature)
+}
 
 const SignatureEmail = ({
   updateComposeEmail,
@@ -19,16 +31,21 @@ const SignatureEmail = ({
   loadState: string
 }) => {
   const { signature } = useAppSelector(selectProfile)
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const activeModal = useAppSelector(selectActiveModal)
+  const dispatch = useAppDispatch()
   const [selectedSignature, setSelectedSignature] = useState<string | null>(
     null
   )
-  const open = Boolean(anchorEl)
-  const { ref } = useClickOutside({
-    onClickOutside: () => {
-      setAnchorEl(null)
-    },
-  })
+
+  const isOpen = activeModal === global.ACTIVE_MODAL_MAP.signature
+
+  const handleClose = () => {
+    dispatch(setActiveModal(null))
+  }
+
+  const handleOpen = () => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.signature))
+  }
 
   useEffect(() => {
     if (global.LOAD_STATE_MAP.loaded === loadState) {
@@ -40,43 +57,72 @@ const SignatureEmail = ({
     const updateEventObject = {
       id: local.SIGNATURE,
       value: selectedSignature
-        ? `<div data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
+        ? `<div class=${global.JUNO_SIGNATURE} data-juno=${global.JUNO_SIGNATURE}>${selectedSignature}</div>`
         : null,
     }
     updateComposeEmail(updateEventObject)
   }, [selectedSignature])
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const handleClickOptions = () => {
+    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.settings))
   }
 
-  const handleClose = () => {
-    setAnchorEl(null)
+  const MENU_SIGNATURE_OPTIONS = useMemo(
+    (): IMenuItemCollection => ({
+      id: 'signature-menu-options',
+      items: [
+        {
+          id: 'user-signature',
+          title: partialSignature(
+            signature && signature.length > 0 ? signature : '(Empty signature)'
+          ),
+          onClick: () => {
+            setSelectedSignature(signature)
+          },
+        },
+        {
+          id: 'no-signature',
+          title: NO_SIGNATURE,
+          onClick: () => {
+            setSelectedSignature(null)
+          },
+        },
+      ],
+    }),
+    [signature]
+  )
+
+  const MENU_MANAGE_OPTIONS: IMenuItemCollection = {
+    id: 'signature-manage-menu-option',
+    items: [
+      {
+        id: 'manage-signature',
+        title: MANAGE_SIGNATURES,
+        onClick: () => handleClickOptions(),
+      },
+    ],
   }
 
   return (
     <S.Wrapper>
       <S.SettingsButtonContainer>
-        <CustomIconButton
-          icon={<QiChevronDown />}
-          title="Show signature options"
-          onClick={handleClick}
-          style={{ marginRight: '20px' }}
+        <Menu
+          activeModalTag={global.ACTIVE_MODAL_MAP.signature}
+          menuItems={[MENU_SIGNATURE_OPTIONS, MENU_MANAGE_OPTIONS]}
+          handleClose={handleClose}
+          triggerButton={
+            <CustomIconButton
+              icon={<QiChevronDown />}
+              title="Show signature options"
+              onClick={handleOpen}
+              style={{ marginRight: '20px' }}
+              ariaHaspopup="true"
+              ariaControls={isOpen ? 'menu' : undefined}
+              ariaExpanded={isOpen || undefined}
+            />
+          }
         />
       </S.SettingsButtonContainer>
-      <Popper
-        id="signature-options"
-        open={open}
-        anchorEl={anchorEl}
-        ref={ref}
-        placement="bottom-end"
-        style={{ zIndex: `var(--z-index-popover)` }}
-      >
-        <SignatureEmailOptions
-          handleClose={handleClose}
-          setSelectedSignature={setSelectedSignature}
-        />
-      </Popper>
       {selectedSignature && (
         <S.ActiveSignatureContainer>
           {sanitizeAndParseHtmlContent(selectedSignature)}

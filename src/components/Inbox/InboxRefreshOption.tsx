@@ -1,14 +1,17 @@
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { useCallback, useEffect, useState } from 'react'
 import { MdRefresh } from 'react-icons/md'
+import { refreshEmailFeed, selectIsFetching } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { AppDispatch } from 'store/store'
+import {
+  selectActiveModal,
+  selectInSearch,
+  selectIsLoading,
+} from 'store/utilsSlice'
 import styled, { css, keyframes } from 'styled-components'
-
-import * as keyConstants from '../../constants/keyConstants'
-import useKeyPress from '../../hooks/useKeyPress'
-import { refreshEmailFeed, selectIsFetching } from '../../store/emailListSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { AppDispatch } from '../../store/store'
-import { selectInSearch, selectIsLoading } from '../../store/utilsSlice'
-import CustomButton from '../Elements/Buttons/CustomButton'
 
 const rotate = keyframes`
   from {
@@ -39,31 +42,31 @@ const refreshFeed = (dispatch: AppDispatch) => {
 const LABEL_INACTIVE = 'Refresh inbox'
 const LABEL_ACTIVE = 'Refreshing inbox...'
 
+const styles = (showButtonLabel: boolean) => ({
+  color: showButtonLabel ? 'var(--color-white)' : undefined,
+})
+
 const InboxRefresh = ({
   showButtonLabel = false,
 }: {
   showButtonLabel?: boolean
 }) => {
   const [disableRefresh, setDisableRefresh] = useState(false)
+  const activeModal = useAppSelector(selectActiveModal)
   const isFetching = useAppSelector(selectIsFetching)
   const isLoading = useAppSelector(selectIsLoading)
   const inSearch = useAppSelector(selectInSearch)
-  const KeyListener = useKeyPress(keyConstants.KEY_R)
   const dispatch = useAppDispatch()
 
-  const handleClick = useCallback(() => {
+  const handleRefreshTrigger = useCallback(() => {
     refreshFeed(dispatch)
   }, [])
 
-  useEffect(() => {
-    let mounted = true
-    if (KeyListener && !inSearch && mounted && !disableRefresh && !isLoading) {
-      handleClick()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [KeyListener, inSearch, disableRefresh, isLoading])
+  useKeyboardShortcut({
+    handleEvent: handleRefreshTrigger,
+    actionKeys: [keyConstants.KEY_LETTERS.r],
+    isDisabled: inSearch || disableRefresh || isLoading || !!activeModal,
+  })
 
   useEffect(() => {
     let disableTimer: NodeJS.Timeout | null
@@ -83,9 +86,10 @@ const InboxRefresh = ({
   return (
     <CustomButton
       label={showButtonLabel ? LABEL_INACTIVE : null}
-      onClick={handleClick}
+      onClick={handleRefreshTrigger}
       disabled={isLoading || disableRefresh}
       title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}
+      style={styles(showButtonLabel)}
       icon={
         <RotatingIcon disableRefresh={disableRefresh}>
           <MdRefresh size={20} />

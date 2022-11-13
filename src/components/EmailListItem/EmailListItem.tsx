@@ -1,39 +1,34 @@
+import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
+import ContactCard from 'components/Elements/ContactCard/ContactCard'
+import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
+import EmailLabel from 'components/Elements/EmailLabel'
+import EmailSnippet from 'components/Elements/EmailSnippet'
+import EmailSubject from 'components/Elements/EmailSubject'
+import MessageCount from 'components/Elements/MessageCount'
+import RecipientName from 'components/Elements/RecipientName'
+import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
+import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import CustomCheckbox from 'components/Elements/StyledCheckbox'
+import getTimeStamp from 'components/Elements/TimeStamp/GetTimeStamp'
+import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
+import * as draft from 'constants/draftConstants'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyPress from 'hooks/useKeyPress'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Checkbox from '@mui/material/Checkbox'
-import EmailAvatar from '../Elements/Avatar/EmailAvatar'
-import TimeStampDisplay from '../Elements/TimeStamp/TimeStampDisplay'
-import MessageCount from '../Elements/MessageCount'
-import Snippet from './Snippet'
-import InlineThreadActionsRegular from './InlineThreadActionsRegular'
+import { selectProfile } from 'store/baseSlice'
+import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
+import emailLabels from 'utils/emailLabels'
+import multipleIncludes from 'utils/multipleIncludes'
+
 import * as S from './EmailListItemStyles'
-import * as draft from '../../constants/draftConstants'
-import * as global from '../../constants/globalConstants'
-import * as keyConstants from '../../constants/keyConstants'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { IEmailListThreadItem } from '../../store/storeTypes/emailListTypes'
-import getTimeStamp from '../Elements/TimeStamp/GetTimeStamp'
-import RecipientName from '../Elements/RecipientName'
-import SenderNamePartial from '../Elements/SenderName/senderNamePartial'
-import SenderNameFull from '../Elements/SenderName/senderNameFull'
-import EmailSubject from '../Elements/EmailSubject'
-import EmailSnippet from '../Elements/EmailSnippet'
 import InlineThreadActionsDraft from './InlineThreadActionsDraft'
-import { selectProfile } from '../../store/baseSlice'
-import EmailLabel from '../Elements/EmailLabel'
-import {
-  openEmail,
-  selectActiveModal,
-  selectInSearch,
-} from '../../store/utilsSlice'
-import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
-import emailLabels from '../../utils/emailLabels'
-import {
-  selectSelectedEmails,
-  setSelectedEmails,
-} from '../../store/emailListSlice'
-import useKeyPress from '../../hooks/useKeyPress'
-import EmailHasAttachmentSimple from '../Elements/EmailHasAttachmentSimple'
-import ContactCard from '../Elements/ContactCard/ContactCard'
+import InlineThreadActionsRegular from './InlineThreadActionsRegular'
+import Snippet from './Snippet'
 
 // If the user is on Draft list, show only draft emails.
 
@@ -61,16 +56,26 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
+const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) => {
+  const foundLabels: string[] = []
+  emailListThreadItem.messages.forEach((message) =>
+    message?.labelIds?.forEach((label) => foundLabels.push(label))
+  )
+  return foundLabels.includes(global.UNREAD_LABEL)
+}
+
 const EmailListItem = ({
-  email,
-  showLabel,
-  index,
   activeIndex,
+  email,
+  index,
+  showCheckbox,
+  showLabel,
 }: {
-  email: IEmailListThreadItem
-  showLabel: boolean
-  index: number
   activeIndex: number
+  email: IEmailListThreadItem
+  index: number
+  showCheckbox: boolean
+  showLabel: boolean
 }) => {
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
@@ -80,7 +85,7 @@ const EmailListItem = ({
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
-  const EnterKeyListener = useKeyPress(keyConstants.KEY_ENTER)
+  const EnterKeyListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
   const { id } = email
 
   useEffect(() => {
@@ -179,12 +184,13 @@ const EmailListItem = ({
     }
   }, [EnterKeyListener, isFocused, inSearch, activeModal])
 
-  const handleCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckBox = (isChecked: boolean) => {
     dispatch(
       setSelectedEmails([
         {
+          labelIds,
           id,
-          event: event.target.checked ? 'add' : 'remove',
+          event: isChecked ? 'add' : 'remove',
         },
       ])
     )
@@ -192,35 +198,40 @@ const EmailListItem = ({
 
   const memoizedEmailListItem = useMemo(
     () => (
-      <S.ThreadBase emailLabels={staticEmailLabels}>
+      <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
-          <S.CellCheckbox inSelect={selectedEmails.length > 0}>
-            <Checkbox
-              checked={selectedEmails.includes(id)}
-              onChange={handleCheckBox}
-              size="small"
-            />
+          <S.CellCheckbox
+            inSelect={
+              selectedEmails.selectedIds.length > 0 &&
+              selectedEmails.labelIds.length > 0 &&
+              multipleIncludes(selectedEmails.labelIds, labelIds)
+            }
+          >
+            {showCheckbox && (
+              <CustomCheckbox
+                isChecked={selectedEmails.selectedIds.includes(id)}
+                onChange={handleCheckBox}
+              />
+            )}
           </S.CellCheckbox>
-          <S.CelUnread>
-            {staticEmailLabels.includes(global.UNREAD_LABEL) && <S.UnreadDot />}
-          </S.CelUnread>
+          <S.CelUnread>{hasUnreadLabel(email) && <S.UnreadDot />}</S.CelUnread>
           <S.CellName onClick={handleOpenEvent} aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(global.DRAFT_LABEL) ? (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticSenderFull}
+                  userEmail={staticSenderFull}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticSenderFull} />
+                  <EmailAvatar userEmail={staticSenderFull} />
                 </ContactCard>
               ) : (
                 <ContactCard
                   offset={[30, 10]}
-                  avatarURL={staticRecipientName.name}
+                  userEmail={staticRecipientName.name}
                   contact={staticSenderPartial}
                 >
-                  <EmailAvatar avatarURL={staticRecipientName.name} />
+                  <EmailAvatar userEmail={staticRecipientName.name} />
                 </ContactCard>
               )}
             </S.Avatars>
@@ -264,7 +275,12 @@ const EmailListItem = ({
           <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
-              <TimeStampDisplay threadTimeStamp={getTimeStamp(email, labelIds.includes(global.DRAFT_LABEL))} />
+              <TimeStampDisplay
+                threadTimeStamp={getTimeStamp(
+                  email,
+                  labelIds.includes(global.DRAFT_LABEL)
+                )}
+              />
             </S.DatePosition>
           </S.CellDate>
           <div />

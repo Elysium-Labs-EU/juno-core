@@ -1,8 +1,8 @@
-import BackButton from '../Elements/Buttons/BackButton'
-import Navigation from '../MainHeader/Navigation/Navigation'
-import * as local from '../../constants/composeEmailConstants'
-import * as S from '../MainHeader/HeaderStyles'
-import * as GS from '../../styles/globalStyles'
+import BackButton from 'components/Elements/Buttons/BackButton'
+import * as S from 'components/MainHeader/HeaderStyles'
+import Navigation from 'components/MainHeader/Navigation/Navigation'
+import * as local from 'constants/composeEmailConstants'
+import * as GS from 'styles/globalStyles'
 
 const ComposeHeader = () => (
   <GS.OuterContainer>

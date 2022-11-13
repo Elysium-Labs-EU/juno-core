@@ -1,27 +1,29 @@
+import BackButton from 'components/Elements/Buttons/BackButton'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import * as S from 'components/MainHeader/HeaderStyles'
+import Navigation from 'components/MainHeader/Navigation/Navigation'
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
+import { QiSearch } from 'images/svgIcons/quillIcons'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import Navigation from '../MainHeader/Navigation/Navigation'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import Tabs from './Tabs/Tabs'
-import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
-import * as local from '../../constants/emailDetailConstants'
-import * as global from '../../constants/globalConstants'
-import BackButton from '../Elements/Buttons/BackButton'
-import * as S from '../MainHeader/HeaderStyles'
-import * as GS from '../../styles/globalStyles'
-import { selectLabelIds, selectStorageLabels } from '../../store/labelsSlice'
-import { findLabelById } from '../../utils/findLabel'
-import EmailPosition from './EmailPosition/EmailPosition'
-import { IEmailListObject } from '../../store/storeTypes/emailListTypes'
-import { edgeLoadingNextPage } from '../../utils/loadNextPage'
-import { selectCoreStatus, selectViewIndex } from '../../store/emailDetailSlice'
-import { selectSearchList } from '../../store/emailListSlice'
+import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
+import { selectSearchList } from 'store/emailListSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
+import { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
   setInSearch,
-} from '../../store/utilsSlice'
-import CustomButton from '../Elements/Buttons/CustomButton'
+} from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import { findLabelById } from 'utils/findLabel'
+import { edgeLoadingNextPage } from 'utils/loadNextPage'
+
+import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
+import EmailPosition from './EmailPosition/EmailPosition'
+import Tabs from './Tabs/Tabs'
 
 const EmailDetailHeader = ({
   activeEmailList,
@@ -82,7 +84,7 @@ const EmailDetailHeader = ({
 
   return (
     <GS.OuterContainer data-testid="email-detail-header">
-      {!coreStatus || coreStatus === global.CORE_STATUS_SEARCHING ? (
+      {!coreStatus || coreStatus === global.CORE_STATUS_MAP.searching ? (
         <S.Wrapper>
           <S.HeaderCenter>
             <S.PageTitle>{detailHeader || local.INVALID_HEADER}</S.PageTitle>
@@ -93,8 +95,8 @@ const EmailDetailHeader = ({
                 label={`Search Query: "${searchList?.q}"`}
                 onClick={() => dispatch(setInSearch(true))}
                 suppressed
-                title="searchQuery"
-                icon={null}
+                title="Go back to search window"
+                icon={<QiSearch />}
               />
             )}
           </S.SearchQuery>
@@ -114,7 +116,7 @@ const EmailDetailHeader = ({
       ) : (
         <S.Wrapper>
           <S.FocusSortHeaderWrapper>
-            {coreStatus === global.CORE_STATUS_FOCUSED ? (
+            {coreStatus === global.CORE_STATUS_MAP.focused ? (
               <S.PageTitle>{local.HEADER_FOCUS}</S.PageTitle>
             ) : (
               <S.PageTitle>{local.HEADER_SORT}</S.PageTitle>

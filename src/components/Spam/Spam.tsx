@@ -1,8 +1,8 @@
+import EmailList from 'components/EmailList/EmailList'
 import { useEffect } from 'react'
-import EmailList from '../EmailList/EmailList'
-import { setCurrentLabels } from '../../store/labelsSlice'
-import { selectBaseLoaded } from '../../store/baseSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { selectBaseLoaded } from 'store/baseSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { setCurrentLabels } from 'store/labelsSlice'
 
 const LABEL = ['SPAM']
 

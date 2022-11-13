@@ -1,8 +1,9 @@
+import StyledTooltip from 'components/Elements/StyledTooltip'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyPress from 'hooks/useKeyPress'
+import { QiAlt } from 'images/svgIcons/quillIcons'
+
 import * as S from './EmailDetailOptionsStackerStyles'
-import * as keyConstants from '../../../../constants/keyConstants'
-import useKeyPress from '../../../../hooks/useKeyPress'
-import { QiAlt } from '../../../../images/svgIcons/quillIcons'
-import StyledTooltip from '../../../Elements/StyledTooltip'
 
 const EmailDetailOptionStacker = ({
   firstOption,
@@ -13,7 +14,7 @@ const EmailDetailOptionStacker = ({
   secondOption: JSX.Element
   prioritizeSecondOption: boolean
 }) => {
-  const KeyALtListener = useKeyPress(keyConstants.KEY_ALT)
+  const KeyALtListener = useKeyPress(keyConstants.KEY_SPECIAL.alt)
   const prioritization = prioritizeSecondOption
     ? [secondOption, firstOption]
     : [firstOption, secondOption]
