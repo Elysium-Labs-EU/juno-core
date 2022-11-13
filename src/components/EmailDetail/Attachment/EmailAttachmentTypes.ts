@@ -9,3 +9,8 @@ export interface IEmailAttachmentType {
   mimeType: string
   partId: string
 }
+
+export interface IFetchedAttachment {
+  blobUrl: string | null
+  mimeType: string | null
+}

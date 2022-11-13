@@ -1,15 +1,16 @@
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
-import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import { IEmailAttachmentType, IFetchedAttachment } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as global from 'constants/globalConstants'
-import { QiCheckmark, QiDownload, QiEscape } from 'images/svgIcons/quillIcons'
+import { QiCheckmark, QiDownload, QiEscape, QiEye } from 'images/svgIcons/quillIcons'
 import { useCallback, useState } from 'react'
 import { useAppDispatch } from 'store/hooks'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
+import { setActiveModal, setSystemStatusUpdate } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
-
+import { viewAttachment } from 'utils/viewAttachment'
+import AttachmentModal from '../AttachmentModal/AttachmentModal'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
 
@@ -79,6 +80,63 @@ const DeleteButton = ({
   />
 )
 
+const ViewAttachmentButton = ({
+  attachmentData,
+  messageId = undefined,
+}: {
+  attachmentData: IEmailAttachmentType
+  messageId?: string
+}) => {
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [fetchedAttachmentData, setFetchedAttachmentData] =
+    useState<null | IFetchedAttachment>(null)
+  const dispatch = useAppDispatch()
+
+  const handleClick = async () => {
+    setLoadState(global.LOAD_STATE_MAP.loading)
+    if (messageId) {
+      const response = await viewAttachment({
+        messageId,
+        attachmentData,
+      })
+      if (response?.success) {
+        setLoadState(global.LOAD_STATE_MAP.loaded)
+        setFetchedAttachmentData({
+          blobUrl: response?.blobUrl,
+          mimeType: response?.mimeType,
+        })
+        dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.attachment))
+
+        return
+      }
+      setLoadState(global.LOAD_STATE_MAP.error)
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: response.message ?? global.NETWORK_ERROR,
+        })
+      )
+    }
+  }
+
+  return loadState !== global.LOAD_STATE_MAP.loading ? (
+    <>
+      {fetchedAttachmentData?.blobUrl !== '' ? (
+        <AttachmentModal
+          fetchedAttachmentData={fetchedAttachmentData}
+          attachmentData={attachmentData}
+        />
+      ) : null}
+      <CustomIconButton
+        onClick={handleClick}
+        icon={<QiEye />}
+        title="View attachment"
+      />
+    </>
+  ) : (
+    <StyledCircularProgress size={ICON_SIZE} />
+  )
+}
 const AttachmentBubble = ({
   attachmentData,
   messageId = undefined,
@@ -116,7 +174,16 @@ const AttachmentBubble = ({
         </GS.Span>
       </S.AttachmentInner>
       {hasDownload && 'body' in attachmentData && (
-        <DownloadButton attachmentData={attachmentData} messageId={messageId} />
+        <>
+          <ViewAttachmentButton
+            attachmentData={attachmentData}
+            messageId={messageId}
+          />
+          <DownloadButton
+            attachmentData={attachmentData}
+            messageId={messageId}
+          />
+        </>
       )}
       {handleDelete && index !== undefined && (
         <DeleteButton handleDelete={handleDelete} index={index} />
