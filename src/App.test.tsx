@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react'
-import renderWithProviders from './utils/ForTesting/testUtils'
+import renderWithProviders from 'utils/forTesting/testUtils'
 import AppHeaderHelp from './AppHeaderHelp'
 
 describe('App tests if base is loaded', () => {

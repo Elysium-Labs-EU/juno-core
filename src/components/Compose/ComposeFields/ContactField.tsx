@@ -89,7 +89,6 @@ const ContactField = ({
   )
 
   const registerOnKeyDown = useCallback(() => {
-    console.log('triggered')
     if (!hasInteracted) {
       setHasInteracted(true)
     }

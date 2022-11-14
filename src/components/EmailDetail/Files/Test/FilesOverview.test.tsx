@@ -1,6 +1,6 @@
 // import renderer from 'react-test-renderer'
 import { screen } from '@testing-library/react'
-import renderWithProviders from '../../../../utils/ForTesting/testUtils'
+import renderWithProviders from 'utils/forTesting/testUtils'
 // import testEmail from '../../../utils/ForTesting/testEmail'
 // import testDraftEmail from '../../../utils/ForTesting/testDraftEmail'
 

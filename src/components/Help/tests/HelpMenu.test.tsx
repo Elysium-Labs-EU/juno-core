@@ -1,5 +1,7 @@
+import renderWithProviders from 'utils/forTesting/testUtils'
+
 import { screen } from '@testing-library/react'
-import renderWithProviders from '../../../utils/ForTesting/testUtils'
+
 import HelpMenu from '../HelpMenu'
 
 describe('Help menu tests', () => {
