@@ -1,16 +1,14 @@
+import { History } from 'history'
 import React, { PropsWithChildren } from 'react'
+import { Provider } from 'react-redux'
+import { setupStore } from 'store/store'
+
 import { render } from '@testing-library/react'
+
 import type { RenderOptions } from '@testing-library/react'
 import type { PreloadedState } from '@reduxjs/toolkit'
-import {
-  // createMemoryHistory,
-  History,
-} from 'history'
-import { Provider } from 'react-redux'
 // import { HistoryRouter } from 'redux-first-history/rr6'
-import type { AppStore, RootState } from '../../store/store'
-import { setupStore } from '../../store/store'
-
+import type { AppStore, RootState } from 'store/store'
 // This type interface extends the default options for render from RTL, as well
 // as allows the user to specify other things such as initialState, store.
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {

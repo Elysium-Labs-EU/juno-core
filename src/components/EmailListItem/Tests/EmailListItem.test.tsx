@@ -1,123 +1,130 @@
-// import renderer from 'react-test-renderer'
-import { screen } from '@testing-library/react'
-import testEmail from '../../../utils/ForTesting/testEmail'
-import testDraftEmail from '../../../utils/ForTesting/testDraftEmail'
-import renderWithProviders from '../../../utils/ForTesting/testUtils'
-// import { render, screen } from '../../../utils/ForTesting/testUtils'
-// import toJson from '../../../utils/toJSONforTest'
-import EmailListItem from '../EmailListItem'
+// import testDraftEmail from 'utils/forTesting/testDraftEmail'
+// import testEmail from 'utils/forTesting/testEmail'
+// import renderWithProviders from 'utils/forTesting/testUtils'
 
-describe('EmailListItem regular tests', () => {
-  test('should always show an avatar', () => {
-    renderWithProviders(
-      <EmailListItem
-        email={testEmail}
-        showLabel={false}
-        index={0}
-        activeIndex={0}
-      />
-    )
+// // import renderer from 'react-test-renderer'
+// import { screen } from '@testing-library/react'
 
-    expect(screen.getByTestId('avatar')).toBeDefined()
-  })
+// // import { render, screen } from '../../../utils/ForTesting/testUtils'
+// // import toJson from '../../../utils/toJSONforTest'
+// import EmailListItem from '../EmailListItem'
 
-  test('should render a sender name if email is not a draft', () => {
-    renderWithProviders(
-      <EmailListItem
-        email={testEmail}
-        showLabel={false}
-        index={0}
-        activeIndex={0}
-      />
-    )
+// describe('EmailListItem regular tests', () => {
+//   test('should always show an avatar', () => {
+//     renderWithProviders(
+//       <EmailListItem
+//         email={testEmail}
+//         showLabel={false}
+//         index={0}
+//         activeIndex={0}
+//       />
+//     )
 
-    expect(screen.getByTestId('email-sender')).toBeDefined()
-  })
+//     expect(screen.getByTestId('avatar')).toBeDefined()
+//   })
 
-  test('should render labels if showLabel is true', () => {
-    renderWithProviders(
-      <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
-    )
+//   test('should render a sender name if email is not a draft', () => {
+//     renderWithProviders(
+//       <EmailListItem
+//         email={testEmail}
+//         showLabel={false}
+//         index={0}
+//         activeIndex={0}
+//       />
+//     )
 
-    expect(screen.getByTestId('email-label')).toBeDefined()
-  })
+//     expect(screen.getByTestId('email-sender')).toBeDefined()
+//   })
 
-  test('should not render message count if number of messages is 1', () => {
-    renderWithProviders(
-      <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
-    )
+//   test('should render labels if showLabel is true', () => {
+//     renderWithProviders(
+//       <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
+//     )
 
-    expect(screen.queryByTestId('email-message-count')).toBe(null)
-  })
+//     expect(screen.getByTestId('email-label')).toBeDefined()
+//   })
 
-  test('should always render a snippet', () => {
-    renderWithProviders(
-      <EmailListItem
-        email={testEmail}
-        showLabel={false}
-        index={0}
-        activeIndex={0}
-      />
-    )
+//   test('should not render message count if number of messages is 1', () => {
+//     renderWithProviders(
+//       <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
+//     )
 
-    expect(screen.getByTestId('email-snippet')).toBeDefined()
-  })
+//     expect(screen.queryByTestId('email-message-count')).toBe(null)
+//   })
 
-  test('should not render an attachment icon if number of attachents is 0', () => {
-    renderWithProviders(
-      <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
-    )
+//   test('should always render a snippet', () => {
+//     renderWithProviders(
+//       <EmailListItem
+//         email={testEmail}
+//         showLabel={false}
+//         index={0}
+//         activeIndex={0}
+//       />
+//     )
 
-    expect(screen.getByTestId('email-has-no-attachment')).toBeDefined()
-  })
+//     expect(screen.getByTestId('email-snippet')).toBeDefined()
+//   })
 
-  // test('should render an attachment icon if number of attachents is greater than 0', () => {
-  //   renderWithProviders(<EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />)
+//   test('should not render an attachment icon if number of attachents is 0', () => {
+//     renderWithProviders(
+//       <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
+//     )
 
-  //   expect(screen.queryByTestId('email-has-attachment')).toBe(null)
-  // })
+//     expect(screen.getByTestId('email-has-no-attachment')).toBeDefined()
+//   })
 
-  test('should render an timestamp if threadTimestamp is available', () => {
-    renderWithProviders(
-      <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
-    )
+//   // test('should render an attachment icon if number of attachents is greater than 0', () => {
+//   //   renderWithProviders(<EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />)
 
-    expect(screen.getByTestId('email-timestamp')).toBeDefined()
-  })
+//   //   expect(screen.queryByTestId('email-has-attachment')).toBe(null)
+//   // })
 
-  test('should render regular inline thread actions if email is not a draft', () => {
-    renderWithProviders(
-      <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
-    )
+//   test('should render an timestamp if threadTimestamp is available', () => {
+//     renderWithProviders(
+//       <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
+//     )
 
-    expect(screen.getByTestId('email-regular-inline-actions')).toBeDefined()
-  })
-})
+//     expect(screen.getByTestId('email-timestamp')).toBeDefined()
+//   })
 
-describe('EmailListItem draft tests', () => {
-  test('should render a recipient name if email is a draft', () => {
-    renderWithProviders(
-      <EmailListItem
-        email={testDraftEmail}
-        showLabel={false}
-        index={0}
-        activeIndex={0}
-      />
-    )
+//   test('should render regular inline thread actions if email is not a draft', () => {
+//     renderWithProviders(
+//       <EmailListItem email={testEmail} showLabel index={0} activeIndex={0} />
+//     )
 
-    expect(screen.findByTestId('email-recipient')).toBeDefined()
-  })
+//     expect(screen.getByTestId('email-regular-inline-actions')).toBeDefined()
+//   })
+// })
 
-  test('should render a draft label indicator when the email is a draft', () => {
-    renderWithProviders(
-      <EmailListItem
-        email={testDraftEmail}
-        showLabel={false}
-        index={0}
-        activeIndex={0}
-      />
-    )
+// describe('EmailListItem draft tests', () => {
+//   test('should render a recipient name if email is a draft', () => {
+//     renderWithProviders(
+//       <EmailListItem
+//         activeIndex={0}
+//         email={testDraftEmail}
+//         index={0}
+//         showCheckbox={false}
+//         showLabel={false}
+//       />
+//     )
 
-    expect(screen.findByTestId('email-draft-snippet-indicator')).toBeDefined()
-  })
-})
+//     expect(screen.findByTestId('email-recipient')).toBeDefined()
+//   })
+
+//   test('should render a draft label indicator when the email is a draft', () => {
+//     renderWithProviders(
+//       <EmailListItem
+//         activeIndex={0}
+//         email={testDraftEmail}
+//         index={0}
+//         showLabel={false}
+//         showCheckbox={false}
+//       />
+//     )
+
+//     expect(screen.findByTestId('email-draft-snippet-indicator')).toBeDefined()
+//   })
+// })
+
+// TODO: Replace test with Cypress test
+export {}
