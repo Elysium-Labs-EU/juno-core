@@ -264,7 +264,17 @@ export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   white-space: nowrap;
   font-size: var(--small);
   ${({ showComma }) => showComma && commaSeperator};
-  margin-right: ${({ showComma }) => (showComma ? '6px' : '0')};
+  margin-right: ${({ showComma }) => (showComma ? '4px' : '0')};
+`
+
+export const FullContactContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`
+
+export const ContactContainer = styled.div`
+  margin-bottom: 5px;
 `
 
 export const ComposeWrapper = styled.div`

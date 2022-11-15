@@ -27,35 +27,36 @@ const MappedContacts = ({
       </GS.Span>
       <S.SmallTextTruncated>
         {contactsMap.length > 2 ? (
-          <div>
+          <S.FullContactContainer>
             {contactsMap
               .slice(0, showAll ? contactsMap.length : 3)
               .map((contact, index) => (
-                <S.SmallTextTruncated
-                  key={contact.emailAddress}
-                  showComma={index !== (showAll ? contactsMap.length : 3) - 1}
-                >
-                  <ContactCard
-                    userEmail={contact.emailAddress}
-                    contact={contact}
+                <S.ContactContainer>
+                  <S.SmallTextTruncated
+                    key={contact.emailAddress}
+                    showComma={index !== (showAll ? contactsMap.length : 3) - 1}
                   >
-                    <S.SmallTextTruncated title={contact.emailAddress}>
-                      {contact.name}
-                    </S.SmallTextTruncated>
-                  </ContactCard>
-                </S.SmallTextTruncated>
+                    <ContactCard
+                      userEmail={contact.emailAddress}
+                      contact={contact}
+                    >
+                      <S.SmallTextTruncated title={contact.emailAddress}>
+                        {contact.name}
+                      </S.SmallTextTruncated>
+                    </ContactCard>
+                  </S.SmallTextTruncated>
+                </S.ContactContainer>
               ))}
             {!showAll && (
               <span
-                style={{ marginLeft: '6px', cursor: 'pointer' }}
+                style={{ marginLeft: '4px', cursor: 'pointer' }}
                 onClick={() => setShowAll(true)}
                 aria-hidden="true"
               >
-                {' '}
                 & {contactsMap.length - 3} others
               </span>
             )}
-          </div>
+          </S.FullContactContainer>
         ) : (
           contactsMap.map((contact, index) => (
             <S.SmallTextTruncated

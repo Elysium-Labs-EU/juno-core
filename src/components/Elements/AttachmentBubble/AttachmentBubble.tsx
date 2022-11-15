@@ -205,11 +205,13 @@ const AttachmentBubble = ({
   const memoizedViewAttachmentButton = useMemo(
     () =>
       'body' in attachmentData ? (
-        <ViewAttachmentButton
-          attachmentData={attachmentData}
-          messageId={messageId}
-          ref={previewButtonRef}
-        />
+        <S.PreviewButtonContainer>
+          <ViewAttachmentButton
+            attachmentData={attachmentData}
+            messageId={messageId}
+            ref={previewButtonRef}
+          />
+        </S.PreviewButtonContainer>
       ) : null,
     [attachmentData, messageId]
   )
@@ -217,7 +219,12 @@ const AttachmentBubble = ({
   const memoizedDownloadButton = useMemo(
     () =>
       hasDownloadOption && 'body' in attachmentData ? (
-        <DownloadButton attachmentData={attachmentData} messageId={messageId} />
+        <S.DownloadDeleteButton>
+          <DownloadButton
+            attachmentData={attachmentData}
+            messageId={messageId}
+          />
+        </S.DownloadDeleteButton>
       ) : null,
     [attachmentData, hasDownloadOption, messageId]
   )
@@ -225,34 +232,40 @@ const AttachmentBubble = ({
   const memoizedDeleteButton = useMemo(
     () =>
       handleDelete && index !== undefined ? (
-        <DeleteButton handleDelete={handleDelete} index={index} />
+        <S.DownloadDeleteButton>
+          <DeleteButton handleDelete={handleDelete} index={index} />
+        </S.DownloadDeleteButton>
       ) : null,
     [handleDelete, index]
   )
 
   // TODO: Add preview for uploaded file with file type FILE
   return (
-    <S.Attachment
-      onClick={() => previewButtonRef.current?.click()}
-      aria-hidden="true"
-      id={
-        'body' in attachmentData
-          ? attachmentData?.body?.attachmentId
-          : undefined
-      }
-    >
-      <EmailAttachmentIcon mimeType={mimeType} />
-      <S.AttachmentInner>
-        <span className="file_name">{fileName}</span>
-        <GS.Span muted small>
-          {global.FILE}
-          {formatBytes(fileSize)}
-        </GS.Span>
-      </S.AttachmentInner>
-      {memoizedViewAttachmentButton}
+    <S.AttachmentWrapper>
+      <S.Attachment
+        onClick={() => previewButtonRef.current?.click()}
+        aria-hidden="true"
+        id={
+          'body' in attachmentData
+            ? attachmentData?.body?.attachmentId
+            : undefined
+        }
+      >
+        <S.AttachmentInner>
+          <EmailAttachmentIcon mimeType={mimeType} />
+          <S.AttachmentDetails>
+            <span className="file_name">{fileName}</span>
+            <GS.Span muted small>
+              {global.FILE}
+              {formatBytes(fileSize)}
+            </GS.Span>
+          </S.AttachmentDetails>
+        </S.AttachmentInner>
+        {memoizedViewAttachmentButton}
+      </S.Attachment>
       {memoizedDownloadButton}
       {memoizedDeleteButton}
-    </S.Attachment>
+    </S.AttachmentWrapper>
   )
 }
 
