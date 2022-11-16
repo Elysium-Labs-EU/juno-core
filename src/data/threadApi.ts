@@ -20,7 +20,7 @@ const threadApi = ({
     try {
       const res: AxiosResponse<any> = await instance.get(`/api/threads/`, {
         params: {
-          labelIds: query.labelIds ?? [''],
+          labelIds: query?.labelIds?.toString() ?? '',
           maxResults: query.maxResults ?? 20,
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,
@@ -34,7 +34,7 @@ const threadApi = ({
   getFullThreads: async (query: EmailQueryObject) => {
     const res: AxiosResponse<any> = await instance.get(`/api/threads_full/`, {
       params: {
-        labelIds: query.labelIds ?? [''],
+        labelIds: query?.labelIds?.toString() ?? '',
         maxResults: query.maxResults ?? 20,
         pageToken: query.nextPageToken ?? undefined,
         q: query.q ?? undefined,
