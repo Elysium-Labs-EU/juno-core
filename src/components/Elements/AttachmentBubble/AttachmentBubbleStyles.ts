@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 
 export const AttachmentWrapper = styled.div`
-  display: flex;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: var(--radius-m);
   background-color: transparent;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--color-neutral-200);
+  display: flex;
+  margin-bottom: 8px;
   width: 100%;
   &:hover {
     box-shadow: var(--box-shadow-low);
@@ -14,20 +15,16 @@ export const AttachmentWrapper = styled.div`
 `
 
 export const Attachment = styled.div`
-  border-radius: var(--radius-m);
+    border-color 0.15s ease-in-out;
+  align-items: center;
   background-color: var(--color-neutral-100);
-  width: 100%;
+  border-radius: var(--radius-m);
   display: flex;
+  flex-flow: row;
   flex: 1 1 0%;
   justify-content: space-between;
-  /* display: grid; */
-  flex-flow: row;
-  /* padding: 4px 8px; */
-  align-items: center;
-  /* margin-bottom: 8px; */
-  /* grid-template-columns: 30px auto 30px 30px; */
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out;
+  width: 100%;
 `
 
 export const AttachmentInner = styled.div`

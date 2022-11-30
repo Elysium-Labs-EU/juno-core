@@ -1,9 +1,4 @@
 import styled from 'styled-components'
-import PopperUnstyled from '@mui/base/PopperUnstyled'
-
-export const Popper = styled(PopperUnstyled)`
-  z-index: var(--z-index-popover);
-`
 
 export const Wrapper = styled.nav`
   .MuiMenuItem-root {

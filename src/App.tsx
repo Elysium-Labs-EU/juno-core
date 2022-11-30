@@ -4,7 +4,6 @@ import SnackbarOrchestrator from 'components/SnackbarOrchestrator/SnackbarOrches
 import { BASE_ARRAY } from 'constants/baseConstants'
 import RoutesConstants from 'constants/routes.json'
 import { fetchToken } from 'data/api'
-import { AnimatePresence } from 'framer-motion'
 import { useEffect, useMemo } from 'react'
 import { push } from 'redux-first-history'
 import { HistoryRouter } from 'redux-first-history/rr6'
@@ -49,14 +48,7 @@ const App = () => {
 
   const memoizedHeaderHelp = useMemo(() => <AppHeaderHelp />, [])
 
-  const memoizedRoutesComponent = useMemo(
-    () => (
-      <AnimatePresence exitBeforeEnter>
-        <RoutesComponent />
-      </AnimatePresence>
-    ),
-    []
-  )
+  const memoizedRoutesComponent = useMemo(() => <RoutesComponent />, [])
 
   return (
     <HistoryRouter history={history}>

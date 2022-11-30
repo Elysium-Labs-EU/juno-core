@@ -2,7 +2,6 @@ import * as S from 'components/BaseLoader/BaseLoaderStyles'
 import LogoutOption, {
   handleLogout,
 } from 'components/MainHeader/Navigation/More/Options/LogoutOption'
-import { motion } from 'framer-motion'
 import useCountDownTimer from 'hooks/useCountDownTimer'
 import Logo from 'images/Juno_logo_dark.png'
 import { useEffect } from 'react'
@@ -17,15 +16,7 @@ const AnimatedMountUnmount = ({
   children,
 }: {
   children: JSX.Element | JSX.Element[] | any
-}) => (
-  <motion.div
-    exit={{ opacity: 0.7, scale: 0.9 }}
-    initial={{ opacity: 0.7, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-  >
-    {children}
-  </motion.div>
-)
+}) => <S.StyledAnimatedMountUnmount>{children}</S.StyledAnimatedMountUnmount>
 
 const Baseloader = () => {
   const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)
