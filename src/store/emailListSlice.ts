@@ -668,7 +668,7 @@ export const updateEmailLabel =
         if (request.delete) {
           try {
             if (threadId) {
-              await threadApi({}).thrashThread({
+              threadApi({}).thrashThread({
                 threadId,
               })
             }
