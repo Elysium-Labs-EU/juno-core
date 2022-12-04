@@ -33,7 +33,7 @@ export default function useKeyboardShortcut({
         if (
           (actionKeys.length === 2 &&
             e[specialKeyMap[actionKeys[0]] as keyof typeof e] &&
-            e.key === actionKeys[1]) ||
+            e.key?.toLowerCase() === actionKeys[1]) ||
           (e[specialKeyMap[actionKeys[1]] as keyof typeof e] &&
             e.key === actionKeys[0]) ||
           (actionKeys.length === 1 && e.key === actionKeys[0])

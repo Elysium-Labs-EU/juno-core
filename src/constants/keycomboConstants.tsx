@@ -11,7 +11,7 @@ export const GLOBAL_KEY_COMBOS = [
   { title: "Open Todo's", keys: ['1'] },
   { title: 'Open Inbox', keys: ['2'] },
   { title: 'Open Search', keys: [modifierKeyDisplay, 'K'] },
-  { title: 'Open Compose', keys: ['C'] },
+  { title: 'Open Compose', keys: ['SHIFT', 'C'] },
   { title: 'Open Help', keys: ['SHIFT', '→'] },
   { title: 'Open Feedback', keys: [modifierKeyDisplay, '.'] },
   { title: 'Open Keyboard shortcuts', keys: [modifierKeyDisplay, '/'] },
@@ -20,7 +20,11 @@ export const GLOBAL_KEY_COMBOS = [
   { title: 'Highlight Previous', keys: ['↑'] },
   { title: 'Highlight Next', keys: ['↓'] },
   { title: 'Open Highlighted Email', keys: ['ENTER'] },
-  { title: 'Refresh Inbox', subTitle: 'When on the Inbox', keys: ['R'] },
+  {
+    title: 'Refresh Inbox',
+    subTitle: 'When on the Inbox',
+    keys: ['SHIFT', 'R'],
+  },
 ]
 
 export const EMAIL_KEY_TITLE = 'Email'

@@ -35,10 +35,6 @@ const RotatingIcon = styled.div<IRotatingIcon>`
   ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
-const refreshFeed = (dispatch: AppDispatch) => {
-  dispatch(refreshEmailFeed())
-}
-
 const LABEL_INACTIVE = 'Refresh inbox'
 const LABEL_ACTIVE = 'Refreshing inbox...'
 
@@ -59,12 +55,12 @@ const InboxRefresh = ({
   const dispatch = useAppDispatch()
 
   const handleRefreshTrigger = useCallback(() => {
-    refreshFeed(dispatch)
+    dispatch(refreshEmailFeed())
   }, [])
 
   useKeyboardShortcut({
     handleEvent: handleRefreshTrigger,
-    actionKeys: [keyConstants.KEY_LETTERS.r],
+    actionKeys: [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.r],
     isDisabled: inSearch || disableRefresh || isLoading || !!activeModal,
   })
 

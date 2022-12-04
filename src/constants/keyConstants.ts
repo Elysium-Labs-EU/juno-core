@@ -36,4 +36,3 @@ export const KEY_SPECIAL = {
 }
 
 export const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']
-export const WHITELISTED_SYSTEM_KEY_COMBOS = [[KEY_SPECIAL.os, KEY_LETTERS.r]]

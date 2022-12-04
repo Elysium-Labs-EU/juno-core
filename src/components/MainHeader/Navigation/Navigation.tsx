@@ -68,7 +68,7 @@ const Navigation = () => {
   })
   useKeyboardShortcut({
     handleEvent: () => dispatch(push(RoutesConstants.COMPOSE_EMAIL)),
-    actionKeys: [setModifierKey, keyConstants.KEY_LETTERS.c],
+    actionKeys: [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.c],
     isDisabled:
       (inSearch || !!activeModal) &&
       (location.pathname.includes('compose') || isReplying || isForwarding),
