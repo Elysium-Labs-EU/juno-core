@@ -1,5 +1,9 @@
-import { QiEscape } from 'images/svgIcons/quillIcons'
+import Alert from '@mui/material/Alert'
+import IconButton from '@mui/material/IconButton'
+import Snackbar from '@mui/material/Snackbar'
 import { useCallback, useEffect, useState } from 'react'
+
+import { QiEscape } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { ISystemStatusUpdate } from 'store/storeTypes/utilsTypes'
 import {
@@ -7,9 +11,6 @@ import {
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
 
-import Alert from '@mui/material/Alert'
-import IconButton from '@mui/material/IconButton'
-import Snackbar from '@mui/material/Snackbar'
 
 interface ISnackbarMessage extends ISystemStatusUpdate {
   key: number

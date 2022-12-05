@@ -1,12 +1,14 @@
+import type { PreloadedState } from '@reduxjs/toolkit'
+import { render } from '@testing-library/react'
+import type { RenderOptions } from '@testing-library/react'
 import { History } from 'history'
 import React, { PropsWithChildren } from 'react'
 import { Provider } from 'react-redux'
+
 import { setupStore } from 'store/store'
 
-import { render } from '@testing-library/react'
 
-import type { RenderOptions } from '@testing-library/react'
-import type { PreloadedState } from '@reduxjs/toolkit'
+
 // import { HistoryRouter } from 'redux-first-history/rr6'
 import type { AppStore, RootState } from 'store/store'
 // This type interface extends the default options for render from RTL, as well

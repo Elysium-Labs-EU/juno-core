@@ -1,5 +1,3 @@
-import * as local from 'constants/emailDetailConstants'
-import * as global from 'constants/globalConstants'
 import {
   Dispatch,
   SetStateAction,
@@ -8,6 +6,9 @@ import {
   useMemo,
   useState,
 } from 'react'
+
+import * as local from 'constants/emailDetailConstants'
+import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'

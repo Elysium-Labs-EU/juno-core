@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+
 import { fetchEmailDetail } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'

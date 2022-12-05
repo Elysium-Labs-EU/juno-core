@@ -1,5 +1,6 @@
-import { breakPoint } from 'constants/themeConstants'
 import styled from 'styled-components'
+
+import { breakPoint } from 'constants/themeConstants'
 
 export const Wrapper = styled.div`
   align-content: center;

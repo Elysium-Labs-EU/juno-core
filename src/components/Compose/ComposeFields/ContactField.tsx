@@ -1,4 +1,3 @@
-import * as global from 'constants/globalConstants'
 import { isEqual } from 'lodash'
 import {
   Dispatch,
@@ -8,6 +7,8 @@ import {
   useMemo,
   useState,
 } from 'react'
+
+import * as global from 'constants/globalConstants'
 import { IContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 

@@ -8,6 +8,7 @@ import {
   MdOutlineRedo,
   MdOutlineUndo,
 } from 'react-icons/md'
+
 import * as S from './BodyFieldStyles'
 
 const PARAGRAPH = 'paragraph'

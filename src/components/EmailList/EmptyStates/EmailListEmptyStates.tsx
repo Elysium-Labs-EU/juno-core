@@ -1,5 +1,6 @@
-import * as local from 'constants/emptyStateConstants'
 import { useLocation } from 'react-router-dom'
+
+import * as local from 'constants/emptyStateConstants'
 
 import EmptyStateTemplate from './EmptyStateTemplate'
 

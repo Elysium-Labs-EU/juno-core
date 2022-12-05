@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
@@ -9,7 +11,6 @@ import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import Seo from 'components/Elements/Seo'
 import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
 import * as global from 'constants/globalConstants'
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'

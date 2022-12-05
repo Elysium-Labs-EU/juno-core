@@ -1,7 +1,8 @@
-import * as global from 'constants/globalConstants'
-import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
+
+import * as global from 'constants/globalConstants'
+import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
 import { selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'

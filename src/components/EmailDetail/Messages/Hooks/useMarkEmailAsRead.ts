@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import { useEffect } from 'react'
+
+import * as global from 'constants/globalConstants'
 import { useAppDispatch } from 'store/hooks'
 import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import markEmailAsRead from 'utils/markEmailAsRead'

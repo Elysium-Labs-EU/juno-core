@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import setToDoMail from 'components/EmailOptions/SetToDoMail'
 import * as local from 'constants/emailDetailConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiToDo } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import { selectInSearch } from 'store/utilsSlice'

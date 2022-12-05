@@ -1,9 +1,10 @@
-import { QiEscape } from 'images/svgIcons/quillIcons'
+import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { ReactNode } from 'react'
+
+import { QiEscape } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
 import { setActiveModal } from 'store/utilsSlice'
 
-import * as DialogPrimitive from '@radix-ui/react-dialog'
 
 import * as S from './CustomModalStyles'
 

@@ -1,5 +1,6 @@
-import EmailList from 'components/EmailList/EmailList'
 import { useEffect } from 'react'
+
+import EmailList from 'components/EmailList/EmailList'
 import { selectBaseLoaded } from 'store/baseSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { setCurrentLabels } from 'store/labelsSlice'

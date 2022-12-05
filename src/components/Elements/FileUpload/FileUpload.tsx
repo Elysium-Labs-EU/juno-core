@@ -2,6 +2,7 @@
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { FiFile } from 'react-icons/fi'
+
 import * as S from './FileUploadStyles'
 
 interface IFileUpload {

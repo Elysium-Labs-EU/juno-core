@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import { useMemo, useState } from 'react'
+
+import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 

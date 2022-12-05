@@ -1,9 +1,10 @@
+import { screen } from '@testing-library/react'
+
 import App from 'App'
 // import Settings from '../Settings'
 import * as global from 'constants/globalConstants'
 import renderWithProviders from 'utils/forTesting/testUtils'
 
-import { screen } from '@testing-library/react'
 
 const initiaUtilsState = {
   activeModal: global.ACTIVE_MODAL_MAP.settings,

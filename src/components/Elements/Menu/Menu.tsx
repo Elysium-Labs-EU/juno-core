@@ -1,5 +1,6 @@
-import StyledPopover from 'components/Elements/StyledPopover'
 import { useState } from 'react'
+
+import StyledPopover from 'components/Elements/StyledPopover'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 

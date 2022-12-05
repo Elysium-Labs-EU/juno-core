@@ -1,3 +1,5 @@
+import { FormControlLabel, Switch } from '@mui/material'
+
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectIsAvatarVisible,
@@ -6,7 +8,6 @@ import {
 } from 'store/utilsSlice'
 import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
-import { FormControlLabel, Switch } from '@mui/material'
 
 const SWITCH_LABEL = 'Show avatars'
 

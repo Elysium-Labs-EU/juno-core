@@ -1,8 +1,9 @@
+import { useCallback } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import discardDraft from 'components/EmailOptions/DiscardDraft'
 import * as local from 'constants/composeEmailConstants'
 import { QiDiscard } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { selectDraftList } from 'store/draftsSlice'
 import {
   selectIsForwarding,

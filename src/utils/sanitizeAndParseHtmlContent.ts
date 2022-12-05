@@ -1,5 +1,5 @@
-import ReactHtmlParser from 'react-html-parser'
 import DOMPurify from 'dompurify'
+import ReactHtmlParser from 'react-html-parser'
 
 export default function sanitizeAndParseHtmlContent(value: string) {
   const sanitizedData = DOMPurify.sanitize(value, {

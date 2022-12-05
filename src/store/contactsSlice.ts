@@ -1,11 +1,12 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 import contactApi from 'data/contactApi'
+import type { AppThunk, RootState } from 'store/store'
 import { IContact } from 'store/storeTypes/contactsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 interface ContactState {
   allContacts: any

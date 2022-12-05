@@ -1,3 +1,5 @@
+import { FormControlLabel, Switch } from '@mui/material'
+
 import * as S from 'components/Settings/SettingsStyles'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -9,7 +11,6 @@ import {
 import * as GS from 'styles/globalStyles'
 import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
-import { FormControlLabel, Switch } from '@mui/material'
 
 const HEADER = 'Alternate actions'
 const BODY =

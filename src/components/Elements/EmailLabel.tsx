@@ -1,7 +1,8 @@
+import styled from 'styled-components'
+
 import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
-import styled from 'styled-components'
 import capFirstLetterOnly from 'utils/capFirstLetterOnly'
 import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
 

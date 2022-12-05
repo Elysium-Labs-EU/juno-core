@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import ArchiveOption from 'components/EmailDetail/Options/ArchiveOption'
 import DeleteOption from 'components/EmailDetail/Options/DeleteOption'
@@ -8,7 +10,6 @@ import ToDoOption from 'components/EmailDetail/Options/ToDoOption'
 import UnsubscribeOption from 'components/EmailDetail/Options/UnsubscribeOption'
 import * as global from 'constants/globalConstants'
 import { QiFolderTrash } from 'images/svgIcons/quillIcons'
-import { useMemo } from 'react'
 import {
   selectCoreStatus,
   selectIsForwarding,

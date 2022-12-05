@@ -1,3 +1,6 @@
+import TextareaAutosize from '@mui/material/TextareaAutosize'
+import { useCallback, useEffect, useState } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import CustomModal from 'components/Elements/Modal/CustomModal'
@@ -9,7 +12,6 @@ import {
   QiGift,
   QiWarningAlt,
 } from 'images/svgIcons/quillIcons'
-import { useCallback, useEffect, useState } from 'react'
 import { selectProfile } from 'store/baseSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
@@ -19,7 +21,6 @@ import {
 } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 
-import TextareaAutosize from '@mui/material/TextareaAutosize'
 
 import * as S from './FeedbackStyles'
 

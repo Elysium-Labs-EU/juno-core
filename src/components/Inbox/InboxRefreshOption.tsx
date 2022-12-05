@@ -1,8 +1,10 @@
+import { useCallback, useEffect, useState } from 'react'
+import { MdRefresh } from 'react-icons/md'
+import styled, { css, keyframes } from 'styled-components'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
-import { useCallback, useEffect, useState } from 'react'
-import { MdRefresh } from 'react-icons/md'
 import { refreshEmailFeed, selectIsFetching } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { AppDispatch } from 'store/store'
@@ -11,7 +13,7 @@ import {
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
-import styled, { css, keyframes } from 'styled-components'
+
 
 const rotate = keyframes`
   from {

@@ -1,6 +1,3 @@
-import * as local from 'constants/composeEmailConstants'
-import * as global from 'constants/globalConstants'
-import useDebounce from 'hooks/useDebounce'
 import { isEqual } from 'lodash'
 import {
   ChangeEvent,
@@ -11,6 +8,10 @@ import {
   useMemo,
   useState,
 } from 'react'
+
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
+import useDebounce from 'hooks/useDebounce'
 
 import * as S from '../ComposeStyles'
 import StyledTextField from './Generic/EmailInput/EmailInputStyles'

@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import isForwardingListener from 'components/EmailOptions/IsForwardingListener'
 import * as local from 'constants/emailDetailConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiForward } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectInSearch } from 'store/utilsSlice'

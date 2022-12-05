@@ -1,12 +1,13 @@
-import { QiMail } from 'images/svgIcons/quillIcons'
+import CardContent from '@mui/material/CardContent'
+import Popper, { PopperPlacementType } from '@mui/material/Popper'
+import { Box } from '@mui/system'
 import { Children, useRef, useState } from 'react'
+
+import { QiMail } from 'images/svgIcons/quillIcons'
 import { IContact } from 'store/storeTypes/contactsTypes'
 import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
-import CardContent from '@mui/material/CardContent'
-import Popper, { PopperPlacementType } from '@mui/material/Popper'
-import { Box } from '@mui/system'
 
 import * as S from './ContactCardStyles'
 

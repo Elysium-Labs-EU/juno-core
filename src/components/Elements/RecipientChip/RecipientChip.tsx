@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react'
+
 import StyledChip from './RecipientChipStyles'
 
 interface IRecipientChip {

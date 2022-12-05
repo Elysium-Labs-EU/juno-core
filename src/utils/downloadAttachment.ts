@@ -1,6 +1,7 @@
+import fileSaver from 'file-saver'
+
 import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
-import fileSaver from 'file-saver'
 import base64toBlob from 'utils/base64toBlob'
 
 const FAIL_RESPONSE_OBJECT = {

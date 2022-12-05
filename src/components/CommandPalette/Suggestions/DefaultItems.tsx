@@ -1,3 +1,6 @@
+import { FiEdit2 } from 'react-icons/fi'
+import { Location } from 'react-router-dom'
+
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routes.json'
 import {
@@ -9,8 +12,6 @@ import {
   QiInbox,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
-import { FiEdit2 } from 'react-icons/fi'
-import { Location } from 'react-router-dom'
 import { AppDispatch } from 'store/store'
 import {
   archiveAllEmailCMDK,

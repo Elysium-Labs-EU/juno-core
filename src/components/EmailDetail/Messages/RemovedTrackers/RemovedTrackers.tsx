@@ -1,12 +1,13 @@
+import { Modal } from '@mui/material'
+import { useState } from 'react'
+import { FiShield } from 'react-icons/fi'
+
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import * as themeConstants from 'constants/themeConstants'
 import { QiEscape } from 'images/svgIcons/quillIcons'
-import { useState } from 'react'
-import { FiShield } from 'react-icons/fi'
 import * as GS from 'styles/globalStyles'
 
-import { Modal } from '@mui/material'
 
 import * as S from './RemovedTrackersStyles'
 

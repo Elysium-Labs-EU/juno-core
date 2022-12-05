@@ -1,10 +1,10 @@
-import * as keyConstants from 'constants/keyConstants'
 import { Dispatch, KeyboardEvent, SetStateAction } from 'react'
+
+import * as keyConstants from 'constants/keyConstants'
 import handleChangeFocus from 'utils/handleChangeFocus'
 
 import MenuItemComponent from './MenuItemComponent'
 import { MenuSection, MenuSectionContainer } from './MenuStyles'
-
 import type { IMenuItemCollection } from './MenuTypes'
 
 function getAllItems(items: IMenuItemCollection[]) {

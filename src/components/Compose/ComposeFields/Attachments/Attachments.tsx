@@ -1,12 +1,13 @@
 /* eslint-disable react/no-array-index-key */
+import { isEqual } from 'lodash'
+import { useCallback, useEffect, useState } from 'react'
+
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
 import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
-import { isEqual } from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
 import { useAppDispatch } from 'store/hooks'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'

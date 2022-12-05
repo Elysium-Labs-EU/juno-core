@@ -1,10 +1,11 @@
+import { useCallback } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import * as local from 'constants/emailDetailConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiFolderArchive } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'

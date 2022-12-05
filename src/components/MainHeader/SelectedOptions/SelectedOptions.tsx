@@ -1,7 +1,8 @@
+import { useCallback } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
 import { QiMeatballsH } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { deleteDraftBatch } from 'store/draftsSlice'
 import {
   selectSelectedEmails,

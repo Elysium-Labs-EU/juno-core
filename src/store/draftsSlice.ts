@@ -1,9 +1,11 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import isEmpty from 'lodash/isEmpty'
+import { push } from 'redux-first-history'
+
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import * as global from 'constants/globalConstants'
 import draftApi from 'data/draftApi'
 import messageApi from 'data/messageApi'
-import isEmpty from 'lodash/isEmpty'
-import { push } from 'redux-first-history'
 import {
   setCurrentEmail,
   setIsForwarding,
@@ -15,6 +17,7 @@ import {
   listRemoveItemDetailDraft,
   setSelectedEmails,
 } from 'store/emailListSlice'
+import type { AppThunk, RootState } from 'store/store'
 import { IComposePayload } from 'store/storeTypes/composeTypes'
 import {
   DraftDetails,
@@ -34,9 +37,7 @@ import getEmailListIndex from 'utils/getEmailListIndex'
 import { prepareFormData } from 'utils/prepareMessage'
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
