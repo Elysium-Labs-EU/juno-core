@@ -75,7 +75,9 @@ const DownloadButton = ({
       title={!downloaded ? 'Download attachment' : 'Attachment downloaded'}
     />
   ) : (
-    <StyledCircularProgress size={ICON_SIZE} />
+    <S.DownloadDeleteButton>
+      <StyledCircularProgress size={ICON_SIZE} />
+    </S.DownloadDeleteButton>
   )
 }
 

@@ -16,6 +16,7 @@ import {
 } from '@reduxjs/toolkit'
 
 import type { PreloadedState } from '@reduxjs/toolkit'
+
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
     history: createBrowserHistory(),

@@ -36,11 +36,11 @@ export const fetchEmailDetail = createAsyncThunk(
 const initialState: IEmailDetailState = Object.freeze({
   coreStatus: null,
   currEmail: '',
-  viewIndex: -1,
-  sessionViewIndex: -1,
-  isReplying: false,
-  isForwarding: false,
   fetchStatus: 'idle',
+  isForwarding: false,
+  isReplying: false,
+  sessionViewIndex: -1,
+  viewIndex: -1,
 })
 
 export const emailDetailSlice = createSlice({
