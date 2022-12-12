@@ -6,7 +6,6 @@ import { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 
 /* eslint-disable no-param-reassign */
 
-
 export const fetchEmailDetail = createAsyncThunk(
   'emailDetail/fetchEmailDetail',
   async (
