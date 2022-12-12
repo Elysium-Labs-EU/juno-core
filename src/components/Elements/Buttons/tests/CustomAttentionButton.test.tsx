@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import renderer from 'react-test-renderer'
+
 import toJson from '../../../../utils/toJSONforTest'
 import CustomAttentionButton from '../CustomAttentionButton'
 

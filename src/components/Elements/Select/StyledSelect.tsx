@@ -1,11 +1,12 @@
+
+import { Label } from '@radix-ui/react-label'
+import * as SelectPrimitive from '@radix-ui/react-select'
+
 import {
   QiCheckmark,
   QiChevronDown,
   QiChevronUp,
 } from 'images/svgIcons/quillIcons'
-
-import { Label } from '@radix-ui/react-label'
-import * as SelectPrimitive from '@radix-ui/react-select'
 
 import * as S from './StyledSelectStyles'
 

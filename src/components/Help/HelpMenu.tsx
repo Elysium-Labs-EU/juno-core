@@ -1,3 +1,5 @@
+import { useCallback, useMemo, useRef } from 'react'
+
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
 import * as S from 'components/Elements/Menu/MenuStyles'
@@ -6,7 +8,6 @@ import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiInfo } from 'images/svgIcons/quillIcons'
-import { useCallback, useMemo, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,

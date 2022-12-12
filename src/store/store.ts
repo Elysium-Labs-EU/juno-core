@@ -1,5 +1,13 @@
+import {
+  Action,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+} from '@reduxjs/toolkit'
+import type { PreloadedState } from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
 import { createReduxHistoryContext } from 'redux-first-history'
+
 import baseReducer from 'store/baseSlice'
 import contactsReducer from 'store/contactsSlice'
 import draftsReducer from 'store/draftsSlice'
@@ -8,14 +16,7 @@ import emailReducer from 'store/emailListSlice'
 import labelsReducer from 'store/labelsSlice'
 import utilsReducer from 'store/utilsSlice'
 
-import {
-  Action,
-  combineReducers,
-  configureStore,
-  ThunkAction,
-} from '@reduxjs/toolkit'
 
-import type { PreloadedState } from '@reduxjs/toolkit'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({

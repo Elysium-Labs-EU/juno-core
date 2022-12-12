@@ -1,5 +1,7 @@
 import { useCallback, useMemo } from 'react'
 
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
@@ -16,8 +18,7 @@ import {
   selectIsSilentLoading,
 } from 'store/utilsSlice'
 import loadNextPage from 'utils/loadNextPage'
-import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+
 import * as S from './DetailNavigationStyles'
 
 const ICON_SIZE = 20

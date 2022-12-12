@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router-dom'
+
 import ArchiveHeader from 'components/Archive/ArchiveHeader'
 import CommandPallette from 'components/CommandPalette/CommandPalette'
 import ComposeHeader from 'components/Compose/ComposeHeader'
@@ -12,7 +14,6 @@ import Settings from 'components/Settings/Settings'
 import SpamHeader from 'components/Spam/SpamHeader'
 import TodoHeader from 'components/ToDo/TodoHeader'
 import * as global from 'constants/globalConstants'
-import { useLocation } from 'react-router-dom'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 

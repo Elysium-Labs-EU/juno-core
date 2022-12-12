@@ -1,9 +1,10 @@
+import { useState } from 'react'
+import { push } from 'redux-first-history'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
 import userApi from 'data/userApi'
 import { QiArrowRight } from 'images/svgIcons/quillIcons'
-import { useState } from 'react'
-import { push } from 'redux-first-history'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
   selectActiveModal,

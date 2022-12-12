@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import styled from 'styled-components'
+
+import * as global from 'constants/globalConstants'
 
 const Wrapper = styled.div`
   display: flex;

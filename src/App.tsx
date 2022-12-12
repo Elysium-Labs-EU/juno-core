@@ -1,12 +1,13 @@
+import { useEffect, useMemo } from 'react'
+import { push } from 'redux-first-history'
+import { HistoryRouter } from 'redux-first-history/rr6'
+
 import AppHeaderHelp from 'AppHeaderHelp'
 import SendingBanner from 'components/SendingBanner/SendingBanner'
 import SnackbarOrchestrator from 'components/SnackbarOrchestrator/SnackbarOrchestrator'
 import { BASE_ARRAY } from 'constants/baseConstants'
 import RoutesConstants from 'constants/routes.json'
 import { fetchToken } from 'data/api'
-import { useEffect, useMemo } from 'react'
-import { push } from 'redux-first-history'
-import { HistoryRouter } from 'redux-first-history/rr6'
 import RoutesComponent from 'Routes'
 import {
   checkBase,

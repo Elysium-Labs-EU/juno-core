@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
+
 import * as global from 'constants/globalConstants'
 import labelApi from 'data/labelApi'
-import { useEffect, useState } from 'react'
 import { selectIsFetching } from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
 

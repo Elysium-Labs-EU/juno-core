@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import { useEffect } from 'react'
+
+import * as global from 'constants/globalConstants'
 import { fetchDrafts } from 'store/draftsSlice'
 import { fetchEmailsSimple, refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'

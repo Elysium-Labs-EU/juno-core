@@ -1,9 +1,10 @@
+import { useState } from 'react'
+
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import senderNameFull from 'components/Elements/SenderName/senderNameFull'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
-import { useState } from 'react'
 import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import { IContact } from 'store/storeTypes/contactsTypes'

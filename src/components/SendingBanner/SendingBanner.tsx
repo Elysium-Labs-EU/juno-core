@@ -1,12 +1,13 @@
-import { QiSend, QiWarningAlt } from 'images/svgIcons/quillIcons'
+import Snackbar from '@mui/material/Snackbar'
 import { useCallback, useEffect, useState } from 'react'
+
+import { QiSend, QiWarningAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 // import CustomButton from '../Elements/Buttons/CustomButton'
 // import * as themeConstants from 'constants/themeConstants'
 import { IMessageSendStatus } from 'store/storeTypes/utilsTypes'
 import { selectIsSending, setIsSending } from 'store/utilsSlice'
 
-import Snackbar from '@mui/material/Snackbar'
 
 import * as S from './SendingBannerStyles'
 

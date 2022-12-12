@@ -1,10 +1,5 @@
-import CustomButton from 'components/Elements/Buttons/CustomButton'
-import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
-import LoadingState from 'components/Elements/LoadingState/LoadingState'
-import * as global from 'constants/globalConstants'
-import * as keyConstants from 'constants/keyConstants'
-import threadApi from 'data/threadApi'
-import { QiArrowLeft, QiEscape, QiSearch } from 'images/svgIcons/quillIcons'
+import InputBase from '@mui/material/InputBase'
+import Modal from '@mui/material/Modal'
 import {
   ChangeEvent,
   Dispatch,
@@ -17,6 +12,14 @@ import {
   useRef,
   useState,
 } from 'react'
+
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import threadApi from 'data/threadApi'
+import { QiArrowLeft, QiEscape, QiSearch } from 'images/svgIcons/quillIcons'
 import {
   selectSearchList,
   selectSelectedEmails,
@@ -33,8 +36,6 @@ import {
 import handleChangeFocus from 'utils/handleChangeFocus'
 import sortThreads from 'utils/sortThreads'
 
-import InputBase from '@mui/material/InputBase'
-import Modal from '@mui/material/Modal'
 
 import * as S from './CommandPaletteStyles'
 import ContextBar from './ContextBar/ContextBar'

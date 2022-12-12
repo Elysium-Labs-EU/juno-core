@@ -1,11 +1,13 @@
 /* eslint-disable react/jsx-props-no-spreading */
+import Autocomplete from '@mui/material/Autocomplete'
+import { matchSorter } from 'match-sorter'
+import { useCallback, useEffect, useState } from 'react'
+
 import { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import contactApi from 'data/contactApi'
 import useDebounce from 'hooks/useDebounce'
-import { matchSorter } from 'match-sorter'
-import { useCallback, useEffect, useState } from 'react'
 import {
   selectAllContacts,
   selectContactsLoaded,
@@ -13,13 +15,12 @@ import {
   setContactsLoaded,
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import type { AppDispatch } from 'store/store'
 import { IContact } from 'store/storeTypes/contactsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
-import Autocomplete from '@mui/material/Autocomplete'
 
-import type { AppDispatch } from 'store/store'
 import StyledTextField from './EmailInputStyles'
 
 interface IEmailInputProps {

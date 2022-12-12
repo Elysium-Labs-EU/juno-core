@@ -1,6 +1,7 @@
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import root from 'react-shadow/styled-components'
+
+import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import { useAppDispatch } from 'store/hooks'
 import { AppDispatch } from 'store/store'
 import changeSignatureColor from 'utils/changeSignatureColor'

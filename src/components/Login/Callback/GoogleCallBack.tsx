@@ -1,9 +1,10 @@
+import { useEffect } from 'react'
+import { push } from 'redux-first-history'
+
 import Baseloader from 'components/BaseLoader/BaseLoader'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routes.json'
 import userApi from 'data/userApi'
-import { useEffect } from 'react'
-import { push } from 'redux-first-history'
 import { setIsAuthenticated } from 'store/baseSlice'
 import { useAppDispatch } from 'store/hooks'
 import { setSystemStatusUpdate } from 'store/utilsSlice'

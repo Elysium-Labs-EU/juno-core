@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import { useEffect } from 'react'
+
+import * as global from 'constants/globalConstants'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'

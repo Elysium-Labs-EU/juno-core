@@ -1,11 +1,12 @@
+import { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { push } from 'redux-first-history'
+
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
 import * as RoutesConstants from 'constants/routes.json'
 import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
-import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { push } from 'redux-first-history'
 import {
   selectCoreStatus,
   selectCurrentEmail,

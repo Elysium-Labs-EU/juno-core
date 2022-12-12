@@ -1,4 +1,5 @@
 import DOMPurify from 'dompurify'
+
 import { IEmailMessage } from 'store/storeTypes/emailListTypes'
 import convertStringToHTML from 'utils/convertStringToHTML'
 

@@ -1,10 +1,11 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
 import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import { QiChevronDown } from 'images/svgIcons/quillIcons'
-import { useEffect, useMemo, useState } from 'react'
 import { selectProfile } from 'store/baseSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectActiveModal, setActiveModal } from 'store/utilsSlice'

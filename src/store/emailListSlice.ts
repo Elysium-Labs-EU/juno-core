@@ -1,9 +1,11 @@
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
+
 import * as global from 'constants/globalConstants'
 import historyApi from 'data/historyApi'
 import messageApi from 'data/messageApi'
 import threadApi, { EmailQueryObject } from 'data/threadApi'
 import userApi from 'data/userApi'
-import { push } from 'redux-first-history'
 import { setProfile } from 'store/baseSlice'
 import {
   fetchEmailDetail,
@@ -12,6 +14,7 @@ import {
   setViewIndex,
 } from 'store/emailDetailSlice'
 import { setCurrentLabels, setLoadedInbox } from 'store/labelsSlice'
+import type { AppThunk, RootState } from 'store/store'
 import {
   IEmailListObject,
   IEmailListState,
@@ -38,9 +41,7 @@ import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
 import sortThreads from 'utils/sortThreads'
 
 /* eslint-disable no-param-reassign */
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',

@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react'
+
 import { EmailAvatarComponent } from 'components/Elements/Avatar/EmailAvatar'
 import * as global from 'constants/globalConstants'
-import { useEffect, useState } from 'react'
 import { selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'

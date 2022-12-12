@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
+
 import EmptyState from 'components/Elements/EmptyState'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import SelectedOptions from 'components/MainHeader/SelectedOptions/SelectedOptions'
 import useFetchEmailsDrafts from 'hooks/useFetchEmailsDrafts'
-import { useEffect } from 'react'
 import { resetEmailDetail, selectCurrentEmail } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,

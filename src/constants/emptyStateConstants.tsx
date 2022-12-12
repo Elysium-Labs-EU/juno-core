@@ -1,7 +1,7 @@
-import EmptyStateOne from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateOne'
-import EmptyStateTwo from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateTwo'
-import EmptyStateThree from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateThree'
 import EmptyStateFour from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateFour'
+import EmptyStateOne from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateOne'
+import EmptyStateThree from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateThree'
+import EmptyStateTwo from '../components/EmailList/EmptyStates/EmptyStateSVG/EmptyStateTwo'
 
 export const INBOX_HEADER = 'Inbox zero'
 export const INBOX_PARAGRAPH = 'You have reached it!'

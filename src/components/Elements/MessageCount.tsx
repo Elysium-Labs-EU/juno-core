@@ -1,8 +1,10 @@
+import { FiEdit2 } from 'react-icons/fi'
+import styled from 'styled-components'
+
 import * as global from 'constants/globalConstants'
 import { QiMail } from 'images/svgIcons/quillIcons'
-import { FiEdit2 } from 'react-icons/fi'
 import { IEmailMessage } from 'store/storeTypes/emailListTypes'
-import styled from 'styled-components'
+
 
 import StyledTooltip from './StyledTooltip'
 

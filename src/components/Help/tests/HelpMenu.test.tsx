@@ -1,6 +1,7 @@
+import { screen } from '@testing-library/react'
+
 import renderWithProviders from 'utils/forTesting/testUtils'
 
-import { screen } from '@testing-library/react'
 
 import HelpMenu from '../HelpMenu'
 

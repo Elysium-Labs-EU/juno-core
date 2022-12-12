@@ -1,3 +1,5 @@
+import { useCallback, useMemo } from 'react'
+
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import ReplyOverview from 'components/EmailOptions/ReplyOverview'
@@ -11,7 +13,6 @@ import {
   QiReply,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
-import { useCallback, useMemo } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'

@@ -1,4 +1,5 @@
 import { FiFile, FiFilm, FiFileText, FiImage } from 'react-icons/fi'
+
 import * as S from './AttachmentBubbleStyles'
 
 const ICON_SIZE = 20

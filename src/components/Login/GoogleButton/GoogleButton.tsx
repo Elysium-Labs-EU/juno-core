@@ -1,7 +1,8 @@
-import * as keyConstants from 'constants/keyConstants'
-import useKeyPress from 'hooks/useKeyPress'
 import { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
+
+import * as keyConstants from 'constants/keyConstants'
+import useKeyPress from 'hooks/useKeyPress'
 
 import * as S from './GoogleButtonStyles'
 

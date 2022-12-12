@@ -1,3 +1,5 @@
+import { Navigate, Route, Routes } from 'react-router-dom'
+
 import Archive from 'components/Archive/Archive'
 import BaseLoader from 'components/BaseLoader/BaseLoader'
 import ComposeEmail from 'components/Compose/ComposeEmail'
@@ -11,7 +13,6 @@ import SentEmail from 'components/Sent/Sent'
 import ToDo from 'components/ToDo/Todo'
 import RoutesConstants from 'constants/routes.json'
 import useSentry from 'hooks/useSentry'
-import { Navigate, Route, Routes } from 'react-router-dom'
 import { selectBaseLoaded, selectIsAuthenticated } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectIsFlexibleFlowActive } from 'store/utilsSlice'

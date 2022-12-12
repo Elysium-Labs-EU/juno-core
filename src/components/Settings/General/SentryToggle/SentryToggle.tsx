@@ -1,9 +1,10 @@
+import { FormControlLabel, Switch } from '@mui/material'
+
 import * as S from 'components/Settings/SettingsStyles'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectIsSentryActive, setIsSentryActive } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 
-import { FormControlLabel, Switch } from '@mui/material'
 
 const HEADER = 'Sentry'
 const BODY =

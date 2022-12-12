@@ -1,3 +1,5 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
@@ -15,7 +17,6 @@ import * as draft from 'constants/draftConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyPress from 'hooks/useKeyPress'
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { selectProfile } from 'store/baseSlice'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'

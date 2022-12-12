@@ -1,8 +1,9 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import ThreadList from 'components/EmailList/ThreadList'
 import * as global from 'constants/globalConstants'
-import { Dispatch, SetStateAction, useState } from 'react'
 import { useSearchResults } from 'store/emailListSlice'
 import { useAppDispatch } from 'store/hooks'
 import { AppDispatch } from 'store/store'

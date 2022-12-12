@@ -1,10 +1,3 @@
-import CustomButton from 'components/Elements/Buttons/CustomButton'
-import Seo from 'components/Elements/Seo'
-import * as local from 'constants/composeEmailConstants'
-import * as global from 'constants/globalConstants'
-import * as keyConstants from 'constants/keyConstants'
-import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
-import { QiEscape, QiSend } from 'images/svgIcons/quillIcons'
 import isEqual from 'lodash/isEqual'
 import {
   MouseEvent,
@@ -15,6 +8,14 @@ import {
   useState,
 } from 'react'
 import { useLocation } from 'react-router-dom'
+
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import Seo from 'components/Elements/Seo'
+import * as local from 'constants/composeEmailConstants'
+import * as global from 'constants/globalConstants'
+import * as keyConstants from 'constants/keyConstants'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import { QiEscape, QiSend } from 'images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
   fetchDrafts,

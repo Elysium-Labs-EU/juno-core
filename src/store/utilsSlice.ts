@@ -1,8 +1,10 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
+
 import { activateTodo } from 'components/ToDo/TodoFocusOption'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routes.json'
-import { push } from 'redux-first-history'
 import {
   deleteDraftBatch,
   fetchDrafts,
@@ -22,6 +24,7 @@ import {
   setSelectedEmails,
   updateEmailLabelBatch,
 } from 'store/emailListSlice'
+import type { AppThunk, RootState } from 'store/store'
 import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import {
   IMessageSendStatus,
@@ -35,9 +38,7 @@ import multipleIncludes from 'utils/multipleIncludes'
 import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 export const initialState: IUtilsState = Object.freeze({
   activeModal: null,

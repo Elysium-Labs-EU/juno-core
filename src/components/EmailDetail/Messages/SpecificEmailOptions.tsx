@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useState } from 'react'
+
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledPopover from 'components/Elements/StyledPopover'
@@ -11,7 +13,6 @@ import {
   QiForward,
   QiReply,
 } from 'images/svgIcons/quillIcons'
-import { Dispatch, SetStateAction, useState } from 'react'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { updateMessageLabel } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'

@@ -1,9 +1,10 @@
-import { QiEscape } from 'images/svgIcons/quillIcons'
+import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { ReactNode } from 'react'
 import styled, { keyframes } from 'styled-components'
 
+import { QiEscape } from 'images/svgIcons/quillIcons'
+
 /* eslint-disable react/jsx-props-no-spreading */
-import * as PopoverPrimitive from '@radix-ui/react-popover'
 
 const slideUpAndFade = keyframes({
   '0%': { opacity: 0, transform: 'translateY(2px)' },

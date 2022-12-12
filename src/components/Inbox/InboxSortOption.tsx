@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
@@ -6,7 +8,6 @@ import useFetchEmailsSimple from 'hooks/useFetchEmailsSimple'
 import useFetchThreadsTotalNumber from 'hooks/useFetchThreadsTotalNumber'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiSort } from 'images/svgIcons/quillIcons'
-import { useCallback } from 'react'
 import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,

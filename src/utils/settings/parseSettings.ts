@@ -8,12 +8,12 @@ import {
   showAvatarMap,
   showIntroductionMap,
 } from '../../constants/baseConstants'
-import { setSettings } from '../../store/utilsSlice'
 import * as global from '../../constants/globalConstants'
-import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
 import { AppDispatch } from '../../store/store'
-import fixMissingSetting from './fixMissingSetting'
+import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
+import { setSettings } from '../../store/utilsSlice'
 import createSettingsLabel from './createSettingsLabel'
+import fixMissingSetting from './fixMissingSetting'
 
 /**
  * @function parseSettings

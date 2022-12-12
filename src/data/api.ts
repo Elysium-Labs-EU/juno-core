@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
+
 import * as global from 'constants/globalConstants'
 import assertNonNullish from 'utils/assertNonNullish'
 import validateLocalSetup from 'utils/validateLocalSetup'

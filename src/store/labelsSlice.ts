@@ -1,7 +1,10 @@
+import { createSlice } from '@reduxjs/toolkit'
+
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { getLabelByRoute } from 'constants/labelMapConstant'
 import labelApi from 'data/labelApi'
 import { fetchEmailsSimple } from 'store/emailListSlice'
+import type { AppThunk, RootState } from 'store/store'
 import {
   GoogleLabel,
   LabelIdName,
@@ -10,9 +13,7 @@ import {
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
 
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 const initialState: LabelState = Object.freeze({
   labelIds: [],

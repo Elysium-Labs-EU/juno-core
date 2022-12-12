@@ -1,5 +1,6 @@
-import * as global from 'constants/globalConstants'
 import styled from 'styled-components'
+
+import * as global from 'constants/globalConstants'
 
 interface IThreadBaseProps {
   emailLabels: string[] | string

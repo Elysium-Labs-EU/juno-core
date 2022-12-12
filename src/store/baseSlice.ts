@@ -1,3 +1,5 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import { BASE_ARRAY } from 'constants/baseConstants'
 import { ARCHIVE_LABEL } from 'constants/globalConstants'
 import labelApi from 'data/labelApi'
@@ -5,6 +7,7 @@ import settingsApi from 'data/settingsApi'
 import userApi from 'data/userApi'
 import { setBaseEmailList } from 'store/emailListSlice'
 import { createLabel, setStorageLabels } from 'store/labelsSlice'
+import type { AppThunk, RootState } from 'store/store'
 import { IBaseState, PrefetchedBoxes } from 'store/storeTypes/baseTypes'
 import { GoogleLabel } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
@@ -14,9 +17,7 @@ import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
 
 /* eslint-disable no-param-reassign */
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import type { AppThunk, RootState } from 'store/store'
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
