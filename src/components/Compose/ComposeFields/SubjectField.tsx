@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash'
+// import { isEqual } from 'lodash'
 import {
   ChangeEvent,
   Dispatch,
@@ -37,7 +37,7 @@ const SubjectField = ({
     if (
       loadState === global.LOAD_STATE_MAP.loaded &&
       composeValue &&
-      !isEqual(composeValue, value)
+      !Object.is(composeValue, value)
     ) {
       setValue(composeValue)
     }
@@ -47,7 +47,7 @@ const SubjectField = ({
     if (
       debouncedValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !isEqual(composeValue, debouncedValue)
+      !Object.is(composeValue, debouncedValue)
     ) {
       const updateEventObject = {
         id: local.SUBJECT,

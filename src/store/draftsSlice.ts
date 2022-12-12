@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import isEmpty from 'lodash/isEmpty'
+// import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 
 import archiveMail from 'components/EmailOptions/ArchiveMail'
@@ -34,6 +34,7 @@ import {
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
 import getEmailListIndex from 'utils/getEmailListIndex'
+import isEmpty from 'utils/isEmpty'
 import { prepareFormData } from 'utils/prepareMessage'
 
 /* eslint-disable no-param-reassign */

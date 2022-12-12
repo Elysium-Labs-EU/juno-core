@@ -13,7 +13,7 @@ import Text from '@tiptap/extension-text'
 import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
-import { isEqual } from 'lodash'
+// import { isEqual } from 'lodash'
 import {
   Dispatch,
   SetStateAction,
@@ -123,7 +123,7 @@ const BodyField = ({
     if (
       debouncedValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !isEqual(composeValue, debouncedValue)
+      !Object.is(composeValue, debouncedValue)
     ) {
       const updateEventObject = { id: local.BODY, value: debouncedValue }
       updateComposeEmail(updateEventObject)
