@@ -1,4 +1,4 @@
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 
 export interface IRecipientsList {
   fieldId: string

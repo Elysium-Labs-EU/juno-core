@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import threadApi from 'data/threadApi'
 import type { RootState } from 'store/store'
-import { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 
 /* eslint-disable no-param-reassign */
 
@@ -48,22 +49,54 @@ export const emailDetailSlice = createSlice({
   initialState,
   reducers: {
     resetEmailDetail: () => initialState,
-    setCoreStatus: (state, { payload }: PayloadAction<string | null>) => {
+    setCoreStatus: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailDetailState, 'coreStatus'>['coreStatus']>
+    ) => {
       state.coreStatus = payload
     },
-    setCurrentEmail: (state, { payload }: PayloadAction<string>) => {
+    setCurrentEmail: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailDetailState, 'currEmail'>['currEmail']>
+    ) => {
       state.currEmail = payload
     },
-    setViewIndex: (state, { payload }: PayloadAction<number>) => {
+    setViewIndex: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailDetailState, 'viewIndex'>['viewIndex']>
+    ) => {
       state.viewIndex = payload
     },
-    setSessionViewIndex: (state, { payload }: PayloadAction<number>) => {
+    setSessionViewIndex: (
+      state,
+      {
+        payload,
+      }: PayloadAction<
+        Pick<IEmailDetailState, 'sessionViewIndex'>['sessionViewIndex']
+      >
+    ) => {
       state.sessionViewIndex = payload
     },
-    setIsReplying: (state, { payload }: PayloadAction<boolean>) => {
+    setIsReplying: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailDetailState, 'isReplying'>['isReplying']>
+    ) => {
       state.isReplying = payload
     },
-    setIsForwarding: (state, { payload }: PayloadAction<boolean>) => {
+    setIsForwarding: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailDetailState, 'isForwarding'>['isForwarding']>
+    ) => {
       state.isForwarding = payload
     },
   },

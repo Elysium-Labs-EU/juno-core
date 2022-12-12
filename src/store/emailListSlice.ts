@@ -1,10 +1,12 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
 import * as global from 'constants/globalConstants'
 import historyApi from 'data/historyApi'
 import messageApi from 'data/messageApi'
-import threadApi, { EmailQueryObject } from 'data/threadApi'
+import threadApi from 'data/threadApi'
+import type { IEmailQueryObject } from 'data/threadApi'
 import userApi from 'data/userApi'
 import { setProfile } from 'store/baseSlice'
 import {
@@ -15,17 +17,17 @@ import {
 } from 'store/emailDetailSlice'
 import { setCurrentLabels, setLoadedInbox } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
-import {
+import type {
   IEmailListObject,
   IEmailListState,
   IEmailListThreadItem,
   ISelectedEmailAction,
   TBaseEmailList,
 } from 'store/storeTypes/emailListTypes'
-import {
-  UpdateRequest,
-  UpdateRequestParamsBatch,
-  UpdateRequestParamsSingle,
+import type {
+  IUpdateRequest,
+  IUpdateRequestParamsBatch,
+  IUpdateRequestParamsSingle,
 } from 'store/storeTypes/metaEmailListTypes'
 import {
   navigateNextMail,
@@ -42,10 +44,9 @@ import sortThreads from 'utils/sortThreads'
 
 /* eslint-disable no-param-reassign */
 
-
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
-  async (query: EmailQueryObject, { signal }) => {
+  async (query: IEmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
     return { response: response.data, labels: query.labelIds, q: query?.q }
   }
@@ -57,7 +58,7 @@ export const fetchEmailsSimple = createAsyncThunk(
  */
 export const fetchEmailsFull = createAsyncThunk(
   'email/fetchEmailsFull',
-  async (query: EmailQueryObject, { signal }) => {
+  async (query: IEmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getFullThreads(query)
     return { response: response.data, labels: query.labelIds }
   }
@@ -276,10 +277,22 @@ export const emailListSlice = createSlice({
       }
       state.selectedEmails = initialState.selectedEmails
     },
-    setIsFetching: (state, { payload }: PayloadAction<boolean>) => {
+    setIsFetching: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IEmailListState, 'isFetching'>['isFetching']>
+    ) => {
       state.isFetching = payload
     },
-    setActiveEmailListIndex: (state, { payload }: PayloadAction<number>) => {
+    setActiveEmailListIndex: (
+      state,
+      {
+        payload,
+      }: PayloadAction<
+        Pick<IEmailListState, 'activeEmailListIndex'>['activeEmailListIndex']
+      >
+    ) => {
       state.activeEmailListIndex = payload
     },
     setBaseEmailList: (state, { payload }: PayloadAction<TBaseEmailList>) => {
@@ -604,7 +617,7 @@ export const updateEmailLabel =
     request,
     request: { removeLabelIds },
     labelIds,
-  }: UpdateRequestParamsSingle): AppThunk =>
+  }: IUpdateRequestParamsSingle): AppThunk =>
   async (dispatch, getState) => {
     try {
       const { coreStatus, viewIndex } = getState().emailDetail
@@ -715,7 +728,7 @@ export const updateEmailLabelBatch =
   ({
     request,
     request: { removeLabelIds },
-  }: UpdateRequestParamsBatch): AppThunk =>
+  }: IUpdateRequestParamsBatch): AppThunk =>
   async (dispatch, getState) => {
     try {
       const { selectedEmails } = getState().email
@@ -778,7 +791,7 @@ export const updateMessageLabel =
   }: {
     messageId: string
     threadId: string
-    request: UpdateRequest
+    request: IUpdateRequest
   }): AppThunk =>
   async (dispatch) => {
     if (request.delete) {

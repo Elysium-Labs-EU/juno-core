@@ -8,7 +8,7 @@ import * as local from 'constants/filesOverviewConstants'
 import { selectProfile } from 'store/baseSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import countUniqueFiles from 'utils/countUniqueFiles'
 
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
@@ -23,78 +23,72 @@ interface IFilesOverview {
 
 const MappedFiles = ({
   threadDetail,
-}: {
-  threadDetail: IEmailListThreadItem
-}) => {
+}: Pick<IFilesOverview, 'threadDetail'>) => {
   const { emailAddress } = useAppSelector(selectProfile)
-  return (
-    threadDetail?.messages && (
-      <div>
-        <S.DownloadAllContainer>
-          <DownloadButtonMultiple
-            filesObjectArray={threadDetail.messages.map((message) => ({
-              id: message.id,
-              files: message.payload.files,
-            }))}
-          />
-        </S.DownloadAllContainer>
-        {threadDetail.messages
-          .slice(0)
-          .reverse()
-          .map((message) => {
-            const staticSenderNameFull = senderNameFull(
-              message.payload.headers?.from,
-              emailAddress
-            )
-            const staticSenderNamePartial = senderNamePartial(
-              message.payload.headers?.from,
-              emailAddress
-            )
+  return threadDetail?.messages ? (
+    <div>
+      <S.DownloadAllContainer>
+        <DownloadButtonMultiple
+          filesObjectArray={threadDetail.messages.map((message) => ({
+            id: message.id,
+            files: message.payload.files,
+          }))}
+        />
+      </S.DownloadAllContainer>
+      {threadDetail.messages
+        .slice(0)
+        .reverse()
+        .map((message) => {
+          const staticSenderNameFull = senderNameFull(
+            message.payload.headers?.from,
+            emailAddress
+          )
+          const staticSenderNamePartial = senderNamePartial(
+            message.payload.headers?.from,
+            emailAddress
+          )
 
-            if (message?.payload?.files && message.payload.files.length > 0) {
-              return (
-                <S.FileEmailRow key={message.id}>
-                  <S.NameOptionsRow>
-                    <S.AvatarName>
-                      <ContactCard
-                        offset={[30, 10]}
-                        userEmail={staticSenderNameFull}
-                        contact={staticSenderNamePartial}
-                      >
-                        <EmailAvatar userEmail={staticSenderNameFull} />
-                      </ContactCard>
-                      <span>{staticSenderNameFull}</span>
-                    </S.AvatarName>
-                    <S.DownloadTimestampRow>
-                      {message.payload.files.length > 1 && (
-                        <DownloadButtonMultiple
-                          filesObjectArray={[
-                            { id: message.id, files: message.payload.files },
-                          ]}
-                        />
-                      )}
-                      <TimeStampDisplay
-                        threadTimeStamp={message.internalDate}
+          if (message?.payload?.files && message.payload.files.length > 0) {
+            return (
+              <S.FileEmailRow key={message.id}>
+                <S.NameOptionsRow>
+                  <S.AvatarName>
+                    <ContactCard
+                      offset={[30, 10]}
+                      userEmail={staticSenderNameFull}
+                      contact={staticSenderNamePartial}
+                    >
+                      <EmailAvatar userEmail={staticSenderNameFull} />
+                    </ContactCard>
+                    <span>{staticSenderNameFull}</span>
+                  </S.AvatarName>
+                  <S.DownloadTimestampRow>
+                    {message.payload.files.length > 1 && (
+                      <DownloadButtonMultiple
+                        filesObjectArray={[
+                          { id: message.id, files: message.payload.files },
+                        ]}
                       />
-                    </S.DownloadTimestampRow>
-                  </S.NameOptionsRow>
-                  <S.BubbleWrapper>
-                    {message.payload.files.map((item) => (
-                      <EmailAttachmentBubble
-                        attachmentData={item}
-                        messageId={message.id}
-                        key={item.body.attachmentId}
-                      />
-                    ))}
-                  </S.BubbleWrapper>
-                </S.FileEmailRow>
-              )
-            }
-            return null
-          })}
-      </div>
-    )
-  )
+                    )}
+                    <TimeStampDisplay threadTimeStamp={message.internalDate} />
+                  </S.DownloadTimestampRow>
+                </S.NameOptionsRow>
+                <S.BubbleWrapper>
+                  {message.payload.files.map((item) => (
+                    <EmailAttachmentBubble
+                      attachmentData={item}
+                      messageId={message.id}
+                      key={item.body.attachmentId}
+                    />
+                  ))}
+                </S.BubbleWrapper>
+              </S.FileEmailRow>
+            )
+          }
+          return null
+        })}
+    </div>
+  ) : null
 }
 
 const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {

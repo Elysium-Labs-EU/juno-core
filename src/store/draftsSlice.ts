@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 // import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 
@@ -18,13 +19,13 @@ import {
   setSelectedEmails,
 } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
-import { IComposePayload } from 'store/storeTypes/composeTypes'
-import {
-  DraftDetails,
-  DraftsState,
-  EnhancedDraftDetails,
+import type { IComposePayload } from 'store/storeTypes/composeTypes'
+import type {
+  IDraftDetails,
+  IDraftsState,
+  IEnhancedIDraftDetails,
   IDraftDetailObject,
-  OpenDraftEmailType,
+  IOpenDraftEmailType,
 } from 'store/storeTypes/draftsTypes'
 import {
   closeMail,
@@ -39,7 +40,6 @@ import { prepareFormData } from 'utils/prepareMessage'
 
 /* eslint-disable no-param-reassign */
 
-
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
   async (_, { signal }) => {
@@ -48,7 +48,7 @@ export const fetchDrafts = createAsyncThunk(
   }
 )
 
-const initialState: DraftsState = Object.freeze({
+const initialState: IDraftsState = Object.freeze({
   draftList: [],
 })
 
@@ -80,7 +80,7 @@ export const draftsSlice = createSlice({
     },
     listRemoveDraftBatch: (
       state,
-      { payload }: PayloadAction<{ threadIds: string[] }>
+      { payload }: PayloadAction<{ threadIds: Array<string> }>
     ) => {
       const { threadIds } = payload
       const copyCurrentDraftList = state.draftList
@@ -161,7 +161,7 @@ export const createUpdateDraft =
 
 const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 const pushDraftDetails =
-  ({ draft, draft: { message } }: EnhancedDraftDetails): AppThunk =>
+  ({ draft, draft: { message } }: IEnhancedIDraftDetails): AppThunk =>
   async (dispatch, getState) => {
     try {
       if (draft?.id && message?.threadId) {
@@ -196,7 +196,7 @@ const pushDraftDetails =
     }
   }
 
-const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
+const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk => {
   const { draftId } = draftDetails
   return async (dispatch) => {
     try {
@@ -223,7 +223,7 @@ const loadDraftDetails = (draftDetails: DraftDetails): AppThunk => {
 }
 
 export const openDraftEmail =
-  ({ messageId, id }: OpenDraftEmailType): AppThunk =>
+  ({ messageId, id }: IOpenDraftEmailType): AppThunk =>
   async (dispatch, getState) => {
     try {
       // If Draft list is empty, fetch it first.

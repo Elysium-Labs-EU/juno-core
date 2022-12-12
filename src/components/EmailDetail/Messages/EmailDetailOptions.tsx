@@ -17,7 +17,7 @@ import {
 } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import { selectAlternateActions } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import { findLabelByName } from 'utils/findLabel'

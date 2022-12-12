@@ -1,25 +1,25 @@
 import * as global from 'constants/globalConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
-import { AppDispatch } from 'store/store'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { AppDispatch } from 'store/store'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 
 interface ILoadNextPage {
-  q?: string
-  nextPageToken: string | null | undefined
-  labelIds: string[]
   dispatch: AppDispatch
-  silentLoading?: boolean
-  maxResults: number
   fetchSimple?: boolean
+  labelIds: string[]
+  maxResults: number
+  nextPageToken: string | null | undefined
+  q?: string
+  silentLoading?: boolean
 }
 
 const loadNextPage = ({
-  q = undefined,
-  nextPageToken,
-  labelIds,
   dispatch,
-  silentLoading = false,
+  labelIds,
   maxResults,
+  nextPageToken,
+  q = undefined,
+  silentLoading = false,
 }: ILoadNextPage) => {
   if (nextPageToken && nextPageToken !== global.HISTORY_NEXT_PAGETOKEN) {
     const params = {
@@ -36,19 +36,19 @@ const loadNextPage = ({
 export default loadNextPage
 
 interface IEdgeLoadingNextPage {
-  isSilentLoading: boolean
-  dispatch: AppDispatch
-  labelIds: string[]
-  emailFetchSize: number
   activeEmailList: IEmailListObject
+  dispatch: AppDispatch
+  emailFetchSize: number
+  isSilentLoading: boolean
+  labelIds: string[]
 }
 
 export const edgeLoadingNextPage = ({
-  isSilentLoading,
-  dispatch,
-  labelIds,
-  emailFetchSize,
   activeEmailList,
+  dispatch,
+  emailFetchSize,
+  isSilentLoading,
+  labelIds,
 }: IEdgeLoadingNextPage) => {
   if (!isSilentLoading) {
     if ('q' in activeEmailList && activeEmailList.q !== undefined) {

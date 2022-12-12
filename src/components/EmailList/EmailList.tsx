@@ -13,7 +13,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import getEmailListIndex from 'utils/getEmailListIndex'
 import multipleIncludes from 'utils/multipleIncludes'
 
@@ -26,7 +26,7 @@ const LabeledInbox = ({
   emailList: IEmailListObject[]
   activeEmailListIndex: number
 }) => {
-  if (emailList && activeEmailListIndex > -1) {
+  if (emailList) {
     // Show the list of emails that are connected to the labelId mailbox.
     return <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
   }
@@ -45,6 +45,7 @@ const EmailList = () => {
   useFetchEmailsDrafts(labelIds, Date.now())
 
   // Run a clean up function to ensure that the email detail values are always back to base values.
+  // TODO: Convert this to a Redux listener.
   useEffect(() => {
     if (currentEmail.length > 0) {
       dispatch(resetEmailDetail())
@@ -52,6 +53,7 @@ const EmailList = () => {
   }, [currentEmail])
 
   // Sync the emailListIndex with Redux
+  // TODO: Convert this to a Redux listener.
   useEffect(() => {
     const emailListIndex = getEmailListIndex({ emailList, labelIds })
     if (emailListIndex > -1 && activeEmailListIndex !== emailListIndex) {

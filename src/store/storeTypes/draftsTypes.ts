@@ -1,13 +1,13 @@
-export interface OpenDraftEmailType {
+export interface IOpenDraftEmailType {
   messageId: string
   id: string
 }
 
-export interface DraftDetails {
+export interface IDraftDetails {
   draftId: string
 }
 
-export interface FullEmailType {
+export interface IFullEmailType {
   historyId: string
   id: string
   internalDate: string
@@ -22,14 +22,14 @@ export interface FullEmailType {
   snippet: string
 }
 
-export interface EnhancedDraftDetails {
+export interface IEnhancedIDraftDetails {
   draft: {
     id: string
-    message: Partial<FullEmailType>
+    message: Partial<IFullEmailType>
   }
 }
 
-export interface MessagePayload {
+export interface IMessagePayload {
   name: string
   value?: string
 }
@@ -43,6 +43,6 @@ export interface IDraftDetailObject {
   }
 }
 
-export interface DraftsState {
+export interface IDraftsState {
   draftList: IDraftDetailObject[]
 }

@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 
 import * as global from 'constants/globalConstants'
 import assertNonNullish from 'utils/assertNonNullish'

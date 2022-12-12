@@ -1,4 +1,4 @@
-import { GoogleLabel } from 'store/storeTypes/labelsTypes'
+import { IGoogleLabel } from 'store/storeTypes/labelsTypes'
 
 export interface IProfile {
   signature: string
@@ -16,4 +16,4 @@ export interface IBaseState {
   isAuthenticated: boolean
 }
 
-export type PrefetchedBoxes = GoogleLabel[][]
+export type TPrefetchedBoxes = IGoogleLabel[][]

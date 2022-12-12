@@ -1,7 +1,7 @@
 import * as global from 'constants/globalConstants'
 import { updateEmailLabel } from 'store/emailListSlice'
-import { AppDispatch } from 'store/store'
-import { LabelIdName } from 'store/storeTypes/labelsTypes'
+import type { AppDispatch } from 'store/store'
+import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { findLabelByName } from 'utils/findLabel'
 import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
@@ -10,7 +10,7 @@ interface ISetToDoMail {
   threadId: string
   labelIds: string[]
   dispatch: AppDispatch
-  storageLabels: LabelIdName[]
+  storageLabels: ILabelIdName[]
 }
 
 const setToDoMail = ({

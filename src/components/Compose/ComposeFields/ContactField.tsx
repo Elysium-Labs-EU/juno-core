@@ -1,19 +1,21 @@
 // import { isEqual } from 'lodash'
 import {
-  Dispatch,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react'
+import type {
+  Dispatch,
+  SetStateAction,
+} from 'react'
 
 import * as global from 'constants/globalConstants'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 
 import { recipientListTransform } from '../ComposeEmail'
-import { IRecipientsList } from '../ComposeEmailTypes'
+import type { IRecipientsList } from '../ComposeEmailTypes'
 import RecipientField from './Generic/RecipientField'
 
 const ContactField = ({
@@ -98,16 +100,16 @@ const ContactField = ({
   const memoizedField = useMemo(
     () => (
       <RecipientField
-        recipientFieldValue={value}
+        error={error}
         fieldId={id}
         fieldLabel={label}
-        error={error}
         handleChangeRecipients={handleChange}
-        inputValue={inputValue}
-        setInputValue={setInputValue}
         handleDelete={handleDelete}
-        showField={showField}
+        inputValue={inputValue}
+        recipientFieldValue={value}
         registerOnKeyDown={registerOnKeyDown}
+        setInputValue={setInputValue}
+        showField={showField}
       />
     ),
     [inputValue, error, handleChange, value, id, label]

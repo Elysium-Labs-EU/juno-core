@@ -7,11 +7,12 @@ import {
   SETTINGS_DELIMITER,
   showAvatarMap,
   showIntroductionMap,
-} from '../../constants/baseConstants'
-import * as global from '../../constants/globalConstants'
-import { AppDispatch } from '../../store/store'
-import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
-import { setSettings } from '../../store/utilsSlice'
+} from 'constants/baseConstants'
+import * as global from 'constants/globalConstants'
+import type { AppDispatch } from 'store/store'
+import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import { setSettings } from 'store/utilsSlice'
+
 import createSettingsLabel from './createSettingsLabel'
 import fixMissingSetting from './fixMissingSetting'
 
@@ -26,7 +27,7 @@ import fixMissingSetting from './fixMissingSetting'
 
 export default function parseSettings(
   dispatch: AppDispatch,
-  settingsLabel: GoogleLabel
+  settingsLabel: IGoogleLabel
 ): void {
   const parsedSettings = settingsLabel.name.split(SETTINGS_DELIMITER)
   if (parsedSettings && parsedSettings.length > 0) {

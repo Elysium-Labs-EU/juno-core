@@ -1,4 +1,4 @@
-import { LabelIdName } from 'store/storeTypes/labelsTypes'
+import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
 
 /**
  * @function filterIllegalLabels
@@ -9,7 +9,7 @@ import { LabelIdName } from 'store/storeTypes/labelsTypes'
 
 const filterIllegalLabels = (
   labelIds: string[],
-  storageLabels: LabelIdName[]
+  storageLabels: ILabelIdName[]
 ) =>
   labelIds.filter((label) =>
     storageLabels.map((storageLabel) => storageLabel.id).includes(label)

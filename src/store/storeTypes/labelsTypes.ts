@@ -1,22 +1,22 @@
-interface LabelColor {
+interface ILabelColor {
   backgroundColor: string
   textColor: string
 }
 
-export interface GoogleLabel {
+export interface IGoogleLabel {
+  color?: ILabelColor
   id: string
   labelListVisibility?: string
   messageListVisibility?: string
   name: string
   type: string
-  color?: LabelColor
 }
-export interface LabelIdName {
+export interface ILabelIdName {
   id: string
   name: string
 }
-export interface LabelState {
-  labelIds: string[]
-  loadedInbox: string[]
-  storageLabels: LabelIdName[]
+export interface ILabelState {
+  labelIds: Array<string>
+  loadedInbox: Array<string>
+  storageLabels: Array<Pick<IGoogleLabel, 'id' | 'name'>>
 }

@@ -26,7 +26,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import {
+import type {
   IEmailListObject,
   IEmailListThreadItem,
 } from 'store/storeTypes/emailListTypes'
@@ -160,12 +160,14 @@ const EmailDetail = () => {
   }, [currentEmail, activeEmailList, baseState])
 
   // If the found threadId doesn't match with the Redux version - it will set it.
+  // TODO: Convert to listener in Redux
   useEffect(() => {
     if (threadId && !currentEmail) {
       dispatch(setCurrentEmail(threadId))
     }
   }, [threadId, currentEmail])
 
+  // TODO: Convert to listener in Redux
   useEffect(() => {
     if (isReplying && currentEmail && currentEmail !== threadId) {
       dispatch(setIsReplying(false))

@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
 import { activateTodo } from 'components/ToDo/TodoFocusOption'
@@ -25,8 +26,8 @@ import {
   updateEmailLabelBatch,
 } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
-import {
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type {
   IMessageSendStatus,
   ISystemStatusUpdate,
   IUtilsState,
@@ -38,7 +39,6 @@ import multipleIncludes from 'utils/multipleIncludes'
 import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 /* eslint-disable no-param-reassign */
-
 
 export const initialState: IUtilsState = Object.freeze({
   activeModal: null,
@@ -60,25 +60,60 @@ export const utilsSlice = createSlice({
   name: 'utils',
   initialState,
   reducers: {
-    setActiveModal(state, { payload }: PayloadAction<string | null>) {
+    setActiveModal(
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'activeModal'>['activeModal']>
+    ) {
       state.activeModal = payload
     },
-    setAlternateActions: (state, { payload }: PayloadAction<boolean>) => {
+    setAlternateActions: (
+      state,
+      {
+        payload,
+      }: PayloadAction<
+        Pick<IUtilsState, 'alternateActions'>['alternateActions']
+      >
+    ) => {
       state.alternateActions = payload
     },
-    setEmailFetchSize(state, { payload }: PayloadAction<number>) {
+    setEmailFetchSize(
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'emailFetchSize'>['emailFetchSize']>
+    ) {
       state.emailFetchSize = payload
     },
-    setFlexibleFlow: (state, { payload }: PayloadAction<boolean>) => {
+    setFlexibleFlow: (
+      state,
+      {
+        payload,
+      }: PayloadAction<
+        Pick<IUtilsState, 'isFlexibleFlowActive'>['isFlexibleFlowActive']
+      >
+    ) => {
       state.isFlexibleFlowActive = payload
     },
-    setInSearch: (state, { payload }: PayloadAction<boolean>) => {
+    setInSearch: (
+      state,
+      { payload }: PayloadAction<Pick<IUtilsState, 'inSearch'>['inSearch']>
+    ) => {
       state.inSearch = payload
     },
-    setIsLoading: (state, { payload }: PayloadAction<boolean>) => {
+    setIsLoading: (
+      state,
+      { payload }: PayloadAction<Pick<IUtilsState, 'isLoading'>['isLoading']>
+    ) => {
       state.isLoading = payload
     },
-    setIsProcessing: (state, { payload }: PayloadAction<boolean>) => {
+    setIsProcessing: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'isProcessing'>['isProcessing']>
+    ) => {
       state.isProcessing = payload
     },
     setIsSending: (
@@ -97,10 +132,20 @@ export const utilsSlice = createSlice({
         state.isSending = null
       }
     },
-    setIsSentryActive: (state, { payload }: PayloadAction<boolean>) => {
+    setIsSentryActive: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'isSentryActive'>['isSentryActive']>
+    ) => {
       state.isSentryActive = payload
     },
-    setIsSilentLoading: (state, { payload }: PayloadAction<boolean>) => {
+    setIsSilentLoading: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'isSilentLoading'>['isSilentLoading']>
+    ) => {
       state.isSilentLoading = payload
     },
     setSystemStatusUpdate: (
@@ -119,7 +164,7 @@ export const utilsSlice = createSlice({
         state.systemStatusUpdate = null
       }
     },
-    setSettings: (state, { payload }) => {
+    setSettings: (state, { payload }: PayloadAction<any>) => {
       state.isAvatarVisible = payload.isAvatarVisible
       state.emailFetchSize = payload.emailFetchSize
       state.activeModal = payload.showIntroduction
@@ -128,10 +173,20 @@ export const utilsSlice = createSlice({
       state.isFlexibleFlowActive = payload.isFlexibleFlowActive
       state.alternateActions = payload.alternateActions
     },
-    setSettingsLabelId(state, { payload }: PayloadAction<string>) {
+    setSettingsLabelId(
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'settingsLabelId'>['settingsLabelId']>
+    ) {
       state.settingsLabelId = payload
     },
-    setShowAvatar: (state, { payload }: PayloadAction<boolean>) => {
+    setShowAvatar: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IUtilsState, 'isAvatarVisible'>['isAvatarVisible']>
+    ) => {
       state.isAvatarVisible = payload
     },
   },

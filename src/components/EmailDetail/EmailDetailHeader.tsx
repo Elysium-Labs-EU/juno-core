@@ -12,7 +12,7 @@ import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
 import { selectSearchList } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
@@ -31,13 +31,13 @@ const EmailDetailHeader = ({
 }: {
   activeEmailList: IEmailListObject
 }) => {
-  const searchList = useAppSelector(selectSearchList)
   const coreStatus = useAppSelector(selectCoreStatus)
-  const storageLabels = useAppSelector(selectStorageLabels)
-  const labelIds = useAppSelector(selectLabelIds)
-  const viewIndex = useAppSelector(selectViewIndex)
-  const isSilentLoading = useAppSelector(selectIsSilentLoading)
   const emailFetchSize = useAppSelector(selectEmailListSize)
+  const isSilentLoading = useAppSelector(selectIsSilentLoading)
+  const labelIds = useAppSelector(selectLabelIds)
+  const searchList = useAppSelector(selectSearchList)
+  const storageLabels = useAppSelector(selectStorageLabels)
+  const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const location = useLocation()
   const [detailHeader, setDetailHeader] = useState<string>('')

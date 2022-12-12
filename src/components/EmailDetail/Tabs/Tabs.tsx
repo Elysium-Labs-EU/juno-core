@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import filterTrashMessages from 'utils/filterTrashMessages'
 
 import FilesTab from './FilesTab'

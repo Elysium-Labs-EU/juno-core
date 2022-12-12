@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 import { BASE_ARRAY } from 'constants/baseConstants'
 import { ARCHIVE_LABEL } from 'constants/globalConstants'
@@ -8,8 +9,8 @@ import userApi from 'data/userApi'
 import { setBaseEmailList } from 'store/emailListSlice'
 import { createLabel, setStorageLabels } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
-import { IBaseState, PrefetchedBoxes } from 'store/storeTypes/baseTypes'
-import { GoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { IBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
+import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
 import multipleIncludes from 'utils/multipleIncludes'
 import createSettingsLabel from 'utils/settings/createSettingsLabel'
@@ -17,7 +18,6 @@ import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
 
 /* eslint-disable no-param-reassign */
-
 
 const initialState: IBaseState = Object.freeze({
   baseLoaded: false,
@@ -37,15 +37,26 @@ export const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
-    setBaseLoaded: (state, { payload }: PayloadAction<boolean>) => {
+    setBaseLoaded: (
+      state,
+      { payload }: PayloadAction<Pick<IBaseState, 'baseLoaded'>['baseLoaded']>
+    ) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
       }
     },
-    setIsAuthenticated: (state, { payload }: PayloadAction<boolean>) => {
+    setIsAuthenticated: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<IBaseState, 'isAuthenticated'>['isAuthenticated']>
+    ) => {
       state.isAuthenticated = payload
     },
-    setProfile: (state, { payload }) => {
+    setProfile: (
+      state,
+      { payload }: PayloadAction<Pick<IBaseState, 'profile'>['profile']>
+    ) => {
       state.profile = payload
     },
   },
@@ -55,7 +66,7 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
 export const handleSettings =
-  (labels: GoogleLabel[]): AppThunk =>
+  (labels: IGoogleLabel[]): AppThunk =>
   async (dispatch) => {
     const settingsLabel = findSettings(labels, dispatch)
     if (!settingsLabel) {
@@ -82,7 +93,7 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
  */
 
 const presetEmailList =
-  (prefetchedBoxes: PrefetchedBoxes): AppThunk =>
+  (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
   (dispatch) => {
     dispatch(
       setBaseEmailList(
@@ -102,11 +113,11 @@ const presetEmailList =
  */
 
 const finalizeBaseLoading =
-  (labels: any[]): AppThunk =>
+  (labels: Array<IGoogleLabel>): AppThunk =>
   (dispatch) => {
     // TODO: Refactor this to not be an array of arrays, but an array of objects
-    const prefetchedBoxes: PrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-      labels.filter((item: GoogleLabel) => item.name === baseLabel)
+    const prefetchedBoxes: TPrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      labels.filter((item) => item.name === baseLabel)
     )
     // Add an empty label to have the option to show ALL emails.
     const addEmptyAllLabel = prefetchedBoxes.concat([
@@ -144,7 +155,7 @@ export const checkBase = (): AppThunk => async (dispatch) => {
         )
         if (Array.isArray(labels) && labels.length > 0) {
           // TODO: Check when this is triggered and write an explanation
-          const nameMapLabels = labels.map((label: GoogleLabel) => label.name)
+          const nameMapLabels = labels.map((label: IGoogleLabel) => label.name)
           if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
             const checkArray = BASE_ARRAY.map((item) =>
               nameMapLabels.includes(item)

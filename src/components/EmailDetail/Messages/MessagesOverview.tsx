@@ -12,7 +12,7 @@ import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 import StyledCircularProgress from '../../Elements/StyledCircularProgress'
 import * as ES from '../EmailDetailStyles'
@@ -23,17 +23,27 @@ import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
 import ReplyComposer from './InlineComposers/ReplyComposer'
 
+interface IMessagesOverview {
+  isForwarding: boolean
+  isLoading: boolean
+  isReplying: boolean
+  labelIds: string[]
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
+  threadDetail: IEmailListThreadItem
+}
+
+interface IMappedMessages
+  extends Pick<IMessagesOverview, 'setShouldRefreshDetail' | 'threadDetail'> {
+  indexMessageListener: (value: number) => void
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
+}
+
 const MappedMessages = ({
   threadDetail,
   setUnsubscribeLink,
   indexMessageListener,
   setShouldRefreshDetail,
-}: {
-  threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
-  indexMessageListener: (value: number) => void
-  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-}) => {
+}: IMappedMessages) => {
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
 
@@ -101,15 +111,6 @@ const MappedMessages = ({
   ) : (
     <p>{global.NOTHING_TO_SEE}</p>
   )
-}
-
-interface IMessagesOverview {
-  threadDetail: IEmailListThreadItem
-  isLoading: boolean
-  isReplying: boolean
-  isForwarding: boolean
-  labelIds: string[]
-  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
 const MessagesOverview = ({

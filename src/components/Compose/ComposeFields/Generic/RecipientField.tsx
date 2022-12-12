@@ -1,5 +1,6 @@
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
+import { Dispatch, SetStateAction } from 'react'
 
 import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import * as S from 'components/Compose/ComposeStyles'
@@ -9,13 +10,13 @@ import type { IContact } from 'store/storeTypes/contactsTypes'
 import EmailInput from './EmailInput/EmailInput'
 
 interface IRecipientField {
-  recipientFieldValue: IContact[]
+  recipientFieldValue: Array<IContact>
   fieldId: string
   fieldLabel: string
   error: boolean
   handleChangeRecipients: (recipientListRaw: IRecipientsList) => void
   inputValue: string
-  setInputValue: (value: string) => void
+  setInputValue: Dispatch<SetStateAction<string>>
   handleDelete: (value: any) => void
   showField: boolean
   registerOnKeyDown: () => void

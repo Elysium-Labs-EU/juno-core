@@ -1,12 +1,6 @@
 // import isEqual from 'lodash/isEqual'
-import {
-  MouseEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
@@ -30,18 +24,18 @@ import {
 } from 'store/emailDetailSlice'
 import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import {
+import type {
   IComposeEmailReceive,
   IComposePayload,
 } from 'store/storeTypes/composeTypes'
-import { IContact } from 'store/storeTypes/contactsTypes'
-import { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
 import { setModifierKey } from 'utils/setModifierKey'
 
-import { IRecipientsList } from './ComposeEmailTypes'
+import type { IRecipientsList } from './ComposeEmailTypes'
 import Attachments from './ComposeFields/Attachments/Attachments'
 import BodyField from './ComposeFields/BodyField/BodyField'
 import ContactField from './ComposeFields/ContactField'

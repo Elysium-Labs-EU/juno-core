@@ -1,7 +1,7 @@
-import { LabelIdName } from '../store/storeTypes/labelsTypes'
+import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
 
 interface IFindLabelByNameType {
-  storageLabels: LabelIdName[]
+  storageLabels: ILabelIdName[]
   LABEL_NAME: string
 }
 
@@ -12,7 +12,7 @@ export const findLabelByName = ({
   storageLabels.find((label) => label.name === LABEL_NAME)
 
 interface IFindLabelByIdType {
-  storageLabels: LabelIdName[]
+  storageLabels: ILabelIdName[]
   labelIds: string[]
 }
 

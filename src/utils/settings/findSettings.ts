@@ -1,10 +1,10 @@
 import {
   SETTINGS_DELIMITER,
   SETTINGS_LABEL,
-} from '../../constants/baseConstants'
-import { removeLabel } from '../../store/labelsSlice'
-import { AppDispatch } from '../../store/store'
-import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
+} from 'constants/baseConstants'
+import { removeLabel } from 'store/labelsSlice'
+import type { AppDispatch } from 'store/store'
+import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
 
 /**
  * @function findSettings
@@ -14,7 +14,7 @@ import { GoogleLabel } from '../../store/storeTypes/labelsTypes'
  * @returns null or a Google Label that is the settings label.
  */
 
-const findSettings = (labels: GoogleLabel[], dispatch: AppDispatch) => {
+const findSettings = (labels: IGoogleLabel[], dispatch: AppDispatch) => {
   const result = labels.filter((label) =>
     label.name.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
   )

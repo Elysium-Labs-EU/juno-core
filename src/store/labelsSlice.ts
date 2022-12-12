@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
 
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { getLabelByRoute } from 'constants/labelMapConstant'
 import labelApi from 'data/labelApi'
 import { fetchEmailsSimple } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
-import {
-  GoogleLabel,
-  LabelIdName,
-  LabelState,
+import type {
+  IGoogleLabel,
+  ILabelIdName,
+  ILabelState,
 } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
 
 /* eslint-disable no-param-reassign */
 
-
-const initialState: LabelState = Object.freeze({
+const initialState: ILabelState = Object.freeze({
   labelIds: [],
   loadedInbox: [],
   storageLabels: [],
@@ -25,22 +25,33 @@ export const labelsSlice = createSlice({
   name: 'labels',
   initialState,
   reducers: {
-    setCurrentLabels: (state, { payload }) => {
+    setCurrentLabels: (
+      state,
+      { payload }: PayloadAction<Pick<ILabelState, 'labelIds'>['labelIds']>
+    ) => {
       state.labelIds = payload
     },
-    setLoadedInbox: (state, { payload }) => {
-      state.loadedInbox = [...new Set([...state.loadedInbox, payload])]
+    setLoadedInbox: (
+      state,
+      {
+        payload,
+      }: PayloadAction<Pick<ILabelState, 'loadedInbox'>['loadedInbox']>
+    ) => {
+      state.loadedInbox = [...new Set([...state.loadedInbox, ...payload])]
     },
-    setStorageLabels: (state, { payload }) => {
+    setStorageLabels: (
+      state,
+      { payload }: PayloadAction<ILabelIdName | IGoogleLabel | IGoogleLabel[][]>
+    ) => {
       if (!Array.isArray(payload)) {
-        const labelIdName: LabelIdName = {
+        const labelIdName = {
           id: payload.id,
           name: payload.name,
         }
         state.storageLabels = [...state.storageLabels, labelIdName]
       }
       if (Array.isArray(payload)) {
-        const labelIdNameArray = payload.map((label: GoogleLabel[]) => ({
+        const labelIdNameArray = payload.map((label) => ({
           id: label[0]?.id,
           name: label[0]?.name,
         }))
@@ -136,7 +147,7 @@ export const fetchLabelIds =
       const { labels } = await labelApi().fetchLabels()
       if (labels) {
         const labelObject = labels.filter(
-          (label: LabelIdName) => label.name === LABEL
+          (label: ILabelIdName) => label.name === LABEL
         )
         if (labelObject.length > 0) {
           dispatch(setCurrentLabels([labelObject[0].id]))

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 export const StyledAnimatedMountUnmount = styled.div`
@@ -25,10 +26,8 @@ export const StyledAnimatedMountUnmount = styled.div`
   }
 `
 
-const AnimatedMountUnmount = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[] | any
-}) => <StyledAnimatedMountUnmount>{children}</StyledAnimatedMountUnmount>
+const AnimatedMountUnmount = ({ children }: { children: ReactNode }) => (
+  <StyledAnimatedMountUnmount>{children}</StyledAnimatedMountUnmount>
+)
 
 export default AnimatedMountUnmount

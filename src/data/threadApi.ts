@@ -1,8 +1,8 @@
-import { AxiosResponse } from 'axios'
+import type { AxiosResponse } from 'axios'
 
 import { errorHandling, instance } from 'data/api'
 
-export interface EmailQueryObject {
+export interface IEmailQueryObject {
   labelIds?: string[]
   maxResults?: number
   nextPageToken: string | null
@@ -17,7 +17,7 @@ const threadApi = ({
   controller?: AbortController
   signal?: AbortSignal
 }) => ({
-  getSimpleThreads: async (query: EmailQueryObject) => {
+  getSimpleThreads: async (query: IEmailQueryObject) => {
     try {
       const res: AxiosResponse<any> = await instance.get(`/api/threads/`, {
         params: {
@@ -32,7 +32,7 @@ const threadApi = ({
       return errorHandling(err)
     }
   },
-  getFullThreads: async (query: EmailQueryObject) => {
+  getFullThreads: async (query: IEmailQueryObject) => {
     const res: AxiosResponse<any> = await instance.get(`/api/threads_full/`, {
       params: {
         labelIds: query?.labelIds?.toString() ?? '',

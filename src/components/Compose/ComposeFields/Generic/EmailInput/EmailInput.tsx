@@ -2,8 +2,9 @@
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import { useCallback, useEffect, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-import { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
+import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import contactApi from 'data/contactApi'
@@ -16,22 +17,21 @@ import {
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
-
 import StyledTextField from './EmailInputStyles'
 
-interface IEmailInputProps {
-  id: string
-  valueState: IContact[]
+export interface IEmailInputProps {
   handleChange: (recipientListRaw: IRecipientsList) => void
   handleDelete: (value: any) => void
+  id: string
   inputValue: string
-  setInputValue: (value: string) => void
-  willAutoFocus: boolean
   registerOnKeyDown: () => void
+  setInputValue: Dispatch<SetStateAction<string>>
+  valueState: Array<IContact>
+  willAutoFocus: boolean
 }
 
 interface IHandleIncompleteInput {
@@ -42,7 +42,7 @@ interface IHandleIncompleteInput {
 interface IFetchContacts {
   inputValue: string
   dispatch: AppDispatch
-  setCompletedSearch: Function
+  setCompletedSearch: Dispatch<SetStateAction<boolean>>
 }
 
 // TODO: Check contactsSlice to unduplicate the code.
@@ -99,21 +99,21 @@ const filterOptions: any = (
 
 const EmailInput = (props: IEmailInputProps) => {
   const {
-    id,
-    valueState,
     handleChange,
-    inputValue,
-    setInputValue,
     handleDelete,
-    willAutoFocus,
+    id,
+    inputValue,
     registerOnKeyDown,
+    setInputValue,
+    valueState,
+    willAutoFocus,
   } = props
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly IContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(true)
   const debouncedInputValue: string = useDebounce(inputValue, 500)
   const availableContacts: IContact[] = useAppSelector(selectAllContacts)
-  const contactsLoaded: string = useAppSelector(selectContactsLoaded)
+  const contactsLoaded = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
   // Wait for fetching new results, if the current query already has some results. Only search for more after 1 sec.

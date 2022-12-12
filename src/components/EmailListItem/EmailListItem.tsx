@@ -21,7 +21,7 @@ import { selectProfile } from 'store/baseSlice'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import multipleIncludes from 'utils/multipleIncludes'
@@ -196,6 +196,8 @@ const EmailListItem = ({
       ])
     )
   }
+
+  // TODO: Abstract all the components into memoized components.
 
   const memoizedEmailListItem = useMemo(
     () => (
