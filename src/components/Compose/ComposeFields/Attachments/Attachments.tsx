@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import { isEqual } from 'lodash'
+// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
@@ -22,7 +22,7 @@ const customIsEqual = (
   composeValue: File[] | IEmailAttachmentType[] | undefined,
   uploadedFiles: File[]
 ) =>
-  isEqual(
+  Object.is(
     composeValue?.map((item: File | IEmailAttachmentType) => ({
       size: 'size' in item ? item.size : item.body.size,
       name: 'name' in item ? item.name : item.filename,

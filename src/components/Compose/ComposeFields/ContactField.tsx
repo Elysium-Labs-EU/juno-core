@@ -1,4 +1,4 @@
-import { isEqual } from 'lodash'
+// import { isEqual } from 'lodash'
 import {
   Dispatch,
   SetStateAction,
@@ -44,7 +44,7 @@ const ContactField = ({
     if (
       loadState === global.LOAD_STATE_MAP.loaded &&
       composeValue &&
-      !isEqual(composeValue, value)
+      !Object.is(composeValue, value)
     ) {
       setValue(composeValue)
     }

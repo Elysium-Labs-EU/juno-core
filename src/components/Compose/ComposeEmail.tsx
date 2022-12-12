@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+// import isEqual from 'lodash/isEqual'
 import {
   MouseEvent,
   useCallback,
@@ -135,7 +135,7 @@ const ComposeEmail = ({
     // For the first time running
     if (
       storedDraftDetails &&
-      !isEqual(localDraftDetails, storedDraftDetails) &&
+      !Object.is(localDraftDetails, storedDraftDetails) &&
       !snapshotComposeEmailRef.current
     ) {
       // Attempt to use the fetched draft object it from the draftList Redux store.
@@ -145,7 +145,7 @@ const ComposeEmail = ({
     } else if (
       composedEmail &&
       userInteractedRef.current &&
-      !isEqual(snapshotComposeEmailRef.current, composedEmail)
+      !Object.is(snapshotComposeEmailRef.current, composedEmail)
     ) {
       snapshotComposeEmailRef.current = composedEmail
       // If the user is interacting with the draft, send an update request and set the response as the local state
