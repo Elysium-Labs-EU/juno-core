@@ -134,6 +134,7 @@ const finalizeBaseLoading =
     dispatch(presetEmailList(addEmptyAllLabel))
     dispatch(setStorageLabels(addEmptyAllLabel))
     dispatch(handleSettings(labels))
+    dispatch(setBaseLoaded(true))
   }
 
 export const checkBase = (): AppThunk => async (dispatch) => {
@@ -168,7 +169,6 @@ export const checkBase = (): AppThunk => async (dispatch) => {
             dispatch(finalizeBaseLoading(labels))
           } else {
             dispatch(finalizeBaseLoading(labels))
-            dispatch(setBaseLoaded(true))
           }
         } else {
           dispatch(

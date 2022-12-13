@@ -1,12 +1,14 @@
 // import { isEqual } from 'lodash'
 import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useState,
+} from 'react'
+import type {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
 } from 'react'
 
 import * as local from 'constants/composeEmailConstants'

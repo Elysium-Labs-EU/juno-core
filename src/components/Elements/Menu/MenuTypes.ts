@@ -7,5 +7,5 @@ export interface IMenuItem {
 
 export interface IMenuItemCollection {
   id: string
-  items: IMenuItem[]
+  items: Array<IMenuItem | null>
 }

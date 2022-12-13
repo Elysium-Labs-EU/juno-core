@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import * as S from './MenuStyles'
-import { IMenuItem } from './MenuTypes'
+import type { IMenuItem } from './MenuTypes'
 
 const MenuItemComponent = ({
   activeModalTag,

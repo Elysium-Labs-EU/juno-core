@@ -42,7 +42,6 @@ export const ThreadRow = styled.div<IThreadRow>`
 
   &:hover {
     background-color: var(--color-neutral-200);
-    z-index: 2;
   }
 `
 

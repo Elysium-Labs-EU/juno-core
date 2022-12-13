@@ -15,12 +15,14 @@ import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
 // import { isEqual } from 'lodash'
 import {
-  Dispatch,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useState,
+} from 'react'
+import type {
+  Dispatch,
+  SetStateAction,
 } from 'react'
 import { compareTwoStrings } from 'string-similarity'
 

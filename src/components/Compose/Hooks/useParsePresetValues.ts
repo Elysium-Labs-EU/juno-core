@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { useEffect } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import * as global from 'constants/globalConstants'
-import { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import { handleContactConversion } from 'utils/convertToContact'
 import parseQueryString from 'utils/parseQueryString'
 

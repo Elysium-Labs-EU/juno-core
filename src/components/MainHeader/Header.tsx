@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 
 import ArchiveHeader from 'components/Archive/ArchiveHeader'
-import CommandPallette from 'components/CommandPalette/CommandPalette'
+import CommandPalette from 'components/CommandPalette/CommandPalette'
 import ComposeHeader from 'components/Compose/ComposeHeader'
 import DraftHeader from 'components/Draft/DraftHeader'
 import Feedback from 'components/Help/Feedback/Feedback'
@@ -50,7 +50,7 @@ const Header = () => {
 
   return (
     <>
-      <CommandPallette />
+      <CommandPalette />
       {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
       {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
       <NoMobileOverlay />

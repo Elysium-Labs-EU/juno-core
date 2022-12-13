@@ -62,6 +62,12 @@ const HelpMenu = () => {
           onClick: () =>
             dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
         },
+        import.meta.env.VITE_DOCUMENTATION_URL ? {
+          id: 'documentation',
+          title: 'Documentation',
+          onClick: () =>
+            window.open(import.meta.env.VITE_DOCUMENTATION_URL, '_blank'),
+        } : null,
       ],
     }),
     []

@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
+import {  useEffect, useMemo, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
@@ -15,7 +16,7 @@ import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import {
+import type {
   IEmailListThreadItem,
   IEmailMessage,
 } from 'store/storeTypes/emailListTypes'

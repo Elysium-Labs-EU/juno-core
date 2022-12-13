@@ -1,6 +1,6 @@
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import * as S from 'components/Compose/ComposeStyles'

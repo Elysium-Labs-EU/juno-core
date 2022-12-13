@@ -3,8 +3,7 @@ import styled from 'styled-components'
 
 import * as global from 'constants/globalConstants'
 import { QiMail } from 'images/svgIcons/quillIcons'
-import { IEmailMessage } from 'store/storeTypes/emailListTypes'
-
+import type { IEmailMessage } from 'store/storeTypes/emailListTypes'
 
 import StyledTooltip from './StyledTooltip'
 

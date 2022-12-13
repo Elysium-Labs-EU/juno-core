@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
@@ -17,7 +18,7 @@ import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { updateMessageLabel } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 import * as S from './SpecificEmailOptionsStyles'
 

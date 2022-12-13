@@ -1,16 +1,18 @@
 import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
 import {
-  ChangeEvent,
-  Dispatch,
-  KeyboardEvent,
-  MutableRefObject,
-  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
+} from 'react'
+import type {
+  ChangeEvent,
+  Dispatch,
+  KeyboardEvent,
+  MutableRefObject,
+  SetStateAction,
 } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
@@ -27,7 +29,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { AppDispatch } from 'store/store'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectInSearch,
   setInSearch,

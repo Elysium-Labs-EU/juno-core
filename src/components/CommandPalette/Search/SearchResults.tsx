@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import {  useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
@@ -6,8 +7,8 @@ import ThreadList from 'components/EmailList/ThreadList'
 import * as global from 'constants/globalConstants'
 import { useSearchResults } from 'store/emailListSlice'
 import { useAppDispatch } from 'store/hooks'
-import { AppDispatch } from 'store/store'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { AppDispatch } from 'store/store'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import { setInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 

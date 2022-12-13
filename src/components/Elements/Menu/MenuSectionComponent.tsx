@@ -1,4 +1,4 @@
-import { Dispatch, KeyboardEvent, SetStateAction } from 'react'
+import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
 
 import * as keyConstants from 'constants/keyConstants'
 import handleChangeFocus from 'utils/handleChangeFocus'
@@ -7,12 +7,12 @@ import MenuItemComponent from './MenuItemComponent'
 import { MenuSection, MenuSectionContainer } from './MenuStyles'
 import type { IMenuItemCollection } from './MenuTypes'
 
-function getAllItems(items: IMenuItemCollection[]) {
+function getAllItems(items: Array<IMenuItemCollection>) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))
 }
 
 function getItemIndex(
-  items: IMenuItemCollection[],
+  items: Array<IMenuItemCollection>,
   id: string,
   startIndex: number = 0
 ) {
@@ -84,16 +84,19 @@ const MenuSectionComponent = ({
     <MenuSectionContainer tabIndex={-1} onKeyDown={keyDownHandler} role="menu">
       {menuItems.map(({ id, items }) => (
         <MenuSection key={id}>
-          {items.map((item) => (
+          {items.map((item) => {
+            if(item){
+            return (
             <MenuItemComponent
               absoluteIndex={getItemIndex(menuItems, item.id)}
               activeModalTag={activeModalTag}
               focusedItemIndex={focusedItemIndex}
               item={item}
-              key={item.title}
+              key={item?.title}
               setFocusedItemIndex={setFocusedItemIndex}
             />
-          ))}
+          )} 
+          return null})}
         </MenuSection>
       ))}
     </MenuSectionContainer>

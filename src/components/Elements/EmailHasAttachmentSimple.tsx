@@ -1,5 +1,5 @@
 import { QiAttachment } from 'images/svgIcons/quillIcons'
-import { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
+import type { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
 
 /**
  * @component EmailHasAttachmentSimple
@@ -12,7 +12,7 @@ const ICON_SIZE = 18
 const EmailHasAttachmentSimple = ({
   files,
 }: {
-  files: IEmailMessagePayloadRaw[] | undefined
+  files: Array<IEmailMessagePayloadRaw> | undefined
 }) => {
   if (files && files.length > 0) {
     return <QiAttachment size={ICON_SIZE} data-testid="email-has-attachment" />
