@@ -6,10 +6,11 @@ import {
   showIntroductionKeyMap,
   flexibleFlowKeyMap,
   alternateActionsMap,
-} from '../../constants/baseConstants'
-import { createLabel } from '../../store/labelsSlice'
-import { AppDispatch } from '../../store/store'
-import { ISettingsObject } from './settingsTypes'
+} from 'constants/baseConstants'
+import { createLabel } from 'store/labelsSlice'
+import type { AppDispatch } from 'store/store'
+
+import type { ISettingsObject } from './settingsTypes'
 import { buildLabelString } from './updateSettingsLabel'
 
 /**

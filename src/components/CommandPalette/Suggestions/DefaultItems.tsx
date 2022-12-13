@@ -1,5 +1,5 @@
 import { FiEdit2 } from 'react-icons/fi'
-import { Location } from 'react-router-dom'
+import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routes.json'
@@ -12,7 +12,7 @@ import {
   QiInbox,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 import {
   archiveAllEmailCMDK,
   discardAllEmailCMDK,
@@ -22,7 +22,7 @@ import {
   setActiveModal,
 } from 'store/utilsSlice'
 
-import { IJsonStructure } from '../commandPaletteUtils'
+import type { IJsonStructure } from '../commandPaletteUtils'
 
 export default function defaultItems({
   dispatch,

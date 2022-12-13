@@ -1,7 +1,7 @@
 import { push } from 'redux-first-history'
 
-import { AppDispatch } from 'store/store'
-import {
+import type { AppDispatch } from 'store/store'
+import type {
   IEmailListObject,
   ISelectedEmail,
 } from 'store/storeTypes/emailListTypes'
@@ -10,7 +10,7 @@ import { setSystemStatusUpdate } from 'store/utilsSlice'
 interface IStartSort {
   activeEmailListIndex: number
   dispatch: AppDispatch
-  emailList: IEmailListObject[]
+  emailList: Array<IEmailListObject>
   labelURL: string
   selectedEmails?: ISelectedEmail
 }

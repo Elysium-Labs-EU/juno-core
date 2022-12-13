@@ -1,10 +1,10 @@
 import * as global from 'constants/globalConstants'
 import { updateEmailLabel } from 'store/emailListSlice'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 
 interface IArchiveEmail {
   threadId: string
-  labelIds: string[]
+  labelIds: Array<string>
   dispatch: AppDispatch
 }
 

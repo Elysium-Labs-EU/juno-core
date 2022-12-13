@@ -1,9 +1,9 @@
-import { Location } from 'react-router-dom'
+import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routes.json'
 import { QiDiscard, QiFolderArchive, QiJump } from 'images/svgIcons/quillIcons'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 import {
   IEmailListObject,
   ISelectedEmail,
@@ -19,7 +19,7 @@ import getRecipientFromList from 'utils/getRecipientFromList'
 import getSenderFromList from 'utils/getSenderFromList'
 import multipleIncludes from 'utils/multipleIncludes'
 
-import { IJsonStructure } from '../commandPaletteUtils'
+import type { IJsonStructure } from '../commandPaletteUtils'
 import defaultItems from './DefaultItems'
 
 export default function contextualItems({

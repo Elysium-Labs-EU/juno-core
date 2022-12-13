@@ -22,10 +22,10 @@ export default function useKeyboardShortcut({
   isDisabled = false,
   refreshOnDeps = undefined,
 }: {
-  actionKeys: string[]
+  actionKeys: Array<string>
   handleEvent: () => void
   isDisabled?: boolean
-  refreshOnDeps?: any[]
+  refreshOnDeps?: Array<any>
 }) {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {

@@ -12,8 +12,8 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import { AppDispatch } from 'store/store'
-import {
+import type { AppDispatch } from 'store/store'
+import type {
   IEmailListObject,
   ISelectedEmail,
 } from 'store/storeTypes/emailListTypes'
@@ -38,7 +38,7 @@ export const activateTodo = ({
 }: {
   activeEmailListIndex: number
   dispatch: AppDispatch
-  emailList: IEmailListObject[]
+  emailList: Array<IEmailListObject>
   labelIds: string[]
   selectedEmails?: ISelectedEmail
 }) => {

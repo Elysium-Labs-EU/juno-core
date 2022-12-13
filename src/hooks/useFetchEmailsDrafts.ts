@@ -11,7 +11,7 @@ import isPromise from 'utils/isPromise'
 let timestampLastFiredWithLabel = { labelIds: [''], timeStamp: 0 }
 
 // Intention is to block the same type of request within a certain time period.
-const handleRequestTiming = (labelIds: string[], firedTimeStamp: number) => {
+const handleRequestTiming = (labelIds: Array<string>, firedTimeStamp: number) => {
   if (
     labelIds.length === 0 ||
     labelIds !== timestampLastFiredWithLabel.labelIds
@@ -34,7 +34,7 @@ const handleRequestTiming = (labelIds: string[], firedTimeStamp: number) => {
 }
 
 export default function useFetchEmailsDrafts(
-  labelIds: string[],
+  labelIds: Array<string>,
   firedTimeStamp: number
 ) {
   const emailFetchSize = useAppSelector(selectEmailListSize)

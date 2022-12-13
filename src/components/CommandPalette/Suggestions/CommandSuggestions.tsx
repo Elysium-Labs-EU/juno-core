@@ -8,10 +8,8 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
 
-import filterItems, {
-  getItemIndex,
-  IJsonStructure,
-} from '../commandPaletteUtils'
+import filterItems, { getItemIndex } from '../commandPaletteUtils'
+import type { IJsonStructure } from '../commandPaletteUtils'
 import ListItem from '../ListItem/ListItem'
 import contextualItems from './ContextualItems'
 import SearchSuggestion from './SearchSuggestion'
@@ -33,7 +31,7 @@ const CommandPaletteSuggestions = ({
 
   const filteredItems = useMemo(() => {
     if (searchValue) {
-      const searchSuggestion: IJsonStructure[] = [
+      const searchSuggestion: Array<IJsonStructure> = [
         {
           heading: undefined,
           id: 'search-option',

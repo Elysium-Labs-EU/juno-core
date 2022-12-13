@@ -1,12 +1,6 @@
 import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type {
   ChangeEvent,
   Dispatch,
@@ -28,7 +22,7 @@ import {
   useSearchResults,
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectInSearch,
@@ -37,7 +31,6 @@ import {
 } from 'store/utilsSlice'
 import handleChangeFocus from 'utils/handleChangeFocus'
 import sortThreads from 'utils/sortThreads'
-
 
 import * as S from './CommandPaletteStyles'
 import ContextBar from './ContextBar/ContextBar'

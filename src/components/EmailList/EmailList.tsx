@@ -23,7 +23,7 @@ const LabeledInbox = ({
   emailList,
   activeEmailListIndex,
 }: {
-  emailList: IEmailListObject[]
+  emailList: Array<IEmailListObject>
   activeEmailListIndex: number
 }) => {
   if (emailList) {

@@ -7,13 +7,11 @@ import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { refreshEmailFeed, selectIsFetching } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { AppDispatch } from 'store/store'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
-
 
 const rotate = keyframes`
   from {

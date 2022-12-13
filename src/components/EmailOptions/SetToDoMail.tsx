@@ -8,9 +8,9 @@ import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 interface ISetToDoMail {
   threadId: string
-  labelIds: string[]
+  labelIds: Array<string>
   dispatch: AppDispatch
-  storageLabels: ILabelIdName[]
+  storageLabels: Array<ILabelIdName>
 }
 
 const setToDoMail = ({

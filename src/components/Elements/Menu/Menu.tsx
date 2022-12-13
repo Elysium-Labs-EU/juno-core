@@ -5,7 +5,7 @@ import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 
 import MenuSectionComponent from './MenuSectionComponent'
-import { IMenuItemCollection } from './MenuTypes'
+import type { IMenuItemCollection } from './MenuTypes'
 
 const Menu = ({
   activeModalTag,

@@ -1,5 +1,5 @@
 import { setIsReplying } from 'store/emailDetailSlice'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 import { openEmail } from 'store/utilsSlice'
 
 interface IReplyOverview {

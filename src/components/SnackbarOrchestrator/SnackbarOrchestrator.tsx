@@ -5,12 +5,11 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { QiEscape } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { ISystemStatusUpdate } from 'store/storeTypes/utilsTypes'
+import type { ISystemStatusUpdate } from 'store/storeTypes/utilsTypes'
 import {
   selectSystemStatusUpdate,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-
 
 interface ISnackbarMessage extends ISystemStatusUpdate {
   key: number
@@ -65,15 +64,12 @@ const SystemUpdateSnackbarOrchestrator = () => {
     }
   }, [snackPack, messageInfo, open])
 
-  const handleClose = useCallback(
-    (event: React.SyntheticEvent | Event, reason?: string) => {
-      if (reason === 'clickaway') {
-        return
-      }
-      setOpen(false)
-    },
-    []
-  )
+  const handleClose = useCallback((_: unknown | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setOpen(false)
+  }, [])
 
   const handleExited = () => {
     if (

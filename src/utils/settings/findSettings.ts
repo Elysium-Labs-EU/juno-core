@@ -14,7 +14,7 @@ import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
  * @returns null or a Google Label that is the settings label.
  */
 
-const findSettings = (labels: IGoogleLabel[], dispatch: AppDispatch) => {
+const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
   const result = labels.filter((label) =>
     label.name.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
   )

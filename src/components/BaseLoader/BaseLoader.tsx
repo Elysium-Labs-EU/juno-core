@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import type { ReactNode } from 'react'
 
 import * as S from 'components/BaseLoader/BaseLoaderStyles'
 import LogoutOption, {
@@ -13,11 +14,9 @@ export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '
 const SECONDS = ' seconds.'
 
-const AnimatedMountUnmount = ({
-  children,
-}: {
-  children: JSX.Element | JSX.Element[] | any
-}) => <S.StyledAnimatedMountUnmount>{children}</S.StyledAnimatedMountUnmount>
+const AnimatedMountUnmount = ({ children }: { children: ReactNode }) => (
+  <S.StyledAnimatedMountUnmount>{children}</S.StyledAnimatedMountUnmount>
+)
 
 const Baseloader = () => {
   const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)

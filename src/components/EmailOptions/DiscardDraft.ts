@@ -7,7 +7,7 @@ import {
   listRemoveItemDetail,
   listRemoveItemMessage,
 } from 'store/emailListSlice'
-import { AppDispatch } from 'store/store'
+import type { AppDispatch } from 'store/store'
 
 interface IDiscardDraft {
   threadId?: string

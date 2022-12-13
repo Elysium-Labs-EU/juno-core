@@ -1,20 +1,21 @@
 import { useEffect } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import { fetchEmailDetail } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 
 export default function useFetchEmailDetail({
-  threadId,
   activeEmailList,
   forceRefresh,
   setShouldRefreshDetail,
+  threadId,
 }: {
-  threadId: string | undefined
   activeEmailList: IEmailListObject | undefined
   forceRefresh: boolean
-  setShouldRefreshDetail: (value: boolean) => void
+  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
+  threadId: string | undefined
 }) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)

@@ -1,6 +1,7 @@
-import { Children, ReactElement, ReactNode } from 'react'
+import { Children } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 
-import { TListItemType } from './ListItem/ListItem'
+import type { TListItemType } from './ListItem/ListItem'
 
 export interface IJsonStructureItem {
   children: ReactNode
@@ -8,7 +9,7 @@ export interface IJsonStructureItem {
   icon?: JSX.Element | null | undefined
   id: string
   index?: number
-  keywords?: string[]
+  keywords?: Array<string>
   onClick?: () =>
     | void
     | undefined
@@ -21,7 +22,7 @@ export interface IJsonStructureItem {
 export interface IJsonStructure {
   heading?: string
   id: string
-  items: (IJsonStructureItem | undefined)[]
+  items: Array<IJsonStructureItem | undefined>
 }
 
 function retrieveChildrenFromElement(item: ReactElement) {
@@ -34,7 +35,7 @@ function retrieveChildrenFromElement(item: ReactElement) {
       )
     ) {
       let output = ''
-      const recursiveChildrenCheck = (input: (string | ReactElement)[]) => {
+      const recursiveChildrenCheck = (input: Array<string | ReactElement>) => {
         input.forEach((child) => {
           if (typeof child === 'string') {
             output += child
@@ -68,12 +69,12 @@ function retrieveChildrenFromElement(item: ReactElement) {
   return item
 }
 
-export function getAllItems(items: IJsonStructure[]) {
+export function getAllItems(items: Array<IJsonStructure>) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))
 }
 
 export function getItemIndex(
-  items: IJsonStructure[],
+  items: Array<IJsonStructure>,
   id: string,
   startIndex: number = 0
 ) {
@@ -103,7 +104,7 @@ function doesChildMatchSearch(search: string, children?: ReactNode) {
     : false
 }
 
-function doesKeywordsMatchSearch(search: string, keywords: string[]) {
+function doesKeywordsMatchSearch(search: string, keywords: Array<string>) {
   return keywords.includes('*')
     ? true
     : keywords.some((keyword) =>
@@ -112,7 +113,7 @@ function doesKeywordsMatchSearch(search: string, keywords: string[]) {
 }
 
 export default function filterItems(
-  items: IJsonStructure[],
+  items: Array<IJsonStructure>,
   search: string,
   {
     filterOnListHeading,
