@@ -61,8 +61,6 @@ interface IComposeEmailProps {
   ) => void
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.enter]
-
 const ComposeEmail = ({
   presetValue = undefined,
   messageOverviewListener = undefined,
@@ -336,7 +334,8 @@ const ComposeEmail = ({
 
   useKeyboardShortcut({
     handleEvent: handleSubmit,
-    actionKeys,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_SPECIAL.enter,
     isDisabled: inSearch || Boolean(activeModal),
   })
 

@@ -14,8 +14,6 @@ import {
 
 import CustomButton from './CustomButton'
 
-const actionKeys = [keyConstants.KEY_SPECIAL.escape]
-
 const BackButton = () => {
   const activeModal = useAppSelector(selectActiveModal)
   const coreStatus = useAppSelector(selectCoreStatus)
@@ -28,7 +26,7 @@ const BackButton = () => {
 
   useKeyboardShortcut({
     handleEvent,
-    actionKeys,
+    key: keyConstants.KEY_SPECIAL.escape,
     isDisabled: Boolean(activeModal) || inSearch,
   })
 

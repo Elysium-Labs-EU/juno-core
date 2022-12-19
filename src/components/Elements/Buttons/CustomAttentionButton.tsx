@@ -8,6 +8,7 @@ interface ICustomButton {
   icon?: JSX.Element | null
   label: string | JSX.Element
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
+  onKeyDown?: any
   tabIndex?: number
   title: string
   type?: 'submit' | 'reset' | 'button'
@@ -76,6 +77,7 @@ const CustomAttentionButton = ({
   icon = null,
   label,
   onClick = undefined,
+  onKeyDown = undefined,
   tabIndex = undefined,
   title,
   type = 'button',
@@ -85,6 +87,7 @@ const CustomAttentionButton = ({
     className={className}
     disabled={disabled}
     onClick={onClick ? (event) => onClick(event) : undefined}
+    onKeyDown={onKeyDown}
     tabIndex={tabIndex}
     title={title}
     type={type ?? 'button'}

@@ -27,8 +27,6 @@ import { findLabelByName } from 'utils/findLabel'
 import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 
-const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
-
 export const activateTodo = ({
   activeEmailListIndex,
   dispatch,
@@ -85,7 +83,8 @@ const TodoFocusOption = () => {
   }
 
   useKeyboardShortcut({
-    actionKeys,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_LETTERS.e,
     handleEvent,
     isDisabled: inSearch || Boolean(activeModal),
     refreshOnDeps: [labelIds],

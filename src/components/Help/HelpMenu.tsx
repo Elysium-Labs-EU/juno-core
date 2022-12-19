@@ -3,7 +3,7 @@ import { useCallback, useMemo, useRef } from 'react'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
 import * as S from 'components/Elements/Menu/MenuStyles'
-import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import type { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
@@ -15,17 +15,6 @@ import {
   setActiveModal,
 } from 'store/utilsSlice'
 import { modifierKeyDisplay, setModifierKey } from 'utils/setModifierKey'
-
-const actionKeysHelp = [
-  keyConstants.KEY_SPECIAL.shift,
-  keyConstants.KEY_ARROWS.right,
-]
-
-const actionKeysKeyboard = [
-  setModifierKey,
-  keyConstants.KEY_SPECIAL.forwardSlash,
-]
-const actionKeysFeedback = [setModifierKey, keyConstants.KEY_SPECIAL.dot]
 
 const SIZE = 16
 const customStyles = {
@@ -62,12 +51,14 @@ const HelpMenu = () => {
           onClick: () =>
             dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
         },
-        import.meta.env.VITE_DOCUMENTATION_URL ? {
-          id: 'documentation',
-          title: 'Documentation',
-          onClick: () =>
-            window.open(import.meta.env.VITE_DOCUMENTATION_URL, '_blank'),
-        } : null,
+        import.meta.env.VITE_DOCUMENTATION_URL
+          ? {
+              id: 'documentation',
+              title: 'Documentation',
+              onClick: () =>
+                window.open(import.meta.env.VITE_DOCUMENTATION_URL, '_blank'),
+            }
+          : null,
       ],
     }),
     []
@@ -118,7 +109,8 @@ const HelpMenu = () => {
     dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.help))
   }, [])
   useKeyboardShortcut({
-    actionKeys: actionKeysHelp,
+    key: keyConstants.KEY_ARROWS.right,
+    modifierKey: keyConstants.KEY_SPECIAL.shift,
     handleEvent: handleOpenHelpMenu,
     isDisabled: inSearch || !activeModal,
   })
@@ -134,7 +126,8 @@ const HelpMenu = () => {
 
   useKeyboardShortcut({
     handleEvent: handleShowKeyboardShortcuts,
-    actionKeys: actionKeysKeyboard,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_SPECIAL.forwardSlash,
     isDisabled: inSearch,
   })
 
@@ -144,7 +137,8 @@ const HelpMenu = () => {
 
   useKeyboardShortcut({
     handleEvent: handleShowFeedback,
-    actionKeys: actionKeysFeedback,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_SPECIAL.dot,
     isDisabled: inSearch,
   })
 

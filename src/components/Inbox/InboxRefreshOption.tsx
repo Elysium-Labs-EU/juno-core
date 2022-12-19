@@ -60,7 +60,8 @@ const InboxRefresh = ({
 
   useKeyboardShortcut({
     handleEvent: handleRefreshTrigger,
-    actionKeys: [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.r],
+    modifierKey: keyConstants.KEY_SPECIAL.shift,
+    key: keyConstants.KEY_LETTERS.r,
     isDisabled: inSearch || disableRefresh || isLoading || !!activeModal,
   })
 

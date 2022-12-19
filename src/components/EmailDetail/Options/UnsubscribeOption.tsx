@@ -12,7 +12,6 @@ import { selectInSearch } from 'store/utilsSlice'
 import createComposeViaURL from 'utils/createComposeViaURL'
 import { setModifierKey } from 'utils/setModifierKey'
 
-
 const handleUnsubscribe = ({
   coreStatus,
   dispatch,
@@ -35,11 +34,6 @@ const handleUnsubscribe = ({
   }
 }
 
-const actionKeys = [
-  setModifierKey,
-  keyConstants.KEY_SPECIAL.shift,
-  keyConstants.KEY_LETTERS.u,
-]
 const UNSUBSCRIBE = 'Unsubscribe'
 
 const UnsubscribeOption = ({
@@ -60,7 +54,8 @@ const UnsubscribeOption = ({
 
   useKeyboardShortcut({
     handleEvent,
-    actionKeys,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_LETTERS.u,
     isDisabled: inSearch,
   })
 
