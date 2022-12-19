@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 
-import * as keyConstants from 'constants/keyConstants'
-
 /**
  * @function useKeyboardShortcut
  * @description - a custom hook that handles the keyboard shortcuts
