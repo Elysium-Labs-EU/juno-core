@@ -11,9 +11,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectInSearch } from 'store/utilsSlice'
 import { setModifierKey } from 'utils/setModifierKey'
 
-import { IEmailDetailOptions } from './optionTypes'
-
-const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.enter]
+import type { IEmailDetailOptions } from './optionTypes'
 
 const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -30,7 +28,12 @@ const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, dispatch])
 
-  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
+  useKeyboardShortcut({
+    handleEvent,
+    key: keyConstants.KEY_SPECIAL.enter,
+    modifierKey: setModifierKey,
+    isDisabled: inSearch,
+  })
 
   return (
     <CustomButton

@@ -8,11 +8,9 @@ import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiFolderArchive } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import { selectInSearch } from 'store/utilsSlice'
 import { setModifierKey } from 'utils/setModifierKey'
-
-const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
 
 const ArchiveOption = ({
   iconSize,
@@ -33,7 +31,12 @@ const ArchiveOption = ({
     })
   }, [threadDetail, labelIds, dispatch])
 
-  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
+  useKeyboardShortcut({
+    handleEvent,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_SPECIAL.backspace,
+    isDisabled: inSearch,
+  })
 
   return (
     <CustomButton

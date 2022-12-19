@@ -53,23 +53,27 @@ const Navigation = () => {
 
   useKeyboardShortcut({
     handleEvent: () => dispatch(setInSearch(true)),
-    actionKeys: [setModifierKey, keyConstants.KEY_LETTERS.k],
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_LETTERS.k,
     isDisabled: inSearch,
     refreshOnDeps: [inSearch],
   })
   useKeyboardShortcut({
     handleEvent: () => dispatch(push(RoutesConstants.TODO)),
-    actionKeys: [setModifierKey, keyConstants.KEY_NUMBERS[1]],
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_NUMBERS[1],
     isDisabled: inSearch && !!activeModal,
   })
   useKeyboardShortcut({
     handleEvent: () => dispatch(push(RoutesConstants.INBOX)),
-    actionKeys: [setModifierKey, keyConstants.KEY_NUMBERS[2]],
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_NUMBERS[2],
     isDisabled: (inSearch || !!activeModal) && !isFlexibleFlowActive,
   })
   useKeyboardShortcut({
     handleEvent: () => dispatch(push(RoutesConstants.COMPOSE_EMAIL)),
-    actionKeys: [keyConstants.KEY_SPECIAL.shift, keyConstants.KEY_LETTERS.c],
+    modifierKey: keyConstants.KEY_SPECIAL.shift,
+    key: keyConstants.KEY_LETTERS.c,
     isDisabled:
       (inSearch || !!activeModal) &&
       (location.pathname.includes('compose') || isReplying || isForwarding),

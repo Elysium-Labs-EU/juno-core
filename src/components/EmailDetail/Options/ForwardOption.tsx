@@ -10,12 +10,7 @@ import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectInSearch } from 'store/utilsSlice'
 
-import { IEmailDetailOptions } from './optionTypes'
-
-const actionKeys = [
-  keyConstants.KEY_SPECIAL.shift,
-  keyConstants.KEY_SPECIAL.enter,
-]
+import type { IEmailDetailOptions } from './optionTypes'
 
 const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const dispatch = useAppDispatch()
@@ -32,7 +27,12 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
     return null
   }, [threadDetail, dispatch])
 
-  useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
+  useKeyboardShortcut({
+    handleEvent,
+    modifierKey: keyConstants.KEY_SPECIAL.shift,
+    key: keyConstants.KEY_SPECIAL.enter,
+    isDisabled: inSearch,
+  })
 
   return (
     <CustomButton

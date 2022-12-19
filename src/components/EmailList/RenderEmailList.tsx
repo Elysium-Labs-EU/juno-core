@@ -9,7 +9,7 @@ import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectEmailListSize,
@@ -75,32 +75,32 @@ const RenderEmailList = ({
 
   useKeyboardShortcut({
     handleEvent: handleEscapeKeyDown,
-    actionKeys: [keyConstants.KEY_SPECIAL.escape],
+    key: keyConstants.KEY_SPECIAL.escape,
     isDisabled: inSearch || !!activeModal,
     refreshOnDeps: [selectedEmails],
   })
 
   useKeyboardShortcut({
     handleEvent: handleFocusDown,
-    actionKeys: [keyConstants.KEY_ARROWS.down],
+    key: keyConstants.KEY_ARROWS.down,
     isDisabled: inSearch || !!activeModal,
     refreshOnDeps: [focusedItemIndex],
   })
   useKeyboardShortcut({
     handleEvent: handleFocusDown,
-    actionKeys: [keyConstants.KEY_LETTERS.j],
+    key: keyConstants.KEY_LETTERS.j,
     isDisabled: inSearch || !!activeModal,
     refreshOnDeps: [focusedItemIndex],
   })
   useKeyboardShortcut({
     handleEvent: handleFocusUp,
-    actionKeys: [keyConstants.KEY_ARROWS.up],
+    key: keyConstants.KEY_ARROWS.up,
     isDisabled: inSearch || !!activeModal,
     refreshOnDeps: [focusedItemIndex],
   })
   useKeyboardShortcut({
     handleEvent: handleFocusUp,
-    actionKeys: [keyConstants.KEY_LETTERS.k],
+    key: keyConstants.KEY_LETTERS.k,
     isDisabled: inSearch || !!activeModal,
     refreshOnDeps: [focusedItemIndex],
   })

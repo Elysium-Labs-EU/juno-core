@@ -24,15 +24,15 @@ export const KEY_LETTERS = {
 }
 
 export const KEY_SPECIAL = {
-  alt: 'Alt',
+  alt: 'altKey',
   backspace: 'Backspace',
-  control: 'Control',
+  control: 'ctrlKey',
   dot: '.',
   enter: 'Enter',
   escape: 'Escape',
   forwardSlash: '/',
-  os: 'Meta',
-  shift: 'Shift',
+  os: 'metaKey',
+  shift: 'shiftKey',
 }
 
 export const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']

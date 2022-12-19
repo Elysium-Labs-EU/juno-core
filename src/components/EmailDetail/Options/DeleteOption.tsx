@@ -18,8 +18,6 @@ interface IDeleteOption {
   noArchive?: boolean
 }
 
-const actionKeys = [setModifierKey, keyConstants.KEY_SPECIAL.backspace]
-
 const DeleteOption = ({
   threadId,
   icon = undefined,
@@ -41,7 +39,12 @@ const DeleteOption = ({
   }, [onlyLegalLabels, labelIds, dispatch])
 
   noArchive &&
-    useKeyboardShortcut({ handleEvent, actionKeys, isDisabled: inSearch })
+    useKeyboardShortcut({
+      handleEvent,
+      modifierKey: setModifierKey,
+      key: keyConstants.KEY_SPECIAL.backspace,
+      isDisabled: inSearch,
+    })
 
   return (
     <CustomButton

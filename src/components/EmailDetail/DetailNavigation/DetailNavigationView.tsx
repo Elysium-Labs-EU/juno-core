@@ -9,7 +9,7 @@ import { QiChevronLeft, QiChevronRight } from 'images/svgIcons/quillIcons'
 import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   navigateNextMail,
   navigatePreviousMail,
@@ -77,13 +77,13 @@ const DetailNavigationView = ({
 
   useKeyboardShortcut({
     handleEvent: handleNavNextEvent,
-    actionKeys: [keyConstants.KEY_ARROWS.right],
+    key: keyConstants.KEY_ARROWS.right,
     refreshOnDeps: [activeEmailList, coreStatus, viewIndex],
   })
 
   useKeyboardShortcut({
     handleEvent: handleNavPrevEvent,
-    actionKeys: [keyConstants.KEY_ARROWS.left],
+    key: keyConstants.KEY_ARROWS.left,
   })
 
   const NavigationView = useMemo(

@@ -31,8 +31,6 @@ import startSort from 'utils/startSort'
 import InboxSortPopper from './InboxSortPopper'
 
 const INBOX_BUTTON = 'Sort inbox'
-const actionKeysStrictFlow = [setModifierKey, keyConstants.KEY_LETTERS.s]
-const actionKeysFlexibleFlow = [setModifierKey, keyConstants.KEY_LETTERS.e]
 
 const InboxSortOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -97,9 +95,10 @@ const InboxSortOption = () => {
   }, [activeEmailListIndex, selectedEmails, dispatch, emailList, labelIds])
 
   useKeyboardShortcut({
-    actionKeys: isFlexibleFlowActive
-      ? actionKeysFlexibleFlow
-      : actionKeysStrictFlow,
+    key: isFlexibleFlowActive
+      ? keyConstants.KEY_LETTERS.e
+      : keyConstants.KEY_LETTERS.s,
+    modifierKey: setModifierKey,
     handleEvent: isFlexibleFlowActive
       ? handleEventFlexibleFlow
       : handleEventStrictFlow,

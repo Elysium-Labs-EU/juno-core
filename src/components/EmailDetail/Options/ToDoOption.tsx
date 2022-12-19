@@ -11,9 +11,7 @@ import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import { selectInSearch } from 'store/utilsSlice'
 import { setModifierKey } from 'utils/setModifierKey'
 
-import { IEmailDetailOptions } from './optionTypes'
-
-const actionKeys = [setModifierKey, keyConstants.KEY_LETTERS.e]
+import type { IEmailDetailOptions } from './optionTypes'
 
 const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -32,7 +30,8 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
 
   useKeyboardShortcut({
     handleEvent,
-    actionKeys,
+    key: keyConstants.KEY_LETTERS.e,
+    modifierKey: setModifierKey,
     isDisabled: inSearch,
   })
 
