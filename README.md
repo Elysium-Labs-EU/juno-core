@@ -6,6 +6,9 @@ Juno is an Open Source React based Gmail application.
 - Go through your emails with minimal clicks.
 - Keep clear track of your to-do emails and new emails.
 
+## Docs
+https://docs.elysiumlabs.io/docs/juno/development/
+
 ## Getting Started
 
 There are two ways to get started. With installer or without installer.
