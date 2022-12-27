@@ -7,7 +7,7 @@
 //   })
 // })
 
-describe('log in to the platform as job seeker', () => {
+describe('log in to the system', () => {
   beforeEach(() => {
     // Cypress starts out with a blank slate for each test
     // so we must tell it to visit our website with the `cy.visit()` command.
@@ -30,28 +30,5 @@ describe('log in to the platform as job seeker', () => {
 
   // it('has a link to redirect to the sign up', () => {
   //   cy.findAllByText('Sign up now').should('exist')
-  // })
-
-  // it('job seeker can log in using the email and password option', () => {
-  //   cy.get("[type='email']").click().type('robbert+1@swiftly.one')
-  //   cy.get("[type='password']").click().type('Robbert')
-  //   cy.get('form')
-  //     .findByRole('button', { name: /Log in as job seeker/i })
-  //     .should('exist')
-  //   .click()
-  //   cy.get("[type='password']").should('not.exist')
-  // })
-
-  // it('employer can log in using the email and password option', () => {
-  //   cy.findByRole('tab', { name: /I'm an employer/i })
-  //     .should('exist')
-  //     .click()
-  //   cy.get("[type='email']").click().type('robbert+e1@swiftly.one')
-  //   cy.get("[type='password']").click().type('Robbert')
-  //   cy.get('form')
-  //     .findByRole('button', { name: /Log in as employer/i })
-  //     .should('exist')
-  //     .click()
-  //   cy.get("[type='password']").should('not.exist')
   // })
 })

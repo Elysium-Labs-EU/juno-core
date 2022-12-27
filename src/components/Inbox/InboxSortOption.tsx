@@ -156,6 +156,7 @@ const InboxSortOption = () => {
           !isDisabled() ? 'Start sorting inbox' : 'There is nothing to sort'
         }
         icon={<QiSort color="var(--color-black)" size={20} />}
+        dataCy="inbox-sort-button"
       />
       {!isFlexibleFlowActive && <InboxSortPopper />}
     </>

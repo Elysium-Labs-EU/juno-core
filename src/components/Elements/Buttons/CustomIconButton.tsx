@@ -9,6 +9,7 @@ interface ICustomIconButton {
   ariaExpanded?: boolean | undefined
   ariaHaspopup?: TAriaHaspopup
   className?: string
+  dataCy?: string
   disabled?: boolean
   hoverColor?: string
   icon: JSX.Element
@@ -50,6 +51,7 @@ const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
       ariaControls = undefined,
       ariaExpanded = undefined,
       className = undefined,
+      dataCy = undefined,
       disabled = false,
       hoverColor = undefined,
       icon,
@@ -67,6 +69,7 @@ const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
       aria-controls={ariaControls}
       aria-expanded={ariaExpanded}
       className={className}
+      data-cy={dataCy}
       disabled={disabled}
       hoverColor={hoverColor}
       isActive={isActive}
@@ -87,6 +90,7 @@ CustomIconButton.defaultProps = {
   ariaControls: undefined,
   ariaExpanded: undefined,
   className: undefined,
+  dataCy: undefined,
   disabled: false,
   hoverColor: undefined,
   isActive: false,

@@ -1,14 +1,6 @@
 // import { isEqual } from 'lodash'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import type {
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import * as global from 'constants/globalConstants'
 import type { IContact } from 'store/storeTypes/contactsTypes'
@@ -20,22 +12,24 @@ import RecipientField from './Generic/RecipientField'
 
 const ContactField = ({
   composeValue = undefined,
-  updateComposeEmail,
-  loadState,
-  showField,
+  dataCy = undefined,
+  hasInteracted,
   id,
   label,
+  loadState,
   setHasInteracted,
-  hasInteracted,
+  showField,
+  updateComposeEmail,
 }: {
   composeValue?: IContact[]
-  updateComposeEmail: (object: { id: string; value: IContact[] }) => void
-  loadState: string
-  showField: boolean
+  dataCy?: string
+  hasInteracted: boolean
   id: string
   label: string
+  loadState: string
   setHasInteracted: Dispatch<SetStateAction<boolean>>
-  hasInteracted: boolean
+  showField: boolean
+  updateComposeEmail: (object: { id: string; value: IContact[] }) => void
 }) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [value, setValue] = useState<IContact[]>([])
@@ -100,6 +94,7 @@ const ContactField = ({
   const memoizedField = useMemo(
     () => (
       <RecipientField
+        dataCy={dataCy}
         error={error}
         fieldId={id}
         fieldLabel={label}
@@ -112,7 +107,7 @@ const ContactField = ({
         showField={showField}
       />
     ),
-    [inputValue, error, handleChange, value, id, label]
+    [dataCy, error, handleChange, id, inputValue, label, value]
   )
 
   return memoizedField

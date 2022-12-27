@@ -1,6 +1,6 @@
 import { defineConfig } from 'cypress'
 
-// import RoutesConstants from './src/constants/routes.json'
+import RoutesConstants from './src/constants/routesConstants'
 
 const WIDTH = 1366
 
@@ -10,9 +10,8 @@ require('dotenv').config()
 export default defineConfig({
   projectId: 'g45j5p',
   env: {
-    login_url: '/login',
-    todo_url: '/',
-    // profile_url: RoutesConstants.PROFILE_BASE,
+    login_url: RoutesConstants.LOGIN,
+    todo_url: RoutesConstants.TODO,
     frontend_app_url: process.env.VITE_FRONTEND_APP_URL,
     googleRefreshToken: process.env.VITE_GOOGLE_TEST_REFRESH_TOKEN,
     googleClientId: process.env.VITE_GOOGLE_TEST_CLIENT_ID,
@@ -23,8 +22,8 @@ export default defineConfig({
     baseUrl: process.env.VITE_FRONTEND_APP_URL,
     viewportWidth: WIDTH,
     viewportHeight: (WIDTH / 16) * 9,
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
+    // setupNodeEvents(on, config) {
+    //   // implement node event listeners here
+    // },
   },
 })

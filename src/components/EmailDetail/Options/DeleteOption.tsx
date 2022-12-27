@@ -53,6 +53,7 @@ const DeleteOption = ({
       icon={icon}
       suppressed={suppressed}
       title="Delete email"
+      dataCy="delete-option"
     />
   )
 }

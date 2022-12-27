@@ -29,14 +29,14 @@ const MenuItemComponent = ({
     isFocused={focusedItemIndex === absoluteIndex}
   >
     <S.MenuItemContentMain
-      data-test-id="item-title"
+      data-cy={item.title}
       tabIndex={absoluteIndex}
       role="menuitem"
     >
       {item.title}
     </S.MenuItemContentMain>
     {item?.hint && (
-      <S.MenuItemContentSide data-test-id="item-hint">
+      <S.MenuItemContentSide data-cy="item-hint">
         {item.hint.map((it) => (
           <span key={it}>{it}</span>
         ))}

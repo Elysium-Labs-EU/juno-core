@@ -3,7 +3,7 @@ import { push } from 'redux-first-history'
 
 import Baseloader from 'components/BaseLoader/BaseLoader'
 import * as global from 'constants/globalConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import userApi from 'data/userApi'
 import { setIsAuthenticated } from 'store/baseSlice'
 import { useAppDispatch } from 'store/hooks'

@@ -42,6 +42,7 @@ const ToDoOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
       label={local.BUTTON_TODO}
       suppressed
       title="Mark as To Do"
+      dataCy="todo-button"
     />
   )
 }

@@ -66,6 +66,7 @@ const UnsubscribeOption = ({
       onClick={handleEvent}
       suppressed
       title="Unsubscribe"
+      dataCy="unsubscribe-button"
     />
   )
 }

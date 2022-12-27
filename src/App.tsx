@@ -6,7 +6,7 @@ import AppHeaderHelp from 'AppHeaderHelp'
 import SendingBanner from 'components/SendingBanner/SendingBanner'
 import SnackbarOrchestrator from 'components/SnackbarOrchestrator/SnackbarOrchestrator'
 import { BASE_ARRAY } from 'constants/baseConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import { fetchToken } from 'data/api'
 import RoutesComponent from 'Routes'
 import {

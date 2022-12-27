@@ -119,6 +119,7 @@ const TodoFocusOption = () => {
       title={
         !isDisabled ? 'Start focus mode' : 'First add items to the to do list'
       }
+      dataCy="todo-focus-button"
       icon={
         <QiJump
           color={isDisabled ? 'var(--color-black)' : 'var(--color-white)'}

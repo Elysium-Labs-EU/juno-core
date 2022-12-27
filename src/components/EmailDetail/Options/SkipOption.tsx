@@ -29,6 +29,7 @@ const SkipOption = ({ iconSize }: { iconSize: number }) => {
       onClick={handleEvent}
       suppressed
       title="Skip email"
+      dataCy="skip-button"
     />
   )
 }

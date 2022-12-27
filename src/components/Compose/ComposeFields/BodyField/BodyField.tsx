@@ -1,4 +1,3 @@
-
 import BlockQuote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
@@ -14,16 +13,8 @@ import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
 // import { isEqual } from 'lodash'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import type {
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import { compareTwoStrings } from 'string-similarity'
 
 import * as Compose from 'components/Compose/ComposeStyles'
@@ -139,7 +130,7 @@ const BodyField = ({
         <Compose.Label hasValue={value.length > 7}>
           <label htmlFor={local.BODY}>{local.BODY_LABEL}</label>
         </Compose.Label>
-        <S.Wrapper isFocused={isFocused}>
+        <S.Wrapper isFocused={isFocused} data-cy="body-field">
           <S.MenuBar isFocused={isFocused}>
             <MenuBar editor={editorInstance} />
           </S.MenuBar>

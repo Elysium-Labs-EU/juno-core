@@ -159,7 +159,7 @@ const Attachments = ({
   }, [uploadedFiles, loadState, composeValue, updateComposeEmail])
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-cy="attachments-field">
       {uploadedFiles.length > 0 && (
         <S.AttachmentHeaderContainer>
           <S.StyledBadge badgeContent={uploadedFiles.length} color="primary">

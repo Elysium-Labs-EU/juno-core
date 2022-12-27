@@ -2,7 +2,7 @@ import { FiEdit2 } from 'react-icons/fi'
 import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import {
   QiCheckmarkDouble,
   QiCog,

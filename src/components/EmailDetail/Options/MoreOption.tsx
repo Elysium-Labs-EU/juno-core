@@ -15,6 +15,7 @@ const MoreOption = ({ setShowMenu, showMenu, iconSize }: IMoreOption) => (
     label={local.BUTTON_MORE}
     suppressed
     title="Show more options"
+    dataCy="more-button"
   />
 )
 

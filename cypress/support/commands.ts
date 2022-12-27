@@ -20,6 +20,8 @@ Cypress.Commands.add('loginByGoogleApi', () => {
     const { access_token } = body
     const success = 'success'
 
+    // Use this function to visit the callback page. The state and code are only used to validate the action.
+
     cy.visit(
       `${Cypress.env(
         'frontend_app_url'
