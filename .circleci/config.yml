@@ -24,7 +24,7 @@ jobs:
         environment:
           ## this enables colors in the output
           TERM: xterm
-    working_directory: ~/app
+    working_directory: ~/
     steps:
       - checkout
       - store_artifacts:
