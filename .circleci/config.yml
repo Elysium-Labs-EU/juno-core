@@ -27,6 +27,8 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
+      - store_artifacts:
+          path: .env
       - restore_cache:
           keys:
             - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
@@ -39,7 +41,9 @@ jobs:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache ## cache both yarn and Cypress!
-      - run: $(yarn bin)/cypress run
+      - run:
+          name: Run Cypress tests
+          command: $(yarn bin)/cypress run -v .env:/app/.env
       # - run: $(yarn bin)/cypress run --record --key <record_key>
   deploy:
     executor: heroku/default
