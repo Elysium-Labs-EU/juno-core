@@ -34,12 +34,13 @@ jobs:
             - v1-deps
       - run:
           name: Install Dependencies
-          command: yarn install
+          command: yarn install --frozen-lockfile
       - save_cache:
           key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
           paths:
             - ~/.cache ## cache both yarn and Cypress!
-      - run: $(yarn bin)/cypress run --record --key "<record_key>"
+      - run: $(yarn bin)/cypress run
+      # - run: $(yarn bin)/cypress run --record --key <record_key>
   deploy:
     executor: heroku/default
     steps:
