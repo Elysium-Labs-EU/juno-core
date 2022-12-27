@@ -15,9 +15,14 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "types": ["vite/client", "vitest/globals"],
+    "types": [
+      "cypress",
+      "@testing-library/cypress",
+      "vite/client",
+      "vitest/globals"
+    ],
     "useDefineForClassFields": true
   },
-  "include": ["src", "env.d.ts", "global.d.ts"],
+  "include": ["src", "env.d.ts", "global.d.ts", "cypress.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

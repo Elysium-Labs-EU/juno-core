@@ -80,9 +80,7 @@ export const utilsSlice = createSlice({
     },
     setEmailFetchSize(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'emailFetchSize'>['emailFetchSize']>
+      { payload }: PayloadAction<IUtilsState['emailFetchSize']>
     ) {
       state.emailFetchSize = payload
     },
