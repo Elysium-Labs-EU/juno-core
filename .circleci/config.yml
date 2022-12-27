@@ -65,7 +65,7 @@ jobs:
 workflows:
   heroku_deploy:
     jobs:
-      - node/run:
+      - format:
           pkg-manager: yarn
           yarn-run: format
       - build
