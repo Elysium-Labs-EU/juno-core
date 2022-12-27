@@ -5,7 +5,7 @@ import handleUserTokens from '../../src/utils/handleUserTokens'
 import '@testing-library/cypress/add-commands'
 
 Cypress.Commands.add('loginByGoogleApi', () => {
-  // cy.log(Cypress.env('googleRefreshToken'))
+  cy.log(Cypress.env('googleRefreshToken'))
   cy.log('Logging in to Google')
   cy.request({
     method: 'POST',
