@@ -16,9 +16,9 @@ describe('log in to the system', () => {
     cy.visit(Cypress.env('login_url'))
   })
 
-  // it('displays the login method', () => {
-  //   cy.findAllByText('Login with Google').should('exist')
-  // })
+  it('displays the login method', () => {
+    cy.findAllByText('Login with Google').should('exist')
+  })
 
   it('can use login method', () => {
     cy.loginByGoogleApi()
