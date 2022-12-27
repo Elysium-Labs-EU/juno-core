@@ -24,11 +24,11 @@ jobs:
         environment:
           ## this enables colors in the output
           TERM: xterm
-    working_directory: ~/
+    working_directory: ~/app
     steps:
       - checkout
       - store_artifacts:
-          path: .env
+          path: app/.env
       - restore_cache:
           keys:
             - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
