@@ -68,12 +68,11 @@ workflows:
       - node/run:
           pkg-manager: yarn
           yarn-run: format
-      - build:
-          filters:
-            branches:
-              only:
-                - main
-                - dev
+      - build
+        # filters:
+        #   branches:
+        #     only:
+        #       - dev
       - deploy:
           filters:
             branches:
