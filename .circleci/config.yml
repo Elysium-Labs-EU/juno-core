@@ -51,9 +51,10 @@ jobs:
             - ~/.cache ## cache both yarn and Cypress!
       - run:
           name: Run Cypress tests
-          command: $(yarn bin)/cypress-parallel -s cypress run -t 2 -d cypress/e2e -a '\"--record"'
+          # command: $(yarn bin)/cypress-parallel -s  -t 2 -d cypress/e2e -a '\"--record"'
           # command: $(yarn bin)/cypress-parallel --record
           # command: $(yarn bin)/cypress run --record
+          command: $(yarn bin)/cy:parallel
   deploy:
     executor: heroku/default
     steps:
