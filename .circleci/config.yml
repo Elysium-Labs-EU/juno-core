@@ -54,7 +54,7 @@ jobs:
           # command: $(yarn bin)/cypress-parallel -s  -t 2 -d cypress/e2e -a '\"--record"'
           # command: $(yarn bin)/cypress-parallel --record
           # command: $(yarn bin)/cypress run --record
-          command: $(yarn bin)/cy:parallel
+          command: yarn cy:parallel
   deploy:
     executor: heroku/default
     steps:
