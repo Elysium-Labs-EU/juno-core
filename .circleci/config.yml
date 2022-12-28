@@ -75,7 +75,7 @@ workflows:
   build:
     jobs:
       - cypress/install:
-          name: Install
+          name: cypress/install
           build: yarn
       - cypress/run:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
