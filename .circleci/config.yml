@@ -3,7 +3,6 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
-  cypress: cypress-io/cypress@2.2.0
 
 executors:
   cypress/base-18:
@@ -52,8 +51,8 @@ jobs:
             - ~/.cache ## cache both yarn and Cypress!
       - run:
           name: Run Cypress tests
+          # command: $(yarn bin)/cypress-parallel --record
           command: $(yarn bin)/cypress run --record
-      # - run: $(yarn bin)/cypress run --record --key <record_key>
   deploy:
     executor: heroku/default
     steps:

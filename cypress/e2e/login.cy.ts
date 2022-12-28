@@ -22,6 +22,7 @@ describe('log in to the system', () => {
 
   it('can use login method', () => {
     cy.loginByGoogleApi()
+    cy.findAllByText('Login with Google').should('not.exist')
   })
 
   // it('has a link to the forgot password', () => {
