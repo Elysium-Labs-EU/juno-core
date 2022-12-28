@@ -82,7 +82,7 @@
     "type": "tsc && vite",
     "test": "vite test",
     "cy:run": "cypress run",
-    "cy:parallel": "cypress-parallel -s cy:run -t 2 -d cypress/e2e -a '\"--record\"'",
+    "cy:parallel": "cypress-parallel -s cy:run -t 2 -d 'cypress/e2e/*' -a '\"--record\"'",
     "preview": "vite preview",
     "lint": "eslint ./",
     "lint-fix": "eslint ./ --fix",
