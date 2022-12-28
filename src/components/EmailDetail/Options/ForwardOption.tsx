@@ -41,6 +41,7 @@ const ForwardOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
       onClick={handleEvent}
       suppressed
       title="Forward email"
+      dataCy="forward-button"
     />
   )
 }

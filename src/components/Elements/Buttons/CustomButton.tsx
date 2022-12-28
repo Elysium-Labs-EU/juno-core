@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 interface ICustomButton {
   className?: string
+  dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | null
@@ -78,6 +79,7 @@ const InnerButton = styled.div<IInnerButton>`
 const CustomButton = ({
   className = undefined,
   disabled = false,
+  dataCy = undefined,
   icon = null,
   label,
   onKeyDown = undefined,
@@ -90,6 +92,7 @@ const CustomButton = ({
 }: ICustomButton) => (
   <Button
     className={className}
+    data-cy={dataCy}
     disabled={disabled}
     onClick={onClick ? (event) => onClick(event) : undefined}
     style={style}

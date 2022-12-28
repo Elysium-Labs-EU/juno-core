@@ -1,6 +1,6 @@
 import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
 import getRelevantMessage from './getRelevantMessage'
@@ -33,7 +33,7 @@ const ForwardingComposer = ({
   })
 
   return (
-    <ES.ComposeWrapper>
+    <ES.ComposeWrapper data-cy="forward-composer">
       <ComposeEmail
         presetValue={{
           subject: relevantMessage?.payload.headers.subject,

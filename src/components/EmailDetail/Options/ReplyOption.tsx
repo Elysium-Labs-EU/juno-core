@@ -42,6 +42,7 @@ const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
       onClick={handleEvent}
       suppressed
       title="Reply email"
+      dataCy="reply-button"
     />
   )
 }

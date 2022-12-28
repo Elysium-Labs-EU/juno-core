@@ -4,6 +4,11 @@ orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
 
+executors:
+  cypress/base-18:
+    docker:
+      - image: cypress/base:18
+
 commands:
   deploy-command:
     parameters:
@@ -18,6 +23,36 @@ commands:
           branch: <<parameters.BRANCH>>
 
 jobs:
+  build:
+    docker:
+      - image: cypress/base:18.12.1
+        environment:
+          ## this enables colors in the output
+          TERM: xterm
+          VITE_GOOGLE_TEST_REFRESH_TOKEN: $VITE_GOOGLE_TEST_REFRESH_TOKEN
+          VITE_GOOGLE_TEST_CLIENT_ID: $VITE_GOOGLE_TEST_CLIENT_ID
+          VITE_GOOGLE_TEST_CLIENT_SECRECT: $VITE_GOOGLE_TEST_CLIENT_SECRECT
+          VITE_FRONTEND_APP_URL: $VITE_FRONTEND_APP_URL
+
+    working_directory: ~/app
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+            - v1-deps-{{ .Branch }}
+            - v1-deps
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - save_cache:
+          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache ## cache both yarn and Cypress!
+      - run:
+          name: Run Cypress tests
+          # command: $(yarn bin)/cypress-parallel --record
+          command: $(yarn bin)/cypress run --record
   deploy:
     executor: heroku/default
     steps:
@@ -41,11 +76,40 @@ jobs:
                 BRANCH: dev
 
 workflows:
+  build:
+    jobs:
+      - build
+      # - cypress/install:
+      #     name: cypress/install
+      #     yarn: true
+      #     executor: cypress/base-18
+      # - cypress/run:
+      #     # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
+      #     # in CircleCI → Project Settings → Environment Variables
+      #     requires:
+      #       - cypress/install
+      #     executor: cypress/base-18
+      #     # Records to Cypress Dashboard
+      #     # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
+      #     record: true
+      #     # Runs jobs in parallel
+      #     # https://docs.cypress.io/guides/guides/parallelization
+      #     parallel: true
+      #     parallelism: 2 # Uses 2 parallel instances
+      #     # Starts web server for E2E tests - replace with your own server invocation
+      #     # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
+      #     start: yarn start
+      #     wait-on: 'http-get://localhost:3000' # Waits for above
   heroku_deploy:
     jobs:
       - node/run:
           pkg-manager: yarn
           yarn-run: format
+      # - build
+      #   # filters:
+      #   #   branches:
+      #   #     only:
+      #   #       - dev
       - deploy:
           filters:
             branches:

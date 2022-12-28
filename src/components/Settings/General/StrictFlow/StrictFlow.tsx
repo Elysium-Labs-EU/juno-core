@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 
 import * as S from 'components/Settings/SettingsStyles'
 import * as global from 'constants/globalConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
@@ -16,7 +16,6 @@ import {
 } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
-
 
 const HEADER = 'Workflow mode'
 const BODY =
@@ -74,6 +73,7 @@ const StrictFlow = () => {
             onChange={switchWorkFlow}
             checked={isFlexibleFlowActive}
             color="secondary"
+            data-cy="flexible-flow-switch"
           />
         }
       />

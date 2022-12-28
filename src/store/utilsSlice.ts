@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 import { activateTodo } from 'components/ToDo/TodoFocusOption'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
-import RouteConstants from 'constants/routes.json'
+import RouteConstants from 'constants/routesConstants'
 import {
   deleteDraftBatch,
   fetchDrafts,
@@ -80,9 +80,7 @@ export const utilsSlice = createSlice({
     },
     setEmailFetchSize(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'emailFetchSize'>['emailFetchSize']>
+      { payload }: PayloadAction<IUtilsState['emailFetchSize']>
     ) {
       state.emailFetchSize = payload
     },

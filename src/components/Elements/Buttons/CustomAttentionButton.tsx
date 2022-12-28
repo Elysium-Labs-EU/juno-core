@@ -1,9 +1,10 @@
 /* eslint-disable react/button-has-type */
-import { MouseEvent } from 'react'
+import type { MouseEvent } from 'react'
 import styled from 'styled-components'
 
 interface ICustomButton {
   className?: string
+  dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | JSX.Element
@@ -73,6 +74,7 @@ const InnerButton = styled.div`
 
 const CustomAttentionButton = ({
   className = undefined,
+  dataCy = undefined,
   disabled = false,
   icon = null,
   label,
@@ -85,6 +87,7 @@ const CustomAttentionButton = ({
 }: ICustomButton) => (
   <Button
     className={className}
+    data-cy={dataCy}
     disabled={disabled}
     onClick={onClick ? (event) => onClick(event) : undefined}
     onKeyDown={onKeyDown}

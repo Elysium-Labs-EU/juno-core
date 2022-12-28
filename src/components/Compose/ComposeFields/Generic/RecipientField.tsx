@@ -10,16 +10,17 @@ import type { IContact } from 'store/storeTypes/contactsTypes'
 import EmailInput from './EmailInput/EmailInput'
 
 interface IRecipientField {
-  recipientFieldValue: Array<IContact>
+  dataCy?: string
+  error: boolean
   fieldId: string
   fieldLabel: string
-  error: boolean
   handleChangeRecipients: (recipientListRaw: IRecipientsList) => void
-  inputValue: string
-  setInputValue: Dispatch<SetStateAction<string>>
   handleDelete: (value: any) => void
-  showField: boolean
+  inputValue: string
+  recipientFieldValue: Array<IContact>
   registerOnKeyDown: () => void
+  setInputValue: Dispatch<SetStateAction<string>>
+  showField: boolean
 }
 
 /**
@@ -29,22 +30,24 @@ interface IRecipientField {
  */
 
 const RecipientField = ({
-  recipientFieldValue,
+  dataCy = undefined,
+  error,
   fieldId,
   fieldLabel,
-  error,
   handleChangeRecipients,
-  inputValue,
-  setInputValue,
   handleDelete,
-  showField,
+  inputValue,
+  recipientFieldValue,
   registerOnKeyDown,
+  setInputValue,
+  showField,
 }: IRecipientField) => (
   <>
     <S.Label
       hasValue={
         recipientFieldValue && Object.keys(recipientFieldValue).length > 0
       }
+      data-cy={dataCy}
     >
       <label htmlFor={fieldId}>{fieldLabel}</label>
     </S.Label>

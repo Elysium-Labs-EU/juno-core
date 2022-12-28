@@ -5,7 +5,7 @@ import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
 import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
 import * as global from 'constants/globalConstants'
-import Routes from 'constants/routes.json'
+import Routes from 'constants/routesConstants'
 import { QiMeatballsH } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
@@ -89,12 +89,13 @@ const NavigationMore = () => {
       handleClose={handleClose}
       triggerButton={
         <CustomIconButton
-          onClick={handleOpen}
-          icon={<QiMeatballsH size={SIZE} />}
-          title="More menu"
-          ariaHaspopup="true"
           ariaControls={isOpen ? 'menu' : undefined}
           ariaExpanded={isOpen || undefined}
+          ariaHaspopup="true"
+          dataCy="more-menu"
+          icon={<QiMeatballsH size={SIZE} />}
+          onClick={handleOpen}
+          title="More menu"
         />
       }
     />

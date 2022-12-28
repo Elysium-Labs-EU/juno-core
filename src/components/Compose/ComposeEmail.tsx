@@ -212,6 +212,7 @@ const ComposeEmail = ({
         setHasInteracted={setHasInteracted}
         showField={!isReplying}
         updateComposeEmail={updateComposeEmail}
+        dataCy="to-field"
       />
     ),
     [isReplying, composedEmail, loadState, hasInteracted]
@@ -228,6 +229,7 @@ const ComposeEmail = ({
         setHasInteracted={setHasInteracted}
         showField={showCC}
         updateComposeEmail={updateComposeEmail}
+        dataCy="cc-field"
       />
     ),
     [showCC, composedEmail, loadState, hasInteracted]
@@ -244,6 +246,7 @@ const ComposeEmail = ({
         setHasInteracted={setHasInteracted}
         showField={showBCC}
         updateComposeEmail={updateComposeEmail}
+        dataCy="bcc-field"
       />
     ),
     [showBCC, composedEmail, loadState, hasInteracted]

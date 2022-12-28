@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 import { useAppDispatch } from 'store/hooks'
 import { setInSearch } from 'store/utilsSlice'
@@ -22,8 +22,10 @@ const ListItemContent = ({
     <S.IconTitleContainer>
       {icon && <S.IconContainer>{icon}</S.IconContainer>}
       {typeof children === 'string' ? (
-        <span className="max-w-md truncate">{children}</span>
+        // TODO: Apply max width and truncate
+        <span>{children}</span>
       ) : (
+        // <span className="max-w-md truncate">{children}</span>
         children
       )}
     </S.IconTitleContainer>
@@ -72,6 +74,7 @@ const ListItem = ({
       onClick={clickAndClose}
       // The className is used to target it.
       className="command-palette-list-item"
+      data-cy="command-palette-list-item"
     >
       <ListItemContent showType={showType} itemType={itemType} icon={icon}>
         {children}

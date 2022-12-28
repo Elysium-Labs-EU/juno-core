@@ -45,6 +45,7 @@ const ArchiveOption = ({
       label={local.BUTTON_ARCHIVE}
       suppressed
       title="Archive email"
+      dataCy='archive-button'
     />
   )
 }

@@ -4,7 +4,7 @@ import { push } from 'redux-first-history'
 
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
-import * as RoutesConstants from 'constants/routes.json'
+import * as RoutesConstants from 'constants/routesConstants'
 import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import {

@@ -1,6 +1,6 @@
 import { push } from 'redux-first-history'
 
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import type { AppDispatch } from 'store/store'
 /**
  * @function createComposeViaURL

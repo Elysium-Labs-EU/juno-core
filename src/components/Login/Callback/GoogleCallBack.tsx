@@ -3,7 +3,7 @@ import { push } from 'redux-first-history'
 
 import Baseloader from 'components/BaseLoader/BaseLoader'
 import * as global from 'constants/globalConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import userApi from 'data/userApi'
 import { setIsAuthenticated } from 'store/baseSlice'
 import { useAppDispatch } from 'store/hooks'
@@ -29,8 +29,9 @@ const GoogleCallBack = () => {
           code,
           state,
         }
+
         const response = await userApi().authGoogleCallback(body)
-        // If the cloud backend is used with the local frontend, the authorization requires these additional values.
+        // If the cloud backend is used with the local frontend, the authorization requires the complete Credentials object.
         if (response?.status === 200) {
           if (
             import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'

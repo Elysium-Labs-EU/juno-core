@@ -59,6 +59,7 @@ const InlineThreadActionsRegular = ({
           })
         }
         title="Reply"
+        dataCy="reply-inline-button"
       />
     ),
     [id]
@@ -87,6 +88,7 @@ const InlineThreadActionsRegular = ({
           }
           icon={<QiToDo size={ICON_SIZE} />}
           title="Mark as To Do"
+          dataCy="mark-todo-inline-button"
         />
       )
     )
@@ -106,6 +108,7 @@ const InlineThreadActionsRegular = ({
           }
           icon={<QiFolderArchive size={ICON_SIZE} />}
           title="Archive"
+          dataCy="archive-inline-button"
         />
       )
     )
@@ -118,6 +121,7 @@ const InlineThreadActionsRegular = ({
         icon={<QiFolderTrash size={ICON_SIZE} />}
         title="Delete"
         hoverColor={themeConstants.color.red[500]}
+        dataCy="delete-inline-button"
       />
     ),
     [id, labelIds]

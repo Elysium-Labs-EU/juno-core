@@ -5,7 +5,7 @@ import { push } from 'redux-first-history'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import * as keyConstants from 'constants/keyConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import {
   QiCompose,
@@ -90,6 +90,7 @@ const Navigation = () => {
                 onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
                 isActive={active === 'todo'}
                 title=""
+                dataCy="todo"
               />
             </S.NavItem>
           </StyledTooltip>
@@ -102,18 +103,20 @@ const Navigation = () => {
                   onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
                   isActive={active === 'inbox'}
                   title=""
+                  dataCy="inbox"
                 />
               </S.NavItem>
             </StyledTooltip>
           ) : null}
 
-          <StyledTooltip title="Search">
+          <StyledTooltip title="Command Palette">
             <S.NavItem>
               <CustomIconButton
                 icon={<QiSearch size={ICON_SIZE} />}
                 isActive={active === 'search'}
                 onClick={() => dispatch(setInSearch(true))}
                 title=""
+                dataCy="command-palette"
               />
             </S.NavItem>
           </StyledTooltip>
@@ -126,7 +129,8 @@ const Navigation = () => {
                 onClick={() => {
                   dispatch(navigateTo('/compose'))
                 }}
-                title="Compose"
+                title=""
+                dataCy="compose"
               />
             </S.NavItem>
           </StyledTooltip>

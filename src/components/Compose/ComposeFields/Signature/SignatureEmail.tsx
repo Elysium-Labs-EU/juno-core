@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
-import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import type { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import { QiChevronDown } from 'images/svgIcons/quillIcons'
@@ -105,7 +105,7 @@ const SignatureEmail = ({
   }
 
   return (
-    <S.Wrapper>
+    <S.Wrapper data-cy="signature-field">
       <S.SettingsButtonContainer>
         <Menu
           activeModalTag={global.ACTIVE_MODAL_MAP.signature}

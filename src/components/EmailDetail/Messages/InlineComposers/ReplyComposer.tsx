@@ -1,7 +1,7 @@
 import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import { handleContactConversion } from 'utils/convertToContact'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
@@ -33,7 +33,7 @@ const ReplyComposer = ({
   })
 
   return (
-    <ES.ComposeWrapper>
+    <ES.ComposeWrapper data-cy="reply-composer">
       <ComposeEmail
         presetValue={{
           // This should only be used when the message is a draft

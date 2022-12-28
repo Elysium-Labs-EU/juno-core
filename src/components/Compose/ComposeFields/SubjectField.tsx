@@ -1,15 +1,6 @@
 // import { isEqual } from 'lodash'
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import type {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react'
 
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
@@ -66,7 +57,7 @@ const SubjectField = ({
   const memoizedSubjectField = useMemo(
     () => (
       <>
-        <S.Label hasValue={Boolean(value)}>
+        <S.Label hasValue={Boolean(value)} data-cy="subject-field">
           <label htmlFor={local.SUBJECT}>{local.SUBJECT_LABEL}</label>
         </S.Label>
         <StyledTextField

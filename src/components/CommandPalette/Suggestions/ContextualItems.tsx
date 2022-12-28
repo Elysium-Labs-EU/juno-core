@@ -1,7 +1,7 @@
 import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
-import RoutesConstants from 'constants/routes.json'
+import RoutesConstants from 'constants/routesConstants'
 import { QiDiscard, QiFolderArchive, QiJump } from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
 import {
