@@ -24,11 +24,13 @@ jobs:
         environment:
           ## this enables colors in the output
           TERM: xterm
+          VITE_GOOGLE_TEST_REFRESH_TOKEN: $VITE_GOOGLE_TEST_REFRESH_TOKEN
+          VITE_GOOGLE_TEST_CLIENT_ID: $VITE_GOOGLE_TEST_CLIENT_ID
+          VITE_GOOGLE_TEST_CLIENT_SECRECT: $VITE_GOOGLE_TEST_CLIENT_SECRECT
+
     working_directory: ~/app
     steps:
       - checkout
-      - store_artifacts:
-          path: app/.env
       - restore_cache:
           keys:
             - v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
