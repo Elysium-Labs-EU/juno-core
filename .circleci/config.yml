@@ -5,6 +5,11 @@ orbs:
   heroku: circleci/heroku@1.2.6
   cypress: cypress-io/cypress@2.2.0
 
+executors:
+  cypress/base-18:
+    docker:
+      - image: cypress/base:18
+
 commands:
   deploy-command:
     parameters:
@@ -77,13 +82,13 @@ workflows:
       - cypress/install:
           name: cypress/install
           yarn: true
-          executor: cypress/base:12
+          executor: cypress/base-18
       - cypress/run:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in CircleCI → Project Settings → Environment Variables
           requires:
             - cypress/install
-          executor: cypress/base:12
+          executor: cypress/base-18
           # Records to Cypress Dashboard
           # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
           record: true
