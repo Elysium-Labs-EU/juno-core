@@ -72,16 +72,35 @@ jobs:
                 BRANCH: dev
 
 workflows:
+  build:
+    jobs:
+      - cypress/install
+      - cypress/run:
+          # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
+          # in CircleCI → Project Settings → Environment Variables
+          requires:
+            - cypress/install
+          # Records to Cypress Dashboard
+          # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
+          record: true
+          # Runs jobs in parallel
+          # https://docs.cypress.io/guides/guides/parallelization
+          parallel: true
+          parallelism: 2 # Uses 2 parallel instances
+          # Starts web server for E2E tests - replace with your own server invocation
+          # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
+          start: yarn start
+          wait-on: 'http-get://localhost:3000' # Waits for above
   heroku_deploy:
     jobs:
       - node/run:
           pkg-manager: yarn
           yarn-run: format
-      - build
-        # filters:
-        #   branches:
-        #     only:
-        #       - dev
+      # - build
+      #   # filters:
+      #   #   branches:
+      #   #     only:
+      #   #       - dev
       - deploy:
           filters:
             branches:
