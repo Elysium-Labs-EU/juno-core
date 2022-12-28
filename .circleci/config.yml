@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.2
   heroku: circleci/heroku@1.2.6
-  cypress: cypress-io/cypress@2
+  cypress: cypress-io/cypress@2.2.0
 
 commands:
   deploy-command:
