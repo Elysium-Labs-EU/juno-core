@@ -45,7 +45,7 @@ jobs:
             - ~/.cache ## cache both yarn and Cypress!
       - run:
           name: Run Cypress tests
-          command: $(yarn bin)/cypress run -v .env:/app/.env
+          command: $(yarn bin)/cypress run
       # - run: $(yarn bin)/cypress run --record --key <record_key>
   deploy:
     executor: heroku/default
