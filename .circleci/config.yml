@@ -76,12 +76,14 @@ workflows:
     jobs:
       - cypress/install:
           name: cypress/install
-          build: yarn
+          yarn: true
+          executor: cypress/base-18
       - cypress/run:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in CircleCI → Project Settings → Environment Variables
           requires:
             - cypress/install
+          executor: cypress/base-18
           # Records to Cypress Dashboard
           # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
           record: true
@@ -91,6 +93,7 @@ workflows:
           parallelism: 2 # Uses 2 parallel instances
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
+          install-command: echo 'Nothing to install in this job'
           start: yarn start
           wait-on: 'http-get://localhost:3000' # Waits for above
   heroku_deploy:
