@@ -74,7 +74,9 @@ jobs:
 workflows:
   build:
     jobs:
-      - cypress/install
+      - cypress/install:
+          name: Install Dependencies
+          command: yarn install
       - cypress/run:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in CircleCI → Project Settings → Environment Variables
