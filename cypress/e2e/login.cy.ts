@@ -13,6 +13,7 @@ describe('log in to the system', () => {
   it('can use login method', () => {
     cy.loginByGoogleApi()
     cy.findAllByText('Login with Google').should('not.exist')
+    cy.wait(10000)
     cy.contains('To Do').should('exist')
   })
 })
