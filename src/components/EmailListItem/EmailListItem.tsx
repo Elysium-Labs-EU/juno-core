@@ -281,7 +281,7 @@ const EmailListItem = ({
               <TimeStampDisplay
                 threadTimeStamp={getTimeStamp(
                   email,
-                  labelIds.includes(global.DRAFT_LABEL)
+                  labelIds.includes(global.DRAFT_LABEL) || inSearch
                 )}
               />
             </S.DatePosition>

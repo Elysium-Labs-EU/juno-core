@@ -86,7 +86,7 @@ const handleAdditionToExistingEmailArray = ({
   state: IEmailListState
   labels: string[]
   threads: IEmailListThreadItem[]
-  timestamp: number
+  timestamp: number | undefined
   arrayIndex?: number
   nextPageToken?: undefined | string | null
   q?: undefined | string
@@ -156,18 +156,17 @@ const handleEmailListChange = ({
   state: IEmailListState
   labels: Array<string> | undefined
   threads: Array<IEmailListThreadItem>
-  timestamp: number
+  timestamp: number | undefined
   nextPageToken?: undefined | string | null
   q?: string
 }) => {
   // The flow can only work if there are labels to use
   if (labels) {
     // Find emailList sub-array index
-    const arrayIndex: number = state.emailList
-      .map((emailArray) => emailArray.labels)
-      .flat(1)
-      .findIndex((obj) => (obj ? obj.includes(labels[0]) : null))
-    if (threads && threads.length > 0) {
+    const arrayIndex = state.emailList.findIndex((emailArray) =>
+      emailArray.labels.includes(labels[0])
+    )
+    if (threads && threads.length) {
       // If the input contains a q - it is search request.
       if (q) {
         // This function is used to update the search List.
@@ -385,7 +384,10 @@ export const emailListSlice = createSlice({
       currentState[state.activeEmailListIndex].threads = filterArray()
       state.emailList = currentState
     },
-    listUpdateSearchResults: (state, { payload }) => {
+    listUpdateSearchResults: (
+      state,
+      { payload }: PayloadAction<IEmailListObject>
+    ) => {
       const { labels, threads, q, nextPageToken, timestamp } = payload
       handleEmailListChange({
         state,
@@ -470,16 +472,16 @@ export const emailListSlice = createSlice({
 })
 
 export const {
-  setSelectedEmails,
-  setIsFetching,
-  setActiveEmailListIndex,
-  setBaseEmailList,
   listAddEmailList,
   listRemoveItemDetail,
+  listRemoveItemDetailBatch,
   listRemoveItemDetailDraft,
   listRemoveItemMessage,
-  listRemoveItemDetailBatch,
   listUpdateSearchResults,
+  setActiveEmailListIndex,
+  setBaseEmailList,
+  setIsFetching,
+  setSelectedEmails,
 } = emailListSlice.actions
 
 export const useSearchResults =
@@ -500,6 +502,7 @@ export const useSearchResults =
       dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
       dispatch(setCurrentLabels([global.SEARCH_LABEL]))
     }
+
     dispatch(
       setViewIndex(
         searchResults.threads.findIndex((item) => item.id === currentEmail)
@@ -644,11 +647,11 @@ export const updateEmailLabel =
             if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
               const { emailFetchSize } = getState().utils
               edgeLoadingNextPage({
-                isSilentLoading,
-                dispatch,
-                labelIds,
-                emailFetchSize,
                 activeEmailList: staticActiveEmailList,
+                dispatch,
+                emailFetchSize,
+                isSilentLoading,
+                labelIds,
               })
             }
           }

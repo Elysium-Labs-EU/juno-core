@@ -1,13 +1,7 @@
 import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type {
-  ChangeEvent,
-  Dispatch,
-  KeyboardEvent,
-  MutableRefObject,
-  SetStateAction,
-} from 'react'
+import type { ChangeEvent, KeyboardEvent } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
@@ -33,81 +27,13 @@ import handleChangeFocus from 'utils/handleChangeFocus'
 import sortThreads from 'utils/sortThreads'
 
 import * as S from './CommandPaletteStyles'
+import type { ISearchBody } from './CommandPaletteTypes'
 import ContextBar from './ContextBar/ContextBar'
 import SearchResults from './Search/SearchResults'
 import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
 
-interface IShouldClearOutPreviousResults {
-  searchValueRef: MutableRefObject<string>
-  searchValue: string
-  setSearchResults: Dispatch<SetStateAction<IEmailListObject | undefined>>
-  dispatch: AppDispatch
-}
-interface IIntitialSearch {
-  searchValue: string
-  setLoadState: Dispatch<SetStateAction<string>>
-  fetchSearchThreads: (searchBody: { q: string }) => void
-  searchValueRef: MutableRefObject<string>
-  setSearchResults: Dispatch<SetStateAction<IEmailListObject | undefined>>
-  dispatch: AppDispatch
-}
-interface ILoadMoreSearchResults {
-  searchValue: string
-  searchResults: IEmailListObject
-  setLoadState: Dispatch<SetStateAction<string>>
-  fetchSearchThreads: (searchBody: { q: string }) => void
-}
-
 const SEARCH = 'Search'
 const COMMAND_PALLETE = 'command-palette-list-item'
-
-const shouldClearOutPreviousResults = ({
-  searchValueRef,
-  searchValue,
-  setSearchResults,
-}: IShouldClearOutPreviousResults) => {
-  if (
-    searchValueRef.current !== searchValue &&
-    searchValueRef.current.length > 0
-  ) {
-    setSearchResults(undefined)
-  }
-}
-
-const intitialSearch = ({
-  searchValue,
-  setLoadState,
-  fetchSearchThreads,
-  searchValueRef,
-  setSearchResults,
-  dispatch,
-}: IIntitialSearch) => {
-  const searchBody = {
-    q: searchValue,
-  }
-  setLoadState(global.LOAD_STATE_MAP.loading)
-  shouldClearOutPreviousResults({
-    searchValueRef,
-    searchValue,
-    setSearchResults,
-    dispatch,
-  })
-  fetchSearchThreads(searchBody)
-}
-
-export const loadMoreSearchResults = ({
-  searchValue,
-  searchResults,
-  setLoadState,
-  fetchSearchThreads,
-}: ILoadMoreSearchResults) => {
-  const searchBody = {
-    q: searchValue,
-    nextPageToken: searchResults?.nextPageToken,
-  }
-  setLoadState(global.LOAD_STATE_MAP.loading)
-  fetchSearchThreads(searchBody)
-}
 
 const openDetail = ({
   currentEmail,
@@ -154,13 +80,20 @@ const CommandPallette = () => {
     setSearchValue('')
     searchValueRef.current = ''
     setSearchResults(undefined)
-    // TODO: Clear out the search results from Redux
-    // dispatch(setSearchResults())
     setLoadState(global.LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
   }, [])
+
+  const shouldClearOutPreviousResults = () => {
+    if (
+      searchValueRef.current !== searchValue &&
+      searchValueRef.current.length > 0
+    ) {
+      setSearchResults(undefined)
+    }
+  }
 
   useEffect(() => {
     let mounted = true
@@ -176,7 +109,8 @@ const CommandPallette = () => {
   }, [searchList])
 
   const fetchSearchThreads = useCallback(
-    async (searchBody: { q: string; nextPageToken?: string }) => {
+    async (searchBody: ISearchBody) => {
+      // async (searchBody: { q: string; nextPageToken?: string }) => {
       const searchBodyWithNextPageToken = {
         q: `${searchBody.q} in:all -label:spam`,
         nextPageToken: searchBody?.nextPageToken ?? null,
@@ -203,6 +137,7 @@ const CommandPallette = () => {
           // If there is already a search result use this
           if (searchResults && searchResults.threads.length > 0) {
             const newStateObject = {
+              q: searchBody.q,
               threads: sortThreads(searchResults.threads.concat(threads)),
               nextPageToken: nextPageToken ?? null,
               labels: [global.SEARCH_LABEL],
@@ -225,6 +160,24 @@ const CommandPallette = () => {
     },
     [loadState, searchValueRef, searchValue, searchResults]
   )
+
+  const intitialSearch = useCallback(() => {
+    const searchBody = {
+      q: searchValue,
+    }
+    setLoadState(global.LOAD_STATE_MAP.loading)
+    shouldClearOutPreviousResults()
+    fetchSearchThreads(searchBody)
+  }, [dispatch, searchValue, searchValueRef])
+
+  const loadMoreSearchResults = useCallback(() => {
+    const searchBody = {
+      q: searchValue,
+      nextPageToken: searchResults?.nextPageToken,
+    }
+    setLoadState(global.LOAD_STATE_MAP.loading)
+    fetchSearchThreads(searchBody)
+  }, [searchValue, searchResults])
 
   const handleOpenEmailEvent = (threadId: string) => {
     if (searchResults) {
@@ -262,14 +215,7 @@ const CommandPallette = () => {
         return
       }
       if (searchValue.length > 1 && searchValue !== searchValueRef.current) {
-        intitialSearch({
-          searchValue,
-          setLoadState,
-          fetchSearchThreads,
-          searchValueRef,
-          setSearchResults,
-          dispatch,
-        })
+        intitialSearch()
         return
       }
       if (searchResults && focusedItemIndex > -1) {
@@ -321,10 +267,11 @@ const CommandPallette = () => {
       <S.SearchOuput>
         {searchResults && searchResults?.threads ? (
           <SearchResults
-            fetchSearchThreads={fetchSearchThreads}
             focusedItemIndex={focusedItemIndex}
+            handleOpenEmailEvent={handleOpenEmailEvent}
+            loadMoreSearchResults={loadMoreSearchResults}
+            loadState={loadState}
             searchResults={searchResults}
-            searchValue={searchValue}
             setFocusedItemIndex={setFocusedItemIndex}
           />
         ) : (
@@ -378,16 +325,7 @@ const CommandPallette = () => {
             value={searchValue}
           />
           <CustomButton
-            onClick={() =>
-              intitialSearch({
-                dispatch,
-                fetchSearchThreads,
-                searchValue,
-                searchValueRef,
-                setLoadState,
-                setSearchResults,
-              })
-            }
+            onClick={() => intitialSearch()}
             disabled={
               searchValue.length < 1 || searchValue === searchValueRef.current
             }

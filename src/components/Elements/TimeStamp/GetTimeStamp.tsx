@@ -1,5 +1,5 @@
 import * as global from 'constants/globalConstants'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function getTimeStamp

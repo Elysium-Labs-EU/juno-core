@@ -33,7 +33,7 @@ const RotatingIcon = styled.span<IRotatingIcon>`
 
 const StyledCircularProgress = ({ size = 18 }: { size?: number }) => (
   <RotatingIcon size={size}>
-    <FiLoader size={size} />
+    <FiLoader size={size} color="var(--color-neutral-400)" />
   </RotatingIcon>
 )
 

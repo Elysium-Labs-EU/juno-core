@@ -1,13 +1,5 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import type {
-  Dispatch,
-  SetStateAction,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
