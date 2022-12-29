@@ -25,19 +25,19 @@ export const Icon = styled.div`
 
 export const InputRow = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   padding: 15px 30px;
 `
 
 export const InfoAndButton = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
 `
 
 export const NoSearchResults = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 `
 
 export const SearchOuput = styled.div`
@@ -50,7 +50,7 @@ export const SearchOuput = styled.div`
 
 export const FooterRow = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   height: 3rem;
   justify-content: center;
   padding-bottom: 0.5rem;

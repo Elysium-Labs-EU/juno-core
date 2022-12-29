@@ -26,6 +26,15 @@ export const GlobalStyle = createGlobalStyle`
     --h4: ${themeConstants.fontSize.h4};
     --h5: ${themeConstants.fontSize.h5};
     --small: ${themeConstants.fontSize.small};
+    --spacing-0-5: ${themeConstants.spacing[0.5]};
+    --spacing-0-75: ${themeConstants.spacing[0.75]};
+    --spacing-1: ${themeConstants.spacing[1]};
+    --spacing-1-5: ${themeConstants.spacing[1.5]};
+    --spacing-2: ${themeConstants.spacing[2]};
+    --spacing-3: ${themeConstants.spacing[3]};
+    --spacing-4: ${themeConstants.spacing[4]};
+    --spacing-6: ${themeConstants.spacing[6]};
+    --spacing-7: ${themeConstants.spacing[7]};
     --radius-l: 8px;
     --radius-m: 4px;
     --radius-s: 2px;
@@ -45,7 +54,7 @@ export const GlobalStyle = createGlobalStyle`
 
 export const Base = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   margin: 0;
 `
 

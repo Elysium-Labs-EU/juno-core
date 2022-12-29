@@ -191,7 +191,7 @@ export const ContactsContainer = styled.div`
 
 export const ToFromBCCInner = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: flex-start;
   .truncate {
     overflow: hidden;
@@ -280,7 +280,7 @@ export const ContactContainer = styled.div`
 export const ComposeWrapper = styled.div`
   position: relative;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   flex: 1 1 auto;
   max-width: 50%;
   margin-left: 40px;

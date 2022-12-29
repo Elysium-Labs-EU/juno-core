@@ -10,7 +10,7 @@ export const Wrapper = styled.div<IWrapper>`
   border: ${({ isFocused }) =>
     isFocused ? `2px var(--color-blue-100) solid` : '2px solid transparent'};
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   position: relative;
   min-height: 200px;
   height: 100%;

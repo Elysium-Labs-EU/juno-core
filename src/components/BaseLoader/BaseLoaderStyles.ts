@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
 export const Inner = styled.div`
   display: flex;
   place-items: center;
-  flex-flow: column;
+  flex-direction: column;
 `
 
 export const ServiceUnavailableParagraph = styled.p`

@@ -4,22 +4,18 @@ import senderNameFull from 'components/Elements/SenderName/senderNameFull'
 import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
-import * as local from 'constants/filesOverviewConstants'
+import * as local from 'components/EmailDetail/Files/FilesOverviewConstants'
 import { selectProfile } from 'store/baseSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import * as GS from 'styles/globalStyles'
 import countUniqueFiles from 'utils/countUniqueFiles'
 
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import * as ES from '../EmailDetailStyles'
 import DownloadButtonMultiple from './DownloadFileMultiple'
 import * as S from './FilesOverviewStyles'
-
-interface IFilesOverview {
-  threadDetail: IEmailListThreadItem | null
-  isLoading: boolean
-}
+import type { IFilesOverview } from './FilesOverViewTypes'
 
 const MappedFiles = ({
   threadDetail,
@@ -27,14 +23,20 @@ const MappedFiles = ({
   const { emailAddress } = useAppSelector(selectProfile)
   return threadDetail?.messages ? (
     <div>
-      <S.DownloadAllContainer>
-        <DownloadButtonMultiple
-          filesObjectArray={threadDetail.messages.map((message) => ({
-            id: message.id,
-            files: message.payload.files,
-          }))}
-        />
-      </S.DownloadAllContainer>
+      <S.FilesHeader>
+        <GS.Span muted small>
+          {local.NO_IDENTICAL_FILES}
+        </GS.Span>
+        <S.DownloadAllContainer>
+          <DownloadButtonMultiple
+            filesObjectArray={threadDetail.messages.map((message) => ({
+              id: message.id,
+              files: message.payload.files,
+            }))}
+            isMainButton
+          />
+        </S.DownloadAllContainer>
+      </S.FilesHeader>
       {threadDetail.messages
         .slice(0)
         .reverse()

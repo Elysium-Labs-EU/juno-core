@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   height: 100%;
   background-color: var(--color-white);
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   place-content: center;
   background: var(--color-neutral-100);
   @media only screen and (min-width: ${breakPoint.md}) {

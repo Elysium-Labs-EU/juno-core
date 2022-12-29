@@ -16,7 +16,7 @@ const StyledMessageCount = styled.div`
   color: var(--color-neutral-400);
   font-weight: 400;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
 `
 
 const CountWrapper = styled.div`

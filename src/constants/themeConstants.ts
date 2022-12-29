@@ -105,3 +105,15 @@ export const fontSize = {
 }
 export const fontFamily =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif"
+
+export const spacing = {
+  '0.5': '4px',
+  '0.75': '6px',
+  '1': '8px',
+  '1.5': '12px',
+  '2': '16px',
+  '3': '24px',
+  '4': '32px',
+  '6': '48px',
+  '7': '56px',
+}

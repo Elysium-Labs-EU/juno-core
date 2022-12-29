@@ -79,12 +79,12 @@ export const Row = styled.div`
 
 export const CcBccContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
 `
 
 export const ButtonContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
   button:not(first-child) {

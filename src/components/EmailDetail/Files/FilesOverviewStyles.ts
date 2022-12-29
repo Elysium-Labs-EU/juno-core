@@ -8,9 +8,17 @@ export const FilesWrapper = styled.div`
   box-shadow: var(--box-shadow-low);
 `
 
+export const FilesHeader = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+`
+
 export const DownloadAllContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 `
@@ -21,7 +29,7 @@ export const FileEmailRow = styled.div`
 
 export const NameOptionsRow = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 12px;
   padding-bottom: 12px;
@@ -30,7 +38,7 @@ export const NameOptionsRow = styled.div`
 
 export const DownloadTimestampRow = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   button {
     margin-right: 20px;
@@ -39,7 +47,7 @@ export const DownloadTimestampRow = styled.div`
 
 export const AvatarName = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   div {
     margin-right: 10px;
@@ -48,6 +56,6 @@ export const AvatarName = styled.div`
 
 export const BubbleWrapper = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   flex-wrap: wrap;
 `

@@ -5,7 +5,7 @@ import { breakPoint } from 'constants/themeConstants'
 export const Wrapper = styled.div`
   align-content: center;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   flex-wrap: wrap;
   height: 100vh;
   justify-content: center;
@@ -55,7 +55,7 @@ export const LoginContainer = styled.div`
 export const Inner = styled.div`
   align-items: center;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   padding: 40px 20px;
 `
 

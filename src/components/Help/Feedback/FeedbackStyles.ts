@@ -2,28 +2,28 @@ import styled from 'styled-components'
 
 export const Wrapper = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: stretch;
   gap: 20px;
 `
 
 export const Inner = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   align-items: stretch;
   gap: 16px;
 `
 
 export const OptionsWrapper = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   gap: 12px;
 `
 
 export const ButtonContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: flex-end;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -38,7 +38,7 @@ export const SuccessContainer = styled.div`
   div {
     justify-content: center;
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
     align-items: center;
   }
 `

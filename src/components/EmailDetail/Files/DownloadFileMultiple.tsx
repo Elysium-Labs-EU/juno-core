@@ -5,9 +5,47 @@ import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
-import { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
+import type { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
+
+interface IDownloadButtonMultiple {
+  filesObjectArray: {
+    id: string
+    files: IEmailMessagePayloadRaw[] | undefined
+  }[]
+  isMainButton?: boolean
+}
+
+const asssesUniqueFiles = ({
+  filesObjectArray,
+}: Pick<IDownloadButtonMultiple, 'filesObjectArray'>) => {
+  const uniqueFiles = filesObjectArray.reduce((accumulator, currentValue) => {
+    // Check if there is another file in the accumulator with the same name and size
+    const duplicate = accumulator.some((fileObject) => {
+      if (fileObject.files && currentValue.files) {
+        return fileObject.files.some((file) => {
+          if (currentValue?.files && currentValue.files[0]) {
+            return (
+              file.filename === currentValue.files[0].filename &&
+              file.body.size === currentValue.files[0].body.size
+            )
+          }
+          return false
+        })
+      }
+      return false
+    })
+
+    // Add the current file to the accumulator if there is no duplicate
+    if (!duplicate && currentValue && currentValue?.files?.length) {
+      accumulator.push(currentValue)
+    }
+    return accumulator
+  }, [] as Pick<IDownloadButtonMultiple, 'filesObjectArray'>['filesObjectArray'])
+
+  return uniqueFiles
+}
 
 const ICON_SIZE = 13
 
@@ -29,12 +67,8 @@ const RenderIcon = ({
 
 const DownloadButtonMultiple = ({
   filesObjectArray,
-}: {
-  filesObjectArray: {
-    id: string
-    files: IEmailMessagePayloadRaw[] | undefined
-  }[]
-}) => {
+  isMainButton = false,
+}: IDownloadButtonMultiple) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
@@ -43,7 +77,7 @@ const DownloadButtonMultiple = ({
     setLoadState(global.LOAD_STATE_MAP.loading)
     try {
       const buffer: any = []
-      filesObjectArray.forEach((object) =>
+      asssesUniqueFiles({ filesObjectArray }).forEach((object) =>
         buffer.push(
           downloadAttachmentMultiple({
             attachmentData: object.files,
@@ -76,16 +110,19 @@ const DownloadButtonMultiple = ({
     }
   }, [])
 
+  const handleLabel = () => {
+    if (filesObjectArray.length > 0 && isMainButton) {
+      return 'Download all files'
+    }
+    return `Download ${
+      filesObjectArray[0]?.files ? filesObjectArray[0].files.length : 0
+    } files`
+  }
+
   return (
     <CustomButton
       onClick={handleClick}
-      label={
-        filesObjectArray.length > 0
-          ? 'Download all files'
-          : `Download ${
-              filesObjectArray[0]?.files ? filesObjectArray[0].files.length : 0
-            }`
-      }
+      label={handleLabel()}
       icon={<RenderIcon downloaded={downloaded} loadState={loadState} />}
       title={
         !downloaded

@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import * as React from 'react'
+import type { MouseEvent } from 'react'
 import styled from 'styled-components'
 
 interface ICustomButton {
@@ -8,7 +8,7 @@ interface ICustomButton {
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | null
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   onKeyDown?: any
   showIconAfterLabel?: boolean
   style?: any

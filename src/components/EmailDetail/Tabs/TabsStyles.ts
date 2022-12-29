@@ -11,7 +11,7 @@ export const TabContainer = styled.nav`
 
 export const ItemsContainer = styled.ul`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   list-style-type: none;
   margin: 0;
   padding: 0;

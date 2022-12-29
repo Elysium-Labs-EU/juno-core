@@ -154,8 +154,8 @@ const handleEmailListChange = ({
   q,
 }: {
   state: IEmailListState
-  labels: string[] | undefined
-  threads: IEmailListThreadItem[]
+  labels: Array<string> | undefined
+  threads: Array<IEmailListThreadItem>
   timestamp: number
   nextPageToken?: undefined | string | null
   q?: string
@@ -242,7 +242,7 @@ export const emailListSlice = createSlice({
   reducers: {
     setSelectedEmails: (
       state,
-      { payload }: PayloadAction<ISelectedEmailAction[]>
+      { payload }: PayloadAction<Array<ISelectedEmailAction>>
     ) => {
       const loopOverPayload = () => {
         for (let i = 0; i < payload.length; i += 1) {
@@ -279,19 +279,13 @@ export const emailListSlice = createSlice({
     },
     setIsFetching: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailListState, 'isFetching'>['isFetching']>
+      { payload }: PayloadAction<IEmailListState['isFetching']>
     ) => {
       state.isFetching = payload
     },
     setActiveEmailListIndex: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IEmailListState, 'activeEmailListIndex'>['activeEmailListIndex']
-      >
+      { payload }: PayloadAction<IEmailListState['activeEmailListIndex']>
     ) => {
       state.activeEmailListIndex = payload
     },

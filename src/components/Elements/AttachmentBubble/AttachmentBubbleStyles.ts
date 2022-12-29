@@ -20,7 +20,7 @@ export const Attachment = styled.div`
   background-color: var(--color-neutral-100);
   border-radius: var(--radius-m);
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   flex: 1 1 0%;
   justify-content: space-between;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
