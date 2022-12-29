@@ -29,7 +29,7 @@ export const HeaderCenter = styled.div`
 
 export const BackButtonWithNavgationContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
   margin-bottom: 40px;
 `
@@ -42,7 +42,7 @@ export const FocusSortHeaderWrapper = styled.div`
 
 export const StrictFlowButtonContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: 40px 0 20px;

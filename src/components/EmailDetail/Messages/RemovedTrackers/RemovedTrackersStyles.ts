@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Wrapper = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: flex-start;
 `
 
@@ -81,7 +81,7 @@ export const DialogHeader = styled.h2`
 
 export const DialogTop = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
   margin-right: 20px;
 `
@@ -93,6 +93,6 @@ export const DialogInner = styled.div`
 
 export const BlockedItemInformation = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   overflow-wrap: anywhere;
 `

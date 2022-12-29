@@ -3,7 +3,6 @@ import styled, { keyframes } from 'styled-components'
 
 import { breakPoint } from 'constants/themeConstants'
 
-
 const overlayShow = keyframes({
   '0%': { opacity: 0 },
   '100%': { opacity: 0.6 },
@@ -56,7 +55,7 @@ export const StyledContent = styled(DialogPrimitive.Content)`
 
 export const Inner = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 `
 
 export const ModalHeader = styled.div`
@@ -67,7 +66,7 @@ export const ModalHeader = styled.div`
 export const HeaderRow = styled.div`
   align-items: center;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
 `
 

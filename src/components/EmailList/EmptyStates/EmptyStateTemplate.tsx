@@ -4,7 +4,7 @@ import * as GS from 'styles/globalStyles'
 
 const Wrapper = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   user-select: none;

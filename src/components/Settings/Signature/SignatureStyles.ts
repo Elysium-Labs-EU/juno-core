@@ -5,7 +5,7 @@ export const EditorWrapper = styled.div`
   width: 100%;
   border: 2px solid var(--color-neutral-300);
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   min-height: 200px;
   max-height: 400px;
   flex: 1;

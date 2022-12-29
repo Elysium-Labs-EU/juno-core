@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   align-items: flex-start;
   color: var(--color-neutral-400);
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   left: -40px;
   min-height: 51px;
   position: relative;

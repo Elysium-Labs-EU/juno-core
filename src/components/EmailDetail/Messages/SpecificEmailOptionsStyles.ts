@@ -3,5 +3,5 @@ import styled from 'styled-components'
 
 export const Inner = styled.div`
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
 `

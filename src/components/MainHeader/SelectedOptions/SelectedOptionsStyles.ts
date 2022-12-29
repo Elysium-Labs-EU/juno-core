@@ -11,7 +11,7 @@ export const Wrapper = styled.div`
   box-shadow: none;
   box-sizing: border-box;
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   justify-content: space-between;
   left: 50%;
   margin: 0 auto;

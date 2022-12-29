@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const Columns = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   div:first-child {
     margin-right: 40px;
   }
@@ -37,6 +37,6 @@ export const KeyBindShortcut = styled.div`
     box-sizing: border-box;
   }
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
   margin-top: 5px;
 `

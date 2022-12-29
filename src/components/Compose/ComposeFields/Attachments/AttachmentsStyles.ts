@@ -7,7 +7,7 @@ export const Wrapper = styled.div`
 
 export const AttachmentHeaderContainer = styled.div`
   display: flex;
-  flex-flow: row;
+  flex-direction: row;
 `
 
 export const StyledBadge = styled(Badge)`

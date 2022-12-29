@@ -1,6 +1,6 @@
 import fileSaver from 'file-saver'
 
-import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
 import base64toBlob from 'utils/base64toBlob'
 
