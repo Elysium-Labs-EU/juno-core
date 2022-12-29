@@ -1,5 +1,5 @@
 import * as global from 'constants/globalConstants'
-import {
+import type {
   IEmailListThreadItem,
   IEmailMessage,
 } from 'store/storeTypes/emailListTypes'

@@ -1,15 +1,15 @@
 import * as global from 'constants/globalConstants'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function sortThreads
  * @param sortObject the object to sort
- * @param forceSort a optional flag to overwrite the filtering on draft
+ * @param forceSort a optional flag to overwrite the filtering on draft, if false it will filter out drafts from the sort
  * @returns a sorted array or empty arry
  */
 
 export default function sortThreads(
-  sortObject: IEmailListThreadItem[],
+  sortObject: Array<IEmailListThreadItem>,
   forceSort?: boolean
 ) {
   if (sortObject && sortObject.length > 0) {
@@ -23,7 +23,7 @@ export default function sortThreads(
                 : b.messages.filter(
                     (message) => !message.labelIds.includes(global.DRAFT_LABEL)
                   ).length - 1
-            ].internalDate,
+            ]?.internalDate,
             10
           ) -
           parseInt(
@@ -33,7 +33,7 @@ export default function sortThreads(
                 : a.messages.filter(
                     (message) => !message.labelIds.includes(global.DRAFT_LABEL)
                   ).length - 1
-            ].internalDate,
+            ]?.internalDate,
             10
           )
         )
