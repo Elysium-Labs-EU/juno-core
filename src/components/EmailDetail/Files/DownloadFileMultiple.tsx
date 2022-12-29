@@ -20,30 +20,28 @@ interface IDownloadButtonMultiple {
 const asssesUniqueFiles = ({
   filesObjectArray,
 }: Pick<IDownloadButtonMultiple, 'filesObjectArray'>) => {
-  const uniqueFiles = filesObjectArray.reduce((accumulator, currentValue) => {
-    // Check if there is another file in the accumulator with the same name and size
-    const duplicate = accumulator.some((fileObject) => {
-      if (fileObject.files && currentValue.files) {
-        return fileObject.files.some((file) => {
-          if (currentValue?.files && currentValue.files[0]) {
-            return (
-              file.filename === currentValue.files[0].filename &&
-              file.body.size === currentValue.files[0].body.size
-            )
+  const processedFiles = new Set()
+  const uniqueFiles: Pick<
+    IDownloadButtonMultiple,
+    'filesObjectArray'
+  >['filesObjectArray'] = []
+
+  filesObjectArray.forEach((fileObject) => {
+    if (fileObject?.files) {
+      uniqueFiles.push({
+        id: fileObject.id,
+        files: fileObject.files.filter((file) => {
+          const { filename, body } = file
+          const fileKey = `${filename}-${body.size}`
+          if (processedFiles.has(fileKey)) {
+            return undefined
           }
-          return false
-        })
-      }
-      return false
-    })
-
-    // Add the current file to the accumulator if there is no duplicate
-    if (!duplicate && currentValue && currentValue?.files?.length) {
-      accumulator.push(currentValue)
+          processedFiles.add(fileKey)
+          return file
+        }),
+      })
     }
-    return accumulator
-  }, [] as Pick<IDownloadButtonMultiple, 'filesObjectArray'>['filesObjectArray'])
-
+  })
   return uniqueFiles
 }
 
@@ -76,7 +74,12 @@ const DownloadButtonMultiple = ({
   const handleClick = useCallback(async () => {
     setLoadState(global.LOAD_STATE_MAP.loading)
     try {
-      const buffer: any = []
+      const buffer: Array<
+        Promise<
+          | { success: boolean; message: string }
+          | { success: boolean; message: null }
+        >
+      > = []
       asssesUniqueFiles({ filesObjectArray }).forEach((object) =>
         buffer.push(
           downloadAttachmentMultiple({

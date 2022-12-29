@@ -64,13 +64,15 @@ export async function downloadAttachmentSingle({
  * @returns
  */
 
+export interface IDownloadAttachmentData {
+  attachmentData: IEmailAttachmentType[] | undefined
+  messageId: string
+}
+
 export async function downloadAttachmentMultiple({
   attachmentData,
   messageId,
-}: {
-  attachmentData: IEmailAttachmentType[] | undefined
-  messageId: string
-}) {
+}: IDownloadAttachmentData) {
   try {
     if (attachmentData && attachmentData.length) {
       const buffer: Promise<any>[] = []
