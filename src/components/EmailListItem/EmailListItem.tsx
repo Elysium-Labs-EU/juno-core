@@ -197,8 +197,6 @@ const EmailListItem = ({
     )
   }
 
-  // TODO: Abstract all the components into memoized components. And renable the click on all the areas to open the email list item.
-
   const memoizedEmailListItem = useMemo(
     () => (
       <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
@@ -242,6 +240,7 @@ const EmailListItem = ({
               <S.TruncatedSpan
                 title={staticSenderPartial.emailAddress}
                 data-testid="email-sender"
+                onClick={handleOpenEvent}
               >
                 {staticSenderPartial.name ?? staticSenderPartial.emailAddress}
               </S.TruncatedSpan>
@@ -249,13 +248,14 @@ const EmailListItem = ({
               <S.TruncatedSpan
                 title={staticRecipientName.emailAddress}
                 data-testid="email-recipient"
+                onClick={handleOpenEvent}
               >
                 {staticRecipientName.name}
               </S.TruncatedSpan>
             )}
           </S.CellName>
           {showLabel && (
-            <S.CellLabels>
+            <S.CellLabels onClick={handleOpenEvent}>
               <EmailLabel labelNames={staticEmailLabels} />
             </S.CellLabels>
           )}
