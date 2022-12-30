@@ -21,7 +21,8 @@ export default function sortThreads(
               forceSort
                 ? b.messages.length - 1
                 : b.messages.filter(
-                    (message) => !message.labelIds.includes(global.DRAFT_LABEL)
+                    (message) =>
+                      !message?.labelIds?.includes(global.DRAFT_LABEL)
                   ).length - 1
             ]?.internalDate,
             10
@@ -31,7 +32,8 @@ export default function sortThreads(
               forceSort
                 ? a.messages.length - 1
                 : a.messages.filter(
-                    (message) => !message.labelIds.includes(global.DRAFT_LABEL)
+                    (message) =>
+                      !message?.labelIds?.includes(global.DRAFT_LABEL)
                   ).length - 1
             ]?.internalDate,
             10

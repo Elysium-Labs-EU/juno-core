@@ -125,7 +125,6 @@ const CommandPallette = () => {
 
   const fetchSearchThreads = useCallback(
     async (searchBody: ISearchBody) => {
-      // async (searchBody: { q: string; nextPageToken?: string }) => {
       const searchBodyWithNextPageToken = {
         q: `${searchBody.q} in:all -label:spam`,
         nextPageToken: searchBody?.nextPageToken ?? null,

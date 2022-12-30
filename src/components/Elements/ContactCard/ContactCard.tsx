@@ -25,7 +25,7 @@ const ContactCard = ({
   children,
   placement = 'bottom-start',
 }: IContactCard) => {
-  const [isHovering, setIsHovering] = useState(false)
+  const [isHovering, setIsHovering] = useState(true)
   const cardDelay = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contactCardWrapper = useRef<HTMLElement | null>(null)
   const dispatch = useAppDispatch()
@@ -91,7 +91,7 @@ const ContactCard = ({
                   onClick={() => {
                     createComposeViaURL({
                       dispatch,
-                      mailToLink: `mailto:${userEmail}`,
+                      mailToLink: `mailto:${emailAddress}`,
                     })
                   }}
                   title="Create email to this user"
@@ -105,7 +105,7 @@ const ContactCard = ({
                     onClick={() => {
                       createComposeViaURL({
                         dispatch,
-                        mailToLink: `mailto:${userEmail}`,
+                        mailToLink: `mailto:${emailAddress}`,
                       })
                     }}
                   >
@@ -121,7 +121,7 @@ const ContactCard = ({
                   onClick={() => {
                     createSearchViaUrl({
                       dispatch,
-                      searchQuery: userEmail,
+                      searchQuery: emailAddress,
                     })
                   }}
                 />
