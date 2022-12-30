@@ -1,4 +1,3 @@
-// import isEqual from 'lodash/isEqual'
 import {
   useCallback,
   useEffect,
@@ -17,7 +16,6 @@ import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
-import useWhyDidYouUpdate from 'hooks/useWhyDidYouUpdate'
 import { QiEscape, QiSend } from 'images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
@@ -235,12 +233,6 @@ const ComposeEmail = ({
     // On the emailDetail a refresh for EmailDetail is dispatched if this composer was opened in a reply or forward mode.
   }, [isReplying, isForwarding, dispatch])
 
-  useWhyDidYouUpdate('ToField', {
-    isReplying,
-    composedEmail,
-    loadState,
-    hasInteracted,
-  })
   const memoizedToField = useMemo(
     () => (
       <ContactField

@@ -3,15 +3,15 @@ import Popper from '@mui/material/Popper'
 import { Box } from '@mui/system'
 import { Children, useRef, useState } from 'react'
 
-import { QiCompose, QiMail } from 'images/svgIcons/quillIcons'
+import { QiMail, QiSearch } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
 import * as GS from 'styles/globalStyles'
 import createComposeViaURL from 'utils/createComposeViaURL'
+import createSearchViaUrl from 'utils/createSearchViaUrl'
 import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
 import CustomButton from '../Buttons/CustomButton'
-import CustomIconButton from '../Buttons/CustomIconButton'
 import * as S from './ContactCardStyles'
 import type { IContactCard } from './ContactCardTypes'
 
@@ -84,36 +84,48 @@ const ContactCard = ({
               {name || NO_NAME}
             </S.ContactCardName>
             <S.ContactCardDetails>
-              <S.ContactCardEmailButton
-                disabled={!emailAddress}
-                $randomColor={getRandomColor(staticInitials)}
-              >
-                <QiMail size={20} />
-              </S.ContactCardEmailButton>
-              <Box
-                display="flex"
-                sx={{
-                  flexDirection: 'column',
-                  marginLeft: '0.6rem',
-                  overflow: 'hidden',
-                }}
-              >
-                <GS.Span small>Email</GS.Span>
-                <S.ContactCardEmail title={emailAddress}>
-                  {emailAddress || NO_EMAIL}
-                </S.ContactCardEmail>
-                <CustomButton
-                  icon={<QiCompose />}
-                  label="Compose"
-                  title="Compose email to this user"
+              <S.ContactCardEmailContainer>
+                <S.ContactCardEmailButton
+                  disabled={!emailAddress}
+                  $randomColor={getRandomColor(staticInitials)}
                   onClick={() => {
                     createComposeViaURL({
                       dispatch,
                       mailToLink: `mailto:${userEmail}`,
                     })
                   }}
+                  title="Create email to this user"
+                >
+                  <QiMail size={20} />
+                </S.ContactCardEmailButton>
+                <S.EmailContainer>
+                  <GS.Span small>Email</GS.Span>
+                  <S.ContactCardEmail
+                    title={emailAddress}
+                    onClick={() => {
+                      createComposeViaURL({
+                        dispatch,
+                        mailToLink: `mailto:${userEmail}`,
+                      })
+                    }}
+                  >
+                    {emailAddress || NO_EMAIL}
+                  </S.ContactCardEmail>
+                </S.EmailContainer>
+              </S.ContactCardEmailContainer>
+              <S.AdditionalButtonsContainer>
+                <CustomButton
+                  icon={<QiSearch />}
+                  label="Search for emails"
+                  title="Search for emails with this user"
+                  onClick={() => {
+                    createSearchViaUrl({
+                      dispatch,
+                      searchQuery: userEmail,
+                    })
+                  }}
                 />
-              </Box>
+              </S.AdditionalButtonsContainer>
             </S.ContactCardDetails>
           </CardContent>
         </S.ContactCard>

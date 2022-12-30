@@ -2,6 +2,7 @@ import InputBase from '@mui/material/InputBase'
 import Modal from '@mui/material/Modal'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, KeyboardEvent } from 'react'
+import { push } from 'redux-first-history'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
@@ -24,6 +25,7 @@ import {
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
 import handleChangeFocus from 'utils/handleChangeFocus'
+import parseQueryString from 'utils/parseQueryString'
 import sortThreads from 'utils/sortThreads'
 
 import * as S from './CommandPaletteStyles'
@@ -72,19 +74,32 @@ const CommandPallette = () => {
   const searchList = useAppSelector(selectSearchList)
   const selectedEmails = useAppSelector(selectSelectedEmails)
 
+  useEffect(() => {
+    const { q }: { q?: string } = parseQueryString(window.location.search)
+    if (q) {
+      setSearchValue(q)
+    }
+  }, [window.location.search])
+
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value)
   }
 
   const resetSearch = useCallback(() => {
-    setSearchValue('')
+    const { q }: { q?: string } = parseQueryString(window.location.search)
+    if (q) {
+      const url = new URL(window.location.href)
+      url.searchParams.delete('q')
+      dispatch(push(url.href))
+    }
     searchValueRef.current = ''
+    setSearchValue('')
     setSearchResults(undefined)
     setLoadState(global.LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
-  }, [])
+  }, [dispatch, window.location.search])
 
   const shouldClearOutPreviousResults = () => {
     if (
