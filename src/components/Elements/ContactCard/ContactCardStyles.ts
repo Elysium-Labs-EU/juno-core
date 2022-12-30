@@ -63,7 +63,6 @@ export const ContactCardEmail = styled.span`
 `
 
 export const ContactCardDetails = styled.div`
-  align-items: center;
   display: flex;
   flex-direction: column;
 `
@@ -71,8 +70,7 @@ export const ContactCardDetails = styled.div`
 export const ContactCardEmailContainer = styled.div`
   align-items: center;
   display: flex;
-  padding: auto var(--spacing-1);
-  justify-content: center;
+  justify-content: flex-start;
 `
 
 export const EmailContainer = styled.div`
@@ -80,7 +78,6 @@ export const EmailContainer = styled.div`
   flex-direction: column;
   margin-left: 0.6rem;
   overflow: hidden;
-  max-width: 65%;
 `
 
 export const AdditionalButtonsContainer = styled.div`
