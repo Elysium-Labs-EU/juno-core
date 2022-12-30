@@ -6,7 +6,7 @@ import { selectStorageLabels } from 'store/labelsSlice'
 import capFirstLetterOnly from 'utils/capFirstLetterOnly'
 import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
 
-import CustomLabel from './CustomLabel'
+import CustomLabel from './CustomLabel/CustomLabel'
 
 const Wrapper = styled.div`
   div:not(:first-child) {

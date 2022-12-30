@@ -25,7 +25,7 @@ const ContactCard = ({
   children,
   placement = 'bottom-start',
 }: IContactCard) => {
-  const [isHovering, setIsHovering] = useState(true)
+  const [isHovering, setIsHovering] = useState(false)
   const cardDelay = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contactCardWrapper = useRef<HTMLElement | null>(null)
   const dispatch = useAppDispatch()

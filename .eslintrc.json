@@ -85,6 +85,13 @@
     "@typescript-eslint/no-useless-concat": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "import/no-cycle": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": ["**/*.stories.*", "**/.storybook/**/*.*"],
+        "peerDependencies": true
+      }
+    ],
     "no-console": "warn",
     "no-restricted-syntax": 1,
     "no-use-before-define": "warn",
