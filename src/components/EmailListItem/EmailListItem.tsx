@@ -197,7 +197,7 @@ const EmailListItem = ({
     )
   }
 
-  // TODO: Abstract all the components into memoized components.
+  // TODO: Abstract all the components into memoized components. And renable the click on all the areas to open the email list item.
 
   const memoizedEmailListItem = useMemo(
     () => (
@@ -218,7 +218,7 @@ const EmailListItem = ({
             )}
           </S.CellCheckbox>
           <S.CelUnread>{hasUnreadLabel(email) && <S.UnreadDot />}</S.CelUnread>
-          <S.CellName onClick={handleOpenEvent} aria-hidden="true">
+          <S.CellName aria-hidden="true">
             <S.Avatars>
               {!labelIds.includes(global.DRAFT_LABEL) ? (
                 <ContactCard

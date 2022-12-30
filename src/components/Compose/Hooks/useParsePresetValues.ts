@@ -9,54 +9,40 @@ import parseQueryString from 'utils/parseQueryString'
 /**
  * @function handlePresetvalueConversions
  * @param presetValueObject
- * @returns an object ready to be ingested into composeEmail state
+ * @returns an array ready to be ingested into composeEmail state, the structure is id: string, value: any where value is the value of the field.
  */
 const handlePresetvalueConversions = (
   presetValueObject: IComposeEmailReceive
 ) => {
-  const convertedPresetValueObject: any = {}
-  if (
-    'id' in presetValueObject &&
-    presetValueObject.id &&
-    presetValueObject.id.length > 0
-  ) {
-    convertedPresetValueObject.id = presetValueObject.id
-  }
-  if (
-    'threadId' in presetValueObject &&
-    presetValueObject.threadId &&
-    presetValueObject.threadId.length > 0
-  ) {
-    convertedPresetValueObject.threadId = presetValueObject.threadId
-  }
-  if (presetValueObject?.to && presetValueObject.to.length > 0) {
-    convertedPresetValueObject.to =
-      typeof presetValueObject.to === 'string'
-        ? handleContactConversion(presetValueObject.to)
-        : presetValueObject.to
-  }
-  if (presetValueObject?.cc && presetValueObject.cc.length > 0) {
-    convertedPresetValueObject.cc =
-      typeof presetValueObject.cc === 'string'
-        ? handleContactConversion(presetValueObject.cc)
-        : presetValueObject.cc
-  }
-  if (presetValueObject?.bcc && presetValueObject.bcc.length > 0) {
-    convertedPresetValueObject.cc =
-      typeof presetValueObject.bcc === 'string'
-        ? handleContactConversion(presetValueObject.bcc)
-        : presetValueObject.bcc
-  }
-  if ('subject' in presetValueObject) {
-    convertedPresetValueObject.subject = presetValueObject.subject
-  }
-  if ('body' in presetValueObject) {
-    convertedPresetValueObject.body = presetValueObject.body
-  }
-  if (presetValueObject?.files && presetValueObject.files.length > 0) {
-    convertedPresetValueObject.files = presetValueObject.files
-  }
-  return convertedPresetValueObject
+  const convertedPresetValueArray: any = []
+
+  const fieldsToConvert = [
+    'id',
+    'threadId',
+    'to',
+    'cc',
+    'bcc',
+    'subject',
+    'body',
+    'files',
+  ]
+
+  fieldsToConvert.forEach((field) => {
+    if (field in presetValueObject) {
+      let value = presetValueObject[field as keyof IComposeEmailReceive]
+      if (field === 'to' || field === 'cc' || field === 'bcc') {
+        if (typeof value === 'string') {
+          value = handleContactConversion(value)
+        }
+      }
+      convertedPresetValueArray.push({
+        id: field,
+        value,
+      })
+    }
+  })
+
+  return convertedPresetValueArray
 }
 
 export default function useParsePresetValues({

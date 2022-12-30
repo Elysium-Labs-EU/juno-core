@@ -1,6 +1,5 @@
 // import { isEqual } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 
 import * as global from 'constants/globalConstants'
 import type { IContact } from 'store/storeTypes/contactsTypes'
@@ -8,6 +7,7 @@ import emailValidation from 'utils/emailValidation'
 
 import { recipientListTransform } from '../ComposeEmail'
 import type { IRecipientsList } from '../ComposeEmailTypes'
+import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
 
 const ContactField = ({
@@ -20,19 +20,9 @@ const ContactField = ({
   setHasInteracted,
   showField,
   updateComposeEmail,
-}: {
-  composeValue?: IContact[]
-  dataCy?: string
-  hasInteracted: boolean
-  id: string
-  label: string
-  loadState: string
-  setHasInteracted: Dispatch<SetStateAction<boolean>>
-  showField: boolean
-  updateComposeEmail: (object: { id: string; value: IContact[] }) => void
-}) => {
+}: IContactField) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [value, setValue] = useState<IContact[]>([])
+  const [value, setValue] = useState<Array<IContact>>([])
   const [error, setError] = useState<boolean>(false)
 
   // Listens to the parent component changes, and updates the internal state in case there is preloaded data.

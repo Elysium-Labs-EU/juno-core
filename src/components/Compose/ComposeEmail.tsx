@@ -1,14 +1,23 @@
 // import isEqual from 'lodash/isEqual'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from 'react'
 import type { MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Seo from 'components/Elements/Seo'
+import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
+import useWhyDidYouUpdate from 'hooks/useWhyDidYouUpdate'
 import { QiEscape, QiSend } from 'images/svgIcons/quillIcons'
 import {
   createUpdateDraft,
@@ -24,10 +33,7 @@ import {
 } from 'store/emailDetailSlice'
 import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type {
-  IComposeEmailReceive,
-  IComposePayload,
-} from 'store/storeTypes/composeTypes'
+import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import type { IContact } from 'store/storeTypes/contactsTypes'
 import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
@@ -52,6 +58,20 @@ export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   ),
 })
 
+const isIContactArray = (value: any): value is IContact[] =>
+  Array.isArray(value) && value.every((item) => 'emailAddress' in item)
+
+const isFileArray = (value: any): value is File[] =>
+  Array.isArray(value) && value.every((item) => item instanceof File)
+
+const isIEmailAttachmentTypeArray = (
+  value: any
+): value is IEmailAttachmentType[] =>
+  Array.isArray(value) &&
+  value.every(
+    (item) => 'id' in item && 'name' in item && 'size' in item && 'type' in item
+  )
+
 // Props are coming from ReplyComposer or ForwardComposer
 interface IComposeEmailProps {
   presetValue?: IComposeEmailReceive
@@ -75,9 +95,6 @@ const ComposeEmail = ({
   const [showCC, setShowCC] = useState<boolean>(false)
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
-  const [composedEmail, setComposedEmail] = useState<
-    undefined | IComposePayload
-  >(undefined)
   const [localDraftDetails, setLocalDraftDetails] = useState<
     IDraftDetailObject | undefined
   >(undefined)
@@ -86,28 +103,45 @@ const ComposeEmail = ({
   const userInteractedRef = useRef(false)
   const snapshotComposeEmailRef = useRef<any>(null)
 
+  const [composedEmail, updateComposedEmail] = useReducer(
+    (
+      state: { [key: string]: string | IContact[] | File[] } | null,
+      action: { id: string; value: string | IContact[] | null | File[] }
+    ) => {
+      if (Array.isArray(action)) {
+        let updatedState = state
+        action.forEach((item) => {
+          if ('id' in item && 'value' in item) {
+            const { id, value } = item
+            updatedState = {
+              ...updatedState,
+              [id]: value,
+            }
+          }
+        })
+        return updatedState
+      }
+      if ('id' in action && 'value' in action && action.value !== null) {
+        const { id, value } = action
+        return {
+          ...state,
+          [id]: value,
+        }
+      }
+      return state
+    },
+    null
+  )
+
   // Use this hook to parse possible preset values at component mount
   useParsePresetValues({
     setShowCC,
     setShowBCC,
-    setComposedEmail,
+    setComposedEmail: updateComposedEmail,
     setLoadState,
     loadState,
     presetValueObject: presetValue || (location.state as IComposeEmailReceive),
   })
-
-  const updateComposeEmail = useCallback(
-    (action: { id: string; value: string | IContact[] | null | File[] }) => {
-      if ('id' in action && 'value' in action) {
-        const { id, value } = action
-        setComposedEmail({
-          ...composedEmail,
-          [id]: value,
-        })
-      }
-    },
-    [composedEmail]
-  )
 
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
   // The flag is used to allow the system to update the draft.
@@ -201,18 +235,26 @@ const ComposeEmail = ({
     // On the emailDetail a refresh for EmailDetail is dispatched if this composer was opened in a reply or forward mode.
   }, [isReplying, isForwarding, dispatch])
 
+  useWhyDidYouUpdate('ToField', {
+    isReplying,
+    composedEmail,
+    loadState,
+    hasInteracted,
+  })
   const memoizedToField = useMemo(
     () => (
       <ContactField
-        composeValue={composedEmail?.to}
+        composeValue={
+          isIContactArray(composedEmail?.to) ? composedEmail?.to : undefined
+        }
+        dataCy="to-field"
         hasInteracted={hasInteracted}
         id={local.TO}
         label={local.TO_LABEL}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
         showField={!isReplying}
-        updateComposeEmail={updateComposeEmail}
-        dataCy="to-field"
+        updateComposeEmail={updateComposedEmail}
       />
     ),
     [isReplying, composedEmail, loadState, hasInteracted]
@@ -221,15 +263,17 @@ const ComposeEmail = ({
   const memoizedCCField = useMemo(
     () => (
       <ContactField
-        composeValue={composedEmail?.cc}
+        composeValue={
+          isIContactArray(composedEmail?.cc) ? composedEmail?.cc : undefined
+        }
+        dataCy="cc-field"
         hasInteracted={hasInteracted}
         id={local.CC}
         label={local.CC_LABEL}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
         showField={showCC}
-        updateComposeEmail={updateComposeEmail}
-        dataCy="cc-field"
+        updateComposeEmail={updateComposedEmail}
       />
     ),
     [showCC, composedEmail, loadState, hasInteracted]
@@ -238,15 +282,17 @@ const ComposeEmail = ({
   const memoizedBCCField = useMemo(
     () => (
       <ContactField
-        composeValue={composedEmail?.bcc}
+        composeValue={
+          isIContactArray(composedEmail?.bcc) ? composedEmail?.bcc : undefined
+        }
+        dataCy="bcc-field"
         hasInteracted={hasInteracted}
         id={local.BCC}
         label={local.BCC_LABEL}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
         showField={showBCC}
-        updateComposeEmail={updateComposeEmail}
-        dataCy="bcc-field"
+        updateComposeEmail={updateComposedEmail}
       />
     ),
     [showBCC, composedEmail, loadState, hasInteracted]
@@ -255,11 +301,15 @@ const ComposeEmail = ({
   const memoizedSubjectField = useMemo(
     () => (
       <SubjectField
-        composeValue={composedEmail?.subject}
+        composeValue={
+          typeof composedEmail?.subject === 'string'
+            ? composedEmail?.subject
+            : undefined
+        }
         hasInteracted={hasInteracted}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
-        updateComposeEmail={updateComposeEmail}
+        updateComposeEmail={updateComposedEmail}
       />
     ),
     [composedEmail, loadState, hasInteracted]
@@ -268,11 +318,15 @@ const ComposeEmail = ({
   const memoizedBodyField = useMemo(
     () => (
       <BodyField
-        composeValue={composedEmail?.body}
+        composeValue={
+          typeof composedEmail?.body === 'string'
+            ? composedEmail?.body
+            : undefined
+        }
         hasInteracted={hasInteracted}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
-        updateComposeEmail={updateComposeEmail}
+        updateComposeEmail={updateComposedEmail}
       />
     ),
     [composedEmail, loadState, hasInteracted]
@@ -281,21 +335,28 @@ const ComposeEmail = ({
   const memoizedAttachmentField = useMemo(
     () => (
       <Attachments
-        composeValue={composedEmail?.files}
+        composeValue={
+          isFileArray(composedEmail?.files) ||
+          isIEmailAttachmentTypeArray(composedEmail?.files)
+            ? composedEmail?.files
+            : undefined
+        }
         hasInteracted={hasInteracted}
         loadState={loadState}
-        messageId={composedEmail?.id}
+        messageId={
+          typeof composedEmail?.id === 'string' ? composedEmail?.id : ''
+        }
         setHasInteracted={setHasInteracted}
-        updateComposeEmail={updateComposeEmail}
+        updateComposeEmail={updateComposedEmail}
       />
     ),
-    [composedEmail, loadState, hasInteracted, updateComposeEmail]
+    [composedEmail, loadState, hasInteracted, updateComposedEmail]
   )
 
   const memoizedSignatureField = useMemo(
     () => (
       <SignatureEmail
-        updateComposeEmail={updateComposeEmail}
+        updateComposeEmail={updateComposedEmail}
         loadState={loadState}
       />
     ),

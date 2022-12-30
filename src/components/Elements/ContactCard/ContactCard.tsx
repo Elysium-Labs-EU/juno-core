@@ -1,23 +1,19 @@
 import CardContent from '@mui/material/CardContent'
-import Popper, { PopperPlacementType } from '@mui/material/Popper'
+import Popper from '@mui/material/Popper'
 import { Box } from '@mui/system'
 import { Children, useRef, useState } from 'react'
 
-import { QiMail } from 'images/svgIcons/quillIcons'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import { QiCompose, QiMail } from 'images/svgIcons/quillIcons'
+import { useAppDispatch } from 'store/hooks'
+import * as GS from 'styles/globalStyles'
+import createComposeViaURL from 'utils/createComposeViaURL'
 import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
-
+import CustomButton from '../Buttons/CustomButton'
+import CustomIconButton from '../Buttons/CustomIconButton'
 import * as S from './ContactCardStyles'
-
-interface IContactCard {
-  userEmail: string
-  children: JSX.Element
-  contact: IContact
-  offset?: [number, number]
-  placement?: PopperPlacementType
-}
+import type { IContactCard } from './ContactCardTypes'
 
 const NO_EMAIL = 'No address available'
 const NO_NAME = 'No display name'
@@ -30,9 +26,9 @@ const ContactCard = ({
   placement = 'bottom-start',
 }: IContactCard) => {
   const [isHovering, setIsHovering] = useState(false)
-
   const cardDelay = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contactCardWrapper = useRef<HTMLElement | null>(null)
+  const dispatch = useAppDispatch()
 
   const { name, emailAddress } = contact
 
@@ -102,10 +98,21 @@ const ContactCard = ({
                   overflow: 'hidden',
                 }}
               >
-                <span style={{ fontSize: '0.8rem' }}>Email</span>
+                <GS.Span small>Email</GS.Span>
                 <S.ContactCardEmail title={emailAddress}>
                   {emailAddress || NO_EMAIL}
                 </S.ContactCardEmail>
+                <CustomButton
+                  icon={<QiCompose />}
+                  label="Compose"
+                  title="Compose email to this user"
+                  onClick={() => {
+                    createComposeViaURL({
+                      dispatch,
+                      mailToLink: `mailto:${userEmail}`,
+                    })
+                  }}
+                />
               </Box>
             </S.ContactCardDetails>
           </CardContent>

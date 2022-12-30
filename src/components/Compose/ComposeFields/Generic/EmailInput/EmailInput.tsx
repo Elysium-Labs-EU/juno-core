@@ -2,9 +2,7 @@
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import { useCallback, useEffect, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 
-import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
 import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import contactApi from 'data/contactApi'
@@ -16,34 +14,16 @@ import {
   setContactsLoaded,
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type { AppDispatch } from 'store/store'
 import type { IContact } from 'store/storeTypes/contactsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
 import StyledTextField from './EmailInputStyles'
-
-export interface IEmailInputProps {
-  handleChange: (recipientListRaw: IRecipientsList) => void
-  handleDelete: (value: any) => void
-  id: string
-  inputValue: string
-  registerOnKeyDown: () => void
-  setInputValue: Dispatch<SetStateAction<string>>
-  valueState: Array<IContact>
-  willAutoFocus: boolean
-}
-
-interface IHandleIncompleteInput {
-  id: string
-  inputValue: string
-}
-
-interface IFetchContacts {
-  inputValue: string
-  dispatch: AppDispatch
-  setCompletedSearch: Dispatch<SetStateAction<boolean>>
-}
+import {
+  IEmailInputProps,
+  IFetchContacts,
+  IHandleIncompleteInput,
+} from './EmailInputTypes'
 
 // TODO: Check contactsSlice to unduplicate the code.
 const fetchContacts = async ({
@@ -97,17 +77,16 @@ const filterOptions: any = (
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 
-const EmailInput = (props: IEmailInputProps) => {
-  const {
-    handleChange,
-    handleDelete,
-    id,
-    inputValue,
-    registerOnKeyDown,
-    setInputValue,
-    valueState,
-    willAutoFocus,
-  } = props
+const EmailInput = ({
+  handleChange,
+  handleDelete,
+  id,
+  inputValue,
+  registerOnKeyDown,
+  setInputValue,
+  valueState,
+  willAutoFocus,
+}: IEmailInputProps) => {
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly IContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(true)
@@ -149,7 +128,7 @@ const EmailInput = (props: IEmailInputProps) => {
 
   // Only attempt a fetch for details when the user changes the input again
   useEffect(() => {
-    if (completedSearch && debouncedInputValue.length > 0) {
+    if (completedSearch && debouncedInputValue.length) {
       setCompletedSearch(false)
     }
   }, [debouncedInputValue])
@@ -180,7 +159,9 @@ const EmailInput = (props: IEmailInputProps) => {
 
   // Clear input when a new contact chip is created.
   useEffect(() => {
-    setInputValue('')
+    if (valueState) {
+      setInputValue('')
+    }
   }, [valueState])
 
   return (
