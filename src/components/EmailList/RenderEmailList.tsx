@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
-import EmptyState from 'components/Elements/EmptyState'
+import EmptyState from 'components/Elements/EmptyState/EmptyState'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
