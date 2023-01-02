@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'

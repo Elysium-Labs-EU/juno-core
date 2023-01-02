@@ -66,7 +66,7 @@ export const PreviewButtonContainer = styled.div`
   width: 50px;
 `
 
-export const DownloadDeleteButton = styled.button`
+export const DownloadDeleteButtonContainer = styled.div`
   all: unset;
   border-top-left-radius: 0;
   border-top-right-radius: var(--radius-m);

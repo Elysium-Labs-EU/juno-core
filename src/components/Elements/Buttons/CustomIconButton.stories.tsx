@@ -2,51 +2,38 @@ import { StoryFn, Meta } from '@storybook/react'
 
 import { QiGift } from 'images/svgIcons/quillIcons'
 
-import CustomButton from './CustomButton'
+import CustomIconButton from './CustomIconButton'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/Button',
-  component: CustomButton,
+  title: 'Example/IconButton',
+  component: CustomIconButton,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   //   argTypes: {
   //     backgroundColor: { control: 'color' },
   //   },
-} as Meta<typeof CustomButton>
+} as Meta<typeof CustomIconButton>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: StoryFn<typeof CustomButton> = (args) => (
+const Template: StoryFn<typeof CustomIconButton> = (args) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <CustomButton {...args} />
+  <CustomIconButton {...args} />
 )
 
 export const Regular = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Regular.args = {
-  label: 'Button',
-}
-
-export const Supressed = Template.bind({})
-Supressed.args = {
-  label: 'Button',
-  suppressed: true,
+  icon: <QiGift />,
 }
 
 export const Disabled = Template.bind({})
 Disabled.args = {
-  label: 'Button',
+  icon: <QiGift />,
   disabled: true,
 }
 
-export const WithIcon = Template.bind({})
-WithIcon.args = {
-  label: 'Button',
+export const CustomHoverColor = Template.bind({})
+CustomHoverColor.args = {
   icon: <QiGift />,
-}
-
-export const WithIconAfterLabel = Template.bind({})
-WithIconAfterLabel.args = {
-  label: 'Button',
-  showIconAfterLabel: true,
-  icon: <QiGift />,
+  hoverColor: 'var(--color-red-500)',
 }

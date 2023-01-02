@@ -1,21 +1,13 @@
-import type { Dispatch, SetStateAction } from 'react'
-
 import * as S from './MenuStyles'
-import type { IMenuItem } from './MenuTypes'
+import type { IMenuItemComponent } from './MenuTypes'
 
 const MenuItemComponent = ({
   activeModalTag,
   item,
   absoluteIndex,
-  focusedItemIndex = undefined,
-  setFocusedItemIndex = undefined,
-}: {
-  activeModalTag: string
-  item: IMenuItem
-  absoluteIndex: number
-  focusedItemIndex?: number
-  setFocusedItemIndex?: Dispatch<SetStateAction<number>>
-}) => (
+  focusedItemIndex,
+  setFocusedItemIndex,
+}: IMenuItemComponent) => (
   <S.MenuItem
     aria-label={item.title}
     className={`${activeModalTag}-menu-item`}

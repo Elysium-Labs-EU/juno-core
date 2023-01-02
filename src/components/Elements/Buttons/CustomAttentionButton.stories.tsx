@@ -1,5 +1,7 @@
 import { StoryFn, Meta } from '@storybook/react'
 
+import { QiGift } from 'images/svgIcons/quillIcons'
+
 import CustomAttentionButton from './CustomAttentionButton'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -34,15 +36,5 @@ Disabled.args = {
 export const WithIcon = Template.bind({})
 WithIcon.args = {
   label: 'Button',
-  icon: (
-    <div style={{ width: '10px', height: '10px', backgroundColor: 'white' }} />
-  ),
-}
-
-export const WithIconAfterLabel = Template.bind({})
-WithIconAfterLabel.args = {
-  label: 'Button',
-  icon: (
-    <div style={{ width: '10px', height: '10px', backgroundColor: 'white' }} />
-  ),
+  icon: <QiGift color="white" />,
 }

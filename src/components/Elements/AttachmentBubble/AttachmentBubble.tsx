@@ -1,8 +1,8 @@
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
-import {
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import type {
   IEmailAttachmentType,
   IFetchedAttachment,
 } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
@@ -30,6 +30,18 @@ import EmailAttachmentIcon from './AttachmentIcon'
 
 const ICON_SIZE = 20
 
+const loadStateIconMap = {
+  [global.LOAD_STATE_MAP.idle]: <QiDownload size={ICON_SIZE} />,
+  [global.LOAD_STATE_MAP.loading]: <StyledCircularProgress size={ICON_SIZE} />,
+  [global.LOAD_STATE_MAP.loaded]: <QiCheckmark size={ICON_SIZE} />,
+}
+
+const loadStateTitleMap = {
+  [global.LOAD_STATE_MAP.idle]: 'Download attachment',
+  [global.LOAD_STATE_MAP.loading]: 'Downloading...',
+  [global.LOAD_STATE_MAP.loaded]: 'Attachment downloaded',
+}
+
 const DownloadButton = ({
   attachmentData,
   messageId = undefined,
@@ -38,7 +50,6 @@ const DownloadButton = ({
   messageId?: string
 }) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-  const [downloaded, setDownloaded] = useState(false)
   const dispatch = useAppDispatch()
 
   const handleClick = useCallback(async () => {
@@ -49,7 +60,6 @@ const DownloadButton = ({
         attachmentData,
       })
       if (response?.success) {
-        setDownloaded(true)
         setLoadState(global.LOAD_STATE_MAP.loaded)
         return
       }
@@ -63,22 +73,12 @@ const DownloadButton = ({
     }
   }, [attachmentData, messageId])
 
-  return loadState !== global.LOAD_STATE_MAP.loading ? (
+  return (
     <CustomIconButton
       onClick={handleClick}
-      icon={
-        !downloaded ? (
-          <QiDownload size={ICON_SIZE} />
-        ) : (
-          <QiCheckmark size={ICON_SIZE} />
-        )
-      }
-      title={!downloaded ? 'Download attachment' : 'Attachment downloaded'}
+      icon={loadStateIconMap[loadState]}
+      title={loadStateTitleMap[loadState]}
     />
-  ) : (
-    <S.DownloadDeleteButton>
-      <StyledCircularProgress size={ICON_SIZE} />
-    </S.DownloadDeleteButton>
   )
 }
 
@@ -179,16 +179,16 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
 )
 const AttachmentBubble = ({
   attachmentData,
-  messageId = undefined,
-  hasDownloadOption = true,
   handleDelete = undefined,
+  hasDownloadOption = true,
   index = undefined,
+  messageId = undefined,
 }: {
   attachmentData: IEmailAttachmentType | File
-  messageId?: string
-  hasDownloadOption?: boolean
   handleDelete?: (attachmentIndex: number) => void
+  hasDownloadOption?: boolean
   index?: number | undefined
+  messageId?: string
 }) => {
   const previewButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -222,12 +222,12 @@ const AttachmentBubble = ({
   const memoizedDownloadButton = useMemo(
     () =>
       hasDownloadOption && 'body' in attachmentData ? (
-        <S.DownloadDeleteButton>
+        <S.DownloadDeleteButtonContainer>
           <DownloadButton
             attachmentData={attachmentData}
             messageId={messageId}
           />
-        </S.DownloadDeleteButton>
+        </S.DownloadDeleteButtonContainer>
       ) : null,
     [attachmentData, hasDownloadOption, messageId]
   )
@@ -235,9 +235,9 @@ const AttachmentBubble = ({
   const memoizedDeleteButton = useMemo(
     () =>
       handleDelete && index !== undefined ? (
-        <S.DownloadDeleteButton>
+        <S.DownloadDeleteButtonContainer>
           <DeleteButton handleDelete={handleDelete} index={index} />
-        </S.DownloadDeleteButton>
+        </S.DownloadDeleteButtonContainer>
       ) : null,
     [handleDelete, index]
   )

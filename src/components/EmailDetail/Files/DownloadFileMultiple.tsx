@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'

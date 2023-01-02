@@ -15,7 +15,6 @@ interface ICustomIconButton {
   icon: JSX.Element
   isActive?: boolean
   onClick: (event: MouseEvent<HTMLButtonElement>) => void
-  onKeyDown?: (event: any) => void
   style?: CSSProperties
   title: string
   type?: 'submit' | 'reset' | 'button'
@@ -27,7 +26,7 @@ interface IButton {
 }
 
 const Button = styled.button<IButton>`
-  unset: all;
+  all: unset;
   background-color: transparent;
   border: none;
   color: ${({ isActive }) =>
@@ -57,7 +56,6 @@ const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
       icon,
       isActive = false,
       onClick,
-      onKeyDown = undefined,
       style = undefined,
       title,
       type = 'button',
@@ -74,7 +72,6 @@ const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
       hoverColor={hoverColor}
       isActive={isActive}
       onClick={(event) => onClick(event)}
-      onKeyDown={onKeyDown}
       ref={ref}
       style={style}
       title={title}
@@ -94,7 +91,6 @@ CustomIconButton.defaultProps = {
   disabled: false,
   hoverColor: undefined,
   isActive: false,
-  onKeyDown: undefined,
   style: undefined,
   type: 'button',
 }

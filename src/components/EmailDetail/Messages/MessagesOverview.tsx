@@ -8,7 +8,7 @@ import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
-import StyledCircularProgress from '../../Elements/StyledCircularProgress'
+import StyledCircularProgress from '../../Elements/CircularProgress/StyledCircularProgress'
 import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'

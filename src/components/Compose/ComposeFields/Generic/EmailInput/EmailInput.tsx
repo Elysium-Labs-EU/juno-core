@@ -3,8 +3,8 @@ import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import { useCallback, useEffect, useState } from 'react'
 
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import contactApi from 'data/contactApi'
 import useDebounce from 'hooks/useDebounce'
 import {

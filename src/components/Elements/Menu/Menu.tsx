@@ -5,7 +5,7 @@ import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 
 import MenuSectionComponent from './MenuSectionComponent'
-import type { IMenuItemCollection } from './MenuTypes'
+import type { IMenu } from './MenuTypes'
 
 const Menu = ({
   activeModalTag,
@@ -13,13 +13,7 @@ const Menu = ({
   handleClose,
   menuItems,
   triggerButton,
-}: {
-  activeModalTag: string
-  dataTestId?: string
-  handleClose: () => void
-  menuItems: Array<IMenuItemCollection>
-  triggerButton: JSX.Element
-}) => {
+}: IMenu) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(0)
   const activeModal = useAppSelector(selectActiveModal)
 

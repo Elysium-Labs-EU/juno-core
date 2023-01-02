@@ -1,7 +1,7 @@
 import { useAppSelector } from 'store/hooks'
 import { selectSystemStatusUpdate } from 'store/utilsSlice'
 
-import StyledCircularProgress from '../StyledCircularProgress'
+import StyledCircularProgress from '../CircularProgress/StyledCircularProgress'
 import * as S from './LoadingStateStyles'
 
 const LoadingState = () => {

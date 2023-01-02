@@ -1,4 +1,3 @@
-
 import BlockQuote from '@tiptap/extension-blockquote'
 import Bold from '@tiptap/extension-bold'
 import BulletList from '@tiptap/extension-bullet-list'
@@ -15,7 +14,7 @@ import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
 import { useCallback, useEffect, useState } from 'react'
 
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import settingsApi from 'data/settingsApi'
 import useDebounce from 'hooks/useDebounce'

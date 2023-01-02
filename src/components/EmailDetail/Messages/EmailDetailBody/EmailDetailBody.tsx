@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import root from 'react-shadow/styled-components'
 
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import { useAppDispatch } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
 import changeSignatureColor from 'utils/changeSignatureColor'
@@ -111,15 +111,17 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      {!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0 && (
-        <ShadowBody
-          bodyState={bodyState}
-          setUnsubscribeLink={
-            // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
-            fallbackUnsubscribe ? setUnsubscribeLink : undefined
-          }
-        />
-      )}
+      {!isDecoding &&
+        bodyState?.emailHTML &&
+        bodyState.emailHTML.length > 0 && (
+          <ShadowBody
+            bodyState={bodyState}
+            setUnsubscribeLink={
+              // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
+              fallbackUnsubscribe ? setUnsubscribeLink : undefined
+            }
+          />
+        )}
       {!isDecoding &&
         bodyState?.emailFileHTML &&
         bodyState?.emailFileHTML.length > 0 &&
