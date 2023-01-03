@@ -60,8 +60,7 @@ instance.interceptors.request.use(
 )
 
 export const errorHandling = async (err: any) => {
-  // process.env.NODE_ENV !== 'development' && console.error(err)
-  console.error(err)
+  process.env.NODE_ENV !== 'development' && console.error(err)
   const originalRequest = err.config
   if (
     err?.response?.data === global.INVALID_TOKEN &&
