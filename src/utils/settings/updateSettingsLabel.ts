@@ -87,6 +87,7 @@ const updateSettingsLabel = async ({
   alternateActions,
 }: IUpdateSettingsLabel) => {
   const foundSettings = localStorage.getItem(global.JUNO_SETTINGS_LOCAL)
+  console.log('foundSettings', foundSettings)
   const parsedSettings = foundSettings ? JSON.parse(foundSettings) : undefined
   if (parsedSettings !== undefined) {
     if (fetchSize !== undefined) {
