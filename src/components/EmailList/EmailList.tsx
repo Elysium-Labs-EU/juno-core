@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import EmptyState from 'components/Elements/EmptyState'
+import EmptyState from 'components/Elements/EmptyState/EmptyState'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import SelectedOptions from 'components/MainHeader/SelectedOptions/SelectedOptions'
 import useFetchEmailsDrafts from 'hooks/useFetchEmailsDrafts'

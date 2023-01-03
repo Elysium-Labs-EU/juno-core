@@ -1,4 +1,3 @@
-
 import { Label } from '@radix-ui/react-label'
 import * as SelectPrimitive from '@radix-ui/react-select'
 
@@ -9,17 +8,11 @@ import {
 } from 'images/svgIcons/quillIcons'
 
 import * as S from './StyledSelectStyles'
-
-interface ISelectOption {
-  value: string
-  isDisabled?: boolean
-}
-
-interface ISelectOptions {
-  id: string
-  label: string
-  options: Array<ISelectOption>
-}
+import type {
+  ISelectComponent,
+  ISelectOption,
+  ISelectOptions,
+} from './StyledSelectTypes'
 
 const Content = ({ children }: { children: Array<JSX.Element> }) => (
   <SelectPrimitive.Portal>
@@ -79,14 +72,7 @@ const SelectComponent = ({
   placeholder = undefined,
   selectOptions,
   value,
-}: {
-  ariaLabelTrigger: string
-  label?: string
-  onValueChange: (value: string) => void
-  placeholder?: string
-  selectOptions: ISelectOptions | ISelectOptions[]
-  value: string
-}) => (
+}: ISelectComponent) => (
   <>
     {label && (
       <Label htmlFor={label.replace(/\s+/g, '-').toLowerCase()}>{label}</Label>

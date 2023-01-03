@@ -1,11 +1,11 @@
-import type { Dispatch, KeyboardEvent, SetStateAction } from 'react'
+import type { KeyboardEvent } from 'react'
 
 import * as keyConstants from 'constants/keyConstants'
 import handleChangeFocus from 'utils/handleChangeFocus'
 
 import MenuItemComponent from './MenuItemComponent'
 import { MenuSection, MenuSectionContainer } from './MenuStyles'
-import type { IMenuItemCollection } from './MenuTypes'
+import type { IMenuSection, IMenuItemCollection } from './MenuTypes'
 
 function getAllItems(items: Array<IMenuItemCollection>) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))
@@ -24,12 +24,7 @@ const MenuSectionComponent = ({
   menuItems,
   focusedItemIndex,
   setFocusedItemIndex,
-}: {
-  activeModalTag: string
-  menuItems: IMenuItemCollection[]
-  focusedItemIndex: number
-  setFocusedItemIndex: Dispatch<SetStateAction<number>>
-}) => {
+}: IMenuSection) => {
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>) => {
     const nodeList = document.querySelectorAll(
       `.${activeModalTag}-menu-item`
@@ -85,18 +80,20 @@ const MenuSectionComponent = ({
       {menuItems.map(({ id, items }) => (
         <MenuSection key={id}>
           {items.map((item) => {
-            if(item){
-            return (
-            <MenuItemComponent
-              absoluteIndex={getItemIndex(menuItems, item.id)}
-              activeModalTag={activeModalTag}
-              focusedItemIndex={focusedItemIndex}
-              item={item}
-              key={item?.title}
-              setFocusedItemIndex={setFocusedItemIndex}
-            />
-          )} 
-          return null})}
+            if (item) {
+              return (
+                <MenuItemComponent
+                  absoluteIndex={getItemIndex(menuItems, item.id)}
+                  activeModalTag={activeModalTag}
+                  focusedItemIndex={focusedItemIndex}
+                  item={item}
+                  key={item?.title}
+                  setFocusedItemIndex={setFocusedItemIndex}
+                />
+              )
+            }
+            return null
+          })}
         </MenuSection>
       ))}
     </MenuSectionContainer>

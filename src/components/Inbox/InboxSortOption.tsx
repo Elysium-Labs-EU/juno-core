@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useFetchEmailsSimple from 'hooks/useFetchEmailsSimple'

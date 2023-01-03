@@ -3,15 +3,14 @@ import { useFormspark } from '@formspark/use-formspark'
 import { FormEvent, useState } from 'react'
 import { FiCheck } from 'react-icons/fi'
 
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import CustomModal from 'components/Elements/Modal/CustomModal'
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import { QiLinkOut } from 'images/svgIcons/quillIcons'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import assertNonNullish from 'utils/assertNonNullish'
-
 
 import * as S from './BetaAccessFormStyles'
 

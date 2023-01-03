@@ -1,4 +1,4 @@
-import StyledCircularProgress from 'components/Elements/StyledCircularProgress'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import * as global from 'constants/globalConstants'
 import useFetchThreadsTotalNumber from 'hooks/useFetchThreadsTotalNumber'

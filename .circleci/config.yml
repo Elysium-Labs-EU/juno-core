@@ -23,6 +23,19 @@ commands:
           branch: <<parameters.BRANCH>>
 
 jobs:
+  chromatic-deployment:
+    docker:
+      - image: cimg/node:18.12.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: yarn install
+      - run: yarn chromatic --project-token=${CHROMATIC_PROJECT_TOKEN}
+
   build:
     docker:
       - image: cypress/base:18.12.1
@@ -76,6 +89,9 @@ jobs:
                 BRANCH: dev
 
 workflows:
+  chromatic-deploy:
+    jobs:
+      - chromatic-deployment
   build:
     jobs:
       - build

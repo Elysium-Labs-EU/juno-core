@@ -5,7 +5,6 @@ import { QiEscape } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
 import { setActiveModal } from 'store/utilsSlice'
 
-
 import * as S from './CustomModalStyles'
 
 const Content = ({

@@ -1,4 +1,4 @@
-import {
+import type {
   IEmailAttachmentType,
   IFetchedAttachment,
 } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'

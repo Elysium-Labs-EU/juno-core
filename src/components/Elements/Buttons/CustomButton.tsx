@@ -9,7 +9,6 @@ interface ICustomButton {
   icon?: JSX.Element | null
   label: string | null
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void
-  onKeyDown?: any
   showIconAfterLabel?: boolean
   style?: any
   suppressed?: boolean
@@ -82,7 +81,6 @@ const CustomButton = ({
   dataCy = undefined,
   icon = null,
   label,
-  onKeyDown = undefined,
   onClick = undefined,
   showIconAfterLabel = false,
   style = undefined,
@@ -97,7 +95,6 @@ const CustomButton = ({
     onClick={onClick ? (event) => onClick(event) : undefined}
     style={style}
     suppressed={suppressed}
-    onKeyDown={onKeyDown}
     title={title}
     type={type ?? 'button'}
   >

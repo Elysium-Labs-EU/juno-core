@@ -15,6 +15,8 @@ interface IRotatingIcon {
   size: number
 }
 
+// TODO: Fix the animation when using in the context of a button
+
 const RotatingIcon = styled.span<IRotatingIcon>`
   animation: ${rotate} 1s cubic-bezier(0.79, 0.33, 0.32, 0.6) infinite;
   width: ${({ size }) => size}px;

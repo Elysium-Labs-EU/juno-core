@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 import { QiCheckmark } from 'images/svgIcons/quillIcons'
 
-
 const StyledCheckbox = styled(Root)`
   all: unset;
   align-items: center;
