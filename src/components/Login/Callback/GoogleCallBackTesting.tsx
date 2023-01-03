@@ -15,10 +15,7 @@ const GoogleCallBackTesting = () => {
     const { code, state }: { code?: string; state?: string } = parseQueryString(
       window.location.search
     )
-    if (
-      state === 'success' &&
-      JSON.parse(fetchToken() ?? '')?.accessToken === code
-    ) {
+    if (state === 'success') {
       // console.log
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.TODO))
