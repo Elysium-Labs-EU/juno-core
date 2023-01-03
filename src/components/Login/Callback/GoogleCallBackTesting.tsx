@@ -17,6 +17,9 @@ const GoogleCallBackTesting = () => {
     if (state === 'success') {
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.TODO))
+    } else {
+      dispatch(push(RoutesConstants.LOGIN))
+      console.log('error')
     }
   }, [])
 
