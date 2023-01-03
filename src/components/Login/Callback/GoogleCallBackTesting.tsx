@@ -19,13 +19,7 @@ const GoogleCallBackTesting = () => {
       state === 'success' &&
       JSON.parse(fetchToken() ?? '')?.accessToken === code
     ) {
-      // if (
-      //     import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
-      //   ) {
-      //     handleUserTokens(response).setCredentials()
-      //   } else {
-      //     handleUserTokens(response).setIdToken()
-      //   }
+      // console.log
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.TODO))
     }

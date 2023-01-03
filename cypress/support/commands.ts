@@ -16,7 +16,11 @@ Cypress.Commands.add('loginByGoogleApi', () => {
       refresh_token: Cypress.env('googleRefreshToken'),
     },
   }).then(({ body }) => {
-    handleUserTokens({ data: { credentials: body } }).setCredentials()
+    try {
+      handleUserTokens({ data: { credentials: body } }).setCredentials()
+    } catch (error) {
+      console.error('HERE', error)
+    }
     const { access_token } = body
     const success = 'success'
 

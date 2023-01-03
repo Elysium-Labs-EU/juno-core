@@ -2,7 +2,7 @@
   "name": "juno-core",
   "version": "0.1.8",
   "description": "Main app for Juno",
-  "homepage": "http:///",
+  "homepage": "https://juno.elysiumlabs.io",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Elysium-Labs-EU/juno-core.git"
