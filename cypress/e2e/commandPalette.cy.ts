@@ -11,7 +11,7 @@ describe('use the command palette', () => {
     // cy.visit(Cypress.env('todo_url'))
   })
   it('can open the command palette', () => {
-    cy.findByTitle('Command Palette').should('exist').click()
+    cy.get('[data-cy="command-palette"]').should('exist').click()
   })
 
   // it('can search for email using the search button', () => {
