@@ -2,7 +2,7 @@
   "name": "juno-core",
   "version": "0.1.8",
   "description": "Main app for Juno",
-  "homepage": "/",
+  "homepage": "http:///",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Elysium-Labs-EU/juno-core.git"
@@ -91,7 +91,8 @@
     "update-deps": "yarn upgrade-interactive --latest",
     "typecheck": "tsc --incremental --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "chromatic": "chromatic --exit-zero-on-changes"
   },
   "devDependencies": {
     "@babel/core": "^7.20.7",
@@ -122,6 +123,7 @@
     "@typescript-eslint/parser": "5.46.1",
     "@vitejs/plugin-react": "3.0.0",
     "babel-loader": "^8.3.0",
+    "chromatic": "^6.14.0",
     "dprint": "0.34.1",
     "eslint": "8.29.0",
     "eslint-config-airbnb": "19.0.4",
@@ -141,5 +143,7 @@
     "vite": "4.0.3",
     "vite-tsconfig-paths": "4.0.3",
     "vitest": "0.26.2"
-  }
+  },
+  "readme": "ERROR: No README data found!",
+  "_id": "juno-core@0.1.8"
 }
