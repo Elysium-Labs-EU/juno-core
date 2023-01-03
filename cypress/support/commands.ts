@@ -16,20 +16,11 @@ Cypress.Commands.add('loginByGoogleApi', () => {
       refresh_token: Cypress.env('googleRefreshToken'),
     },
   }).then(({ body }) => {
-    try {
-      handleUserTokens({ data: { credentials: body } }).setCredentials()
-    } catch (error) {
-      console.error('HERE', error)
-    }
-    const { access_token } = body
-    const success = 'success'
-
-    // Use this function to visit the callback page. The state and code are only used to validate the action.
+    handleUserTokens({ data: { credentials: body } }).setCredentials()
+    // Use this function to visit the callback page. The state is only used to validate the action.
 
     cy.visit(
-      `${Cypress.env(
-        'frontend_app_url'
-      )}/oauth2callback_test?state=${success}&code=${access_token}`
+      `${Cypress.env('frontend_app_url')}/oauth2callback_test?state=success`
     )
   })
 })

@@ -3,7 +3,6 @@ import { push } from 'redux-first-history'
 
 import Baseloader from 'components/BaseLoader/BaseLoader'
 import RoutesConstants from 'constants/routesConstants'
-import { fetchToken } from 'data/api'
 import { setIsAuthenticated } from 'store/baseSlice'
 import { useAppDispatch } from 'store/hooks'
 import parseQueryString from 'utils/parseQueryString'
@@ -12,11 +11,10 @@ const GoogleCallBackTesting = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const { code, state }: { code?: string; state?: string } = parseQueryString(
+    const { state }: { state?: string } = parseQueryString(
       window.location.search
     )
     if (state === 'success') {
-      // console.log
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.TODO))
     }
