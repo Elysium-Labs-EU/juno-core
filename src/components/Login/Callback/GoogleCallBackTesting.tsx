@@ -9,7 +9,7 @@ import { useAppDispatch } from 'store/hooks'
 import parseQueryString from 'utils/parseQueryString'
 
 const GoogleCallBackTesting = () => {
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -19,7 +19,8 @@ const GoogleCallBackTesting = () => {
 
     // if (state === 'success') {
     dispatch(setIsAuthenticated(true))
-    dispatch(push('/'))
+    // dispatch(push('/'))
+    navigate('/')
     // }
   }, [])
 
