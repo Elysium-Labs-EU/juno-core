@@ -19,7 +19,7 @@ const GoogleCallBackTesting = () => {
       dispatch(push(RoutesConstants.TODO))
     } else {
       dispatch(push(RoutesConstants.LOGIN))
-      console.log('error')
+      console.log(`error - you cannot log in - the state is ${state}`)
     }
   }, [])
 
