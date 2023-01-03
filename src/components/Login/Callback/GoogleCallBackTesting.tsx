@@ -20,6 +20,7 @@ const GoogleCallBackTesting = () => {
     // if (state === 'success') {
     dispatch(setIsAuthenticated(true))
     // dispatch(push('/'))
+    console.log('window.location', window.location)
     navigate('/')
     // }
   }, [])
