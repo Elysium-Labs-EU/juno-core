@@ -25,7 +25,7 @@ commands:
 jobs:
   chromatic-deployment:
     docker:
-      - image: circleci/node:18
+      - image: cimg/node:18.12.1
     working_directory: ~/repo
     steps:
       - checkout
