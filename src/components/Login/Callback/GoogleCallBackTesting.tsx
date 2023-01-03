@@ -11,13 +11,14 @@ const GoogleCallBackTesting = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    const { state }: { state?: string } = parseQueryString(
-      window.location.search
-    )
-    if (state === 'success') {
-      dispatch(setIsAuthenticated(true))
-      dispatch(push(RoutesConstants.TODO))
-    }
+    // const { state }: { state?: string } = parseQueryString(
+    //   window.location.search
+    // )
+
+    // if (state === 'success') {
+    dispatch(setIsAuthenticated(true))
+    dispatch(push(RoutesConstants.TODO))
+    // }
   }, [])
 
   return <Baseloader />
