@@ -74,7 +74,7 @@ export default function contextualItems({
         })
       )
     }
-    if (uniqueUsers.length > 1 && uniqueUsers.length < 3) {
+    if (uniqueUsers.length > 1) {
       baseUseWith.items.push(
         location.pathname === RoutesConstants.TODO
           ? {
