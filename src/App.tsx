@@ -22,10 +22,10 @@ import { history } from 'store/store'
 import * as GS from 'styles/globalStyles'
 
 const App = () => {
-  const dispatch = useAppDispatch()
   const baseLoaded = useAppSelector(selectBaseLoaded)
-  const storageLabels = useAppSelector(selectStorageLabels)
+  const dispatch = useAppDispatch()
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const storageLabels = useAppSelector(selectStorageLabels)
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {

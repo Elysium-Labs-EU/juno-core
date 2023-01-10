@@ -4,7 +4,7 @@ import * as themeConstants from 'constants/themeConstants'
 
 /* 16px */
 export const GlobalStyle = createGlobalStyle`
-  html {
+  :root {
     --box-shadow-low: rgba(0, 0, 0, 0.1) 0px 0px 10px;
     --color-black: ${themeConstants.color.black};
     --color-blue-100: ${themeConstants.color.blue[100]};
@@ -47,7 +47,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     -webkit-font-smoothing: antialiased !important;
     background-color: var(--color-neutral-100) !important;
-    font-family: var(--font-family);
+    font-family: var(--font-family) !important;
     margin: 0;
   }
 `

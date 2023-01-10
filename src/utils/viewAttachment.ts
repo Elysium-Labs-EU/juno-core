@@ -1,5 +1,6 @@
-import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import messageApi from '../data/messageApi'
+import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import messageApi from 'data/messageApi'
+
 import base64toBlob from './base64toBlob'
 
 const FAIL_RESPONSE_OBJECT = {
@@ -27,7 +28,7 @@ const handleFetchedAttachment = (
  * @returns
  */
 
-export async function viewAttachment({
+export default async function viewAttachment({
   attachmentData,
   messageId,
 }: {
@@ -46,7 +47,13 @@ export async function viewAttachment({
         attachmentId,
       })
       if (fetchedAttachment) {
-        return handleFetchedAttachment(fetchedAttachment, filename, mimeType)
+        const test = handleFetchedAttachment(
+          fetchedAttachment,
+          filename,
+          mimeType
+        )
+        console.log(test)
+        return test
       }
       return FAIL_RESPONSE_OBJECT
     }

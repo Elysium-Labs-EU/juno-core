@@ -1,23 +1,36 @@
-import fileSaver from 'file-saver'
-
+/* eslint-disable no-underscore-dangle */
 import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
 import base64toBlob from 'utils/base64toBlob'
+import downloadBlob from 'utils/fileSaver'
+import saveFileToFilesystem from 'utils/tauri/saveFileToSystem'
 
 const FAIL_RESPONSE_OBJECT = {
   success: false,
   message: 'Cannot download attachment',
 }
 
-const handleFetchedAttachment = (
+const handleSaveAttachment = (
   fetchedAttachment: any,
   filename: string,
   mimeType: string
-) => {
-  const base64Data = fetchedAttachment?.data?.data
-  const blobData = base64toBlob({ base64Data, mimeType })
-  fileSaver(blobData, filename)
-  return { success: true, message: null }
+): { success: boolean; message: string | null } => {
+  if (!fetchedAttachment?.data?.data) {
+    return { success: false, message: 'No attachment data found' }
+  }
+  try {
+    const base64Data = fetchedAttachment.data.data
+    const blobData = base64toBlob({ base64Data, mimeType })
+    if (window.__TAURI_METADATA__) {
+      saveFileToFilesystem(blobData, filename)
+    } else {
+      downloadBlob({ blob: blobData, fileName: filename })
+    }
+    return { success: true, message: null }
+  } catch (err) {
+    console.error('Error downloading attachment:', err)
+    return FAIL_RESPONSE_OBJECT
+  }
 }
 
 /**
@@ -46,12 +59,13 @@ export async function downloadAttachmentSingle({
         attachmentId,
       })
       if (fetchedAttachment) {
-        return handleFetchedAttachment(fetchedAttachment, filename, mimeType)
+        return handleSaveAttachment(fetchedAttachment, filename, mimeType)
       }
       return FAIL_RESPONSE_OBJECT
     }
     return FAIL_RESPONSE_OBJECT
   } catch (err) {
+    console.log('err', err)
     return FAIL_RESPONSE_OBJECT
   }
 }
@@ -88,17 +102,20 @@ export async function downloadAttachmentMultiple({
         }
       })
       const result = await Promise.all(buffer)
-      for (let i = 0; i < result.length; i += 1) {
-        handleFetchedAttachment(
-          result[i],
-          attachmentData[i].filename,
-          attachmentData[i].mimeType
-        )
-      }
+      result.forEach((attachment, index) => {
+        if (attachment) {
+          handleSaveAttachment(
+            attachment,
+            attachmentData[index].filename,
+            attachmentData[index].mimeType
+          )
+        }
+      })
       return { success: true, message: null }
     }
-    return FAIL_RESPONSE_OBJECT
+    return null
   } catch (err) {
+    console.log('err', err)
     return FAIL_RESPONSE_OBJECT
   }
 }

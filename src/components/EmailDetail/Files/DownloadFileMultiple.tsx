@@ -78,6 +78,7 @@ const DownloadButtonMultiple = ({
         Promise<
           | { success: boolean; message: string }
           | { success: boolean; message: null }
+          | null
         >
       > = []
       asssesUniqueFiles({ filesObjectArray }).forEach((object) =>
@@ -99,7 +100,9 @@ const DownloadButtonMultiple = ({
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: response[0].message ?? global.NETWORK_ERROR,
+          message: response
+            ? response[0]?.message ?? global.NETWORK_ERROR
+            : global.NETWORK_ERROR,
         })
       )
     } catch (err) {

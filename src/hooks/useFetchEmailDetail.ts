@@ -19,34 +19,29 @@ export default function useFetchEmailDetail({
 }) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
-
-  // The hook may fire to update the emaildetail, whenever no thread has a body element, or whenever the composer closes (forceRefresh).
+  const emailThreadObject = activeEmailList?.threads.find(
+    (item) => item.id === threadId
+  )
+  const someThreadHasBody = emailThreadObject
+    ? emailThreadObject.messages.some((message) =>
+        Object.prototype.hasOwnProperty.call(message.payload, 'body')
+      )
+    : undefined
   useEffect(() => {
     let mounted = true
-    if (threadId && activeEmailList) {
-      // First check if the thread already has a body, if not fetch it.
-      const emailThreadObject = activeEmailList.threads.find(
-        (item) => item.id === threadId
-      )
-      if (emailThreadObject) {
-        const someThreadHasBody = emailThreadObject.messages.some((message) =>
-          Object.prototype.hasOwnProperty.call(message.payload, 'body')
+    if (threadId && activeEmailList && (!someThreadHasBody || forceRefresh)) {
+      setShouldRefreshDetail(false)
+      mounted &&
+        dispatch(
+          fetchEmailDetail({
+            threadId,
+            labelIds,
+            q: activeEmailList?.q,
+          })
         )
-        if (!someThreadHasBody || forceRefresh) {
-          setShouldRefreshDetail(false)
-          mounted &&
-            dispatch(
-              fetchEmailDetail({
-                threadId,
-                labelIds,
-                q: activeEmailList?.q,
-              })
-            )
-        }
-      }
     }
     return () => {
       mounted = false
     }
-  }, [threadId, activeEmailList, forceRefresh])
+  }, [threadId, activeEmailList, forceRefresh, someThreadHasBody])
 }

@@ -92,10 +92,8 @@ const EmailDetail = () => {
 
   // On closing of the composer refresh the message feed
   useEffect(() => {
-    if ((isForwarding || isReplying) && !isComposerActiveRef.current) {
-      isComposerActiveRef.current = true
-    } else if (isComposerActiveRef.current && !isProcessing) {
-      isComposerActiveRef.current = false
+    isComposerActiveRef.current = isForwarding || isReplying
+    if (!isProcessing && !isComposerActiveRef.current) {
       setShouldRefreshDetail(true)
     }
   }, [isForwarding, isReplying, isProcessing])

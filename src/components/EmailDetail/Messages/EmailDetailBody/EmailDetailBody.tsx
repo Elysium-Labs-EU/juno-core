@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 import root from 'react-shadow/styled-components'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import { useAppDispatch } from 'store/hooks'
-import type { AppDispatch } from 'store/store'
 import changeSignatureColor from 'utils/changeSignatureColor'
 import cleanLink from 'utils/cleanLink'
 import fetchUnsubscribeLink from 'utils/fetchUnsubscribeLink'
@@ -13,20 +11,12 @@ import openLinkInNewTab from 'utils/openLinkInNewTab'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 
 import Wrapper from './EmailDetailBodyStyles'
-
-interface IEmailDetailBody {
-  threadDetailBody: any
-  // threadDetailBody: IEmailMessagePayload
-  detailBodyCSS: 'visible' | 'invisible'
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-  setBlockedTrackers?: Dispatch<SetStateAction<string[] | []>>
-}
-
-interface IBodyState {
-  emailHTML: string
-  emailFileHTML: any[]
-  removedTrackers: string[] | []
-}
+import type {
+  IBodyState,
+  IEmailDetailBody,
+  IPostTreatmentBody,
+  IShadowBody,
+} from './EmailDetailBodyTypes'
 
 /**
  * @function postTreatmentBody
@@ -38,11 +28,7 @@ const postTreatmentBody = ({
   dispatch,
   setUnsubscribeLink,
   activeDocument,
-}: {
-  dispatch: AppDispatch
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-  activeDocument: HTMLDivElement | null
-}): void => {
+}: IPostTreatmentBody): void => {
   openLinkInNewTab(activeDocument)
   handleEmailLink(activeDocument, dispatch)
   cleanLink()
@@ -56,10 +42,7 @@ const postTreatmentBody = ({
 const ShadowBody = ({
   bodyState,
   setUnsubscribeLink = undefined,
-}: {
-  bodyState: IBodyState
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-}) => {
+}: IShadowBody) => {
   const dispatch = useAppDispatch()
   const [enhancedBody, setEnhancedBody] = useState(false)
 

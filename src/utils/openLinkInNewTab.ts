@@ -1,3 +1,6 @@
+/* eslint-disable no-underscore-dangle */
+import openAnchorElement from './tauri/openAnchorElement'
+
 /**
  * @function openLinkInNewTab
  * @param activeDocument
@@ -10,12 +13,19 @@ export default function openLinkInNewTab(
   activeDocument: HTMLDivElement | null
 ): void {
   const elements = activeDocument?.shadowRoot?.querySelectorAll('a')
-  if (elements && elements.length > 0) {
+  if (elements) {
     elements.forEach((element) => {
-      if (element.getAttribute('href')?.includes('mailto:')) {
-        return element
+      if (
+        element.getAttribute('href') &&
+        !element.getAttribute('href')?.includes('mailto:')
+      ) {
+        if (window.__TAURI_METADATA__) {
+          openAnchorElement({ element })
+        }
+        element.setAttribute('target', '_blank')
+        element.setAttribute('rel', 'noreferer noopener')
+        element.setAttribute('aria-label', 'Opens in new tab')
       }
-      return element.setAttribute('target', '_blank')
     })
   }
 }
