@@ -16,6 +16,7 @@ import { selectAllEmailsCurrentInbox, setInSearch } from 'store/utilsSlice'
 import * as S from './SelectedOptionsStyles'
 
 const ARCHIVE_BUTTON_LABEL = 'Archive'
+const DELETE_BUTTON_LABEL = 'Delete'
 const DISCARD_BUTTON_LABEL = 'Discard'
 const EMAILS_SELECTED_SINGLE = 'emails selected'
 const EMAILS_SELECTED_PLURAL = 'email selected'
@@ -43,6 +44,15 @@ const SelectedOptions = () => {
     dispatch(updateEmailLabelBatch({ request }))
     dispatch(setSelectedEmails([]))
   }, [labelIds])
+
+  const handleDeleteAll = useCallback(() => {
+    dispatch(
+      updateEmailLabelBatch({
+        request: { delete: true },
+      })
+    )
+    dispatch(setSelectedEmails([]))
+  }, [])
 
   const handleDiscardAll = useCallback(() => {
     dispatch(deleteDraftBatch())
@@ -85,6 +95,11 @@ const SelectedOptions = () => {
             title="Discard all the selected drafts"
           />
         )}
+        <CustomButton
+          label={DELETE_BUTTON_LABEL}
+          onClick={handleDeleteAll}
+          title="Delete all the selected emails"
+        />
         <CustomButton
           label=""
           onClick={handleShowMoreOptions}
