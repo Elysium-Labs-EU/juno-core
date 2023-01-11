@@ -1,7 +1,9 @@
 import { useCallback } from 'react'
+import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
+import RoutesConstants from 'constants/routesConstants'
 import { QiMeatballsH } from 'images/svgIcons/quillIcons'
 import { deleteDraftBatch } from 'store/draftsSlice'
 import {
@@ -18,13 +20,14 @@ import * as S from './SelectedOptionsStyles'
 const ARCHIVE_BUTTON_LABEL = 'Archive'
 const DELETE_BUTTON_LABEL = 'Delete'
 const DISCARD_BUTTON_LABEL = 'Discard'
-const EMAILS_SELECTED_SINGLE = 'emails selected'
-const EMAILS_SELECTED_PLURAL = 'email selected'
+const EMAILS_SELECTED_SINGLE = 'email selected'
+const EMAILS_SELECTED_PLURAL = 'emails selected'
 
 const SelectedOptions = () => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
   const selectedEmails = useAppSelector(selectSelectedEmails)
+  const location = useLocation()
 
   const handleCancel = useCallback(() => {
     dispatch(setSelectedEmails([]))
@@ -79,22 +82,24 @@ const SelectedOptions = () => {
       <S.Inner>
         <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${
           selectedEmails.selectedIds.length > 1
-            ? EMAILS_SELECTED_SINGLE
-            : EMAILS_SELECTED_PLURAL
+            ? EMAILS_SELECTED_PLURAL
+            : EMAILS_SELECTED_SINGLE
         }`}</S.SelectedLabelsText>
-        {!labelIds.includes(global.DRAFT_LABEL) ? (
-          <CustomButton
-            label={ARCHIVE_BUTTON_LABEL}
-            onClick={handleArchiveAll}
-            title="Archive all the selected emails"
-          />
-        ) : (
-          <CustomButton
-            label={DISCARD_BUTTON_LABEL}
-            onClick={handleDiscardAll}
-            title="Discard all the selected drafts"
-          />
-        )}
+        {location.pathname !== RoutesConstants.ARCHIVE &&
+          (!labelIds.includes(global.DRAFT_LABEL) ? (
+            <CustomButton
+              label={ARCHIVE_BUTTON_LABEL}
+              onClick={handleArchiveAll}
+              title="Archive all the selected emails"
+            />
+          ) : (
+            <CustomButton
+              label={DISCARD_BUTTON_LABEL}
+              onClick={handleDiscardAll}
+              title="Discard all the selected drafts"
+            />
+          ))}
+
         <CustomButton
           label={DELETE_BUTTON_LABEL}
           onClick={handleDeleteAll}
