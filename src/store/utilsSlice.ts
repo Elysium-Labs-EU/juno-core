@@ -405,6 +405,15 @@ export const archiveAllEmailCMDK = (): AppThunk => (dispatch, getState) => {
   dispatch(setSelectedEmails([]))
 }
 
+export const deleteAllEmailCMDK = (): AppThunk => (dispatch) => {
+  dispatch(
+    updateEmailLabelBatch({
+      request: { delete: true },
+    })
+  )
+  dispatch(setSelectedEmails([]))
+}
+
 export const discardAllEmailCMDK = (): AppThunk => (dispatch) => {
   dispatch(deleteDraftBatch())
 }

@@ -9,12 +9,14 @@ import {
   QiCompose,
   QiDiscard,
   QiFolderArchive,
+  QiFolderTrash,
   QiInbox,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
 import {
   archiveAllEmailCMDK,
+  deleteAllEmailCMDK,
   discardAllEmailCMDK,
   navigateTo,
   selectAllEmailsCurrentInbox,
@@ -47,6 +49,12 @@ export default function defaultItems({
                 dispatch(selectAllEmailsSender(archiveAllEmailCMDK)),
             }
           : undefined,
+        {
+          id: 'delete-all-current-box',
+          children: 'Delete all loaded emails of current box',
+          icon: <QiFolderTrash />,
+          onClick: () => dispatch(selectAllEmailsSender(deleteAllEmailCMDK)),
+        },
         location.pathname === RoutesConstants.DRAFTS
           ? {
               id: 'discard-all-current-box',

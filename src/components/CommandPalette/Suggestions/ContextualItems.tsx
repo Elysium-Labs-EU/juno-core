@@ -2,7 +2,12 @@ import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
-import { QiDiscard, QiFolderArchive, QiJump } from 'images/svgIcons/quillIcons'
+import {
+  QiDiscard,
+  QiFolderArchive,
+  QiFolderTrash,
+  QiJump,
+} from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
 import {
   IEmailListObject,
@@ -10,6 +15,7 @@ import {
 } from 'store/storeTypes/emailListTypes'
 import {
   archiveAllEmailCMDK,
+  deleteAllEmailCMDK,
   discardAllEmailCMDK,
   selectAllEmailsSender,
   startFocusModeCMDK,
@@ -135,6 +141,12 @@ export default function contextualItems({
             icon: <QiFolderArchive />,
             onClick: () => dispatch(archiveAllEmailCMDK()),
           },
+      {
+        id: 'delete-all-selection',
+        children: 'Delete all selection',
+        icon: <QiFolderTrash />,
+        onClick: () => dispatch(deleteAllEmailCMDK()),
+      },
       location.pathname === RoutesConstants.TODO
         ? {
             id: 'Focus-with-selection',
