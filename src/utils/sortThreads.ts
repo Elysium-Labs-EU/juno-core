@@ -15,30 +15,30 @@ export default function sortThreads(
   if (sortObject && sortObject.length > 0) {
     return sortObject.sort((a, b) => {
       if (a.messages && b.messages) {
-        return (
-          parseInt(
-            b.messages[
-              forceSort
-                ? b.messages.length - 1
-                : b.messages.filter(
-                    (message) =>
-                      !message?.labelIds?.includes(global.DRAFT_LABEL)
-                  ).length - 1
-            ]?.internalDate,
-            10
-          ) -
-          parseInt(
-            a.messages[
-              forceSort
-                ? a.messages.length - 1
-                : a.messages.filter(
-                    (message) =>
-                      !message?.labelIds?.includes(global.DRAFT_LABEL)
-                  ).length - 1
-            ]?.internalDate,
-            10
+        const firstMessages =
+          a.messages[
+            forceSort
+              ? a.messages.length - 1
+              : a.messages.filter(
+                  (message) =>
+                    message.labelIds.indexOf(global.DRAFT_LABEL) === -1
+                ).length - 1
+          ]
+        const secondMessages =
+          b.messages[
+            forceSort
+              ? b.messages.length - 1
+              : b.messages.filter(
+                  (message) =>
+                    message.labelIds.indexOf(global.DRAFT_LABEL) === -1
+                ).length - 1
+          ]
+        if (firstMessages && secondMessages) {
+          return (
+            parseInt(secondMessages?.internalDate, 10) -
+            parseInt(firstMessages?.internalDate, 10)
           )
-        )
+        }
       }
       return 0
     })

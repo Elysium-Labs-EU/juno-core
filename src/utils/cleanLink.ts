@@ -8,7 +8,7 @@ export default function cleanLink() {
       const firstPartLink = element
         .getAttribute('href')
         ?.split(SEPERATOR, LIMIT)
-      if (firstPartLink && firstPartLink.length > 0) {
+      if (firstPartLink && firstPartLink.length > 0 && firstPartLink[0]) {
         element.setAttribute('href', firstPartLink[0])
       }
     })

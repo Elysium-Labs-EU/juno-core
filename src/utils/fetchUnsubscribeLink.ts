@@ -61,7 +61,12 @@ export default function fetchUnsubscribeLink(
     })
   }
   if (matchedElements.length > 0) {
-    setUnsubscribeLink(matchedElements[matchedElements.length - 1])
+    const lastMatch = matchedElements[matchedElements.length - 1]
+    if (lastMatch) {
+      setUnsubscribeLink(lastMatch)
+    } else {
+      setUnsubscribeLink(null)
+    }
   } else {
     // If there are no matched elements, set it to null. This is required to overwrite any previous data.
     setUnsubscribeLink(null)

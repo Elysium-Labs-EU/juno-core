@@ -1,7 +1,4 @@
-import {
-  SETTINGS_DELIMITER,
-  SETTINGS_LABEL,
-} from 'constants/baseConstants'
+import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { removeLabel } from 'store/labelsSlice'
 import type { AppDispatch } from 'store/store'
 import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
@@ -24,17 +21,24 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
     const toRemoveLabels = []
     let longestSettingsLabelNumber = 0
     for (let i = 0; i < result.length; i += 1) {
-      if (result[i].name.length > longestSettingsLabelNumber) {
-        longestSettingsLabel.push(result[i])
-        longestSettingsLabelNumber = result[i].name.length
-      }
-      if (result[i].name.length === longestSettingsLabelNumber) {
-        toRemoveLabels.push(result[i])
+      const filteredLabel = result[i]
+      if (filteredLabel) {
+        if (filteredLabel.name.length > longestSettingsLabelNumber) {
+          longestSettingsLabel.push(result[i])
+          longestSettingsLabelNumber = filteredLabel.name.length
+        }
+        if (filteredLabel.name.length === longestSettingsLabelNumber) {
+          toRemoveLabels.push(result[i])
+        }
       }
     }
     if (result.length !== toRemoveLabels.length) {
       if (toRemoveLabels.length > 0) {
-        toRemoveLabels.forEach((label) => dispatch(removeLabel(label.id)))
+        toRemoveLabels.forEach((label) => {
+          if (label) {
+            dispatch(removeLabel(label.id))
+          }
+        })
       }
       if (longestSettingsLabel.length === 1) {
         return longestSettingsLabel[0]
@@ -45,7 +49,11 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
       ]
       // If there are two or more equal length settings labels found
       // we drop it all and create a new one via the 'handleSettings' function.
-      uniqueLabels.forEach((label) => dispatch(removeLabel(label.id)))
+      uniqueLabels.forEach((label) => {
+        if (label) {
+          dispatch(removeLabel(label.id))
+        }
+      })
       return null
     }
   }

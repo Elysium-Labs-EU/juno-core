@@ -9,11 +9,11 @@ import { IContact } from 'store/storeTypes/contactsTypes'
 
 export function convertToContact(data: string): IContact {
   const splitted = data.split('<')
-
-  if (splitted.length > 1) {
-    const cleanUpName: string = splitted[0].trim().replace(/(")+/g, '')
-    const cleanUpEmailAddress: string = splitted[1]
-      .substring(0, splitted[1].length - 1)
+  const [first, second] = splitted
+  if (splitted.length > 1 && first && second) {
+    const cleanUpName: string = first.trim().replace(/(")+/g, '')
+    const cleanUpEmailAddress: string = second
+      .substring(0, second.length - 1)
       .replace(/(")+/g, '')
 
     if (cleanUpName.length > 1) {
@@ -23,8 +23,11 @@ export function convertToContact(data: string): IContact {
     return { name: cleanUpEmailAddress, emailAddress: cleanUpEmailAddress }
   }
 
-  splitted[0].replace(/(")+/g, '')
-  return { name: splitted[0], emailAddress: splitted[0] }
+  if (first) {
+    first.replace(/(")+/g, '')
+    return { name: first, emailAddress: first }
+  }
+  return { name: '', emailAddress: '' }
 }
 
 /**

@@ -35,11 +35,12 @@ const startSort = ({
         push(`/mail/${labelURL}/${selectedEmails.selectedIds[0]}/messages`)
       )
     }
-    return dispatch(
-      push(
-        `/mail/${labelURL}/${emailList[activeEmailListIndex].threads[0].id}/messages`
+    const firstThreadObject = emailList[activeEmailListIndex]?.threads[0]
+    if (firstThreadObject) {
+      return dispatch(
+        push(`/mail/${labelURL}/${firstThreadObject.id}/messages`)
       )
-    )
+    }
   }
   return dispatch(
     setSystemStatusUpdate({
