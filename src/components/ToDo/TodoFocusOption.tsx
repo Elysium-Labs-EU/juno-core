@@ -1,7 +1,6 @@
 import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
-import * as local from 'constants/todoConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiJump } from 'images/svgIcons/quillIcons'
 import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
@@ -109,11 +108,11 @@ const TodoFocusOption = () => {
           })?.id ?? ''
         ) ? (
           <>
-            {local.BUTTON_FOCUS}
+            {global.BUTTON_FOCUS}
             <span> ({selectedEmails.selectedIds.length})</span>
           </>
         ) : (
-          local.BUTTON_FOCUS
+          global.BUTTON_FOCUS
         )
       }
       title={

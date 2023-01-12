@@ -18,3 +18,12 @@ export const getLabelByRoute: { [key: string]: string } = {
   [RoutesConstants.SENT]: global.SENT_LABEL,
   [RoutesConstants.ARCHIVE]: global.ARCHIVE_LABEL,
 }
+
+export const getHeaderByRoute: { [key: string]: string } = {
+  [RoutesConstants.INBOX]: global.HEADER_INBOX,
+  [RoutesConstants.TODO]: global.HEADER_TODO,
+  [RoutesConstants.DRAFTS]: global.HEADER_DRAFTS,
+  [RoutesConstants.SENT]: global.HEADER_SENT,
+  [RoutesConstants.ARCHIVE]: global.HEADER_ARCHIVE,
+}
+

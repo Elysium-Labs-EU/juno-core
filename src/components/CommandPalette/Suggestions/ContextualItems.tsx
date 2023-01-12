@@ -29,6 +29,7 @@ import type { IJsonStructure } from '../commandPaletteUtils'
 import defaultItems from './DefaultItems'
 
 export default function contextualItems({
+  currentEmailBoxHasEmails,
   dispatch,
   emailList,
   isFlexibleFlowActive,
@@ -36,6 +37,7 @@ export default function contextualItems({
   location,
   selectedEmails,
 }: {
+  currentEmailBoxHasEmails: boolean
   dispatch: AppDispatch
   emailList: IEmailListObject[]
   isFlexibleFlowActive: boolean
@@ -44,6 +46,7 @@ export default function contextualItems({
   selectedEmails: ISelectedEmail
 }): IJsonStructure[] {
   const itemsArray = defaultItems({
+    currentEmailBoxHasEmails,
     dispatch,
     isFlexibleFlowActive,
     location,
