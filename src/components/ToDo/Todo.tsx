@@ -1,6 +1,6 @@
 import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
-import * as local from 'constants/todoConstants'
+import {HEADER_TODO} from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
@@ -9,7 +9,7 @@ const Todo = () => {
 
   return (
     <>
-      <Seo title={local.HEADER_TODO} />
+      <Seo title={HEADER_TODO} />
       <AnimatedMountUnmount>
         <EmailList />
       </AnimatedMountUnmount>

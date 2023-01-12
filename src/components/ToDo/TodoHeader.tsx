@@ -1,7 +1,7 @@
 import InboxSortOption from 'components/Inbox/InboxSortOption'
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
-import * as local from 'constants/todoConstants'
+import {HEADER_TODO} from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -25,7 +25,7 @@ const TodoHeader = () => {
           <S.PageTitle
             title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
           >
-            {local.HEADER_TODO}
+            {HEADER_TODO}
           </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />
