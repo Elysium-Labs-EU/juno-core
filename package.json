@@ -67,7 +67,7 @@
     "react-html-parser": "2.0.2",
     "react-icons": "4.7.1",
     "react-redux": "8.0.5",
-    "react-router-dom": "6.4.5",
+    "react-router-dom": "6.6.0",
     "react-shadow": "19.0.3",
     "redux": "4.2.0",
     "redux-first-history": "5.1.1",
