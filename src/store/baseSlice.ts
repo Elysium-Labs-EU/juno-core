@@ -17,6 +17,8 @@ import createSettingsLabel from 'utils/settings/createSettingsLabel'
 import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
 
+import { IEmailListObject, TBaseEmailList } from './storeTypes/emailListTypes'
+
 /* eslint-disable no-param-reassign */
 
 const initialState: IBaseState = Object.freeze({
@@ -95,15 +97,21 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 const presetEmailList =
   (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
   (dispatch) => {
-    dispatch(
-      setBaseEmailList(
-        prefetchedBoxes.map((emailContainer) => ({
-          labels: [emailContainer[0]?.id],
-          threads: [],
+    const emailListBuffer = [] as TBaseEmailList
+
+    prefetchedBoxes.forEach((emailContainer) => {
+      const [firstEmailContainer] = emailContainer
+      if (firstEmailContainer) {
+        const presetEmailBox = {
+          labels: [firstEmailContainer?.id],
+          threads: [] as [],
           nextPageToken: null,
-        }))
-      )
-    )
+        }
+        emailListBuffer.push(presetEmailBox)
+      }
+    })
+
+    dispatch(setBaseEmailList(emailListBuffer))
   }
 
 /**
@@ -161,10 +169,11 @@ export const checkBase = (): AppThunk => async (dispatch) => {
             const checkArray = BASE_ARRAY.map((item) =>
               nameMapLabels.includes(item)
             )
-            checkArray.forEach(
-              (checkValue, index) =>
-                !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-            )
+            checkArray.forEach((checkValue, index) => {
+              const baseArrayItem = BASE_ARRAY[index]
+              if (!checkValue && baseArrayItem)
+                dispatch(createLabel(baseArrayItem))
+            })
 
             dispatch(finalizeBaseLoading(labels))
           } else {

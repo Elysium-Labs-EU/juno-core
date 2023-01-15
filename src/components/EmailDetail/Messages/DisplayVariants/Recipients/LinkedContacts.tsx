@@ -16,7 +16,7 @@ const MappedContacts = ({
   contactsMap,
   title,
 }: {
-  contactsMap: IContact[]
+  contactsMap: Array<IContact>
   title: string
 }) => {
   const [showAll, setShowAll] = useState(false)

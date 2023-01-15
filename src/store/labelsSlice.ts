@@ -51,10 +51,18 @@ export const labelsSlice = createSlice({
         state.storageLabels = [...state.storageLabels, labelIdName]
       }
       if (Array.isArray(payload)) {
-        const labelIdNameArray = payload.map((label) => ({
-          id: label[0]?.id,
-          name: label[0]?.name,
-        }))
+        const labelIdNameArray = [] as Array<IGoogleLabel>
+        payload.forEach((label) => {
+          const [firstLabel] = label
+          if (firstLabel && firstLabel.name && firstLabel.id) {
+            const labelIdName = {
+              id: firstLabel.id,
+              name: firstLabel.name,
+              type: firstLabel?.type ?? 'user',
+            }
+            labelIdNameArray.push(labelIdName)
+          }
+        })
         state.storageLabels = [...state.storageLabels, ...labelIdNameArray]
       }
     },
