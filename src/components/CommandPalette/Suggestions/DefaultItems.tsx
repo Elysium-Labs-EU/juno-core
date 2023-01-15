@@ -53,7 +53,7 @@ export default function defaultItems({
               }`,
               icon: <QiFolderArchive />,
               onClick: () =>
-                dispatch(selectAllEmailsSender(archiveAllEmailCMDK)),
+                dispatch(selectAllEmailsCurrentInbox(archiveAllEmailCMDK)),
             }
           : undefined,
         !isEmailDetailPage && currentEmailBoxHasEmails && !isDraftsPage
@@ -64,7 +64,7 @@ export default function defaultItems({
               }`,
               icon: <QiFolderTrash />,
               onClick: () =>
-                dispatch(selectAllEmailsSender(deleteAllEmailCMDK)),
+                dispatch(selectAllEmailsCurrentInbox(deleteAllEmailCMDK)),
             }
           : undefined,
         location.pathname === RoutesConstants.DRAFTS && currentEmailBoxHasEmails
@@ -75,7 +75,7 @@ export default function defaultItems({
               }`,
               icon: <QiDiscard />,
               onClick: () =>
-                dispatch(selectAllEmailsSender(discardAllEmailCMDK)),
+                dispatch(selectAllEmailsCurrentInbox(discardAllEmailCMDK)),
             }
           : undefined,
         location.pathname !== RoutesConstants.TODO
