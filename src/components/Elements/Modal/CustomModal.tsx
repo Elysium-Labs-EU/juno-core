@@ -42,18 +42,20 @@ export const DialogTitle = S.StyledTitle
 export const DialogDescription = S.StyledDescription
 export const DialogClose = DialogPrimitive.Close
 
-const CustomDialog = ({
+const CustomDialog = <T extends (...args: any[]) => any>({
   children,
   modalAriaLabel,
   modalTitle,
   open,
   subTitle = undefined,
+  additionalOnClose = undefined,
 }: {
   children: JSX.Element
   modalAriaLabel: string
   modalTitle: string
   open: boolean
   subTitle?: JSX.Element
+  additionalOnClose?: T
 }) => {
   const dispatch = useAppDispatch()
 
@@ -78,6 +80,10 @@ const CustomDialog = ({
             aria-label="close-keyboard-shortcuts-modal"
             onClick={() => {
               if (open) {
+                if (additionalOnClose) {
+                  additionalOnClose()
+                  return
+                }
                 dispatch(setActiveModal(null))
               }
             }}

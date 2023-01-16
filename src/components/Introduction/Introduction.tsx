@@ -47,6 +47,7 @@ const Introduction = () => {
       open={activeModal === global.ACTIVE_MODAL_MAP.intro}
       modalTitle={DIALOG_HEADER}
       modalAriaLabel="introduction"
+      additionalOnClose={handleClose}
     >
       <>
         <S.InnerContent>
