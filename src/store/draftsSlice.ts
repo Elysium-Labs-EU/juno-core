@@ -132,11 +132,15 @@ export const createUpdateDraft =
         ? await draftApi().createDrafts(formData)
         : await draftApi().updateDrafts({ id: localDraftDetails?.id, formData })
 
-      if (response && response?.status === 200) {
+      if (
+        response &&
+        response?.status === 200 &&
+        localDraftDetails?.message?.threadId
+      ) {
         // Remove the previous entry from Redux Emaillist. History will create a new one.
         dispatch(
           listRemoveItemDetailDraft({
-            threadId: localDraftDetails?.message?.threadId,
+            threadId: localDraftDetails.message.threadId,
           })
         )
         return response.data.data

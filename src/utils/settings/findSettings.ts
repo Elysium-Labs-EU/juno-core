@@ -16,6 +16,13 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
     label.name.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
   )
 
+  if (!result.length) {
+    return null
+  }
+  if (result.length === 1) {
+    return result[0]
+  }
+
   if (result.length > 1) {
     const longestSettingsLabel = []
     const toRemoveLabels = []
@@ -56,9 +63,6 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
       })
       return null
     }
-  }
-  if (result.length === 1) {
-    return result[0]
   }
   return null
 }

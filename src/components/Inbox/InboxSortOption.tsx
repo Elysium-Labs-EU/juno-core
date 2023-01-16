@@ -111,7 +111,7 @@ const InboxSortOption = () => {
       return (
         isLoading ||
         activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex].threads.length === 0
+        emailList[activeEmailListIndex]?.threads.length === 0
       )
     }
     return isLoading || totalThreads === 0

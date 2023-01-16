@@ -17,30 +17,24 @@ import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 
+const pathToHeader = {
+  '/inbox': <InboxHeader />,
+  '/': <TodoHeader />,
+  '/compose': <ComposeHeader />,
+  '/drafts': <DraftHeader />,
+  '/sent': <SentHeader />,
+  '/spam': <SpamHeader />,
+  '/archive': <ArchiveHeader />,
+}
+
 const SetHeader = () => {
   const location = useLocation()
-
-  // The email detail header is coming from EmailDetail.
-  if (location.pathname === '/inbox') {
-    return <InboxHeader />
-  }
-  if (location.pathname === '/') {
-    return <TodoHeader />
-  }
-  if (location.pathname.includes('/compose')) {
-    return <ComposeHeader />
-  }
-  if (location.pathname === '/drafts') {
-    return <DraftHeader />
-  }
-  if (location.pathname === '/sent') {
-    return <SentHeader />
-  }
-  if (location.pathname === '/spam') {
-    return <SpamHeader />
-  }
-  if (location.pathname === '/archive') {
-    return <ArchiveHeader />
+  const matchedPaths = Object.keys(pathToHeader).filter((path) =>
+    location.pathname.match(path)
+  )
+  if (matchedPaths[0]) {
+    const header = pathToHeader[matchedPaths[0] as keyof typeof pathToHeader]
+    return header || null
   }
   return null
 }

@@ -1,12 +1,12 @@
 export interface ISelectedEmail {
-  labelIds: string[]
-  selectedIds: string[]
+  labelIds: Array<string>
+  selectedIds: Array<string>
 }
 
 export interface ISelectedEmailAction {
   event: 'add' | 'remove'
   id: string
-  labelIds: string[]
+  labelIds: Array<string>
 }
 
 export interface IEmailMessageHeaders {
@@ -28,25 +28,25 @@ export interface IEmailMessagePayloadRaw {
     attachmentId?: string
     size: number
   }
-  parts?: IEmailMessagePayloadRaw[]
+  parts?: Array<IEmailMessagePayloadRaw>
 }
 
 export interface IEmailMessagePayloadConverted {
   mimeType: string
   headers: IEmailMessageHeaders
-  files?: undefined | IEmailMessagePayloadRaw[]
+  files?: undefined | Array<IEmailMessagePayloadRaw>
   body?: {
-    emailFileHTML: any[]
+    emailFileHTML: Array<any>
     emailHTML: string
-    removedTrackers: string[]
+    removedTrackers: Array<string>
   }
-  parts?: IEmailMessagePayloadRaw[]
+  parts?: Array<IEmailMessagePayloadRaw>
 }
 
 export interface IEmailMessage {
   id: string
   threadId: string
-  labelIds: string[]
+  labelIds: Array<string>
   snippet: string
   payload: IEmailMessagePayloadConverted
   sizeEstimate: number
@@ -57,12 +57,12 @@ export interface IEmailMessage {
 export interface IEmailListThreadItem {
   id: string
   historyId: string
-  messages: IEmailMessage[]
+  messages: Array<IEmailMessage>
 }
 
 export interface IEmailListObject {
-  labels: string[]
-  threads: IEmailListThreadItem[]
+  labels: Array<string>
+  threads: Array<IEmailListThreadItem>
   nextPageToken: string | null | undefined
   resultSizeEstimate?: number
   timestamp?: number
@@ -71,14 +71,14 @@ export interface IEmailListObject {
 
 export interface IEmailListState {
   activeEmailListIndex: number
-  emailList: IEmailListObject[]
+  emailList: Array<IEmailListObject>
   isFetching: boolean
   searchList: IEmailListObject | null
   selectedEmails: ISelectedEmail
 }
 
-export type TBaseEmailList = {
-  labels: string[]
+export type TBaseEmailList = Array<{
+  labels: Array<string>
   nextPageToken: null
-  threads: []
-}[]
+  threads: Array<any>
+}>

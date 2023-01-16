@@ -17,6 +17,11 @@ interface ITabItem {
   link: string
 }
 
+const pathToActiveLink = {
+  messages: 'Messages',
+  files: 'Files',
+}
+
 const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const [activeLink, setActiveLink] = useState('')
   const dispatch = useAppDispatch()
@@ -30,13 +35,14 @@ const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   }
 
   useEffect(() => {
-    if (location.pathname.includes('messages')) {
-      setActiveLink('Messages')
-    }
-    if (location.pathname.includes('files')) {
-      setActiveLink('Files')
+    const determinedLink =
+      pathToActiveLink[location.pathname as keyof typeof pathToActiveLink]
+    if (determinedLink) {
+      setActiveLink(determinedLink)
     }
   }, [location])
+
+  const viewedThread = activeEmailList.threads[viewIndex]
 
   return (
     <S.TabContainer>
@@ -44,18 +50,12 @@ const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
         <MessagesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(
-            activeEmailList.threads[viewIndex],
-            labelIds
-          )}
+          activeThread={filterTrashMessages(viewedThread, labelIds)}
         />
         <FilesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(
-            activeEmailList.threads[viewIndex],
-            labelIds
-          )}
+          activeThread={filterTrashMessages(viewedThread, labelIds)}
         />
       </S.ItemsContainer>
     </S.TabContainer>

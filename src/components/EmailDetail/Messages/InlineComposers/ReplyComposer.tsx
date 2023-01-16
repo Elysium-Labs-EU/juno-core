@@ -1,7 +1,9 @@
 import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
+import { useAppDispatch } from 'store/hooks'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { handleContactConversion } from 'utils/convertToContact'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
@@ -15,22 +17,39 @@ import getRelevantMessage from './getRelevantMessage'
  * @returns
  */
 
-const ReplyComposer = ({
-  localThreadDetail,
-  selectedIndex,
-  messageOverviewListener,
-}: {
+interface IReplyComposer {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
   messageOverviewListener: (
     evenType: 'cancel' | 'discard',
     messageId?: string
   ) => void
-}) => {
+}
+
+const ReplyComposer = ({
+  localThreadDetail,
+  selectedIndex,
+  messageOverviewListener,
+}: IReplyComposer) => {
+  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
+
+  if (!relevantMessage) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Cannot open composer with relevant message',
+      })
+    )
+    return (
+      <ES.ComposeWrapper data-cy="reply-composer">
+        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+      </ES.ComposeWrapper>
+    )
+  }
 
   return (
     <ES.ComposeWrapper data-cy="reply-composer">

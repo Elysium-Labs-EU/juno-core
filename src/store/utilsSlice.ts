@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
-import { activateTodo } from 'components/ToDo/TodoFocusOption'
+import activateTodo from 'components/ToDo/activateTodo'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routesConstants'
