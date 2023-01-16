@@ -44,18 +44,21 @@ const EmailDetailHeader = ({
 
   useEffect(() => {
     let mounted = true
-    if (storageLabels.length > 0 && labelIds.length > 0) {
-      if (location?.pathname?.includes(labelIds[0])) {
-        const matchedLabel = findLabelById({ storageLabels, labelIds })
-        if (matchedLabel) {
-          const splitHeader = matchedLabel.name.split('/')
-          mounted &&
-            setDetailHeader(splitHeader[splitHeader.length - 1].toLowerCase())
-        } else {
-          mounted && setDetailHeader(global.SEARCH_LABEL.toLowerCase())
-        }
+    if (
+      storageLabels.length > 0 &&
+      labelIds.length > 0 &&
+      labelIds[0] &&
+      location?.pathname?.includes(labelIds[0])
+    ) {
+      const matchedLabel = findLabelById({ storageLabels, labelIds })
+      if (matchedLabel) {
+        const lastHeader = matchedLabel.name.split('/').pop()
+        mounted && lastHeader && setDetailHeader(lastHeader.toLowerCase())
+      } else {
+        mounted && setDetailHeader(global.SEARCH_LABEL.toLowerCase())
       }
     }
+
     return () => {
       mounted = false
     }

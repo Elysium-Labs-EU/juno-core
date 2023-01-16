@@ -12,22 +12,10 @@ export default function getTimeStamp(
   email: IEmailListThreadItem,
   useAllMessages?: boolean
 ): string {
-  if (email?.messages) {
-    return email.messages[
-      useAllMessages
-        ? email.messages.length - 1
-        : email.messages.filter(
-            (message) => !message.labelIds.includes(global.DRAFT_LABEL)
-          ).length - 1
-    ]
-      ? email.messages[
-          useAllMessages
-            ? email.messages.length - 1
-            : email.messages.filter(
-                (message) => !message.labelIds.includes(global.DRAFT_LABEL)
-              ).length - 1
-        ].internalDate
-      : ''
-  }
-  return ''
+  const messages = email?.messages?.filter(
+    (message) =>
+      useAllMessages || !message.labelIds.includes(global.DRAFT_LABEL)
+  )
+  const latestMessage = messages?.[messages.length - 1]
+  return latestMessage?.internalDate ?? ''
 }

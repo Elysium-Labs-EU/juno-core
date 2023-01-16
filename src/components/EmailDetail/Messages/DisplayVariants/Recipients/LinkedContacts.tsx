@@ -78,7 +78,9 @@ const MappedContacts = ({
 const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
-  const senderContact = handleContactConversion(message?.payload?.headers?.from)
+  const [firstSenderContact] = handleContactConversion(
+    message?.payload?.headers?.from
+  )
   const toNameFull = handleContactConversion(message?.payload?.headers?.to)
   const ccNameFull = handleContactConversion(message?.payload?.headers?.cc)
   const bccNameFull = handleContactConversion(message?.payload?.headers?.bcc)
@@ -90,9 +92,11 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
           <GS.Span muted small style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
           </GS.Span>
-          <ContactCard userEmail={senderName} contact={senderContact[0]}>
-            <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
-          </ContactCard>
+          {firstSenderContact ? (
+            <ContactCard userEmail={senderName} contact={firstSenderContact}>
+              <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
+            </ContactCard>
+          ) : null}
         </S.ToFromBCCInner>
       </S.ContactsContainer>
       <S.ContactsContainer>

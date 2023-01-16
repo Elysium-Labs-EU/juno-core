@@ -56,25 +56,28 @@ const EmailDetailOptions = ({
 
   const memoizedToDoOption = useMemo(() => {
     const lastMessageLabels =
-      threadDetail.messages[threadDetail.messages.length - 1].labelIds
-    const getOnlyLegalLabels = onlyLegalLabelStrings({
-      labelIds: lastMessageLabels,
-      storageLabels,
-    }).filter(
-      (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
-    )
-    if (
-      getOnlyLegalLabels &&
-      !getOnlyLegalLabels.some(
-        (item) =>
-          item ===
-          findLabelByName({
-            storageLabels,
-            LABEL_NAME: global.TODO_LABEL_NAME,
-          })?.id
+      threadDetail.messages[threadDetail.messages.length - 1]?.labelIds
+    if (lastMessageLabels) {
+      const getOnlyLegalLabels = onlyLegalLabelStrings({
+        labelIds: lastMessageLabels,
+        storageLabels,
+      }).filter(
+        (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
       )
-    ) {
-      return <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+      if (
+        getOnlyLegalLabels &&
+        !getOnlyLegalLabels.some(
+          (item) =>
+            item ===
+            findLabelByName({
+              storageLabels,
+              LABEL_NAME: global.TODO_LABEL_NAME,
+            })?.id
+        )
+      ) {
+        return <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+      }
+      return null
     }
     return null
   }, [threadDetail, storageLabels])

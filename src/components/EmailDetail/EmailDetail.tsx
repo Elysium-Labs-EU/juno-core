@@ -26,10 +26,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type {
-  IEmailListObject,
-  IEmailListThreadItem,
-} from 'store/storeTypes/emailListTypes'
+import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectIsFlexibleFlowActive,
   selectIsLoading,
@@ -106,42 +103,34 @@ const EmailDetail = () => {
     setBaseState(local.STATUS_STATUS_MAP.loaded)
     if (coreStatus === global.CORE_STATUS_MAP.searching && searchList) {
       setActiveEmailList(searchList)
-      return
-    }
-    if (
-      (coreStatus === global.CORE_STATUS_MAP.focused ||
-        (isFlexibleFlowActive &&
-          coreStatus === global.CORE_STATUS_MAP.sorting)) &&
-      selectedEmails &&
-      selectedEmails.selectedIds.length > 0 &&
-      (selectedEmails.labelIds.includes(
-        findLabelByName({
-          storageLabels,
-          LABEL_NAME: global.TODO_LABEL_NAME,
-        })?.id ?? ''
-      ) ||
-        selectedEmails.labelIds.includes(global.INBOX_LABEL))
-    ) {
-      const activeThreadList = emailList[activeEmailListIndex].threads
-      const relevantThreadsFeed: IEmailListThreadItem[] = []
-      selectedEmails.selectedIds.forEach((email) => {
-        const resultIndex = activeThreadList.findIndex((t) => t.id === email)
-        if (resultIndex > -1) {
-          relevantThreadsFeed.push(activeThreadList[resultIndex])
+    } else {
+      const targetEmailList = emailList[activeEmailListIndex]
+      if (targetEmailList) {
+        if (
+          (coreStatus === global.CORE_STATUS_MAP.focused ||
+            (isFlexibleFlowActive &&
+              coreStatus === global.CORE_STATUS_MAP.sorting)) &&
+          selectedEmails &&
+          selectedEmails.selectedIds.length > 0 &&
+          (selectedEmails.labelIds.includes(
+            findLabelByName({
+              storageLabels,
+              LABEL_NAME: global.TODO_LABEL_NAME,
+            })?.id ?? ''
+          ) ||
+            selectedEmails.labelIds.includes(global.INBOX_LABEL))
+        ) {
+          const relevantThreadsFeed = targetEmailList.threads.filter((t) =>
+            selectedEmails.selectedIds.includes(t.id)
+          )
+          setActiveEmailList({
+            ...targetEmailList,
+            threads: relevantThreadsFeed,
+          })
+        } else {
+          setActiveEmailList(targetEmailList)
         }
-      })
-      setActiveEmailList({
-        ...emailList[activeEmailListIndex],
-        threads: relevantThreadsFeed,
-      })
-      return
-    }
-    if (
-      emailList &&
-      activeEmailListIndex > -1 &&
-      emailList[activeEmailListIndex]
-    ) {
-      setActiveEmailList(emailList[activeEmailListIndex])
+      }
     }
   }, [emailList, activeEmailListIndex, searchList])
 

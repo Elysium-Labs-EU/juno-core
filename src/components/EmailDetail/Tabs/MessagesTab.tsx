@@ -4,7 +4,7 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 import * as S from './TabsStyles'
 
 interface IMesssageTab {
-  activeThread: IEmailListThreadItem | undefined
+  activeThread: IEmailListThreadItem | undefined | null
   activeLink: string
   navigateTo: ({ link, name }: { link: string; name: string }) => void
 }

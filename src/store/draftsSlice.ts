@@ -409,11 +409,10 @@ export const sendComposedEmail =
             emailList,
             labelIds: [global.DRAFT_LABEL],
           })
-          if (staticIndexActiveEmailList > -1)
+          if (staticIndexActiveEmailList > -1 && localDraftDetails?.message?.id)
             dispatch(
               listRemoveItemDetail({
-                messageId: localDraftDetails?.message?.id,
-                staticIndexActiveEmailList,
+                threadId: localDraftDetails.message.id,
               })
             )
         } else {

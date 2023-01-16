@@ -9,8 +9,8 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  */
 
 const filterTrashMessages = (
-  thread: IEmailListThreadItem | undefined,
-  labelIds: string[]
+  thread: IEmailListThreadItem | undefined | null,
+  labelIds: Array<string>
 ) => {
   if (!thread || labelIds.includes(global.SEARCH_LABEL)) return thread
 

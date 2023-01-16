@@ -56,7 +56,7 @@ function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
   >
 
   if (items[focusedItemIndex]) {
-    items[focusedItemIndex].click()
+    items[focusedItemIndex]?.click()
   }
 }
 
@@ -233,7 +233,10 @@ const CommandPallette = () => {
         return
       }
       if (searchResults && focusedItemIndex > -1) {
-        handleOpenEmailEvent(searchResults.threads[focusedItemIndex].id)
+        const id = searchResults?.threads?.[focusedItemIndex]?.id
+        if (id) {
+          handleOpenEmailEvent(id)
+        }
       }
     }
   }

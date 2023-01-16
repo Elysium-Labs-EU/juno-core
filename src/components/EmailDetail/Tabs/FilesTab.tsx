@@ -5,7 +5,7 @@ import countUniqueFiles from 'utils/countUniqueFiles'
 import * as S from './TabsStyles'
 
 interface IFilesTab {
-  activeThread: IEmailListThreadItem | undefined
+  activeThread: IEmailListThreadItem | undefined | null
   activeLink: string
   navigateTo: ({ link, name }: { link: string; name: string }) => void
 }

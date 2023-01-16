@@ -1,14 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import type { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { ILabelState } from 'store/storeTypes/labelsTypes'
+import type { IUtilsState } from 'store/storeTypes/utilsTypes'
 
-import StyledCircularProgress from '../../Elements/CircularProgress/StyledCircularProgress'
 import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
@@ -18,12 +21,12 @@ import ForwardingComposer from './InlineComposers/ForwardingComposer'
 import ReplyComposer from './InlineComposers/ReplyComposer'
 
 interface IMessagesOverview {
-  isForwarding: boolean
-  isLoading: boolean
-  isReplying: boolean
-  labelIds: string[]
+  isForwarding: IEmailDetailState['isForwarding']
+  isLoading: IUtilsState['isLoading']
+  isReplying: IEmailDetailState['isReplying']
+  labelIds: ILabelState['labelIds']
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  threadDetail: IEmailListThreadItem
+  threadDetail: IEmailListThreadItem | undefined | null
 }
 
 interface IMappedMessages
@@ -74,13 +77,14 @@ const MappedMessages = ({
   }, [isReplying, isForwarding])
 
   const reversedMessagesOrder = useMemo(
-    () => threadDetail.messages.slice(0).reverse(),
+    () => threadDetail?.messages.slice(0).reverse(),
     [threadDetail]
   )
 
-  return threadDetail.messages ? (
+  return threadDetail?.messages ? (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
-      {reversedMessagesOrder.map((message, index) => (
+      {reversedMessagesOrder?.map((message, index) => (
         <div key={message.id}>
           {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
             <DraftMessage
@@ -124,7 +128,7 @@ const MessagesOverview = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted) {
+    if (mounted && threadDetail) {
       // Create a local copy of threadDetail to manipulate. Is used by opening a threadDetail draft, and reversing the message order.
       setLocalThreadDetail(threadDetail)
     }

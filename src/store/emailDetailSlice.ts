@@ -51,51 +51,37 @@ export const emailDetailSlice = createSlice({
     resetEmailDetail: () => initialState,
     setCoreStatus: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'coreStatus'>['coreStatus']>
+      { payload }: PayloadAction<IEmailDetailState['coreStatus']>
     ) => {
       state.coreStatus = payload
     },
     setCurrentEmail: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'currEmail'>['currEmail']>
+      { payload }: PayloadAction<IEmailDetailState['currEmail']>
     ) => {
       state.currEmail = payload
     },
     setViewIndex: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'viewIndex'>['viewIndex']>
+      { payload }: PayloadAction<IEmailDetailState['viewIndex']>
     ) => {
       state.viewIndex = payload
     },
     setSessionViewIndex: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IEmailDetailState, 'sessionViewIndex'>['sessionViewIndex']
-      >
+      { payload }: PayloadAction<IEmailDetailState['sessionViewIndex']>
     ) => {
       state.sessionViewIndex = payload
     },
     setIsReplying: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'isReplying'>['isReplying']>
+      { payload }: PayloadAction<IEmailDetailState['isReplying']>
     ) => {
       state.isReplying = payload
     },
     setIsForwarding: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'isForwarding'>['isForwarding']>
+      { payload }: PayloadAction<IEmailDetailState['isForwarding']>
     ) => {
       state.isForwarding = payload
     },
