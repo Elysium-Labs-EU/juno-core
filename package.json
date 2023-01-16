@@ -23,7 +23,7 @@
     "@formspark/use-formspark": "0.1.39",
     "@mui/base": "5.0.0-alpha.103",
     "@mui/material": "5.10.11",
-    "@mui/system": "5.10.10",
+    "@mui/system": "5.11.2",
     "@radix-ui/react-checkbox": "1.0.1",
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-label": "2.0.0",
