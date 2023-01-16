@@ -21,7 +21,6 @@ import {
   discardAllEmailCMDK,
   navigateTo,
   selectAllEmailsCurrentInbox,
-  selectAllEmailsSender,
   setActiveModal,
 } from 'store/utilsSlice'
 
