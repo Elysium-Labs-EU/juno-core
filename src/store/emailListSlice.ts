@@ -393,7 +393,9 @@ export const emailListSlice = createSlice({
       const currentState = state.emailList
       const threadList = currentState[state.activeEmailListIndex]?.threads
       if (currentState && threadList) {
-        threadList.filter((thread) => !messageIds.includes(thread.id))
+        threadList.filter(
+          (thread) => !messageIds.some((id) => thread.id.startsWith(id))
+        )
         state.emailList = currentState
       }
     },
