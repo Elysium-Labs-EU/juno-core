@@ -29,7 +29,6 @@ import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 
 import InboxRefresh from './InboxRefreshOption'
-import InboxSortPopper from './InboxSortPopper'
 
 const INBOX_BUTTON = 'Sort inbox'
 
