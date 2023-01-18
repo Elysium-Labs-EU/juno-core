@@ -23,47 +23,27 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
     return result[0]
   }
 
-  if (result.length > 1) {
-    const longestSettingsLabel = []
-    const toRemoveLabels = []
-    let longestSettingsLabelNumber = 0
-    for (let i = 0; i < result.length; i += 1) {
-      const filteredLabel = result[i]
-      if (filteredLabel) {
-        if (filteredLabel.name.length > longestSettingsLabelNumber) {
-          longestSettingsLabel.push(result[i])
-          longestSettingsLabelNumber = filteredLabel.name.length
-        }
-        if (filteredLabel.name.length === longestSettingsLabelNumber) {
-          toRemoveLabels.push(result[i])
-        }
+  const longestSettingsLabel = result.reduce(
+    (acc, curr) => {
+      if (curr.name.length > acc.name.length) {
+        return curr
       }
-    }
-    if (result.length !== toRemoveLabels.length) {
-      if (toRemoveLabels.length > 0) {
-        toRemoveLabels.forEach((label) => {
-          if (label) {
-            dispatch(removeLabel(label.id))
-          }
-        })
+      return acc
+    },
+    { name: '', id: '', type: '' }
+  )
+
+  // If there are two or more equal length settings labels found
+  // we drop it all and create a new one via the 'handleSettings' function.
+  result
+    .filter((label) => label !== longestSettingsLabel)
+    .forEach((label) => {
+      if (label) {
+        dispatch(removeLabel(label.id))
       }
-      if (longestSettingsLabel.length === 1) {
-        return longestSettingsLabel[0]
-      }
-    } else {
-      const uniqueLabels = [
-        ...new Set(toRemoveLabels.concat(longestSettingsLabel)),
-      ]
-      // If there are two or more equal length settings labels found
-      // we drop it all and create a new one via the 'handleSettings' function.
-      uniqueLabels.forEach((label) => {
-        if (label) {
-          dispatch(removeLabel(label.id))
-        }
-      })
-      return null
-    }
-  }
-  return null
+    })
+
+  return longestSettingsLabel
 }
+
 export default findSettings

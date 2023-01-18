@@ -1,6 +1,6 @@
 import * as local from 'constants/menuConstants'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
-import countUniqueFiles from 'utils/countUniqueFiles'
+import countUniqueFiles from 'utils/countUniqueFiles/countUniqueFiles'
 
 import * as S from './TabsStyles'
 

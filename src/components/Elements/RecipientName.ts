@@ -5,6 +5,7 @@ import { convertToContact } from 'utils/convertToContact'
 const NO_RECIPIENT = '(No recipient)'
 
 const recipientName = (toHeaders: string, emailAddress: string): IContact => {
+  console.log(toHeaders)
   if (toHeaders && toHeaders.length > 0) {
     if (emailAddress && toHeaders.includes(emailAddress)) {
       return { name: global.ME_LABEL, emailAddress }

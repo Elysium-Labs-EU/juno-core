@@ -75,6 +75,7 @@ export const handleSettings =
       createSettingsLabel(dispatch)
       return
     }
+    console.log('settingsLabel', settingsLabel)
     dispatch(setSettingsLabelId(settingsLabel.id))
     parseSettings(dispatch, settingsLabel)
   }

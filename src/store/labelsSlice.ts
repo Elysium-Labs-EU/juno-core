@@ -12,10 +12,15 @@ import type {
   ILabelState,
 } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
+import {
+  parseSettingsLabel,
+  storeUpdatedSettingsLabel,
+} from 'utils/settings/updateSettingsLabel'
+import type { IUpdateSettingsLabel } from 'utils/settings/updateSettingsLabel'
 
 /* eslint-disable no-param-reassign */
 
-const initialState: ILabelState = Object.freeze({
+export const initialState: ILabelState = Object.freeze({
   labelIds: [],
   loadedInbox: [],
   storageLabels: [],
@@ -27,15 +32,13 @@ export const labelsSlice = createSlice({
   reducers: {
     setCurrentLabels: (
       state,
-      { payload }: PayloadAction<Pick<ILabelState, 'labelIds'>['labelIds']>
+      { payload }: PayloadAction<ILabelState['labelIds']>
     ) => {
       state.labelIds = payload
     },
     setLoadedInbox: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<ILabelState, 'loadedInbox'>['loadedInbox']>
+      { payload }: PayloadAction<ILabelState['loadedInbox']>
     ) => {
       state.loadedInbox = [...new Set([...state.loadedInbox, ...payload])]
     },
@@ -121,7 +124,6 @@ export const createLabel =
         })
       )
     }
-    return null
   }
 
 export const removeLabel =
@@ -214,6 +216,29 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
     )
   }
 }
+
+export const updateSettingsLabel =
+  ({
+    settingsLabelId,
+    emailFetchSize,
+    showIntroduction,
+    isAvatarVisible,
+    isFlexibleFlowActive,
+    alternateActions,
+  }: IUpdateSettingsLabel): AppThunk =>
+  (dispatch) => {
+    storeUpdatedSettingsLabel(
+      parseSettingsLabel({
+        settingsLabelId,
+        emailFetchSize,
+        showIntroduction,
+        isAvatarVisible,
+        isFlexibleFlowActive,
+        alternateActions,
+      }),
+      dispatch
+    )
+  }
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds
 export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox

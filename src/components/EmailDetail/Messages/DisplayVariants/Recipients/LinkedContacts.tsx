@@ -79,11 +79,21 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
   const [firstSenderContact] = handleContactConversion(
-    message?.payload?.headers?.from
+    message?.payload?.headers?.from,
+    emailAddress
   )
-  const toNameFull = handleContactConversion(message?.payload?.headers?.to)
-  const ccNameFull = handleContactConversion(message?.payload?.headers?.cc)
-  const bccNameFull = handleContactConversion(message?.payload?.headers?.bcc)
+  const toNameFull = handleContactConversion(
+    message?.payload?.headers?.to,
+    emailAddress
+  )
+  const ccNameFull = handleContactConversion(
+    message?.payload?.headers?.cc,
+    emailAddress
+  )
+  const bccNameFull = handleContactConversion(
+    message?.payload?.headers?.bcc,
+    emailAddress
+  )
 
   return (
     <>

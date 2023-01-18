@@ -62,19 +62,13 @@ export const utilsSlice = createSlice({
   reducers: {
     setActiveModal(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'activeModal'>['activeModal']>
+      { payload }: PayloadAction<IUtilsState['activeModal']>
     ) {
       state.activeModal = payload
     },
     setAlternateActions: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'alternateActions'>['alternateActions']
-      >
+      { payload }: PayloadAction<IUtilsState['alternateActions']>
     ) => {
       state.alternateActions = payload
     },
@@ -86,31 +80,25 @@ export const utilsSlice = createSlice({
     },
     setFlexibleFlow: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'isFlexibleFlowActive'>['isFlexibleFlowActive']
-      >
+      { payload }: PayloadAction<IUtilsState['isFlexibleFlowActive']>
     ) => {
       state.isFlexibleFlowActive = payload
     },
     setInSearch: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'inSearch'>['inSearch']>
+      { payload }: PayloadAction<IUtilsState['inSearch']>
     ) => {
       state.inSearch = payload
     },
     setIsLoading: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'isLoading'>['isLoading']>
+      { payload }: PayloadAction<IUtilsState['isLoading']>
     ) => {
       state.isLoading = payload
     },
     setIsProcessing: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isProcessing'>['isProcessing']>
+      { payload }: PayloadAction<IUtilsState['isProcessing']>
     ) => {
       state.isProcessing = payload
     },
@@ -132,17 +120,13 @@ export const utilsSlice = createSlice({
     },
     setIsSentryActive: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSentryActive'>['isSentryActive']>
+      { payload }: PayloadAction<IUtilsState['isSentryActive']>
     ) => {
       state.isSentryActive = payload
     },
     setIsSilentLoading: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSilentLoading'>['isSilentLoading']>
+      { payload }: PayloadAction<IUtilsState['isSilentLoading']>
     ) => {
       state.isSilentLoading = payload
     },
@@ -173,17 +157,13 @@ export const utilsSlice = createSlice({
     },
     setSettingsLabelId(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'settingsLabelId'>['settingsLabelId']>
+      { payload }: PayloadAction<IUtilsState['settingsLabelId']>
     ) {
       state.settingsLabelId = payload
     },
     setShowAvatar: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isAvatarVisible'>['isAvatarVisible']>
+      { payload }: PayloadAction<IUtilsState['isAvatarVisible']>
     ) => {
       state.isAvatarVisible = payload
     },

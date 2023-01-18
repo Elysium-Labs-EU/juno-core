@@ -9,7 +9,7 @@ import { selectProfile } from 'store/baseSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import * as GS from 'styles/globalStyles'
-import countUniqueFiles from 'utils/countUniqueFiles'
+import countUniqueFiles from 'utils/countUniqueFiles/countUniqueFiles'
 
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import * as ES from '../EmailDetailStyles'

@@ -1,12 +1,12 @@
-import { IComposePayload } from 'store/storeTypes/composeTypes'
-import { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import type { IComposePayload } from 'store/storeTypes/composeTypes'
+import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
 import convertToGmailEmail from 'utils/convertToGmailEmail'
 
 export async function prepareFilesForSave({
   files,
   formData,
 }: {
-  files: File[]
+  files: Array<File>
   formData: FormData
 }) {
   try {

@@ -1,4 +1,4 @@
-import {
+import type {
   IEmailListObject,
   ISelectedEmail,
 } from 'store/storeTypes/emailListTypes'

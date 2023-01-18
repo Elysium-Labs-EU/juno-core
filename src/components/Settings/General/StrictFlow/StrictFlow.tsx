@@ -8,6 +8,7 @@ import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectEmailListSize,
   selectIsFlexibleFlowActive,
@@ -15,7 +16,6 @@ import {
   setFlexibleFlow,
 } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
-import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
 const HEADER = 'Workflow mode'
 const BODY =
@@ -43,10 +43,12 @@ const StrictFlow = () => {
     if (!event.target.checked) {
       localStorage.setItem('isFlexibleFlowActive', 'false')
       dispatch(setFlexibleFlow(false))
-      updateSettingsLabel({
-        settingsLabelId,
-        isFlexibleFlowActive: false,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          isFlexibleFlowActive: false,
+        })
+      )
       if (location.pathname.includes(RoutesConstants.INBOX)) {
         // In case the user is on the inbox page, redirect to user to the homepage, since the inbox page will be removed from the RoutesComponent.
         dispatch(push(RoutesConstants.TODO))
@@ -55,10 +57,12 @@ const StrictFlow = () => {
       localStorage.setItem('isFlexibleFlowActive', 'true')
       dispatch(setFlexibleFlow(true))
       rehydrateInbox()
-      updateSettingsLabel({
-        settingsLabelId,
-        isFlexibleFlowActive: true,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          isFlexibleFlowActive: true,
+        })
+      )
     }
   }
 

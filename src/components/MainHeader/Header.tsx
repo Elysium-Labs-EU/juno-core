@@ -17,14 +17,16 @@ import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 
+// The mail path has its own header logic.
 const pathToHeader = {
   '/inbox': <InboxHeader />,
-  '/': <TodoHeader />,
   '/compose': <ComposeHeader />,
   '/drafts': <DraftHeader />,
   '/sent': <SentHeader />,
   '/spam': <SpamHeader />,
   '/archive': <ArchiveHeader />,
+  '/mail': null,
+  '/': <TodoHeader />,
 }
 
 const SetHeader = () => {

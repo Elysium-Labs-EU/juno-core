@@ -1,5 +1,13 @@
+import { ME_LABEL } from 'constants/globalConstants'
 import { IContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
+
+const convertToMe = (header: string, emailAddress: string | undefined) => {
+  if (emailAddress && header.includes(emailAddress)) {
+    return ME_LABEL
+  }
+  return null
+}
 
 /**
  * @function convertToContact
@@ -7,7 +15,10 @@ import { IContact } from 'store/storeTypes/contactsTypes'
  * @returns - returns a Contact object
  */
 
-export function convertToContact(data: string): IContact {
+export function convertToContact(
+  data: string,
+  emailAddress?: string
+): IContact {
   const splitted = data.split('<')
   const [first, second] = splitted
   if (splitted.length > 1 && first && second) {
@@ -17,15 +28,32 @@ export function convertToContact(data: string): IContact {
       .replace(/(")+/g, '')
 
     if (cleanUpName.length > 1) {
-      return { name: cleanUpName, emailAddress: cleanUpEmailAddress }
+      return {
+        name: convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpName,
+        emailAddress: cleanUpEmailAddress,
+      }
     }
 
-    return { name: cleanUpEmailAddress, emailAddress: cleanUpEmailAddress }
+    return {
+      name:
+        convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpEmailAddress,
+      emailAddress: cleanUpEmailAddress,
+    }
   }
 
   if (first) {
     first.replace(/(")+/g, '')
-    return { name: first, emailAddress: first }
+    return {
+      name: convertToMe(first, emailAddress) ?? first,
+      emailAddress: first,
+    }
+  }
+  if (second) {
+    second.replace(/(")+/g, '')
+    return {
+      name: convertToMe(second, emailAddress) ?? second,
+      emailAddress: second,
+    }
   }
   return { name: '', emailAddress: '' }
 }
@@ -36,13 +64,18 @@ export function convertToContact(data: string): IContact {
  * @returns an array of contact objects or an empty array
  */
 
-export function handleContactConversion(contactValue: string): IContact[] {
+export function handleContactConversion(
+  contactValue: string,
+  emailAddress: string
+): IContact[] {
   if (
     contactValue &&
     contactValue.length > 0 &&
     typeof contactValue === 'string'
   ) {
-    return contactValue.split(',').map((item) => convertToContact(item))
+    return contactValue
+      .split(',')
+      .map((item) => convertToContact(item, emailAddress))
   }
   return []
 }

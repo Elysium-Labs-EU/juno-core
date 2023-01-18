@@ -57,13 +57,10 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
-const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) => {
-  const foundLabels: string[] = []
-  emailListThreadItem.messages.forEach((message) =>
-    message?.labelIds?.forEach((label) => foundLabels.push(label))
+const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) =>
+  emailListThreadItem.messages.some((message) =>
+    message?.labelIds?.includes(global.UNREAD_LABEL)
   )
-  return foundLabels.includes(global.UNREAD_LABEL)
-}
 
 export const getRecipientName = ({
   emailAddress,

@@ -73,36 +73,21 @@ const RenderEmailList = ({
     })
   }, [focusedItemIndex])
 
-  useKeyboardShortcut({
-    handleEvent: handleEscapeKeyDown,
-    key: keyConstants.KEY_SPECIAL.escape,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [selectedEmails],
-  })
+  const keyHandlers = {
+    [keyConstants.KEY_SPECIAL.escape]: handleEscapeKeyDown,
+    [keyConstants.KEY_ARROWS.down]: handleFocusDown,
+    [keyConstants.KEY_LETTERS.j]: handleFocusDown,
+    [keyConstants.KEY_ARROWS.up]: handleFocusUp,
+    [keyConstants.KEY_LETTERS.k]: handleFocusUp,
+  }
 
-  useKeyboardShortcut({
-    handleEvent: handleFocusDown,
-    key: keyConstants.KEY_ARROWS.down,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusDown,
-    key: keyConstants.KEY_LETTERS.j,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusUp,
-    key: keyConstants.KEY_ARROWS.up,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusUp,
-    key: keyConstants.KEY_LETTERS.k,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
+  Object.entries(keyHandlers).forEach(([key, handleEvent]) => {
+    useKeyboardShortcut({
+      handleEvent,
+      key,
+      isDisabled: inSearch || !!activeModal,
+      refreshOnDeps: [focusedItemIndex],
+    })
   })
 
   const { threads, nextPageToken } = filteredOnLabel

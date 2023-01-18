@@ -83,7 +83,7 @@ interface IHandleAdditionToExistingEmailArray {
   q?: undefined | string
 }
 
-const handleAdditionToExistingEmailArray = ({
+export const handleAdditionToExistingEmailArray = ({
   targetEmailListObject,
   state,
   labels,
@@ -96,79 +96,76 @@ const handleAdditionToExistingEmailArray = ({
   const tempArray: Array<IEmailListThreadItem> = []
   let activeCount: number = 0
   const completeCount: number = threads.length
+  const existingThreads = new Map(
+    targetEmailListObject.threads.map((thread) => [thread.id, thread])
+  )
 
   for (let i = 0; i < completeCount; i += 1) {
-    // Check if the object already exists on the Redux store.
-    const threadIndex = targetEmailListObject.threads.findIndex(
-      (thread) => thread.id === threads[i]?.id
+    const activeThreads = threads[i]
+    if (activeThreads?.id) {
+      if (!existingThreads.has(activeThreads.id)) {
+        activeCount += 1
+        tempArray.push(activeThreads)
+      } else {
+        activeCount += 1
+        const existingThread = existingThreads.get(activeThreads.id)
+        if (existingThread) {
+          existingThreads.set(activeThreads.id, {
+            ...existingThread,
+            ...activeThreads,
+          })
+        }
+      }
+    }
+  }
+
+  if (activeCount === completeCount) {
+    const sortedThreads = sortThreads(
+      [...existingThreads.values()].concat(tempArray),
+      labels.includes(global.DRAFT_LABEL)
     )
 
-    // The object doesn't exist in the Redux store
-    if (threadIndex === -1) {
-      activeCount += 1
-      const newThread = threads[i]
-      if (newThread) {
-        tempArray.push(newThread)
-      }
+    // Here we create the final object that will be pushed to the Redux state
+    // If the timestamp and/or nextPageToken are history values, maintain the original version.
+    const newObject: IEmailListObject = {
+      labels,
+      threads: deduplicateItems(sortedThreads),
+      nextPageToken:
+        nextPageToken === global.HISTORY_NEXT_PAGETOKEN
+          ? targetEmailListObject.nextPageToken
+          : nextPageToken,
+      timestamp:
+        timestamp === global.HISTORY_TIME_STAMP
+          ? targetEmailListObject.timestamp
+          : timestamp,
+      q,
     }
-
-    // The object exists in the Redux store
-    if (threadIndex > -1) {
-      activeCount += 1
-      // TODO: Check if the object has been updated
-      let existingThread = targetEmailListObject.threads[threadIndex]
-      if (existingThread) {
-        existingThread = threads[i]
-      }
-    }
-
-    if (activeCount === completeCount) {
-      const sortedThreads = sortThreads(
-        targetEmailListObject.threads.concat(tempArray),
-        labels.includes(global.DRAFT_LABEL)
-      )
-
-      // Here we create the final object that will be pushed to the Redux state
-      // If the timestamp and/or nextPageToken are history values, maintain the original version.
-      // TODO: Verify if the removal of the nextPageToken on the object is detrimental to the behavior, e.g. will it be able to readd the nextPageToken once it does have one?
-      const newObject: IEmailListObject = {
-        labels,
-        threads: deduplicateItems(sortedThreads),
-        nextPageToken:
-          nextPageToken === global.HISTORY_NEXT_PAGETOKEN
-            ? targetEmailListObject.nextPageToken
-            : nextPageToken,
-        timestamp:
-          timestamp === global.HISTORY_TIME_STAMP
-            ? targetEmailListObject.timestamp
-            : timestamp,
-        q,
-      }
-      targetEmailListObject = newObject
-      if (arrayIndex && arrayIndex > -1) {
-        state.emailList[arrayIndex] = targetEmailListObject
-      } else {
-        state.searchList = targetEmailListObject
-      }
+    targetEmailListObject = newObject
+    if (arrayIndex && arrayIndex > -1) {
+      state.emailList[arrayIndex] = targetEmailListObject
+    } else {
+      state.searchList = targetEmailListObject
     }
   }
 }
 
-const handleEmailListChange = ({
-  state,
-  labels,
-  threads,
-  timestamp,
-  nextPageToken,
-  q,
-}: {
+interface IHandleEmailListChange {
   state: IEmailListState
   labels: Array<string> | undefined
   threads: Array<IEmailListThreadItem>
   timestamp: number | undefined
   nextPageToken?: undefined | string | null
   q?: string
-}) => {
+}
+
+export const handleEmailListChange = ({
+  state,
+  labels,
+  threads,
+  timestamp,
+  nextPageToken,
+  q,
+}: IHandleEmailListChange) => {
   // The flow can only work if there are labels to use
   if (labels) {
     // Find emailList sub-array index
@@ -541,54 +538,52 @@ export const loadEmailDetails =
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads) {
         if (threads.length > 0) {
-          const buffer: Promise<IEmailListThreadItem>[] = []
-          threads.forEach((thread) =>
-            // TODO: Alter all input to have the threadId as input
+          const buffer: Array<Promise<IEmailListThreadItem>> = []
+          for (const thread of threads) {
             buffer.push(threadApi({}).getThreadDetail(thread.id))
-          )
-          // TODO: Since the history api doesn't give back any other label information than Draft - we need to check for the original source and create it
+          }
           const resolvedThreads = await Promise.all(buffer)
           const onlyObjectThreads = resolvedThreads.filter(
             (thread) => typeof thread !== 'string'
           )
-          // If the object is only of length 1, then it could mean that it is an update from draft.
-          // If that is the case, attempt to find the original label id of the thread to store the object.
-          const lastMessage =
-            onlyObjectThreads[0]?.messages[
-              onlyObjectThreads[0].messages.length - 1
-            ]
-          if (
-            lastMessage &&
-            lastMessage.labelIds.includes(global.DRAFT_LABEL)
-          ) {
-            const { storageLabels } = getState().labels
-            const labelNames = onlyObjectThreads[0]?.messages[0]?.labelIds
-            if (labelNames) {
-              const legalLabels = onlyLegalLabelObjects({
-                storageLabels,
-                labelNames,
-              })
-              if (legalLabels.length > 0) {
-                legalLabels.forEach((label) =>
-                  dispatch(
-                    listAddEmailList({
-                      labels: label.id,
-                      threads: onlyObjectThreads,
-                      nextPageToken: nextPageToken ?? null,
-                    })
-                  )
-                )
+          if (onlyObjectThreads.length === 1) {
+            const lastMessage =
+              onlyObjectThreads[0]?.messages[
+                onlyObjectThreads[0].messages.length - 1
+              ]
+            if (
+              lastMessage &&
+              lastMessage.labelIds.includes(global.DRAFT_LABEL)
+            ) {
+              const { storageLabels } = getState().labels
+              const labelNames = onlyObjectThreads[0]?.messages[0]?.labelIds
+              if (labelNames) {
+                const legalLabels = onlyLegalLabelObjects({
+                  storageLabels,
+                  labelNames,
+                })
+                if (legalLabels.length > 0) {
+                  for (const label of legalLabels) {
+                    dispatch(
+                      listAddEmailList({
+                        labels: label.id,
+                        threads: onlyObjectThreads,
+                        nextPageToken: nextPageToken ?? null,
+                      })
+                    )
+                  }
+                }
               }
+            } else {
+              dispatch(
+                listAddEmailList({
+                  labels,
+                  threads: onlyObjectThreads,
+                  nextPageToken: nextPageToken ?? null,
+                })
+              )
+              dispatch(setLoadedInbox(labels))
             }
-          } else {
-            dispatch(
-              listAddEmailList({
-                labels,
-                threads: onlyObjectThreads,
-                nextPageToken: nextPageToken ?? null,
-              })
-            )
-            dispatch(setLoadedInbox(labels))
           }
           getState().utils.isLoading && dispatch(setIsLoading(false))
           getState().utils.isSilentLoading &&
