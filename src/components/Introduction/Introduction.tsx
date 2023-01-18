@@ -35,7 +35,6 @@ const Introduction = () => {
 
   const handleClose = () => {
     updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-    dispatch(setActiveModal(null))
   }
 
   const openKeyboardShortcuts = () => {
@@ -47,6 +46,7 @@ const Introduction = () => {
       open={activeModal === global.ACTIVE_MODAL_MAP.intro}
       modalTitle={DIALOG_HEADER}
       modalAriaLabel="introduction"
+      additionalOnClose={handleClose}
     >
       <>
         <S.InnerContent>
