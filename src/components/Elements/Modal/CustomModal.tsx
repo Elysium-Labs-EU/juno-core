@@ -82,7 +82,6 @@ const CustomDialog = <T extends (...args: any[]) => any>({
               if (open) {
                 if (additionalOnClose) {
                   additionalOnClose()
-                  return
                 }
                 dispatch(setActiveModal(null))
               }

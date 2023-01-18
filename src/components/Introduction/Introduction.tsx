@@ -35,7 +35,6 @@ const Introduction = () => {
 
   const handleClose = () => {
     updateSettingsLabel({ settingsLabelId, showIntroduction: false })
-    dispatch(setActiveModal(null))
   }
 
   const openKeyboardShortcuts = () => {
