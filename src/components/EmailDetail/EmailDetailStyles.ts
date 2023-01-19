@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components'
 
+import { breakPoint } from 'constants/themeConstants'
+
 interface IScroll {
   clientState: boolean
 }
@@ -112,6 +114,17 @@ export const DetailBase = styled.div`
   position: relative;
   display: flex;
   flex-direction: row;
+`
+
+export const OverviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    flex-direction: row;
+    max-width: calc(100vw - 340px);
+  }
 `
 
 export const DetailRow = styled.article`
@@ -282,8 +295,11 @@ export const ComposeWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  max-width: 50%;
-  margin-left: 40px;
+  order: -1;
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    order: 1;
+    max-width: 50%;
+  }
 `
 
 export const Spacer = styled.div`

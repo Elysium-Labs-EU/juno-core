@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
-import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
