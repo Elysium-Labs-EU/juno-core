@@ -121,6 +121,9 @@ workflows:
       - node/run:
           pkg-manager: yarn
           yarn-run: format
+      - node/run:
+          pkg-manager: yarn
+          yarn-run: test
       # - build
       #   # filters:
       #   #   branches:
