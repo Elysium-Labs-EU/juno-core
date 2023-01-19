@@ -1,9 +1,9 @@
-// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from 'constants/globalConstants'
 import type { IContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
+import isEqual from 'utils/isEqual/isEqual'
 
 import { recipientListTransform } from '../ComposeEmail'
 import type { IRecipientsList } from '../ComposeEmailTypes'
@@ -30,7 +30,7 @@ const ContactField = ({
     if (
       loadState === global.LOAD_STATE_MAP.loaded &&
       composeValue &&
-      !Object.is(composeValue, value)
+      !isEqual(composeValue, value)
     ) {
       setValue(composeValue)
     }

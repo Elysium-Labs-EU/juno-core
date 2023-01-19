@@ -309,7 +309,7 @@ export const emailListSlice = createSlice({
     setBaseEmailList: (state, { payload }: PayloadAction<TBaseEmailList>) => {
       state.emailList = payload
     },
-    listAddEmailList: (state, { payload }) => {
+    listAddEmailList: (state, { payload }: PayloadAction<IEmailListObject>) => {
       const { labels, threads, timestamp } = payload
       handleEmailListChange({ state, labels, threads, timestamp })
     },
@@ -566,7 +566,7 @@ export const loadEmailDetails =
                   for (const label of legalLabels) {
                     dispatch(
                       listAddEmailList({
-                        labels: label.id,
+                        labels: [label.id],
                         threads: onlyObjectThreads,
                         nextPageToken: nextPageToken ?? null,
                       })

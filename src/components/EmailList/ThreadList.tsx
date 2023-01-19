@@ -15,13 +15,13 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  */
 
 interface IThreadList {
-  threads: IEmailListThreadItem[]
   focusedItemIndex: number
-  setFocusedItemIndex: Dispatch<SetStateAction<number>>
-  showLabel?: boolean
-  showCheckbox?: boolean
   keySuffix: 'search' | 'emailList'
   searchOnClickHandeler?: (id: string) => void
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
+  showCheckbox?: boolean
+  showLabel?: boolean
+  threads: Array<IEmailListThreadItem>
 }
 
 const ThreadList = ({

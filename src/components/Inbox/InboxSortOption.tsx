@@ -24,7 +24,7 @@ import {
   selectIsLoading,
 } from 'store/utilsSlice'
 import labelURL from 'utils/createLabelURL'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 

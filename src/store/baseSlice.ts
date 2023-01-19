@@ -17,7 +17,7 @@ import createSettingsLabel from 'utils/settings/createSettingsLabel'
 import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
 
-import { IEmailListObject, TBaseEmailList } from './storeTypes/emailListTypes'
+import type { TBaseEmailList } from './storeTypes/emailListTypes'
 
 /* eslint-disable no-param-reassign */
 
@@ -41,7 +41,7 @@ export const baseSlice = createSlice({
   reducers: {
     setBaseLoaded: (
       state,
-      { payload }: PayloadAction<Pick<IBaseState, 'baseLoaded'>['baseLoaded']>
+      { payload }: PayloadAction<IBaseState['baseLoaded']>
     ) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
@@ -49,16 +49,11 @@ export const baseSlice = createSlice({
     },
     setIsAuthenticated: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IBaseState, 'isAuthenticated'>['isAuthenticated']>
+      { payload }: PayloadAction<IBaseState['isAuthenticated']>
     ) => {
       state.isAuthenticated = payload
     },
-    setProfile: (
-      state,
-      { payload }: PayloadAction<Pick<IBaseState, 'profile'>['profile']>
-    ) => {
+    setProfile: (state, { payload }: PayloadAction<IBaseState['profile']>) => {
       state.profile = payload
     },
   },
@@ -68,14 +63,13 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
 export const handleSettings =
-  (labels: IGoogleLabel[]): AppThunk =>
+  (labels: Array<IGoogleLabel>): AppThunk =>
   async (dispatch) => {
     const settingsLabel = findSettings(labels, dispatch)
     if (!settingsLabel) {
       createSettingsLabel(dispatch)
       return
     }
-    console.log('settingsLabel', settingsLabel)
     dispatch(setSettingsLabelId(settingsLabel.id))
     parseSettings(dispatch, settingsLabel)
   }

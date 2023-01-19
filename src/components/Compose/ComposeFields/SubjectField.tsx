@@ -1,10 +1,10 @@
-// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react'
 
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import useDebounce from 'hooks/useDebounce'
+import isEqual from 'utils/isEqual/isEqual'
 
 import * as S from '../ComposeStyles'
 import StyledTextField from './Generic/EmailInput/EmailInputStyles'
@@ -40,7 +40,7 @@ const SubjectField = ({
     if (
       debouncedValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !Object.is(composeValue, debouncedValue)
+      !isEqual(composeValue, debouncedValue)
     ) {
       const updateEventObject = {
         id: local.SUBJECT,

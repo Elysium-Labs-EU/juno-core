@@ -8,7 +8,7 @@ import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
  * @returns {number} the index of the threadList object in emailList that contains a label in labelIds, or -1 if no such threadList exists
  */
 
-interface IEmailListFilteredByLabel {
+export interface IEmailListFilteredByLabel {
   emailList: Array<IEmailListObject>
   labelIds: Array<string>
 }

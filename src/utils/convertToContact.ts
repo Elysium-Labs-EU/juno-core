@@ -1,5 +1,5 @@
 import { ME_LABEL } from 'constants/globalConstants'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
 
 const convertToMe = (header: string, emailAddress: string | undefined) => {
@@ -67,7 +67,7 @@ export function convertToContact(
 export function handleContactConversion(
   contactValue: string,
   emailAddress: string
-): IContact[] {
+): Array<IContact> {
   if (
     contactValue &&
     contactValue.length > 0 &&

@@ -14,7 +14,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
 import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import multipleIncludes from 'utils/multipleIncludes'
 
 import RenderEmailList from './RenderEmailList'
