@@ -1,8 +1,13 @@
 import Badge from '@mui/material/Badge'
 import styled from 'styled-components'
 
+import { breakPoint } from 'constants/themeConstants'
+
 export const Wrapper = styled.div`
-  margin-top: 40px;
+  margin-bottom: var(--spacing-7);
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    margin-top: var(--spacing-6);
+  }
 `
 
 export const AttachmentHeaderContainer = styled.div`

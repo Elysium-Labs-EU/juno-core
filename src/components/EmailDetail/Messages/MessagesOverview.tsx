@@ -162,7 +162,7 @@ const MessagesOverview = ({
   }
 
   return (
-    <>
+    <ES.OverviewContainer>
       <ES.DetailRow>
         <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
           <ES.DetailBase>
@@ -213,7 +213,7 @@ const MessagesOverview = ({
           isForwarding={isForwarding}
         />
       )}
-    </>
+    </ES.OverviewContainer>
   )
 }
 export default MessagesOverview

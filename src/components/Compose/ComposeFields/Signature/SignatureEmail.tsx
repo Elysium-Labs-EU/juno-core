@@ -116,7 +116,6 @@ const SignatureEmail = ({
               icon={<QiChevronDown />}
               title="Show signature options"
               onClick={handleOpen}
-              style={{ marginRight: '20px' }}
               ariaHaspopup="true"
               ariaControls={isOpen ? 'menu' : undefined}
               ariaExpanded={isOpen || undefined}
