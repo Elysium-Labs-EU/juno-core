@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { breakPoint, spacing } from 'constants/themeConstants'
+import { breakPoint } from 'constants/themeConstants'
 
 export const Wrapper = styled.div`
   align-items: flex-start;
@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
   /* text-align: right; */
   p {
     font-size: var(--small);
-    padding-left: ${spacing[1.5]};
+    padding-left: var(--spacing-1-5);
   }
 `
 

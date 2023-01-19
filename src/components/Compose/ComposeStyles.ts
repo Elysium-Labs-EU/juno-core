@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-import { breakPoint, spacing } from 'constants/themeConstants'
+import { breakPoint } from 'constants/themeConstants'
 
 interface IWrapper {
   tabbedView: boolean
@@ -21,6 +21,7 @@ export const Wrapper = styled.div<IWrapper>`
         position: sticky;
         top: 0px;
         margin-left: 100px;
+      }
     `}
 `
 
@@ -61,7 +62,7 @@ interface ILabel {
 
 export const Label = styled.div<ILabel>`
   font-size: var(--small);
-  margin-bottom: ${spacing['1']};
+  margin-bottom: var(--spacing-1);
 
   @media only screen and (min-width: ${breakPoint.xl}) {
     position: absolute;

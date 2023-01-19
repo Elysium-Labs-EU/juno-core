@@ -1,12 +1,12 @@
 import Badge from '@mui/material/Badge'
 import styled from 'styled-components'
 
-import { breakPoint, spacing } from 'constants/themeConstants'
+import { breakPoint } from 'constants/themeConstants'
 
 export const Wrapper = styled.div`
-  margin-bottom: ${spacing['7']};
+  margin-bottom: var(--spacing-7);
   @media only screen and (min-width: ${breakPoint.xl}) {
-    margin-top: ${spacing['6']};
+    margin-top: var(--spacing-6);
   }
 `
 
