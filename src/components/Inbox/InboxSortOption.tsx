@@ -28,7 +28,7 @@ import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 
-import InboxSortPopper from './InboxSortPopper'
+import InboxRefresh from './InboxRefreshOption'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -158,7 +158,11 @@ const InboxSortOption = () => {
         icon={<QiSort color="var(--color-black)" size={20} />}
         dataCy="inbox-sort-button"
       />
-      {!isFlexibleFlowActive && <InboxSortPopper />}
+      {/* TO-DO: Complete InboxSortPopper options dropdown */}
+      {/* {!isFlexibleFlowActive && <InboxSortPopper />} */}
+
+      {/* TO-DO: Delete if implmenting dropdown options */}
+      {!isFlexibleFlowActive && <InboxRefresh />}
     </>
   )
 }

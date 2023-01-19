@@ -8,7 +8,7 @@ import getUserAgent from 'utils/getUserAgent'
  */
 
 export const modifierKeyDisplay =
-  getUserAgent() === global.MAC_OS ? '⌘' : keyConstant.KEY_SPECIAL.control
+  getUserAgent() === global.MAC_OS ? '⌘' : 'CTRL'
 
 /**
  * @function setModifierKey
