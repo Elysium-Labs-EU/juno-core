@@ -1,18 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-// import contactApi from 'data/contactApi'
 import type { RootState } from 'store/store'
-// import type { IContact } from 'store/storeTypes/contactsTypes'
-// import { setSystemStatusUpdate } from 'store/utilsSlice'
+
+import type { IContactState } from './storeTypes/contactsTypes'
 
 /* eslint-disable no-param-reassign */
-
-interface IContactState {
-  allContacts: any
-  contactNextPageToken: string
-  contactsLoaded: string
-}
 
 const initialState: IContactState = Object.freeze({
   allContacts: [],
@@ -24,20 +17,26 @@ export const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
-    setAllContacts: (state, action) => {
+    setAllContacts: (state, { payload }) => {
       const uniqueContacts = [
         ...new Set(
-          [...state.allContacts, ...action.payload].map((contact) =>
+          [...state.allContacts, ...payload].map((contact) =>
             JSON.stringify(contact)
           )
         ),
       ].map((string) => JSON.parse(string))
       state.allContacts = uniqueContacts
     },
-    setContactsNextPageToken: (state, { payload }: PayloadAction<Pick<IContactState, 'contactNextPageToken'>['contactNextPageToken']>) => {
+    setContactsNextPageToken: (
+      state,
+      { payload }: PayloadAction<IContactState['contactNextPageToken']>
+    ) => {
       state.contactNextPageToken = payload
     },
-    setContactsLoaded: (state, { payload }: PayloadAction<Pick<IContactState, 'contactsLoaded'>['contactsLoaded']>) => {
+    setContactsLoaded: (
+      state,
+      { payload }: PayloadAction<IContactState['contactsLoaded']>
+    ) => {
       state.contactsLoaded = payload
     },
   },

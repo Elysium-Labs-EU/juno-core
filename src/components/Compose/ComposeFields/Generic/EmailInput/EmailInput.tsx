@@ -19,7 +19,7 @@ import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
 import StyledTextField from './EmailInputStyles'
-import {
+import type {
   IEmailInputProps,
   IFetchContacts,
   IHandleIncompleteInput,
@@ -43,19 +43,14 @@ const fetchContacts = async ({
       } = responseQueryContacts
 
       const mappedResults =
-        results && results.length > 0
-          ? results.map(
-              (contact: any): IContact => ({
-                name: Object.prototype.hasOwnProperty.call(
-                  contact.person,
-                  'names'
-                )
-                  ? contact.person.names[0].displayName
-                  : contact.person.emailAddresses[0].value,
-                emailAddress: contact.person.emailAddresses[0].value,
-              })
-            )
-          : []
+        results?.map(
+          (contact: any): IContact => ({
+            name: Object.prototype.hasOwnProperty.call(contact.person, 'names')
+              ? contact.person.names[0].displayName
+              : contact.person.emailAddresses[0].value,
+            emailAddress: contact.person.emailAddresses[0].value,
+          })
+        ) ?? []
 
       dispatch(setAllContacts(mappedResults))
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))

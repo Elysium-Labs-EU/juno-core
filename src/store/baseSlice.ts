@@ -17,6 +17,8 @@ import createSettingsLabel from 'utils/settings/createSettingsLabel'
 import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
 
+import type { TBaseEmailList } from './storeTypes/emailListTypes'
+
 /* eslint-disable no-param-reassign */
 
 const initialState: IBaseState = Object.freeze({
@@ -39,7 +41,7 @@ export const baseSlice = createSlice({
   reducers: {
     setBaseLoaded: (
       state,
-      { payload }: PayloadAction<Pick<IBaseState, 'baseLoaded'>['baseLoaded']>
+      { payload }: PayloadAction<IBaseState['baseLoaded']>
     ) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
@@ -47,16 +49,11 @@ export const baseSlice = createSlice({
     },
     setIsAuthenticated: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IBaseState, 'isAuthenticated'>['isAuthenticated']>
+      { payload }: PayloadAction<IBaseState['isAuthenticated']>
     ) => {
       state.isAuthenticated = payload
     },
-    setProfile: (
-      state,
-      { payload }: PayloadAction<Pick<IBaseState, 'profile'>['profile']>
-    ) => {
+    setProfile: (state, { payload }: PayloadAction<IBaseState['profile']>) => {
       state.profile = payload
     },
   },
@@ -66,7 +63,7 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
 export const handleSettings =
-  (labels: IGoogleLabel[]): AppThunk =>
+  (labels: Array<IGoogleLabel>): AppThunk =>
   async (dispatch) => {
     const settingsLabel = findSettings(labels, dispatch)
     if (!settingsLabel) {
@@ -95,15 +92,21 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
 const presetEmailList =
   (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
   (dispatch) => {
-    dispatch(
-      setBaseEmailList(
-        prefetchedBoxes.map((emailContainer) => ({
-          labels: [emailContainer[0]?.id],
-          threads: [],
+    const emailListBuffer = [] as TBaseEmailList
+
+    prefetchedBoxes.forEach((emailContainer) => {
+      const [firstEmailContainer] = emailContainer
+      if (firstEmailContainer) {
+        const presetEmailBox = {
+          labels: [firstEmailContainer?.id],
+          threads: [] as [],
           nextPageToken: null,
-        }))
-      )
-    )
+        }
+        emailListBuffer.push(presetEmailBox)
+      }
+    })
+
+    dispatch(setBaseEmailList(emailListBuffer))
   }
 
 /**
@@ -161,10 +164,11 @@ export const checkBase = (): AppThunk => async (dispatch) => {
             const checkArray = BASE_ARRAY.map((item) =>
               nameMapLabels.includes(item)
             )
-            checkArray.forEach(
-              (checkValue, index) =>
-                !checkValue && dispatch(createLabel(BASE_ARRAY[index]))
-            )
+            checkArray.forEach((checkValue, index) => {
+              const baseArrayItem = BASE_ARRAY[index]
+              if (!checkValue && baseArrayItem)
+                dispatch(createLabel(baseArrayItem))
+            })
 
             dispatch(finalizeBaseLoading(labels))
           } else {

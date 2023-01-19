@@ -1,4 +1,4 @@
-import { IDraftDetailObject } from '../store/storeTypes/draftsTypes'
+import type { IDraftDetailObject } from '../store/storeTypes/draftsTypes'
 
 /**
  * @function findDraftMessageInList
@@ -11,7 +11,7 @@ export default function findDraftMessageInList({
   draftList,
   target,
 }: {
-  draftList: IDraftDetailObject[]
+  draftList: Array<IDraftDetailObject>
   target: any
 }) {
   // Target can be composedEmail or message

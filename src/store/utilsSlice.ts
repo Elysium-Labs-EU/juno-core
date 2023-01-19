@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
-import { activateTodo } from 'components/ToDo/TodoFocusOption'
+import activateTodo from 'components/ToDo/activateTodo'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routesConstants'
@@ -62,19 +62,13 @@ export const utilsSlice = createSlice({
   reducers: {
     setActiveModal(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'activeModal'>['activeModal']>
+      { payload }: PayloadAction<IUtilsState['activeModal']>
     ) {
       state.activeModal = payload
     },
     setAlternateActions: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'alternateActions'>['alternateActions']
-      >
+      { payload }: PayloadAction<IUtilsState['alternateActions']>
     ) => {
       state.alternateActions = payload
     },
@@ -86,31 +80,25 @@ export const utilsSlice = createSlice({
     },
     setFlexibleFlow: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'isFlexibleFlowActive'>['isFlexibleFlowActive']
-      >
+      { payload }: PayloadAction<IUtilsState['isFlexibleFlowActive']>
     ) => {
       state.isFlexibleFlowActive = payload
     },
     setInSearch: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'inSearch'>['inSearch']>
+      { payload }: PayloadAction<IUtilsState['inSearch']>
     ) => {
       state.inSearch = payload
     },
     setIsLoading: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'isLoading'>['isLoading']>
+      { payload }: PayloadAction<IUtilsState['isLoading']>
     ) => {
       state.isLoading = payload
     },
     setIsProcessing: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isProcessing'>['isProcessing']>
+      { payload }: PayloadAction<IUtilsState['isProcessing']>
     ) => {
       state.isProcessing = payload
     },
@@ -132,17 +120,13 @@ export const utilsSlice = createSlice({
     },
     setIsSentryActive: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSentryActive'>['isSentryActive']>
+      { payload }: PayloadAction<IUtilsState['isSentryActive']>
     ) => {
       state.isSentryActive = payload
     },
     setIsSilentLoading: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSilentLoading'>['isSilentLoading']>
+      { payload }: PayloadAction<IUtilsState['isSilentLoading']>
     ) => {
       state.isSilentLoading = payload
     },
@@ -173,17 +157,13 @@ export const utilsSlice = createSlice({
     },
     setSettingsLabelId(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'settingsLabelId'>['settingsLabelId']>
+      { payload }: PayloadAction<IUtilsState['settingsLabelId']>
     ) {
       state.settingsLabelId = payload
     },
     setShowAvatar: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isAvatarVisible'>['isAvatarVisible']>
+      { payload }: PayloadAction<IUtilsState['isAvatarVisible']>
     ) => {
       state.isAvatarVisible = payload
     },
@@ -276,8 +256,11 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
       dispatch(push(RouteConstants.TODO))
       return
     }
-    dispatch(push(getRouteByLabelMap[foundLabel.name]))
-    return
+    const route = getRouteByLabelMap[foundLabel.name]
+    if (route) {
+      dispatch(push(route))
+      return
+    }
   }
   dispatch(push(RouteConstants.TODO))
 }
@@ -288,14 +271,10 @@ export const openEmail =
     const { labelIds, storageLabels } = getState().labels
 
     const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
-
+    const lastMessage = email?.messages[email.messages.length - 1]
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
+    if (lastMessage && onlyLegalLabels.includes(global.DRAFT_LABEL)) {
+      const messageId = lastMessage.id
       dispatch(openDraftEmail({ id, messageId }))
       return
     }
@@ -438,25 +417,30 @@ export const selectAllEmailsSender =
     const { labelIds } = getState().labels
 
     const currentEmailSender = getSenderFromList({ selectedEmails, emailList })
-
     const emailsFromSameSender = emailList[
       emailList.findIndex((list) => multipleIncludes(list.labels, labelIds))
-    ]?.threads.filter((email) =>
-      currentEmailSender.includes(
-        email.messages[email.messages.length - 1].payload.headers.from
+    ]?.threads.filter((email) => {
+      const lastMessageFromThread = email.messages[email.messages.length - 1]
+      if (lastMessageFromThread) {
+        return currentEmailSender.includes(
+          lastMessageFromThread.payload.headers.from
+        )
+      }
+      return undefined
+    })
+    if (emailsFromSameSender) {
+      dispatch(
+        setSelectedEmails(
+          emailsFromSameSender.map((thread) => ({
+            id: thread.id,
+            event: 'add',
+            labelIds,
+          }))
+        )
       )
-    )
-    dispatch(
-      setSelectedEmails(
-        emailsFromSameSender.map((thread) => ({
-          id: thread.id,
-          event: 'add',
-          labelIds,
-        }))
-      )
-    )
-    if (emailsFromSameSender.length > 0 && callback) {
-      dispatch(callback())
+      if (emailsFromSameSender.length > 0 && callback) {
+        dispatch(callback())
+      }
     }
   }
 
@@ -467,18 +451,19 @@ export const selectAllEmailsCurrentInbox =
     const { labelIds } = getState().labels
 
     const emailsFromCurrentInbox = emailList[activeEmailListIndex]?.threads
-
-    dispatch(
-      setSelectedEmails(
-        emailsFromCurrentInbox.map((thread) => ({
-          id: thread.id,
-          event: 'add',
-          labelIds,
-        }))
+    if (emailsFromCurrentInbox) {
+      dispatch(
+        setSelectedEmails(
+          emailsFromCurrentInbox.map((thread) => ({
+            id: thread.id,
+            event: 'add',
+            labelIds,
+          }))
+        )
       )
-    )
-    if (emailsFromCurrentInbox.length > 0 && callback) {
-      dispatch(callback())
+      if (emailsFromCurrentInbox.length > 0 && callback) {
+        dispatch(callback())
+      }
     }
   }
 

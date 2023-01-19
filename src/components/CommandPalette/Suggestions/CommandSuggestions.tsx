@@ -3,7 +3,11 @@ import { useLocation } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
-import { selectActiveEmailListIndex, selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+  selectSelectedEmails,
+} from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
@@ -30,7 +34,13 @@ const CommandPaletteSuggestions = ({
   const selectedEmails = useAppSelector(selectSelectedEmails)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
 
-  const currentEmailBoxHasEmails = useMemo(() => emailList[activeEmailListIndex].threads.length > 0, [emailList, activeEmailListIndex])
+  const currentEmailBoxHasEmails = useMemo(() => {
+    const threads = emailList?.[activeEmailListIndex]?.threads
+    if (threads) {
+      return threads.length > 0
+    }
+    return false
+  }, [emailList, activeEmailListIndex])
 
   const filteredItems = useMemo(() => {
     if (searchValue) {

@@ -2,7 +2,7 @@
 import {
   alternateActionsMap,
   AVAILABLE_SETTINGS,
-  fetchSizeMap,
+  emailFetchSizeMap,
   flexibleFlowMap,
   SETTINGS_DELIMITER,
   showAvatarMap,
@@ -45,7 +45,7 @@ export default function parseSettings(
         case 'FS20':
         case 'FS25':
         case 'FS30':
-          foundSettings.emailFetchSize = fetchSizeMap[value]
+          foundSettings.emailFetchSize = emailFetchSizeMap[value]
           break
         case 'FF0':
         case 'FF1':

@@ -24,7 +24,7 @@ import {
   selectIsLoading,
 } from 'store/utilsSlice'
 import labelURL from 'utils/createLabelURL'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 
@@ -111,7 +111,7 @@ const InboxSortOption = () => {
       return (
         isLoading ||
         activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex].threads.length === 0
+        emailList[activeEmailListIndex]?.threads.length === 0
       )
     }
     return isLoading || totalThreads === 0

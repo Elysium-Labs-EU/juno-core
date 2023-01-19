@@ -13,10 +13,15 @@ export default function useFetchThreadsTotalNumber(labelIds: string[]) {
   const fetchLabel = async (mounted: boolean) => {
     try {
       setLoadingState(global.LOAD_STATE_MAP.loading)
-      const response = await labelApi().fetchSingleLabel(labelIds[0])
-      if ('threadsTotal' in response) {
-        mounted && setTotalThreads(response.threadsTotal)
-        mounted && setLoadingState(global.LOAD_STATE_MAP.loaded)
+      const [firstLabelId] = labelIds
+      if (firstLabelId) {
+        const response = await labelApi().fetchSingleLabel(firstLabelId)
+        if ('threadsTotal' in response) {
+          mounted && setTotalThreads(response.threadsTotal)
+          mounted && setLoadingState(global.LOAD_STATE_MAP.loaded)
+        } else {
+          mounted && setLoadingState(global.LOAD_STATE_MAP.error)
+        }
       } else {
         mounted && setLoadingState(global.LOAD_STATE_MAP.error)
       }

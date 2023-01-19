@@ -10,10 +10,10 @@ import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
 
 interface IDownloadButtonMultiple {
-  filesObjectArray: {
+  filesObjectArray: Array<{
     id: string
-    files: IEmailMessagePayloadRaw[] | undefined
-  }[]
+    files: Array<IEmailMessagePayloadRaw> | undefined
+  }>
   isMainButton?: boolean
 }
 
@@ -99,7 +99,7 @@ const DownloadButtonMultiple = ({
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: response[0].message ?? global.NETWORK_ERROR,
+          message: response[0]?.message ?? global.NETWORK_ERROR,
         })
       )
     } catch (err) {

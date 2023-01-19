@@ -1,6 +1,8 @@
 import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
+import { useAppDispatch } from 'store/hooks'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
 import getRelevantMessage from './getRelevantMessage'
@@ -13,12 +15,7 @@ import getRelevantMessage from './getRelevantMessage'
  * @returns
  */
 
-const ForwardingComposer = ({
-  localThreadDetail,
-  selectedIndex,
-  messageOverviewListener,
-  isForwarding,
-}: {
+interface IForwardingComposer {
   localThreadDetail: IEmailListThreadItem
   selectedIndex: number | undefined
   messageOverviewListener: (
@@ -26,11 +23,33 @@ const ForwardingComposer = ({
     messageId?: string
   ) => void
   isForwarding: boolean
-}) => {
+}
+
+const ForwardingComposer = ({
+  localThreadDetail,
+  selectedIndex,
+  messageOverviewListener,
+  isForwarding,
+}: IForwardingComposer) => {
+  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
+
+  if (!relevantMessage) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Cannot open composer with relevant message',
+      })
+    )
+    return (
+      <ES.ComposeWrapper data-cy="forward-composer">
+        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+      </ES.ComposeWrapper>
+    )
+  }
 
   return (
     <ES.ComposeWrapper data-cy="forward-composer">

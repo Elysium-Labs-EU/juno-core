@@ -1,4 +1,4 @@
-import {
+import type {
   IEmailListObject,
   ISelectedEmail,
 } from 'store/storeTypes/emailListTypes'
@@ -27,9 +27,13 @@ export default function getSenderFromList({
     const specificThreadById = filteredEmailList.threads.filter((item) =>
       selectedEmails.selectedIds.includes(item.id)
     )
-    return specificThreadById.map(
-      (item) => item.messages[item.messages.length - 1].payload.headers.from
-    )
+    return specificThreadById.map((item) => {
+      const lastMessageInThread = item.messages[item.messages.length - 1]
+      if (lastMessageInThread) {
+        return lastMessageInThread.payload.headers.from
+      }
+      return undefined
+    })
   }
   return []
 }

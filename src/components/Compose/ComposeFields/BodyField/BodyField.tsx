@@ -12,7 +12,6 @@ import Text from '@tiptap/extension-text'
 import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
-// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { compareTwoStrings } from 'string-similarity'
@@ -21,6 +20,7 @@ import * as Compose from 'components/Compose/ComposeStyles'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import useDebounce from 'hooks/useDebounce'
+import isEqual from 'utils/isEqual/isEqual'
 import removeSignature from 'utils/removeSignature'
 
 import MenuBar from './BodyFieldMenubar'
@@ -33,6 +33,15 @@ import * as S from './BodyFieldStyles'
  * @returns {JSX.Element}
  */
 
+interface IBodyField {
+  composeValue?: string
+  autofocus?: boolean
+  hasInteracted: boolean
+  updateComposeEmail: (object: { id: string; value: string }) => void
+  loadState: string
+  setHasInteracted: Dispatch<SetStateAction<boolean>>
+}
+
 const BodyField = ({
   composeValue = undefined,
   autofocus = false,
@@ -40,14 +49,7 @@ const BodyField = ({
   loadState,
   hasInteracted,
   setHasInteracted,
-}: {
-  composeValue?: string
-  autofocus?: boolean
-  hasInteracted: boolean
-  updateComposeEmail: (object: { id: string; value: string }) => void
-  loadState: string
-  setHasInteracted: Dispatch<SetStateAction<boolean>>
-}) => {
+}: IBodyField) => {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedValue = useDebounce(value, 500)
@@ -116,7 +118,7 @@ const BodyField = ({
     if (
       debouncedValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !Object.is(composeValue, debouncedValue)
+      !isEqual(composeValue, debouncedValue)
     ) {
       const updateEventObject = { id: local.BODY, value: debouncedValue }
       updateComposeEmail(updateEventObject)

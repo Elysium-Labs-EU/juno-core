@@ -8,8 +8,8 @@ const StyledSnippet = styled.span`
   font-weight: 400;
 `
 
-const Snippet = ({ snippet }: { snippet: string }) => {
-  if (snippet.length > 0)
+const Snippet = ({ snippet }: { snippet: string | null }) => {
+  if (snippet && snippet.length > 0)
     return (
       <StyledSnippet data-testid="email-snippet">
         &nbsp;&nbsp;—&nbsp;&nbsp;

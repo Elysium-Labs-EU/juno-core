@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-// import isEmpty from 'lodash/isEmpty'
 import { push } from 'redux-first-history'
 
 import archiveMail from 'components/EmailOptions/ArchiveMail'
@@ -34,7 +33,7 @@ import {
   setIsSending,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import isEmpty from 'utils/isEmpty'
 import { prepareFormData } from 'utils/prepareMessage'
 
@@ -132,21 +131,27 @@ export const createUpdateDraft =
         ? await draftApi().createDrafts(formData)
         : await draftApi().updateDrafts({ id: localDraftDetails?.id, formData })
 
-      if (response && response?.status === 200) {
+      if (!response || response?.status !== 200) {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Cannot create or update draft. 123',
+          })
+        )
+      }
+      if (
+        response &&
+        response?.status === 200 &&
+        localDraftDetails?.message?.threadId
+      ) {
         // Remove the previous entry from Redux Emaillist. History will create a new one.
         dispatch(
           listRemoveItemDetailDraft({
-            threadId: localDraftDetails?.message?.threadId,
+            threadId: localDraftDetails.message.threadId,
           })
         )
         return response.data.data
       }
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Cannot create or update draft.',
-        })
-      )
       return null
     } catch (err) {
       dispatch(
@@ -229,8 +234,8 @@ export const openDraftEmail =
       // If Draft list is empty, fetch it first.
       if (isEmpty(getState().drafts.draftList)) {
         const { payload } = await dispatch(fetchDrafts())
-        if (payload?.drafts && payload.drafts.length > 0) {
-          const { drafts }: { drafts: IDraftDetailObject[] } = payload
+        if (payload?.drafts && payload?.drafts?.length > 0) {
+          const { drafts }: { drafts: Array<IDraftDetailObject> } = payload
           const getDraft = drafts.find(
             (draft) => draft.message.id === messageId
           )
@@ -405,11 +410,10 @@ export const sendComposedEmail =
             emailList,
             labelIds: [global.DRAFT_LABEL],
           })
-          if (staticIndexActiveEmailList > -1)
+          if (staticIndexActiveEmailList > -1 && localDraftDetails?.message?.id)
             dispatch(
               listRemoveItemDetail({
-                messageId: localDraftDetails?.message?.id,
-                staticIndexActiveEmailList,
+                threadId: localDraftDetails.message.id,
               })
             )
         } else {

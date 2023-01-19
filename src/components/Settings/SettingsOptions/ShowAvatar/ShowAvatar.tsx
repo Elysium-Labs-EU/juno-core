@@ -1,13 +1,12 @@
 import { FormControlLabel, Switch } from '@mui/material'
 
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectIsAvatarVisible,
   selectSettingsLabelId,
   setShowAvatar,
 } from 'store/utilsSlice'
-import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
-
 
 const SWITCH_LABEL = 'Show avatars'
 
@@ -20,17 +19,21 @@ const showAvatar = () => {
     if (!event.target.checked) {
       localStorage.setItem('showAvatar', 'false')
       dispatch(setShowAvatar(false))
-      updateSettingsLabel({
-        settingsLabelId,
-        isAvatarVisible: false,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          isAvatarVisible: false,
+        })
+      )
     } else {
       localStorage.setItem('showAvatar', 'true')
       dispatch(setShowAvatar(true))
-      updateSettingsLabel({
-        settingsLabelId,
-        isAvatarVisible: true,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          isAvatarVisible: true,
+        })
+      )
     }
   }
 

@@ -3,7 +3,6 @@ import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiJump } from 'images/svgIcons/quillIcons'
-import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -11,47 +10,15 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { AppDispatch } from 'store/store'
-import type {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
-import labelURL from 'utils/createLabelURL'
 import { findLabelByName } from 'utils/findLabel'
 import { setModifierKey } from 'utils/setModifierKey'
-import startSort from 'utils/startSort'
 
-export const activateTodo = ({
-  activeEmailListIndex,
-  dispatch,
-  emailList,
-  labelIds,
-  selectedEmails,
-}: {
-  activeEmailListIndex: number
-  dispatch: AppDispatch
-  emailList: Array<IEmailListObject>
-  labelIds: string[]
-  selectedEmails?: ISelectedEmail
-}) => {
-  const staticLabelURL = labelURL(labelIds)
-  if (staticLabelURL) {
-    startSort({
-      dispatch,
-      labelURL: staticLabelURL,
-      emailList,
-      selectedEmails,
-      activeEmailListIndex,
-    })
-    dispatch(setCoreStatus(global.CORE_STATUS_MAP.focused))
-    dispatch(setSessionViewIndex(0))
-  }
-}
+import activateTodo from './activateTodo'
 
 const TodoFocusOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -92,7 +59,7 @@ const TodoFocusOption = () => {
   const isDisabled =
     isLoading ||
     activeEmailListIndex < 0 ||
-    emailList[activeEmailListIndex].threads.length === 0
+    emailList[activeEmailListIndex]?.threads.length === 0
 
   return (
     <CustomAttentionButton

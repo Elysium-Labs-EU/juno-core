@@ -38,7 +38,7 @@ const SpecificEmailOptions = ({
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
   const activeMessage = threadDetail.messages[messageIndex]
-  const isTrash = activeMessage.labelIds.includes(global.TRASH_LABEL)
+  const isTrash = activeMessage?.labelIds.includes(global.TRASH_LABEL)
   const [open, setOpen] = useState<boolean>(false)
 
   const handleOpenChange = (isOpen: boolean) => {
@@ -51,7 +51,7 @@ const SpecificEmailOptions = ({
   }
 
   const thrashMessage = () => {
-    if (threadDetail.messages.length > 1) {
+    if (threadDetail.messages.length > 1 && activeMessage) {
       dispatch(
         updateMessageLabel({
           threadId: threadDetail.id,

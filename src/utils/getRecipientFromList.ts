@@ -1,4 +1,4 @@
-import {
+import type {
   IEmailListObject,
   ISelectedEmail,
 } from 'store/storeTypes/emailListTypes'
@@ -15,21 +15,28 @@ export default function getRecipientFromList({
   emailList,
 }: {
   selectedEmails: ISelectedEmail
-  emailList: IEmailListObject[]
+  emailList: Array<IEmailListObject>
 }) {
-  const filteredEmailList =
-    emailList[
-      emailList.findIndex((item) =>
-        multipleIncludes(item.labels, selectedEmails.labelIds)
-      )
-    ]
+  const { labelIds, selectedIds } = selectedEmails
+  if (!labelIds.length || !selectedIds.length) {
+    return []
+  }
+  const labelIdsSet = new Set(labelIds)
+  const selectedIdsSet = new Set(selectedIds)
+  const filteredEmailList = emailList.find(({ labels }) =>
+    labels.some(labelIdsSet.has)
+  )
   if (filteredEmailList) {
-    const specificThreadById = filteredEmailList.threads.filter((item) =>
-      selectedEmails.selectedIds.includes(item.id)
+    const specificThreadById = filteredEmailList.threads.filter(({ id }) =>
+      selectedIdsSet.has(id)
     )
-    return specificThreadById.map(
-      (item) => item.messages[item.messages.length - 1].payload.headers.to
-    )
+    return specificThreadById.map(({ messages }) => {
+      const lastMessageInThread = messages[messages.length - 1]
+      if (lastMessageInThread) {
+        return lastMessageInThread.payload.headers.to
+      }
+      return undefined
+    })
   }
   return []
 }

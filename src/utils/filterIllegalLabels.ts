@@ -8,11 +8,13 @@ import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
  */
 
 const filterIllegalLabels = (
-  labelIds: string[],
-  storageLabels: ILabelIdName[]
-) =>
-  labelIds.filter((label) =>
-    storageLabels.map((storageLabel) => storageLabel.id).includes(label)
+  labelIds: Array<string>,
+  storageLabels: Array<ILabelIdName>
+) => {
+  const storageLabelIds = new Set(
+    storageLabels.map((storageLabel) => storageLabel.id)
   )
+  return labelIds.filter((labelId) => storageLabelIds.has(labelId))
+}
 
 export default filterIllegalLabels

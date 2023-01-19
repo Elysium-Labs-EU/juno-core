@@ -14,6 +14,16 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  * @returns {JSX.Element}
  */
 
+interface IThreadList {
+  focusedItemIndex: number
+  keySuffix: 'search' | 'emailList'
+  searchOnClickHandeler?: (id: string) => void
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
+  showCheckbox?: boolean
+  showLabel?: boolean
+  threads: Array<IEmailListThreadItem>
+}
+
 const ThreadList = ({
   threads,
   focusedItemIndex,
@@ -22,15 +32,7 @@ const ThreadList = ({
   showCheckbox = true,
   keySuffix,
   searchOnClickHandeler = undefined,
-}: {
-  threads: IEmailListThreadItem[]
-  focusedItemIndex: number
-  setFocusedItemIndex: Dispatch<SetStateAction<number>>
-  showLabel?: boolean
-  showCheckbox?: boolean
-  keySuffix: 'search' | 'emailList'
-  searchOnClickHandeler?: (id: string) => void
-}) => (
+}: IThreadList) => (
   <>
     {threads.map((thread, index) => (
       <div

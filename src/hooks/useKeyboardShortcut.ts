@@ -9,19 +9,21 @@ import { useEffect } from 'react'
  * @param {string[]} refreshOnDeps - an optional array of dependencies to refresh the event listener
  */
 
+interface IUseKeyboardShortcut {
+  key: string
+  modifierKey?: string
+  handleEvent: () => void
+  isDisabled?: boolean
+  refreshOnDeps?: Array<any>
+}
+
 export default function useKeyboardShortcut({
   key,
   modifierKey,
   handleEvent,
   isDisabled = false,
   refreshOnDeps = undefined,
-}: {
-  key: string
-  modifierKey?: string
-  handleEvent: () => void
-  isDisabled?: boolean
-  refreshOnDeps?: Array<any>
-}) {
+}: IUseKeyboardShortcut) {
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (isDisabled) return

@@ -1,5 +1,13 @@
-import { IContact } from 'store/storeTypes/contactsTypes'
+import { ME_LABEL } from 'constants/globalConstants'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
+
+const convertToMe = (header: string, emailAddress: string | undefined) => {
+  if (emailAddress && header.includes(emailAddress)) {
+    return ME_LABEL
+  }
+  return null
+}
 
 /**
  * @function convertToContact
@@ -7,24 +15,47 @@ import { IContact } from 'store/storeTypes/contactsTypes'
  * @returns - returns a Contact object
  */
 
-export function convertToContact(data: string): IContact {
+export function convertToContact(
+  data: string,
+  emailAddress?: string
+): IContact {
   const splitted = data.split('<')
-
-  if (splitted.length > 1) {
-    const cleanUpName: string = splitted[0].trim().replace(/(")+/g, '')
-    const cleanUpEmailAddress: string = splitted[1]
-      .substring(0, splitted[1].length - 1)
+  const [first, second] = splitted
+  if (splitted.length > 1 && first && second) {
+    const cleanUpName: string = first.trim().replace(/(")+/g, '')
+    const cleanUpEmailAddress: string = second
+      .substring(0, second.length - 1)
       .replace(/(")+/g, '')
 
     if (cleanUpName.length > 1) {
-      return { name: cleanUpName, emailAddress: cleanUpEmailAddress }
+      return {
+        name: convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpName,
+        emailAddress: cleanUpEmailAddress,
+      }
     }
 
-    return { name: cleanUpEmailAddress, emailAddress: cleanUpEmailAddress }
+    return {
+      name:
+        convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpEmailAddress,
+      emailAddress: cleanUpEmailAddress,
+    }
   }
 
-  splitted[0].replace(/(")+/g, '')
-  return { name: splitted[0], emailAddress: splitted[0] }
+  if (first) {
+    first.replace(/(")+/g, '')
+    return {
+      name: convertToMe(first, emailAddress) ?? first,
+      emailAddress: first,
+    }
+  }
+  if (second) {
+    second.replace(/(")+/g, '')
+    return {
+      name: convertToMe(second, emailAddress) ?? second,
+      emailAddress: second,
+    }
+  }
+  return { name: '', emailAddress: '' }
 }
 
 /**
@@ -33,13 +64,18 @@ export function convertToContact(data: string): IContact {
  * @returns an array of contact objects or an empty array
  */
 
-export function handleContactConversion(contactValue: string): IContact[] {
+export function handleContactConversion(
+  contactValue: string,
+  emailAddress: string
+): Array<IContact> {
   if (
     contactValue &&
     contactValue.length > 0 &&
     typeof contactValue === 'string'
   ) {
-    return contactValue.split(',').map((item) => convertToContact(item))
+    return contactValue
+      .split(',')
+      .map((item) => convertToContact(item, emailAddress))
   }
   return []
 }

@@ -37,6 +37,7 @@ import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
+import isEqual from 'utils/isEqual/isEqual'
 import { setModifierKey } from 'utils/setModifierKey'
 
 import type { IRecipientsList } from './ComposeEmailTypes'
@@ -67,7 +68,12 @@ const isIEmailAttachmentTypeArray = (
 ): value is IEmailAttachmentType[] =>
   Array.isArray(value) &&
   value.every(
-    (item) => 'id' in item && 'name' in item && 'size' in item && 'type' in item
+    (item) =>
+      'body' in item &&
+      'filename' in item &&
+      'headers' in item &&
+      'mimeType' in item &&
+      'partId' in item
   )
 
 // Props are coming from ReplyComposer or ForwardComposer
@@ -151,7 +157,6 @@ const ComposeEmail = ({
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
-    let mounted = true
     const storedDraftDetails = findDraftMessageInList({
       draftList,
       target: composedEmail,
@@ -159,7 +164,7 @@ const ComposeEmail = ({
     // For the first time running
     if (
       storedDraftDetails &&
-      !Object.is(localDraftDetails, storedDraftDetails) &&
+      !isEqual(localDraftDetails, storedDraftDetails) &&
       !snapshotComposeEmailRef.current
     ) {
       // Attempt to use the fetched draft object it from the draftList Redux store.
@@ -169,7 +174,7 @@ const ComposeEmail = ({
     } else if (
       composedEmail &&
       userInteractedRef.current &&
-      !Object.is(snapshotComposeEmailRef.current, composedEmail)
+      !isEqual(snapshotComposeEmailRef.current, composedEmail)
     ) {
       snapshotComposeEmailRef.current = composedEmail
       // If the user is interacting with the draft, send an update request and set the response as the local state
@@ -177,14 +182,11 @@ const ComposeEmail = ({
         const response: IDraftDetailObject = await dispatch(
           createUpdateDraft({ composedEmail, localDraftDetails })
         )
-        if (response && mounted) {
+        if (response) {
           setLocalDraftDetails(response)
         }
       }
       asyncDispatchAction()
-    }
-    return () => {
-      mounted = false
     }
   }, [composedEmail, localDraftDetails])
 
@@ -342,7 +344,7 @@ const ComposeEmail = ({
         updateComposeEmail={updateComposedEmail}
       />
     ),
-    [composedEmail, loadState, hasInteracted, updateComposedEmail]
+    [composedEmail, loadState, hasInteracted]
   )
 
   const memoizedSignatureField = useMemo(

@@ -19,13 +19,13 @@ interface IEmailDetailBody {
   // threadDetailBody: IEmailMessagePayload
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-  setBlockedTrackers?: Dispatch<SetStateAction<string[] | []>>
+  setBlockedTrackers?: Dispatch<SetStateAction<Array<string> | Array<any>>>
 }
 
 interface IBodyState {
   emailHTML: string
-  emailFileHTML: any[]
-  removedTrackers: string[] | []
+  emailFileHTML: Array<any>
+  removedTrackers: Array<string> | Array<any>
 }
 
 /**

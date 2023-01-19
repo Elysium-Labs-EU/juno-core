@@ -4,12 +4,12 @@ import StrictFlow from 'components/Settings/General/StrictFlow/StrictFlow'
 import * as global from 'constants/globalConstants'
 import { QiArrowRight, QiCommand } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectActiveModal,
   selectSettingsLabelId,
   setActiveModal,
 } from 'store/utilsSlice'
-import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
 import * as S from './IntroductionStyles'
 
@@ -34,7 +34,9 @@ const Introduction = () => {
   const dispatch = useAppDispatch()
 
   const handleClose = () => {
-    updateSettingsLabel({ settingsLabelId, showIntroduction: false })
+    dispatch(
+      updateSettingsLabel({ settingsLabelId, showIntroduction: 'false' })
+    )
   }
 
   const openKeyboardShortcuts = () => {
