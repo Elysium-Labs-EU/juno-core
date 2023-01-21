@@ -42,6 +42,15 @@ export const DialogTitle = S.StyledTitle
 export const DialogDescription = S.StyledDescription
 export const DialogClose = DialogPrimitive.Close
 
+interface ICustomDialog<T> {
+  children: JSX.Element
+  modalAriaLabel: string
+  modalTitle: string
+  open: boolean
+  subTitle?: JSX.Element
+  additionalOnClose?: T
+}
+
 const CustomDialog = <T extends (...args: any[]) => any>({
   children,
   modalAriaLabel,
@@ -49,14 +58,7 @@ const CustomDialog = <T extends (...args: any[]) => any>({
   open,
   subTitle = undefined,
   additionalOnClose = undefined,
-}: {
-  children: JSX.Element
-  modalAriaLabel: string
-  modalTitle: string
-  open: boolean
-  subTitle?: JSX.Element
-  additionalOnClose?: T
-}) => {
+}: ICustomDialog<T>) => {
   const dispatch = useAppDispatch()
 
   return (
