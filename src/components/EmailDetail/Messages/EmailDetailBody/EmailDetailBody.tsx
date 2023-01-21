@@ -12,7 +12,7 @@ import handleEmailLink from 'utils/handleEmailLink'
 import openLinkInNewTab from 'utils/openLinkInNewTab'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 
-import Wrapper from './EmailDetailBodyStyles'
+import { Wrapper, ShadowStyles } from './EmailDetailBodyStyles'
 
 interface IEmailDetailBody {
   threadDetailBody: any
@@ -75,7 +75,9 @@ const ShadowBody = ({
 
   return (
     <root.div ref={callbackRef}>
-      {sanitizeAndParseHtmlContent(bodyState.emailHTML)}
+      <ShadowStyles>
+        {sanitizeAndParseHtmlContent(bodyState.emailHTML)}
+      </ShadowStyles>
     </root.div>
   )
 }
@@ -133,7 +135,10 @@ const EmailDetailBody = ({
                 key={`${item.filename + itemIdx}`}
                 src={`data:${item.mimeType};base64,${item.decodedB64}`}
                 alt={item?.filename ?? 'embedded image'}
-                style={{ maxWidth: '100%', borderRadius: '5px' }}
+                style={{
+                  maxWidth: '100%',
+                  borderRadius: '5px',
+                }}
               />
             )
         )}

@@ -69,10 +69,10 @@ export const DraftHeaderControls = styled.div`
 `
 
 export const EmailOptionsContainer = styled.div<IEmailDetail>`
-  position: relative;
   min-height: 200px;
-  padding: 30px;
-  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
+  width: 140px;
+  margin-right: var(--spacing-3);
+  margin-left: var(--spacing-2);
 `
 
 export const EmailOptionsPlaceholder = styled.div`
@@ -117,6 +117,7 @@ export const DetailBase = styled.div`
 `
 
 export const OverviewContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   margin-left: auto;
@@ -139,16 +140,16 @@ export const CardFullWidth = styled.div`
 `
 
 export const EmailDetailContainer = styled.div<IEmailDetail>`
-  width: ${({ tabbedView }) => (tabbedView ? '100%' : '100vw')};
-  min-width: ${({ tabbedView }) => (tabbedView ? '665px' : '300px')};
-  max-width: min(100vw - 340px, 860px);
-  /* padding-bottom: 320px; */
+  width: 100%;
   margin-bottom: 20px;
   overflow: scroll;
   scrollbar-width: none;
   transition: all 0.2s ease-in-out;
-  left: ${({ tabbedView }) => (tabbedView ? '0' : '75px')};
-  position: relative;
+  margin-left: var(--spacing-3);
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    width: 100vw;
+    max-width: min(100vw - 340px, 860px);
+  }
 
   &::-webkit-scrollbar {
     display: none; /* for Chrome, Safari, and Opera */

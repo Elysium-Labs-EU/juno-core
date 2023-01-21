@@ -46,9 +46,16 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   html {
-    box-sizing: border-box;
-    font-size: 16px;
-  } 
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  }
+  
+  *, *:before, *:after {
+  -webkit-box-sizing: inherit;
+  -moz-box-sizing: inherit;
+  box-sizing: inherit;
+  }
   
   body {
     -webkit-font-smoothing: antialiased !important;
