@@ -92,6 +92,7 @@ const InboxRefresh = ({
           <MdRefresh size={20} />
         </RotatingIcon>
       }
+      suppressed
     />
   )
 }

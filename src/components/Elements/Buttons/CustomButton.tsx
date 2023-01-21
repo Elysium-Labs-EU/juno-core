@@ -45,7 +45,6 @@ const Button = styled.button<IButton>`
   vertical-align: middle;
 
   &:hover {
-    border-color: var(--color-neutral-600);
     box-shadow: (--box-shadow-low);
     color: var(--color-black);
   }
