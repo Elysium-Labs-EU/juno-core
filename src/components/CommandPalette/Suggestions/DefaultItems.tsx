@@ -27,17 +27,17 @@ import {
 import type { IJsonStructure } from '../commandPaletteUtils'
 
 interface IDefaultItems {
+  currentEmailBoxHasEmails: boolean
   dispatch: AppDispatch
   isFlexibleFlowActive: boolean
   location: Location
-  currentEmailBoxHasEmails: boolean
 }
 
 export default function defaultItems({
+  currentEmailBoxHasEmails,
   dispatch,
   isFlexibleFlowActive,
   location,
-  currentEmailBoxHasEmails,
 }: IDefaultItems): Array<IJsonStructure> {
   const isEmailDetailPage = location.pathname.startsWith('/mail/')
   const isDraftsPage = location.pathname.startsWith(RoutesConstants.DRAFTS)
@@ -46,6 +46,7 @@ export default function defaultItems({
   const isComposePage =
     location.pathname.startsWith(RoutesConstants.COMPOSE_EMAIL) ||
     location.pathname.startsWith('/compose')
+
   return [
     {
       heading: 'Suggestions',
