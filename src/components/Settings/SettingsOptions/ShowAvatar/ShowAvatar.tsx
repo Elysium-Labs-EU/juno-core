@@ -22,7 +22,7 @@ const showAvatar = () => {
       dispatch(
         updateSettingsLabel({
           settingsLabelId,
-          isAvatarVisible: false,
+          isAvatarVisible: 'false',
         })
       )
     } else {
@@ -31,7 +31,7 @@ const showAvatar = () => {
       dispatch(
         updateSettingsLabel({
           settingsLabelId,
-          isAvatarVisible: true,
+          isAvatarVisible: 'true',
         })
       )
     }
