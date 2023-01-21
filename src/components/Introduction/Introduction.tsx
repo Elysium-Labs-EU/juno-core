@@ -74,6 +74,10 @@ const Introduction = () => {
             label={CONFIRM_BUTTON}
             icon={<QiArrowRight />}
             title="Close Introduction"
+            style={{
+              backgroundColor: 'var(--color-black)',
+              color: 'var(--color-white)',
+            }}
           />
         </S.ButtonContainer>
       </>
