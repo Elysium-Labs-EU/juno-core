@@ -1,5 +1,6 @@
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
+import { HEADER_SPAM } from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -9,8 +10,6 @@ import * as GS from 'styles/globalStyles'
 import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
 
 import SpamClearOption from './SpamClearOption'
-
-const SPAM_HEADER = 'Spam'
 
 const SpamHeader = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -23,7 +22,7 @@ const SpamHeader = () => {
           <S.PageTitle
             title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
           >
-            {SPAM_HEADER}
+            {HEADER_SPAM}
           </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />

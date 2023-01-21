@@ -1,6 +1,6 @@
 import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
-import * as local from 'constants/draftConstants'
+import { HEADER_DRAFTS } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
@@ -9,7 +9,7 @@ const DraftEmail = () => {
 
   return (
     <>
-      <Seo title={local.DRAFT_HEADER} />
+      <Seo title={HEADER_DRAFTS} />
       <AnimatedMountUnmount>
         <EmailList />
       </AnimatedMountUnmount>

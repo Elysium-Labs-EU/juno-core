@@ -82,6 +82,37 @@ const EmailDetailOptions = ({
     return null
   }, [threadDetail, storageLabels])
 
+  const memoizedTrashArchiveOption = useMemo(() => {
+    const lastMessageLabels =
+      threadDetail.messages[threadDetail.messages.length - 1]?.labelIds
+    if (lastMessageLabels?.includes(global.TRASH_LABEL)) {
+      return null
+    }
+    return staticEmailLabels.length > 0 ? (
+      <EmailDetailOptionStacker
+        firstOption={
+          <ArchiveOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+        }
+        secondOption={
+          <DeleteOption
+            threadId={threadDetail.id}
+            icon={<QiFolderTrash size={ICON_SIZE} />}
+            suppressed
+            noArchive
+          />
+        }
+        prioritizeSecondOption={alternateActions}
+      />
+    ) : (
+      <DeleteOption
+        threadId={threadDetail.id}
+        icon={<QiFolderTrash size={ICON_SIZE} />}
+        suppressed
+        noArchive
+      />
+    )
+  }, [threadDetail, storageLabels])
+
   return (
     <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
       <S.StickyOptions>
@@ -89,32 +120,7 @@ const EmailDetailOptions = ({
           {memoizedReplyOption}
           {memoizedForwardOption}
           {memoizedToDoOption}
-          {staticEmailLabels.length > 0 ? (
-            <EmailDetailOptionStacker
-              firstOption={
-                <ArchiveOption
-                  threadDetail={threadDetail}
-                  iconSize={ICON_SIZE}
-                />
-              }
-              secondOption={
-                <DeleteOption
-                  threadId={threadDetail.id}
-                  icon={<QiFolderTrash size={ICON_SIZE} />}
-                  suppressed
-                  noArchive
-                />
-              }
-              prioritizeSecondOption={alternateActions}
-            />
-          ) : (
-            <DeleteOption
-              threadId={threadDetail.id}
-              icon={<QiFolderTrash size={ICON_SIZE} />}
-              suppressed
-              noArchive
-            />
-          )}
+          {memoizedTrashArchiveOption}
           {(coreStatus === global.CORE_STATUS_MAP.focused ||
             coreStatus === global.CORE_STATUS_MAP.sorting) && (
             <SkipOption iconSize={ICON_SIZE} />

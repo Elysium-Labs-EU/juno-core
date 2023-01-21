@@ -26,25 +26,32 @@ import {
 
 import type { IJsonStructure } from '../commandPaletteUtils'
 
+interface IDefaultItems {
+  dispatch: AppDispatch
+  isFlexibleFlowActive: boolean
+  location: Location
+  currentEmailBoxHasEmails: boolean
+}
+
 export default function defaultItems({
   dispatch,
   isFlexibleFlowActive,
   location,
   currentEmailBoxHasEmails,
-}: {
-  dispatch: AppDispatch
-  isFlexibleFlowActive: boolean
-  location: Location
-  currentEmailBoxHasEmails: boolean
-}): IJsonStructure[] {
+}: IDefaultItems): Array<IJsonStructure> {
   const isEmailDetailPage = location.pathname.startsWith('/mail/')
-  const isDraftsPage = location.pathname.startsWith('/drafts')
+  const isDraftsPage = location.pathname.startsWith(RoutesConstants.DRAFTS)
+  const isArchivePage = location.pathname.startsWith(RoutesConstants.ARCHIVE)
+  const isTrashPage = location.pathname.startsWith(RoutesConstants.TRASH)
   return [
     {
       heading: 'Suggestions',
       id: 'suggestions',
       items: [
-        !isDraftsPage && currentEmailBoxHasEmails && !isEmailDetailPage
+        !isDraftsPage &&
+        currentEmailBoxHasEmails &&
+        !isEmailDetailPage &&
+        !isArchivePage
           ? {
               id: 'archive-all-current-box',
               children: `Archive all loaded emails of ${
@@ -55,7 +62,10 @@ export default function defaultItems({
                 dispatch(selectAllEmailsCurrentInbox(archiveAllEmailCMDK)),
             }
           : undefined,
-        !isEmailDetailPage && currentEmailBoxHasEmails && !isDraftsPage
+        !isEmailDetailPage &&
+        currentEmailBoxHasEmails &&
+        !isDraftsPage &&
+        !isTrashPage
           ? {
               id: 'delete-all-current-box',
               children: `Delete all loaded emails of ${
@@ -77,15 +87,6 @@ export default function defaultItems({
                 dispatch(selectAllEmailsCurrentInbox(discardAllEmailCMDK)),
             }
           : undefined,
-        location.pathname !== RoutesConstants.TODO
-          ? {
-              id: 'to-do',
-              children: 'To Do',
-              icon: <QiToDo />,
-              onClick: () => dispatch(navigateTo(RoutesConstants.TODO)),
-              type: 'Link',
-            }
-          : undefined,
         isEmailDetailPage || !currentEmailBoxHasEmails
           ? undefined
           : {
@@ -96,6 +97,15 @@ export default function defaultItems({
               icon: <QiCheckmarkDouble />,
               onClick: () => dispatch(selectAllEmailsCurrentInbox()),
             },
+        location.pathname !== RoutesConstants.TODO
+          ? {
+              id: 'to-do',
+              children: 'To Do',
+              icon: <QiToDo />,
+              onClick: () => dispatch(navigateTo(RoutesConstants.TODO)),
+              type: 'Link',
+            }
+          : undefined,
         location.pathname !== RoutesConstants.INBOX && isFlexibleFlowActive
           ? {
               id: 'inbox',

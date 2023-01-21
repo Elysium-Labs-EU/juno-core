@@ -1,7 +1,7 @@
 import InboxSortOption from 'components/Inbox/InboxSortOption'
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
-import {HEADER_TODO} from 'constants/globalConstants'
+import { HEADER_TODO } from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
