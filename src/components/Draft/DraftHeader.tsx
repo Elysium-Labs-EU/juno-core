@@ -1,6 +1,6 @@
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
-import * as local from 'constants/draftConstants'
+import { HEADER_DRAFTS } from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -20,7 +20,7 @@ const InboxHeader = () => {
           <S.PageTitle
             title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
           >
-            {local.DRAFT_HEADER}
+            {HEADER_DRAFTS}
           </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />

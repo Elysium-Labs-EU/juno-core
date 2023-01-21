@@ -12,7 +12,12 @@ const filterTrashMessages = (
   thread: IEmailListThreadItem | undefined | null,
   labelIds: Array<string>
 ) => {
-  if (!thread || labelIds.includes(global.SEARCH_LABEL)) return thread
+  if (
+    !thread ||
+    labelIds.includes(global.SEARCH_LABEL) ||
+    labelIds.includes(global.TRASH_LABEL)
+  )
+    return thread
 
   const threadMessages = thread.messages.filter(
     (m) => !m.labelIds.includes(global.TRASH_LABEL)

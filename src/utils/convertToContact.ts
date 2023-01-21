@@ -10,9 +10,10 @@ const convertToMe = (header: string, emailAddress: string | undefined) => {
 }
 
 /**
- * @function convertToContact
- * @param data - takes in a string, a potential email address, coming from the email list item.
- * @returns - returns a Contact object
+ * Converts a string of contact data into an IContact object.
+ * @param {string} data - A string of contact data.
+ * @param {string} [emailAddress] - The email address of the current user.
+ * @returns {IContact} - An IContact object containing the contact's name and email address.
  */
 
 export function convertToContact(
@@ -59,14 +60,15 @@ export function convertToContact(
 }
 
 /**
- * @function handleContactConversion
- * @param contactValue - takes in a raw string an parses it
- * @returns an array of contact objects or an empty array
+ * Converts a string of contacts into an array of IContact objects.
+ * @param {string} contactValue - A string of contacts separated by commas.
+ * @param {string} emailAddress - The email address of the current user.
+ * @returns {Array<IContact>} - An array of IContact objects.
  */
 
 export function handleContactConversion(
   contactValue: string,
-  emailAddress: string
+  emailAddress?: string
 ): Array<IContact> {
   if (
     contactValue &&

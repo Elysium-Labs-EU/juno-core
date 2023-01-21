@@ -1,16 +1,15 @@
 import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
+import { HEADER_ARCHIVE } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 import AnimatedMountUnmount from 'utils/animatedMountUnmount'
-
-const ARCHIVE_HEADER = 'Archive'
 
 const Archive = () => {
   useSetCurrentLabel()
 
   return (
     <>
-      <Seo title={ARCHIVE_HEADER} />
+      <Seo title={HEADER_ARCHIVE} />
       <AnimatedMountUnmount>
         <EmailList />
       </AnimatedMountUnmount>

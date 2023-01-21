@@ -34,7 +34,7 @@ const NavigationMore = () => {
       items: [
         {
           id: 'draft-navigation',
-          title: 'Drafts',
+          title: global.HEADER_DRAFTS,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.DRAFTS))
@@ -42,7 +42,7 @@ const NavigationMore = () => {
         },
         {
           id: 'sent-navigation',
-          title: 'Sent',
+          title: global.HEADER_SENT,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.SENT))
@@ -50,10 +50,18 @@ const NavigationMore = () => {
         },
         {
           id: 'archive-navigation',
-          title: 'Archive',
+          title: global.HEADER_ARCHIVE,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.ARCHIVE))
+          },
+        },
+        {
+          id: 'delete-navigation',
+          title: global.HEADER_TRASH,
+          onClick: () => {
+            dispatch(setActiveModal(null))
+            dispatch(push(Routes.TRASH))
           },
         },
       ],
