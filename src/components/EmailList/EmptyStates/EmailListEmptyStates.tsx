@@ -33,6 +33,20 @@ const emptyStateMap: { [key: string]: JSX.Element } = {
       SVG={local.SENT_SVG}
     />
   ),
+  '/archive': (
+    <EmptyStateTemplate
+      header={local.SENT_HEADER}
+      paragraph={local.SENT_PARAGRAPH}
+      SVG={local.SENT_SVG}
+    />
+  ),
+  '/delete': (
+    <EmptyStateTemplate
+      header={local.SENT_HEADER}
+      paragraph={local.SENT_PARAGRAPH}
+      SVG={local.SENT_SVG}
+    />
+  ),
   default: <p>Nothing to see here</p>,
 }
 
