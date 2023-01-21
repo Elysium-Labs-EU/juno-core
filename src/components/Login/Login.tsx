@@ -69,7 +69,7 @@ const Login = () => {
             >
               By Elysium Labs
             </S.StyledLink>
-            <GS.Span muted>Private Beta</GS.Span>
+            <GS.Span muted>{global.BETA_VERSION}</GS.Span>
           </S.SubHeaderContainer>
         </S.Header>
         <S.LoginContainer>

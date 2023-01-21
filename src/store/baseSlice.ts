@@ -12,7 +12,6 @@ import type { AppThunk, RootState } from 'store/store'
 import type { IBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
 import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
-import multipleIncludes from 'utils/multipleIncludes'
 import createSettingsLabel from 'utils/settings/createSettingsLabel'
 import findSettings from 'utils/settings/findSettings'
 import parseSettings from 'utils/settings/parseSettings'
@@ -142,53 +141,53 @@ const finalizeBaseLoading =
 
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
-    // TODO: TYPE THE DATA
     const userResponse = await userApi().fetchUser()
-    const sendAsResponse = await settingsApi().getSendAs(
-      userResponse.data.emailAddress
-    )
-    const labelResponse = await labelApi().fetchLabels()
-    const { labels } = labelResponse
-    if (userResponse?.data && userResponse?.status === 200) {
-      if (sendAsResponse?.data && sendAsResponse?.status === 200) {
-        dispatch(
-          setProfile({
-            signature: sendAsResponse?.data?.signature ?? '',
-            ...userResponse.data,
-          })
-        )
-        if (Array.isArray(labels) && labels.length > 0) {
-          // TODO: Check when this is triggered and write an explanation
-          const nameMapLabels = labels.map((label: IGoogleLabel) => label.name)
-          if (!multipleIncludes(BASE_ARRAY, nameMapLabels)) {
-            const checkArray = BASE_ARRAY.map((item) =>
-              nameMapLabels.includes(item)
-            )
-            checkArray.forEach((checkValue, index) => {
-              const baseArrayItem = BASE_ARRAY[index]
-              if (!checkValue && baseArrayItem)
-                dispatch(createLabel(baseArrayItem))
-            })
-
-            dispatch(finalizeBaseLoading(labels))
-          } else {
-            dispatch(finalizeBaseLoading(labels))
-          }
-        } else {
-          dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: `Network Error. ${labelResponse}. Please try again later.`,
-            })
-          )
-        }
-      } else {
+    if (userResponse?.data && userResponse.status === 200) {
+      const [sendAsResponse, labelResponse] = await Promise.allSettled([
+        settingsApi().getSendAs(userResponse.data.emailAddress),
+        labelApi().fetchLabels(),
+      ])
+      if (labelResponse.status === 'rejected') {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: `Network Error. ${sendAsResponse}. Please try again later.`,
+            message: `Network Error. ${labelResponse.reason}. Please try again later.`,
           })
         )
+      }
+      if (sendAsResponse.status === 'rejected') {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: `Network Error. ${sendAsResponse.reason}. Please try again later.`,
+          })
+        )
+      }
+      if (
+        sendAsResponse.status === 'fulfilled' &&
+        labelResponse.status === 'fulfilled'
+      ) {
+        dispatch(
+          setProfile({
+            signature: sendAsResponse?.value?.data?.signature ?? '',
+            ...userResponse.data,
+          })
+        )
+        const { labels } = labelResponse.value
+        if (Array.isArray(labels) && labels.length > 0) {
+          const nameMapLabels = new Set(
+            labels.map((label: IGoogleLabel) => label.name)
+          )
+          const missingLabels = BASE_ARRAY.filter(
+            (item) => !nameMapLabels.has(item)
+          )
+          if (missingLabels.length > 0) {
+            missingLabels.forEach((item) => {
+              dispatch(createLabel(item))
+            })
+          }
+          dispatch(finalizeBaseLoading(labels))
+        }
       }
     } else {
       dispatch(
