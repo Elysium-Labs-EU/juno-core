@@ -97,7 +97,7 @@ export const OpenMessageWrapper = styled.div`
 
 export const ClosedMessageWrapper = styled.div`
   align-items: center;
-  column-gap: 15px;
+  column-gap: var(--spacing-2);
   display: grid;
   grid-template-columns: max-content auto 95px;
 `
@@ -143,7 +143,7 @@ export const EmailDetailContainer = styled.div<IEmailDetail>`
   min-width: ${({ tabbedView }) => (tabbedView ? '665px' : '300px')};
   max-width: min(100vw - 340px, 860px);
   /* padding-bottom: 320px; */
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-2);
   overflow: scroll;
   scrollbar-width: none;
   transition: all 0.2s ease-in-out;
@@ -164,7 +164,7 @@ export const ClickHeader = styled.div`
   align-items: center;
   display: grid;
   grid-template-columns: auto auto;
-  margin-right: 20px;
+  margin-right: var(--spacing-2);
 `
 
 export const SpecificMenuContainer = styled.div`
@@ -198,8 +198,8 @@ export const HeaderFullWidth = styled.div`
 export const ContactsContainer = styled.div`
   align-items: center;
   display: flex;
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
 `
 
 export const ToFromBCCInner = styled.div`
@@ -216,8 +216,8 @@ export const ToFromBCCInner = styled.div`
 export const BlockedTrackersContainer = styled.div`
   align-items: center;
   display: flex;
-  padding-top: 16px;
-  padding-bottom: 8px;
+  padding-top: var(--spacing-2);
+  padding-bottom: var(--spacing-1);
 `
 
 export const GreyDivider = styled.div`
@@ -225,8 +225,8 @@ export const GreyDivider = styled.div`
 `
 
 export const EmailBody = styled.div`
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: var(--spacing-2);
+  margin-bottom: var(--spacing-2);
 `
 
 export const ClosedAvatarSender = styled.div`
@@ -254,7 +254,7 @@ export const EmailDetailTitle = styled.span`
   font-weight: bold;
   line-height: 1.21;
   color: var(--color-black);
-  margin-left: 0.5rem;
+  margin-left: var(--spacing-1);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -265,7 +265,7 @@ interface ISmallTextTruncated {
 }
 
 const commaSeperator = css`
-  margin-right: 6px;
+  margin-right: var(--spacing-0-75);
   &:after {
     content: ',';
   }
@@ -277,7 +277,7 @@ export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   white-space: nowrap;
   font-size: var(--small);
   ${({ showComma }) => showComma && commaSeperator};
-  margin-right: ${({ showComma }) => (showComma ? '4px' : '0')};
+  margin-right: ${({ showComma }) => (showComma ? 'var(--spacing-0-5)' : '0')};
 `
 
 export const FullContactContainer = styled.div`
@@ -287,7 +287,7 @@ export const FullContactContainer = styled.div`
 `
 
 export const ContactContainer = styled.div`
-  margin-bottom: 5px;
+  margin-bottom: var(--spacing-0-5);
 `
 
 export const ComposeWrapper = styled.div`
