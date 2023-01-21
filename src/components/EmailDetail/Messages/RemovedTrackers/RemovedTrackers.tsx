@@ -8,7 +8,6 @@ import * as themeConstants from 'constants/themeConstants'
 import { QiEscape } from 'images/svgIcons/quillIcons'
 import * as GS from 'styles/globalStyles'
 
-
 import * as S from './RemovedTrackersStyles'
 
 const REMOVED_TRACKERS = 'Trackers removed'
@@ -77,7 +76,10 @@ const RemovedTrackers = ({
             <S.StyledButton onClick={() => setShowDialog(true)}>
               <S.InnerButton>
                 <div className="icon">
-                  <FiShield size={10} color={themeConstants.color.gray[300]} />
+                  <FiShield
+                    size={10}
+                    color={themeConstants.color.neutral[400]}
+                  />
                 </div>
                 <GS.Span small>{REMOVED_TRACKERS}</GS.Span>
               </S.InnerButton>

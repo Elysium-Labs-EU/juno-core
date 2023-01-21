@@ -7,11 +7,13 @@ import RoutesConstants from 'constants/routesConstants'
 import {
   QiCheckmarkDouble,
   QiCog,
+  QiCommand,
   QiCompose,
   QiDiscard,
   QiFolderArchive,
   QiFolderTrash,
   QiInbox,
+  QiSend,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
@@ -130,6 +132,15 @@ export default function defaultItems({
               type: 'Link',
             }
           : undefined,
+        location.pathname !== RoutesConstants.SENT
+          ? {
+              id: 'sent',
+              children: 'Sent',
+              icon: <QiSend />,
+              onClick: () => dispatch(navigateTo(RoutesConstants.SENT)),
+              type: 'Link',
+            }
+          : undefined,
         location.pathname !== RoutesConstants.ARCHIVE
           ? {
               id: 'archive',
@@ -164,6 +175,14 @@ export default function defaultItems({
           icon: <QiCog />,
           onClick: () =>
             dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.settings)),
+          type: 'Link',
+        },
+        {
+          id: 'keyboard-shortcuts',
+          children: 'Keyboard shortcuts',
+          icon: <QiCommand />,
+          onClick: () =>
+            dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.keyboard)),
           type: 'Link',
         },
       ],
