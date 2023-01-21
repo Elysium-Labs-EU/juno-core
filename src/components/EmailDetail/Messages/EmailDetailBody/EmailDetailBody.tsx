@@ -72,8 +72,9 @@ const ShadowBody = ({
       postTreatmentBody({ dispatch, setUnsubscribeLink, activeDocument: node })
     }
   }
-
   return (
+    // TODO: This is a temporary fix.
+    // @ts-ignore
     <root.div ref={callbackRef}>
       {sanitizeAndParseHtmlContent(bodyState.emailHTML)}
     </root.div>
