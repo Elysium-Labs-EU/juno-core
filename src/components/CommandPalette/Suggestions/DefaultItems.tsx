@@ -27,22 +27,26 @@ import {
 import type { IJsonStructure } from '../commandPaletteUtils'
 
 interface IDefaultItems {
+  currentEmailBoxHasEmails: boolean
   dispatch: AppDispatch
   isFlexibleFlowActive: boolean
   location: Location
-  currentEmailBoxHasEmails: boolean
 }
 
 export default function defaultItems({
+  currentEmailBoxHasEmails,
   dispatch,
   isFlexibleFlowActive,
   location,
-  currentEmailBoxHasEmails,
 }: IDefaultItems): Array<IJsonStructure> {
   const isEmailDetailPage = location.pathname.startsWith('/mail/')
   const isDraftsPage = location.pathname.startsWith(RoutesConstants.DRAFTS)
   const isArchivePage = location.pathname.startsWith(RoutesConstants.ARCHIVE)
   const isTrashPage = location.pathname.startsWith(RoutesConstants.TRASH)
+  const isComposePage =
+    location.pathname.startsWith(RoutesConstants.COMPOSE_EMAIL) ||
+    location.pathname.startsWith('/compose')
+
   return [
     {
       heading: 'Suggestions',
@@ -51,7 +55,8 @@ export default function defaultItems({
         !isDraftsPage &&
         currentEmailBoxHasEmails &&
         !isEmailDetailPage &&
-        !isArchivePage
+        !isArchivePage &&
+        !isComposePage
           ? {
               id: 'archive-all-current-box',
               children: `Archive all loaded emails of ${
@@ -65,7 +70,8 @@ export default function defaultItems({
         !isEmailDetailPage &&
         currentEmailBoxHasEmails &&
         !isDraftsPage &&
-        !isTrashPage
+        !isTrashPage &&
+        !isComposePage
           ? {
               id: 'delete-all-current-box',
               children: `Delete all loaded emails of ${
@@ -87,7 +93,7 @@ export default function defaultItems({
                 dispatch(selectAllEmailsCurrentInbox(discardAllEmailCMDK)),
             }
           : undefined,
-        isEmailDetailPage || !currentEmailBoxHasEmails
+        isEmailDetailPage || !currentEmailBoxHasEmails || isComposePage
           ? undefined
           : {
               id: `select-all-current-box`,
@@ -124,7 +130,25 @@ export default function defaultItems({
               type: 'Link',
             }
           : undefined,
-        location.pathname !== RoutesConstants.COMPOSE_EMAIL
+        location.pathname !== RoutesConstants.ARCHIVE
+          ? {
+              id: 'archive',
+              children: 'Archive',
+              icon: <QiFolderArchive />,
+              onClick: () => dispatch(navigateTo(RoutesConstants.ARCHIVE)),
+              type: 'Link',
+            }
+          : undefined,
+        location.pathname !== RoutesConstants.TRASH
+          ? {
+              id: 'trash',
+              children: 'Trash',
+              icon: <QiFolderTrash />,
+              onClick: () => dispatch(navigateTo(RoutesConstants.TRASH)),
+              type: 'Link',
+            }
+          : undefined,
+        !isComposePage
           ? {
               id: 'compose',
               children: 'Compose',
