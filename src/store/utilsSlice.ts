@@ -140,6 +140,8 @@ export const utilsSlice = createSlice({
           message: payload.message,
           type: payload.type,
           timestamp: new Date().getTime(),
+          action: payload?.action,
+          actionType: payload.actionType ?? 'close',
         }
       } else {
         // If a null is received, reset the state.
