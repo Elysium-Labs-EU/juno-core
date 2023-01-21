@@ -292,6 +292,8 @@ export const emailListSlice = createSlice({
           return
         }
         state.selectedEmails = initialState.selectedEmails
+      } else {
+        state.selectedEmails = initialState.selectedEmails
       }
     },
     setIsFetching: (

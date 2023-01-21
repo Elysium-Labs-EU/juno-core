@@ -495,19 +495,24 @@ describe('setSelectedEmails', () => {
     expect(check.selectedEmails.labelIds).toEqual(labelIds)
     expect(check.selectedEmails.selectedIds).toContain('789')
   })
-  // it('sets selectedEmails to initial state when payload is empty', () => {
-  //   const emailId = '456'
-  //   const labelIds = ['INBOX']
-  //   const state = {
-  //     activeEmailListIndex: -1,
-  //     emailList: [],
-  //     isFetching: false,
-  //     searchList: null,
-  //     selectedEmails: { selectedIds: [emailId], labelIds },
-  //   }
-  //   const payload = { selectedIds: [], labelIds }
-  //   const check = reducer(state, setSelectedEmails(payload))
-  //   // setSelectedEmails(state, { payload: [] })
-  //   expect(initialState.selectedEmails).toEqual({ selectedIds: [] })
-  // })
+  it('sets selectedEmails to initial state when payload is empty', () => {
+    const emailId = '456'
+    const labelIds = ['INBOX']
+    const state = {
+      activeEmailListIndex: -1,
+      emailList: [],
+      isFetching: false,
+      searchList: null,
+      selectedEmails: { selectedIds: [emailId], labelIds },
+    }
+    const payload: Array<any> = []
+    const check = reducer(state, setSelectedEmails(payload))
+    expect(check).toEqual({
+      activeEmailListIndex: -1,
+      emailList: [],
+      isFetching: false,
+      searchList: null,
+      selectedEmails: { selectedIds: [], labelIds: [] },
+    })
+  })
 })
