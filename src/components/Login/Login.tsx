@@ -76,12 +76,12 @@ const Login = () => {
           <S.Inner>
             <div style={{ marginBottom: '40px' }} />
             <GoogleButton
-              renderProps={{
-                onClick: fetchUrl,
-                disabled:
-                  loadState === global.LOAD_STATE_MAP.error ||
-                  loadState === global.LOAD_STATE_MAP.loading,
-              }}
+              onClick={fetchUrl}
+              disabled={
+                loadState === global.LOAD_STATE_MAP.error ||
+                loadState === global.LOAD_STATE_MAP.loading
+              }
+              showLoadingState={loadState === global.LOAD_STATE_MAP.loading}
             />
             <GS.P muted small>
               {ENTER_HINT}

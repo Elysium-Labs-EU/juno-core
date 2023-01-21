@@ -1,15 +1,16 @@
-import { useEffect } from 'react'
 import { FcGoogle } from 'react-icons/fc'
 
 import * as keyConstants from 'constants/keyConstants'
-import useKeyPress from 'hooks/useKeyPress'
+import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 
 import * as S from './GoogleButtonStyles'
 
 const GOOGLE = 'Login with Google'
+
 interface IGoogleButton {
   disabled: boolean
   onClick: () => void
+  showLoadingState: boolean
 }
 
 /**
@@ -18,30 +19,24 @@ interface IGoogleButton {
  * @returns a styled Google button that is either disabled or active.
  */
 
-const GoogleButton = ({ renderProps }: { renderProps: IGoogleButton }) => {
-  const EnterListener = useKeyPress(keyConstants.KEY_SPECIAL.enter)
-
-  useEffect(() => {
-    let mounted = true
-    if (
-      EnterListener &&
-      !renderProps.disabled &&
-      renderProps.onClick &&
-      mounted
-    ) {
-      renderProps.onClick()
-    }
-    return () => {
-      mounted = false
-    }
-  }, [EnterListener, renderProps])
+const GoogleButton = ({
+  disabled,
+  onClick,
+  showLoadingState,
+}: IGoogleButton) => {
+  useKeyboardShortcut({
+    handleEvent: () => onClick(),
+    key: keyConstants.KEY_SPECIAL.enter,
+    isDisabled: disabled,
+  })
 
   return (
     <S.StyledButton
-      onClick={() => renderProps.onClick()}
-      disabled={renderProps.disabled}
+      onClick={() => onClick()}
+      disabled={disabled}
       type="button"
-      isActive={EnterListener}
+      isActive={disabled}
+      showLoadingState={showLoadingState}
     >
       <S.IconContainer>
         <FcGoogle size={20} />
