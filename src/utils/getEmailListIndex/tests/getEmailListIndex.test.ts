@@ -4,9 +4,9 @@ import getEmailListIndex from '../getEmailListIndex'
 
 test('getEmailListIndex returns the correct index', () => {
   const emailList = [
-    { labels: ['label1', 'label2'] },
-    { labels: ['label3', 'label4'] },
-    { labels: ['label5', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label1', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label3', 'label4'] },
+    { threads: [], nextPageToken: '', labels: ['label5', 'label2'] },
   ]
   const labelIds = ['label2']
   const expectedIndex = 0
@@ -17,9 +17,9 @@ test('getEmailListIndex returns the correct index', () => {
 
 test('getEmailListIndex returns -1 when no match is found', () => {
   const emailList = [
-    { labels: ['label1', 'label2'] },
-    { labels: ['label3', 'label4'] },
-    { labels: ['label5', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label1', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label3', 'label4'] },
+    { threads: [], nextPageToken: '', labels: ['label5', 'label2'] },
   ]
   const labelIds = ['label6']
   const expectedIndex = -1
@@ -29,7 +29,7 @@ test('getEmailListIndex returns -1 when no match is found', () => {
 })
 
 test('getEmailListIndex returns -1 when emailList is empty', () => {
-  const emailList = []
+  const emailList: any = []
   const labelIds = ['label1']
   const expectedIndex = -1
   const index = getEmailListIndex({ emailList, labelIds })
@@ -39,9 +39,9 @@ test('getEmailListIndex returns -1 when emailList is empty', () => {
 
 test('getEmailListIndex returns -1 when labelIds is empty', () => {
   const emailList = [
-    { labels: ['label1', 'label2'] },
-    { labels: ['label3', 'label4'] },
-    { labels: ['label5', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label1', 'label2'] },
+    { threads: [], nextPageToken: '', labels: ['label3', 'label4'] },
+    { threads: [], nextPageToken: '', labels: ['label5', 'label2'] },
   ]
   const labelIds: any = []
   const expectedIndex = -1
