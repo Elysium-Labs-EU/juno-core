@@ -1,5 +1,6 @@
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
+import { HEADER_INBOX } from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -12,8 +13,6 @@ import * as InboxS from './InboxHeaderStyles'
 import InboxRefreshOption from './InboxRefreshOption'
 import InboxSortOption from './InboxSortOption'
 
-const INBOX_HEADER = 'Inbox'
-
 const InboxHeader = () => {
   const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
@@ -25,7 +24,7 @@ const InboxHeader = () => {
           <S.PageTitle
             title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
           >
-            {INBOX_HEADER}
+            {HEADER_INBOX}
           </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />

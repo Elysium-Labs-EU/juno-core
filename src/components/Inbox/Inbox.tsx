@@ -1,9 +1,8 @@
 import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
+import { HEADER_INBOX } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 import AnimatedMountUnmount from 'utils/animatedMountUnmount'
-
-const HEADER_INBOX = 'Inbox'
 
 const Inbox = () => {
   useSetCurrentLabel()

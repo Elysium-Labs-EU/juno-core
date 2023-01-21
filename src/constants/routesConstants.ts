@@ -11,6 +11,7 @@ const ROUTES = {
   LOGIN_SUCCESS: '/login_success',
   INBOX: '/inbox',
   ARCHIVE: '/archive',
+  TRASH: '/delete',
   WILDCARD: '*',
 }
 

@@ -46,7 +46,7 @@ const StrictFlow = () => {
       dispatch(
         updateSettingsLabel({
           settingsLabelId,
-          isFlexibleFlowActive: false,
+          isFlexibleFlowActive: 'false',
         })
       )
       if (location.pathname.includes(RoutesConstants.INBOX)) {
@@ -60,7 +60,7 @@ const StrictFlow = () => {
       dispatch(
         updateSettingsLabel({
           settingsLabelId,
-          isFlexibleFlowActive: true,
+          isFlexibleFlowActive: 'true',
         })
       )
     }

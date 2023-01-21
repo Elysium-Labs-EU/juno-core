@@ -1,5 +1,6 @@
 import * as S from 'components/MainHeader/HeaderStyles'
 import Navigation from 'components/MainHeader/Navigation/Navigation'
+import { HEADER_ARCHIVE } from 'constants/globalConstants'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -7,8 +8,6 @@ import {
 import { useAppSelector } from 'store/hooks'
 import * as GS from 'styles/globalStyles'
 import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
-
-const ARCHIVE_HEADER = 'Archive'
 
 const AllEmailHeader = () => {
   const emailList = useAppSelector(selectEmailList)
@@ -21,7 +20,7 @@ const AllEmailHeader = () => {
           <S.PageTitle
             title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
           >
-            {ARCHIVE_HEADER}
+            {HEADER_ARCHIVE}
           </S.PageTitle>
         </S.HeaderCenter>
         <Navigation />

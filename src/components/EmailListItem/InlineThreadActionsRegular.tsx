@@ -114,8 +114,12 @@ const InlineThreadActionsRegular = ({
     )
   }, [id, labelIds])
 
-  const memoizedDeleteButton = useMemo(
-    () => (
+  const memoizedDeleteButton = useMemo(() => {
+    const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
+    if (staticAllMessageLabelIds.includes(global.TRASH_LABEL)) {
+      return null
+    }
+    return (
       <CustomIconButton
         onClick={() => thrashMail({ threadId: id, dispatch, labelIds })}
         icon={<QiFolderTrash size={ICON_SIZE} />}
@@ -123,9 +127,8 @@ const InlineThreadActionsRegular = ({
         hoverColor={themeConstants.color.red[500]}
         dataCy="delete-inline-button"
       />
-    ),
-    [id, labelIds]
-  )
+    )
+  }, [id, labelIds])
 
   return (
     <S.Wrapper data-testid="email-regular-inline-actions">

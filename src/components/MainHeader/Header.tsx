@@ -13,6 +13,7 @@ import SentHeader from 'components/Sent/SentHeader'
 import Settings from 'components/Settings/Settings'
 import SpamHeader from 'components/Spam/SpamHeader'
 import TodoHeader from 'components/ToDo/TodoHeader'
+import TrashHeader from 'components/Trash/TrashHeader'
 import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
@@ -25,6 +26,7 @@ const pathToHeader = {
   '/sent': <SentHeader />,
   '/spam': <SpamHeader />,
   '/archive': <ArchiveHeader />,
+  '/delete': <TrashHeader />,
   '/mail': null,
   '/': <TodoHeader />,
 }
