@@ -2,8 +2,10 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
+  align-items: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  height: 2rem;
-  padding-top: 1rem;
+  height: var(--spacing-4);
+  padding-top: var(--spacing-2);
 `
