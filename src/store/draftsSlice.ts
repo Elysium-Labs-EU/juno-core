@@ -139,17 +139,17 @@ export const createUpdateDraft =
           })
         )
       }
-      if (
-        response &&
-        response?.status === 200 &&
-        localDraftDetails?.message?.threadId
-      ) {
-        // Remove the previous entry from Redux Emaillist. History will create a new one.
-        dispatch(
-          listRemoveItemDetailDraft({
-            threadId: localDraftDetails.message.threadId,
-          })
-        )
+
+      if (response && response?.status === 200) {
+        // if(localDraftDetails?.message?.threadId || response?.data?.message?.threadId)
+        if (localDraftDetails?.message?.threadId) {
+          // Remove the previous entry from Redux Emaillist. History will create a new one.
+          dispatch(
+            listRemoveItemDetailDraft({
+              threadId: localDraftDetails.message.threadId,
+            })
+          )
+        }
         return response.data.data
       }
       return null
