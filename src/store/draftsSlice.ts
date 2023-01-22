@@ -109,6 +109,20 @@ export const {
   listRemoveDraftBatch,
 } = draftsSlice.actions
 
+/**
+ * @function createUpdateDraft
+ * @async
+ * @param {Object} composedEmail - An object that contains the details of the composed email.
+ * @param {IDraftDetailObject} localDraftDetails - An object that contains the details of the local draft.
+ * @returns {Promise<AppThunk>} - Returns a promise that resolves to the updated or created draft.
+ *
+ * @throws {Error} - If the API call fails or the response status is not 200.
+ *
+ * @description
+ * This function creates or updates a draft. If the `localDraftDetails` object is provided, it updates the existing draft.
+ * Otherwise, it creates a new draft.
+ */
+
 export const createUpdateDraft =
   ({
     composedEmail,
