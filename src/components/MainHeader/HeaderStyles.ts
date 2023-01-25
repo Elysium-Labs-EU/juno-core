@@ -10,7 +10,7 @@ export const InnerMenu = styled.div`
   margin-bottom: var(--spacing-2);
   align-items: center;
   min-width: 665px;
-  max-width: min(100vw - 3var (--spacing-4), 860px);
+  max-width: min(100vw - 340px, 860px);
   justify-content: space-between;
   flex: 1 1;
   margin: var(--spacing-4) auto var(--spacing-2);
