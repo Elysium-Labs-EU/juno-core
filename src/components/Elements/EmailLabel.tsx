@@ -10,12 +10,12 @@ import CustomLabel from './CustomLabel/CustomLabel'
 
 const Wrapper = styled.div`
   div:not(:first-child) {
-    margin-left: 5px;
+    margin-left: var(--spacing-0-5);
   }
 `
 
 // Filter out the Category_ labels and Important labels etc. If there is nothing left, label it as Archive
-const EmailLabel = ({ labelNames }: { labelNames: string[] }) => {
+const EmailLabel = ({ labelNames }: { labelNames: Array<string> }) => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const staticOnlyLegalLabels = onlyLegalLabelObjects({
     labelNames,

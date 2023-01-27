@@ -1,9 +1,18 @@
-import axios from 'axios'
-import type { AxiosRequestConfig } from 'axios'
+import axios, { AxiosError } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import * as global from 'constants/globalConstants'
+import type { ICustomError } from 'store/storeTypes/baseTypes'
 import assertNonNullish from 'utils/assertNonNullish'
 import validateLocalSetup from 'utils/validateLocalSetup'
+
+export type TemplateApiResponse<T> = Promise<
+  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
+>
+
+export type TemplateApiResponseSettled<T> = PromiseSettledResult<
+  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
+>
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
@@ -41,7 +50,8 @@ export const instance = axios.create({
  * Set an accessToken for all the urls within the system, barring the Google oAuth API and external api.
  */
 instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config) => {
+    // (config: AxiosRequestConfig) => {
     const accessToken = fetchToken()
     if (
       accessToken &&

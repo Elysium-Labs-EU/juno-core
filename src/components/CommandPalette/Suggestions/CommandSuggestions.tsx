@@ -12,12 +12,12 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
 
-import filterItems, { getItemIndex } from '../commandPaletteUtils'
-import type { IJsonStructure } from '../commandPaletteUtils'
-import ListItem from '../ListItem/ListItem'
 import contextualItems from './ContextualItems'
 import SearchSuggestion from './SearchSuggestion'
 import * as S from './SuggestionStyles'
+import filterItems, { getItemIndex } from '../commandPaletteUtils'
+import type { IJsonStructure } from '../commandPaletteUtils'
+import ListItem from '../ListItem/ListItem'
 
 const CommandPaletteSuggestions = ({
   focusedItemIndex,

@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export type TUpdateType = 'success' | 'info' | 'warning' | 'error'
 export type TActionType = 'copy' | 'close' | 'undo' | 'unsubscribe'
 
@@ -38,3 +40,11 @@ export interface IUtilsState {
   settingsLabelId: string | null
   systemStatusUpdate: ISystemStatusUpdateTimestamp | null
 }
+
+export const Location = z.object({
+  pathname: z.string(),
+  search: z.string(),
+  hash: z.string(),
+  state: z.any(),
+  key: z.string(),
+})

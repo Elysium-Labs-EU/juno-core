@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
@@ -18,8 +17,8 @@ import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { updateMessageLabel } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
+import type { IReadMessage } from './DisplayVariants/ReadUnreadMessage'
 import * as S from './SpecificEmailOptionsStyles'
 
 const SpecificEmailOptions = ({
@@ -27,17 +26,18 @@ const SpecificEmailOptions = ({
   messageIndex,
   setShouldRefreshDetail,
   threadDetail,
-}: {
-  handleClickListener: ({ mIndex }: { mIndex: number }) => void
-  messageIndex: number
-  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  threadDetail: IEmailListThreadItem
-}) => {
+}: Pick<
+  IReadMessage,
+  | 'handleClickListener'
+  | 'messageIndex'
+  | 'setShouldRefreshDetail'
+  | 'threadDetail'
+>) => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
-  const activeMessage = threadDetail.messages[messageIndex]
+  const activeMessage = threadDetail?.messages[messageIndex]
   const isTrash = activeMessage?.labelIds.includes(global.TRASH_LABEL)
   const [open, setOpen] = useState<boolean>(false)
 
@@ -51,7 +51,11 @@ const SpecificEmailOptions = ({
   }
 
   const thrashMessage = () => {
-    if (threadDetail.messages.length > 1 && activeMessage) {
+    if (
+      threadDetail?.messages &&
+      threadDetail.messages.length > 1 &&
+      activeMessage
+    ) {
       dispatch(
         updateMessageLabel({
           threadId: threadDetail.id,
@@ -59,7 +63,7 @@ const SpecificEmailOptions = ({
           request: { delete: true },
         })
       )
-    } else {
+    } else if (threadDetail?.id) {
       thrashMail({ threadId: threadDetail.id, labelIds, dispatch })
     }
   }

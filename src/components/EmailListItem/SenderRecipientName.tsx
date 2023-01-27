@@ -1,4 +1,5 @@
 import { DRAFT_LABEL } from 'constants/globalConstants'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 import {
   getRecipientName,
@@ -9,7 +10,7 @@ import * as S from './EmailListItemStyles'
 
 interface ISenderRecipientName {
   handleOpenEvent: () => void
-  labelIds: Array<string>
+  labelIds: TLabelState['labelIds']
   recipientName: ReturnType<typeof getRecipientName>
   senderFull: ReturnType<typeof getSenderFull>
   senderPartial: ReturnType<typeof getSenderPartial>

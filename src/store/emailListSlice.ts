@@ -1,4 +1,6 @@
-import { current, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-param-reassign */
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
@@ -18,16 +20,17 @@ import {
 import { setCurrentLabels, setLoadedInbox } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
 import type {
-  IEmailListObject,
-  IEmailListState,
-  IEmailListThreadItem,
+  TEmailListObject,
+  TEmailListState,
+  TThreadObject,
   ISelectedEmailAction,
   TBaseEmailList,
 } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import type {
-  IUpdateRequest,
-  IUpdateRequestParamsBatch,
-  IUpdateRequestParamsSingle,
+  TGmailV1SchemaModifyThreadRequestSchemaEnhanced,
+  TUpdateRequestParamsBatchThread,
+  TUpdateRequestParamsSingleThread,
 } from 'store/storeTypes/metaEmailListTypes'
 import {
   navigateNextMail,
@@ -42,29 +45,18 @@ import multipleIncludes from 'utils/multipleIncludes'
 import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
 import sortThreads from 'utils/sortThreads'
 
-/* eslint-disable no-param-reassign */
-
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
   async (query: IEmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
-    return { response: response.data, labels: query.labelIds, q: query?.q }
+    if ('data' in response) {
+      return { response: response.data, labels: query.labelIds, q: query?.q }
+    }
+    return null
   }
 )
 
-/**
- * @function fetchEmailsFull
- * @deprecated in favor of fetchEmailSimple
- */
-export const fetchEmailsFull = createAsyncThunk(
-  'email/fetchEmailsFull',
-  async (query: IEmailQueryObject, { signal }) => {
-    const response = await threadApi({ signal }).getFullThreads(query)
-    return { response: response.data, labels: query.labelIds }
-  }
-)
-
-export const initialState: IEmailListState = Object.freeze({
+export const initialState: TEmailListState = Object.freeze({
   activeEmailListIndex: -1,
   emailList: [],
   isFetching: false,
@@ -72,15 +64,15 @@ export const initialState: IEmailListState = Object.freeze({
   selectedEmails: { labelIds: [], selectedIds: [] },
 })
 
-interface IHandleAdditionToExistingEmailArray {
-  targetEmailListObject: IEmailListObject
-  state: IEmailListState
-  labels: Array<string>
-  threads: Array<IEmailListThreadItem>
-  timestamp: number | undefined
+interface IHandleEmailListChange
+  extends Omit<TEmailListObject, 'resultSizeEstimate'> {
+  state: TEmailListState
+}
+
+interface IHandleAdditionToExistingEmailArray extends IHandleEmailListChange {
   arrayIndex?: number
-  nextPageToken?: undefined | string | null
-  q?: undefined | string
+  labels: TLabelState['labelIds']
+  targetEmailListObject: TEmailListObject
 }
 
 export const handleAdditionToExistingEmailArray = ({
@@ -93,7 +85,7 @@ export const handleAdditionToExistingEmailArray = ({
   nextPageToken,
   q,
 }: IHandleAdditionToExistingEmailArray) => {
-  const tempArray: Array<IEmailListThreadItem> = []
+  const tempArray: Array<TThreadObject> = []
   let activeCount: number = 0
   const completeCount: number = threads.length
   const existingThreads = new Map(
@@ -122,12 +114,12 @@ export const handleAdditionToExistingEmailArray = ({
   if (activeCount === completeCount) {
     const sortedThreads = sortThreads(
       [...existingThreads.values()].concat(tempArray),
-      labels.includes(global.DRAFT_LABEL)
+      labels?.includes(global.DRAFT_LABEL)
     )
 
     // Here we create the final object that will be pushed to the Redux state
     // If the timestamp and/or nextPageToken are history values, maintain the original version.
-    const newObject: IEmailListObject = {
+    const newObject: TEmailListObject = {
       labels,
       threads: deduplicateItems(sortedThreads),
       nextPageToken:
@@ -147,15 +139,6 @@ export const handleAdditionToExistingEmailArray = ({
       state.searchList = targetEmailListObject
     }
   }
-}
-
-interface IHandleEmailListChange {
-  state: IEmailListState
-  labels: Array<string> | undefined
-  threads: Array<IEmailListThreadItem>
-  timestamp: number | undefined
-  nextPageToken?: undefined | string | null
-  q?: string
 }
 
 export const handleEmailListChange = ({
@@ -192,7 +175,7 @@ export const handleEmailListChange = ({
           })
         } else {
           const sortedThreads = sortThreads(threads)
-          const sortedEmailList: IEmailListObject = {
+          const sortedEmailList: TEmailListObject = {
             nextPageToken,
             labels,
             threads: sortedThreads,
@@ -224,7 +207,7 @@ export const handleEmailListChange = ({
       if (arrayIndex === -1 && !labels.includes(global.SEARCH_LABEL)) {
         const sortedThreads = sortThreads(threads)
 
-        const sortedEmailList: IEmailListObject = {
+        const sortedEmailList: TEmailListObject = {
           nextPageToken,
           labels,
           threads: deduplicateItems(sortedThreads),
@@ -298,20 +281,20 @@ export const emailListSlice = createSlice({
     },
     setIsFetching: (
       state,
-      { payload }: PayloadAction<IEmailListState['isFetching']>
+      { payload }: PayloadAction<TEmailListState['isFetching']>
     ) => {
       state.isFetching = payload
     },
     setActiveEmailListIndex: (
       state,
-      { payload }: PayloadAction<IEmailListState['activeEmailListIndex']>
+      { payload }: PayloadAction<TEmailListState['activeEmailListIndex']>
     ) => {
       state.activeEmailListIndex = payload
     },
     setBaseEmailList: (state, { payload }: PayloadAction<TBaseEmailList>) => {
       state.emailList = payload
     },
-    listAddEmailList: (state, { payload }: PayloadAction<IEmailListObject>) => {
+    listAddEmailList: (state, { payload }: PayloadAction<TEmailListObject>) => {
       const { labels, threads, timestamp } = payload
       handleEmailListChange({ state, labels, threads, timestamp })
     },
@@ -352,8 +335,9 @@ export const emailListSlice = createSlice({
         state.emailList[state.activeEmailListIndex]
       // Index 4 is used, this is the static predefined array based on BASE_ARRAY
       if (currentStateEmailListObject && newStateEmailListObject) {
-        currentStateEmailListObject.threads =
-          newStateEmailListObject.threads.filter((item) => item.id !== threadId)
+        currentStateEmailListObject.threads = newStateEmailListObject.threads.filter(
+          (item) => item.id !== threadId
+        )
         state.emailList = currentState
       }
     },
@@ -401,7 +385,7 @@ export const emailListSlice = createSlice({
 
     listUpdateSearchResults: (
       state,
-      { payload }: PayloadAction<IEmailListObject>
+      { payload }: PayloadAction<TEmailListObject>
     ) => {
       const { labels, threads, q, nextPageToken, timestamp } = payload
       handleEmailListChange({
@@ -415,38 +399,13 @@ export const emailListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchEmailsFull.fulfilled,
-      (
-        state,
-        {
-          payload: {
-            labels,
-            response: { threads, nextPageToken, timestamp },
-          },
-        }
-      ) => {
-        handleEmailListChange({
-          state,
+    builder.addCase(fetchEmailsSimple.fulfilled, (state, { payload }) => {
+      if (payload && 'labels' in payload && payload.labels) {
+        const {
           labels,
-          threads,
-          nextPageToken,
-          timestamp,
-        })
-      }
-    )
-    builder.addCase(
-      fetchEmailsSimple.fulfilled,
-      (
-        state,
-        {
-          payload: {
-            labels,
-            response: { threads, nextPageToken, timestamp },
-            q,
-          },
-        }
-      ) => {
+          response: { threads, nextPageToken, timestamp },
+          q,
+        } = payload
         // If there is a q (query) - send it - this is used to determine if the action is search related.
         handleEmailListChange({
           state,
@@ -457,7 +416,7 @@ export const emailListSlice = createSlice({
           q,
         })
       }
-    )
+    })
     builder.addCase(
       fetchEmailDetail.fulfilled,
       (
@@ -499,282 +458,251 @@ export const {
   setSelectedEmails,
 } = emailListSlice.actions
 
-export const useSearchResults =
-  ({
-    searchResults,
-    currentEmail,
-  }: {
-    searchResults: IEmailListObject
-    currentEmail: string
-  }): AppThunk =>
-  (dispatch, getState) => {
-    const { searchList } = getState().email
-    const { coreStatus } = getState().emailDetail
-    if (searchList !== searchResults) {
-      dispatch(listUpdateSearchResults(searchResults))
-    }
-    if (coreStatus !== global.CORE_STATUS_MAP.searching) {
-      dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
-      dispatch(setCurrentLabels([global.SEARCH_LABEL]))
-    }
-
-    dispatch(
-      setViewIndex(
-        searchResults.threads.findIndex((item) => item.id === currentEmail)
-      )
-    )
-    dispatch(setCurrentEmail(currentEmail))
-    dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
+export const useSearchResults = ({
+  searchResults,
+  currentEmail,
+}: {
+  searchResults: TEmailListObject
+  currentEmail: string
+}): AppThunk => (dispatch, getState) => {
+  const { searchList } = getState().email
+  const { coreStatus } = getState().emailDetail
+  if (searchList !== searchResults) {
+    dispatch(listUpdateSearchResults(searchResults))
   }
+  if (coreStatus !== global.CORE_STATUS_MAP.searching) {
+    dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
+    dispatch(setCurrentLabels([global.SEARCH_LABEL]))
+  }
+
+  dispatch(
+    setViewIndex(
+      searchResults.threads.findIndex((item) => item.id === currentEmail)
+    )
+  )
+  dispatch(setCurrentEmail(currentEmail))
+  dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
+}
 
 /**
+ * Async thunk function that loads email details.
  * @function loadEmailDetails
- * @param labeledThreads - takes in an object with threads which only contain meta data.
- * @returns - the function updates the Redux state with the found email details.
+ * @async
+ * @param {Array<TEmailListObject>} emailListObjectArray - An array of email list objects.
+ * @returns {AppThunk} - A thunk function that takes dispatch and getState as arguments.
  */
 
-export const loadEmailDetails =
-  (labeledThreads: IEmailListObject): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { threads, labels, nextPageToken } = labeledThreads
-      if (threads) {
-        if (threads.length > 0) {
-          const buffer: Array<Promise<IEmailListThreadItem>> = []
-          for (const thread of threads) {
-            buffer.push(threadApi({}).getThreadDetail(thread.id))
-          }
-          const resolvedThreads = await Promise.all(buffer)
-          const onlyObjectThreads = resolvedThreads.filter(
-            (thread) => typeof thread !== 'string'
-          )
-          if (onlyObjectThreads.length === 1) {
-            const lastMessage =
-              onlyObjectThreads[0]?.messages[
-                onlyObjectThreads[0].messages.length - 1
-              ]
-            if (
-              lastMessage &&
-              lastMessage.labelIds.includes(global.DRAFT_LABEL)
-            ) {
-              const { storageLabels } = getState().labels
-              const labelNames = onlyObjectThreads[0]?.messages[0]?.labelIds
-              if (labelNames) {
-                const legalLabels = onlyLegalLabelObjects({
-                  storageLabels,
-                  labelNames,
-                })
-                if (legalLabels.length > 0) {
-                  for (const label of legalLabels) {
-                    dispatch(
-                      listAddEmailList({
-                        labels: [label.id],
-                        threads: onlyObjectThreads,
-                        nextPageToken: nextPageToken ?? null,
-                      })
-                    )
-                  }
-                }
+export const loadEmailDetails = (
+  emailListObjectArray: Array<TEmailListObject>
+): AppThunk => (dispatch, getState) => {
+  const { storageLabels } = getState().labels
+  emailListObjectArray.forEach((labeledThreads) => {
+    const { threads, labels, nextPageToken } = labeledThreads
+    if (threads.length > 0) {
+      const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
+      if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
+        const labelNames = threads[0]?.messages[0]?.labelIds
+        if (labelNames) {
+          const legalLabels = onlyLegalLabelObjects({
+            storageLabels,
+            labelNames,
+          })
+          if (legalLabels.length > 0) {
+            for (const label of legalLabels) {
+              if (label.id) {
+                dispatch(
+                  listAddEmailList({
+                    labels: [label.id],
+                    threads,
+                    nextPageToken: nextPageToken ?? null,
+                  })
+                )
+              } else {
+                dispatch(
+                  setSystemStatusUpdate({
+                    type: 'error',
+                    message:
+                      'Cannot add emails to the list - we cannot find the labels.',
+                  })
+                )
               }
-            } else {
-              dispatch(
-                listAddEmailList({
-                  labels,
-                  threads: onlyObjectThreads,
-                  nextPageToken: nextPageToken ?? null,
-                })
-              )
-              dispatch(setLoadedInbox(labels))
             }
           }
-          getState().utils.isLoading && dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
         }
       } else {
-        if (
-          !getState().base.baseLoaded &&
-          labels.some(
-            (val) => getState().labels.loadedInbox.indexOf(val) === -1
-          )
-        ) {
-          dispatch(setLoadedInbox(labels))
-        }
-        if (
-          !getState().base.baseLoaded &&
-          getState().labels.storageLabels.length ===
-            getState().labels.loadedInbox.length
-        ) {
-          dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
-        }
+        dispatch(
+          listAddEmailList({
+            labels,
+            threads,
+            nextPageToken: nextPageToken ?? null,
+          })
+        )
+        dispatch(setLoadedInbox(labels))
       }
-    } catch (err) {
-      process.env.NODE_ENV !== 'production' && console.error(err)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to update the emails.',
-        })
-      )
+      getState().utils.isLoading && dispatch(setIsLoading(false))
+      getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
+    } else {
+      if (
+        !getState().base.baseLoaded &&
+        labels.some((val) => getState().labels.loadedInbox.indexOf(val) === -1)
+      ) {
+        dispatch(setLoadedInbox(labels))
+      }
+      if (
+        !getState().base.baseLoaded &&
+        getState().labels.storageLabels.length ===
+          getState().labels.loadedInbox.length
+      ) {
+        dispatch(setIsLoading(false))
+        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
+      }
     }
-  }
+  })
+}
 
 /**
  * @function updateEmailLabel
  * @param props - takes in an object with the default properties of request and labelIds. The other properties are optional.
  * @returns {void} - based on the properties other Redux actions and/or Gmail API requests are made.
  */
-export const updateEmailLabel =
-  ({
-    threadId,
-    request,
-    request: { removeLabelIds },
-    labelIds,
-  }: IUpdateRequestParamsSingle): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { coreStatus, viewIndex } = getState().emailDetail
-      const { activeEmailListIndex, emailList, searchList } = getState().email
-      const { isSilentLoading } = getState().utils
-      const staticActiveEmailList =
-        activeEmailListIndex === -1
-          ? searchList
-          : emailList[activeEmailListIndex]
+export const updateEmailLabel = ({
+  threadId,
+  request,
+  request: { removeLabelIds },
+  labelIds,
+}: TUpdateRequestParamsSingleThread): AppThunk => async (
+  dispatch,
+  getState
+) => {
+  try {
+    const { coreStatus, viewIndex } = getState().emailDetail
+    const { activeEmailListIndex, emailList, searchList } = getState().email
+    const { isSilentLoading } = getState().utils
+    const staticActiveEmailList =
+      activeEmailListIndex === -1 ? searchList : emailList[activeEmailListIndex]
 
+    if (
+      staticActiveEmailList &&
+      Object.keys(staticActiveEmailList).length > 0
+    ) {
       if (
-        staticActiveEmailList &&
-        Object.keys(staticActiveEmailList).length > 0
+        getState().router.location?.pathname.includes('/mail/') &&
+        !getState().labels.labelIds.includes(global.DRAFT_LABEL)
       ) {
+        // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
+        // This action is done first, to speed up the UX.
         if (
-          getState().router.location?.pathname.includes('/mail/') &&
-          !getState().labels.labelIds.includes(global.DRAFT_LABEL)
+          (request?.removeLabelIds &&
+            !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+          request?.delete
         ) {
-          // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
-          // This action is done first, to speed up the UX.
-          if (
-            (request?.removeLabelIds &&
-              !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-            request?.delete
-          ) {
-            const blockViewIndexUpdate = true
-            const forceNavigateBack =
-              !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
-            dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
-            if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
-              const { emailFetchSize } = getState().utils
-              edgeLoadingNextPage({
-                activeEmailList: staticActiveEmailList,
-                dispatch,
-                emailFetchSize,
-                isSilentLoading,
-                labelIds,
-              })
-            }
+          const blockViewIndexUpdate = true
+          const forceNavigateBack =
+            !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
+          dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
+          if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
+            const { emailFetchSize } = getState().utils
+            edgeLoadingNextPage({
+              activeEmailList: staticActiveEmailList,
+              dispatch,
+              emailFetchSize,
+              isSilentLoading,
+              labelIds,
+            })
           }
         }
+      }
 
-        // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
-        if (!request.delete) {
-          try {
-            if (threadId) {
-              await threadApi({}).updateThread({
-                threadId,
-                request,
-              })
-            }
-          } catch (err) {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
-          }
-        }
-        // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
-        if (request.delete) {
-          try {
-            if (threadId) {
-              threadApi({}).thrashThread({
-                threadId,
-              })
-            }
-          } catch (err) {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
-          }
-        }
-        // If the request is to delete the thread or message, or to remove a label (except the unread label)
-        if (
-          (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
-          request.delete
-        ) {
-          dispatch(
-            listRemoveItemDetail({
+      // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
+      if (!request.delete) {
+        try {
+          if (threadId) {
+            await threadApi({}).updateThread({
               threadId,
+              request,
+            })
+          }
+        } catch (err) {
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Error updating label.',
             })
           )
         }
-      } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Error updating label.',
-          })
-        )
       }
-    } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error updating label.',
-        })
-      )
-    }
-  }
-
-export const updateEmailLabelBatch =
-  ({
-    request,
-    request: { removeLabelIds },
-  }: IUpdateRequestParamsBatch): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { selectedEmails } = getState().email
+      // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
+      if (request.delete) {
+        try {
+          if (threadId) {
+            threadApi({}).thrashThread({
+              threadId,
+            })
+          }
+        } catch (err) {
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Error updating label.',
+            })
+          )
+        }
+      }
+      // If the request is to delete the thread or message, or to remove a label (except the unread label)
       if (
         (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
         request.delete
       ) {
         dispatch(
-          listRemoveItemDetailBatch({
-            messageIds: selectedEmails.selectedIds,
+          listRemoveItemDetail({
+            threadId,
           })
         )
       }
-      for (let i = 0; i < selectedEmails.selectedIds.length; i += 1) {
-        if (!request.delete) {
-          const selectedId = selectedEmails.selectedIds[i]
-          if (selectedId) {
-            try {
-              threadApi({}).updateThread({
-                threadId: selectedId,
-                request,
-              })
-            } catch (err) {
-              dispatch(
-                setSystemStatusUpdate({
-                  type: 'error',
-                  message: 'Error updating label.',
-                })
-              )
-            }
-          } else {
+    } else {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Error updating label.',
+        })
+      )
+    }
+  } catch (err) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Error updating label.',
+      })
+    )
+  }
+}
+
+export const updateEmailLabelBatch = ({
+  request,
+  request: { removeLabelIds },
+}: TUpdateRequestParamsBatchThread): AppThunk => async (dispatch, getState) => {
+  try {
+    const { selectedEmails } = getState().email
+    if (
+      (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
+      request.delete
+    ) {
+      dispatch(
+        listRemoveItemDetailBatch({
+          messageIds: selectedEmails.selectedIds,
+        })
+      )
+    }
+    for (let i = 0; i < selectedEmails.selectedIds.length; i += 1) {
+      if (!request.delete) {
+        const selectedId = selectedEmails.selectedIds[i]
+        if (selectedId) {
+          try {
+            threadApi({}).updateThread({
+              threadId: selectedId,
+              request,
+            })
+          } catch (err) {
             dispatch(
               setSystemStatusUpdate({
                 type: 'error',
@@ -782,33 +710,63 @@ export const updateEmailLabelBatch =
               })
             )
           }
-        }
-        if (request.delete) {
-          const selectedId = selectedEmails.selectedIds[i]
-          if (selectedId) {
-            try {
-              threadApi({}).thrashThread({
-                threadId: selectedId,
-              })
-            } catch (err) {
-              dispatch(
-                setSystemStatusUpdate({
-                  type: 'error',
-                  message: 'Error updating label.',
-                })
-              )
-            }
-          } else {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
-          }
+        } else {
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Error updating label.',
+            })
+          )
         }
       }
-    } catch (err) {
+      if (request.delete) {
+        const selectedId = selectedEmails.selectedIds[i]
+        if (selectedId) {
+          try {
+            threadApi({}).thrashThread({
+              threadId: selectedId,
+            })
+          } catch (err) {
+            dispatch(
+              setSystemStatusUpdate({
+                type: 'error',
+                message: 'Error updating label.',
+              })
+            )
+          }
+        } else {
+          dispatch(
+            setSystemStatusUpdate({
+              type: 'error',
+              message: 'Error updating label.',
+            })
+          )
+        }
+      }
+    }
+  } catch (err) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Error updating label.',
+      })
+    )
+  }
+}
+
+export const updateMessageLabel = ({
+  threadId,
+  messageId,
+  request,
+}: {
+  messageId: string
+  threadId: string
+  request: TGmailV1SchemaModifyThreadRequestSchemaEnhanced
+}): AppThunk => async (dispatch) => {
+  if (request.delete) {
+    try {
+      await messageApi().thrashMessage({ messageId })
+    } catch {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
@@ -818,37 +776,13 @@ export const updateEmailLabelBatch =
     }
   }
 
-export const updateMessageLabel =
-  ({
-    threadId,
-    messageId,
-    request,
-  }: {
-    messageId: string
-    threadId: string
-    request: IUpdateRequest
-  }): AppThunk =>
-  async (dispatch) => {
-    if (request.delete) {
-      try {
-        await messageApi().thrashMessage({ messageId })
-      } catch {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Error updating label.',
-          })
-        )
-      }
-    }
-
-    dispatch(
-      listRemoveItemMessage({
-        messageId,
-        threadId,
-      })
-    )
-  }
+  dispatch(
+    listRemoveItemMessage({
+      messageId,
+      threadId,
+    })
+  )
+}
 
 /**
  * @function refreshEmailFeed
@@ -860,21 +794,25 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
   try {
     dispatch(setIsFetching(true))
     const { storageLabels } = getState().labels
-    const savedHistoryId = parseInt(getState().base.profile.historyId, 10)
+    const savedHistoryId = Number(getState().base.profile.historyId ?? 0)
     const response = await historyApi().listHistory(
       savedHistoryId,
       storageLabels
     )
-    if (response?.status === 200) {
-      const { history } = response.data
-      if (history) {
-        for (let i = 0; i < history.length; i += 1) {
-          dispatch(loadEmailDetails(history[i]))
-        }
+    if (
+      'status' in response &&
+      response?.status === 200 &&
+      'data' in response
+    ) {
+      if ('threads' in response.data) {
+        dispatch(loadEmailDetails(response.data))
       }
-      const { data } = await userApi().fetchUser()
+      const userResponse = await userApi().fetchUser()
       const { signature } = getState().base.profile
-      dispatch(setProfile({ signature, ...data }))
+      if ('data' in userResponse) {
+        const { data } = userResponse
+        dispatch(setProfile({ signature, ...data }))
+      }
       handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
     } else {
       dispatch(
@@ -887,7 +825,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
   } catch (err) {
     const typedError: any = err
     process.env.NODE_ENV === 'development' &&
-      console.error(typedError.response.message)
+      console.error(typedError?.response?.message || typedError)
     dispatch(
       setSystemStatusUpdate({
         type: 'error',

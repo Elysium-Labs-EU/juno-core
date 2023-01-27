@@ -1,9 +1,9 @@
 import format from 'date-fns/format'
 
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 
 export default function getEmailListTimeStamp(
-  emailList: Array<IEmailListObject>,
+  emailList: Array<TEmailListObject>,
   activeEmailListIndex: number
 ) {
   const timeStamp = emailList[activeEmailListIndex]?.timestamp

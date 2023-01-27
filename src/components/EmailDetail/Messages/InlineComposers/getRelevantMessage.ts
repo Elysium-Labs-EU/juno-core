@@ -1,4 +1,4 @@
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function getRelevantMessage
@@ -11,7 +11,7 @@ export default function getRelevantMessage({
   localThreadDetail,
 }: {
   selectedIndex: number | undefined
-  localThreadDetail: IEmailListThreadItem
+  localThreadDetail: TThreadObject
 }) {
   if (selectedIndex !== undefined) {
     return localThreadDetail.messages[

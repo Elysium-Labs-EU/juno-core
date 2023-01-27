@@ -5,10 +5,10 @@ import type { IContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 import isEqual from 'utils/isEqual/isEqual'
 
-import { recipientListTransform } from '../ComposeEmail'
-import type { IRecipientsList } from '../ComposeEmailTypes'
 import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
+import { recipientListTransform } from '../ComposeEmail'
+import type { IRecipientsList } from '../ComposeEmailTypes'
 
 const ContactField = ({
   composeValue = undefined,

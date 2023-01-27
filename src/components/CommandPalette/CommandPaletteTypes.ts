@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
 
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 
 export interface ISearchBody {
   q: string
@@ -12,6 +12,6 @@ export interface ICommandPalletteSearchResults {
   handleOpenEmailEvent: (threadId: string) => void
   loadState: string
   loadMoreSearchResults: () => void
-  searchResults: IEmailListObject | undefined
+  searchResults: TEmailListObject | undefined
   setFocusedItemIndex: Dispatch<SetStateAction<number>>
 }

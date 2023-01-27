@@ -1,4 +1,5 @@
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 /**
  * @function getEmailListIndex
@@ -9,8 +10,8 @@ import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
  */
 
 export interface IEmailListFilteredByLabel {
-  emailList: Array<IEmailListObject>
-  labelIds: Array<string>
+  emailList: TEmailListState['emailList']
+  labelIds: TLabelState['labelIds']
 }
 
 const getEmailListIndex = (props: IEmailListFilteredByLabel): number => {

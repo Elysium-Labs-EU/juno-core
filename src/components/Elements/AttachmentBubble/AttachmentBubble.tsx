@@ -22,11 +22,11 @@ import {
 import * as GS from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
-import { viewAttachment } from 'utils/viewAttachment'
+import viewAttachment from 'utils/viewAttachment'
 
-import AttachmentModal from '../AttachmentModal/AttachmentModal'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
+import AttachmentModal from '../AttachmentModal/AttachmentModal'
 
 const ICON_SIZE = 20
 
@@ -113,8 +113,10 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
     ref
   ) => {
     const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-    const [fetchedAttachmentData, setFetchedAttachmentData] =
-      useState<null | IFetchedAttachment>(null)
+    const [
+      fetchedAttachmentData,
+      setFetchedAttachmentData,
+    ] = useState<null | IFetchedAttachment>(null)
     const dispatch = useAppDispatch()
     const activeModal = useAppSelector(selectActiveModal)
 

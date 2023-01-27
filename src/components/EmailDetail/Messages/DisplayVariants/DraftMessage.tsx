@@ -5,9 +5,9 @@ import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
-import EmailSubject from 'components/Elements/EmailSubject'
-import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
-import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import emailSubject from 'components/Elements/EmailSubject'
+import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
 import EmailAttachment from 'components/EmailDetail/Attachment/EmailAttachment'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
@@ -18,20 +18,15 @@ import { QiFolderTrash } from 'images/svgIcons/quillIcons'
 import { selectProfile } from 'store/baseSlice'
 import { selectDraftList } from 'store/draftsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import * as GS from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
 
-import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import LinkedContacts from './Recipients/LinkedContacts'
+import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 
-const DraftMessage = ({
-  message,
-  draftIndex,
-  handleClickListener,
-  hideDraft,
-}: {
-  message: IEmailMessage
+interface IDraftMessage {
+  message: TThreadObject['messages'][0]
   draftIndex: number
   handleClickListener: ({
     id,
@@ -43,7 +38,14 @@ const DraftMessage = ({
     dIndex: number
   }) => void
   hideDraft: boolean
-}) => {
+}
+
+const DraftMessage = ({
+  message,
+  draftIndex,
+  handleClickListener,
+  hideDraft,
+}: IDraftMessage) => {
   const [open, setOpen] = useState<boolean>(true)
   const { emailAddress } = useAppSelector(selectProfile)
   const draftList = useAppSelector(selectDraftList)
@@ -53,16 +55,16 @@ const DraftMessage = ({
     message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
-    () => SenderNameFull(message.payload.headers?.from, emailAddress),
+    () => senderNameFull(message.payload.headers?.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => SenderNamePartial(message.payload.headers?.from, emailAddress),
+    () => senderNamePartial(message.payload.headers?.from, emailAddress),
     []
   )
 
   const staticEmailSubject = useMemo(
-    () => EmailSubject(message.payload.headers?.subject),
+    () => emailSubject(message.payload.headers?.subject),
     []
   )
 

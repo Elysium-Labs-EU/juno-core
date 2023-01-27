@@ -1,17 +1,17 @@
 import { CORE_STATUS_MAP } from 'constants/globalConstants'
 import { setCoreStatus, setSessionViewIndex } from 'store/emailDetailSlice'
 import type { AppDispatch } from 'store/store'
-import type { IEmailListState } from 'store/storeTypes/emailListTypes'
-import type { ILabelState } from 'store/storeTypes/labelsTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import labelURL from 'utils/createLabelURL'
 import startSort from 'utils/startSort'
 
 interface IActivateTodo {
-  activeEmailListIndex: IEmailListState['activeEmailListIndex']
+  activeEmailListIndex: TEmailListState['activeEmailListIndex']
   dispatch: AppDispatch
-  emailList: IEmailListState['emailList']
-  labelIds: ILabelState['labelIds']
-  selectedEmails?: IEmailListState['selectedEmails']
+  emailList: TEmailListState['emailList']
+  labelIds: TLabelState['labelIds']
+  selectedEmails?: TEmailListState['selectedEmails']
 }
 
 export default function activateTodo({

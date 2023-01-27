@@ -1,16 +1,17 @@
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 /**
  * Filters trash messages from an email thread
- * @param {IEmailListThreadItem | undefined} thread - The email thread to filter
+ * @param {TThreadObject | undefined} thread - The email thread to filter
  * @param {Array<string>} labelIds - The list of label ids to filter by
- * @returns {IEmailListThreadItem} - The email thread with trash messages filtered out
+ * @returns {TThreadObject} - The email thread with trash messages filtered out
  */
 
 const filterTrashMessages = (
-  thread: IEmailListThreadItem | undefined | null,
-  labelIds: Array<string>
+  thread: TThreadObject | undefined | null,
+  labelIds: TLabelState['labelIds']
 ) => {
   if (
     !thread ||

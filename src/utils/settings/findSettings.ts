@@ -1,7 +1,7 @@
 import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { removeLabel } from 'store/labelsSlice'
 import type { AppDispatch } from 'store/store'
-import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 
 /**
  * @function findSettings
@@ -11,9 +11,12 @@ import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
  * @returns null or a Google Label that is the settings label.
  */
 
-const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
+const findSettings = (
+  labels: Array<TGmailV1SchemaLabelSchema>,
+  dispatch: AppDispatch
+) => {
   const result = labels.filter((label) =>
-    label.name.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
+    label.name?.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
   )
 
   if (!result.length) {
@@ -25,7 +28,10 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
 
   const longestSettingsLabel = result.reduce(
     (acc, curr) => {
-      if (curr.name.length > acc.name.length) {
+      if (
+        (curr?.name && acc?.name && curr.name.length > acc.name.length) ||
+        !acc.name
+      ) {
         return curr
       }
       return acc
@@ -38,7 +44,7 @@ const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
   result
     .filter((label) => label !== longestSettingsLabel)
     .forEach((label) => {
-      if (label) {
+      if (label && label?.id) {
         dispatch(removeLabel(label.id))
       }
     })

@@ -1,5 +1,5 @@
-import StyledCircularProgress from '../CircularProgress/StyledCircularProgress'
 import * as S from './LoadingStateStyles'
+import StyledCircularProgress from '../CircularProgress/StyledCircularProgress'
 
 const LoadingState = () => (
   <S.Wrapper>

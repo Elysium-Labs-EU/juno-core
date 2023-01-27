@@ -10,7 +10,7 @@ import {
 } from 'constants/baseConstants'
 import * as global from 'constants/globalConstants'
 import type { AppDispatch } from 'store/store'
-import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 import { setSettings } from 'store/utilsSlice'
 
 import createSettingsLabel from './createSettingsLabel'
@@ -27,9 +27,9 @@ import fixMissingSetting from './fixMissingSetting'
 
 export default function parseSettings(
   dispatch: AppDispatch,
-  settingsLabel: IGoogleLabel
+  settingsLabel: TGmailV1SchemaLabelSchema
 ): void {
-  const parsedSettings = settingsLabel.name.split(SETTINGS_DELIMITER)
+  const parsedSettings = settingsLabel.name?.split(SETTINGS_DELIMITER)
   if (parsedSettings && parsedSettings.length > 0) {
     // Remove the prefix of 'Juno/' from the parsed result
     parsedSettings.shift()

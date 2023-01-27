@@ -17,7 +17,7 @@ import {
 } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import { selectAlternateActions } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import { findLabelByName } from 'utils/findLabel'
@@ -26,7 +26,7 @@ import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 import EmailDetailOptionStacker from './EmailDetailOptionsStacker/EmailDetailOptionStacker'
 
 interface IEmailDetailOptions {
-  threadDetail: IEmailListThreadItem
+  threadDetail: TThreadObject
   unsubscribeLink: string | null
 }
 

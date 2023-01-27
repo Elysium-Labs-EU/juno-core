@@ -1,12 +1,15 @@
 import * as global from 'constants/globalConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
 import type { AppDispatch } from 'store/store'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
+
+// TODO: Update these types
 
 interface ILoadNextPage {
   dispatch: AppDispatch
   fetchSimple?: boolean
-  labelIds: string[]
+  labelIds: TLabelState['labelIds']
   maxResults: number
   nextPageToken: string | null | undefined
   q?: string
@@ -36,11 +39,11 @@ const loadNextPage = ({
 export default loadNextPage
 
 interface IEdgeLoadingNextPage {
-  activeEmailList: IEmailListObject
+  activeEmailList: TEmailListObject
   dispatch: AppDispatch
   emailFetchSize: number
   isSilentLoading: boolean
-  labelIds: string[]
+  labelIds: TLabelState['labelIds']
 }
 
 export const edgeLoadingNextPage = ({

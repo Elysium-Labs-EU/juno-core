@@ -1,8 +1,12 @@
 import * as global from 'constants/globalConstants'
+import type { TProfile } from 'store/storeTypes/baseTypes'
 
 import { NO_SENDER } from './senderNamePartial'
 
-const senderNameFull = (fromHeader: string, emailAddress: string): string => {
+const senderNameFull = (
+  fromHeader: string | null,
+  emailAddress: TProfile['emailAddress']
+): string => {
   if (fromHeader) {
     if (fromHeader.length > 0) {
       if (emailAddress && fromHeader.includes(emailAddress)) {

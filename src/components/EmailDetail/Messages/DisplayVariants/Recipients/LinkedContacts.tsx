@@ -8,7 +8,7 @@ import * as emailDetail from 'constants/emailDetailConstants'
 import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import type { IContact } from 'store/storeTypes/contactsTypes'
-import type { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import * as GS from 'styles/globalStyles'
 import { handleContactConversion } from 'utils/convertToContact'
 
@@ -80,7 +80,11 @@ const MappedContacts = ({
   )
 }
 
-const LinkedContants = ({ message }: { message: IEmailMessage }) => {
+const LinkedContants = ({
+  message,
+}: {
+  message: TThreadObject['messages'][0]
+}) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
   const [firstSenderContact] = handleContactConversion(

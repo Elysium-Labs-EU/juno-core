@@ -12,7 +12,7 @@ import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
 import { selectSearchList } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectEmailListSize,
   selectIsSilentLoading,
@@ -29,7 +29,7 @@ import Tabs from './Tabs/Tabs'
 const EmailDetailHeader = ({
   activeEmailList,
 }: {
-  activeEmailList: IEmailListObject
+  activeEmailList: TEmailListObject
 }) => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const emailFetchSize = useAppSelector(selectEmailListSize)
@@ -51,7 +51,7 @@ const EmailDetailHeader = ({
       location?.pathname?.includes(labelIds[0])
     ) {
       const matchedLabel = findLabelById({ storageLabels, labelIds })
-      if (matchedLabel) {
+      if (matchedLabel && matchedLabel.name) {
         const lastHeader = matchedLabel.name.split('/').pop()
         mounted && lastHeader && setDetailHeader(lastHeader.toLowerCase())
       } else {

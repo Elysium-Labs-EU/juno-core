@@ -1,10 +1,12 @@
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
-export default function countUniqueFiles(activeThread: IEmailListThreadItem) {
+export default function countUniqueFiles(activeThread: TThreadObject) {
   let filesCount = 0
   const uniqueFilesArray = [
     ...new Set(
-      activeThread?.messages?.map((message) => message?.payload?.files)
+      activeThread?.messages?.map((message) =>
+        'files' in message.payload ? message?.payload?.files : []
+      )
     ),
   ]
 

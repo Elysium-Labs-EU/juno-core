@@ -5,14 +5,14 @@ import StyledCircularProgress from 'components/Elements/CircularProgress/StyledC
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
-import type { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
+import type { TFullMessage } from 'store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
 
 interface IDownloadButtonMultiple {
   filesObjectArray: Array<{
     id: string
-    files: Array<IEmailMessagePayloadRaw> | undefined
+    files: Pick<TFullMessage, 'payload'>['payload']['files'] | undefined
   }>
   isMainButton?: boolean
 }
@@ -32,7 +32,7 @@ const asssesUniqueFiles = ({
         id: fileObject.id,
         files: fileObject.files.filter((file) => {
           const { filename, body } = file
-          const fileKey = `${filename}-${body.size}`
+          const fileKey = `${filename}-${body?.size}`
           if (processedFiles.has(fileKey)) {
             return undefined
           }

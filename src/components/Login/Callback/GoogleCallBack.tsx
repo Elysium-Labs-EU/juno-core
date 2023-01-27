@@ -22,8 +22,12 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const { code, state }: { code?: string; state?: string } =
-        parseQueryString(window.location.search)
+      const {
+        code,
+        state,
+      }: { code?: string; state?: string } = parseQueryString(
+        window.location.search
+      )
       try {
         const body = {
           code,
@@ -32,7 +36,11 @@ const GoogleCallBack = () => {
 
         const response = await userApi().authGoogleCallback(body)
         // If the cloud backend is used with the local frontend, the authorization requires the complete Credentials object.
-        if (response?.status === 200) {
+        if (
+          'status' in response &&
+          response?.status === 200 &&
+          'data' in response
+        ) {
           if (
             import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
           ) {
@@ -43,10 +51,14 @@ const GoogleCallBack = () => {
           dispatch(setIsAuthenticated(true))
           dispatch(push(RoutesConstants.TODO))
         } else {
+          const message =
+            'error' in response
+              ? response?.error ?? global.SOMETHING_WRONG
+              : global.SOMETHING_WRONG
           dispatch(
             setSystemStatusUpdate({
               type: 'error',
-              message: response?.error ?? global.SOMETHING_WRONG,
+              message,
             })
           )
           dispatch(push(RoutesConstants.LOGIN))

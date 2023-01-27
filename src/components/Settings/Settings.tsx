@@ -4,12 +4,12 @@ import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 
-import CustomModal from '../Elements/Modal/CustomModal'
 import Contributions from './Contributions/Contributions'
 import General from './General/General'
 import SettingsSidebar from './SettingsSidebar/SettingsSidebar'
 import * as S from './SettingsStyles'
 import Signature from './Signature/Signature'
+import CustomModal from '../Elements/Modal/CustomModal'
 
 const SETTINGS = 'Settings'
 

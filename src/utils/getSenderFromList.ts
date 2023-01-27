@@ -1,7 +1,4 @@
-import type {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
 import multipleIncludes from 'utils/multipleIncludes'
 
 /**
@@ -14,8 +11,8 @@ export default function getSenderFromList({
   selectedEmails,
   emailList,
 }: {
-  selectedEmails: ISelectedEmail
-  emailList: IEmailListObject[]
+  selectedEmails: TEmailListState['selectedEmails']
+  emailList: TEmailListState['emailList']
 }) {
   const filteredEmailList =
     emailList[

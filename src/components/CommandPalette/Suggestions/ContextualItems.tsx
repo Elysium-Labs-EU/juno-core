@@ -9,10 +9,8 @@ import {
   QiJump,
 } from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
-import {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
+import { TEmailListState } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import {
   archiveAllEmailCMDK,
   deleteAllEmailCMDK,
@@ -25,8 +23,8 @@ import getRecipientFromList from 'utils/getRecipientFromList'
 import getSenderFromList from 'utils/getSenderFromList'
 import multipleIncludes from 'utils/multipleIncludes'
 
-import type { IJsonStructure } from '../commandPaletteUtils'
 import defaultItems from './DefaultItems'
+import type { IJsonStructure } from '../commandPaletteUtils'
 
 export default function contextualItems({
   currentEmailBoxHasEmails,
@@ -39,11 +37,11 @@ export default function contextualItems({
 }: {
   currentEmailBoxHasEmails: boolean
   dispatch: AppDispatch
-  emailList: IEmailListObject[]
+  emailList: TEmailListState['emailList']
   isFlexibleFlowActive: boolean
-  labelIds: string[]
+  labelIds: TLabelState['labelIds']
   location: Location
-  selectedEmails: ISelectedEmail
+  selectedEmails: TEmailListState['selectedEmails']
 }): IJsonStructure[] {
   const itemsArray = defaultItems({
     currentEmailBoxHasEmails,

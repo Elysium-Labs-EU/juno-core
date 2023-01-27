@@ -6,7 +6,7 @@ import * as local from 'constants/menuConstants'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import filterTrashMessages from 'utils/filterTrashMessages'
 
 import FilesTab from './FilesTab'
@@ -23,7 +23,7 @@ const pathToActiveLink = {
   files: 'Files',
 }
 
-const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
+const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
   const [activeLink, setActiveLink] = useState(local.MESSAGE_MENU_ITEM.name)
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)

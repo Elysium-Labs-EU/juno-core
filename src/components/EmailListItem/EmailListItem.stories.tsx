@@ -81,6 +81,7 @@ WithAttachment.args = {
         internalDate: '2021-01-01T00:00:00.000Z',
         payload: {
           headers: {
+            deliveredTo: 'Jane Doe',
             date: '2021-01-01T00:00:00.000Z',
             from: 'John Doe',
             subject: 'Hello World',

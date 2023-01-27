@@ -19,7 +19,9 @@ import { selectProfile } from 'store/baseSlice'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TProfile } from 'store/storeTypes/baseTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import multipleIncludes from 'utils/multipleIncludes'
@@ -40,8 +42,8 @@ import Snippet from './Snippet'
  * @returns a filtered version of the emaillist object, if the draft label is found.
  */
 const shouldUseDraftOrRegular = (
-  labelIds: Array<string>,
-  email: IEmailListThreadItem
+  labelIds: TLabelState['labelIds'],
+  email: TThreadObject
 ) => {
   if (Array.isArray(labelIds) && labelIds.includes(global.DRAFT_LABEL)) {
     if (email?.messages) {
@@ -57,22 +59,23 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
-const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) =>
+const hasUnreadLabel = (emailListThreadItem: TThreadObject) =>
   emailListThreadItem.messages.some((message) =>
     message?.labelIds?.includes(global.UNREAD_LABEL)
   )
 
+interface ExtractEmailData {
+  emailAddress: TProfile['emailAddress']
+  memoizedDraftOrRegular: TThreadObject
+}
+
 export const getRecipientName = ({
   emailAddress,
   memoizedDraftOrRegular,
-}: {
-  emailAddress: string
-  memoizedDraftOrRegular: IEmailListThreadItem
-}) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+}: ExtractEmailData) => {
+  const lastMessage = memoizedDraftOrRegular.messages![
+    memoizedDraftOrRegular.messages!.length - 1
+  ]
   if (lastMessage) {
     return recipientName(lastMessage?.payload?.headers?.to, emailAddress)
   }
@@ -81,14 +84,10 @@ export const getRecipientName = ({
 export const getSenderPartial = ({
   emailAddress,
   memoizedDraftOrRegular,
-}: {
-  emailAddress: string
-  memoizedDraftOrRegular: IEmailListThreadItem
-}) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+}: ExtractEmailData) => {
+  const lastMessage = memoizedDraftOrRegular.messages![
+    memoizedDraftOrRegular.messages!.length - 1
+  ]
   if (lastMessage) {
     return senderNamePartial(lastMessage?.payload?.headers?.from, emailAddress)
   }
@@ -97,14 +96,10 @@ export const getSenderPartial = ({
 export const getSenderFull = ({
   emailAddress,
   memoizedDraftOrRegular,
-}: {
-  emailAddress: string
-  memoizedDraftOrRegular: IEmailListThreadItem
-}) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+}: ExtractEmailData) => {
+  const lastMessage = memoizedDraftOrRegular.messages![
+    memoizedDraftOrRegular.messages!.length - 1
+  ]
   if (lastMessage) {
     return senderNameFull(lastMessage?.payload?.headers?.from, emailAddress)
   }
@@ -113,13 +108,10 @@ export const getSenderFull = ({
 
 const getSubject = ({
   memoizedDraftOrRegular,
-}: {
-  memoizedDraftOrRegular: IEmailListThreadItem
-}) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
+  const lastMessage = memoizedDraftOrRegular.messages![
+    memoizedDraftOrRegular.messages!.length - 1
+  ]
   if (lastMessage) {
     return emailSubject(lastMessage?.payload?.headers?.subject)
   }
@@ -127,13 +119,10 @@ const getSubject = ({
 }
 const getSnippet = ({
   memoizedDraftOrRegular,
-}: {
-  memoizedDraftOrRegular: IEmailListThreadItem
-}) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
+  const lastMessage = memoizedDraftOrRegular.messages![
+    memoizedDraftOrRegular.messages!.length - 1
+  ]
   if (lastMessage) {
     return emailSnippet(lastMessage)
   }
@@ -142,7 +131,7 @@ const getSnippet = ({
 
 interface IEmailListItem {
   activeIndex: number
-  email: IEmailListThreadItem
+  email: TThreadObject
   index: number
   showCheckbox: boolean
   showLabel: boolean

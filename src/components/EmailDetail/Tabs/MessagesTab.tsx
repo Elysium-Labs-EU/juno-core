@@ -1,10 +1,10 @@
 import * as local from 'constants/menuConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 import * as S from './TabsStyles'
 
 interface IMesssageTab {
-  activeThread: IEmailListThreadItem | undefined | null
+  activeThread: TThreadObject | undefined | null
   activeLink: string
   navigateTo: ({ link, name }: { link: string; name: string }) => void
 }

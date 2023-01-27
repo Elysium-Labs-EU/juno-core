@@ -18,12 +18,14 @@ export const testObject: IEmailListFilteredByLabel = {
               payload: {
                 mimeType: 'text/html',
                 headers: {
+                  deliveredTo: 'recipient@example.com',
                   date: 'Jan 1, 2021',
                   from: 'test@example.com',
                   subject: 'Test Email',
                   to: 'recipient@example.com',
                   cc: '',
                   bcc: '',
+                  listUnsubscribe: '',
                 },
                 files: [
                   {

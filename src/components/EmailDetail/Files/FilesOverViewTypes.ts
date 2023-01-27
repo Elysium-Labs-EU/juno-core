@@ -1,6 +1,6 @@
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 export interface IFilesOverview {
-  threadDetail: IEmailListThreadItem | null | undefined
+  threadDetail: TThreadObject | null | undefined
   isLoading: boolean
 }

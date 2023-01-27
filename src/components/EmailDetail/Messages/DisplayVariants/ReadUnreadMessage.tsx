@@ -1,4 +1,4 @@
-import {  useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
@@ -16,25 +16,22 @@ import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type {
-  IEmailListThreadItem,
-  IEmailMessage,
-} from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
+import LinkedContacts from './Recipients/LinkedContacts'
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import SpecificEmailOptions from '../SpecificEmailOptions'
-import LinkedContacts from './Recipients/LinkedContacts'
 
-interface IReadMessage {
+export interface IReadMessage {
   handleClickListener: ({ mIndex }: { mIndex: number }) => void
-  message: IEmailMessage
+  message: TThreadObject['messages'][0]
   messageIndex: number
-  threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
+  threadDetail: TThreadObject | null | undefined
 }
 
 const ReadUnreadMessage = ({

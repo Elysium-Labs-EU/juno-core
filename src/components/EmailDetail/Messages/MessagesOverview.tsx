@@ -7,26 +7,26 @@ import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
-import type { ILabelState } from 'store/storeTypes/labelsTypes'
+import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import type { IUtilsState } from 'store/storeTypes/utilsTypes'
 
-import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import EmailDetailOptions from './EmailDetailOptions'
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
 import ReplyComposer from './InlineComposers/ReplyComposer'
+import * as ES from '../EmailDetailStyles'
 
 interface IMessagesOverview {
-  isForwarding: IEmailDetailState['isForwarding']
+  isForwarding: TEmailDetailState['isForwarding']
   isLoading: IUtilsState['isLoading']
-  isReplying: IEmailDetailState['isReplying']
-  labelIds: ILabelState['labelIds']
+  isReplying: TEmailDetailState['isReplying']
+  labelIds: TLabelState['labelIds']
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  threadDetail: IEmailListThreadItem | undefined | null
+  threadDetail: TThreadObject | undefined | null
 }
 
 interface IMappedMessages
@@ -81,10 +81,9 @@ const MappedMessages = ({
     [threadDetail]
   )
 
-  return threadDetail?.messages ? (
-    // eslint-disable-next-line react/jsx-no-useless-fragment
+  return reversedMessagesOrder ? (
     <>
-      {reversedMessagesOrder?.map((message, index) => (
+      {reversedMessagesOrder.map((message, index) => (
         <div key={message.id}>
           {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
             <DraftMessage
@@ -120,8 +119,10 @@ const MessagesOverview = ({
   setShouldRefreshDetail,
 }: IMessagesOverview) => {
   const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
-  const [localThreadDetail, setLocalThreadDetail] =
-    useState<IEmailListThreadItem | null>(null)
+  const [
+    localThreadDetail,
+    setLocalThreadDetail,
+  ] = useState<TThreadObject | null>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
     undefined
   )

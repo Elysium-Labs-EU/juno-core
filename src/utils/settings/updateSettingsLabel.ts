@@ -153,7 +153,7 @@ export const storeUpdatedSettingsLabel = async (
       id: settingsLabelId,
       requestBody: { name: updatedString },
     })
-    if (response?.type !== 'user') {
+    if ('data' in response && response.data?.type !== 'user') {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',

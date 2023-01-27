@@ -34,7 +34,11 @@ const Login = () => {
       const response = await userApi().authGoogle(
         import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
       )
-      if (response?.status === 200 && response?.data) {
+      if (
+        'status' in response &&
+        response?.status === 200 &&
+        'data' in response
+      ) {
         dispatch(push(response.data))
       } else {
         setLoadState(global.LOAD_STATE_MAP.error)
