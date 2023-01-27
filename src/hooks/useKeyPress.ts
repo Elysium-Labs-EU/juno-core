@@ -1,29 +1,38 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
-export default function useKeyPress(targetKey: string): boolean {
-  // State for keeping track of whether key is pressed
-  const [keyPressed, setKeyPressed] = useState(false)
-  // If pressed key is our target key then set to true
-  function downHandler({ key }: { key: any }): void {
-    if (key === targetKey) {
-      setKeyPressed(true)
-    }
-  }
-  // If released key is our target key then set to false
-  const upHandler = ({ key }: { key: any }): void => {
-    if (key === targetKey) {
-      setKeyPressed(false)
-    }
-  }
-  // Add event listeners
+/**
+ * @function
+ * @name useKeyboardShortcut
+ * @description A custom hook that handles the keyboard shortcuts
+ * @param {IUseKeyboardShortcut} options - An object containing the options for the hook
+ *  @returns {void}
+ */
+
+interface IUseKeyboardShortcut {
+  key: string
+  handleEvent: () => void
+  isDisabled?: boolean
+  refreshOnDeps?: Array<any>
+}
+
+export default function useKeyboardShortcut({
+  key,
+  handleEvent,
+  isDisabled = false,
+  refreshOnDeps = undefined,
+}: IUseKeyboardShortcut) {
   useEffect(() => {
+    const downHandler = (e: KeyboardEvent) => {
+      if (isDisabled) return
+      if (e.key === key) {
+        e.preventDefault()
+        e.stopPropagation()
+        handleEvent()
+      }
+    }
     window.addEventListener('keydown', downHandler)
-    window.addEventListener('keyup', upHandler)
-    // Remove event listeners on cleanup
     return () => {
       window.removeEventListener('keydown', downHandler)
-      window.removeEventListener('keyup', upHandler)
     }
-  }, [])
-  return keyPressed
+  }, [isDisabled, key, handleEvent, refreshOnDeps])
 }

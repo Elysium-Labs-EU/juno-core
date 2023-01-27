@@ -31,7 +31,9 @@ const TodoHeader = () => {
         <Navigation />
       </S.NavContainer>
       {!isFlexibleFlowActive ? (
-        <S.StrictFlowButtonContainer>
+        <S.StrictFlowButtonContainer
+          isFlexibleFlowActive={isFlexibleFlowActive}
+        >
           <TodoFocusOption />
           <InboxSortOption />
         </S.StrictFlowButtonContainer>
