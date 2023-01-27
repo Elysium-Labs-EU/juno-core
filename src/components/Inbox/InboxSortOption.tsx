@@ -51,7 +51,9 @@ const InboxSortOption = () => {
 
   const resultMap = {
     [global.LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${totalThreads})`,
-    [global.LOAD_STATE_MAP.loading]: <StyledCircularProgress size={10} />,
+    [global.LOAD_STATE_MAP.loading]: totalThreads > 0 && (
+      <StyledCircularProgress size={10} />
+    ),
     [global.LOAD_STATE_MAP.error]: undefined,
     [global.LOAD_STATE_MAP.idle]: undefined,
   }

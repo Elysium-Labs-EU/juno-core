@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
+import * as local from 'constants/menuConstants'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
@@ -22,8 +23,13 @@ const pathToActiveLink = {
   files: 'Files',
 }
 
+<<<<<<< #895---Build-Schema-validation
 const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
   const [activeLink, setActiveLink] = useState('')
+=======
+const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
+  const [activeLink, setActiveLink] = useState(local.MESSAGE_MENU_ITEM.name)
+>>>>>>> dev
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)
   const labelIds = useAppSelector(selectLabelIds)

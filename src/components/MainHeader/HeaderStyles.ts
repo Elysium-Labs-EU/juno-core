@@ -1,23 +1,23 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Wrapper = styled.div`
-  padding: 0 20px;
+  padding: 0 var(--spacing-2);
   position: relative;
 `
 
 export const InnerMenu = styled.div`
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-2);
   align-items: center;
   min-width: 665px;
   max-width: min(100vw - 340px, 860px);
   justify-content: space-between;
   flex: 1 1;
-  margin: 40px auto 20px;
+  margin: var(--spacing-4) auto var(--spacing-2);
 `
 
 export const NavContainer = styled.div`
-  padding: 0 20px;
+  padding: 0 var(--spacing-2);
   position: relative;
 `
 
@@ -31,7 +31,7 @@ export const BackButtonWithNavgationContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-4);
 `
 
 export const FocusSortHeaderWrapper = styled.div`
@@ -40,23 +40,31 @@ export const FocusSortHeaderWrapper = styled.div`
   width: 100%;
 `
 
-export const StrictFlowButtonContainer = styled.div`
+interface IStrictFlowButtonContainer {
+  isFlexibleFlowActive?: boolean
+}
+
+export const StrictFlowButtonContainer = styled.div<IStrictFlowButtonContainer>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 40px 0 20px;
+  margin: var(--spacing-4) 0 var(--spacing-2);
 
-  button:nth-child(1) {
-    margin-right: 20px;
-  }
+  ${({ isFlexibleFlowActive }) =>
+    !isFlexibleFlowActive &&
+    css`
+      button:nth-child(1) {
+        margin-right: var(--spacing-2);
+      }
+    `}
   button:nth-child(2) {
-    margin-right: 5px;
+    margin-right: var(--spacing-0-5);
   }
 `
 
 export const PageTitle = styled.h2`
-  margin: 40px 0 0;
+  margin: var(--spacing-4) 0 0;
   font-weight: 200;
   user-select: none;
   text-transform: capitalize;
