@@ -23,13 +23,8 @@ const pathToActiveLink = {
   files: 'Files',
 }
 
-<<<<<<< #895---Build-Schema-validation
 const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
-  const [activeLink, setActiveLink] = useState('')
-=======
-const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   const [activeLink, setActiveLink] = useState(local.MESSAGE_MENU_ITEM.name)
->>>>>>> dev
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)
   const labelIds = useAppSelector(selectLabelIds)
