@@ -5,13 +5,17 @@ import { fetchDrafts } from 'store/draftsSlice'
 import { fetchEmailsSimple, refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLoadedInbox } from 'store/labelsSlice'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { selectEmailListSize } from 'store/utilsSlice'
 import isPromise from 'utils/isPromise'
 
 let timestampLastFiredWithLabel = { labelIds: [''], timeStamp: 0 }
 
 // Intention is to block the same type of request within a certain time period.
-const handleRequestTiming = (labelIds: Array<string>, firedTimeStamp: number) => {
+const handleRequestTiming = (
+  labelIds: TLabelState['labelIds'],
+  firedTimeStamp: number
+) => {
   if (
     labelIds.length === 0 ||
     labelIds !== timestampLastFiredWithLabel.labelIds
@@ -34,7 +38,7 @@ const handleRequestTiming = (labelIds: Array<string>, firedTimeStamp: number) =>
 }
 
 export default function useFetchEmailsDrafts(
-  labelIds: Array<string>,
+  labelIds: TLabelState['labelIds'],
   firedTimeStamp: number
 ) {
   const emailFetchSize = useAppSelector(selectEmailListSize)

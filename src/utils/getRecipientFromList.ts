@@ -1,9 +1,4 @@
-import type {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
-import multipleIncludes from 'utils/multipleIncludes'
-
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
 /**
  * @function getRecipientFromList
  * @param {object} - takes in an selectedEmails object and an emailList object
@@ -14,8 +9,8 @@ export default function getRecipientFromList({
   selectedEmails,
   emailList,
 }: {
-  selectedEmails: ISelectedEmail
-  emailList: Array<IEmailListObject>
+  selectedEmails: TEmailListState['selectedEmails']
+  emailList: TEmailListState['emailList']
 }) {
   const { labelIds, selectedIds } = selectedEmails
   if (!labelIds.length || !selectedIds.length) {

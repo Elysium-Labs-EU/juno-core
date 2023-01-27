@@ -1,33 +1,30 @@
-import type { AxiosResponse } from 'axios'
+import axios from 'axios'
+
+import type { ICustomError } from 'store/storeTypes/baseTypes'
+import type { TGmailV1SchemaMessageSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
 import { errorHandling, instance } from './api'
+import type { TemplateApiResponse } from './api'
 
 const messageApi = () => ({
-  getMessageDetail: async (messageId: string) => {
-    try {
-      const res: AxiosResponse<any> = await instance.get(
-        `/api/message/${messageId}`
-      )
-      return res.data
-    } catch (err) {
-      return errorHandling(err)
-    }
-  },
-
   getAttachment: async ({
     messageId,
     attachmentId,
   }: {
     messageId: string
     attachmentId: string
-  }) => {
+  }): TemplateApiResponse<any> => {
     try {
-      const res: AxiosResponse<any> = await instance.get(
+      const res = await instance.get<any>(
         `/api/message/attachment/${messageId}/${attachmentId}`
       )
       return res
     } catch (err) {
-      return errorHandling(err)
+      if (axios.isAxiosError(err)) {
+        return errorHandling(err)
+      }
+      // Handle unexpected error
+      return err as ICustomError
     }
   },
 
@@ -37,48 +34,42 @@ const messageApi = () => ({
   }: {
     data: FormData
     timeOut: number
-  }) => {
+  }): TemplateApiResponse<TGmailV1SchemaMessageSchema> => {
     try {
-      const res: AxiosResponse<any> = await instance.post(`/api/send-message`, {
-        data,
-        timeOut,
-      })
-      return res
-    } catch (err) {
-      return errorHandling(err)
-    }
-  },
-  updateMessage: async ({ messageId, request }: any) => {
-    try {
-      const res: AxiosResponse<any> = await instance.patch(
-        `/api/message/${messageId}`,
-        request
+      const res = await instance.post<TGmailV1SchemaMessageSchema>(
+        `/api/send-message`,
+        {
+          data,
+          timeOut,
+        }
       )
       return res
     } catch (err) {
-      return errorHandling(err)
+      if (axios.isAxiosError(err)) {
+        return errorHandling(err)
+      }
+      // Handle unexpected error
+      return err as ICustomError
     }
   },
-  thrashMessage: async ({ messageId }: { messageId: string }) => {
+  thrashMessage: async ({
+    messageId,
+  }: {
+    messageId: string
+  }): TemplateApiResponse<TGmailV1SchemaMessageSchema> => {
     const data = {}
     try {
-      const res: AxiosResponse<any> = await instance.post(
+      const res = await instance.post<TGmailV1SchemaMessageSchema>(
         `/api/message/thrash/${messageId}`,
         data
       )
       return res
     } catch (err) {
-      return errorHandling(err)
-    }
-  },
-  deleteMessage: async (messageId: string) => {
-    try {
-      const res: AxiosResponse<any> = await instance.delete(`/api/message/`, {
-        data: { id: messageId },
-      })
-      return res.data
-    } catch (err) {
-      return errorHandling(err)
+      if (axios.isAxiosError(err)) {
+        return errorHandling(err)
+      }
+      // Handle unexpected error
+      return err as ICustomError
     }
   },
 })

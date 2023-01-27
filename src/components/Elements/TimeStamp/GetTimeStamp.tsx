@@ -1,5 +1,5 @@
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function getTimeStamp
@@ -9,7 +9,7 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  */
 
 export default function getTimeStamp(
-  email: IEmailListThreadItem,
+  email: TThreadObject,
   useAllMessages?: boolean
 ): string {
   const messages = email?.messages?.filter(

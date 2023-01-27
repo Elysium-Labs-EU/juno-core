@@ -18,7 +18,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectInSearch,
   setInSearch,
@@ -44,7 +44,7 @@ const openDetail = ({
 }: {
   currentEmail: string
   dispatch: AppDispatch
-  searchResults: IEmailListObject
+  searchResults: TEmailListObject
 }) => {
   dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
@@ -65,7 +65,7 @@ const handleClose = (dispatch: AppDispatch) => dispatch(setInSearch(false))
 const CommandPallette = () => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(0)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-  const [searchResults, setSearchResults] = useState<IEmailListObject>()
+  const [searchResults, setSearchResults] = useState<TEmailListObject>()
   const [searchValue, setSearchValue] = useState('')
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const searchValueRef = useRef('')
@@ -133,8 +133,12 @@ const CommandPallette = () => {
         const response = await threadApi({}).getSimpleThreads(
           searchBodyWithNextPageToken
         )
-        if (response?.data?.resultSizeEstimate > 0) {
-          const { threads, nextPageToken }: IEmailListObject = response.data
+        if (
+          'data' in response &&
+          response.data?.resultSizeEstimate &&
+          response.data.resultSizeEstimate > 0
+        ) {
+          const { threads, nextPageToken }: TEmailListObject = response.data
           // If there is no prior search - use this.
           if (searchValueRef.current !== searchValue) {
             searchValueRef.current = searchValue

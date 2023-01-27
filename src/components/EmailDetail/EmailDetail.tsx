@@ -26,7 +26,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectIsFlexibleFlowActive,
   selectIsLoading,
@@ -36,12 +36,12 @@ import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 import filterTrashMessages from 'utils/filterTrashMessages'
 import { findLabelByName } from 'utils/findLabel'
 
-import Baseloader from '../BaseLoader/BaseLoader'
 import EmailDetailHeader from './EmailDetailHeader'
 import * as S from './EmailDetailStyles'
 import FilesOverview from './Files/FilesOverview'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
 import MessagesOverview from './Messages/MessagesOverview'
+import Baseloader from '../BaseLoader/BaseLoader'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -72,7 +72,7 @@ const EmailDetail = () => {
     threadId: string
     overviewId: string
   }>()
-  const [activeEmailList, setActiveEmailList] = useState<IEmailListObject>()
+  const [activeEmailList, setActiveEmailList] = useState<TEmailListObject>()
   useFetchEmailDetail({
     threadId,
     activeEmailList,
@@ -200,15 +200,15 @@ const EmailDetail = () => {
               viewIndex > -1 && (
                 <>
                   <MessagesOverview
+                    isForwarding={isForwarding}
+                    isLoading={isLoading}
+                    isReplying={isReplying}
+                    labelIds={labelIds}
+                    setShouldRefreshDetail={setShouldRefreshDetail}
                     threadDetail={filterTrashMessages(
                       activeEmailList.threads[viewIndex],
                       labelIds
                     )}
-                    isLoading={isLoading}
-                    isReplying={isReplying}
-                    isForwarding={isForwarding}
-                    labelIds={labelIds}
-                    setShouldRefreshDetail={setShouldRefreshDetail}
                   />
                   {/* <S.HiddenMessagesFeed test-dataid="email-hidden-message-feed">
                     <PreLoadMessages
@@ -221,11 +221,11 @@ const EmailDetail = () => {
             {overviewId === local.FILES &&
               activeEmailList.threads.length > 0 && (
                 <FilesOverview
+                  isLoading={isLoading}
                   threadDetail={filterTrashMessages(
                     activeEmailList.threads[viewIndex],
                     labelIds
                   )}
-                  isLoading={isLoading}
                 />
               )}
           </S.EmailDetailWrapper>

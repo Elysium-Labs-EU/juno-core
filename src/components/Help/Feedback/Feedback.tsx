@@ -84,7 +84,7 @@ const Feedback = () => {
   const sendData = useCallback(async (body: ISendFeedback) => {
     try {
       const response = await feedbackApi().sendFeedback(body)
-      if (response?.status === 200) {
+      if ('status' in response && response?.status === 200) {
         setShowSuccess(true)
       } else {
         dispatch(
@@ -105,7 +105,7 @@ const Feedback = () => {
   }, [])
 
   const handleSubmit = useCallback(() => {
-    if (selectedType.type) {
+    if (selectedType.type && emailAddress) {
       const body: ISendFeedback = {
         type: selectedType.type,
         message: textAreaValue,

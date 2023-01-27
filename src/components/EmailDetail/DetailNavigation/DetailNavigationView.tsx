@@ -9,7 +9,7 @@ import { QiChevronLeft, QiChevronRight } from 'images/svgIcons/quillIcons'
 import { selectCoreStatus, selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   navigateNextMail,
   navigatePreviousMail,
@@ -25,7 +25,7 @@ const ICON_SIZE = 20
 interface IDetailNavigationView {
   isDisabledPrev: boolean
   isDisabledNext: boolean
-  activeEmailList: IEmailListObject
+  activeEmailList: TEmailListObject
 }
 
 const DetailNavigationView = ({
@@ -55,7 +55,7 @@ const DetailNavigationView = ({
       }
       if (coreStatus !== global.CORE_STATUS_MAP.searching) {
         // If loading isn't already happening, load the nextPage
-        const { nextPageToken } = activeEmailList as IEmailListObject
+        const { nextPageToken } = activeEmailList as TEmailListObject
         if (
           activeEmailList.nextPageToken !== null &&
           activeEmailList.threads[viewIndex + 1] === undefined &&

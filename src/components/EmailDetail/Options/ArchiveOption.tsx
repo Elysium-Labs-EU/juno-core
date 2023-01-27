@@ -8,7 +8,7 @@ import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiFolderArchive } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import { selectInSearch } from 'store/utilsSlice'
 import { setModifierKey } from 'utils/setModifierKey'
 
@@ -17,7 +17,7 @@ const ArchiveOption = ({
   threadDetail,
 }: {
   iconSize: number
-  threadDetail: IEmailListThreadItem
+  threadDetail: TThreadObject
 }) => {
   const labelIds = useAppSelector(selectLabelIds)
   const dispatch = useAppDispatch()
@@ -45,7 +45,7 @@ const ArchiveOption = ({
       label={local.BUTTON_ARCHIVE}
       suppressed
       title="Archive email"
-      dataCy='archive-button'
+      dataCy="archive-button"
     />
   )
 }

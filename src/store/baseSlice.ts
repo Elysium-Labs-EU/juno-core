@@ -9,8 +9,8 @@ import userApi from 'data/userApi'
 import { setBaseEmailList } from 'store/emailListSlice'
 import { createLabel, setStorageLabels } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
-import type { IBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
-import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { TBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
+import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
 import createSettingsLabel from 'utils/settings/createSettingsLabel'
 import findSettings from 'utils/settings/findSettings'
@@ -20,7 +20,7 @@ import type { TBaseEmailList } from './storeTypes/emailListTypes'
 
 /* eslint-disable no-param-reassign */
 
-const initialState: IBaseState = Object.freeze({
+const initialState: TBaseState = Object.freeze({
   baseLoaded: false,
   profile: {
     signature: '',
@@ -40,7 +40,7 @@ export const baseSlice = createSlice({
   reducers: {
     setBaseLoaded: (
       state,
-      { payload }: PayloadAction<IBaseState['baseLoaded']>
+      { payload }: PayloadAction<TBaseState['baseLoaded']>
     ) => {
       if (!state.baseLoaded) {
         state.baseLoaded = payload
@@ -48,30 +48,33 @@ export const baseSlice = createSlice({
     },
     setIsAuthenticated: (
       state,
-      { payload }: PayloadAction<IBaseState['isAuthenticated']>
+      { payload }: PayloadAction<TBaseState['isAuthenticated']>
     ) => {
       state.isAuthenticated = payload
     },
-    setProfile: (state, { payload }: PayloadAction<IBaseState['profile']>) => {
+    setProfile: (state, { payload }: PayloadAction<TBaseState['profile']>) => {
       state.profile = payload
     },
   },
 })
 
-export const { setBaseLoaded, setIsAuthenticated, setProfile } =
-  baseSlice.actions
+export const {
+  setBaseLoaded,
+  setIsAuthenticated,
+  setProfile,
+} = baseSlice.actions
 
-export const handleSettings =
-  (labels: Array<IGoogleLabel>): AppThunk =>
-  async (dispatch) => {
-    const settingsLabel = findSettings(labels, dispatch)
-    if (!settingsLabel) {
-      createSettingsLabel(dispatch)
-      return
-    }
-    dispatch(setSettingsLabelId(settingsLabel.id))
-    parseSettings(dispatch, settingsLabel)
+export const handleSettings = (
+  labels: Array<TGmailV1SchemaLabelSchema>
+): AppThunk => async (dispatch) => {
+  const settingsLabel = findSettings(labels, dispatch)
+  if (!settingsLabel || !settingsLabel.id) {
+    createSettingsLabel(dispatch)
+    return
   }
+  dispatch(setSettingsLabelId(settingsLabel.id))
+  parseSettings(dispatch, settingsLabel)
+}
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
@@ -88,25 +91,32 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
  * @returns adding all the required emailboxes as empty shells to the Redux state. To ensure that the position of the boxes are static.
  */
 
-const presetEmailList =
-  (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
-  (dispatch) => {
-    const emailListBuffer = [] as TBaseEmailList
+const presetEmailList = (prefetchedBoxes: TPrefetchedBoxes): AppThunk => (
+  dispatch
+) => {
+  const emailListBuffer = [] as TBaseEmailList
 
-    prefetchedBoxes.forEach((emailContainer) => {
-      const [firstEmailContainer] = emailContainer
-      if (firstEmailContainer) {
-        const presetEmailBox = {
-          labels: [firstEmailContainer?.id],
-          threads: [] as [],
-          nextPageToken: null,
-        }
-        emailListBuffer.push(presetEmailBox)
+  prefetchedBoxes.forEach((emailContainer) => {
+    const [firstEmailContainer] = emailContainer
+    if (firstEmailContainer && firstEmailContainer?.id) {
+      const presetEmailBox = {
+        labels: [firstEmailContainer.id],
+        threads: [] as Array<any>,
+        nextPageToken: null,
       }
-    })
+      emailListBuffer.push(presetEmailBox)
+    } else {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'We cannot setup all the email boxes.',
+        })
+      )
+    }
+  })
 
-    dispatch(setBaseEmailList(emailListBuffer))
-  }
+  dispatch(setBaseEmailList(emailListBuffer))
+}
 
 /**
  * @function finalizeBaseLoading
@@ -114,35 +124,35 @@ const presetEmailList =
  * @returns finalizes the base loading by setting the emaillist and the storagelabels in Redux and parsing the settings.
  */
 
-const finalizeBaseLoading =
-  (labels: Array<IGoogleLabel>): AppThunk =>
-  (dispatch) => {
-    // TODO: Refactor this to not be an array of arrays, but an array of objects
-    const prefetchedBoxes: TPrefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-      labels.filter((item) => item.name === baseLabel)
-    )
-    // Add an empty label to have the option to show ALL emails.
-    const addEmptyAllLabel = prefetchedBoxes.concat([
-      [
-        {
-          id: ARCHIVE_LABEL,
-          name: ARCHIVE_LABEL,
-          messageListVisibility: 'show',
-          labelListVisibility: 'labelShow',
-          type: 'junoCustom',
-        },
-      ],
-    ])
-    dispatch(presetEmailList(addEmptyAllLabel))
-    dispatch(setStorageLabels(addEmptyAllLabel))
-    dispatch(handleSettings(labels))
-    dispatch(setBaseLoaded(true))
-  }
+const finalizeBaseLoading = (
+  labels: Array<TGmailV1SchemaLabelSchema>
+): AppThunk => (dispatch) => {
+  // TODO: Refactor this to not be an array of arrays, but an array of objects
+  const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+    labels.filter((item) => item.name === baseLabel)
+  )
+  // Add an empty label to have the option to show ALL emails.
+  const addEmptyAllLabel = prefetchedBoxes.concat([
+    [
+      {
+        id: ARCHIVE_LABEL,
+        name: ARCHIVE_LABEL,
+        messageListVisibility: 'show',
+        labelListVisibility: 'labelShow',
+        type: 'junoCustom',
+      },
+    ],
+  ])
+  dispatch(presetEmailList(addEmptyAllLabel))
+  dispatch(setStorageLabels(addEmptyAllLabel))
+  dispatch(handleSettings(labels))
+  dispatch(setBaseLoaded(true))
+}
 
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {
     const userResponse = await userApi().fetchUser()
-    if (userResponse?.data && userResponse.status === 200) {
+    if ('data' in userResponse && userResponse.data.emailAddress) {
       const [sendAsResponse, labelResponse] = await Promise.allSettled([
         settingsApi().getSendAs(userResponse.data.emailAddress),
         labelApi().fetchLabels(),
@@ -151,7 +161,9 @@ export const checkBase = (): AppThunk => async (dispatch) => {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: `Network Error. ${labelResponse.reason}. Please try again later.`,
+            message: `Network Error. ${
+              labelResponse?.reason || JSON.stringify(labelResponse)
+            }. Please try again later.`,
           })
         )
       }
@@ -159,24 +171,27 @@ export const checkBase = (): AppThunk => async (dispatch) => {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',
-            message: `Network Error. ${sendAsResponse.reason}. Please try again later.`,
+            message: `Network Error. ${
+              sendAsResponse?.reason || JSON.stringify(labelResponse)
+            }. Please try again later.`,
           })
         )
       }
       if (
         sendAsResponse.status === 'fulfilled' &&
-        labelResponse.status === 'fulfilled'
+        'data' in sendAsResponse.value &&
+        labelResponse.status === 'fulfilled' &&
+        'data' in labelResponse.value
       ) {
-        dispatch(
-          setProfile({
-            signature: sendAsResponse?.value?.data?.signature ?? '',
-            ...userResponse.data,
-          })
-        )
-        const { labels } = labelResponse.value
+        const profileData = {
+          signature: sendAsResponse?.value?.data?.signature ?? '',
+          ...userResponse.data,
+        }
+        dispatch(setProfile(profileData))
+        const { labels } = labelResponse.value.data
         if (Array.isArray(labels) && labels.length > 0) {
           const nameMapLabels = new Set(
-            labels.map((label: IGoogleLabel) => label.name)
+            labels.map((label: TGmailV1SchemaLabelSchema) => label.name)
           )
           const missingLabels = BASE_ARRAY.filter(
             (item) => !nameMapLabels.has(item)
@@ -193,7 +208,9 @@ export const checkBase = (): AppThunk => async (dispatch) => {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: `Network Error. ${userResponse}. Please try again later.`,
+          message: `Network Error. ${JSON.stringify(
+            userResponse
+          )}. Please try again later.`,
         })
       )
     }

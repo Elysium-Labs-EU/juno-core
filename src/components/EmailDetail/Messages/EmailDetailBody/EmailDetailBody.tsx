@@ -5,6 +5,7 @@ import root from 'react-shadow/styled-components'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import { useAppDispatch } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
+import type { TFullMessage } from 'store/storeTypes/emailListTypes'
 import changeSignatureColor from 'utils/changeSignatureColor'
 import cleanLink from 'utils/cleanLink'
 import fetchUnsubscribeLink from 'utils/fetchUnsubscribeLink'
@@ -14,18 +15,13 @@ import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 
 import Wrapper from './EmailDetailBodyStyles'
 
+// TODO: Type this correctly
 interface IEmailDetailBody {
   threadDetailBody: any
   // threadDetailBody: IEmailMessagePayload
   detailBodyCSS: 'visible' | 'invisible'
   setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
   setBlockedTrackers?: Dispatch<SetStateAction<Array<string> | Array<any>>>
-}
-
-interface IBodyState {
-  emailHTML: string
-  emailFileHTML: Array<any>
-  removedTrackers: Array<string> | Array<any>
 }
 
 /**
@@ -57,7 +53,7 @@ const ShadowBody = ({
   bodyState,
   setUnsubscribeLink = undefined,
 }: {
-  bodyState: IBodyState
+  bodyState: TFullMessage['payload']['body']
   setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
 }) => {
   const dispatch = useAppDispatch()
@@ -87,7 +83,9 @@ const EmailDetailBody = ({
   setUnsubscribeLink = undefined,
   setBlockedTrackers = undefined,
 }: IEmailDetailBody) => {
-  const [bodyState, setBodyState] = useState<null | IBodyState>(null)
+  const [bodyState, setBodyState] = useState<
+    null | TFullMessage['payload']['body']
+  >(null)
   const [isDecoding, setIsDecoding] = useState(true)
   const [fallbackUnsubscribe, setFallbackUnsubscribe] = useState(true)
 
@@ -112,20 +110,18 @@ const EmailDetailBody = ({
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      {!isDecoding &&
-        bodyState?.emailHTML &&
-        bodyState.emailHTML.length > 0 && (
-          <ShadowBody
-            bodyState={bodyState}
-            setUnsubscribeLink={
-              // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
-              fallbackUnsubscribe ? setUnsubscribeLink : undefined
-            }
-          />
-        )}
+      {!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0 && (
+        <ShadowBody
+          bodyState={bodyState}
+          setUnsubscribeLink={
+            // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
+            fallbackUnsubscribe ? setUnsubscribeLink : undefined
+          }
+        />
+      )}
       {!isDecoding &&
         bodyState?.emailFileHTML &&
-        bodyState?.emailFileHTML.length > 0 &&
+        bodyState.emailFileHTML.length > 0 &&
         bodyState.emailFileHTML.map(
           (item, itemIdx) =>
             Object.prototype.hasOwnProperty.call(item, 'mimeType') &&

@@ -1,6 +1,6 @@
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 export interface IEmailDetailOptions {
   iconSize: number
-  threadDetail: IEmailListThreadItem
+  threadDetail: TThreadObject
 }

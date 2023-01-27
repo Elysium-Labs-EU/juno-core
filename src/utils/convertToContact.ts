@@ -1,8 +1,12 @@
 import { ME_LABEL } from 'constants/globalConstants'
+import type { TProfile } from 'store/storeTypes/baseTypes'
 import type { IContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
 
-const convertToMe = (header: string, emailAddress: string | undefined) => {
+const convertToMe = (
+  header: string,
+  emailAddress: TProfile['emailAddress']
+) => {
   if (emailAddress && header.includes(emailAddress)) {
     return ME_LABEL
   }
@@ -18,7 +22,7 @@ const convertToMe = (header: string, emailAddress: string | undefined) => {
 
 export function convertToContact(
   data: string,
-  emailAddress?: string
+  emailAddress?: TProfile['emailAddress']
 ): IContact {
   const splitted = data.split('<')
   const [first, second] = splitted
@@ -67,8 +71,8 @@ export function convertToContact(
  */
 
 export function handleContactConversion(
-  contactValue: string,
-  emailAddress?: string
+  contactValue: string | null,
+  emailAddress?: TProfile['emailAddress']
 ): Array<IContact> {
   if (
     contactValue &&

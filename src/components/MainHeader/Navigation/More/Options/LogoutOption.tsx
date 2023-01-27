@@ -5,7 +5,7 @@ import * as S from '../NavigationMoreStyles'
 
 export const handleLogout = async () => {
   const response = await userApi().logoutUser()
-  if (response?.status === 205) {
+  if ('status' in response && response.status === 205) {
     handleUserTokens().removeAllTokens()
     window.location.reload()
   }

@@ -16,6 +16,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -23,7 +25,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',
@@ -43,6 +45,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -50,7 +54,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',
@@ -70,6 +74,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -77,7 +83,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',
@@ -103,6 +109,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -110,7 +118,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',
@@ -130,6 +138,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -137,7 +147,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',
@@ -157,6 +167,8 @@ export const localInitialState = {
               payload: {
                 mimeType: '',
                 headers: {
+                  listUnsubscribe: '',
+                  deliveredTo: '',
                   date: '',
                   from: '',
                   subject: '',
@@ -164,7 +176,7 @@ export const localInitialState = {
                   cc: '',
                   bcc: '',
                 },
-                files: undefined,
+                files: [],
                 body: {
                   emailFileHTML: [],
                   emailHTML: '',

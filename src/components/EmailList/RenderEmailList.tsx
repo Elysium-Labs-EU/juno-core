@@ -9,7 +9,7 @@ import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectEmailListSize,
@@ -30,7 +30,7 @@ const SOURCE_TAG_EMAILLIST = 'emailList-thread-list-item'
 const RenderEmailList = ({
   filteredOnLabel,
 }: {
-  filteredOnLabel: IEmailListObject
+  filteredOnLabel: TEmailListObject
 }) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()

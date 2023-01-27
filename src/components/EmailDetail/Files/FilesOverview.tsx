@@ -11,11 +11,11 @@ import { useAppSelector } from 'store/hooks'
 import * as GS from 'styles/globalStyles'
 import countUniqueFiles from 'utils/countUniqueFiles/countUniqueFiles'
 
-import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
-import * as ES from '../EmailDetailStyles'
 import DownloadButtonMultiple from './DownloadFileMultiple'
 import * as S from './FilesOverviewStyles'
 import type { IFilesOverview } from './FilesOverViewTypes'
+import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
+import * as ES from '../EmailDetailStyles'
 
 const MappedFiles = ({
   threadDetail,

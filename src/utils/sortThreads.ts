@@ -1,5 +1,5 @@
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function sortThreads
@@ -9,7 +9,7 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  */
 
 export default function sortThreads(
-  sortObject: Array<IEmailListThreadItem>,
+  sortObject: Array<TThreadObject>,
   forceSort?: boolean
 ) {
   if (sortObject && sortObject.length > 0) {

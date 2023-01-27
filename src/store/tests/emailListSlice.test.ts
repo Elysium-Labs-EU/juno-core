@@ -1,10 +1,11 @@
 import { expect } from 'vitest'
 
 import type {
-  IEmailListState,
+  TEmailListState,
   ISelectedEmailAction,
 } from 'store/storeTypes/emailListTypes'
 
+import { localInitialState } from './data/constants'
 import reducer, {
   initialState,
   listRemoveItemDetail,
@@ -14,7 +15,6 @@ import reducer, {
   handleEmailListChange,
   setSelectedEmails,
 } from '../emailListSlice'
-import { localInitialState } from './data/constants'
 
 test('should return the initial state', () => {
   expect(reducer(undefined, { type: undefined })).toEqual(initialState)
@@ -44,6 +44,8 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -51,7 +53,7 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -71,6 +73,8 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -78,7 +82,7 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -104,6 +108,8 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -111,7 +117,7 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -131,6 +137,8 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -138,7 +146,7 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -158,6 +166,8 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -165,7 +175,7 @@ test('listRemoveItemMessage returns the correct state when removing 1 message', 
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -211,6 +221,8 @@ test('listRemoveItemDetail returns the correct state', () => {
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -218,7 +230,7 @@ test('listRemoveItemDetail returns the correct state', () => {
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -238,6 +250,8 @@ test('listRemoveItemDetail returns the correct state', () => {
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -245,7 +259,7 @@ test('listRemoveItemDetail returns the correct state', () => {
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -265,6 +279,8 @@ test('listRemoveItemDetail returns the correct state', () => {
                 payload: {
                   mimeType: '',
                   headers: {
+                    deliveredTo: '',
+                    listUnsubscribe: '',
                     date: '',
                     from: '',
                     subject: '',
@@ -272,7 +288,7 @@ test('listRemoveItemDetail returns the correct state', () => {
                     cc: '',
                     bcc: '',
                   },
-                  files: undefined,
+                  files: [],
                   body: {
                     emailFileHTML: [],
                     emailHTML: '',
@@ -312,7 +328,7 @@ test('removes all the threads that are sent as the payload', () => {
 })
 
 describe('handleAdditionToExistingEmailArray', () => {
-  const state: IEmailListState = {
+  const state: TEmailListState = {
     activeEmailListIndex: -1,
     emailList: [],
     searchList: {
@@ -374,7 +390,7 @@ describe('handleAdditionToExistingEmailArray', () => {
 })
 
 describe('handleEmailListChange', () => {
-  const state: IEmailListState = {
+  const state: TEmailListState = {
     activeEmailListIndex: -1,
     emailList: [],
     searchList: null,
@@ -447,7 +463,7 @@ describe('setSelectedEmails', () => {
         labelIds: ['INBOX'],
       },
     ]
-    const state: IEmailListState = {
+    const state: TEmailListState = {
       activeEmailListIndex: -1,
       emailList: [],
       isFetching: false,

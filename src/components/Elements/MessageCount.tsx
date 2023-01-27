@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import * as global from 'constants/globalConstants'
 import { QiMail } from 'images/svgIcons/quillIcons'
-import type { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 import StyledTooltip from './StyledTooltip'
 
@@ -30,7 +30,11 @@ const IconWrapper = styled.div`
   height: var(--small);
 `
 
-const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
+interface IMessages {
+  messages: Array<TThreadObject['messages'][0]>
+}
+
+const LengthMessageCount = ({ messages }: IMessages) => {
   const regularCount: number = messages.filter(
     (item) => !item?.labelIds?.includes(global.DRAFT_LABEL)
   ).length
@@ -70,7 +74,7 @@ const LengthMessageCount = ({ messages }: { messages: IEmailMessage[] }) => {
   )
 }
 
-const MessageCount = ({ messages }: { messages: IEmailMessage[] }) =>
+const MessageCount = ({ messages }: IMessages) =>
   messages.length > 1 ? (
     <LengthMessageCount messages={messages} data-testid="email-message-count" />
   ) : null

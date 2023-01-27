@@ -4,7 +4,7 @@ import * as global from 'constants/globalConstants'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import { selectEmailListSize, selectIsSilentLoading } from 'store/utilsSlice'
 import loadNextPage from 'utils/loadNextPage'
 
@@ -13,7 +13,7 @@ import DetailNavigationView from './DetailNavigationView'
 const DetailNavigationContainer = ({
   activeEmailList,
 }: {
-  activeEmailList: IEmailListObject
+  activeEmailList: TEmailListObject
 }) => {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)

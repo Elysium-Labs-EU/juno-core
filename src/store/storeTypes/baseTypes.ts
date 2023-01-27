@@ -1,19 +1,32 @@
-import { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import { z } from 'zod'
 
-export interface IProfile {
-  signature: string
-  name: string
-  picture: string
-  emailAddress: string
-  messagesTotal: number
-  threadsTotal: number
-  historyId: string
+import { gmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
+
+export const Profile = z.object({
+  signature: z.string().nullable().optional(),
+  name: z.string().nullable().optional(),
+  picture: z.string().nullable().optional(),
+  emailAddress: z.string().nullable().optional(),
+  messagesTotal: z.number().nullable().optional(),
+  threadsTotal: z.number().nullable().optional(),
+  historyId: z.string().nullable().optional(),
+})
+
+export type TProfile = z.infer<typeof Profile>
+
+export const BaseState = z.object({
+  baseLoaded: z.boolean(),
+  profile: Profile,
+  isAuthenticated: z.boolean(),
+})
+
+export type TBaseState = z.infer<typeof BaseState>
+
+export const PrefetchedBoxes = z.array(z.array(gmailV1SchemaLabelSchema))
+
+export type TPrefetchedBoxes = z.infer<typeof PrefetchedBoxes>
+
+export interface ICustomError {
+  error: any
+  message?: any
 }
-
-export interface IBaseState {
-  baseLoaded: boolean
-  profile: IProfile
-  isAuthenticated: boolean
-}
-
-export type TPrefetchedBoxes = IGoogleLabel[][]

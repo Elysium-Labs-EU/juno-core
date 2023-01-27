@@ -15,7 +15,7 @@ import {
 } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import emailLabels from 'utils/emailLabels'
 import { findLabelByName } from 'utils/findLabel'
 
@@ -23,7 +23,7 @@ import * as S from './InlineThreadActionsStyles'
 
 interface IInlineThreadActionsRegular {
   id: string
-  email: IEmailListThreadItem
+  email: TThreadObject
 }
 
 const ICON_SIZE = 18

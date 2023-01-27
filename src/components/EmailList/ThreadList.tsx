@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 
 import EmailListItem from 'components/EmailListItem/EmailListItem'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @component ThreadList
@@ -21,7 +21,7 @@ interface IThreadList {
   setFocusedItemIndex: Dispatch<SetStateAction<number>>
   showCheckbox?: boolean
   showLabel?: boolean
-  threads: Array<IEmailListThreadItem>
+  threads: Array<TThreadObject>
 }
 
 const ThreadList = ({

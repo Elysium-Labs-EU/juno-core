@@ -37,7 +37,10 @@ const fetchContacts = async ({
   }
   try {
     const responseQueryContacts = await contactApi().queryContacts(params)
-    if (responseQueryContacts.status === 200) {
+    if (
+      'data' in responseQueryContacts &&
+      responseQueryContacts.status === 200
+    ) {
       const {
         data: { results },
       } = responseQueryContacts
@@ -68,7 +71,7 @@ const fetchContacts = async ({
 }
 
 const filterOptions: any = (
-  options: IContact[],
+  options: Array<IContact>,
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 

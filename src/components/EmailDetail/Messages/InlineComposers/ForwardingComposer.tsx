@@ -1,10 +1,11 @@
 import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import { useAppDispatch } from 'store/hooks'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
+import isBodyWithEmailHTML from './getEmailHTML'
 import getRelevantMessage from './getRelevantMessage'
 
 /**
@@ -16,7 +17,7 @@ import getRelevantMessage from './getRelevantMessage'
  */
 
 interface IForwardingComposer {
-  localThreadDetail: IEmailListThreadItem
+  localThreadDetail: TThreadObject
   selectedIndex: number | undefined
   messageOverviewListener: (
     evenType: 'cancel' | 'discard',
@@ -24,6 +25,18 @@ interface IForwardingComposer {
   ) => void
   isForwarding: boolean
 }
+
+// const isBodyWithEmailHTML = (
+//   relevantMessage: ReturnType<typeof getRelevantMessage>
+// ) => {
+//   if (relevantMessage && 'body' in relevantMessage.payload) {
+//     if ('emailHTML' in relevantMessage.payload.body) {
+//       return relevantMessage.payload.body.emailHTML
+//     }
+//     return undefined
+//   }
+//   return undefined
+// }
 
 const ForwardingComposer = ({
   localThreadDetail,
@@ -56,10 +69,7 @@ const ForwardingComposer = ({
       <ComposeEmail
         presetValue={{
           subject: relevantMessage?.payload.headers.subject,
-          body: emailBody(
-            relevantMessage?.payload?.body?.emailHTML,
-            isForwarding
-          ),
+          body: emailBody(isBodyWithEmailHTML(relevantMessage), isForwarding),
           threadId: relevantMessage?.threadId,
           id: relevantMessage?.id,
         }}

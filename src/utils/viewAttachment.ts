@@ -1,6 +1,6 @@
-import { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import messageApi from '../data/messageApi'
 import base64toBlob from './base64toBlob'
+import type { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
+import messageApi from '../data/messageApi'
 
 const FAIL_RESPONSE_OBJECT = {
   success: false,
@@ -27,7 +27,7 @@ const handleFetchedAttachment = (
  * @returns
  */
 
-export async function viewAttachment({
+export default async function viewAttachment({
   attachmentData,
   messageId,
 }: {

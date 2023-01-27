@@ -33,7 +33,7 @@ import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import type { IContact } from 'store/storeTypes/contactsTypes'
-import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
@@ -100,7 +100,7 @@ const ComposeEmail = ({
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
   const [localDraftDetails, setLocalDraftDetails] = useState<
-    IDraftDetailObject | undefined
+    TGmailV1SchemaDraftSchema | undefined
   >(undefined)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
@@ -179,7 +179,7 @@ const ComposeEmail = ({
       snapshotComposeEmailRef.current = composedEmail
       // If the user is interacting with the draft, send an update request and set the response as the local state
       const asyncDispatchAction = async () => {
-        const response: IDraftDetailObject = await dispatch(
+        const response: TGmailV1SchemaDraftSchema = await dispatch(
           createUpdateDraft({ composedEmail, localDraftDetails })
         )
         if (response) {
@@ -360,14 +360,16 @@ const ComposeEmail = ({
   const memoizedButtons = useMemo(
     () => (
       <S.ButtonContainer>
-        {localDraftDetails?.id && (
-          <DiscardDraftButton
-            draftId={localDraftDetails.id}
-            threadId={localDraftDetails.message.threadId}
-            id={localDraftDetails.message.id}
-            messageOverviewListener={messageOverviewListener}
-          />
-        )}
+        {localDraftDetails?.id &&
+          localDraftDetails?.message?.threadId &&
+          localDraftDetails?.message?.id && (
+            <DiscardDraftButton
+              draftId={localDraftDetails.id}
+              threadId={localDraftDetails.message.threadId}
+              id={localDraftDetails.message.id}
+              messageOverviewListener={messageOverviewListener}
+            />
+          )}
         {(isReplying || isForwarding) && (
           <CustomButton
             label={local.CANCEL_BUTTON}

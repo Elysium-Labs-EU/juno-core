@@ -1,12 +1,13 @@
 import * as global from 'constants/globalConstants'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { TProfile } from 'store/storeTypes/baseTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 import { convertToContact } from 'utils/convertToContact'
 
 export const NO_SENDER = '(No sender)'
 
 const senderNamePartial = (
-  fromHeaders: string,
-  emailAddress: string
+  fromHeaders: string | null,
+  emailAddress: TProfile['emailAddress']
 ): IContact => {
   if (fromHeaders) {
     if (fromHeaders.length > 0) {

@@ -1,12 +1,13 @@
 import type {
-  IEmailMessageHeaders,
-  IEmailMessagePayloadRaw,
-  IEmailMessagePayloadConverted,
-  IEmailMessage,
-  IEmailListThreadItem,
+  TThreadObject,
+  TPayloadHeadersEnhanced,
+  TFullMessage,
+  TGmailV1SchemaMessagePartSchema,
 } from 'store/storeTypes/emailListTypes'
 
-const emailMessageHeaders: IEmailMessageHeaders = {
+const emailMessageHeaders: TPayloadHeadersEnhanced = {
+  listUnsubscribe: '',
+  deliveredTo: 'recipient@example.com',
   date: '01/01/2022',
   from: 'test@example.com',
   subject: 'Test Subject',
@@ -15,11 +16,16 @@ const emailMessageHeaders: IEmailMessageHeaders = {
   bcc: 'bcc@example.com',
 }
 
-const emailMessagePayloadRaw: IEmailMessagePayloadRaw = {
+const emailMessageHeadersRaw = {
+  name: '',
+  value: '',
+}
+
+const emailMessagePayloadRaw: TGmailV1SchemaMessagePartSchema = {
   partId: '1',
   mimeType: 'text/plain',
   filename: 'test.txt',
-  headers: emailMessageHeaders,
+  headers: [emailMessageHeadersRaw],
   body: {
     data: 'Test body data',
     attachmentId: 'attachment1',
@@ -30,7 +36,7 @@ const emailMessagePayloadRaw: IEmailMessagePayloadRaw = {
       partId: '2',
       mimeType: 'image/jpeg',
       filename: 'image.jpg',
-      headers: emailMessageHeaders,
+      headers: [emailMessageHeadersRaw],
       body: {
         data: '',
         attachmentId: 'attachment2',
@@ -40,7 +46,7 @@ const emailMessagePayloadRaw: IEmailMessagePayloadRaw = {
   ],
 }
 
-const emailMessagePayloadConverted: IEmailMessagePayloadConverted = {
+const emailMessagePayloadConverted: TFullMessage['payload'] = {
   mimeType: 'text/html',
   headers: emailMessageHeaders,
   files: [
@@ -86,7 +92,7 @@ const emailMessagePayloadConverted: IEmailMessagePayloadConverted = {
   parts: [emailMessagePayloadRaw],
 }
 
-const emailMessage: IEmailMessage = {
+const emailMessage: TFullMessage = {
   id: '1',
   threadId: '1',
   labelIds: ['inbox', 'important'],
@@ -97,7 +103,7 @@ const emailMessage: IEmailMessage = {
   internalDate: '01/01/2022',
 }
 
-const emailListThreadItem: IEmailListThreadItem = {
+const emailListThreadItem: TThreadObject = {
   id: '1',
   historyId: '1',
   messages: [emailMessage],

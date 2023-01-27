@@ -6,8 +6,8 @@ import * as global from 'constants/globalConstants'
 import useDebounce from 'hooks/useDebounce'
 import isEqual from 'utils/isEqual/isEqual'
 
-import * as S from '../ComposeStyles'
 import StyledTextField from './Generic/EmailInput/EmailInputStyles'
+import * as S from '../ComposeStyles'
 
 const SubjectField = ({
   composeValue = undefined,

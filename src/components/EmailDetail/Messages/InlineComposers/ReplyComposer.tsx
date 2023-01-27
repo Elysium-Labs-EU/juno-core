@@ -2,11 +2,12 @@ import ComposeEmail from 'components/Compose/ComposeEmail'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
 import { useAppDispatch } from 'store/hooks'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { handleContactConversion } from 'utils/convertToContact'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
+import isBodyWithEmailHTML from './getEmailHTML'
 import getRelevantMessage from './getRelevantMessage'
 
 /**
@@ -18,7 +19,7 @@ import getRelevantMessage from './getRelevantMessage'
  */
 
 interface IReplyComposer {
-  localThreadDetail: IEmailListThreadItem
+  localThreadDetail: TThreadObject
   selectedIndex: number | undefined
   messageOverviewListener: (
     evenType: 'cancel' | 'discard',
@@ -58,7 +59,7 @@ const ReplyComposer = ({
           // This should only be used when the message is a draft
           bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
           body: relevantMessage?.labelIds.includes(global.DRAFT_LABEL)
-            ? emailBody(relevantMessage?.payload?.body?.emailHTML)
+            ? emailBody(isBodyWithEmailHTML(relevantMessage))
             : undefined,
           cc: handleContactConversion(relevantMessage?.payload.headers.cc),
           files: relevantMessage?.payload?.files,

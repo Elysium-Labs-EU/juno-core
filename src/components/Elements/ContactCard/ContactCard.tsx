@@ -11,9 +11,9 @@ import createSearchViaUrl from 'utils/createSearchViaUrl'
 import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
-import CustomButton from '../Buttons/CustomButton'
 import * as S from './ContactCardStyles'
 import type { IContactCard, IContactCardPopper } from './ContactCardTypes'
+import CustomButton from '../Buttons/CustomButton'
 
 const NO_EMAIL = 'No address available'
 const NO_NAME = 'No display name'

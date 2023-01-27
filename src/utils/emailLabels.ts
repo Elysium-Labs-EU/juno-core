@@ -1,6 +1,6 @@
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
-import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 import { onlyLegalLabelStrings } from './onlyLegalLabels'
 
@@ -11,8 +11,8 @@ import { onlyLegalLabelStrings } from './onlyLegalLabels'
  */
 
 const emailLabels = (
-  emailListThreadItem: IEmailListThreadItem,
-  storageLabels: ILabelIdName[]
+  emailListThreadItem: TThreadObject,
+  storageLabels: TLabelState['storageLabels']
 ) => {
   if (emailListThreadItem?.messages) {
     const getAllLegalMessagesLabelIds = () => {

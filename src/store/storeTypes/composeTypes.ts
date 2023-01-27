@@ -1,33 +1,33 @@
-import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
-import { IContact } from 'store/storeTypes/contactsTypes'
+import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { IContact } from 'store/storeTypes/contactsTypes'
 
 export interface IComposePayload {
-  bcc?: IContact[]
+  bcc?: Array<IContact>
   body?: string
-  cc?: IContact[]
-  files?: File[] | undefined
+  cc?: Array<IContact>
+  files?: Array<File> | undefined
   id?: string
   subject?: string
   threadId?: string | undefined
-  to?: IContact[]
+  to?: Array<IContact>
   value?: string
   signature?: string
 }
 
 export interface IComposeEmail {
-  bcc: IContact[]
+  bcc: Array<IContact>
   body: string
-  cc: IContact[]
+  cc: Array<IContact>
   subject: string
-  to: IContact[]
+  to: Array<IContact>
 }
 export interface IComposeEmailReceive {
-  bcc?: string | IContact[] | undefined
+  bcc?: string | Array<IContact> | undefined
   body?: string | undefined
-  cc?: string | IContact[] | undefined
-  files?: File[] | IEmailAttachmentType[] | undefined
+  cc?: string | Array<IContact> | undefined
+  files?: Array<File> | Array<IEmailAttachmentType> | undefined
   id?: string | undefined
-  subject?: string | undefined
+  subject?: string | undefined | null
   threadId?: string | undefined
-  to?: string | IContact[] | undefined
+  to?: string | Array<IContact> | undefined
 }

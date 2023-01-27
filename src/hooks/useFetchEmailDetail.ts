@@ -4,10 +4,10 @@ import type { Dispatch, SetStateAction } from 'react'
 import { fetchEmailDetail } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 
 interface IUseFetchEmailDetail {
-  activeEmailList: IEmailListObject | undefined
+  activeEmailList: TEmailListObject | undefined
   forceRefresh: boolean
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
   threadId: string | undefined
@@ -37,6 +37,7 @@ export default function useFetchEmailDetail({
           (message) => 'body' in message.payload
         )
         if (!emailWithBody.length || forceRefresh) {
+          console.log('here')
           setShouldRefreshDetail(false)
           mounted &&
             dispatch(

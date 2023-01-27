@@ -1,6 +1,7 @@
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import { DRAFT_LABEL } from 'constants/globalConstants'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 import {
   getRecipientName,
@@ -9,7 +10,7 @@ import {
 } from './EmailListItem'
 
 interface IContactCardAvatar {
-  labelIds: Array<string>
+  labelIds: TLabelState['labelIds']
   recipientName: ReturnType<typeof getRecipientName>
   senderFull: ReturnType<typeof getSenderFull>
   senderPartial: ReturnType<typeof getSenderPartial>

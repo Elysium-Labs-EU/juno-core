@@ -7,9 +7,8 @@ import labelApi from 'data/labelApi'
 import { fetchEmailsSimple } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
 import type {
-  IGoogleLabel,
-  ILabelIdName,
-  ILabelState,
+  TGmailV1SchemaLabelSchema,
+  TLabelState,
 } from 'store/storeTypes/labelsTypes'
 import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
 import {
@@ -20,7 +19,7 @@ import type { IUpdateSettingsLabel } from 'utils/settings/updateSettingsLabel'
 
 /* eslint-disable no-param-reassign */
 
-export const initialState: ILabelState = Object.freeze({
+export const initialState: TLabelState = Object.freeze({
   labelIds: [],
   loadedInbox: [],
   storageLabels: [],
@@ -32,29 +31,36 @@ export const labelsSlice = createSlice({
   reducers: {
     setCurrentLabels: (
       state,
-      { payload }: PayloadAction<ILabelState['labelIds']>
+      { payload }: PayloadAction<TLabelState['labelIds']>
     ) => {
       state.labelIds = payload
     },
     setLoadedInbox: (
       state,
-      { payload }: PayloadAction<ILabelState['loadedInbox']>
+      { payload }: PayloadAction<TLabelState['loadedInbox']>
     ) => {
       state.loadedInbox = [...new Set([...state.loadedInbox, ...payload])]
     },
     setStorageLabels: (
       state,
-      { payload }: PayloadAction<ILabelIdName | IGoogleLabel | IGoogleLabel[][]>
+      {
+        payload,
+      }: PayloadAction<
+        TGmailV1SchemaLabelSchema | TGmailV1SchemaLabelSchema[][]
+      >
     ) => {
       if (!Array.isArray(payload)) {
-        const labelIdName = {
+        const label = {
           id: payload.id,
-          name: payload.name,
+          name: payload?.name,
+          type: payload?.type ?? 'user',
+        } as TLabelState['storageLabels'][0]
+        if (label.id && label.name) {
+          state.storageLabels = [...state.storageLabels, label]
         }
-        state.storageLabels = [...state.storageLabels, labelIdName]
       }
       if (Array.isArray(payload)) {
-        const labelIdNameArray = [] as Array<IGoogleLabel>
+        const labelIdNameArray = [] as TLabelState['storageLabels']
         payload.forEach((label) => {
           const [firstLabel] = label
           if (firstLabel && firstLabel.name && firstLabel.id) {
@@ -71,52 +77,48 @@ export const labelsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchEmailsSimple.fulfilled,
-      (state, { payload: { labels } }) => {
+    builder.addCase(fetchEmailsSimple.fulfilled, (state, { payload }) => {
+      if (payload && 'labels' in payload) {
+        const { labels } = payload
         if (labels) {
           state.loadedInbox = [...state.loadedInbox, ...labels]
         }
       }
-    )
+    })
   },
 })
 
-export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
-  labelsSlice.actions
+export const {
+  setCurrentLabels,
+  setLoadedInbox,
+  setStorageLabels,
+} = labelsSlice.actions
 
-export const createLabel =
-  (label: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      const body =
-        typeof label === 'string'
-          ? {
-              name: label,
-              labelVisibility: 'labelShow',
-              messageListVisibility: 'show',
-            }
-          : label
-      const response = await labelApi().createLabel(body)
+export const createLabel = (label: string): AppThunk => async (dispatch) => {
+  try {
+    const body =
+      typeof label === 'string'
+        ? {
+            name: label,
+            labelVisibility: 'labelShow',
+            messageListVisibility: 'show',
+          }
+        : label
+    const response = await labelApi().createLabel(body)
 
-      if (response?.status === 200) {
-        dispatch(setStorageLabels(response.data))
-        if (
-          response?.data?.data?.name.startsWith(
-            `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
-          )
-        ) {
-          dispatch(setSettingsLabelId(response.data.data.id))
+    if ('data' in response) {
+      dispatch(setStorageLabels(response.data))
+      if (
+        response?.data?.name &&
+        // response?.data?.data?.name.startsWith(
+        response.data.name.startsWith(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
+      ) {
+        if (response?.data?.id) {
+          dispatch(setSettingsLabelId(response.data.id))
+          // dispatch(setSettingsLabelId(response.data.data.id))
         }
-      } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to create the label.',
-          })
-        )
       }
-    } catch (err) {
+    } else {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
@@ -124,22 +126,20 @@ export const createLabel =
         })
       )
     }
+  } catch (err) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Unable to create the label.',
+      })
+    )
   }
+}
 
-export const removeLabel =
-  (labelId: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      const response = await labelApi().deleteLabel(labelId)
-      if (response?.status !== 204) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to remove the label.',
-          })
-        )
-      }
-    } catch (err) {
+export const removeLabel = (labelId: string): AppThunk => async (dispatch) => {
+  try {
+    const response = await labelApi().deleteLabel(labelId)
+    if ('status' in response && response.status !== 204) {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
@@ -147,21 +147,27 @@ export const removeLabel =
         })
       )
     }
-    return null
+  } catch (err) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Unable to remove the label.',
+      })
+    )
   }
+  return null
+}
 
-export const fetchLabelIds =
-  (LABEL: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      const { labels } = await labelApi().fetchLabels()
+export const fetchLabelIds = (LABEL: string): AppThunk => async (dispatch) => {
+  try {
+    const response = await labelApi().fetchLabels()
+    if ('data' in response) {
+      const { labels } = response.data
       if (labels) {
-        const labelObject = labels.filter(
-          (label: ILabelIdName) => label.name === LABEL
-        )
-        if (labelObject.length > 0) {
+        const labelObject = labels.filter((label) => label.name === LABEL)
+        if (labelObject.length > 0 && labelObject[0]?.id) {
           dispatch(setCurrentLabels([labelObject[0].id]))
-          dispatch(setStorageLabels([labelObject[0].id]))
+          dispatch(setStorageLabels(labelObject[0]))
         } else {
           dispatch(
             setSystemStatusUpdate({
@@ -178,15 +184,16 @@ export const fetchLabelIds =
           })
         )
       }
-    } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to fetch the label.',
-        })
-      )
     }
+  } catch (err) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Unable to fetch the label.',
+      })
+    )
   }
+}
 
 export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   const activePath = getState().router.location?.pathname
@@ -197,7 +204,7 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
     const labelObject = storageLabels.find(
       (label) => label.name === currentLabelName
     )
-    if (labelObject) {
+    if (labelObject && labelObject.id) {
       dispatch(setCurrentLabels([labelObject.id]))
     } else {
       dispatch(
@@ -217,28 +224,26 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   }
 }
 
-export const updateSettingsLabel =
-  ({
-    settingsLabelId,
-    emailFetchSize,
-    showIntroduction,
-    isAvatarVisible,
-    isFlexibleFlowActive,
-    alternateActions,
-  }: IUpdateSettingsLabel): AppThunk =>
-  (dispatch) => {
-    storeUpdatedSettingsLabel(
-      parseSettingsLabel({
-        settingsLabelId,
-        emailFetchSize,
-        showIntroduction,
-        isAvatarVisible,
-        isFlexibleFlowActive,
-        alternateActions,
-      }),
-      dispatch
-    )
-  }
+export const updateSettingsLabel = ({
+  settingsLabelId,
+  emailFetchSize,
+  showIntroduction,
+  isAvatarVisible,
+  isFlexibleFlowActive,
+  alternateActions,
+}: IUpdateSettingsLabel): AppThunk => (dispatch) => {
+  storeUpdatedSettingsLabel(
+    parseSettingsLabel({
+      settingsLabelId,
+      emailFetchSize,
+      showIntroduction,
+      isAvatarVisible,
+      isFlexibleFlowActive,
+      alternateActions,
+    }),
+    dispatch
+  )
+}
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds
 export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox

@@ -1,11 +1,11 @@
 import * as local from 'constants/menuConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import countUniqueFiles from 'utils/countUniqueFiles/countUniqueFiles'
 
 import * as S from './TabsStyles'
 
 interface IFilesTab {
-  activeThread: IEmailListThreadItem | undefined | null
+  activeThread: TThreadObject | undefined | null
   activeLink: string
   navigateTo: ({ link, name }: { link: string; name: string }) => void
 }
