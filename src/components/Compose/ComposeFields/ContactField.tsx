@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from 'constants/globalConstants'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 import isEqual from 'utils/isEqual/isEqual'
 
@@ -22,7 +22,7 @@ const ContactField = ({
   updateComposeEmail,
 }: IContactField) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [value, setValue] = useState<Array<IContact>>([])
+  const [value, setValue] = useState<Array<TContact>>([])
   const [error, setError] = useState<boolean>(false)
 
   // Listens to the parent component changes, and updates the internal state in case there is preloaded data.
@@ -37,7 +37,7 @@ const ContactField = ({
   }, [composeValue, loadState])
 
   const handleDelete = useCallback(
-    (selectedOption: IContact) => {
+    (selectedOption: TContact) => {
       const filteredValue = value.filter((item) => item !== selectedOption)
       setValue(filteredValue)
       const updateEventObject = {

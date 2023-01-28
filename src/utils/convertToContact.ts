@@ -1,6 +1,6 @@
 import { ME_LABEL } from 'constants/globalConstants'
 import type { TProfile } from 'store/storeTypes/baseTypes'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
 
 const convertToMe = (
@@ -14,16 +14,16 @@ const convertToMe = (
 }
 
 /**
- * Converts a string of contact data into an IContact object.
+ * Converts a string of contact data into an TContact object.
  * @param {string} data - A string of contact data.
  * @param {string} [emailAddress] - The email address of the current user.
- * @returns {IContact} - An IContact object containing the contact's name and email address.
+ * @returns {TContact} - An TContact object containing the contact's name and email address.
  */
 
 export function convertToContact(
   data: string,
   emailAddress?: TProfile['emailAddress']
-): IContact {
+): TContact {
   const splitted = data.split('<')
   const [first, second] = splitted
   if (splitted.length > 1 && first && second) {
@@ -64,16 +64,16 @@ export function convertToContact(
 }
 
 /**
- * Converts a string of contacts into an array of IContact objects.
+ * Converts a string of contacts into an array of TContact objects.
  * @param {string} contactValue - A string of contacts separated by commas.
  * @param {string} emailAddress - The email address of the current user.
- * @returns {Array<IContact>} - An array of IContact objects.
+ * @returns {Array<TContact>} - An array of TContact objects.
  */
 
 export function handleContactConversion(
   contactValue: string | null,
   emailAddress?: TProfile['emailAddress']
-): Array<IContact> {
+): Array<TContact> {
   if (
     contactValue &&
     contactValue.length > 0 &&

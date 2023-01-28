@@ -1,4 +1,4 @@
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 /**
  * @function convertToGmailEmail
@@ -6,7 +6,7 @@ import type { IContact } from 'store/storeTypes/contactsTypes'
  * @returns {string} - returns string representing the contact object.
  */
 
-const convertToGmailEmail = (data: Array<IContact>) => {
+const convertToGmailEmail = (data: Array<TContact>) => {
   if (data.length > 0 && typeof data !== 'string') {
     const convertedData = data
       .map(

@@ -1,12 +1,12 @@
 import type { PopperPlacementType } from '@mui/material/Popper'
 import type { MutableRefObject } from 'react'
 
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 export interface IContactCard {
   userEmail: string
   children: JSX.Element
-  contact: IContact
+  contact: TContact
   offset?: [number, number]
   placement?: PopperPlacementType
 }

@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from 'react'
 
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 export interface IContactField {
-  composeValue?: Array<IContact>
+  composeValue?: Array<TContact>
   dataCy?: string
   hasInteracted: boolean
   id: string
@@ -11,5 +11,5 @@ export interface IContactField {
   loadState: string
   setHasInteracted: Dispatch<SetStateAction<boolean>>
   showField: boolean
-  updateComposeEmail: (object: { id: string; value: Array<IContact> }) => void
+  updateComposeEmail: (object: { id: string; value: Array<TContact> }) => void
 }

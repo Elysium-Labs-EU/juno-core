@@ -1,6 +1,6 @@
 import * as global from 'constants/globalConstants'
 import type { TProfile } from 'store/storeTypes/baseTypes'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import { convertToContact } from 'utils/convertToContact'
 
 export const NO_SENDER = '(No sender)'
@@ -8,7 +8,7 @@ export const NO_SENDER = '(No sender)'
 const senderNamePartial = (
   fromHeaders: string | null,
   emailAddress: TProfile['emailAddress']
-): IContact => {
+): TContact => {
   if (fromHeaders) {
     if (fromHeaders.length > 0) {
       if (emailAddress && fromHeaders.includes(emailAddress)) {

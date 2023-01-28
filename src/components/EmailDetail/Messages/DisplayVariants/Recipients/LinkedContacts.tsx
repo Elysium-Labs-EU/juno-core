@@ -7,7 +7,7 @@ import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
 import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import * as GS from 'styles/globalStyles'
 import { handleContactConversion } from 'utils/convertToContact'
@@ -18,7 +18,7 @@ const MappedContacts = ({
   contactsMap,
   title,
 }: {
-  contactsMap: Array<IContact>
+  contactsMap: Array<TContact>
   title: string
 }) => {
   const [showAll, setShowAll] = useState(false)

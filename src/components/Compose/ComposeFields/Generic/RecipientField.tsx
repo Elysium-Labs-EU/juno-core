@@ -5,7 +5,7 @@ import type { Dispatch, SetStateAction } from 'react'
 import type { IRecipientsList } from 'components/Compose/ComposeEmailTypes'
 import * as S from 'components/Compose/ComposeStyles'
 import * as local from 'constants/composeEmailConstants'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 import EmailInput from './EmailInput/EmailInput'
 
@@ -17,7 +17,7 @@ interface IRecipientField {
   handleChangeRecipients: (recipientListRaw: IRecipientsList) => void
   handleDelete: (value: any) => void
   inputValue: string
-  recipientFieldValue: Array<IContact>
+  recipientFieldValue: Array<TContact>
   registerOnKeyDown: () => void
   setInputValue: Dispatch<SetStateAction<string>>
   showField: boolean

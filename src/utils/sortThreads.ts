@@ -12,36 +12,23 @@ export default function sortThreads(
   sortObject: Array<TThreadObject>,
   forceSort?: boolean
 ) {
-  if (sortObject && sortObject.length > 0) {
-    return sortObject.sort((a, b) => {
-      if (a.messages && b.messages) {
-        const firstMessages =
-          a.messages[
-            forceSort
-              ? a.messages.length - 1
-              : a.messages.filter(
-                  (message) =>
-                    message.labelIds.indexOf(global.DRAFT_LABEL) === -1
-                ).length - 1
-          ]
-        const secondMessages =
-          b.messages[
-            forceSort
-              ? b.messages.length - 1
-              : b.messages.filter(
-                  (message) =>
-                    message.labelIds.indexOf(global.DRAFT_LABEL) === -1
-                ).length - 1
-          ]
-        if (firstMessages && secondMessages) {
-          return (
-            parseInt(secondMessages?.internalDate, 10) -
-            parseInt(firstMessages?.internalDate, 10)
-          )
-        }
-      }
-      return 0
-    })
+  if (!sortObject || sortObject.length === 0) {
+    return []
   }
-  return []
+  const mappedArray = sortObject.map((thread) => {
+    let { messages } = thread
+    if (!forceSort) {
+      messages = messages.filter(
+        (message) => message.labelIds.indexOf(global.DRAFT_LABEL) === -1
+      )
+    }
+    return {
+      thread,
+      internalDate: messages[messages.length - 1]?.internalDate,
+    }
+  })
+
+  return mappedArray
+    .sort((a, b) => Number(b?.internalDate) - Number(a?.internalDate))
+    .map((item) => item.thread)
 }
