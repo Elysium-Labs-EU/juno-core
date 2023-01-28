@@ -1,16 +1,13 @@
 import axios from 'axios'
+import { z } from 'zod'
 
 import { errorHandling, instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
 import type { ICustomError } from 'store/storeTypes/baseTypes'
-import {
-  peopleV1SchemaListOtherContactsResponseSchema,
-  peopleV1SchemaSearchResponseSchema,
-} from 'store/storeTypes/gmailBaseTypes/peopleTypes'
-import type {
-  TPeopleV1SchemaSearchResponseSchema,
-  TPeopleV1SchemaListOtherContactsResponseSchema,
-} from 'store/storeTypes/gmailBaseTypes/peopleTypes'
+import { Contact } from 'store/storeTypes/contactsTypes'
+import type { TContactState } from 'store/storeTypes/contactsTypes'
+import { peopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
+import type { TPeopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
 
 interface IAllContactsQueryObject {
   readMask: string
@@ -24,6 +21,7 @@ interface IQueryContactObject {
 }
 
 const contactApi = () => ({
+  // TODO: We currently do not use this api endpoint
   getAllContacts: async (
     query: IAllContactsQueryObject
   ): TemplateApiResponse<TPeopleV1SchemaListOtherContactsResponseSchema> => {
@@ -50,9 +48,9 @@ const contactApi = () => ({
   },
   queryContacts: async (
     query: IQueryContactObject
-  ): TemplateApiResponse<TPeopleV1SchemaSearchResponseSchema> => {
+  ): TemplateApiResponse<TContactState['allContacts']> => {
     try {
-      const res = await instance.get<TPeopleV1SchemaSearchResponseSchema>(
+      const res = await instance.get<TContactState['allContacts']>(
         `/api/contact/search/`,
         {
           params: {
@@ -61,7 +59,7 @@ const contactApi = () => ({
           },
         }
       )
-      peopleV1SchemaSearchResponseSchema.parse(res.data)
+      z.array(Contact).parse(res.data)
       return res
     } catch (err) {
       if (axios.isAxiosError(err)) {

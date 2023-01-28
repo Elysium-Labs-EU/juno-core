@@ -14,7 +14,7 @@ import {
   setContactsLoaded,
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
@@ -41,21 +41,9 @@ const fetchContacts = async ({
       'data' in responseQueryContacts &&
       responseQueryContacts.status === 200
     ) {
-      const {
-        data: { results },
-      } = responseQueryContacts
+      const { data } = responseQueryContacts
 
-      const mappedResults =
-        results?.map(
-          (contact: any): IContact => ({
-            name: Object.prototype.hasOwnProperty.call(contact.person, 'names')
-              ? contact.person.names[0].displayName
-              : contact.person.emailAddresses[0].value,
-            emailAddress: contact.person.emailAddresses[0].value,
-          })
-        ) ?? []
-
-      dispatch(setAllContacts(mappedResults))
+      dispatch(setAllContacts(data))
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))
     }
   } catch (err) {
@@ -71,7 +59,7 @@ const fetchContacts = async ({
 }
 
 const filterOptions: any = (
-  options: Array<IContact>,
+  options: Array<TContact>,
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
 
@@ -86,10 +74,10 @@ const EmailInput = ({
   willAutoFocus,
 }: IEmailInputProps) => {
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<readonly IContact[]>([])
+  const [options, setOptions] = useState<readonly TContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(true)
   const debouncedInputValue: string = useDebounce(inputValue, 500)
-  const availableContacts: IContact[] = useAppSelector(selectAllContacts)
+  const availableContacts: TContact[] = useAppSelector(selectAllContacts)
   const contactsLoaded = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
@@ -194,8 +182,8 @@ const EmailInput = ({
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue)
       }}
-      renderTags={(value: readonly IContact[], getTagProps) =>
-        value.map((option: IContact, index: number) => {
+      renderTags={(value: readonly TContact[], getTagProps) =>
+        value.map((option: TContact, index: number) => {
           if (option) {
             return (
               <RecipientChip

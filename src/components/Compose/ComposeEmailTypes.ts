@@ -1,6 +1,6 @@
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 export interface IRecipientsList {
   fieldId: string
-  newValue: IContact[]
+  newValue: Array<TContact>
 }

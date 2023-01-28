@@ -32,7 +32,7 @@ import {
 import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
@@ -52,12 +52,12 @@ import useParsePresetValues from './Hooks/useParsePresetValues'
 
 export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
-  newValue: recipientListRaw.newValue.map((item: string | IContact) =>
+  newValue: recipientListRaw.newValue.map((item: string | TContact) =>
     typeof item === 'string' ? { name: item, emailAddress: item } : item
   ),
 })
 
-const isIContactArray = (value: any): value is IContact[] =>
+const isTContactArray = (value: any): value is TContact[] =>
   Array.isArray(value) && value.every((item) => 'emailAddress' in item)
 
 const isFileArray = (value: any): value is File[] =>
@@ -109,8 +109,8 @@ const ComposeEmail = ({
 
   const [composedEmail, updateComposedEmail] = useReducer(
     (
-      state: { [key: string]: string | IContact[] | File[] } | null,
-      action: { id: string; value: string | IContact[] | null | File[] }
+      state: { [key: string]: string | TContact[] | File[] } | null,
+      action: { id: string; value: string | TContact[] | null | File[] }
     ) => {
       if (Array.isArray(action)) {
         let updatedState = state
@@ -239,7 +239,7 @@ const ComposeEmail = ({
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.to) ? composedEmail?.to : undefined
+          isTContactArray(composedEmail?.to) ? composedEmail?.to : undefined
         }
         dataCy="to-field"
         hasInteracted={hasInteracted}
@@ -258,7 +258,7 @@ const ComposeEmail = ({
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.cc) ? composedEmail?.cc : undefined
+          isTContactArray(composedEmail?.cc) ? composedEmail?.cc : undefined
         }
         dataCy="cc-field"
         hasInteracted={hasInteracted}
@@ -277,7 +277,7 @@ const ComposeEmail = ({
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.bcc) ? composedEmail?.bcc : undefined
+          isTContactArray(composedEmail?.bcc) ? composedEmail?.bcc : undefined
         }
         dataCy="bcc-field"
         hasInteracted={hasInteracted}

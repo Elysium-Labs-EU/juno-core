@@ -1,7 +1,6 @@
-import { IContact } from 'store/storeTypes/contactsTypes'
+import { TContact } from 'store/storeTypes/contactsTypes'
 
-const regexTest =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const regexTest = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 /**
  * @function emailValidation
@@ -9,10 +8,10 @@ const regexTest =
  * @returns - the input if validation is succesful, otherwise returns false.
  */
 
-const emailValidation = (email: IContact[]) => {
+const emailValidation = (email: Array<TContact>) => {
   if (Array.isArray(email)) {
-    const isValidEmail = (emailEntry: IContact) =>
-      regexTest.test(emailEntry.emailAddress)
+    const isValidEmail = (emailEntry: TContact) =>
+      emailEntry.emailAddress ? regexTest.test(emailEntry.emailAddress) : false
     const arrayTestResult = email.every(isValidEmail)
     if (arrayTestResult) {
       return email
