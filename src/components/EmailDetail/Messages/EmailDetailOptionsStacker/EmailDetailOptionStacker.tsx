@@ -17,7 +17,7 @@ const EmailDetailOptionStacker = ({
   prioritizeSecondOption: boolean
 }) => {
   const [isAltActive, setIsAltActive] = useState(false)
-  const KeyALtListener = useKeyPress(keyConstants.KEY_SPECIAL.alt)
+  const KeyALtListener = useKeyPress(keyConstants.KEY_SPECIAL.altOnlyKey)
   const prioritization = prioritizeSecondOption
     ? [secondOption, firstOption]
     : [firstOption, secondOption]
