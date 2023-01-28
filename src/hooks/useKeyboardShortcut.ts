@@ -19,31 +19,29 @@ interface IUseKeyboardShortcut {
   refreshOnDeps?: Array<any>
 }
 
-export const handleKeydown =
-  (
-    key: string,
-    handleEvent: () => void,
-    modifierKey?: string,
-    isDisabled?: boolean
-  ) =>
-  (e: KeyboardEvent | undefined) => {
-    if (isDisabled) return
-    if (e?.code === undefined) return
-    if (modifierKey) {
-      if (
-        e[modifierKey as keyof typeof e] &&
-        e.key.toLowerCase() === key.toLowerCase()
-      ) {
-        e.preventDefault()
-        e.stopPropagation()
-        handleEvent()
-      }
-    } else if (e.key.toLowerCase() === key.toLowerCase()) {
+export const handleKeydown = (
+  key: string,
+  handleEvent: () => void,
+  modifierKey?: string,
+  isDisabled?: boolean
+) => (e: KeyboardEvent | undefined) => {
+  if (isDisabled) return
+  if (e?.code === undefined) return
+  if (modifierKey) {
+    if (
+      e[modifierKey as keyof typeof e] &&
+      e.key.toLowerCase() === key.toLowerCase()
+    ) {
       e.preventDefault()
       e.stopPropagation()
       handleEvent()
     }
+  } else if (e.key.toLowerCase() === key.toLowerCase()) {
+    e.preventDefault()
+    e.stopPropagation()
+    handleEvent()
   }
+}
 
 export default function useKeyboardShortcut({
   key,
