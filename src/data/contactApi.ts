@@ -1,13 +1,13 @@
-import axios from 'axios'
 import { z } from 'zod'
 
-import { errorHandling, instance } from 'data/api'
+import { instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import { Contact } from 'store/storeTypes/contactsTypes'
 import type { TContactState } from 'store/storeTypes/contactsTypes'
 import { peopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
 import type { TPeopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
+
+import { errorBlockTemplate } from './api'
 
 interface IAllContactsQueryObject {
   readMask: string
@@ -39,11 +39,7 @@ const contactApi = () => ({
       peopleV1SchemaListOtherContactsResponseSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   queryContacts: async (
@@ -62,11 +58,7 @@ const contactApi = () => ({
       z.array(Contact).parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })

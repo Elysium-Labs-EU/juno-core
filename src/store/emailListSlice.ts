@@ -804,7 +804,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       response?.status === 200 &&
       'data' in response
     ) {
-      if ('threads' in response.data) {
+      if (Array.isArray(response.data)) {
         dispatch(loadEmailDetails(response.data))
       }
       const userResponse = await userApi().fetchUser()

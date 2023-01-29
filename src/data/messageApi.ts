@@ -1,9 +1,6 @@
-import axios from 'axios'
-
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import type { TGmailV1SchemaMessageSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
-import { errorHandling, instance } from './api'
+import { errorBlockTemplate, instance } from './api'
 import type { TemplateApiResponse } from './api'
 
 const messageApi = () => ({
@@ -20,11 +17,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 
@@ -45,11 +38,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   thrashMessage: async ({
@@ -65,11 +54,7 @@ const messageApi = () => ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })

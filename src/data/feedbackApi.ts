@@ -1,8 +1,7 @@
 import axios from 'axios'
 
-import { errorHandling } from 'data/api'
+import { errorBlockTemplate } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import assertNonNullish from 'utils/assertNonNullish'
 
 export interface ISendFeedback {
@@ -29,11 +28,7 @@ const feedbackApi = () => {
         )
         return res
       } catch (err) {
-        if (axios.isAxiosError(err)) {
-          return errorHandling(err)
-        }
-        // Handle unexpected error
-        return err as ICustomError
+        return errorBlockTemplate(err)
       }
     },
   }
