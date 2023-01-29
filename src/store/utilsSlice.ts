@@ -243,23 +243,50 @@ export const closeMail = (): AppThunk => (dispatch, getState) => {
 }
 
 export const openEmail =
-  ({ email, id }: { email?: TThreadObject; id: string }): AppThunk =>
+  ({
+    email,
+    id,
+    isReplying,
+  }: {
+    email?: TThreadObject
+    id: string
+    isReplying?: Boolean
+  }): AppThunk =>
   (dispatch, getState) => {
     const { labelIds, storageLabels } = getState().labels
 
     const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
+    const draftMessageArray = email?.messages.filter((message) =>
+      message.labelIds.includes(global.DRAFT_LABEL)
+    )
     const lastMessage = email?.messages[email.messages.length - 1]
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (lastMessage && onlyLegalLabels.includes(global.DRAFT_LABEL)) {
-      const messageId = lastMessage.id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
+    if (draftMessageArray && lastMessage) {
+      if (
+        draftMessageArray.length === 1
+        // onlyLegalLabels.includes(global.DRAFT_LABEL)
+      ) {
+        const messageId = lastMessage.id
+        dispatch(openDraftEmail({ id, messageId }))
+        return
+      }
+      if (draftMessageArray.length > 1) {
+        dispatch(setCurrentEmail(id))
+        // We are sending the state here to override a possible closing of the composer on email detail load.
+        dispatch(push(`/mail/drafts/${id}/messages`))
+      }
     }
     dispatch(setCurrentEmail(id))
+    // We are sending the state here to override a possible closing of the composer on email detail load.
     dispatch(
-      push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`, {
-        isReplying: true,
-      })
+      push(
+        `/mail/${labelURL(onlyLegalLabels)}/${id}/messages`,
+        isReplying
+          ? {
+              isReplying: true,
+            }
+          : null
+      )
     )
   }
 
