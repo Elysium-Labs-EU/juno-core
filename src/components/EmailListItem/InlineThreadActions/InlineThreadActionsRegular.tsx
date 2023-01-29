@@ -15,16 +15,11 @@ import {
 } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import emailLabels from 'utils/emailLabels'
 import { findLabelByName } from 'utils/findLabel'
 
 import * as S from './InlineThreadActionsStyles'
-
-interface IInlineThreadActionsRegular {
-  id: string
-  email: TThreadObject
-}
+import type { IInlineThreadActionsRegular } from './InlineThreadActionsTypes'
 
 const ICON_SIZE = 18
 
@@ -36,8 +31,9 @@ const ICON_SIZE = 18
  */
 
 const InlineThreadActionsRegular = ({
-  id,
+  threadId,
   email,
+  isFocused,
 }: IInlineThreadActionsRegular) => {
   const labelIds = useAppSelector(selectLabelIds)
   const storageLabels = useAppSelector(selectStorageLabels)
@@ -54,7 +50,7 @@ const InlineThreadActionsRegular = ({
         icon={<QiReply size={ICON_SIZE} />}
         onClick={() =>
           ReplyOverview({
-            id,
+            id: threadId,
             dispatch,
           })
         }
@@ -62,7 +58,7 @@ const InlineThreadActionsRegular = ({
         dataCy="reply-inline-button"
       />
     ),
-    [id]
+    [threadId]
   )
 
   const memoizeMarkToDoButton = useMemo(() => {
@@ -80,7 +76,7 @@ const InlineThreadActionsRegular = ({
         <CustomIconButton
           onClick={() =>
             setToDoMail({
-              threadId: id,
+              threadId,
               labelIds: staticAllMessageLabelIds,
               dispatch,
               storageLabels,
@@ -92,7 +88,7 @@ const InlineThreadActionsRegular = ({
         />
       )
     )
-  }, [labelIds, id, storageLabels])
+  }, [labelIds, threadId, storageLabels])
 
   const memoizedArchiveButton = useMemo(() => {
     const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
@@ -101,7 +97,7 @@ const InlineThreadActionsRegular = ({
         <CustomIconButton
           onClick={() =>
             archiveMail({
-              threadId: id,
+              threadId,
               dispatch,
               labelIds: staticAllMessageLabelIds,
             })
@@ -112,7 +108,7 @@ const InlineThreadActionsRegular = ({
         />
       )
     )
-  }, [id, labelIds])
+  }, [threadId, labelIds])
 
   const memoizedDeleteButton = useMemo(() => {
     const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
@@ -121,18 +117,18 @@ const InlineThreadActionsRegular = ({
     }
     return (
       <CustomIconButton
-        onClick={() => thrashMail({ threadId: id, dispatch, labelIds })}
+        onClick={() => thrashMail({ threadId, dispatch, labelIds })}
         icon={<QiFolderTrash size={ICON_SIZE} />}
         title="Delete"
         hoverColor={themeConstants.color.red[500]}
         dataCy="delete-inline-button"
       />
     )
-  }, [id, labelIds])
+  }, [threadId, labelIds])
 
   return (
-    <S.Wrapper data-testid="email-regular-inline-actions">
-      {id && labelIds && (
+    <S.Wrapper data-testid="email-regular-inline-actions" isFocused={isFocused}>
+      {threadId && labelIds && (
         <S.Inner>
           {memoizedReplyButton}
           {memoizeMarkToDoButton}
