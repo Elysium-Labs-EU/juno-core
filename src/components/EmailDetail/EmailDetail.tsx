@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
 import * as local from 'constants/emailDetailConstants'
@@ -72,7 +72,9 @@ const EmailDetail = () => {
     threadId: string
     overviewId: string
   }>()
+  const location = useLocation()
   const [activeEmailList, setActiveEmailList] = useState<TEmailListObject>()
+
   useFetchEmailDetail({
     threadId,
     activeEmailList,
@@ -156,23 +158,15 @@ const EmailDetail = () => {
     }
   }, [threadId, currentEmail])
 
-  // TODO: Convert to listener in Redux
+  // Based on the location, set the correct Redux state. Location state comes from openEmail function
   useEffect(() => {
-    if (isReplying && currentEmail && currentEmail !== threadId) {
+    if (isReplying && !location?.state?.isReplying) {
       dispatch(setIsReplying(false))
     }
-    if (isForwarding && currentEmail && currentEmail !== threadId) {
+    if (isForwarding && !location?.state?.isForwarding) {
       dispatch(setIsForwarding(false))
     }
-    return () => {
-      if (isForwarding && currentEmail && currentEmail === threadId) {
-        dispatch(setIsForwarding(false))
-      }
-      if (isReplying && currentEmail && currentEmail === threadId) {
-        dispatch(setIsReplying(false))
-      }
-    }
-  }, [threadId])
+  }, [location])
 
   // If there is no viewIndex yet - set it by finding the index of the email.
   useEffect(() => {
