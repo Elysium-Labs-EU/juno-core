@@ -33,6 +33,7 @@ import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import type { TContact } from 'store/storeTypes/contactsTypes'
+import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
@@ -75,6 +76,19 @@ const isIEmailAttachmentTypeArray = (
       'mimeType' in item &&
       'partId' in item
   )
+
+export const assertComposerMode = ({
+  isForwarding,
+  isReplying,
+}: Pick<TEmailDetailState, 'isForwarding' | 'isReplying'>) => {
+  if (isReplying) {
+    return 'replying'
+  }
+  if (isForwarding) {
+    return 'forwarding'
+  }
+  return 'composing'
+}
 
 // Props are coming from ReplyComposer or ForwardComposer
 interface IComposeEmailProps {
@@ -312,18 +326,20 @@ const ComposeEmail = ({
   const memoizedBodyField = useMemo(
     () => (
       <BodyField
+        autofocus={isReplying ? 'start' : false}
         composeValue={
           typeof composedEmail?.body === 'string'
             ? composedEmail?.body
             : undefined
         }
+        composerMode={assertComposerMode({ isForwarding, isReplying })}
         hasInteracted={hasInteracted}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
         updateComposeEmail={updateComposedEmail}
       />
     ),
-    [composedEmail, loadState, hasInteracted]
+    [composedEmail, hasInteracted, isForwarding, isReplying, loadState]
   )
 
   const memoizedAttachmentField = useMemo(
