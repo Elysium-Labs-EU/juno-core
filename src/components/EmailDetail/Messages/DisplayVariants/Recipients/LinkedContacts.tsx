@@ -46,7 +46,7 @@ const MappedContacts = ({
                       userEmail={contact.emailAddress}
                       contact={contact}
                     >
-                      <S.SmallTextTruncated title={contact.emailAddress}>
+                      <S.SmallTextTruncated title={contact.emailAddress ?? ''}>
                         {contact.name}
                       </S.SmallTextTruncated>
                     </ContactCard>

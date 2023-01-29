@@ -6,7 +6,7 @@ const FALLBACK_AVATAR = '##'
  * @returns the first letter of the first word and the first letter of the second word
  */
 
-export default function getUserInitials(userEmail: string) {
+export default function getUserInitials(userEmail: string | undefined | null) {
   const splittedEmail = userEmail?.split('<')
   if (splittedEmail) {
     const name = () => {
