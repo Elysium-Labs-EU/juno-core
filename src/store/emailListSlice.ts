@@ -497,12 +497,13 @@ export const loadEmailDetails =
   (emailListObjectArray: Array<TEmailListObject>): AppThunk =>
   (dispatch, getState) => {
     const { storageLabels } = getState().labels
+    // TODO: Introduce filtering on historyId, to understand which emails are new to the system and update the system for that.
     emailListObjectArray.forEach((labeledThreads) => {
       const { threads, labels, nextPageToken } = labeledThreads
       if (threads.length > 0) {
         const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
         if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
-          const labelNames = threads[0]?.messages[0]?.labelIds
+          const labelNames = lastMessage?.labelIds
           if (labelNames) {
             const legalLabels = onlyLegalLabelObjects({
               storageLabels,

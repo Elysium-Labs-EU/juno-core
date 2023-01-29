@@ -75,7 +75,7 @@ const Navigation = () => {
     modifierKey: keyConstants.KEY_SPECIAL.shift,
     key: keyConstants.KEY_LETTERS.c,
     isDisabled:
-      (inSearch || !!activeModal) &&
+      (inSearch || !!activeModal || location.pathname.startsWith('/mail/')) &&
       (location.pathname.includes('compose') || isReplying || isForwarding),
   })
 
