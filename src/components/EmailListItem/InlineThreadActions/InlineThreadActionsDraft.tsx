@@ -5,10 +5,14 @@ import { selectDraftList } from 'store/draftsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 
 import * as S from './InlineThreadActionsStyles'
+import type { IInlineThreadActions } from './InlineThreadActionsTypes'
 
 const ICON_SIZE = 16
 
-const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
+const InlineThreadActionsDraft = ({
+  isFocused,
+  threadId,
+}: IInlineThreadActions) => {
   const dispatch = useAppDispatch()
   const draftList = useAppSelector(selectDraftList)
 
@@ -17,7 +21,7 @@ const InlineThreadActionsDraft = ({ threadId }: { threadId: string }) => {
     draftList.find((draft) => draft.message.threadId === threadId)?.id
 
   return (
-    <S.Wrapper>
+    <S.Wrapper isFocused={isFocused}>
       <S.Inner>
         <CustomIconButton
           onClick={() =>

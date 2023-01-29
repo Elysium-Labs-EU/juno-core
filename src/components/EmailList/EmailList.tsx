@@ -13,7 +13,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
-import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
 import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import multipleIncludes from 'utils/multipleIncludes'
 
@@ -23,7 +23,7 @@ const LabeledInbox = ({
   emailList,
   activeEmailListIndex,
 }: {
-  emailList: Array<TEmailListObject>
+  emailList: TEmailListState['emailList']
   activeEmailListIndex: number
 }) => {
   const specificEmailList = emailList[activeEmailListIndex]

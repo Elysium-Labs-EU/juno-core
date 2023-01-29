@@ -28,8 +28,8 @@ import multipleIncludes from 'utils/multipleIncludes'
 
 import ContactCardAvatar from './ContactCardAvatar'
 import * as S from './EmailListItemStyles'
-import InlineThreadActionsDraft from './InlineThreadActionsDraft'
-import InlineThreadActionsRegular from './InlineThreadActionsRegular'
+import InlineThreadActionsDraft from './InlineThreadActions/InlineThreadActionsDraft'
+import InlineThreadActionsRegular from './InlineThreadActions/InlineThreadActionsRegular'
 import SenderRecipientName from './SenderRecipientName'
 import Snippet from './Snippet'
 
@@ -246,6 +246,15 @@ const EmailListItem = ({
     () => (
       <S.ThreadBase emailLabels={memoizedEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
+          {!labelIds.includes(global.DRAFT_LABEL) ? (
+            <InlineThreadActionsRegular
+              threadId={id}
+              email={email}
+              isFocused={isFocused}
+            />
+          ) : (
+            <InlineThreadActionsDraft threadId={id} isFocused={isFocused} />
+          )}
           <S.CellCheckbox
             inSelect={
               selectedEmails.selectedIds.length > 0 &&
@@ -312,11 +321,6 @@ const EmailListItem = ({
           </S.CellDate>
           <div />
           <div />
-          {!labelIds.includes(global.DRAFT_LABEL) ? (
-            <InlineThreadActionsRegular id={id} email={email} />
-          ) : (
-            <InlineThreadActionsDraft threadId={id} />
-          )}
         </S.ThreadRow>
       </S.ThreadBase>
     ),
