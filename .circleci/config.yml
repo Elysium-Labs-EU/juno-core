@@ -92,9 +92,9 @@ workflows:
   chromatic-deploy:
     jobs:
       - chromatic-deployment
-  build:
-    jobs:
-      - build
+  # build:
+  #   jobs:
+  #     - build
       # - cypress/install:
       #     name: cypress/install
       #     yarn: true
