@@ -73,9 +73,10 @@ export const getRecipientName = ({
   emailAddress,
   memoizedDraftOrRegular,
 }: ExtractEmailData) => {
-  const lastMessage = memoizedDraftOrRegular.messages![
-    memoizedDraftOrRegular.messages!.length - 1
-  ]
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
   if (lastMessage) {
     return recipientName(lastMessage?.payload?.headers?.to, emailAddress)
   }
@@ -85,9 +86,10 @@ export const getSenderPartial = ({
   emailAddress,
   memoizedDraftOrRegular,
 }: ExtractEmailData) => {
-  const lastMessage = memoizedDraftOrRegular.messages![
-    memoizedDraftOrRegular.messages!.length - 1
-  ]
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
   if (lastMessage) {
     return senderNamePartial(lastMessage?.payload?.headers?.from, emailAddress)
   }
@@ -97,9 +99,10 @@ export const getSenderFull = ({
   emailAddress,
   memoizedDraftOrRegular,
 }: ExtractEmailData) => {
-  const lastMessage = memoizedDraftOrRegular.messages![
-    memoizedDraftOrRegular.messages!.length - 1
-  ]
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
   if (lastMessage) {
     return senderNameFull(lastMessage?.payload?.headers?.from, emailAddress)
   }
@@ -109,9 +112,10 @@ export const getSenderFull = ({
 const getSubject = ({
   memoizedDraftOrRegular,
 }: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
-  const lastMessage = memoizedDraftOrRegular.messages![
-    memoizedDraftOrRegular.messages!.length - 1
-  ]
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
   if (lastMessage) {
     return emailSubject(lastMessage?.payload?.headers?.subject)
   }
@@ -120,9 +124,10 @@ const getSubject = ({
 const getSnippet = ({
   memoizedDraftOrRegular,
 }: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
-  const lastMessage = memoizedDraftOrRegular.messages![
-    memoizedDraftOrRegular.messages!.length - 1
-  ]
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
   if (lastMessage) {
     return emailSnippet(lastMessage)
   }

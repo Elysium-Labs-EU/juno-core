@@ -115,7 +115,7 @@ const RenderEmailList = ({
   const memoizedThreadList = useMemo(
     () => (
       <S.ThreadList>
-        {threads.length > 0 && (
+        {threads.length > 0 ? (
           <GS.Base>
             <ThreadList
               threads={threads}
@@ -125,12 +125,12 @@ const RenderEmailList = ({
               showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
             />
           </GS.Base>
-        )}
-        {threads.length === 0 && (
+        ) : null}
+        {threads.length === 0 ? (
           <EmptyState>
             <EmailListEmptyStates />
           </EmptyState>
-        )}
+        ) : null}
       </S.ThreadList>
     ),
     [threads, focusedItemIndex]
