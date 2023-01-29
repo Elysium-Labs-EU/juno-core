@@ -37,7 +37,6 @@ export default function useFetchEmailDetail({
           (message) => 'body' in message.payload
         )
         if (!emailWithBody.length || forceRefresh) {
-          console.log('here')
           setShouldRefreshDetail(false)
           mounted &&
             dispatch(

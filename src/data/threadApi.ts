@@ -1,8 +1,5 @@
-import axios from 'axios'
-
-import { errorHandling, instance } from 'data/api'
+import { instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import {
   EmailListObject,
   TEmailListObject,
@@ -12,6 +9,8 @@ import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import type { TGmailV1SchemaThreadSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import type { TUpdateRequestParamsSingleThread } from 'store/storeTypes/metaEmailListTypes'
+
+import { errorBlockTemplate } from './api'
 
 export interface IEmailQueryObject {
   labelIds?: TLabelState['labelIds']
@@ -43,11 +42,7 @@ const threadApi = ({
       EmailListObject.omit({ labels: true }).parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   getFullThreads: async (
@@ -66,11 +61,7 @@ const threadApi = ({
       EmailListObject.omit({ labels: true }).parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 
@@ -85,11 +76,7 @@ const threadApi = ({
       ThreadObject.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   updateThread: async ({
@@ -106,11 +93,7 @@ const threadApi = ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   thrashThread: async ({
@@ -127,11 +110,7 @@ const threadApi = ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   deleteThread: async ({
@@ -146,11 +125,7 @@ const threadApi = ({
       })
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })

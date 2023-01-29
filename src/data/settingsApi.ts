@@ -1,9 +1,8 @@
-import axios from 'axios'
-
-import { errorHandling, instance } from 'data/api'
+import { instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import type { TGmailV1SchemaSendAsSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
+
+import { errorBlockTemplate } from './api'
 
 const settingsApi = () => ({
   getSendAs: async (
@@ -20,11 +19,7 @@ const settingsApi = () => ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   updateSendAs: async (
@@ -43,11 +38,7 @@ const settingsApi = () => ({
       )
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })

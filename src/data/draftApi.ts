@@ -1,8 +1,5 @@
-import axios from 'axios'
-
 import { errorHandling, instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import {
   DraftListResponse,
   DraftResponseEntry,
@@ -14,6 +11,8 @@ import type {
   TGmailV1SchemaListDraftsResponseSchema,
   TGmailV1SchemaMessageSchema,
 } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
+
+import { errorBlockTemplate } from './api'
 
 const draftApi = (signal?: AbortSignal) => ({
   createDrafts: async (
@@ -27,11 +26,7 @@ const draftApi = (signal?: AbortSignal) => ({
       gmailV1SchemaDraftSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 
@@ -50,11 +45,7 @@ const draftApi = (signal?: AbortSignal) => ({
       gmailV1SchemaDraftSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 
@@ -69,7 +60,7 @@ const draftApi = (signal?: AbortSignal) => ({
       DraftListResponse.parse(res.data)
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
 
@@ -83,7 +74,7 @@ const draftApi = (signal?: AbortSignal) => ({
       DraftResponseEntry.parse(res.data)
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
 
@@ -109,7 +100,7 @@ const draftApi = (signal?: AbortSignal) => ({
       })
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
 })

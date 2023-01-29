@@ -50,6 +50,7 @@
     "@tiptap/react": "2.0.0-beta.209",
     "@tiptap/starter-kit": "2.0.0-beta.209",
     "axios": "1.2.5",
+    "axios-retry": "^3.4.0",
     "base64url": "3.0.1",
     "buffer": "6.0.3",
     "cypress": "^12.3.0",

@@ -1,6 +1,3 @@
-import axios from 'axios'
-
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import {
   gmailV1SchemaLabelSchema,
   gmailV1SchemaListLabelsResponseSchema,
@@ -8,7 +5,7 @@ import {
 } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 
-import { errorHandling, instance } from './api'
+import { instance, errorBlockTemplate } from './api'
 import type { TemplateApiResponse } from './api'
 
 const labelApi = () => ({
@@ -20,11 +17,7 @@ const labelApi = () => ({
       gmailV1SchemaListLabelsResponseSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   fetchSingleLabel: async (
@@ -37,11 +30,7 @@ const labelApi = () => ({
       gmailV1SchemaLabelSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   updateLabel: async (
@@ -55,11 +44,7 @@ const labelApi = () => ({
       gmailV1SchemaLabelSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 
@@ -70,11 +55,7 @@ const labelApi = () => ({
       })
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   createLabel: async (
@@ -88,11 +69,7 @@ const labelApi = () => ({
       gmailV1SchemaLabelSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })

@@ -1,8 +1,5 @@
-import axios from 'axios'
-
-import { errorHandling, instance } from 'data/api'
+import { instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
 import {
   authenticateClientResponseSchema,
   extendedGmailV1SchemaProfileSchemaSchema,
@@ -13,6 +10,8 @@ import type {
   TAuthenticateClientResponseSchema,
   TGetAuthUrlResponseSchema,
 } from 'store/storeTypes/gmailBaseTypes/otherTypes'
+
+import { errorBlockTemplate } from './api'
 
 const userApi = () => ({
   authGoogle: async (
@@ -28,11 +27,7 @@ const userApi = () => ({
       getAuthUrlResponseSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   authGoogleCallback: async (body: {
@@ -47,11 +42,7 @@ const userApi = () => ({
       authenticateClientResponseSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   fetchUser: async (): TemplateApiResponse<TExtendedGmailV1SchemaProfileSchemaSchema> => {
@@ -62,11 +53,7 @@ const userApi = () => ({
       extendedGmailV1SchemaProfileSchemaSchema.parse(res.data)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
   logoutUser: async (): TemplateApiResponse<any> => {
@@ -74,11 +61,7 @@ const userApi = () => ({
       const res = await instance.get<any>(`/api/user/logout`)
       return res
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        return errorHandling(err)
-      }
-      // Handle unexpected error
-      return err as ICustomError
+      return errorBlockTemplate(err)
     }
   },
 })
