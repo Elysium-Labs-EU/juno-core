@@ -63,7 +63,7 @@ const RecipientField = ({
         willAutoFocus={
           showField &&
           recipientFieldValue &&
-          Object.keys(recipientFieldValue).length > 0
+          Object.keys(recipientFieldValue).length === 0
         }
       />
       {error && (

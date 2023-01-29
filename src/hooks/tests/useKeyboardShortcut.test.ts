@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { expect } from 'vitest'
 
 import { handleKeydown } from '../useKeyboardShortcut'

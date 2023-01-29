@@ -26,18 +26,6 @@ interface IForwardingComposer {
   isForwarding: boolean
 }
 
-// const isBodyWithEmailHTML = (
-//   relevantMessage: ReturnType<typeof getRelevantMessage>
-// ) => {
-//   if (relevantMessage && 'body' in relevantMessage.payload) {
-//     if ('emailHTML' in relevantMessage.payload.body) {
-//       return relevantMessage.payload.body.emailHTML
-//     }
-//     return undefined
-//   }
-//   return undefined
-// }
-
 const ForwardingComposer = ({
   localThreadDetail,
   selectedIndex,
