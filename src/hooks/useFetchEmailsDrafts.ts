@@ -48,7 +48,6 @@ export default function useFetchEmailsDrafts(
   // If the box is empty, and the history feed is adding the item to the feed
   // there is no next page token and the feed is only that shallow item.
   useEffect(() => {
-    let mounted = true
     let emailPromise: any = {}
     let draftPromise: any = {}
     // This variable checks whether the current request isn't within a too short time period for a similar request.
@@ -71,33 +70,29 @@ export default function useFetchEmailsDrafts(
           nextPageToken: null,
         }
 
-        if (mounted) {
-          timestampLastFiredWithLabel = {
-            labelIds,
-            timeStamp: Date.now(),
-          }
-          emailPromise = dispatch(fetchEmailsSimple(params))
+        timestampLastFiredWithLabel = {
+          labelIds,
+          timeStamp: Date.now(),
         }
-        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
+        emailPromise = dispatch(fetchEmailsSimple(params))
+
+        if (labelIds.includes(global.DRAFT_LABEL)) {
           draftPromise = dispatch(fetchDrafts())
         }
       }
       if (inboxIsLoaded) {
-        if (mounted) {
-          timestampLastFiredWithLabel = {
-            labelIds,
-            timeStamp: Date.now(),
-          }
-          // TODO: Refactor this to be an asyncThunk, or at least have an abort controller.
-          dispatch(refreshEmailFeed())
+        timestampLastFiredWithLabel = {
+          labelIds,
+          timeStamp: Date.now(),
         }
-        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
-          draftPromise = dispatch(fetchDrafts())
-        }
+        dispatch(refreshEmailFeed())
+      }
+      if (labelIds.includes(global.DRAFT_LABEL)) {
+        draftPromise = dispatch(fetchDrafts())
       }
     }
+
     return () => {
-      mounted = false
       if (isPromise(emailPromise)) {
         emailPromise.abort()
       }
