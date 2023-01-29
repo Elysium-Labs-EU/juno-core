@@ -27,7 +27,7 @@ const SenderRecipientName = ({
   if (senderFull && senderPartial && !labelIdsHasDraft)
     return (
       <S.TruncatedSpan
-        title={senderPartial.emailAddress}
+        title={senderPartial.emailAddress ?? ''}
         data-testid="email-sender"
         onClick={handleOpenEvent}
       >
@@ -37,7 +37,7 @@ const SenderRecipientName = ({
   if (labelIdsHasDraft && recipientName && senderPartial) {
     return (
       <S.TruncatedSpan
-        title={recipientName.emailAddress}
+        title={recipientName.emailAddress ?? ''}
         data-testid="email-recipient"
         onClick={handleOpenEvent}
       >

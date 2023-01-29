@@ -135,7 +135,7 @@ const ReadUnreadMessage = ({
             <S.ClosedSender>
               <span
                 style={{ fontWeight: 'bold' }}
-                title={staticSenderNamePartial?.emailAddress}
+                title={staticSenderNamePartial?.emailAddress ?? ''}
               >
                 {staticSenderNamePartial?.name}
               </span>

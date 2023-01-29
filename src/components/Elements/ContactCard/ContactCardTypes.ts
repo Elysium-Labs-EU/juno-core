@@ -4,7 +4,7 @@ import type { MutableRefObject } from 'react'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 
 export interface IContactCard {
-  userEmail: string
+  userEmail: string | undefined | null
   children: JSX.Element
   contact: TContact
   offset?: [number, number]

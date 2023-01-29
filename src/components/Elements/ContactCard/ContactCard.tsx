@@ -31,7 +31,9 @@ export const ContactCardContent = ({
         <span>{staticInitials}</span>
       </S.ContactCardAvatar>
       <CardContent>
-        <S.ContactCardName title={name}>{name || NO_NAME}</S.ContactCardName>
+        <S.ContactCardName title={name ?? ''}>
+          {name || NO_NAME}
+        </S.ContactCardName>
         <S.ContactCardDetails>
           <S.ContactCardEmailContainer>
             <S.ContactCardEmailButton
@@ -50,7 +52,7 @@ export const ContactCardContent = ({
             <S.EmailContainer>
               <GS.Span small>Email</GS.Span>
               <S.ContactCardEmail
-                title={emailAddress}
+                title={emailAddress ?? ''}
                 onClick={() => {
                   createComposeViaURL({
                     dispatch,
@@ -68,10 +70,12 @@ export const ContactCardContent = ({
               label="Search for emails"
               title="Search for emails with this user"
               onClick={() => {
-                createSearchViaUrl({
-                  dispatch,
-                  searchQuery: emailAddress,
-                })
+                if (emailAddress) {
+                  createSearchViaUrl({
+                    dispatch,
+                    searchQuery: emailAddress,
+                  })
+                }
               }}
             />
           </S.AdditionalButtonsContainer>

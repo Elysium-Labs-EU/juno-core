@@ -117,7 +117,7 @@ const DraftMessage = ({
             <S.ClosedSender>
               <span
                 style={{ fontStyle: 'italic' }}
-                title={staticSenderNamePartial.emailAddress}
+                title={staticSenderNamePartial.emailAddress ?? ''}
               >
                 {staticSenderNamePartial.name}
               </span>

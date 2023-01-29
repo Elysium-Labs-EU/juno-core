@@ -47,7 +47,7 @@ const RecipientChip = ({
       {...additionalProps}
       onDelete={() => handleDelete(option)}
       onClick={() => setShowFull(!showFull)}
-      title={option.emailAddress}
+      title={option.emailAddress ?? ''}
     />
   )
 }
