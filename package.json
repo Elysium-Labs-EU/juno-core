@@ -22,7 +22,7 @@
     "@emotion/styled": "11.10.5",
     "@formspark/use-formspark": "0.1.39",
     "@mui/base": "5.0.0-alpha.114",
-    "@mui/material": "5.11.5",
+    "@mui/material": "5.11.6",
     "@mui/system": "5.11.5",
     "@radix-ui/react-checkbox": "1.0.1",
     "@radix-ui/react-dialog": "1.0.2",
