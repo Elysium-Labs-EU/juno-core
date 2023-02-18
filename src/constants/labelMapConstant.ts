@@ -24,7 +24,7 @@ export const getLabelByRoute: { [key: string]: string } = {
 export const getHeaderByRoute: { [key: string]: string } = {
   [RoutesConstants.INBOX]: global.HEADER_INBOX,
   [RoutesConstants.TODO]: global.HEADER_TODO,
-  [RoutesConstants.DRAFTS]: global.HEADER_DRAFTS,
+  [RoutesConstants.DRAFTS]: global.HEADER_DRAFT,
   [RoutesConstants.SENT]: global.HEADER_SENT,
   [RoutesConstants.ARCHIVE]: global.HEADER_ARCHIVE,
   [RoutesConstants.TRASH]: global.HEADER_TRASH,

@@ -39,6 +39,7 @@ import {
 } from 'store/utilsSlice'
 import filterTrashMessages from 'utils/filterTrashMessages'
 import { findLabelByName } from 'utils/findLabel'
+
 import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import * as S from './EmailDetailStyles'
 import EmailPosition from './EmailPosition/EmailPosition'

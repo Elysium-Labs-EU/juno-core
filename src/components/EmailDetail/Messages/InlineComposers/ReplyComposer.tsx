@@ -47,7 +47,7 @@ const ReplyComposer = ({
     )
     return (
       <ES.ComposeWrapper data-cy="reply-composer">
-        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+        <Composer messageOverviewListener={messageOverviewListener} />
       </ES.ComposeWrapper>
     )
   }

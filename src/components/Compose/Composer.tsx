@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
-import Layout from 'components/Layout/Layout'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
@@ -32,11 +31,13 @@ import {
 import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
-import type { IContact } from 'store/storeTypes/contactsTypes'
-import type { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
+import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
+import isEqual from 'utils/isEqual/isEqual'
 import { setModifierKey } from 'utils/setModifierKey'
 
 import Attachments from './ComposeFields/Attachments/Attachments'
@@ -48,7 +49,7 @@ import * as S from './ComposeStyles'
 import DiscardDraftButton from './DiscardDraftButton'
 import useParsePresetValues from './Hooks/useParsePresetValues'
 
-const isIContactArray = (value: any): value is IContact[] =>
+const isTContactArray = (value: any): value is TContact[] =>
   Array.isArray(value) && value.every((item) => 'emailAddress' in item)
 
 const isFileArray = (value: any): value is File[] =>
@@ -59,8 +60,26 @@ const isIEmailAttachmentTypeArray = (
 ): value is IEmailAttachmentType[] =>
   Array.isArray(value) &&
   value.every(
-    (item) => 'id' in item && 'name' in item && 'size' in item && 'type' in item
+    (item) =>
+      'body' in item &&
+      'filename' in item &&
+      'headers' in item &&
+      'mimeType' in item &&
+      'partId' in item
   )
+
+export const assertComposerMode = ({
+  isForwarding,
+  isReplying,
+}: Pick<TEmailDetailState, 'isForwarding' | 'isReplying'>) => {
+  if (isReplying) {
+    return 'replying'
+  }
+  if (isForwarding) {
+    return 'forwarding'
+  }
+  return 'composing'
+}
 
 // Props are coming from ReplyComposer or ForwardComposer
 interface IComposeEmailProps {
@@ -77,26 +96,26 @@ const Composer = ({
 }: IComposeEmailProps) => {
   const location = useLocation()
   const dispatch = useAppDispatch()
-  const activeModal = useAppSelector(selectActiveModal)
   const isReplying = useAppSelector(selectIsReplying)
   const isForwarding = useAppSelector(selectIsForwarding)
   const inSearch = useAppSelector(selectInSearch)
+  const activeModal = useAppSelector(selectActiveModal)
   const draftList = useAppSelector(selectDraftList)
   const [showCC, setShowCC] = useState<boolean>(false)
   const [showBCC, setShowBCC] = useState<boolean>(false)
   const [saveSuccess, setSaveSuccess] = useState<boolean>(false)
+  const [localDraftDetails, setLocalDraftDetails] = useState<
+    TGmailV1SchemaDraftSchema | undefined
+  >(undefined)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
-  const [localDraftDetails, setLocalDraftDetails] = useState<
-    IDraftDetailObject | undefined
-  >(undefined)
   const userInteractedRef = useRef(false)
   const snapshotComposeEmailRef = useRef<any>(null)
 
   const [composedEmail, updateComposedEmail] = useReducer(
     (
-      state: { [key: string]: string | IContact[] | File[] } | null,
-      action: { id: string; value: string | IContact[] | null | File[] }
+      state: { [key: string]: string | TContact[] | File[] } | null,
+      action: { id: string; value: string | TContact[] | null | File[] }
     ) => {
       if (Array.isArray(action)) {
         let updatedState = state
@@ -133,9 +152,16 @@ const Composer = ({
     presetValueObject: presetValue || (location.state as IComposeEmailReceive),
   })
 
+  // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
+  // The flag is used to allow the system to update the draft.
+  useEffect(() => {
+    if (!userInteractedRef.current && hasInteracted) {
+      userInteractedRef.current = true
+    }
+  }, [hasInteracted])
+
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
-    let mounted = true
     const storedDraftDetails = findDraftMessageInList({
       draftList,
       target: composedEmail,
@@ -143,7 +169,7 @@ const Composer = ({
     // For the first time running
     if (
       storedDraftDetails &&
-      !Object.is(localDraftDetails, storedDraftDetails) &&
+      !isEqual(localDraftDetails, storedDraftDetails) &&
       !snapshotComposeEmailRef.current
     ) {
       // Attempt to use the fetched draft object it from the draftList Redux store.
@@ -153,22 +179,19 @@ const Composer = ({
     } else if (
       composedEmail &&
       userInteractedRef.current &&
-      !Object.is(snapshotComposeEmailRef.current, composedEmail)
+      !isEqual(snapshotComposeEmailRef.current, composedEmail)
     ) {
       snapshotComposeEmailRef.current = composedEmail
       // If the user is interacting with the draft, send an update request and set the response as the local state
       const asyncDispatchAction = async () => {
-        const response: IDraftDetailObject = await dispatch(
+        const response: TGmailV1SchemaDraftSchema = await dispatch(
           createUpdateDraft({ composedEmail, localDraftDetails })
         )
-        if (response && mounted) {
+        if (response) {
           setLocalDraftDetails(response)
         }
       }
       asyncDispatchAction()
-    }
-    return () => {
-      mounted = false
     }
   }, [composedEmail, localDraftDetails])
 
@@ -188,14 +211,6 @@ const Composer = ({
       mounted = false
     }
   }, [localDraftDetails])
-
-  // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
-  // The flag is used to allow the system to update the draft.
-  useEffect(() => {
-    if (!userInteractedRef.current && hasInteracted) {
-      userInteractedRef.current = true
-    }
-  }, [hasInteracted])
 
   const handleSubmit = useCallback(
     (e?: MouseEvent<HTMLButtonElement>) => {
@@ -225,18 +240,11 @@ const Composer = ({
     // On the emailDetail a refresh for EmailDetail is dispatched if this composer was opened in a reply or forward mode.
   }, [isReplying, isForwarding, dispatch])
 
-  useKeyboardShortcut({
-    handleEvent: handleSubmit,
-    modifierKey: setModifierKey,
-    key: keyConstants.KEY_SPECIAL.enter,
-    isDisabled: inSearch || Boolean(activeModal),
-  })
-
   const memoizedToField = useMemo(
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.to) ? composedEmail?.to : undefined
+          isTContactArray(composedEmail?.to) ? composedEmail?.to : undefined
         }
         dataCy="to-field"
         hasInteracted={hasInteracted}
@@ -255,7 +263,7 @@ const Composer = ({
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.cc) ? composedEmail?.cc : undefined
+          isTContactArray(composedEmail?.cc) ? composedEmail?.cc : undefined
         }
         dataCy="cc-field"
         hasInteracted={hasInteracted}
@@ -274,7 +282,7 @@ const Composer = ({
     () => (
       <ContactField
         composeValue={
-          isIContactArray(composedEmail?.bcc) ? composedEmail?.bcc : undefined
+          isTContactArray(composedEmail?.bcc) ? composedEmail?.bcc : undefined
         }
         dataCy="bcc-field"
         hasInteracted={hasInteracted}
@@ -309,18 +317,20 @@ const Composer = ({
   const memoizedBodyField = useMemo(
     () => (
       <BodyField
+        autofocus={isReplying ? 'start' : false}
         composeValue={
           typeof composedEmail?.body === 'string'
             ? composedEmail?.body
             : undefined
         }
+        composerMode={assertComposerMode({ isForwarding, isReplying })}
         hasInteracted={hasInteracted}
         loadState={loadState}
         setHasInteracted={setHasInteracted}
         updateComposeEmail={updateComposedEmail}
       />
     ),
-    [composedEmail, loadState, hasInteracted]
+    [composedEmail, hasInteracted, isForwarding, isReplying, loadState]
   )
 
   const memoizedAttachmentField = useMemo(
@@ -341,7 +351,7 @@ const Composer = ({
         updateComposeEmail={updateComposedEmail}
       />
     ),
-    [composedEmail, loadState, hasInteracted, updateComposedEmail]
+    [composedEmail, loadState, hasInteracted]
   )
 
   const memoizedSignatureField = useMemo(
@@ -357,14 +367,16 @@ const Composer = ({
   const memoizedButtons = useMemo(
     () => (
       <S.ButtonContainer>
-        {localDraftDetails?.id && (
-          <DiscardDraftButton
-            draftId={localDraftDetails.id}
-            threadId={localDraftDetails.message.threadId}
-            id={localDraftDetails.message.id}
-            messageOverviewListener={messageOverviewListener}
-          />
-        )}
+        {localDraftDetails?.id &&
+          localDraftDetails?.message?.threadId &&
+          localDraftDetails?.message?.id && (
+            <DiscardDraftButton
+              draftId={localDraftDetails.id}
+              threadId={localDraftDetails.message.threadId}
+              id={localDraftDetails.message.id}
+              messageOverviewListener={messageOverviewListener}
+            />
+          )}
         {(isReplying || isForwarding) && (
           <CustomButton
             label={local.CANCEL_BUTTON}
@@ -386,6 +398,13 @@ const Composer = ({
     ),
     [isReplying, isForwarding, localDraftDetails, composedEmail]
   )
+
+  useKeyboardShortcut({
+    handleEvent: handleSubmit,
+    modifierKey: setModifierKey,
+    key: keyConstants.KEY_SPECIAL.enter,
+    isDisabled: inSearch || Boolean(activeModal),
+  })
 
   return (
     <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>

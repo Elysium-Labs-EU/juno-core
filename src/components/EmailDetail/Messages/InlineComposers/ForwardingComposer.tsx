@@ -47,7 +47,7 @@ const ForwardingComposer = ({
     )
     return (
       <ES.ComposeWrapper data-cy="forward-composer">
-        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+        <Composer messageOverviewListener={messageOverviewListener} />
       </ES.ComposeWrapper>
     )
   }

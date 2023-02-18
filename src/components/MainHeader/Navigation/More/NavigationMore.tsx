@@ -38,7 +38,7 @@ const NavigationMore = ({ isActive }: INavigationMore) => {
       items: [
         {
           id: 'draft-navigation',
-          title: global.HEADER_DRAFTS,
+          title: global.HEADER_DRAFT,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.DRAFTS))

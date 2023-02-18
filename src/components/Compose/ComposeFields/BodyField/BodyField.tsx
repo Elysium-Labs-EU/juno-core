@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { compareTwoStrings } from 'string-similarity'
 
-import { assertComposerMode } from 'components/Compose/ComposeEmail'
+import { assertComposerMode } from 'components/Compose/Composer'
 import * as Compose from 'components/Compose/ComposeStyles'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'

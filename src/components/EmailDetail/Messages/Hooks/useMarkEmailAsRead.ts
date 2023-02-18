@@ -17,7 +17,7 @@ export default function useMarkEmailAsRead({
   localThreadDetail,
   labelIds,
 }: {
-  localThreadDetail: TThreadObject | null
+  localThreadDetail: TThreadObject | null | undefined
   labelIds: TLabelState['labelIds']
 }) {
   const dispatch = useAppDispatch()

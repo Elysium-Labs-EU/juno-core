@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import { selectEmailListSize, selectIsSilentLoading } from 'store/utilsSlice'
 import { edgeLoadingNextPage } from 'utils/loadNextPage'
 
 interface IUseEdgeLoadNextPage {
-  activeEmailList: IEmailListObject | undefined
+  activeEmailList: TEmailListObject | undefined
 }
 
 export default function useEdgeLoadNextPage({
