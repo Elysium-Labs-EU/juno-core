@@ -30,7 +30,7 @@
     "@radix-ui/react-popover": "1.0.3",
     "@radix-ui/react-select": "1.2.0",
     "@radix-ui/react-tooltip": "1.0.3",
-    "@reduxjs/toolkit": "1.9.1",
+    "@reduxjs/toolkit": "1.9.2",
     "@sentry/react": "7.34.0",
     "@sentry/tracing": "7.34.0",
     "@testing-library/react": "^13.4.0",
