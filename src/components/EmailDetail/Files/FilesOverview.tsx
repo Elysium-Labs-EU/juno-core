@@ -1,8 +1,8 @@
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import senderNameFull from 'components/Elements/SenderName/senderNameFull'
 import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
-import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
 import * as local from 'components/EmailDetail/Files/FilesOverviewConstants'
 import { selectProfile } from 'store/baseSlice'
@@ -98,7 +98,7 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
   const isForwarding = useAppSelector(selectIsForwarding)
 
   return (
-    <ES.DetailRow>
+    <>
       <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <S.FilesWrapper>
           {!isLoading && threadDetail && countUniqueFiles(threadDetail) > 0 ? (
@@ -110,7 +110,7 @@ const FilesOverview = ({ threadDetail, isLoading }: IFilesOverview) => {
         </S.FilesWrapper>
       </ES.EmailDetailContainer>
       <ES.EmailOptionsPlaceholder />
-    </ES.DetailRow>
+    </>
   )
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
@@ -8,14 +9,11 @@ import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
 
-import StyledCircularProgress from '../../Elements/CircularProgress/StyledCircularProgress'
-import * as ES from '../EmailDetailStyles'
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
-import EmailDetailOptions from './EmailDetailOptions'
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
-import ForwardingComposer from './InlineComposers/ForwardingComposer'
-import ReplyComposer from './InlineComposers/ReplyComposer'
+import StyledCircularProgress from '../../Elements/CircularProgress/StyledCircularProgress'
+import * as ES from '../EmailDetailStyles'
 
 interface IMessagesOverview {
   isForwarding: boolean
@@ -23,7 +21,8 @@ interface IMessagesOverview {
   isReplying: boolean
   labelIds: string[]
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  threadDetail: IEmailListThreadItem
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
+  threadDetail: IEmailListThreadItem | undefined | null
 }
 
 interface IMappedMessages
@@ -74,33 +73,35 @@ const MappedMessages = ({
   }, [isReplying, isForwarding])
 
   const reversedMessagesOrder = useMemo(
-    () => threadDetail.messages.slice(0).reverse(),
+    () => threadDetail?.messages.slice(0).reverse(),
     [threadDetail]
   )
 
-  return threadDetail.messages ? (
+  return threadDetail?.messages ? (
     <>
-      {reversedMessagesOrder.map((message, index) => (
-        <div key={message.id}>
-          {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
-            <DraftMessage
-              message={message}
-              draftIndex={index}
-              handleClickListener={handleClickDraft}
-              hideDraft={hideDraft === index}
-            />
-          ) : (
-            <ReadUnreadMessage
-              message={message}
-              threadDetail={threadDetail}
-              handleClickListener={handleClickMessage}
-              messageIndex={index}
-              setUnsubscribeLink={setUnsubscribeLink}
-              setShouldRefreshDetail={setShouldRefreshDetail}
-            />
-          )}
-        </div>
-      ))}
+      {reversedMessagesOrder
+        ? reversedMessagesOrder.map((message, index) => (
+            <div key={message.id}>
+              {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
+                <DraftMessage
+                  message={message}
+                  draftIndex={index}
+                  handleClickListener={handleClickDraft}
+                  hideDraft={hideDraft === index}
+                />
+              ) : (
+                <ReadUnreadMessage
+                  message={message}
+                  threadDetail={threadDetail}
+                  handleClickListener={handleClickMessage}
+                  messageIndex={index}
+                  setUnsubscribeLink={setUnsubscribeLink}
+                  setShouldRefreshDetail={setShouldRefreshDetail}
+                />
+              )}
+            </div>
+          ))
+        : null}
     </>
   ) : (
     <p>{global.NOTHING_TO_SEE}</p>
@@ -114,13 +115,14 @@ const MessagesOverview = ({
   isForwarding,
   labelIds,
   setShouldRefreshDetail,
+  setUnsubscribeLink,
 }: IMessagesOverview) => {
-  const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
-  const [localThreadDetail, setLocalThreadDetail] =
-    useState<IEmailListThreadItem | null>(null)
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    undefined
-  )
+  const [localThreadDetail, setLocalThreadDetail] = useState<
+    IEmailListThreadItem | null | undefined
+  >(null)
+  // const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
+  //   undefined
+  // )
 
   useEffect(() => {
     let mounted = true
@@ -136,65 +138,56 @@ const MessagesOverview = ({
   // On mount of the email detail - mark the email as read when it is unread.
   useMarkEmailAsRead({ localThreadDetail, labelIds })
 
-  // A callback function that will listen to the discard or cancel event on the composer
-  const messageOverviewListener = useCallback(
-    (eventType: 'cancel' | 'discard') => {
-      // TODO: Discard eventType is currently unused.
-      if (eventType === 'cancel') {
-        setSelectedIndex(undefined)
-      }
-    },
-    [localThreadDetail]
-  )
+  // // A callback function that will listen to the discard or cancel event on the composer
+  // const messageOverviewListener = useCallback(
+  //   (eventType: 'cancel' | 'discard') => {
+  //     // TODO: Discard eventType is currently unused.
+  //     if (eventType === 'cancel') {
+  //       setSelectedIndex(undefined)
+  //     }
+  //   },
+  //   [localThreadDetail]
+  // )
 
-  /**
-   * @function indexMessageListener
-   * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
-   * @param value - number of the index of the selected Draft Message
-   * @returns {void} - returns the found object or undefined if not found as a change on the state.
-   */
-  const indexMessageListener = (value: number) => {
-    setSelectedIndex(value)
-  }
+  // /**
+  //  * @function indexMessageListener
+  //  * This function will listen to the selected draft messsage. This is used to get a body value when opening the composer.
+  //  * @param value - number of the index of the selected Draft Message
+  //  * @returns {void} - returns the found object or undefined if not found as a change on the state.
+  //  */
+  // const indexMessageListener = (value: number) => {
+  //   setSelectedIndex(value)
+  // }
 
   return (
-    <>
-      <ES.DetailRow>
-        <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
-          <ES.DetailBase>
-            <ES.CardFullWidth>
-              {localThreadDetail?.messages && !isLoading ? (
-                <MappedMessages
-                  threadDetail={localThreadDetail}
-                  setUnsubscribeLink={setUnsubscribeLink}
-                  indexMessageListener={indexMessageListener}
-                  setShouldRefreshDetail={setShouldRefreshDetail}
-                />
-              ) : (
-                <ES.LoadingErrorWrapper>
-                  <StyledCircularProgress />
-                </ES.LoadingErrorWrapper>
-              )}
-              {!localThreadDetail && (
-                <ES.LoadingErrorWrapper>
-                  {isLoading && <StyledCircularProgress />}
-                  {!isLoading && <p>{local.ERROR_EMAIL}</p>}
-                </ES.LoadingErrorWrapper>
-              )}
-            </ES.CardFullWidth>
-          </ES.DetailBase>
-        </ES.EmailDetailContainer>
-        {localThreadDetail &&
-          !isReplying &&
-          !isForwarding &&
-          localThreadDetail.messages && (
-            <EmailDetailOptions
-              threadDetail={localThreadDetail}
-              unsubscribeLink={unsubscribeLink}
-            />
-          )}
-      </ES.DetailRow>
-      {isReplying && localThreadDetail && localThreadDetail?.messages && (
+    <ES.MessageFeedComposerContainer>
+      <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+        <ES.DetailBase>
+          <ES.CardFullWidth>
+            {localThreadDetail?.messages && !isLoading ? (
+              <MappedMessages
+                threadDetail={localThreadDetail}
+                setUnsubscribeLink={setUnsubscribeLink}
+                indexMessageListener={(value) => {
+                  console.log(value)
+                }}
+                setShouldRefreshDetail={setShouldRefreshDetail}
+              />
+            ) : (
+              <ES.LoadingErrorWrapper>
+                <StyledCircularProgress />
+              </ES.LoadingErrorWrapper>
+            )}
+            {!localThreadDetail && (
+              <ES.LoadingErrorWrapper>
+                {isLoading && <StyledCircularProgress />}
+                {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+              </ES.LoadingErrorWrapper>
+            )}
+          </ES.CardFullWidth>
+        </ES.DetailBase>
+      </ES.EmailDetailContainer>
+      {/* {isReplying && localThreadDetail && localThreadDetail?.messages && (
         <ReplyComposer
           localThreadDetail={localThreadDetail}
           selectedIndex={selectedIndex}
@@ -208,8 +201,8 @@ const MessagesOverview = ({
           messageOverviewListener={messageOverviewListener}
           isForwarding={isForwarding}
         />
-      )}
-    </>
+      )} */}
+    </ES.MessageFeedComposerContainer>
   )
 }
 export default MessagesOverview

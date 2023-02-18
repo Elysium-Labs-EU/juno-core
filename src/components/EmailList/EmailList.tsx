@@ -61,6 +61,7 @@ const EmailList = () => {
     }
   }, [emailList, labelIds])
 
+  // TODO: Make use of match pattern
   return labelIds.some((val) => loadedInbox.indexOf(val) > -1) &&
     activeEmailListIndex > -1 ? (
     <>

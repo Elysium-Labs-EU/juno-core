@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Archive from 'components/Archive/Archive'
 import BaseLoader from 'components/BaseLoader/BaseLoader'
 import ComposeEmail from 'components/Compose/ComposeEmail'
-import DraftEmail from 'components/Draft/DraftEmail'
+import Draft from 'components/Draft/Draft'
 import EmailDetail from 'components/EmailDetail/EmailDetail'
 import Inbox from 'components/Inbox/Inbox'
 import GoogleCallback from 'components/Login/Callback/GoogleCallBack'
@@ -99,7 +99,7 @@ const RoutesComponent = () => {
         path={RoutesConstants.DRAFTS}
         element={
           <ProtectedRouteTemplate>
-            <DraftEmail />
+            <Draft />
           </ProtectedRouteTemplate>
         }
       />

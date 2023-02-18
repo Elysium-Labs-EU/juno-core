@@ -31,6 +31,9 @@ export const IconTitleContainer = styled.div`
   align-items: center;
   display: flex;
   flex-direction: row;
+  span {
+    font-size: var(--small);
+  }
 `
 
 export const ChildrenAsText = styled.span`

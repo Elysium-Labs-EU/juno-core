@@ -14,7 +14,11 @@ import { handleLogout } from './Options/LogoutOption'
 
 const SIZE = 16
 
-const NavigationMore = () => {
+interface INavigationMore {
+  isActive: boolean
+}
+
+const NavigationMore = ({ isActive }: INavigationMore) => {
   const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
 
@@ -93,6 +97,7 @@ const NavigationMore = () => {
           ariaExpanded={isOpen || undefined}
           ariaHaspopup="true"
           dataCy="more-menu"
+          isActive={isActive}
           icon={<QiMeatballsH size={SIZE} />}
           onClick={handleOpen}
           title="More menu"

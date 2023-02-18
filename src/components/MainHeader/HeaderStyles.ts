@@ -1,37 +1,34 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  padding: 0 20px;
+  padding: 0 var(--spacing-2);
   position: relative;
 `
 
 export const InnerMenu = styled.div`
-  display: flex;
-  margin-bottom: 20px;
   align-items: center;
-  min-width: 665px;
-  max-width: min(100vw - 340px, 860px);
-  justify-content: space-between;
+  display: flex;
   flex: 1 1;
-  margin: 40px auto 20px;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+  margin: var(--spacing-4) auto var(--spacing-2);
+  max-width: min(100vw - 340px, 860px);
+  min-width: 665px;
 `
 
 export const NavContainer = styled.div`
-  padding: 0 20px;
-  position: relative;
-`
-
-export const HeaderCenter = styled.div`
-  display: flex;
-  width: 100%;
-  place-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+  padding: var(--spacing-2) 0;
+  max-width: var(--container-max-width);
 `
 
 export const BackButtonWithNavgationContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-4);
 `
 
 export const FocusSortHeaderWrapper = styled.div`
@@ -45,25 +42,25 @@ export const StrictFlowButtonContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin: 40px 0 20px;
+  margin: var(--spacing-1) 0 var(--spacing-1);
 
   button:nth-child(1) {
-    margin-right: 20px;
+    margin-right: var(--spacing-2);
   }
   button:nth-child(2) {
-    margin-right: 5px;
+    margin-right: var(--spacing-0-5);
   }
 `
 
-export const PageTitle = styled.h2`
-  margin: 40px 0 0;
-  font-weight: 200;
-  user-select: none;
-  text-transform: capitalize;
-  font-size: 2.441rem;
-  font-family: var(--font-family) !important;
-  line-height: 1.3;
+export const PageTitle = styled.h1`
   color: var(--color-black) !important;
+  font-family: var(--font-family) !important;
+  font-size: var(--h3);
+  font-weight: 200;
+  line-height: 1.3;
+  margin: 0;
+  text-transform: capitalize;
+  user-select: none;
 `
 
 export const SearchQuery = styled.div`

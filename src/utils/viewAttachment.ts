@@ -53,6 +53,10 @@ export default async function viewAttachment({
           mimeType
         )
         console.log(test)
+        //   // TODO: Write the blob to the file system, but first we need to get the file
+        //  const base64Data = test?.
+        //   const array = new Uint8Array(await test.blobUrl.arrayBuffer())
+        //   console.log(array)
         return test
       }
       return FAIL_RESPONSE_OBJECT

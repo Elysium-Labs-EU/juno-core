@@ -64,6 +64,7 @@ export const MenuItem = styled.button<IMenuItem>`
   border-radius: var(--radius-m);
   border: 0;
   color: var(--color-white);
+  font-size: var(--small);
   display: flex;
   justify-content: space-between;
   letter-spacing: 0.01em;

@@ -1,19 +1,38 @@
-import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
+import InboxSortOption from 'components/Inbox/InboxSortOption'
+import Layout from 'components/Layout/Layout'
+import * as S from 'components/MainHeader/HeaderStyles'
+import { ACTIVE_PAGE_HEADER } from 'constants/globalConstants'
 import * as local from 'constants/todoConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
-import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+import { useAppSelector } from 'store/hooks'
+import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
+
+import TodoFocusOption from './TodoFocusOption'
 
 const Todo = () => {
+  const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   useSetCurrentLabel()
 
   return (
-    <>
-      <Seo title={local.HEADER_TODO} />
-      <AnimatedMountUnmount>
-        <EmailList />
-      </AnimatedMountUnmount>
-    </>
+    <Layout
+      activePage={ACTIVE_PAGE_HEADER.todo}
+      headerTitle={local.HEADER_TODO}
+      additionalHeader={
+        !isFlexibleFlowActive ? (
+          <S.StrictFlowButtonContainer>
+            <TodoFocusOption />
+            <InboxSortOption />
+          </S.StrictFlowButtonContainer>
+        ) : (
+          <S.StrictFlowButtonContainer>
+            <TodoFocusOption />
+          </S.StrictFlowButtonContainer>
+        )
+      }
+    >
+      <EmailList />
+    </Layout>
   )
 }
 

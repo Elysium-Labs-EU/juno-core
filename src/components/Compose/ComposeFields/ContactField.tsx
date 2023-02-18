@@ -5,10 +5,16 @@ import * as global from 'constants/globalConstants'
 import type { IContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 
-import { recipientListTransform } from '../ComposeEmail'
 import type { IRecipientsList } from '../ComposeEmailTypes'
 import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
+
+export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
+  fieldId: recipientListRaw.fieldId,
+  newValue: recipientListRaw.newValue.map((item: string | IContact) =>
+    typeof item === 'string' ? { name: item, emailAddress: item } : item
+  ),
+})
 
 const ContactField = ({
   composeValue = undefined,

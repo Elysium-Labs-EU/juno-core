@@ -25,9 +25,9 @@ import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
 import viewAttachment from 'utils/viewAttachment'
 
-import AttachmentModal from '../AttachmentModal/AttachmentModal'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
+import AttachmentModal from '../AttachmentModal/AttachmentModal'
 
 const ICON_SIZE = 20
 
@@ -211,6 +211,7 @@ const AttachmentBubble = ({
       ? attachmentData.body?.size
       : attachmentData?.size ?? 0
 
+  // TODO: Reinstate this with using the Tauri API
   const memoizedViewAttachmentButton = useMemo(
     () =>
       'body' in attachmentData ? (
@@ -270,7 +271,7 @@ const AttachmentBubble = ({
             </GS.Span>
           </S.AttachmentDetails>
         </S.AttachmentInner>
-        {memoizedViewAttachmentButton}
+        {/* {memoizedViewAttachmentButton} */}
       </S.Attachment>
       {memoizedDownloadButton}
       {memoizedDeleteButton}

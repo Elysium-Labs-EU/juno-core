@@ -15,7 +15,7 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   left: 50%;
   margin: 0 auto;
-  max-width: 1480px;
+  max-width: var(--container-max-width);
   padding: 5px 40px;
   position: absolute;
   transform: translate(-50%);

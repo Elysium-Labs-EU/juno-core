@@ -1,5 +1,20 @@
 // SYSTEM CODE
 export const ACCESS_TOKEN = 'accessToken'
+export type TActivePageHeader =
+  | 'compose'
+  | 'inbox'
+  | 'more'
+  | 'search'
+  | 'spam'
+  | 'todo'
+export const ACTIVE_PAGE_HEADER = {
+  compose: 'compose' as TActivePageHeader,
+  inbox: 'inbox' as TActivePageHeader,
+  more: 'more' as TActivePageHeader,
+  search: 'search' as TActivePageHeader,
+  spam: 'spam' as TActivePageHeader,
+  todo: 'todo' as TActivePageHeader,
+}
 export const ACTIVE_MODAL_MAP = {
   attachment: 'attachment',
   betaAccess: 'betaAccess',

@@ -8,8 +8,8 @@ export const Wrapper = styled.div<IWrapper>`
   width: ${({ tabbedView }) => (tabbedView ? 'auto' : '100%')};
   min-width: ${({ tabbedView }) => (tabbedView ? '500px' : '665px')};
   max-width: ${({ tabbedView }) =>
-    tabbedView ? '40%' : 'min(100vw - 340px, 860px)'};
-  margin-left: ${({ tabbedView }) => (tabbedView ? '10%' : 'auto')};
+    tabbedView ? '100%' : 'min(100vw - 340px, 860px)'};
+  margin-left: ${({ tabbedView }) => (tabbedView ? '40px' : 'auto')};
   margin-right: auto;
   position: ${({ tabbedView }) => (tabbedView ? 'sticky' : 'static')};
   ${({ tabbedView }) => tabbedView && 'top: 0px'};

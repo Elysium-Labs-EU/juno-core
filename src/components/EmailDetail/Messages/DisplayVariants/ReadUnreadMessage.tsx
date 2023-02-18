@@ -1,4 +1,4 @@
-import {  useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
@@ -21,12 +21,12 @@ import type {
   IEmailMessage,
 } from 'store/storeTypes/emailListTypes'
 
+import LinkedContacts from './Recipients/LinkedContacts'
 import EmailAttachment from '../../Attachment/EmailAttachment'
 import * as S from '../../EmailDetailStyles'
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import SpecificEmailOptions from '../SpecificEmailOptions'
-import LinkedContacts from './Recipients/LinkedContacts'
 
 interface IReadMessage {
   handleClickListener: ({ mIndex }: { mIndex: number }) => void

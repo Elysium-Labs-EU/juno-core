@@ -5,6 +5,7 @@ export const breakPoint = {
   xl: '1280px',
   twoXL: '1536px',
 }
+export const containerMaxWidth = '1480px'
 export const color = {
   transparent: 'transparent',
   black: '#000',

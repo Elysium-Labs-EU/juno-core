@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Juno",
-    "version": "0.1.0"
+    "version": "0.1.9"
   },
   "tauri": {
     "allowlist": {
@@ -76,7 +76,8 @@
         "height": 900,
         "resizable": true,
         "title": "Juno",
-        "width": 1400
+        "width": 1400,
+        "minWidth": 900
       }
     ]
   }

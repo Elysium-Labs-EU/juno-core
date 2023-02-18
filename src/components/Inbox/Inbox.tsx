@@ -1,7 +1,11 @@
-import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
+import Layout from 'components/Layout/Layout'
+import { ACTIVE_PAGE_HEADER } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
-import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+
+import InboxRefreshOption from './InboxRefreshOption'
+import InboxSortOption from './InboxSortOption'
+import * as S from './InboxStyles'
 
 const HEADER_INBOX = 'Inbox'
 
@@ -9,12 +13,23 @@ const Inbox = () => {
   useSetCurrentLabel()
 
   return (
-    <>
-      <Seo title={HEADER_INBOX} />
-      <AnimatedMountUnmount>
-        <EmailList />
-      </AnimatedMountUnmount>
-    </>
+    <Layout
+      activePage={ACTIVE_PAGE_HEADER.inbox}
+      headerTitle={HEADER_INBOX}
+      additionalHeader={
+        <S.OptionsContainer>
+          <div />
+          <S.SortOptionWrapper>
+            <InboxSortOption />
+          </S.SortOptionWrapper>
+          <S.RefreshOptionWrapper>
+            <InboxRefreshOption />
+          </S.RefreshOptionWrapper>
+        </S.OptionsContainer>
+      }
+    >
+      <EmailList />
+    </Layout>
   )
 }
 

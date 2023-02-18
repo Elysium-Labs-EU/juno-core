@@ -19,25 +19,26 @@ export const GlobalStyle = createGlobalStyle`
     --color-neutral-900: ${themeConstants.color.neutral[900]};
     --color-red-500: ${themeConstants.color.red[500]};
     --color-white: ${themeConstants.color.white};
+    --container-max-width: ${themeConstants.containerMaxWidth};
     --font-family: ${themeConstants.fontFamily};
     --h1: ${themeConstants.fontSize.h1};
     --h2: ${themeConstants.fontSize.h2};
     --h3: ${themeConstants.fontSize.h3};
     --h4: ${themeConstants.fontSize.h4};
     --h5: ${themeConstants.fontSize.h5};
+    --radius-l: 8px;
+    --radius-m: 4px;
+    --radius-s: 2px;
     --small: ${themeConstants.fontSize.small};
     --spacing-0-5: ${themeConstants.spacing[0.5]};
     --spacing-0-75: ${themeConstants.spacing[0.75]};
-    --spacing-1: ${themeConstants.spacing[1]};
     --spacing-1-5: ${themeConstants.spacing[1.5]};
+    --spacing-1: ${themeConstants.spacing[1]};
     --spacing-2: ${themeConstants.spacing[2]};
     --spacing-3: ${themeConstants.spacing[3]};
     --spacing-4: ${themeConstants.spacing[4]};
     --spacing-6: ${themeConstants.spacing[6]};
     --spacing-7: ${themeConstants.spacing[7]};
-    --radius-l: 8px;
-    --radius-m: 4px;
-    --radius-s: 2px;
     --z-index-block-layer: 1000;
     --z-index-modal: 402;
     --z-index-popover: 401;
@@ -49,6 +50,7 @@ export const GlobalStyle = createGlobalStyle`
     background-color: var(--color-neutral-100) !important;
     font-family: var(--font-family) !important;
     margin: 0;
+    scroll-behavior: smooth;
   }
 `
 
@@ -63,13 +65,13 @@ interface IOuterContainer {
 }
 
 export const OuterContainer = styled.div<IOuterContainer>`
-  max-width: 1480px;
-  width: 100%;
+  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
+  flex: 1 1 0%;
   margin-left: auto;
   margin-right: auto;
+  max-width: var(--container-max-width);
   position: relative;
-  flex: 1 1 0%;
-  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'initial')};
+  width: 100%;
 `
 
 interface ITextProps {

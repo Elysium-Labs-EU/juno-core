@@ -1,12 +1,16 @@
-import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
+import BackButton from 'components/Elements/Buttons/BackButton'
+import CustomButton from 'components/Elements/Buttons/CustomButton'
+import Layout from 'components/Layout/Layout'
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
+import { QiSearch } from 'images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
   selectCurrentEmail,
@@ -34,17 +38,24 @@ import {
   selectIsFlexibleFlowActive,
   selectIsLoading,
   selectIsProcessing,
+  setInSearch,
 } from 'store/utilsSlice'
-import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 import filterTrashMessages from 'utils/filterTrashMessages'
 import { findLabelByName } from 'utils/findLabel'
 
-import Baseloader from '../BaseLoader/BaseLoader'
-import EmailDetailHeader from './EmailDetailHeader'
+import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import * as S from './EmailDetailStyles'
+import EmailPosition from './EmailPosition/EmailPosition'
 import FilesOverview from './Files/FilesOverview'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
+import EmailDetailOptions from './Messages/EmailDetailOptions'
+import ForwardingComposer from './Messages/InlineComposers/ForwardingComposer'
+import ReplyComposer from './Messages/InlineComposers/ReplyComposer'
 import MessagesOverview from './Messages/MessagesOverview'
+import Tabs from './Tabs/Tabs'
+import getEmailHeader from './Utils/getEmailHeader'
+import useEdgeLoadNextPage from './Utils/useEdgeLoadNextPage'
+import Baseloader from '../BaseLoader/BaseLoader'
 
 /**
  * @component EmailDetail - the main component to handle the content of the email detail page. It handles the email detail header, the mapped messages, the preloading of messages, the files and messages tabs, and the side composing mode.
@@ -67,9 +78,14 @@ const EmailDetail = () => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
+  const location = useLocation()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
+    undefined
+  )
   const [shouldRefreshDetail, setShouldRefreshDetail] = useState(false)
+  const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
   const isComposerActiveRef = useRef(false)
   const { threadId, overviewId } = useParams<{
     threadId: string
@@ -89,6 +105,7 @@ const EmailDetail = () => {
       )
     ),
   })
+  useEdgeLoadNextPage({ activeEmailList })
 
   // On closing of the composer refresh the message feed
   useEffect(() => {
@@ -198,49 +215,124 @@ const EmailDetail = () => {
     }
   }, [viewIndex, activeEmailList, currentEmail])
 
+  const showNoNavigation =
+    coreStatus === global.CORE_STATUS_MAP.focused ||
+    coreStatus === global.CORE_STATUS_MAP.sorting
+
+  const noThrashMessages = useMemo(() => {
+    if (activeEmailList) {
+      return filterTrashMessages(activeEmailList.threads[viewIndex], labelIds)
+    }
+    return undefined
+  }, [activeEmailList, labelIds, viewIndex])
+
+  // A callback function that will listen to the discard or cancel event on the composer
+  const messageOverviewListener = useCallback(
+    (eventType: 'cancel' | 'discard') => {
+      // TODO: Discard eventType is currently unused.
+      if (eventType === 'cancel') {
+        setSelectedIndex(undefined)
+      }
+    },
+    []
+  )
+
   return activeEmailList ? (
-    <>
-      <EmailDetailHeader activeEmailList={activeEmailList} />
-      <AnimatedMountUnmount>
-        <S.Scroll clientState={Boolean(coreStatus)}>
-          <S.EmailDetailWrapper tabbedView={isReplying || isForwarding}>
-            {overviewId === local.MESSAGES &&
-              activeEmailList.threads.length > 0 &&
-              viewIndex > -1 && (
-                <>
+    <Layout
+      headerTitle={getEmailHeader({
+        coreStatus,
+        labelIds,
+        location,
+        storageLabels,
+      })}
+      activePage={undefined}
+      showNavigation={!showNoNavigation}
+      additionalHeader={
+        coreStatus === global.CORE_STATUS_MAP.searching ? (
+          <S.SearchQuery>
+            {labelIds.includes(global.SEARCH_LABEL) && (
+              <CustomButton
+                label={`Search Query: "${searchList?.q}"`}
+                onClick={() => dispatch(setInSearch(true))}
+                suppressed
+                title="Go back to search window"
+                icon={<QiSearch />}
+              />
+            )}
+          </S.SearchQuery>
+        ) : undefined
+      }
+    >
+      <S.Scroll tabbedView={isForwarding || isReplying}>
+        <S.EmailDetailWrapper>
+          <S.BackButtonContainer>
+            <S.StickyOptions>
+              <BackButton />
+            </S.StickyOptions>
+          </S.BackButtonContainer>
+          <S.EmailWithComposerContainer>
+            <S.EmailCenterContainer>
+              <S.EmailTopControlContainer
+                tabbedView={isForwarding || isReplying}
+              >
+                <Tabs activeEmailList={activeEmailList} />
+                {showNoNavigation ? (
+                  <EmailPosition />
+                ) : (
+                  <DetailNavigationContainer
+                    activeEmailList={activeEmailList}
+                  />
+                )}
+              </S.EmailTopControlContainer>
+              {/* TODO: Create match pattern here */}
+              {overviewId === local.MESSAGES &&
+                noThrashMessages &&
+                viewIndex > -1 && (
                   <MessagesOverview
-                    threadDetail={filterTrashMessages(
-                      activeEmailList.threads[viewIndex],
-                      labelIds
-                    )}
+                    threadDetail={noThrashMessages}
                     isLoading={isLoading}
                     isReplying={isReplying}
                     isForwarding={isForwarding}
                     labelIds={labelIds}
                     setShouldRefreshDetail={setShouldRefreshDetail}
+                    setUnsubscribeLink={setUnsubscribeLink}
                   />
-                  {/* <S.HiddenMessagesFeed test-dataid="email-hidden-message-feed">
-                    <PreLoadMessages
-                      threadDetailList={activeEmailList.threads}
-                      viewIndex={viewIndex}
-                    />
-                  </S.HiddenMessagesFeed> */}
-                </>
-              )}
-            {overviewId === local.FILES &&
-              activeEmailList.threads.length > 0 && (
+                )}
+              {overviewId === local.FILES && noThrashMessages && (
                 <FilesOverview
-                  threadDetail={filterTrashMessages(
-                    activeEmailList.threads[viewIndex],
-                    labelIds
-                  )}
+                  threadDetail={noThrashMessages}
                   isLoading={isLoading}
                 />
               )}
-          </S.EmailDetailWrapper>
-        </S.Scroll>
-      </AnimatedMountUnmount>
-    </>
+            </S.EmailCenterContainer>
+            {isReplying && noThrashMessages && noThrashMessages?.messages && (
+              <ReplyComposer
+                localThreadDetail={noThrashMessages}
+                selectedIndex={selectedIndex}
+                messageOverviewListener={messageOverviewListener}
+              />
+            )}
+            {isForwarding && noThrashMessages && noThrashMessages?.messages && (
+              <ForwardingComposer
+                localThreadDetail={noThrashMessages}
+                selectedIndex={selectedIndex}
+                messageOverviewListener={messageOverviewListener}
+                isForwarding={isForwarding}
+              />
+            )}
+          </S.EmailWithComposerContainer>
+          {noThrashMessages?.messages &&
+            noThrashMessages.messages.length &&
+            !isReplying &&
+            !isForwarding && (
+              <EmailDetailOptions
+                threadDetail={noThrashMessages}
+                unsubscribeLink={unsubscribeLink}
+              />
+            )}
+        </S.EmailDetailWrapper>
+      </S.Scroll>
+    </Layout>
   ) : (
     <Baseloader />
   )

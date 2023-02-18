@@ -1,64 +1,37 @@
-import { useLocation } from 'react-router-dom'
-
-import ArchiveHeader from 'components/Archive/ArchiveHeader'
-import CommandPalette from 'components/CommandPalette/CommandPalette'
-import ComposeHeader from 'components/Compose/ComposeHeader'
-import DraftHeader from 'components/Draft/DraftHeader'
-import CustomButton from 'components/Elements/Buttons/CustomButton'
-import Feedback from 'components/Help/Feedback/Feedback'
-import KeyboardCombos from 'components/Help/KeyboardCombos/KeyboardCombos'
-import InboxHeader from 'components/Inbox/InboxHeader'
-import Introduction from 'components/Introduction/Introduction'
-import NoMobileOverlay from 'components/NoMobileOverlay/noMobileOverlay'
-import SentHeader from 'components/Sent/SentHeader'
-import Settings from 'components/Settings/Settings'
-import SpamHeader from 'components/Spam/SpamHeader'
-import TodoHeader from 'components/ToDo/TodoHeader'
-import * as global from 'constants/globalConstants'
+import type { ILayout } from 'components/Layout/Layout'
+import * as S from 'components/MainHeader/HeaderStyles'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+} from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
-import { selectActiveModal } from 'store/utilsSlice'
+import * as GS from 'styles/globalStyles'
+import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
 
-const SetHeader = () => {
-  const location = useLocation()
+import Navigation from './Navigation/Navigation'
 
-  // The email detail header is coming from EmailDetail.
-  if (location.pathname === '/inbox') {
-    return <InboxHeader />
-  }
-  if (location.pathname === '/') {
-    return <TodoHeader />
-  }
-  if (location.pathname.includes('/compose')) {
-    return <ComposeHeader />
-  }
-  if (location.pathname === '/drafts') {
-    return <DraftHeader />
-  }
-  if (location.pathname === '/sent') {
-    return <SentHeader />
-  }
-  if (location.pathname === '/spam') {
-    return <SpamHeader />
-  }
-  if (location.pathname === '/archive') {
-    return <ArchiveHeader />
-  }
-  return null
-}
-
-const Header = () => {
-  const activeModal = useAppSelector(selectActiveModal)
+const Header = ({
+  activePage,
+  additionalHeader = undefined,
+  headerTitle,
+  showNavigation,
+}: Omit<ILayout, 'children'>) => {
+  const emailList = useAppSelector(selectEmailList)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
 
   return (
-    <>
-      <CommandPalette />
-      {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
-      {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
-      <NoMobileOverlay />
-      <SetHeader />
-      {global.ACTIVE_MODAL_MAP.settings === activeModal && <Settings />}
-      {global.ACTIVE_MODAL_MAP.intro === activeModal && <Introduction />}
-    </>
+    <GS.OuterContainer>
+      <S.NavContainer>
+        <div />
+        <S.PageTitle
+          title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
+        >
+          {headerTitle}
+        </S.PageTitle>
+        {showNavigation ? <Navigation activePage={activePage} /> : null}
+      </S.NavContainer>
+      {additionalHeader}
+    </GS.OuterContainer>
   )
 }
 

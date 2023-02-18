@@ -25,6 +25,7 @@ export const MenuItem = styled.button<IMenuItem>`
     ${({ active }) => (active ? `var(--color-neutral-100)` : 'transparent')};
   color: var(--color-black);
   display: flex;
+  font-size: var(--small);
   justify-content: space-between;
   letter-spacing: 0.01em;
   line-height: 8px;

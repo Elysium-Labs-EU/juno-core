@@ -1,4 +1,4 @@
-import ComposeEmail from 'components/Compose/ComposeEmail'
+import Composer from 'components/Compose/Composer'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
 import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
@@ -34,7 +34,7 @@ const ReplyComposer = ({
 
   return (
     <ES.ComposeWrapper data-cy="reply-composer">
-      <ComposeEmail
+      <Composer
         presetValue={{
           // This should only be used when the message is a draft
           bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
