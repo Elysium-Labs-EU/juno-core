@@ -8,7 +8,7 @@ import { QiMailUnsub } from 'images/svgIcons/quillIcons'
 import { selectCoreStatus, setCoreStatus } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
-import { selectInSearch } from 'store/utilsSlice'
+import { selectInSearch, setSystemStatusUpdate } from 'store/utilsSlice'
 import createComposeViaURL from 'utils/createComposeViaURL'
 import { setModifierKey } from 'utils/setModifierKey'
 
@@ -31,6 +31,21 @@ const handleUnsubscribe = ({
     createComposeViaURL({ dispatch, mailToLink: unsubscribeLink })
   } else {
     window.open(unsubscribeLink)
+    const newWindow = window.open(unsubscribeLink)
+    const messageContent = `A content blocker is preventing the page from opening. Please disable your content blocker or try via the button.`
+
+    setTimeout(() => {
+      if (newWindow?.closed || !newWindow) {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: messageContent,
+            actionType: 'unsubscribe',
+            action: unsubscribeLink,
+          })
+        )
+      }
+    }, 1000)
   }
 }
 

@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { breakPoint } from 'constants/themeConstants'
 
 interface IWrapper {
   tabbedView: boolean
@@ -10,9 +12,24 @@ export const Wrapper = styled.div<IWrapper>`
   max-width: ${({ tabbedView }) =>
     tabbedView ? '100%' : 'min(100vw - 340px, 860px)'};
   margin-left: ${({ tabbedView }) => (tabbedView ? '40px' : 'auto')};
+  // TODO: Check these values
+/*
+  width: 100%;
+  min-width: 665px;
+  max-width: min(100vw - 340px, 860px);
+  margin-left: auto; */
   margin-right: auto;
-  position: ${({ tabbedView }) => (tabbedView ? 'sticky' : 'static')};
-  ${({ tabbedView }) => tabbedView && 'top: 0px'};
+  position: static;
+
+  ${({ tabbedView }) =>
+    tabbedView &&
+    css`
+      @media only screen and (min-width: ${breakPoint.xl}) {
+        position: sticky;
+        top: 0px;
+        margin-left: 100px;
+      }
+    `}
 `
 
 export const InfoWarningContainer = styled.div`
@@ -51,12 +68,18 @@ interface ILabel {
 }
 
 export const Label = styled.div<ILabel>`
-  position: absolute;
-  left: -120px;
-  width: 100px;
-  text-align: right;
-  top: 25px;
   font-size: var(--small);
+  margin-bottom: var(--spacing-1);
+
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    position: absolute;
+    left: -120px;
+    width: 100px;
+    text-align: right;
+    top: 25px;
+    margin-bottom: unset;
+  }
+
   label {
     cursor: default;
     user-select: none;
@@ -74,7 +97,12 @@ export const Row = styled.div`
   position: relative;
   min-height: 35px;
   display: flex;
+  flex-direction: column;
+  width: 100%;
   padding: 4px 0;
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    flex-direction: row;
+  }
 `
 
 export const CcBccContainer = styled.div`

@@ -1,34 +1,28 @@
 /* eslint-disable no-restricted-syntax */
 import {
   showAvatarMap,
-  fetchSizeMap,
+  emailFetchSizeMap,
   flexibleFlowMap,
   showIntroductionMap,
   alternateActionsMap,
-} from '../../constants/baseConstants'
+} from 'constants/baseConstants'
 
-export default function fixMissingSetting(missingSettings: string[]) {
+export const settingMap = {
+  isAvatarVisible: showAvatarMap.SA1,
+  emailFetchSize: emailFetchSizeMap.FS20,
+  isFlexibleFlowActive: flexibleFlowMap.FF1,
+  showIntroduction: showIntroductionMap.SI1,
+  alternateActions: alternateActionsMap.AA1,
+}
+
+export default function fixMissingSetting(missingSettings: Array<string>) {
   const fixedSettings: any = {}
-  const unableToHandle: string[] = []
-  for (const value of Object.values(missingSettings)) {
-    switch (value) {
-      case 'isAvatarVisible':
-        fixedSettings.isAvatarVisible = showAvatarMap.SA1
-        break
-      case 'emailFetchSize':
-        fixedSettings.emailFetchSize = fetchSizeMap.FS20
-        break
-      case 'isFlexibleFlowActive':
-        fixedSettings.isFlexibleFlowActive = flexibleFlowMap.FF1
-        break
-      case 'showIntroduction':
-        fixedSettings.showIntroduction = showIntroductionMap.SI1
-        break
-      case 'alternateActions':
-        fixedSettings.alternateActions = alternateActionsMap.AA1
-        break
-      default:
-        unableToHandle.push(value)
+  const unableToHandle: Array<string> = []
+  for (const value of missingSettings) {
+    if (settingMap[value as keyof typeof settingMap]) {
+      fixedSettings[value] = settingMap[value as keyof typeof settingMap]
+    } else {
+      unableToHandle.push(value)
     }
   }
   // In case the above loop errors, show this in the console

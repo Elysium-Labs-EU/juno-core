@@ -5,10 +5,12 @@ import * as S from 'components/BaseLoader/BaseLoaderStyles'
 import LogoutOption, {
   handleLogout,
 } from 'components/MainHeader/Navigation/More/Options/LogoutOption'
+import { BETA_VERSION } from 'constants/globalConstants'
 import useCountDownTimer from 'hooks/useCountDownTimer'
 import Logo from 'images/Juno_logo_dark.png'
 import { useAppSelector } from 'store/hooks'
 import { selectSystemStatusUpdate } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 
 export const LOGO_ALT = "Juno's Logo"
 const REDIRECTED = 'You will be redirected to the login page in '
@@ -40,7 +42,7 @@ const Baseloader = () => {
             <AnimatedMountUnmount>
               <S.Container>
                 <img
-                  style={{ marginBottom: '16px' }}
+                  style={{ marginBottom: 'var(--spacing-2)' }}
                   src={Logo}
                   alt={LOGO_ALT}
                 />
@@ -49,6 +51,7 @@ const Baseloader = () => {
             <S.LoaderContainer>
               <S.StyledLinearProgress />
             </S.LoaderContainer>
+            <Span muted>{BETA_VERSION}</Span>
           </>
         )}
         {systemStatusUpdate && systemStatusUpdate.type === 'error' && (

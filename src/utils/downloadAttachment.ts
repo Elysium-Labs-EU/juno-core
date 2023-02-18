@@ -102,15 +102,16 @@ export async function downloadAttachmentMultiple({
         }
       })
       const result = await Promise.all(buffer)
-      result.forEach((attachment, index) => {
-        if (attachment) {
+      for (let i = 0; i < result.length; i += 1) {
+        const relevantAttachment = attachmentData[i]
+        if (relevantAttachment) {
           handleSaveAttachment(
-            attachment,
-            attachmentData[index].filename,
-            attachmentData[index].mimeType
+            result[i],
+            relevantAttachment.filename,
+            relevantAttachment.mimeType
           )
         }
-      })
+      }
       return { success: true, message: null }
     }
     return null

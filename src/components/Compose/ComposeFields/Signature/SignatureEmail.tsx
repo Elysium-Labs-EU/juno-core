@@ -34,9 +34,9 @@ const SignatureEmail = ({
   const { signature } = useAppSelector(selectProfile)
   const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
-  const [selectedSignature, setSelectedSignature] = useState<string | null>(
-    null
-  )
+  const [selectedSignature, setSelectedSignature] = useState<
+    string | null | undefined
+  >(null)
 
   const isOpen = activeModal === global.ACTIVE_MODAL_MAP.signature
 
@@ -116,7 +116,6 @@ const SignatureEmail = ({
               icon={<QiChevronDown />}
               title="Show signature options"
               onClick={handleOpen}
-              style={{ marginRight: '20px' }}
               ariaHaspopup="true"
               ariaControls={isOpen ? 'menu' : undefined}
               ariaExpanded={isOpen || undefined}

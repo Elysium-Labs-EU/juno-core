@@ -14,20 +14,22 @@ import {
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { navigateBack } from 'store/utilsSlice'
 
+interface IDiscardDraftButton {
+  id: string
+  draftId: string
+  threadId: string
+  messageOverviewListener?: (
+    evenType: 'cancel' | 'discard',
+    messageId?: string
+  ) => void
+}
+
 const DiscardDraftButton = ({
   draftId,
   threadId,
   id,
   messageOverviewListener = undefined,
-}: {
-  draftId: string
-  threadId: string
-  id: string
-  messageOverviewListener?: (
-    evenType: 'cancel' | 'discard',
-    messageId?: string
-  ) => void
-}) => {
+}: IDiscardDraftButton) => {
   const dispatch = useAppDispatch()
   const draftList = useAppSelector(selectDraftList)
   const isReplying = useAppSelector(selectIsReplying)

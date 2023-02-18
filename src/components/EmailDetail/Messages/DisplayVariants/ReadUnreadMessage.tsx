@@ -16,10 +16,7 @@ import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type {
-  IEmailListThreadItem,
-  IEmailMessage,
-} from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 import LinkedContacts from './Recipients/LinkedContacts'
 import EmailAttachment from '../../Attachment/EmailAttachment'
@@ -28,13 +25,13 @@ import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 
-interface IReadMessage {
+export interface IReadMessage {
   handleClickListener: ({ mIndex }: { mIndex: number }) => void
-  message: IEmailMessage
+  message: TThreadObject['messages'][0]
   messageIndex: number
-  threadDetail: IEmailListThreadItem
-  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
+  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
+  threadDetail: TThreadObject | null | undefined
 }
 
 const ReadUnreadMessage = ({
@@ -138,7 +135,7 @@ const ReadUnreadMessage = ({
             <S.ClosedSender>
               <span
                 style={{ fontWeight: 'bold' }}
-                title={staticSenderNamePartial?.emailAddress}
+                title={staticSenderNamePartial?.emailAddress ?? ''}
               >
                 {staticSenderNamePartial?.name}
               </span>

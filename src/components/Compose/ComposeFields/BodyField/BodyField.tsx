@@ -10,17 +10,19 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import { EditorContent, generateHTML, useEditor } from '@tiptap/react'
+import type { FocusPosition } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
-// import { isEqual } from 'lodash'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 import { compareTwoStrings } from 'string-similarity'
 
+import { assertComposerMode } from 'components/Compose/ComposeEmail'
 import * as Compose from 'components/Compose/ComposeStyles'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import useDebounce from 'hooks/useDebounce'
+import isEqual from 'utils/isEqual/isEqual'
 import removeSignature from 'utils/removeSignature'
 
 import MenuBar from './BodyFieldMenubar'
@@ -33,39 +35,35 @@ import * as S from './BodyFieldStyles'
  * @returns {JSX.Element}
  */
 
-const BodyField = ({
-  composeValue = undefined,
-  autofocus = false,
-  updateComposeEmail,
-  loadState,
-  hasInteracted,
-  setHasInteracted,
-}: {
+interface IBodyField {
+  autofocus?: FocusPosition
   composeValue?: string
-  autofocus?: boolean
+  composerMode: ReturnType<typeof assertComposerMode>
   hasInteracted: boolean
-  updateComposeEmail: (object: { id: string; value: string }) => void
   loadState: string
   setHasInteracted: Dispatch<SetStateAction<boolean>>
-}) => {
+  updateComposeEmail: (object: { id: string; value: string }) => void
+}
+
+const BodyField = ({
+  autofocus = false,
+  composerMode,
+  composeValue = undefined,
+  hasInteracted,
+  loadState,
+  setHasInteracted,
+  updateComposeEmail,
+}: IBodyField) => {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedValue = useDebounce(value, 500)
-  // const tipTapRef = useRef<any | null>(null)
-
-  const handleChange = useCallback((incomingValue: string) => {
-    setValue(
-      DOMPurify.sanitize(incomingValue, {
-        USE_PROFILES: { html: true },
-      })
-    )
-  }, [])
 
   const editorInstance = useEditor({
     extensions: [StarterKit],
     autofocus,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
+
       const htlmlOutput = generateHTML(json, [
         Document,
         Paragraph,
@@ -79,7 +77,11 @@ const BodyField = ({
         OrderedList,
         ListItem,
       ])
-      handleChange(htlmlOutput)
+      setValue(
+        DOMPurify.sanitize(htlmlOutput, {
+          USE_PROFILES: { html: true },
+        })
+      )
     },
     onFocus() {
       setIsFocused(true)
@@ -91,20 +93,16 @@ const BodyField = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted && composeValue && composeValue.length > 0) {
+    if (mounted && composeValue && composeValue.length > 0 && editorInstance) {
       if (composeValue.includes(global.JUNO_SIGNATURE)) {
         const response = removeSignature(composeValue)
-        setValue(response.outerHTML)
 
         // Compare the input fetched body value and the stored body value - if below a certain treshhold, overwrite the local state.
-        if (compareTwoStrings(composeValue, value) < 0.9 && editorInstance) {
-          editorInstance.commands.setContent(response.outerHTML)
+        if (compareTwoStrings(composeValue, value) < 0.9) {
+          editorInstance.commands.setContent(response.outerHTML, true)
         }
       } else {
-        setValue(composeValue)
-        if (value.length < 1 && editorInstance) {
-          editorInstance.commands.setContent(composeValue)
-        }
+        editorInstance.commands.setContent(composeValue, true)
       }
     }
     return () => {
@@ -116,7 +114,7 @@ const BodyField = ({
     if (
       debouncedValue &&
       loadState === global.LOAD_STATE_MAP.loaded &&
-      !Object.is(composeValue, debouncedValue)
+      !isEqual(composeValue, debouncedValue)
     ) {
       const updateEventObject = { id: local.BODY, value: debouncedValue }
       updateComposeEmail(updateEventObject)
@@ -141,11 +139,20 @@ const BodyField = ({
                 setHasInteracted(true)
               }
             }}
+            onFocus={() => {
+              if (!hasInteracted && composerMode === 'forwarding') {
+                editorInstance?.commands.focus('start')
+                return
+              }
+              if (!hasInteracted && composerMode !== 'forwarding') {
+                editorInstance?.commands.focus('end')
+              }
+            }}
           />
         </S.Wrapper>
       </>
     ),
-    [value, isFocused, editorInstance, hasInteracted, setHasInteracted]
+    [composerMode, editorInstance, hasInteracted, isFocused, value]
   )
 
   return memoizedBodyField

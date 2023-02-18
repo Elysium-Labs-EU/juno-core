@@ -7,16 +7,18 @@ import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
 import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
-import type { IContact } from 'store/storeTypes/contactsTypes'
-import type { IEmailMessage } from 'store/storeTypes/emailListTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import * as GS from 'styles/globalStyles'
 import { handleContactConversion } from 'utils/convertToContact'
+
+const MAX_CONTACTS_UNOPENED = 3
 
 const MappedContacts = ({
   contactsMap,
   title,
 }: {
-  contactsMap: IContact[]
+  contactsMap: Array<TContact>
   title: string
 }) => {
   const [showAll, setShowAll] = useState(false)
@@ -27,21 +29,24 @@ const MappedContacts = ({
         {title}
       </GS.Span>
       <S.SmallTextTruncated>
-        {contactsMap.length > 2 ? (
+        {contactsMap.length > MAX_CONTACTS_UNOPENED ? (
           <S.FullContactContainer>
             {contactsMap
-              .slice(0, showAll ? contactsMap.length : 3)
+              .slice(0, showAll ? contactsMap.length : MAX_CONTACTS_UNOPENED)
               .map((contact, index) => (
                 <S.ContactContainer>
                   <S.SmallTextTruncated
                     key={contact.emailAddress}
-                    showComma={index !== (showAll ? contactsMap.length : 3) - 1}
+                    showComma={
+                      index !==
+                      (showAll ? contactsMap.length : MAX_CONTACTS_UNOPENED) - 1
+                    }
                   >
                     <ContactCard
                       userEmail={contact.emailAddress}
                       contact={contact}
                     >
-                      <S.SmallTextTruncated title={contact.emailAddress}>
+                      <S.SmallTextTruncated title={contact.emailAddress ?? ''}>
                         {contact.name}
                       </S.SmallTextTruncated>
                     </ContactCard>
@@ -54,7 +59,7 @@ const MappedContacts = ({
                 onClick={() => setShowAll(true)}
                 aria-hidden="true"
               >
-                & {contactsMap.length - 3} others
+                & {contactsMap.length - MAX_CONTACTS_UNOPENED} others
               </span>
             )}
           </S.FullContactContainer>
@@ -75,13 +80,29 @@ const MappedContacts = ({
   )
 }
 
-const LinkedContants = ({ message }: { message: IEmailMessage }) => {
+const LinkedContants = ({
+  message,
+}: {
+  message: TThreadObject['messages'][0]
+}) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
-  const senderContact = handleContactConversion(message?.payload?.headers?.from)
-  const toNameFull = handleContactConversion(message?.payload?.headers?.to)
-  const ccNameFull = handleContactConversion(message?.payload?.headers?.cc)
-  const bccNameFull = handleContactConversion(message?.payload?.headers?.bcc)
+  const [firstSenderContact] = handleContactConversion(
+    message?.payload?.headers?.from,
+    emailAddress
+  )
+  const toNameFull = handleContactConversion(
+    message?.payload?.headers?.to,
+    emailAddress
+  )
+  const ccNameFull = handleContactConversion(
+    message?.payload?.headers?.cc,
+    emailAddress
+  )
+  const bccNameFull = handleContactConversion(
+    message?.payload?.headers?.bcc,
+    emailAddress
+  )
 
   return (
     <>
@@ -90,9 +111,11 @@ const LinkedContants = ({ message }: { message: IEmailMessage }) => {
           <GS.Span muted small style={{ marginRight: '4px' }}>
             {emailDetail.FROM_LABEL}
           </GS.Span>
-          <ContactCard userEmail={senderName} contact={senderContact[0]}>
-            <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
-          </ContactCard>
+          {firstSenderContact ? (
+            <ContactCard userEmail={senderName} contact={firstSenderContact}>
+              <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
+            </ContactCard>
+          ) : null}
         </S.ToFromBCCInner>
       </S.ContactsContainer>
       <S.ContactsContainer>

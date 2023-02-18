@@ -1,7 +1,6 @@
 import Layout from 'components/Layout/Layout'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
-
 import Composer from './Composer'
 
 const ComposeEmail = () => (

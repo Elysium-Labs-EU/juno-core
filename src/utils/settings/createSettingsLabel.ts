@@ -2,10 +2,10 @@ import {
   SETTINGS_LABEL,
   SETTINGS_DELIMITER,
   showAvatarKeyMap,
-  fetchSizeKeyMap,
+  emailFetchSizeKeyMap,
   showIntroductionKeyMap,
   flexibleFlowKeyMap,
-  alternateActionsMap,
+  alternateActionsKeyMap,
 } from 'constants/baseConstants'
 import { createLabel } from 'store/labelsSlice'
 import type { AppDispatch } from 'store/store'
@@ -33,13 +33,13 @@ export default function createSettingsLabel(
           SETTINGS_DELIMITER +
           showAvatarKeyMap.true +
           SETTINGS_DELIMITER +
-          fetchSizeKeyMap[20] +
+          emailFetchSizeKeyMap[20] +
           SETTINGS_DELIMITER +
           showIntroductionKeyMap.true +
           SETTINGS_DELIMITER +
           flexibleFlowKeyMap.false +
           SETTINGS_DELIMITER +
-          alternateActionsMap.true
+          alternateActionsKeyMap.true
         }`
       )
     )

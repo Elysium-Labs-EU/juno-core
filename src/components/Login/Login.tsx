@@ -34,7 +34,11 @@ const Login = () => {
       const response = await userApi().authGoogle(
         import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
       )
-      if (response?.status === 200 && response?.data) {
+      if (
+        'status' in response &&
+        response?.status === 200 &&
+        'data' in response
+      ) {
         dispatch(push(response.data))
       } else {
         setLoadState(global.LOAD_STATE_MAP.error)
@@ -69,19 +73,19 @@ const Login = () => {
             >
               By Elysium Labs
             </S.StyledLink>
-            <GS.Span muted>Private Beta</GS.Span>
+            <GS.Span muted>{global.BETA_VERSION}</GS.Span>
           </S.SubHeaderContainer>
         </S.Header>
         <S.LoginContainer>
           <S.Inner>
             <div style={{ marginBottom: '40px' }} />
             <GoogleButton
-              renderProps={{
-                onClick: fetchUrl,
-                disabled:
-                  loadState === global.LOAD_STATE_MAP.error ||
-                  loadState === global.LOAD_STATE_MAP.loading,
-              }}
+              onClick={fetchUrl}
+              disabled={
+                loadState === global.LOAD_STATE_MAP.error ||
+                loadState === global.LOAD_STATE_MAP.loading
+              }
+              showLoadingState={loadState === global.LOAD_STATE_MAP.loading}
             />
             <GS.P muted small>
               {ENTER_HINT}

@@ -1,14 +1,11 @@
 import type { ILayout } from 'components/Layout/Layout'
-import * as S from 'components/MainHeader/HeaderStyles'
-import {
-  selectActiveEmailListIndex,
-  selectEmailList,
-} from 'store/emailListSlice'
-import { useAppSelector } from 'store/hooks'
-import * as GS from 'styles/globalStyles'
-import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
+import * as S from 'components/MainHeader/HeaderStyles';
+import { selectActiveEmailListIndex, selectEmailList } from 'store/emailListSlice';
+import { useAppSelector } from 'store/hooks';
+import * as GS from 'styles/globalStyles';
+import getEmailListTimeStamp from 'utils/getEmailListTimeStamp';
 
-import Navigation from './Navigation/Navigation'
+import Navigation from './Navigation/Navigation';
 
 const Header = ({
   activePage,

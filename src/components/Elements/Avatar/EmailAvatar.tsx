@@ -12,7 +12,11 @@ import * as S from './EmailAvatarStyles'
  * @returns an avatar or empty div depending on the outcome of the initialCreator function
  */
 
-export const EmailAvatarComponent = ({ userEmail }: { userEmail: string }) => {
+export const EmailAvatarComponent = ({
+  userEmail,
+}: {
+  userEmail: string | null | undefined
+}) => {
   const staticInitials = getUserInitials(userEmail)
   return (
     <S.EmailAvatarContainer
@@ -24,7 +28,11 @@ export const EmailAvatarComponent = ({ userEmail }: { userEmail: string }) => {
   )
 }
 
-const EmailAvatar = ({ userEmail }: { userEmail: string }) => {
+const EmailAvatar = ({
+  userEmail,
+}: {
+  userEmail: string | null | undefined
+}) => {
   const isAvatarVisible = useAppSelector(selectIsAvatarVisible)
 
   return isAvatarVisible ? (

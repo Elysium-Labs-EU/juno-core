@@ -1,84 +1,112 @@
-export interface ISelectedEmail {
-  labelIds: string[]
-  selectedIds: string[]
-}
+import { z } from 'zod'
+
+import { gmailV1SchemaMessagePartSchema } from './gmailBaseTypes/gmailTypes'
+import type { TLabelState } from './labelsTypes'
+
+export const SelectedEmail = z.object({
+  labelIds: z.array(z.string()),
+  selectedIds: z.array(z.string()),
+})
+
+export type TSelectedEmail = z.infer<typeof SelectedEmail>
 
 export interface ISelectedEmailAction {
   event: 'add' | 'remove'
   id: string
-  labelIds: string[]
+  labelIds: TLabelState['labelIds']
 }
 
-export interface IEmailMessageHeaders {
-  date: string
-  from: string
-  subject: string
-  to: string
-  cc: string
-  bcc: string
-}
+const PayloadHeaders = z.object({
+  deliveredTo: z.string().nullable(),
+  date: z.string().nullable(),
+  from: z.string().nullable(),
+  subject: z.string().nullable(),
+  to: z.string().nullable(),
+  cc: z.string().nullable(),
+  bcc: z.string().nullable(),
+})
 
-export interface IEmailMessagePayloadRaw {
-  partId: string
-  mimeType: string
-  filename: string
-  headers: IEmailMessageHeaders
-  body: {
-    data?: string
-    attachmentId?: string
-    size: number
-  }
-  parts?: IEmailMessagePayloadRaw[]
-}
+export type TPayloadHeaders = z.infer<typeof PayloadHeaders>
 
-export interface IEmailMessagePayloadConverted {
-  mimeType: string
-  headers: IEmailMessageHeaders
-  files?: undefined | IEmailMessagePayloadRaw[]
-  body?: {
-    emailFileHTML: any[]
-    emailHTML: string
-    removedTrackers: string[]
-  }
-  parts?: IEmailMessagePayloadRaw[]
-}
+export const PayloadHeadersEnhanced = PayloadHeaders.extend({
+  listUnsubscribe: z.string().nullable(),
+})
 
-export interface IEmailMessage {
-  id: string
-  threadId: string
-  labelIds: string[]
-  snippet: string
-  payload: IEmailMessagePayloadConverted
-  sizeEstimate: number
-  historyId: string
-  internalDate: string
-}
+export type TPayloadHeadersEnhanced = z.infer<typeof PayloadHeadersEnhanced>
 
-export interface IEmailListThreadItem {
-  id: string
-  historyId: string
-  messages: IEmailMessage[]
-}
+export type TGmailV1SchemaMessagePartSchema = z.infer<
+  typeof gmailV1SchemaMessagePartSchema
+>
 
-export interface IEmailListObject {
-  labels: string[]
-  threads: IEmailListThreadItem[]
-  nextPageToken: string | null | undefined
-  resultSizeEstimate?: number
-  timestamp?: number
-  q?: string
-}
+export const SimpleMessage = z.object({
+  historyId: z.string(),
+  id: z.string(),
+  internalDate: z.string(),
+  labelIds: z.array(z.string()),
+  payload: z.object({
+    mimeType: z.string(),
+    headers: PayloadHeaders,
+    files: z.array(z.any()),
+    parts: z.array(gmailV1SchemaMessagePartSchema).optional(),
+  }),
+  sizeEstimate: z.number(),
+  snippet: z.string(),
+  threadId: z.string(),
+})
 
-export interface IEmailListState {
-  activeEmailListIndex: number
-  emailList: IEmailListObject[]
-  isFetching: boolean
-  searchList: IEmailListObject | null
-  selectedEmails: ISelectedEmail
-}
+export type TSimpleMessage = z.infer<typeof SimpleMessage>
 
-export type TBaseEmailList = {
-  labels: string[]
-  nextPageToken: null
-  threads: []
-}[]
+export const FullMessage = SimpleMessage.extend({
+  payload: z.object({
+    mimeType: z.string(),
+    headers: PayloadHeadersEnhanced,
+    body: z.object({
+      emailHTML: z.string(),
+      emailFileHTML: z.array(z.any()),
+      removedTrackers: z.array(z.string()).optional(),
+    }),
+    files: z.array(z.any()),
+    parts: z.array(gmailV1SchemaMessagePartSchema).optional(),
+  }),
+})
+
+export type TFullMessage = z.infer<typeof FullMessage>
+
+export const ThreadObject = z.object({
+  id: z.string(),
+  historyId: z.string(),
+  messages: z.array(z.union([FullMessage, SimpleMessage])),
+})
+
+export type TThreadObject = z.infer<typeof ThreadObject>
+
+export const EmailListObject = z.object({
+  labels: z.array(z.string()),
+  nextPageToken: z.string().optional().nullable(),
+  q: z.string().optional(),
+  resultSizeEstimate: z.number().optional().nullable(),
+  threads: z.array(ThreadObject),
+  timestamp: z.number().optional().nullable(),
+})
+
+export type TEmailListObject = z.infer<typeof EmailListObject>
+
+export const EmailListState = z.object({
+  activeEmailListIndex: z.number(),
+  emailList: z.array(EmailListObject),
+  isFetching: z.boolean(),
+  searchList: EmailListObject.nullable(),
+  selectedEmails: SelectedEmail,
+})
+
+export type TEmailListState = z.infer<typeof EmailListState>
+
+export const BaseEmailList = z.array(
+  z.object({
+    labels: z.array(z.string()),
+    nextPageToken: z.string().optional().nullable(),
+    threads: z.array(z.any()),
+  })
+)
+
+export type TBaseEmailList = z.infer<typeof BaseEmailList>

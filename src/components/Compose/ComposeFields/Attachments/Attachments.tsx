@@ -1,5 +1,4 @@
 /* eslint-disable react/no-array-index-key */
-// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
@@ -11,6 +10,7 @@ import * as global from 'constants/globalConstants'
 import { useAppDispatch } from 'store/hooks'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'
+import isEqual from 'utils/isEqual/isEqual'
 import formatBytes from 'utils/prettierBytes'
 
 import * as S from './AttachmentsStyles'
@@ -19,10 +19,10 @@ const ATTACHMENTS = 'Attachments'
 const MAX_MB_UPLOAD_DIRECT = 25000000
 
 const customIsEqual = (
-  composeValue: File[] | IEmailAttachmentType[] | undefined,
-  uploadedFiles: File[]
+  composeValue: Array<File> | Array<IEmailAttachmentType> | undefined,
+  uploadedFiles: Array<File>
 ) =>
-  Object.is(
+  isEqual(
     composeValue?.map((item: File | IEmailAttachmentType) => ({
       size: 'size' in item ? item.size : item.body.size,
       name: 'name' in item ? item.name : item.filename,
@@ -33,6 +33,15 @@ const customIsEqual = (
     }))
   )
 
+interface IAttachments {
+  composeValue: Array<File> | Array<IEmailAttachmentType> | undefined
+  hasInteracted: boolean
+  loadState: string
+  messageId: string | undefined
+  setHasInteracted: (value: boolean) => void
+  updateComposeEmail: (action: { id: string; value: Array<File> }) => void
+}
+
 const Attachments = ({
   messageId,
   composeValue,
@@ -40,15 +49,8 @@ const Attachments = ({
   loadState,
   setHasInteracted,
   hasInteracted,
-}: {
-  messageId: string | undefined
-  composeValue: File[] | IEmailAttachmentType[] | undefined
-  updateComposeEmail: (action: { id: string; value: File[] }) => void
-  loadState: string
-  setHasInteracted: (value: boolean) => void
-  hasInteracted: boolean
-}) => {
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
+}: IAttachments) => {
+  const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([])
   const [localLoadState, setLocalLoadState] = useState(
     global.LOAD_STATE_MAP.idle
   )
@@ -56,7 +58,7 @@ const Attachments = ({
 
   //! Watch out for a loop, where the draft update on the parent component keeps sending new attachments as preset values.
   /**
-   * This function will the composeValue, if there are objects in there which are not of type File, it will download the file data and convert it to a File.
+   * This function will read the composeValue, if there are objects in there which are not of type File, it will download the file data and convert it to a File.
    * This function also keeps the local state in sync with the parent component state.
    */
   useEffect(() => {
@@ -109,6 +111,14 @@ const Attachments = ({
     }
   }, [composeValue, loadState, messageId])
 
+  const syncStateWithParentComponent = (updatedFiles: Array<File>) => {
+    const updateEventObject = {
+      id: local.FILES,
+      value: updatedFiles,
+    }
+    updateComposeEmail(updateEventObject)
+  }
+
   const onDropHandeler = useCallback(
     (data: File[]) => {
       if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
@@ -124,7 +134,12 @@ const Attachments = ({
       }
       // if (data.every((item) => item.type.includes('image'))) {
       //     if (data.every((item) => !/bmp|x-icon|tiff/.test(item.type))) {
-      setUploadedFiles((prevState) => [...prevState, ...data])
+      setUploadedFiles((prevState) => {
+        syncStateWithParentComponent([...prevState, ...data])
+
+        return [...prevState, ...data]
+      })
+
       if (!hasInteracted) {
         setHasInteracted(true)
       }
@@ -134,29 +149,19 @@ const Attachments = ({
 
   const handleDeleteFile = useCallback(
     (index: number) => {
-      setUploadedFiles((prevState) =>
-        prevState.filter((item) => prevState.indexOf(item) !== index)
-      )
+      setUploadedFiles((prevState) => {
+        const newState = prevState.filter(
+          (item) => prevState.indexOf(item) !== index
+        )
+        syncStateWithParentComponent(newState)
+        return newState
+      })
       if (!hasInteracted) {
         setHasInteracted(true)
       }
     },
     [uploadedFiles, hasInteracted]
   )
-
-  // Sync the local state with the parent component state
-  useEffect(() => {
-    if (
-      loadState === global.LOAD_STATE_MAP.loaded &&
-      !customIsEqual(composeValue, uploadedFiles)
-    ) {
-      const updateEventObject = {
-        id: local.FILES,
-        value: uploadedFiles,
-      }
-      updateComposeEmail(updateEventObject)
-    }
-  }, [uploadedFiles, loadState, composeValue, updateComposeEmail])
 
   return (
     <S.Wrapper data-cy="attachments-field">

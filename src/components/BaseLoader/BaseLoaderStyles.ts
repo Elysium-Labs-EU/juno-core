@@ -30,6 +30,7 @@ export const Container = styled.div`
 `
 
 export const LoaderContainer = styled.div`
+  margin-bottom: var(--spacing-2);
   max-width: 260px;
   width: 100%;
 `

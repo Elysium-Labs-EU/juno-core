@@ -17,6 +17,7 @@ export const Inner = styled.div`
 
 interface IStyledButton {
   isActive: boolean
+  showLoadingState: boolean
 }
 
 export const StyledButton = styled.button<IStyledButton>`
@@ -39,7 +40,8 @@ export const StyledButton = styled.button<IStyledButton>`
   user-select: none;
   background-color: ${({ isActive }) =>
     isActive ? `var(--color-neutral-800)` : `var(--color-black)`};
-  cursor: pointer;
+  cursor: ${({ showLoadingState }) =>
+    showLoadingState ? 'progress' : 'pointer'};
 
   &:hover {
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);

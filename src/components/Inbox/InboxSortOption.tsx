@@ -24,11 +24,11 @@ import {
   selectIsLoading,
 } from 'store/utilsSlice'
 import labelURL from 'utils/createLabelURL'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import { setModifierKey } from 'utils/setModifierKey'
 import startSort from 'utils/startSort'
 
-import InboxSortPopper from './InboxSortPopper'
+import InboxRefresh from './InboxRefreshOption'
 
 const INBOX_BUTTON = 'Sort inbox'
 
@@ -51,7 +51,9 @@ const InboxSortOption = () => {
 
   const resultMap = {
     [global.LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${totalThreads})`,
-    [global.LOAD_STATE_MAP.loading]: <StyledCircularProgress size={10} />,
+    [global.LOAD_STATE_MAP.loading]: totalThreads > 0 && (
+      <StyledCircularProgress size={10} />
+    ),
     [global.LOAD_STATE_MAP.error]: undefined,
     [global.LOAD_STATE_MAP.idle]: undefined,
   }
@@ -111,7 +113,7 @@ const InboxSortOption = () => {
       return (
         isLoading ||
         activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex].threads.length === 0
+        emailList[activeEmailListIndex]?.threads.length === 0
       )
     }
     return isLoading || totalThreads === 0
@@ -158,7 +160,11 @@ const InboxSortOption = () => {
         icon={<QiSort color="var(--color-black)" size={20} />}
         dataCy="inbox-sort-button"
       />
-      {!isFlexibleFlowActive && <InboxSortPopper />}
+      {/* TO-DO: Complete InboxSortPopper options dropdown */}
+      {/* {!isFlexibleFlowActive && <InboxSortPopper />} */}
+
+      {/* TO-DO: Delete if implmenting dropdown options */}
+      {!isFlexibleFlowActive && <InboxRefresh />}
     </>
   )
 }

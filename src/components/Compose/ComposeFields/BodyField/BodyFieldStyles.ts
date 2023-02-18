@@ -7,6 +7,7 @@ interface IWrapper {
 export const Wrapper = styled.div<IWrapper>`
   background: var(--color-white);
   width: 100%;
+  box-sizing: border-box;
   border: ${({ isFocused }) =>
     isFocused ? `2px var(--color-blue-100) solid` : '2px solid transparent'};
   display: flex;
@@ -17,6 +18,9 @@ export const Wrapper = styled.div<IWrapper>`
   max-height: calc(100vh - 500px);
   overflow-y: auto;
   border-radius: var(--radius-m);
+  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   div {
     .ProseMirror {
       min-height: 200px;

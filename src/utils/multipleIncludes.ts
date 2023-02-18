@@ -1,6 +1,13 @@
-const multipleIncludes = <T, T2>(first: T[], second: T2[]) => {
-  const indexArray = first.map((el: any) => second.indexOf(el))
-  return indexArray.indexOf(-1) === -1
+/**
+ * @function multipleIncludes
+ * @param {Array} first - an array of any type
+ * @param {Array} second - an array of any type
+ * @returns {boolean} true if all elements of the first array are included in the second array, false otherwise.
+ */
+
+const multipleIncludes = (first: Array<any>, second: Array<any>): boolean => {
+  const secondSet = new Set(second)
+  return first.every((el) => secondSet.has(el))
 }
 
 export default multipleIncludes

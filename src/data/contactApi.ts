@@ -1,36 +1,52 @@
-import type { AxiosResponse } from 'axios'
+import { z } from 'zod'
 
-import { errorHandling, instance } from 'data/api'
+import { instance } from 'data/api'
+import type { TemplateApiResponse } from 'data/api'
+import { Contact } from 'store/storeTypes/contactsTypes'
+import type { TContactState } from 'store/storeTypes/contactsTypes'
+import { peopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
+import type { TPeopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
 
-interface AllContactsQueryObject {
+import { errorBlockTemplate } from './api'
+
+interface IAllContactsQueryObject {
   readMask: string
   pageSize?: number
   nextPageToken?: string
 }
 
-interface QueryContactObject {
+interface IQueryContactObject {
   readMask: string
   query: string
 }
 
 const contactApi = () => ({
-  getAllContacts: async (query: AllContactsQueryObject) => {
+  // TODO: We currently do not use this api endpoint
+  getAllContacts: async (
+    query: IAllContactsQueryObject
+  ): TemplateApiResponse<TPeopleV1SchemaListOtherContactsResponseSchema> => {
     try {
-      const res: AxiosResponse<any> = await instance.get(`/api/contacts/`, {
-        params: {
-          readMask: query.readMask,
-          pageSize: query.pageSize ?? 1000,
-          pageToken: query.nextPageToken ?? undefined,
-        },
-      })
+      const res = await instance.get<TPeopleV1SchemaListOtherContactsResponseSchema>(
+        `/api/contacts/`,
+        {
+          params: {
+            readMask: query.readMask,
+            pageSize: query.pageSize ?? 1000,
+            pageToken: query.nextPageToken ?? undefined,
+          },
+        }
+      )
+      peopleV1SchemaListOtherContactsResponseSchema.parse(res.data)
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
-  queryContacts: async (query: QueryContactObject) => {
+  queryContacts: async (
+    query: IQueryContactObject
+  ): TemplateApiResponse<TContactState['allContacts']> => {
     try {
-      const res: AxiosResponse<any> = await instance.get(
+      const res = await instance.get<TContactState['allContacts']>(
         `/api/contact/search/`,
         {
           params: {
@@ -39,9 +55,10 @@ const contactApi = () => ({
           },
         }
       )
+      z.array(Contact).parse(res.data)
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
 })

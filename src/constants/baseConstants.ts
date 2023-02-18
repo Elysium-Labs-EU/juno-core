@@ -30,12 +30,12 @@ export const showAvatarKeyMap: { [key: string]: string } = {
   true: 'SA1',
 }
 
-export const fetchSizeMap: { [key: string]: number } = {
+export const emailFetchSizeMap: { [key: string]: number } = {
   FS20: 20,
   FS25: 25,
   FS30: 30,
 }
-export const fetchSizeKeyMap: { [key: number]: string } = {
+export const emailFetchSizeKeyMap: { [key: number]: string } = {
   20: 'FS20',
   25: 'FS25',
   30: 'FS30',

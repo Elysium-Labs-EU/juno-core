@@ -1,45 +1,87 @@
-import { IContact } from 'store/storeTypes/contactsTypes'
+import { ME_LABEL } from 'constants/globalConstants'
+import type { TProfile } from 'store/storeTypes/baseTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 // Takes the string email format from Gmail, and converts it to object email format for this app.
 
-/**
- * @function convertToContact
- * @param data - takes in a string, a potential email address, coming from the email list item.
- * @returns - returns a Contact object
- */
-
-export function convertToContact(data: string): IContact {
-  const splitted = data.split('<')
-
-  if (splitted.length > 1) {
-    const cleanUpName: string = splitted[0].trim().replace(/(")+/g, '')
-    const cleanUpEmailAddress: string = splitted[1]
-      .substring(0, splitted[1].length - 1)
-      .replace(/(")+/g, '')
-
-    if (cleanUpName.length > 1) {
-      return { name: cleanUpName, emailAddress: cleanUpEmailAddress }
-    }
-
-    return { name: cleanUpEmailAddress, emailAddress: cleanUpEmailAddress }
+const convertToMe = (
+  header: string,
+  emailAddress: TProfile['emailAddress']
+) => {
+  if (emailAddress && header.includes(emailAddress)) {
+    return ME_LABEL
   }
-
-  splitted[0].replace(/(")+/g, '')
-  return { name: splitted[0], emailAddress: splitted[0] }
+  return null
 }
 
 /**
- * @function handleContactConversion
- * @param contactValue - takes in a raw string an parses it
- * @returns an array of contact objects or an empty array
+ * Converts a string of contact data into an TContact object.
+ * @param {string} data - A string of contact data.
+ * @param {string} [emailAddress] - The email address of the current user.
+ * @returns {TContact} - An TContact object containing the contact's name and email address.
  */
 
-export function handleContactConversion(contactValue: string): IContact[] {
+export function convertToContact(
+  data: string,
+  emailAddress?: TProfile['emailAddress']
+): TContact {
+  const splitted = data.split('<')
+  const [first, second] = splitted
+  if (splitted.length > 1 && first && second) {
+    const cleanUpName: string = first.trim().replace(/(")+/g, '')
+    const cleanUpEmailAddress: string = second
+      .substring(0, second.length - 1)
+      .replace(/(")+/g, '')
+
+    if (cleanUpName.length > 1) {
+      return {
+        name: convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpName,
+        emailAddress: cleanUpEmailAddress,
+      }
+    }
+
+    return {
+      name:
+        convertToMe(cleanUpEmailAddress, emailAddress) ?? cleanUpEmailAddress,
+      emailAddress: cleanUpEmailAddress,
+    }
+  }
+
+  if (first) {
+    first.replace(/(")+/g, '')
+    return {
+      name: convertToMe(first, emailAddress) ?? first,
+      emailAddress: first,
+    }
+  }
+  if (second) {
+    second.replace(/(")+/g, '')
+    return {
+      name: convertToMe(second, emailAddress) ?? second,
+      emailAddress: second,
+    }
+  }
+  return { name: '', emailAddress: '' }
+}
+
+/**
+ * Converts a string of contacts into an array of TContact objects.
+ * @param {string} contactValue - A string of contacts separated by commas.
+ * @param {string} emailAddress - The email address of the current user.
+ * @returns {Array<TContact>} - An array of TContact objects.
+ */
+
+export function handleContactConversion(
+  contactValue: string | null,
+  emailAddress?: TProfile['emailAddress']
+): Array<TContact> {
   if (
     contactValue &&
     contactValue.length > 0 &&
     typeof contactValue === 'string'
   ) {
-    return contactValue.split(',').map((item) => convertToContact(item))
+    return contactValue
+      .split(',')
+      .map((item) => convertToContact(item, emailAddress))
   }
   return []
 }

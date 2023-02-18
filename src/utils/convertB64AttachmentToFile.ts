@@ -32,15 +32,18 @@ export default async function convertB64AttachmentToFile({
 
     const output: File[] = []
     for (let i = 0; i < files.length; i += 1) {
-      const base64Data = result[i]?.data?.data
-      const blobData = base64toBlob({
-        base64Data,
-        mimeType: files[i].mimeType,
-      })
-      const file = new File([blobData], files[i].filename, {
-        type: files[i].mimeType,
-      })
-      output.push(file)
+      const loopFile = files[i]
+      if (loopFile) {
+        const base64Data = result[i]?.data?.data
+        const blobData = base64toBlob({
+          base64Data,
+          mimeType: loopFile.mimeType,
+        })
+        const file = new File([blobData], loopFile.filename, {
+          type: loopFile.mimeType,
+        })
+        output.push(file)
+      }
     }
     return output
   }

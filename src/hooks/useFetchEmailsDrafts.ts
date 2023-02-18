@@ -5,13 +5,17 @@ import { fetchDrafts } from 'store/draftsSlice'
 import { fetchEmailsSimple, refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLoadedInbox } from 'store/labelsSlice'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { selectEmailListSize } from 'store/utilsSlice'
 import isPromise from 'utils/isPromise'
 
 let timestampLastFiredWithLabel = { labelIds: [''], timeStamp: 0 }
 
 // Intention is to block the same type of request within a certain time period.
-const handleRequestTiming = (labelIds: Array<string>, firedTimeStamp: number) => {
+const handleRequestTiming = (
+  labelIds: TLabelState['labelIds'],
+  firedTimeStamp: number
+) => {
   if (
     labelIds.length === 0 ||
     labelIds !== timestampLastFiredWithLabel.labelIds
@@ -34,7 +38,7 @@ const handleRequestTiming = (labelIds: Array<string>, firedTimeStamp: number) =>
 }
 
 export default function useFetchEmailsDrafts(
-  labelIds: Array<string>,
+  labelIds: TLabelState['labelIds'],
   firedTimeStamp: number
 ) {
   const emailFetchSize = useAppSelector(selectEmailListSize)
@@ -44,7 +48,6 @@ export default function useFetchEmailsDrafts(
   // If the box is empty, and the history feed is adding the item to the feed
   // there is no next page token and the feed is only that shallow item.
   useEffect(() => {
-    let mounted = true
     let emailPromise: any = {}
     let draftPromise: any = {}
     // This variable checks whether the current request isn't within a too short time period for a similar request.
@@ -67,33 +70,29 @@ export default function useFetchEmailsDrafts(
           nextPageToken: null,
         }
 
-        if (mounted) {
-          timestampLastFiredWithLabel = {
-            labelIds,
-            timeStamp: Date.now(),
-          }
-          emailPromise = dispatch(fetchEmailsSimple(params))
+        timestampLastFiredWithLabel = {
+          labelIds,
+          timeStamp: Date.now(),
         }
-        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
+        emailPromise = dispatch(fetchEmailsSimple(params))
+
+        if (labelIds.includes(global.DRAFT_LABEL)) {
           draftPromise = dispatch(fetchDrafts())
         }
       }
       if (inboxIsLoaded) {
-        if (mounted) {
-          timestampLastFiredWithLabel = {
-            labelIds,
-            timeStamp: Date.now(),
-          }
-          // TODO: Refactor this to be an asyncThunk, or at least have an abort controller.
-          dispatch(refreshEmailFeed())
+        timestampLastFiredWithLabel = {
+          labelIds,
+          timeStamp: Date.now(),
         }
-        if (labelIds.includes(global.DRAFT_LABEL) && mounted) {
-          draftPromise = dispatch(fetchDrafts())
-        }
+        dispatch(refreshEmailFeed())
+      }
+      if (labelIds.includes(global.DRAFT_LABEL)) {
+        draftPromise = dispatch(fetchDrafts())
       }
     }
+
     return () => {
-      mounted = false
       if (isPromise(emailPromise)) {
         emailPromise.abort()
       }

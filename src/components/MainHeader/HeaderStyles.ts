@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Wrapper = styled.div`
   padding: 0 var(--spacing-2);
@@ -37,16 +37,24 @@ export const FocusSortHeaderWrapper = styled.div`
   width: 100%;
 `
 
-export const StrictFlowButtonContainer = styled.div`
+interface IStrictFlowButtonContainer {
+  isFlexibleFlowActive?: boolean
+}
+
+export const StrictFlowButtonContainer = styled.div<IStrictFlowButtonContainer>`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   margin: var(--spacing-1) 0 var(--spacing-1);
 
-  button:nth-child(1) {
-    margin-right: var(--spacing-2);
-  }
+  ${({ isFlexibleFlowActive }) =>
+    !isFlexibleFlowActive &&
+    css`
+      button:nth-child(1) {
+        margin-right: var(--spacing-2);
+      }
+    `}
   button:nth-child(2) {
     margin-right: var(--spacing-0-5);
   }

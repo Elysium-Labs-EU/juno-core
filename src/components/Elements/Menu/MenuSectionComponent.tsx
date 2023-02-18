@@ -56,18 +56,18 @@ const MenuSectionComponent = ({
         break
       case 'Home':
         event.preventDefault()
-        nodeList[0].focus()
+        nodeList[0]?.focus()
         setFocusedItemIndex(0)
         break
       case 'End':
         event.preventDefault()
-        nodeList[nodeList.length - 1].focus()
+        nodeList?.[nodeList.length - 1]?.focus()
         setFocusedItemIndex(nodeList.length - 1)
         break
       case 'Enter':
         event.preventDefault()
         event.stopPropagation()
-        nodeList[focusedItemIndex].click()
+        nodeList?.[focusedItemIndex]?.click()
         break
       // default:
       // ;(event.target as HTMLButtonElement).focus()

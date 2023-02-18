@@ -1,4 +1,4 @@
-import { IDraftDetailObject } from '../store/storeTypes/draftsTypes'
+import type { TDraftsState } from '../store/storeTypes/draftsTypes'
 
 /**
  * @function findDraftMessageInList
@@ -11,13 +11,17 @@ export default function findDraftMessageInList({
   draftList,
   target,
 }: {
-  draftList: IDraftDetailObject[]
+  draftList: TDraftsState['draftList']
   target: any
 }) {
   // Target can be composedEmail or message
-  return draftList.find(
-    (draft) =>
-      draft.message.threadId === target?.threadId &&
-      draft.message.id === target?.id
-  )
+  return draftList.find((draft) => {
+    if (draft.message) {
+      return (
+        draft.message.threadId === target?.threadId &&
+        draft.message.id === target?.id
+      )
+    }
+    return undefined
+  })
 }

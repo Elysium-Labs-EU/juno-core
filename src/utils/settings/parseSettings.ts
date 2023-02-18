@@ -2,7 +2,7 @@
 import {
   alternateActionsMap,
   AVAILABLE_SETTINGS,
-  fetchSizeMap,
+  emailFetchSizeMap,
   flexibleFlowMap,
   SETTINGS_DELIMITER,
   showAvatarMap,
@@ -10,7 +10,7 @@ import {
 } from 'constants/baseConstants'
 import * as global from 'constants/globalConstants'
 import type { AppDispatch } from 'store/store'
-import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 import { setSettings } from 'store/utilsSlice'
 
 import createSettingsLabel from './createSettingsLabel'
@@ -27,9 +27,9 @@ import fixMissingSetting from './fixMissingSetting'
 
 export default function parseSettings(
   dispatch: AppDispatch,
-  settingsLabel: IGoogleLabel
+  settingsLabel: TGmailV1SchemaLabelSchema
 ): void {
-  const parsedSettings = settingsLabel.name.split(SETTINGS_DELIMITER)
+  const parsedSettings = settingsLabel.name?.split(SETTINGS_DELIMITER)
   if (parsedSettings && parsedSettings.length > 0) {
     // Remove the prefix of 'Juno/' from the parsed result
     parsedSettings.shift()
@@ -45,7 +45,7 @@ export default function parseSettings(
         case 'FS20':
         case 'FS25':
         case 'FS30':
-          foundSettings.emailFetchSize = fetchSizeMap[value]
+          foundSettings.emailFetchSize = emailFetchSizeMap[value]
           break
         case 'FF0':
         case 'FF1':

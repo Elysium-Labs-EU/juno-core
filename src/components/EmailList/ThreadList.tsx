@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 
 import EmailListItem from 'components/EmailListItem/EmailListItem'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @component ThreadList
@@ -14,6 +14,16 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  * @returns {JSX.Element}
  */
 
+interface IThreadList {
+  focusedItemIndex: number
+  keySuffix: 'search' | 'emailList'
+  searchOnClickHandeler?: (id: string) => void
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
+  showCheckbox?: boolean
+  showLabel?: boolean
+  threads: Array<TThreadObject>
+}
+
 const ThreadList = ({
   threads,
   focusedItemIndex,
@@ -22,15 +32,7 @@ const ThreadList = ({
   showCheckbox = true,
   keySuffix,
   searchOnClickHandeler = undefined,
-}: {
-  threads: IEmailListThreadItem[]
-  focusedItemIndex: number
-  setFocusedItemIndex: Dispatch<SetStateAction<number>>
-  showLabel?: boolean
-  showCheckbox?: boolean
-  keySuffix: 'search' | 'emailList'
-  searchOnClickHandeler?: (id: string) => void
-}) => (
+}: IThreadList) => (
   <>
     {threads.map((thread, index) => (
       <div

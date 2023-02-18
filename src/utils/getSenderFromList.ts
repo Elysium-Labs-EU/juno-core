@@ -1,7 +1,4 @@
-import {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
 import multipleIncludes from 'utils/multipleIncludes'
 
 /**
@@ -14,8 +11,8 @@ export default function getSenderFromList({
   selectedEmails,
   emailList,
 }: {
-  selectedEmails: ISelectedEmail
-  emailList: IEmailListObject[]
+  selectedEmails: TEmailListState['selectedEmails']
+  emailList: TEmailListState['emailList']
 }) {
   const filteredEmailList =
     emailList[
@@ -27,9 +24,13 @@ export default function getSenderFromList({
     const specificThreadById = filteredEmailList.threads.filter((item) =>
       selectedEmails.selectedIds.includes(item.id)
     )
-    return specificThreadById.map(
-      (item) => item.messages[item.messages.length - 1].payload.headers.from
-    )
+    return specificThreadById.map((item) => {
+      const lastMessageInThread = item.messages[item.messages.length - 1]
+      if (lastMessageInThread) {
+        return lastMessageInThread.payload.headers.from
+      }
+      return undefined
+    })
   }
   return []
 }

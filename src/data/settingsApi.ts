@@ -1,11 +1,15 @@
-import type { AxiosResponse } from 'axios'
+import { instance } from 'data/api'
+import type { TemplateApiResponse } from 'data/api'
+import type { TGmailV1SchemaSendAsSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
-import { errorHandling, instance } from 'data/api'
+import { errorBlockTemplate } from './api'
 
 const settingsApi = () => ({
-  getSendAs: async (emailId: string) => {
+  getSendAs: async (
+    emailId: string
+  ): TemplateApiResponse<TGmailV1SchemaSendAsSchema> => {
     try {
-      const res: AxiosResponse<any> = await instance.get(
+      const res = await instance.get<TGmailV1SchemaSendAsSchema>(
         `/api/settings/getSendAs`,
         {
           params: {
@@ -15,12 +19,15 @@ const settingsApi = () => ({
       )
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
-  updateSendAs: async (emailId: string, request: { signature: string }) => {
+  updateSendAs: async (
+    emailId: string,
+    request: { signature: string }
+  ): TemplateApiResponse<TGmailV1SchemaSendAsSchema> => {
     try {
-      const res: AxiosResponse<any> = await instance.put(
+      const res = await instance.put<TGmailV1SchemaSendAsSchema>(
         `/api/settings/updateSendAs`,
         {
           params: {
@@ -31,7 +38,7 @@ const settingsApi = () => ({
       )
       return res
     } catch (err) {
-      return errorHandling(err)
+      return errorBlockTemplate(err)
     }
   },
 })

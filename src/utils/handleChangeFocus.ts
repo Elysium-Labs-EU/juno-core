@@ -47,7 +47,7 @@ export default function handleChangeFocus({
     setFocusedItemIndex(0)
   }
 
-  const newItem: Element = items[newIndex]
+  const newItem: Element | undefined = items[newIndex]
 
   if (newItem && typeof newIndex === 'number') {
     setFocusedItemIndex(newIndex)

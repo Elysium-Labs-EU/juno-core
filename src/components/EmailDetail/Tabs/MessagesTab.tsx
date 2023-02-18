@@ -1,17 +1,19 @@
 import * as local from 'constants/menuConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 import * as S from './TabsStyles'
+
+interface IMesssageTab {
+  activeThread: TThreadObject | undefined | null
+  activeLink: string
+  navigateTo: ({ link, name }: { link: string; name: string }) => void
+}
 
 const MessagesTab = ({
   activeThread,
   activeLink,
   navigateTo,
-}: {
-  activeThread: IEmailListThreadItem
-  activeLink: string
-  navigateTo: ({ link, name }: { link: string; name: string }) => void
-}) => (
+}: IMesssageTab) => (
   <S.StyedListItem
     style={{ cursor: 'pointer' }}
     onClick={() => navigateTo(local.MESSAGE_MENU_ITEM)}

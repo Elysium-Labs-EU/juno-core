@@ -1,7 +1,7 @@
 import axios from 'axios'
-import type { AxiosResponse } from 'axios'
 
-import { errorHandling } from 'data/api'
+import { errorBlockTemplate } from 'data/api'
+import type { TemplateApiResponse } from 'data/api'
 import assertNonNullish from 'utils/assertNonNullish'
 
 export interface ISendFeedback {
@@ -20,15 +20,15 @@ const feedbackApi = () => {
     )
 
   return {
-    sendFeedback: async (body: ISendFeedback) => {
+    sendFeedback: async (body: ISendFeedback): TemplateApiResponse<any> => {
       try {
-        const res: AxiosResponse<any> = await axios.post(
+        const res = await axios.post<any>(
           `${import.meta.env.VITE_HEADLESS_FEEDBACK_URL}`,
           body
         )
         return res
       } catch (err) {
-        return errorHandling(err)
+        return errorBlockTemplate(err)
       }
     },
   }

@@ -3,17 +3,21 @@ import { useLocation } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
-import { selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+  selectSelectedEmails,
+} from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
 
-import filterItems, { getItemIndex } from '../commandPaletteUtils'
-import type { IJsonStructure } from '../commandPaletteUtils'
-import ListItem from '../ListItem/ListItem'
 import contextualItems from './ContextualItems'
 import SearchSuggestion from './SearchSuggestion'
 import * as S from './SuggestionStyles'
+import filterItems, { getItemIndex } from '../commandPaletteUtils'
+import type { IJsonStructure } from '../commandPaletteUtils'
+import ListItem from '../ListItem/ListItem'
 
 const CommandPaletteSuggestions = ({
   focusedItemIndex,
@@ -28,6 +32,15 @@ const CommandPaletteSuggestions = ({
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const labelIds = useAppSelector(selectLabelIds)
   const selectedEmails = useAppSelector(selectSelectedEmails)
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+
+  const currentEmailBoxHasEmails = useMemo(() => {
+    const threads = emailList?.[activeEmailListIndex]?.threads
+    if (threads) {
+      return threads.length > 0
+    }
+    return false
+  }, [emailList, activeEmailListIndex])
 
   const filteredItems = useMemo(() => {
     if (searchValue) {
@@ -66,6 +79,7 @@ const CommandPaletteSuggestions = ({
         ...searchSuggestion,
         ...filterItems(
           contextualItems({
+            currentEmailBoxHasEmails,
             dispatch,
             emailList,
             isFlexibleFlowActive,
@@ -81,6 +95,7 @@ const CommandPaletteSuggestions = ({
     }
     return filterItems(
       contextualItems({
+        currentEmailBoxHasEmails,
         dispatch,
         emailList,
         isFlexibleFlowActive,

@@ -1,8 +1,8 @@
-import type { ILabelIdName } from 'store/storeTypes/labelsTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 interface IOnlyLegalLabelObjects {
-  labelNames: string[]
-  storageLabels: ILabelIdName[]
+  labelNames: Array<string>
+  storageLabels: TLabelState['storageLabels']
 }
 
 /**
@@ -15,12 +15,12 @@ interface IOnlyLegalLabelObjects {
 export function onlyLegalLabelObjects({
   labelNames,
   storageLabels,
-}: IOnlyLegalLabelObjects): ILabelIdName[] {
+}: IOnlyLegalLabelObjects) {
   const idMapStorageLabels = storageLabels.map((label) => label.id)
 
   const filterArray = labelNames.filter((el) => idMapStorageLabels.includes(el))
 
-  const newArray: ILabelIdName[] = []
+  const newArray: TLabelState['storageLabels'] = []
   for (let i = 0; i < filterArray.length; i += 1) {
     const pushItem = storageLabels.find((item) => item.id === filterArray[i])
     if (pushItem) newArray.push(pushItem)
@@ -40,9 +40,9 @@ export function onlyLegalLabelStrings({
   labelIds,
   storageLabels,
 }: {
-  labelIds: string[]
-  storageLabels: ILabelIdName[]
-}): string[] {
+  labelIds: TLabelState['labelIds']
+  storageLabels: TLabelState['storageLabels']
+}) {
   return labelIds.filter((label) =>
     storageLabels.map((storageLabel) => storageLabel.id).includes(label)
   )

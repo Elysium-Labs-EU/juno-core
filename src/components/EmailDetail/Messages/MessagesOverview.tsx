@@ -2,27 +2,30 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
+import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as local from 'constants/emailDetailConstants'
 import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
+import type { IUtilsState } from 'store/storeTypes/utilsTypes'
 
 import DraftMessage from './DisplayVariants/DraftMessage'
 import ReadUnreadMessage from './DisplayVariants/ReadUnreadMessage'
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
-import StyledCircularProgress from '../../Elements/CircularProgress/StyledCircularProgress'
 import * as ES from '../EmailDetailStyles'
 
 interface IMessagesOverview {
-  isForwarding: boolean
-  isLoading: boolean
-  isReplying: boolean
-  labelIds: string[]
+  isForwarding: TEmailDetailState['isForwarding']
+  isLoading: IUtilsState['isLoading']
+  isReplying: TEmailDetailState['isReplying']
+  labelIds: TLabelState['labelIds']
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
   setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
-  threadDetail: IEmailListThreadItem | undefined | null
+  threadDetail: TThreadObject | undefined | null
 }
 
 interface IMappedMessages
@@ -77,31 +80,29 @@ const MappedMessages = ({
     [threadDetail]
   )
 
-  return threadDetail?.messages ? (
+  return reversedMessagesOrder ? (
     <>
-      {reversedMessagesOrder
-        ? reversedMessagesOrder.map((message, index) => (
-            <div key={message.id}>
-              {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
-                <DraftMessage
-                  message={message}
-                  draftIndex={index}
-                  handleClickListener={handleClickDraft}
-                  hideDraft={hideDraft === index}
-                />
-              ) : (
-                <ReadUnreadMessage
-                  message={message}
-                  threadDetail={threadDetail}
-                  handleClickListener={handleClickMessage}
-                  messageIndex={index}
-                  setUnsubscribeLink={setUnsubscribeLink}
-                  setShouldRefreshDetail={setShouldRefreshDetail}
-                />
-              )}
-            </div>
-          ))
-        : null}
+      {reversedMessagesOrder.map((message, index) => (
+        <div key={message.id}>
+          {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
+            <DraftMessage
+              message={message}
+              draftIndex={index}
+              handleClickListener={handleClickDraft}
+              hideDraft={hideDraft === index}
+            />
+          ) : (
+            <ReadUnreadMessage
+              message={message}
+              threadDetail={threadDetail}
+              handleClickListener={handleClickMessage}
+              messageIndex={index}
+              setUnsubscribeLink={setUnsubscribeLink}
+              setShouldRefreshDetail={setShouldRefreshDetail}
+            />
+          )}
+        </div>
+      ))}
     </>
   ) : (
     <p>{global.NOTHING_TO_SEE}</p>
@@ -118,7 +119,7 @@ const MessagesOverview = ({
   setUnsubscribeLink,
 }: IMessagesOverview) => {
   const [localThreadDetail, setLocalThreadDetail] = useState<
-    IEmailListThreadItem | null | undefined
+  TThreadObject | null | undefined
   >(null)
   // const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
   //   undefined
@@ -126,7 +127,7 @@ const MessagesOverview = ({
 
   useEffect(() => {
     let mounted = true
-    if (mounted) {
+    if (mounted && threadDetail) {
       // Create a local copy of threadDetail to manipulate. Is used by opening a threadDetail draft, and reversing the message order.
       setLocalThreadDetail(threadDetail)
     }
@@ -160,6 +161,7 @@ const MessagesOverview = ({
   // }
 
   return (
+
     <ES.MessageFeedComposerContainer>
       <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
         <ES.DetailBase>
@@ -188,6 +190,43 @@ const MessagesOverview = ({
         </ES.DetailBase>
       </ES.EmailDetailContainer>
       {/* {isReplying && localThreadDetail && localThreadDetail?.messages && (
+    <ES.OverviewContainer>
+      <ES.DetailRow>
+        <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+          <ES.DetailBase>
+            <ES.CardFullWidth>
+              {localThreadDetail?.messages && !isLoading ? (
+                <MappedMessages
+                  threadDetail={localThreadDetail}
+                  setUnsubscribeLink={setUnsubscribeLink}
+                  indexMessageListener={indexMessageListener}
+                  setShouldRefreshDetail={setShouldRefreshDetail}
+                />
+              ) : (
+                <ES.LoadingErrorWrapper>
+                  <StyledCircularProgress />
+                </ES.LoadingErrorWrapper>
+              )}
+              {!localThreadDetail && (
+                <ES.LoadingErrorWrapper>
+                  {isLoading && <StyledCircularProgress />}
+                  {!isLoading && <p>{local.ERROR_EMAIL}</p>}
+                </ES.LoadingErrorWrapper>
+              )}
+            </ES.CardFullWidth>
+          </ES.DetailBase>
+        </ES.EmailDetailContainer>
+        {localThreadDetail &&
+          !isReplying &&
+          !isForwarding &&
+          localThreadDetail.messages && (
+            <EmailDetailOptions
+              threadDetail={localThreadDetail}
+              unsubscribeLink={unsubscribeLink}
+            />
+          )}
+      </ES.DetailRow>
+      {isReplying && localThreadDetail && localThreadDetail?.messages && (
         <ReplyComposer
           localThreadDetail={localThreadDetail}
           selectedIndex={selectedIndex}
@@ -201,6 +240,7 @@ const MessagesOverview = ({
           messageOverviewListener={messageOverviewListener}
           isForwarding={isForwarding}
         />
+
       )} */}
     </ES.MessageFeedComposerContainer>
   )

@@ -65,24 +65,33 @@ const Signature = () => {
   useEffect(() => {
     const updateSignature = async () => {
       const request = { signature: debouncedValue }
-      try {
-        const response = await settingsApi().updateSendAs(
-          profile.emailAddress,
-          request
-        )
-        if (response?.status !== 200) {
+      if (profile.emailAddress) {
+        try {
+          const response = await settingsApi().updateSendAs(
+            profile.emailAddress,
+            request
+          )
+          if (!('data' in response)) {
+            dispatch(
+              setSystemStatusUpdate({
+                type: 'error',
+                message: 'Cannot update signature.',
+              })
+            )
+            return
+          }
+          dispatch(
+            setProfile({ ...profile, signature: response?.data?.signature })
+          )
+        } catch (err) {
           dispatch(
             setSystemStatusUpdate({
               type: 'error',
               message: 'Cannot update signature.',
             })
           )
-          return
         }
-        dispatch(
-          setProfile({ ...profile, signature: response?.data?.signature })
-        )
-      } catch (err) {
+      } else {
         dispatch(
           setSystemStatusUpdate({
             type: 'error',

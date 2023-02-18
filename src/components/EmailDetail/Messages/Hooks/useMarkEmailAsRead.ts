@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 
 import * as global from 'constants/globalConstants'
 import { useAppDispatch } from 'store/hooks'
-import { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import markEmailAsRead from 'utils/markEmailAsRead'
 
 /**
@@ -16,8 +17,8 @@ export default function useMarkEmailAsRead({
   localThreadDetail,
   labelIds,
 }: {
-  localThreadDetail: IEmailListThreadItem | null | undefined
-  labelIds: string[]
+  localThreadDetail: TThreadObject | null
+  labelIds: TLabelState['labelIds']
 }) {
   const dispatch = useAppDispatch()
 

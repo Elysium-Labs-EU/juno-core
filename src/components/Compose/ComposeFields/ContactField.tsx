@@ -1,17 +1,16 @@
-// import { isEqual } from 'lodash'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from 'constants/globalConstants'
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
-
-import type { IRecipientsList } from '../ComposeEmailTypes'
+import isEqual from 'utils/isEqual/isEqual'
 import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
+import type { IRecipientsList } from '../ComposeEmailTypes'
 
-export const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
+const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
-  newValue: recipientListRaw.newValue.map((item: string | IContact) =>
+  newValue: recipientListRaw.newValue.map((item: string | TContact) =>
     typeof item === 'string' ? { name: item, emailAddress: item } : item
   ),
 })
@@ -28,7 +27,7 @@ const ContactField = ({
   updateComposeEmail,
 }: IContactField) => {
   const [inputValue, setInputValue] = useState<string>('')
-  const [value, setValue] = useState<Array<IContact>>([])
+  const [value, setValue] = useState<Array<TContact>>([])
   const [error, setError] = useState<boolean>(false)
 
   // Listens to the parent component changes, and updates the internal state in case there is preloaded data.
@@ -36,14 +35,14 @@ const ContactField = ({
     if (
       loadState === global.LOAD_STATE_MAP.loaded &&
       composeValue &&
-      !Object.is(composeValue, value)
+      !isEqual(composeValue, value)
     ) {
       setValue(composeValue)
     }
   }, [composeValue, loadState])
 
   const handleDelete = useCallback(
-    (selectedOption: IContact) => {
+    (selectedOption: TContact) => {
       const filteredValue = value.filter((item) => item !== selectedOption)
       setValue(filteredValue)
       const updateEventObject = {

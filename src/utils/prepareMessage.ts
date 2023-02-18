@@ -1,12 +1,13 @@
-import { IComposePayload } from 'store/storeTypes/composeTypes'
-import { IDraftDetailObject } from 'store/storeTypes/draftsTypes'
+import type { TBaseState } from 'store/storeTypes/baseTypes'
+import type { IComposePayload } from 'store/storeTypes/composeTypes'
+import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import convertToGmailEmail from 'utils/convertToGmailEmail'
 
 export async function prepareFilesForSave({
   files,
   formData,
 }: {
-  files: File[]
+  files: Array<File>
   formData: FormData
 }) {
   try {
@@ -18,22 +19,30 @@ export async function prepareFilesForSave({
 }
 
 /**
+ *
+ * @async
  * @function prepareFormData
- * @param param0
- * @returns it will return a FormData object based on the input
+ * @param {Object} param0 - An object containing the following properties
+ * @param {Object} param0.composedEmail - An object representing the composed email
+ * @param {string} param0.emailAddress - Email address of the sender
+ * @param {Object} param0.localDraftDetails - An object containing details of the local draft
+ * @param {string} param0.name - Name of the sender
+ * @returns {FormData} - Returns a FormData object containing the data to be sent to the server
  */
+
+interface IPrepareFormData {
+  composedEmail: IComposePayload
+  emailAddress: TBaseState['profile']['emailAddress']
+  localDraftDetails: TGmailV1SchemaDraftSchema | undefined
+  name: TBaseState['profile']['name']
+}
 
 export async function prepareFormData({
   composedEmail,
   emailAddress,
   localDraftDetails,
   name,
-}: {
-  composedEmail: IComposePayload
-  emailAddress: string
-  localDraftDetails: IDraftDetailObject | undefined
-  name: string
-}) {
+}: IPrepareFormData) {
   const formData = new FormData()
   formData.append('draftId', localDraftDetails?.id ?? '')
   formData.append(
@@ -43,7 +52,12 @@ export async function prepareFormData({
       : localDraftDetails?.message?.threadId ?? ''
   )
   formData.append('messageId', localDraftDetails?.message?.id ?? '')
-  formData.append('from', convertToGmailEmail([{ name, emailAddress }]))
+  if (emailAddress) {
+    formData.append(
+      'from',
+      convertToGmailEmail([{ name: name ?? emailAddress, emailAddress }])
+    )
+  }
   formData.append(
     'to',
     composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''

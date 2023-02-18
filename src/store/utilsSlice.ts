@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
-import { activateTodo } from 'components/ToDo/TodoFocusOption'
+import activateTodo from 'components/ToDo/activateTodo'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routesConstants'
@@ -20,13 +20,12 @@ import {
   setViewIndex,
 } from 'store/emailDetailSlice'
 import {
-  fetchEmailsFull,
   fetchEmailsSimple,
   setSelectedEmails,
   updateEmailLabelBatch,
 } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import type {
   IMessageSendStatus,
   ISystemStatusUpdate,
@@ -62,19 +61,13 @@ export const utilsSlice = createSlice({
   reducers: {
     setActiveModal(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'activeModal'>['activeModal']>
+      { payload }: PayloadAction<IUtilsState['activeModal']>
     ) {
       state.activeModal = payload
     },
     setAlternateActions: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'alternateActions'>['alternateActions']
-      >
+      { payload }: PayloadAction<IUtilsState['alternateActions']>
     ) => {
       state.alternateActions = payload
     },
@@ -86,31 +79,25 @@ export const utilsSlice = createSlice({
     },
     setFlexibleFlow: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IUtilsState, 'isFlexibleFlowActive'>['isFlexibleFlowActive']
-      >
+      { payload }: PayloadAction<IUtilsState['isFlexibleFlowActive']>
     ) => {
       state.isFlexibleFlowActive = payload
     },
     setInSearch: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'inSearch'>['inSearch']>
+      { payload }: PayloadAction<IUtilsState['inSearch']>
     ) => {
       state.inSearch = payload
     },
     setIsLoading: (
       state,
-      { payload }: PayloadAction<Pick<IUtilsState, 'isLoading'>['isLoading']>
+      { payload }: PayloadAction<IUtilsState['isLoading']>
     ) => {
       state.isLoading = payload
     },
     setIsProcessing: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isProcessing'>['isProcessing']>
+      { payload }: PayloadAction<IUtilsState['isProcessing']>
     ) => {
       state.isProcessing = payload
     },
@@ -132,17 +119,13 @@ export const utilsSlice = createSlice({
     },
     setIsSentryActive: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSentryActive'>['isSentryActive']>
+      { payload }: PayloadAction<IUtilsState['isSentryActive']>
     ) => {
       state.isSentryActive = payload
     },
     setIsSilentLoading: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isSilentLoading'>['isSilentLoading']>
+      { payload }: PayloadAction<IUtilsState['isSilentLoading']>
     ) => {
       state.isSilentLoading = payload
     },
@@ -156,6 +139,8 @@ export const utilsSlice = createSlice({
           message: payload.message,
           type: payload.type,
           timestamp: new Date().getTime(),
+          action: payload?.action,
+          actionType: payload.actionType ?? 'close',
         }
       } else {
         // If a null is received, reset the state.
@@ -173,17 +158,13 @@ export const utilsSlice = createSlice({
     },
     setSettingsLabelId(
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'settingsLabelId'>['settingsLabelId']>
+      { payload }: PayloadAction<IUtilsState['settingsLabelId']>
     ) {
       state.settingsLabelId = payload
     },
     setShowAvatar: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IUtilsState, 'isAvatarVisible'>['isAvatarVisible']>
+      { payload }: PayloadAction<IUtilsState['isAvatarVisible']>
     ) => {
       state.isAvatarVisible = payload
     },
@@ -193,7 +174,7 @@ export const utilsSlice = createSlice({
       if (!meta.aborted) {
         state.systemStatusUpdate = {
           type: 'error',
-          message: global.SOMETHING_WRONG,
+          message: `Drafts - ${global.SOMETHING_WRONG}`,
           timestamp: new Date().getTime(),
         }
       }
@@ -212,30 +193,6 @@ export const utilsSlice = createSlice({
       state.isSilentLoading = false
     })
     builder.addCase(fetchEmailsSimple.rejected, (state, { meta }) => {
-      state.isLoading = false
-      state.isSilentLoading = false
-      if (!meta.aborted) {
-        state.systemStatusUpdate = {
-          type: 'error',
-          message: global.SOMETHING_WRONG,
-          timestamp: new Date().getTime(),
-        }
-      }
-    })
-    builder.addCase(fetchEmailsFull.pending, (state, { meta: { arg } }) => {
-      const { silentLoading } = arg
-      if (!state.isLoading && !silentLoading) {
-        state.isLoading = true
-      }
-      if (!state.isSilentLoading && silentLoading) {
-        state.isSilentLoading = true
-      }
-    })
-    builder.addCase(fetchEmailsFull.fulfilled, (state) => {
-      state.isLoading = false
-      state.isSilentLoading = false
-    })
-    builder.addCase(fetchEmailsFull.rejected, (state, { meta }) => {
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
@@ -269,39 +226,76 @@ export const {
 export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
   const foundLabel = findLabelById({ storageLabels, labelIds })
-  if (foundLabel) {
+  if (foundLabel && foundLabel?.name) {
     const { isFlexibleFlowActive } = getState().utils
     // If the flexibleFlow isn't active, thus no dedicated Inbox page, reroute the user to To Do page
     if (!isFlexibleFlowActive && foundLabel.id === global.INBOX_LABEL) {
       dispatch(push(RouteConstants.TODO))
       return
     }
-    dispatch(push(getRouteByLabelMap[foundLabel.name]))
-    return
+    const route = getRouteByLabelMap[foundLabel.name]
+    if (route) {
+      dispatch(push(route))
+      return
+    }
   }
   dispatch(push(RouteConstants.TODO))
 }
 
 export const openEmail =
-  ({ email, id }: { email?: IEmailListThreadItem; id: string }): AppThunk =>
+  ({
+    email,
+    id,
+    isReplying,
+  }: {
+    email?: TThreadObject
+    id: string
+    isReplying?: Boolean
+  }): AppThunk =>
   (dispatch, getState) => {
     const { labelIds, storageLabels } = getState().labels
 
     const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
-
+    const draftMessageArray = email?.messages.filter((message) =>
+      message.labelIds.includes(global.DRAFT_LABEL)
+    )
+    const lastMessage = email?.messages[email.messages.length - 1]
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (
-      email?.messages?.length === 1 &&
-      onlyLegalLabels.includes(global.DRAFT_LABEL) &&
-      email
-    ) {
-      const messageId = email.messages[email.messages.length - 1].id
-      dispatch(openDraftEmail({ id, messageId }))
-      return
+    if (draftMessageArray && lastMessage) {
+      if (
+        draftMessageArray.length === 1
+        // onlyLegalLabels.includes(global.DRAFT_LABEL)
+      ) {
+        const messageId = lastMessage.id
+        dispatch(openDraftEmail({ id, messageId }))
+        return
+      }
+      if (draftMessageArray.length > 1) {
+        dispatch(setCurrentEmail(id))
+        // We are sending the state here to override a possible closing of the composer on email detail load.
+        dispatch(push(`/mail/drafts/${id}/messages`))
+      }
     }
     dispatch(setCurrentEmail(id))
-    dispatch(push(`/mail/${labelURL(onlyLegalLabels)}/${id}/messages`))
+    // We are sending the state here to override a possible closing of the composer on email detail load.
+    dispatch(
+      push(
+        `/mail/${labelURL(onlyLegalLabels)}/${id}/messages`,
+        isReplying
+          ? {
+              isReplying: true,
+            }
+          : null
+      )
+    )
   }
+
+/**
+ * A wrapper function that navigates to the specified destination.
+ * @function navigateTo
+ * @param {string} destination - The destination to navigate to.
+ * @returns {AppThunk} - A thunk function that dispatches push action with the destination.
+ */
 
 export const navigateTo =
   (destination: string): AppThunk =>
@@ -405,6 +399,15 @@ export const archiveAllEmailCMDK = (): AppThunk => (dispatch, getState) => {
   dispatch(setSelectedEmails([]))
 }
 
+export const deleteAllEmailCMDK = (): AppThunk => (dispatch) => {
+  dispatch(
+    updateEmailLabelBatch({
+      request: { delete: true },
+    })
+  )
+  dispatch(setSelectedEmails([]))
+}
+
 export const discardAllEmailCMDK = (): AppThunk => (dispatch) => {
   dispatch(deleteDraftBatch())
 }
@@ -429,25 +432,30 @@ export const selectAllEmailsSender =
     const { labelIds } = getState().labels
 
     const currentEmailSender = getSenderFromList({ selectedEmails, emailList })
-
     const emailsFromSameSender = emailList[
       emailList.findIndex((list) => multipleIncludes(list.labels, labelIds))
-    ]?.threads.filter((email) =>
-      currentEmailSender.includes(
-        email.messages[email.messages.length - 1].payload.headers.from
+    ]?.threads.filter((email) => {
+      const lastMessageFromThread = email.messages[email.messages.length - 1]
+      if (lastMessageFromThread) {
+        return currentEmailSender.includes(
+          lastMessageFromThread.payload.headers.from
+        )
+      }
+      return undefined
+    })
+    if (emailsFromSameSender) {
+      dispatch(
+        setSelectedEmails(
+          emailsFromSameSender.map((thread) => ({
+            id: thread.id,
+            event: 'add',
+            labelIds,
+          }))
+        )
       )
-    )
-    dispatch(
-      setSelectedEmails(
-        emailsFromSameSender.map((thread) => ({
-          id: thread.id,
-          event: 'add',
-          labelIds,
-        }))
-      )
-    )
-    if (emailsFromSameSender.length > 0 && callback) {
-      dispatch(callback())
+      if (emailsFromSameSender.length > 0 && callback) {
+        dispatch(callback())
+      }
     }
   }
 
@@ -458,18 +466,19 @@ export const selectAllEmailsCurrentInbox =
     const { labelIds } = getState().labels
 
     const emailsFromCurrentInbox = emailList[activeEmailListIndex]?.threads
-
-    dispatch(
-      setSelectedEmails(
-        emailsFromCurrentInbox.map((thread) => ({
-          id: thread.id,
-          event: 'add',
-          labelIds,
-        }))
+    if (emailsFromCurrentInbox) {
+      dispatch(
+        setSelectedEmails(
+          emailsFromCurrentInbox.map((thread) => ({
+            id: thread.id,
+            event: 'add',
+            labelIds,
+          }))
+        )
       )
-    )
-    if (emailsFromCurrentInbox.length > 0 && callback) {
-      dispatch(callback())
+      if (emailsFromCurrentInbox.length > 0 && callback) {
+        dispatch(callback())
+      }
     }
   }
 

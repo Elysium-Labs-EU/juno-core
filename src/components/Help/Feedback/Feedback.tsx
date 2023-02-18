@@ -21,7 +21,6 @@ import {
 } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
 
-
 import * as S from './FeedbackStyles'
 
 interface IFeedbackTypeMapItem {
@@ -67,7 +66,7 @@ const SUCCESS_MESSAGE = 'Thank you for submitting the feedback!'
 
 const Feedback = () => {
   const [selectedType, setSelectedType] = useState<IFeedbackTypeMapItem>(
-    FEEDBACK_TYPE_MAP[0]
+    FEEDBACK_TYPE_MAP[0] as IFeedbackTypeMapItem
   )
   const [textAreaValue, setTextAreaValue] = useState('')
   const [showSuccess, setShowSuccess] = useState(false)
@@ -79,13 +78,13 @@ const Feedback = () => {
     setShowSuccess(false)
     setTextAreaValue('')
     dispatch(setActiveModal(null))
-    setSelectedType(FEEDBACK_TYPE_MAP[0])
+    setSelectedType(FEEDBACK_TYPE_MAP[0] as IFeedbackTypeMapItem)
   }, [])
 
   const sendData = useCallback(async (body: ISendFeedback) => {
     try {
       const response = await feedbackApi().sendFeedback(body)
-      if (response?.status === 200) {
+      if ('status' in response && response?.status === 200) {
         setShowSuccess(true)
       } else {
         dispatch(
@@ -106,12 +105,21 @@ const Feedback = () => {
   }, [])
 
   const handleSubmit = useCallback(() => {
-    const body: ISendFeedback = {
-      type: selectedType.type,
-      message: textAreaValue,
-      email: emailAddress,
+    if (selectedType.type && emailAddress) {
+      const body: ISendFeedback = {
+        type: selectedType.type,
+        message: textAreaValue,
+        email: emailAddress,
+      }
+      sendData(body)
+    } else {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: global.NETWORK_ERROR,
+        })
+      )
     }
-    sendData(body)
   }, [selectedType, emailAddress, textAreaValue])
 
   useEffect(() => {
@@ -145,19 +153,28 @@ const Feedback = () => {
           <S.Wrapper>
             <S.Inner>
               <S.OptionsWrapper>
-                {FEEDBACK_TYPE_MAP.map((option, index) => (
-                  <CustomIconButton
-                    key={option.type}
-                    title={option.type.toLowerCase()}
-                    icon={ICON_MAP[option.type]}
-                    style={
-                      option.type === selectedType.type
-                        ? customStylesActive
-                        : customStyles
+                {FEEDBACK_TYPE_MAP.map((option, index) => {
+                  if (option?.type) {
+                    const icon = ICON_MAP[option.type]
+                    const feedbackType = FEEDBACK_TYPE_MAP[index]
+                    if (icon && feedbackType) {
+                      return (
+                        <CustomIconButton
+                          key={option.type}
+                          title={option.type.toLowerCase()}
+                          icon={icon}
+                          style={
+                            option.type === selectedType.type
+                              ? customStylesActive
+                              : customStyles
+                          }
+                          onClick={() => setSelectedType(feedbackType)}
+                        />
+                      )
                     }
-                    onClick={() => setSelectedType(FEEDBACK_TYPE_MAP[index])}
-                  />
-                ))}
+                  }
+                  return undefined
+                })}
               </S.OptionsWrapper>
               <TextareaAutosize
                 minRows={8}
@@ -173,7 +190,7 @@ const Feedback = () => {
           </S.Wrapper>
           <S.ButtonContainer>
             <CustomButton
-              label={`Submit ${selectedType.type.toLowerCase()}`}
+              label={`Submit ${selectedType?.type?.toLowerCase()}`}
               title="Submit feedback form"
               onClick={() => handleSubmit()}
               disabled={textAreaValue.length === 0}

@@ -9,7 +9,7 @@ interface IReplyOverview {
 
 const ReplyOverview = ({ id, dispatch }: IReplyOverview) => {
   dispatch(setIsReplying(true))
-  dispatch(openEmail({ id }))
+  dispatch(openEmail({ id, isReplying: true }))
 }
 
 export default ReplyOverview

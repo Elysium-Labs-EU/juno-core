@@ -1,10 +1,13 @@
 import Composer from 'components/Compose/Composer'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { useAppDispatch } from 'store/hooks'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { handleContactConversion } from 'utils/convertToContact'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
+import isBodyWithEmailHTML from './getEmailHTML'
 import getRelevantMessage from './getRelevantMessage'
 
 /**
@@ -15,22 +18,39 @@ import getRelevantMessage from './getRelevantMessage'
  * @returns
  */
 
-const ReplyComposer = ({
-  localThreadDetail,
-  selectedIndex,
-  messageOverviewListener,
-}: {
-  localThreadDetail: IEmailListThreadItem
+interface IReplyComposer {
+  localThreadDetail: TThreadObject
   selectedIndex: number | undefined
   messageOverviewListener: (
     evenType: 'cancel' | 'discard',
     messageId?: string
   ) => void
-}) => {
+}
+
+const ReplyComposer = ({
+  localThreadDetail,
+  selectedIndex,
+  messageOverviewListener,
+}: IReplyComposer) => {
+  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
+
+  if (!relevantMessage) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Cannot open composer with relevant message',
+      })
+    )
+    return (
+      <ES.ComposeWrapper data-cy="reply-composer">
+        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+      </ES.ComposeWrapper>
+    )
+  }
 
   return (
     <ES.ComposeWrapper data-cy="reply-composer">
@@ -39,7 +59,7 @@ const ReplyComposer = ({
           // This should only be used when the message is a draft
           bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
           body: relevantMessage?.labelIds.includes(global.DRAFT_LABEL)
-            ? emailBody(relevantMessage?.payload?.body?.emailHTML)
+            ? emailBody(isBodyWithEmailHTML(relevantMessage))
             : undefined,
           cc: handleContactConversion(relevantMessage?.payload.headers.cc),
           files: relevantMessage?.payload?.files,

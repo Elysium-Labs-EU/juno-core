@@ -1,10 +1,7 @@
-import {
-  SETTINGS_DELIMITER,
-  SETTINGS_LABEL,
-} from 'constants/baseConstants'
+import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { removeLabel } from 'store/labelsSlice'
 import type { AppDispatch } from 'store/store'
-import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
+import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 
 /**
  * @function findSettings
@@ -14,44 +11,45 @@ import type { IGoogleLabel } from 'store/storeTypes/labelsTypes'
  * @returns null or a Google Label that is the settings label.
  */
 
-const findSettings = (labels: Array<IGoogleLabel>, dispatch: AppDispatch) => {
+const findSettings = (
+  labels: Array<TGmailV1SchemaLabelSchema>,
+  dispatch: AppDispatch
+) => {
   const result = labels.filter((label) =>
-    label.name.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
+    label.name?.includes(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
   )
 
-  if (result.length > 1) {
-    const longestSettingsLabel = []
-    const toRemoveLabels = []
-    let longestSettingsLabelNumber = 0
-    for (let i = 0; i < result.length; i += 1) {
-      if (result[i].name.length > longestSettingsLabelNumber) {
-        longestSettingsLabel.push(result[i])
-        longestSettingsLabelNumber = result[i].name.length
-      }
-      if (result[i].name.length === longestSettingsLabelNumber) {
-        toRemoveLabels.push(result[i])
-      }
-    }
-    if (result.length !== toRemoveLabels.length) {
-      if (toRemoveLabels.length > 0) {
-        toRemoveLabels.forEach((label) => dispatch(removeLabel(label.id)))
-      }
-      if (longestSettingsLabel.length === 1) {
-        return longestSettingsLabel[0]
-      }
-    } else {
-      const uniqueLabels = [
-        ...new Set(toRemoveLabels.concat(longestSettingsLabel)),
-      ]
-      // If there are two or more equal length settings labels found
-      // we drop it all and create a new one via the 'handleSettings' function.
-      uniqueLabels.forEach((label) => dispatch(removeLabel(label.id)))
-      return null
-    }
+  if (!result.length) {
+    return null
   }
   if (result.length === 1) {
     return result[0]
   }
-  return null
+
+  const longestSettingsLabel = result.reduce(
+    (acc, curr) => {
+      if (
+        (curr?.name && acc?.name && curr.name.length > acc.name.length) ||
+        !acc.name
+      ) {
+        return curr
+      }
+      return acc
+    },
+    { name: '', id: '', type: '' }
+  )
+
+  // If there are two or more equal length settings labels found
+  // we drop it all and create a new one via the 'handleSettings' function.
+  result
+    .filter((label) => label !== longestSettingsLabel)
+    .forEach((label) => {
+      if (label && label?.id) {
+        dispatch(removeLabel(label.id))
+      }
+    })
+
+  return longestSettingsLabel
 }
+
 export default findSettings

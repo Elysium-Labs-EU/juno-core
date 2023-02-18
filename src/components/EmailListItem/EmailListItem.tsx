@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
-import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
 import EmailLabel from 'components/Elements/EmailLabel'
-import EmailSnippet from 'components/Elements/EmailSnippet'
-import EmailSubject from 'components/Elements/EmailSubject'
+import emailSnippet from 'components/Elements/EmailSnippet'
+import emailSubject from 'components/Elements/EmailSubject'
 import MessageCount from 'components/Elements/MessageCount'
-import RecipientName from 'components/Elements/RecipientName'
-import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
-import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
+import recipientName from 'components/Elements/RecipientName'
+import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import CustomCheckbox from 'components/Elements/StyledCheckbox/StyledCheckbox'
 import getTimeStamp from 'components/Elements/TimeStamp/GetTimeStamp'
 import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
@@ -21,14 +19,18 @@ import { selectProfile } from 'store/baseSlice'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TProfile } from 'store/storeTypes/baseTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import multipleIncludes from 'utils/multipleIncludes'
 
+import ContactCardAvatar from './ContactCardAvatar'
 import * as S from './EmailListItemStyles'
-import InlineThreadActionsDraft from './InlineThreadActionsDraft'
-import InlineThreadActionsRegular from './InlineThreadActionsRegular'
+import InlineThreadActionsDraft from './InlineThreadActions/InlineThreadActionsDraft'
+import InlineThreadActionsRegular from './InlineThreadActions/InlineThreadActionsRegular'
+import SenderRecipientName from './SenderRecipientName'
 import Snippet from './Snippet'
 
 // If the user is on Draft list, show only draft emails.
@@ -40,8 +42,8 @@ import Snippet from './Snippet'
  * @returns a filtered version of the emaillist object, if the draft label is found.
  */
 const shouldUseDraftOrRegular = (
-  labelIds: string[],
-  email: IEmailListThreadItem
+  labelIds: TLabelState['labelIds'],
+  email: TThreadObject
 ) => {
   if (Array.isArray(labelIds) && labelIds.includes(global.DRAFT_LABEL)) {
     if (email?.messages) {
@@ -57,12 +59,87 @@ const shouldUseDraftOrRegular = (
   return email
 }
 
-const hasUnreadLabel = (emailListThreadItem: IEmailListThreadItem) => {
-  const foundLabels: string[] = []
-  emailListThreadItem.messages.forEach((message) =>
-    message?.labelIds?.forEach((label) => foundLabels.push(label))
+const hasUnreadLabel = (emailListThreadItem: TThreadObject) =>
+  emailListThreadItem.messages.some((message) =>
+    message?.labelIds?.includes(global.UNREAD_LABEL)
   )
-  return foundLabels.includes(global.UNREAD_LABEL)
+
+interface ExtractEmailData {
+  emailAddress: TProfile['emailAddress']
+  memoizedDraftOrRegular: TThreadObject
+}
+
+export const getRecipientName = ({
+  emailAddress,
+  memoizedDraftOrRegular,
+}: ExtractEmailData) => {
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
+  if (lastMessage) {
+    return recipientName(lastMessage?.payload?.headers?.to, emailAddress)
+  }
+  return null
+}
+export const getSenderPartial = ({
+  emailAddress,
+  memoizedDraftOrRegular,
+}: ExtractEmailData) => {
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
+  if (lastMessage) {
+    return senderNamePartial(lastMessage?.payload?.headers?.from, emailAddress)
+  }
+  return null
+}
+export const getSenderFull = ({
+  emailAddress,
+  memoizedDraftOrRegular,
+}: ExtractEmailData) => {
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
+  if (lastMessage) {
+    return senderNameFull(lastMessage?.payload?.headers?.from, emailAddress)
+  }
+  return null
+}
+
+const getSubject = ({
+  memoizedDraftOrRegular,
+}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
+  if (lastMessage) {
+    return emailSubject(lastMessage?.payload?.headers?.subject)
+  }
+  return null
+}
+const getSnippet = ({
+  memoizedDraftOrRegular,
+}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
+  const lastMessage =
+    memoizedDraftOrRegular.messages![
+      memoizedDraftOrRegular.messages!.length - 1
+    ]
+  if (lastMessage) {
+    return emailSnippet(lastMessage)
+  }
+  return null
+}
+
+interface IEmailListItem {
+  activeIndex: number
+  email: TThreadObject
+  index: number
+  showCheckbox: boolean
+  showLabel: boolean
 }
 
 const EmailListItem = ({
@@ -71,13 +148,7 @@ const EmailListItem = ({
   index,
   showCheckbox,
   showLabel,
-}: {
-  activeIndex: number
-  email: IEmailListThreadItem
-  index: number
-  showCheckbox: boolean
-  showLabel: boolean
-}) => {
+}: IEmailListItem) => {
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
@@ -98,85 +169,59 @@ const EmailListItem = ({
     }
   }, [activeIndex, index, isFocused])
 
-  const staticShouldUseDraftOrRegular = useMemo(
+  const memoizedDraftOrRegular = useMemo(
     () => shouldUseDraftOrRegular(labelIds, email),
     [email]
   )
 
-  const staticEmailLabels = useMemo(
-    () => emailLabels(staticShouldUseDraftOrRegular, storageLabels),
-    [staticShouldUseDraftOrRegular, storageLabels]
+  const memoizedEmailLabels = useMemo(
+    () => emailLabels(memoizedDraftOrRegular, storageLabels),
+    [memoizedDraftOrRegular, storageLabels]
   )
 
-  const staticRecipientName = useMemo(
-    () =>
-      RecipientName(
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]?.payload?.headers?.to,
-        emailAddress
-      ),
-    [staticShouldUseDraftOrRegular]
+  const memoizedRecipientName = useMemo(
+    () => getRecipientName({ emailAddress, memoizedDraftOrRegular }),
+    [emailAddress, memoizedDraftOrRegular]
   )
-  const staticSenderPartial = useMemo(
-    () =>
-      SenderNamePartial(
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]?.payload?.headers?.from,
-        emailAddress
-      ),
-    [staticShouldUseDraftOrRegular]
+  const memoizedSenderPartial = useMemo(
+    () => getSenderPartial({ emailAddress, memoizedDraftOrRegular }),
+    [emailAddress, memoizedDraftOrRegular]
   )
-  const staticSenderFull = useMemo(
-    () =>
-      SenderNameFull(
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]?.payload?.headers?.from,
-        emailAddress
-      ),
-    [staticShouldUseDraftOrRegular]
+  const memoizedSenderFull = useMemo(
+    () => getSenderFull({ emailAddress, memoizedDraftOrRegular }),
+    [memoizedDraftOrRegular]
   )
-  const staticSubject = useMemo(
-    () =>
-      EmailSubject(
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]?.payload?.headers?.subject
-      ),
-    [staticShouldUseDraftOrRegular]
+
+  const memoizedSubject = useMemo(
+    () => getSubject({ memoizedDraftOrRegular }),
+    [memoizedDraftOrRegular]
   )
-  const staticSnippet = useMemo(
-    () =>
-      EmailSnippet(
-        staticShouldUseDraftOrRegular.messages![
-          staticShouldUseDraftOrRegular.messages!.length - 1
-        ]
-      ),
-    [staticShouldUseDraftOrRegular]
+  const memoizedSnippet = useMemo(
+    () => getSnippet({ memoizedDraftOrRegular }),
+    [memoizedDraftOrRegular]
   )
-  const staticHasAttachment = useMemo(
+
+  const memoizedHasAttachment = useMemo(
     () => (
       <EmailHasAttachmentSimple
         files={
-          staticShouldUseDraftOrRegular.messages![
-            staticShouldUseDraftOrRegular.messages!.length - 1
+          memoizedDraftOrRegular.messages![
+            memoizedDraftOrRegular.messages!.length - 1
           ]?.payload?.files
         }
       />
     ),
-    [staticShouldUseDraftOrRegular]
+    [memoizedDraftOrRegular]
   )
 
   const handleOpenEvent = useCallback(() => {
     dispatch(
       openEmail({
         id,
-        email: staticShouldUseDraftOrRegular,
+        email: memoizedDraftOrRegular,
       })
     )
-  }, [staticShouldUseDraftOrRegular])
+  }, [memoizedDraftOrRegular])
 
   useEffect(() => {
     // This is not triggered in search mode.
@@ -199,8 +244,17 @@ const EmailListItem = ({
 
   const memoizedEmailListItem = useMemo(
     () => (
-      <S.ThreadBase emailLabels={staticEmailLabels} id={id}>
+      <S.ThreadBase emailLabels={memoizedEmailLabels} id={id}>
         <S.ThreadRow showLabel={showLabel} isFocused={isFocused}>
+          {!labelIds.includes(global.DRAFT_LABEL) ? (
+            <InlineThreadActionsRegular
+              threadId={id}
+              email={email}
+              isFocused={isFocused}
+            />
+          ) : (
+            <InlineThreadActionsDraft threadId={id} isFocused={isFocused} />
+          )}
           <S.CellCheckbox
             inSelect={
               selectedEmails.selectedIds.length > 0 &&
@@ -218,45 +272,24 @@ const EmailListItem = ({
           <S.CelUnread>{hasUnreadLabel(email) && <S.UnreadDot />}</S.CelUnread>
           <S.CellName aria-hidden="true">
             <S.Avatars>
-              {!labelIds.includes(global.DRAFT_LABEL) ? (
-                <ContactCard
-                  offset={[30, 10]}
-                  userEmail={staticSenderFull}
-                  contact={staticSenderPartial}
-                >
-                  <EmailAvatar userEmail={staticSenderFull} />
-                </ContactCard>
-              ) : (
-                <ContactCard
-                  offset={[30, 10]}
-                  userEmail={staticRecipientName.name}
-                  contact={staticSenderPartial}
-                >
-                  <EmailAvatar userEmail={staticRecipientName.name} />
-                </ContactCard>
-              )}
+              <ContactCardAvatar
+                labelIds={labelIds}
+                senderFull={memoizedSenderFull}
+                senderPartial={memoizedSenderPartial}
+                recipientName={memoizedRecipientName}
+              />
             </S.Avatars>
-            {!labelIds.includes(global.DRAFT_LABEL) ? (
-              <S.TruncatedSpan
-                title={staticSenderPartial.emailAddress}
-                data-testid="email-sender"
-                onClick={handleOpenEvent}
-              >
-                {staticSenderPartial.name ?? staticSenderPartial.emailAddress}
-              </S.TruncatedSpan>
-            ) : (
-              <S.TruncatedSpan
-                title={staticRecipientName.emailAddress}
-                data-testid="email-recipient"
-                onClick={handleOpenEvent}
-              >
-                {staticRecipientName.name}
-              </S.TruncatedSpan>
-            )}
+            <SenderRecipientName
+              labelIds={labelIds}
+              senderFull={memoizedSenderFull}
+              senderPartial={memoizedSenderPartial}
+              recipientName={memoizedRecipientName}
+              handleOpenEvent={handleOpenEvent}
+            />
           </S.CellName>
           {showLabel && (
             <S.CellLabels onClick={handleOpenEvent}>
-              <EmailLabel labelNames={staticEmailLabels} />
+              <EmailLabel labelNames={memoizedEmailLabels} />
             </S.CellLabels>
           )}
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
@@ -270,12 +303,12 @@ const EmailListItem = ({
                 </span>
               )}
               {email.messages && <MessageCount messages={email.messages} />}
-              <span>{staticSubject}</span>
-              <Snippet snippet={staticSnippet} />
+              <span>{memoizedSubject}</span>
+              <Snippet snippet={memoizedSnippet} />
             </S.TruncatedDiv>
           </S.CellMessage>
 
-          <S.CellAttachment>{staticHasAttachment}</S.CellAttachment>
+          <S.CellAttachment>{memoizedHasAttachment}</S.CellAttachment>
           <S.CellDate>
             <S.DatePosition>
               <TimeStampDisplay
@@ -288,15 +321,10 @@ const EmailListItem = ({
           </S.CellDate>
           <div />
           <div />
-          {!labelIds.includes(global.DRAFT_LABEL) ? (
-            <InlineThreadActionsRegular id={id} email={email} />
-          ) : (
-            <InlineThreadActionsDraft threadId={id} />
-          )}
         </S.ThreadRow>
       </S.ThreadBase>
     ),
-    [isFocused, selectedEmails, staticEmailLabels]
+    [isFocused, selectedEmails, memoizedEmailLabels]
   )
 
   return memoizedEmailListItem

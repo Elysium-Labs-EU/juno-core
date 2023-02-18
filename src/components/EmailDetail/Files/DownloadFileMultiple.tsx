@@ -5,15 +5,15 @@ import StyledCircularProgress from 'components/Elements/CircularProgress/StyledC
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
-import type { IEmailMessagePayloadRaw } from 'store/storeTypes/emailListTypes'
+import type { TFullMessage } from 'store/storeTypes/emailListTypes'
 import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
 
 interface IDownloadButtonMultiple {
-  filesObjectArray: {
+  filesObjectArray: Array<{
     id: string
-    files: IEmailMessagePayloadRaw[] | undefined
-  }[]
+    files: Pick<TFullMessage, 'payload'>['payload']['files'] | undefined
+  }>
   isMainButton?: boolean
 }
 
@@ -32,7 +32,7 @@ const asssesUniqueFiles = ({
         id: fileObject.id,
         files: fileObject.files.filter((file) => {
           const { filename, body } = file
-          const fileKey = `${filename}-${body.size}`
+          const fileKey = `${filename}-${body?.size}`
           if (processedFiles.has(fileKey)) {
             return undefined
           }
@@ -100,9 +100,7 @@ const DownloadButtonMultiple = ({
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
-          message: response
-            ? response[0]?.message ?? global.NETWORK_ERROR
-            : global.NETWORK_ERROR,
+          message: response[0]?.message ?? global.NETWORK_ERROR,
         })
       )
     } catch (err) {

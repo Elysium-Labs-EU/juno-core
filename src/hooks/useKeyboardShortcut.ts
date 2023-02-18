@@ -2,12 +2,46 @@ import { useEffect } from 'react'
 
 /**
  * @function useKeyboardShortcut
- * @description - a custom hook that handles the keyboard shortcuts
- * @param {string[]} actionKeys - the key or keys to listen for
- * @param {function} handleEvent - the function to run when the key or keys are pressed
- * @param {boolean} isDisabled - an optional boolean to determine if the event should be prevented
- * @param {string[]} refreshOnDeps - an optional array of dependencies to refresh the event listener
+ * @description A custom hook that handles keyboard shortcuts
+ * @param {IUseKeyboardShortcut} config - an object containing the configuration for the hook
+ * @param {string} config.key - the key to listen for
+ * @param {string} [config.modifierKey] - an optional modifier key to listen for
+ * @param {function} config.handleEvent - the function to run when the key or keys are pressed
+ * @param {boolean} [config.isDisabled=false] - an optional boolean to determine if the event should be prevented
+ * @param {Array<any>} [config.refreshOnDeps] - an optional array of dependencies to refresh the event listener
  */
+
+interface IUseKeyboardShortcut {
+  key: string
+  modifierKey?: string
+  handleEvent: () => void
+  isDisabled?: boolean
+  refreshOnDeps?: Array<any>
+}
+
+export const handleKeydown = (
+  key: string,
+  handleEvent: () => void,
+  modifierKey?: string,
+  isDisabled?: boolean
+) => (e: KeyboardEvent | undefined) => {
+  if (isDisabled) return
+  if (e?.code === undefined) return
+  if (modifierKey) {
+    if (
+      e[modifierKey as keyof typeof e] &&
+      e.key.toLowerCase() === key.toLowerCase()
+    ) {
+      e.preventDefault()
+      e.stopPropagation()
+      handleEvent()
+    }
+  } else if (e.key.toLowerCase() === key.toLowerCase()) {
+    e.preventDefault()
+    e.stopPropagation()
+    handleEvent()
+  }
+}
 
 export default function useKeyboardShortcut({
   key,
@@ -15,38 +49,17 @@ export default function useKeyboardShortcut({
   handleEvent,
   isDisabled = false,
   refreshOnDeps = undefined,
-}: {
-  key: string
-  modifierKey?: string
-  handleEvent: () => void
-  isDisabled?: boolean
-  refreshOnDeps?: Array<any>
-}) {
+}: IUseKeyboardShortcut) {
   useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (isDisabled) return
-      if (e?.code === undefined) return
-
-      if (modifierKey) {
-        if (
-          e[modifierKey as keyof typeof e] &&
-          e.key.toLowerCase() === key.toLowerCase()
-        ) {
-          e.preventDefault()
-          e.stopPropagation()
-          handleEvent()
-        }
-      } else if (e.key.toLowerCase() === key.toLowerCase()) {
-        e.preventDefault()
-        e.stopPropagation()
-        handleEvent()
-      }
-    }
-
-    document.addEventListener('keydown', handleKeyDown)
-
+    const handleKeydownCallback = handleKeydown(
+      key,
+      handleEvent,
+      modifierKey,
+      isDisabled
+    )
+    window.addEventListener('keydown', handleKeydownCallback)
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keydown', handleKeydownCallback)
     }
-  }, [refreshOnDeps, isDisabled])
+  }, [isDisabled, key, modifierKey, handleEvent, refreshOnDeps])
 }

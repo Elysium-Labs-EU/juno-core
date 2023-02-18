@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
+import * as local from 'constants/menuConstants'
 import { selectViewIndex } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import filterTrashMessages from 'utils/filterTrashMessages'
 
 import FilesTab from './FilesTab'
@@ -17,8 +18,13 @@ interface ITabItem {
   link: string
 }
 
-const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
-  const [activeLink, setActiveLink] = useState('')
+const pathToActiveLink = {
+  messages: 'Messages',
+  files: 'Files',
+}
+
+const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
+  const [activeLink, setActiveLink] = useState(local.MESSAGE_MENU_ITEM.name)
   const dispatch = useAppDispatch()
   const viewIndex = useAppSelector(selectViewIndex)
   const labelIds = useAppSelector(selectLabelIds)
@@ -30,13 +36,14 @@ const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
   }
 
   useEffect(() => {
-    if (location.pathname.includes('messages')) {
-      setActiveLink('Messages')
-    }
-    if (location.pathname.includes('files')) {
-      setActiveLink('Files')
+    const determinedLink =
+      pathToActiveLink[location.pathname as keyof typeof pathToActiveLink]
+    if (determinedLink) {
+      setActiveLink(determinedLink)
     }
   }, [location])
+
+  const viewedThread = activeEmailList.threads[viewIndex]
 
   return (
     <S.TabContainer>
@@ -44,18 +51,12 @@ const Tabs = ({ activeEmailList }: { activeEmailList: IEmailListObject }) => {
         <MessagesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(
-            activeEmailList.threads[viewIndex],
-            labelIds
-          )}
+          activeThread={filterTrashMessages(viewedThread, labelIds)}
         />
         <FilesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(
-            activeEmailList.threads[viewIndex],
-            labelIds
-          )}
+          activeThread={filterTrashMessages(viewedThread, labelIds)}
         />
       </S.ItemsContainer>
     </S.TabContainer>

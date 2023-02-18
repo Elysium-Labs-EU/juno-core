@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import threadApi from 'data/threadApi'
 import type { RootState } from 'store/store'
-import type { IEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 /* eslint-disable no-param-reassign */
 
@@ -14,12 +15,15 @@ export const fetchEmailDetail = createAsyncThunk(
       threadId,
       labelIds,
       q,
-    }: { threadId: string; labelIds: string[]; q?: string },
+    }: { threadId: string; labelIds: TLabelState['labelIds']; q?: string },
     { signal }
   ) => {
-    const response = await threadApi({ signal }).getThreadDetail(threadId)
+    const response = await threadApi({ signal }).getThreadDetail({ threadId })
     // Convert the output to facilite the current code to update and email in the emaillist.
-    return { response: { threads: [response] }, labels: labelIds, q }
+    if ('data' in response) {
+      return { response: { threads: [response.data] }, labels: labelIds, q }
+    }
+    return { response: { threads: [] }, labels: labelIds, q }
   },
   {
     condition: (arg, { getState }: { getState: any }) => {
@@ -34,7 +38,7 @@ export const fetchEmailDetail = createAsyncThunk(
   }
 )
 
-const initialState: IEmailDetailState = Object.freeze({
+const initialState: TEmailDetailState = Object.freeze({
   coreStatus: null,
   currEmail: '',
   fetchStatus: 'idle',
@@ -51,51 +55,37 @@ export const emailDetailSlice = createSlice({
     resetEmailDetail: () => initialState,
     setCoreStatus: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'coreStatus'>['coreStatus']>
+      { payload }: PayloadAction<TEmailDetailState['coreStatus']>
     ) => {
       state.coreStatus = payload
     },
     setCurrentEmail: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'currEmail'>['currEmail']>
+      { payload }: PayloadAction<TEmailDetailState['currEmail']>
     ) => {
       state.currEmail = payload
     },
     setViewIndex: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'viewIndex'>['viewIndex']>
+      { payload }: PayloadAction<TEmailDetailState['viewIndex']>
     ) => {
       state.viewIndex = payload
     },
     setSessionViewIndex: (
       state,
-      {
-        payload,
-      }: PayloadAction<
-        Pick<IEmailDetailState, 'sessionViewIndex'>['sessionViewIndex']
-      >
+      { payload }: PayloadAction<TEmailDetailState['sessionViewIndex']>
     ) => {
       state.sessionViewIndex = payload
     },
     setIsReplying: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'isReplying'>['isReplying']>
+      { payload }: PayloadAction<TEmailDetailState['isReplying']>
     ) => {
       state.isReplying = payload
     },
     setIsForwarding: (
       state,
-      {
-        payload,
-      }: PayloadAction<Pick<IEmailDetailState, 'isForwarding'>['isForwarding']>
+      { payload }: PayloadAction<TEmailDetailState['isForwarding']>
     ) => {
       state.isForwarding = payload
     },

@@ -9,7 +9,7 @@ const convertArrayToString = (data: string | string[]) => {
     const converted = data.toString().replace(',', '-')
     return converted
   }
-  if (data && Array.isArray(data)) {
+  if (data && Array.isArray(data) && data[0]) {
     const converted = data[0].toString().replace(',', '-')
     return converted
   }

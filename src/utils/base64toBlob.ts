@@ -19,7 +19,10 @@ export default function base64toBlob({
 
     const bytes = new Array(end - begin)
     for (let offset = begin, i = 0; offset < end; i += 1, offset += 1) {
-      bytes[i] = byteCharacters[offset].charCodeAt(0)
+      const byte = byteCharacters[offset]
+      if (byte) {
+        bytes[i] = byte.charCodeAt(0)
+      }
     }
     byteArrays[sliceIndex] = new Uint8Array(bytes)
   }

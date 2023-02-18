@@ -2,12 +2,12 @@
 import type { AutocompleteRenderGetTagProps } from '@mui/material'
 import { useState } from 'react'
 
-import type { IContact } from 'store/storeTypes/contactsTypes'
+import type { TContact } from 'store/storeTypes/contactsTypes'
 
 import StyledChip from './RecipientChipStyles'
 
 interface IRecipientChip {
-  option: IContact
+  option: TContact
   getTagProps?: AutocompleteRenderGetTagProps
   handleDelete: (data: any) => void
   index: number
@@ -17,7 +17,7 @@ const chipLabel = ({
   option,
   showFull,
 }: {
-  option: IContact
+  option: TContact
   showFull: boolean
 }) => {
   if (option.name && showFull) {
@@ -47,7 +47,7 @@ const RecipientChip = ({
       {...additionalProps}
       onDelete={() => handleDelete(option)}
       onClick={() => setShowFull(!showFull)}
-      title={option.emailAddress}
+      title={option.emailAddress ?? ''}
     />
   )
 }

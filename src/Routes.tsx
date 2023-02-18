@@ -12,6 +12,7 @@ import Login from 'components/Login/Login'
 import PageNotFound from 'components/PageNotFound/PageNotFound'
 import SentEmail from 'components/Sent/Sent'
 import ToDo from 'components/ToDo/Todo'
+import Trash from 'components/Trash/Trash'
 import RoutesConstants from 'constants/routesConstants'
 import useSentry from 'hooks/useSentry'
 import { selectBaseLoaded, selectIsAuthenticated } from 'store/baseSlice'
@@ -126,6 +127,14 @@ const RoutesComponent = () => {
         element={
           <ProtectedRouteTemplate>
             <Archive />
+          </ProtectedRouteTemplate>
+        }
+      />
+      <Route
+        path={RoutesConstants.TRASH}
+        element={
+          <ProtectedRouteTemplate>
+            <Trash />
           </ProtectedRouteTemplate>
         }
       />

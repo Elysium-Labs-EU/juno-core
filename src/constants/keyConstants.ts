@@ -25,6 +25,7 @@ export const KEY_LETTERS = {
 
 export const KEY_SPECIAL = {
   alt: 'altKey',
+  altOnlyKey: 'Alt',
   backspace: 'Backspace',
   control: 'ctrlKey',
   dot: '.',

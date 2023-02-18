@@ -13,8 +13,8 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectLoadedInbox } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
-import getEmailListIndex from 'utils/getEmailListIndex'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
+import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import multipleIncludes from 'utils/multipleIncludes'
 
 import RenderEmailList from './RenderEmailList'
@@ -23,12 +23,13 @@ const LabeledInbox = ({
   emailList,
   activeEmailListIndex,
 }: {
-  emailList: Array<IEmailListObject>
+  emailList: TEmailListState['emailList']
   activeEmailListIndex: number
 }) => {
-  if (emailList) {
+  const specificEmailList = emailList[activeEmailListIndex]
+  if (specificEmailList) {
     // Show the list of emails that are connected to the labelId mailbox.
-    return <RenderEmailList filteredOnLabel={emailList[activeEmailListIndex]} />
+    return <RenderEmailList filteredOnLabel={specificEmailList} />
   }
   return <EmptyState />
 }

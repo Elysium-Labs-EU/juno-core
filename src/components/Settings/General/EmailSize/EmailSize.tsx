@@ -1,12 +1,12 @@
 import StyledSelect from 'components/Elements/Select/StyledSelect'
-import { fetchSizeKeyMap } from 'constants/baseConstants'
+import { emailFetchSizeKeyMap } from 'constants/baseConstants'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectEmailListSize,
   selectSettingsLabelId,
   setEmailFetchSize,
 } from 'store/utilsSlice'
-import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
 
 const selectOptions = {
   id: 'emailSize',
@@ -20,10 +20,12 @@ const EmailSize = () => {
   const dispatch = useAppDispatch()
 
   const handleEmailListSizeChange = (selectedValue: string) => {
-    updateSettingsLabel({
-      settingsLabelId,
-      fetchSize: fetchSizeKeyMap[parseInt(selectedValue, 10)],
-    })
+    dispatch(
+      updateSettingsLabel({
+        settingsLabelId,
+        emailFetchSize: emailFetchSizeKeyMap[parseInt(selectedValue, 10)],
+      })
+    )
     dispatch(setEmailFetchSize(parseInt(selectedValue, 10)))
   }
 

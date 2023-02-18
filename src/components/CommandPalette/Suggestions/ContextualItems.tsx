@@ -2,14 +2,18 @@ import type { Location } from 'react-router-dom'
 
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
-import { QiDiscard, QiFolderArchive, QiJump } from 'images/svgIcons/quillIcons'
-import type { AppDispatch } from 'store/store'
 import {
-  IEmailListObject,
-  ISelectedEmail,
-} from 'store/storeTypes/emailListTypes'
+  QiDiscard,
+  QiFolderArchive,
+  QiFolderTrash,
+  QiJump,
+} from 'images/svgIcons/quillIcons'
+import type { AppDispatch } from 'store/store'
+import { TEmailListState } from 'store/storeTypes/emailListTypes'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import {
   archiveAllEmailCMDK,
+  deleteAllEmailCMDK,
   discardAllEmailCMDK,
   selectAllEmailsSender,
   startFocusModeCMDK,
@@ -19,10 +23,11 @@ import getRecipientFromList from 'utils/getRecipientFromList'
 import getSenderFromList from 'utils/getSenderFromList'
 import multipleIncludes from 'utils/multipleIncludes'
 
-import type { IJsonStructure } from '../commandPaletteUtils'
 import defaultItems from './DefaultItems'
+import type { IJsonStructure } from '../commandPaletteUtils'
 
 export default function contextualItems({
+  currentEmailBoxHasEmails,
   dispatch,
   emailList,
   isFlexibleFlowActive,
@@ -30,14 +35,16 @@ export default function contextualItems({
   location,
   selectedEmails,
 }: {
+  currentEmailBoxHasEmails: boolean
   dispatch: AppDispatch
-  emailList: IEmailListObject[]
+  emailList: TEmailListState['emailList']
   isFlexibleFlowActive: boolean
-  labelIds: string[]
+  labelIds: TLabelState['labelIds']
   location: Location
-  selectedEmails: ISelectedEmail
+  selectedEmails: TEmailListState['selectedEmails']
 }): IJsonStructure[] {
   const itemsArray = defaultItems({
+    currentEmailBoxHasEmails,
     dispatch,
     isFlexibleFlowActive,
     location,
@@ -74,7 +81,7 @@ export default function contextualItems({
         })
       )
     }
-    if (uniqueUsers.length > 1 && uniqueUsers.length < 3) {
+    if (uniqueUsers.length > 1) {
       baseUseWith.items.push(
         location.pathname === RoutesConstants.TODO
           ? {
@@ -135,6 +142,12 @@ export default function contextualItems({
             icon: <QiFolderArchive />,
             onClick: () => dispatch(archiveAllEmailCMDK()),
           },
+      {
+        id: 'delete-all-selection',
+        children: 'Delete all selection',
+        icon: <QiFolderTrash />,
+        onClick: () => dispatch(deleteAllEmailCMDK()),
+      },
       location.pathname === RoutesConstants.TODO
         ? {
             id: 'Focus-with-selection',

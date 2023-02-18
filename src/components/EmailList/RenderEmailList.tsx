@@ -9,7 +9,7 @@ import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { IEmailListObject } from 'store/storeTypes/emailListTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectActiveModal,
   selectEmailListSize,
@@ -30,7 +30,7 @@ const SOURCE_TAG_EMAILLIST = 'emailList-thread-list-item'
 const RenderEmailList = ({
   filteredOnLabel,
 }: {
-  filteredOnLabel: IEmailListObject
+  filteredOnLabel: TEmailListObject
 }) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()
@@ -73,36 +73,21 @@ const RenderEmailList = ({
     })
   }, [focusedItemIndex])
 
-  useKeyboardShortcut({
-    handleEvent: handleEscapeKeyDown,
-    key: keyConstants.KEY_SPECIAL.escape,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [selectedEmails],
-  })
+  const keyHandlers = {
+    [keyConstants.KEY_SPECIAL.escape]: handleEscapeKeyDown,
+    [keyConstants.KEY_ARROWS.down]: handleFocusDown,
+    [keyConstants.KEY_LETTERS.j]: handleFocusDown,
+    [keyConstants.KEY_ARROWS.up]: handleFocusUp,
+    [keyConstants.KEY_LETTERS.k]: handleFocusUp,
+  }
 
-  useKeyboardShortcut({
-    handleEvent: handleFocusDown,
-    key: keyConstants.KEY_ARROWS.down,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusDown,
-    key: keyConstants.KEY_LETTERS.j,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusUp,
-    key: keyConstants.KEY_ARROWS.up,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
-  })
-  useKeyboardShortcut({
-    handleEvent: handleFocusUp,
-    key: keyConstants.KEY_LETTERS.k,
-    isDisabled: inSearch || !!activeModal,
-    refreshOnDeps: [focusedItemIndex],
+  Object.entries(keyHandlers).forEach(([key, handleEvent]) => {
+    useKeyboardShortcut({
+      handleEvent,
+      key,
+      isDisabled: inSearch || !!activeModal,
+      refreshOnDeps: [focusedItemIndex],
+    })
   })
 
   const { threads, nextPageToken } = filteredOnLabel
@@ -130,7 +115,7 @@ const RenderEmailList = ({
   const memoizedThreadList = useMemo(
     () => (
       <S.ThreadList>
-        {threads.length > 0 && (
+        {threads.length > 0 ? (
           <GS.Base>
             <ThreadList
               threads={threads}
@@ -140,12 +125,12 @@ const RenderEmailList = ({
               showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
             />
           </GS.Base>
-        )}
-        {threads.length === 0 && (
+        ) : null}
+        {threads.length === 0 ? (
           <EmptyState>
             <EmailListEmptyStates />
           </EmptyState>
-        )}
+        ) : null}
       </S.ThreadList>
     ),
     [threads, focusedItemIndex]

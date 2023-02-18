@@ -25,7 +25,6 @@ interface StyledListItem {
 }
 
 export const StyedListItem = styled.li<StyledListItem>`
-  font-size: 1.125rem;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.13;

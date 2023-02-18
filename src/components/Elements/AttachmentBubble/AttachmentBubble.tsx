@@ -74,13 +74,18 @@ const DownloadButton = ({
     }
   }, [attachmentData, messageId])
 
-  return (
-    <CustomIconButton
-      onClick={handleClick}
-      icon={loadStateIconMap[loadState]}
-      title={loadStateTitleMap[loadState]}
-    />
-  )
+  const buttonIcon = loadStateIconMap[loadState]
+  const buttonTitle = loadStateTitleMap[loadState]
+  if (buttonIcon && buttonTitle) {
+    return (
+      <CustomIconButton
+        onClick={handleClick}
+        icon={buttonIcon}
+        title={buttonTitle}
+      />
+    )
+  }
+  return null
 }
 
 const DeleteButton = ({
@@ -109,8 +114,10 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
     ref
   ) => {
     const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-    const [fetchedAttachmentData, setFetchedAttachmentData] =
-      useState<null | IFetchedAttachment>(null)
+    const [
+      fetchedAttachmentData,
+      setFetchedAttachmentData,
+    ] = useState<null | IFetchedAttachment>(null)
     const dispatch = useAppDispatch()
     const activeModal = useAppSelector(selectActiveModal)
 
@@ -183,19 +190,22 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
     )
   }
 )
+
+interface IAttachmentBubble {
+  attachmentData: IEmailAttachmentType | File
+  handleDelete?: (attachmentIndex: number) => void
+  hasDownloadOption?: boolean
+  index?: number | undefined
+  messageId?: string
+}
+
 const AttachmentBubble = ({
   attachmentData,
   handleDelete = undefined,
   hasDownloadOption = true,
   index = undefined,
   messageId = undefined,
-}: {
-  attachmentData: IEmailAttachmentType | File
-  handleDelete?: (attachmentIndex: number) => void
-  hasDownloadOption?: boolean
-  index?: number | undefined
-  messageId?: string
-}) => {
+}: IAttachmentBubble) => {
   const previewButtonRef = useRef<HTMLButtonElement>(null)
 
   const mimeType =

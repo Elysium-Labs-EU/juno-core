@@ -1,5 +1,5 @@
 import * as global from 'constants/globalConstants'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function getTimeStamp
@@ -9,25 +9,13 @@ import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
  */
 
 export default function getTimeStamp(
-  email: IEmailListThreadItem,
+  email: TThreadObject,
   useAllMessages?: boolean
 ): string {
-  if (email?.messages) {
-    return email.messages[
-      useAllMessages
-        ? email.messages.length - 1
-        : email.messages.filter(
-            (message) => !message.labelIds.includes(global.DRAFT_LABEL)
-          ).length - 1
-    ]
-      ? email.messages[
-          useAllMessages
-            ? email.messages.length - 1
-            : email.messages.filter(
-                (message) => !message.labelIds.includes(global.DRAFT_LABEL)
-              ).length - 1
-        ].internalDate
-      : ''
-  }
-  return ''
+  const messages = email?.messages?.filter(
+    (message) =>
+      useAllMessages || !message.labelIds.includes(global.DRAFT_LABEL)
+  )
+  const latestMessage = messages?.[messages.length - 1]
+  return latestMessage?.internalDate ?? ''
 }

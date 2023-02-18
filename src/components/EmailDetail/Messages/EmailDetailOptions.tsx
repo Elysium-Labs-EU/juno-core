@@ -17,7 +17,7 @@ import {
 } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import { selectAlternateActions } from 'store/utilsSlice'
 import emailLabels from 'utils/emailLabels'
 import { findLabelByName } from 'utils/findLabel'
@@ -26,7 +26,7 @@ import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 import EmailDetailOptionStacker from './EmailDetailOptionsStacker/EmailDetailOptionStacker'
 
 interface IEmailDetailOptions {
-  threadDetail: IEmailListThreadItem
+  threadDetail: TThreadObject
   unsubscribeLink: string | null
 }
 
@@ -56,27 +56,61 @@ const EmailDetailOptions = ({
 
   const memoizedToDoOption = useMemo(() => {
     const lastMessageLabels =
-      threadDetail.messages[threadDetail.messages.length - 1].labelIds
-    const getOnlyLegalLabels = onlyLegalLabelStrings({
-      labelIds: lastMessageLabels,
-      storageLabels,
-    }).filter(
-      (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
-    )
-    if (
-      getOnlyLegalLabels &&
-      !getOnlyLegalLabels.some(
-        (item) =>
-          item ===
-          findLabelByName({
-            storageLabels,
-            LABEL_NAME: global.TODO_LABEL_NAME,
-          })?.id
+      threadDetail.messages[threadDetail.messages.length - 1]?.labelIds
+    if (lastMessageLabels) {
+      const getOnlyLegalLabels = onlyLegalLabelStrings({
+        labelIds: lastMessageLabels,
+        storageLabels,
+      }).filter(
+        (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
       )
-    ) {
-      return <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+      if (
+        getOnlyLegalLabels &&
+        !getOnlyLegalLabels.some(
+          (item) =>
+            item ===
+            findLabelByName({
+              storageLabels,
+              LABEL_NAME: global.TODO_LABEL_NAME,
+            })?.id
+        )
+      ) {
+        return <ToDoOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+      }
+      return null
     }
     return null
+  }, [threadDetail, storageLabels])
+
+  const memoizedTrashArchiveOption = useMemo(() => {
+    const lastMessageLabels =
+      threadDetail.messages[threadDetail.messages.length - 1]?.labelIds
+    if (lastMessageLabels?.includes(global.TRASH_LABEL)) {
+      return null
+    }
+    return staticEmailLabels.length > 0 ? (
+      <EmailDetailOptionStacker
+        firstOption={
+          <ArchiveOption threadDetail={threadDetail} iconSize={ICON_SIZE} />
+        }
+        secondOption={
+          <DeleteOption
+            threadId={threadDetail.id}
+            icon={<QiFolderTrash size={ICON_SIZE} />}
+            suppressed
+            noArchive
+          />
+        }
+        prioritizeSecondOption={alternateActions}
+      />
+    ) : (
+      <DeleteOption
+        threadId={threadDetail.id}
+        icon={<QiFolderTrash size={ICON_SIZE} />}
+        suppressed
+        noArchive
+      />
+    )
   }, [threadDetail, storageLabels])
 
   return (
@@ -86,32 +120,7 @@ const EmailDetailOptions = ({
           {memoizedReplyOption}
           {memoizedForwardOption}
           {memoizedToDoOption}
-          {staticEmailLabels.length > 0 ? (
-            <EmailDetailOptionStacker
-              firstOption={
-                <ArchiveOption
-                  threadDetail={threadDetail}
-                  iconSize={ICON_SIZE}
-                />
-              }
-              secondOption={
-                <DeleteOption
-                  threadId={threadDetail.id}
-                  icon={<QiFolderTrash size={ICON_SIZE} />}
-                  suppressed
-                  noArchive
-                />
-              }
-              prioritizeSecondOption={alternateActions}
-            />
-          ) : (
-            <DeleteOption
-              threadId={threadDetail.id}
-              icon={<QiFolderTrash size={ICON_SIZE} />}
-              suppressed
-              noArchive
-            />
-          )}
+          {memoizedTrashArchiveOption}
           {(coreStatus === global.CORE_STATUS_MAP.focused ||
             coreStatus === global.CORE_STATUS_MAP.sorting) && (
             <SkipOption iconSize={ICON_SIZE} />

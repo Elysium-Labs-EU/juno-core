@@ -3,14 +3,13 @@ import { FormControlLabel, Switch } from '@mui/material'
 import * as S from 'components/Settings/SettingsStyles'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectAlternateActions,
   selectSettingsLabelId,
   setAlternateActions,
 } from 'store/utilsSlice'
 import * as GS from 'styles/globalStyles'
-import updateSettingsLabel from 'utils/settings/updateSettingsLabel'
-
 
 const HEADER = 'Alternate actions'
 const BODY =
@@ -27,17 +26,21 @@ const AlternateActions = () => {
     if (!event.target.checked) {
       localStorage.setItem('alternateActions', 'false')
       dispatch(setAlternateActions(false))
-      updateSettingsLabel({
-        settingsLabelId,
-        alternateActions: false,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          alternateActions: 'false',
+        })
+      )
     } else {
       localStorage.setItem('alternateActions', 'true')
       dispatch(setAlternateActions(true))
-      updateSettingsLabel({
-        settingsLabelId,
-        alternateActions: true,
-      })
+      dispatch(
+        updateSettingsLabel({
+          settingsLabelId,
+          alternateActions: 'true',
+        })
+      )
     }
   }
 

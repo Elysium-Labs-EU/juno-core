@@ -1,14 +1,15 @@
 import * as global from 'constants/globalConstants'
-import {
-  IEmailListThreadItem,
-  IEmailMessage,
-} from 'store/storeTypes/emailListTypes'
+import { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 
 // Only preload messages that are is not actively being shown on the window.
 
-const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
+const PreLoadNormalMessage = ({
+  message,
+}: {
+  message: TThreadObject['messages'][0]
+}) =>
   message &&
   message.payload &&
   message.id &&
@@ -21,11 +22,7 @@ const PreLoadNormalMessage = ({ message }: { message: IEmailMessage }) =>
     <div>{global.NOTHING_TO_SEE}</div>
   )
 
-const PreLoadMessage = ({
-  threadDetail,
-}: {
-  threadDetail: IEmailListThreadItem
-}) => (
+const PreLoadMessage = ({ threadDetail }: { threadDetail: TThreadObject }) => (
   <div>
     {threadDetail?.messages &&
       threadDetail.messages.map((message) => {
@@ -49,7 +46,7 @@ const PreLoadMessages = ({
   viewIndex,
   contentRendered,
 }: {
-  threadDetailList: IEmailListThreadItem[]
+  threadDetailList: TThreadObject[]
   viewIndex: number
   contentRendered: boolean
 }) => {

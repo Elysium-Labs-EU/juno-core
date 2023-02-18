@@ -1,9 +1,20 @@
-import axios from 'axios'
-import type { AxiosRequestConfig } from 'axios'
+import axios, { AxiosError } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axiosRetry from 'axios-retry'
+import { z } from 'zod'
 
 import * as global from 'constants/globalConstants'
+import type { ICustomError } from 'store/storeTypes/baseTypes'
 import assertNonNullish from 'utils/assertNonNullish'
 import validateLocalSetup from 'utils/validateLocalSetup'
+
+export type TemplateApiResponse<T> = Promise<
+  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
+>
+
+export type TemplateApiResponseSettled<T> = PromiseSettledResult<
+  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
+>
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
@@ -31,17 +42,20 @@ export const fetchToken = () => {
   }
   return null
 }
+
 export const instance = axios.create({
   withCredentials:
     import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'false',
   baseURL: BASE_API_URL,
 })
+axiosRetry(instance, { retries: 3, retryDelay: axiosRetry.exponentialDelay })
 
 /**
  * Set an accessToken for all the urls within the system, barring the Google oAuth API and external api.
  */
 instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config) => {
+    // (config: AxiosRequestConfig) => {
     const accessToken = fetchToken()
     if (
       accessToken &&
@@ -69,4 +83,15 @@ export const errorHandling = async (err: any) => {
     originalRequest.isRetry = true
   }
   return err?.response?.data ?? err?.message
+}
+
+export const errorBlockTemplate = (err: unknown) => {
+  if (axios.isAxiosError(err)) {
+    return errorHandling(err)
+  }
+  if (err instanceof z.ZodError) {
+    console.log(err.issues)
+  }
+  // Handle unexpected error
+  return err as ICustomError
 }

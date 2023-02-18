@@ -5,7 +5,7 @@ import labelApi from 'data/labelApi'
 import { selectIsFetching } from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
 
-export default function useFetchThreadsTotalNumber(labelIds: string[]) {
+export default function useFetchThreadsTotalNumber(labelIds: Array<string>) {
   const [totalThreads, setTotalThreads] = useState(0)
   const [loadingState, setLoadingState] = useState(global.LOAD_STATE_MAP.idle)
   const isFetching = useAppSelector(selectIsFetching)
@@ -13,10 +13,15 @@ export default function useFetchThreadsTotalNumber(labelIds: string[]) {
   const fetchLabel = async (mounted: boolean) => {
     try {
       setLoadingState(global.LOAD_STATE_MAP.loading)
-      const response = await labelApi().fetchSingleLabel(labelIds[0])
-      if ('threadsTotal' in response) {
-        mounted && setTotalThreads(response.threadsTotal)
-        mounted && setLoadingState(global.LOAD_STATE_MAP.loaded)
+      const [firstLabelId] = labelIds
+      if (firstLabelId) {
+        const response = await labelApi().fetchSingleLabel(firstLabelId)
+        if ('data' in response && response?.data?.threadsTotal) {
+          mounted && setTotalThreads(response.data.threadsTotal)
+          mounted && setLoadingState(global.LOAD_STATE_MAP.loaded)
+        } else {
+          mounted && setLoadingState(global.LOAD_STATE_MAP.error)
+        }
       } else {
         mounted && setLoadingState(global.LOAD_STATE_MAP.error)
       }

@@ -45,6 +45,12 @@ export const GlobalStyle = createGlobalStyle`
     --z-index-top-element: 400;
     font-size: 100%;
   }
+
+  html {
+    box-sizing: border-box;
+    font-size: 16px;
+  } 
+  
   body {
     -webkit-font-smoothing: antialiased !important;
     background-color: var(--color-neutral-100) !important;

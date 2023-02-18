@@ -8,6 +8,7 @@ export const getRouteByLabelMap: { [key: string]: string } = {
   [global.DRAFT_LABEL]: `${RoutesConstants.DRAFTS}`,
   [global.SENT_LABEL]: `${RoutesConstants.SENT}`,
   [global.ARCHIVE_LABEL]: `${RoutesConstants.ARCHIVE}`,
+  [global.TRASH_LABEL]: `${RoutesConstants.TRASH}`,
 }
 
 export const getLabelByRoute: { [key: string]: string } = {
@@ -17,4 +18,14 @@ export const getLabelByRoute: { [key: string]: string } = {
   [RoutesConstants.DRAFTS]: global.DRAFT_LABEL,
   [RoutesConstants.SENT]: global.SENT_LABEL,
   [RoutesConstants.ARCHIVE]: global.ARCHIVE_LABEL,
+  [RoutesConstants.TRASH]: global.TRASH_LABEL,
+}
+
+export const getHeaderByRoute: { [key: string]: string } = {
+  [RoutesConstants.INBOX]: global.HEADER_INBOX,
+  [RoutesConstants.TODO]: global.HEADER_TODO,
+  [RoutesConstants.DRAFTS]: global.HEADER_DRAFTS,
+  [RoutesConstants.SENT]: global.HEADER_SENT,
+  [RoutesConstants.ARCHIVE]: global.HEADER_ARCHIVE,
+  [RoutesConstants.TRASH]: global.HEADER_TRASH,
 }

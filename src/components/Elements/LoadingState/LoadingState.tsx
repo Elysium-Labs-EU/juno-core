@@ -1,19 +1,10 @@
-import { useAppSelector } from 'store/hooks'
-import { selectSystemStatusUpdate } from 'store/utilsSlice'
-
-import StyledCircularProgress from '../CircularProgress/StyledCircularProgress'
 import * as S from './LoadingStateStyles'
+import StyledCircularProgress from '../CircularProgress/StyledCircularProgress'
 
-const LoadingState = () => {
-  const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)
-  return (
-    <S.Wrapper>
-      <StyledCircularProgress />
-      {systemStatusUpdate && systemStatusUpdate.type === 'error' && (
-        <p>{systemStatusUpdate.message}</p>
-      )}
-    </S.Wrapper>
-  )
-}
+const LoadingState = () => (
+  <S.Wrapper>
+    <StyledCircularProgress />
+  </S.Wrapper>
+)
 
 export default LoadingState

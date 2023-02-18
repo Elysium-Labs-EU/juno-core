@@ -8,7 +8,6 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { IMessageSendStatus } from 'store/storeTypes/utilsTypes'
 import { selectIsSending, setIsSending } from 'store/utilsSlice'
 
-
 import * as S from './SendingBannerStyles'
 
 const THREE_SECONDS = 3000
@@ -52,9 +51,12 @@ const SendingBanner = () => {
     let timer: undefined | ReturnType<typeof setTimeout>
     if (snackPack.length && !messageInfo) {
       // Set a new snack when we don't have an active one
-      setMessageInfo({ ...snackPack[0] })
-      setSnackPack((prev) => prev.slice(1))
-      setOpen(true)
+      const [firstItem] = snackPack
+      if (firstItem) {
+        setMessageInfo({ ...firstItem })
+        setSnackPack((prev) => prev.slice(1))
+        setOpen(true)
+      }
     } else if (snackPack.length && messageInfo && open) {
       // Close an active snack when a new one is added, but only after minimal 2000 ms.
       timer = setTimeout(() => {

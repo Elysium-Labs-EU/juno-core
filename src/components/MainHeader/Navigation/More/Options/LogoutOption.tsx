@@ -3,12 +3,10 @@ import handleUserTokens from 'utils/handleUserTokens'
 
 import * as S from '../NavigationMoreStyles'
 
-export const handleLogout = async () => {
-  const response = await userApi().logoutUser()
-  if (response?.status === 205) {
-    handleUserTokens().removeAllTokens()
-    window.location.reload()
-  }
+export const handleLogout = () => {
+  userApi().logoutUser()
+  handleUserTokens().removeAllTokens()
+  window.location.reload()
 }
 
 const LogoutOption = () => (

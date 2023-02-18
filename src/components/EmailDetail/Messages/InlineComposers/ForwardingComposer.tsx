@@ -1,8 +1,11 @@
 import Composer from 'components/Compose/Composer'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
-import type { IEmailListThreadItem } from 'store/storeTypes/emailListTypes'
+import { useAppDispatch } from 'store/hooks'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
+import isBodyWithEmailHTML from './getEmailHTML'
 import getRelevantMessage from './getRelevantMessage'
 
 /**
@@ -13,34 +16,48 @@ import getRelevantMessage from './getRelevantMessage'
  * @returns
  */
 
-const ForwardingComposer = ({
-  localThreadDetail,
-  selectedIndex,
-  messageOverviewListener,
-  isForwarding,
-}: {
-  localThreadDetail: IEmailListThreadItem
+interface IForwardingComposer {
+  localThreadDetail: TThreadObject
   selectedIndex: number | undefined
   messageOverviewListener: (
     evenType: 'cancel' | 'discard',
     messageId?: string
   ) => void
   isForwarding: boolean
-}) => {
+}
+
+const ForwardingComposer = ({
+  localThreadDetail,
+  selectedIndex,
+  messageOverviewListener,
+  isForwarding,
+}: IForwardingComposer) => {
+  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
+
+  if (!relevantMessage) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Cannot open composer with relevant message',
+      })
+    )
+    return (
+      <ES.ComposeWrapper data-cy="forward-composer">
+        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+      </ES.ComposeWrapper>
+    )
+  }
 
   return (
     <ES.ComposeWrapper data-cy="forward-composer">
       <Composer
         presetValue={{
           subject: relevantMessage?.payload.headers.subject,
-          body: emailBody(
-            relevantMessage?.payload?.body?.emailHTML,
-            isForwarding
-          ),
+          body: emailBody(isBodyWithEmailHTML(relevantMessage), isForwarding),
           threadId: relevantMessage?.threadId,
           id: relevantMessage?.id,
         }}

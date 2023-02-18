@@ -1,13 +1,12 @@
 import EmailList from 'components/EmailList/EmailList'
 import Layout from 'components/Layout/Layout'
-import { ACTIVE_PAGE_HEADER } from 'constants/globalConstants'
+import { ACTIVE_PAGE_HEADER, HEADER_INBOX } from 'constants/globalConstants'
+
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 
 import InboxRefreshOption from './InboxRefreshOption'
 import InboxSortOption from './InboxSortOption'
 import * as S from './InboxStyles'
-
-const HEADER_INBOX = 'Inbox'
 
 const Inbox = () => {
   useSetCurrentLabel()

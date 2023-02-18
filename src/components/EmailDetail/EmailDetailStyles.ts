@@ -273,7 +273,7 @@ export const EmailDetailTitle = styled.span`
   font-weight: bold;
   line-height: 1.21;
   color: var(--color-black);
-  margin-left: 0.5rem;
+  margin-left: var(--spacing-1);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -284,7 +284,7 @@ interface ISmallTextTruncated {
 }
 
 const commaSeperator = css`
-  margin-right: 6px;
+  margin-right: var(--spacing-0-75);
   &:after {
     content: ',';
   }
@@ -296,7 +296,7 @@ export const SmallTextTruncated = styled.span<ISmallTextTruncated>`
   white-space: nowrap;
   font-size: var(--small);
   ${({ showComma }) => showComma && commaSeperator};
-  margin-right: ${({ showComma }) => (showComma ? '4px' : '0')};
+  margin-right: ${({ showComma }) => (showComma ? 'var(--spacing-0-5)' : '0')};
 `
 
 export const FullContactContainer = styled.div`
@@ -306,7 +306,7 @@ export const FullContactContainer = styled.div`
 `
 
 export const ContactContainer = styled.div`
-  margin-bottom: 5px;
+  margin-bottom: var(--spacing-0-5);
 `
 
 export const ComposeWrapper = styled.div`
@@ -316,6 +316,12 @@ export const ComposeWrapper = styled.div`
   flex: 1 1 auto;
   /* max-width: 50%; */
   margin-left: 40px;
+  /* TODO: Check these values */
+  /* order: -1;
+  @media only screen and (min-width: ${breakPoint.xl}) {
+    order: 1;
+    max-width: 50%;
+  } */
 `
 
 export const Spacer = styled.div`

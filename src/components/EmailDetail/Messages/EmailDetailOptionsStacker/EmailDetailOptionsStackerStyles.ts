@@ -66,5 +66,6 @@ export const SecondOptionContainer = styled.div`
 `
 
 export const StackIndicator = styled.div`
+  cursor: pointer;
   margin-left: 10px;
 `

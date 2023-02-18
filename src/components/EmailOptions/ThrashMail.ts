@@ -1,9 +1,10 @@
 import { updateEmailLabel } from 'store/emailListSlice'
 import type { AppDispatch } from 'store/store'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 interface IThrashMailProps {
   threadId: string
-  labelIds: Array<string>
+  labelIds: TLabelState['labelIds']
   dispatch: AppDispatch
 }
 
