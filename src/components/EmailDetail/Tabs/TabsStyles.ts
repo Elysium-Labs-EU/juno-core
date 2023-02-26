@@ -2,11 +2,12 @@ import Badge from '@mui/material/Badge/Badge'
 import styled from 'styled-components'
 
 export const TabContainer = styled.nav`
+  align-content: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-left: var(--spacing-2);
   position: relative;
   text-align: center;
-  display: flex;
-  align-content: flex-start;
-  justify-content: space-between;
 `
 
 export const ItemsContainer = styled.ul`

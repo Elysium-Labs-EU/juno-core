@@ -9,25 +9,24 @@ import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import { handleContactConversion } from 'utils/convertToContact'
 
 const MAX_CONTACTS_UNOPENED = 3
 
-const MappedContacts = ({
-  contactsMap,
-  title,
-}: {
+interface IMappedContacts {
   contactsMap: Array<TContact>
   title: string
-}) => {
+}
+
+const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
   const [showAll, setShowAll] = useState(false)
 
   return (
     <S.ToFromBCCInner>
-      <GS.Span muted small style={{ marginRight: '4px' }}>
+      <Span muted small style={{ marginRight: '4px' }}>
         {title}
-      </GS.Span>
+      </Span>
       <S.SmallTextTruncated>
         {contactsMap.length > MAX_CONTACTS_UNOPENED ? (
           <S.FullContactContainer>
@@ -54,13 +53,13 @@ const MappedContacts = ({
                 </S.ContactContainer>
               ))}
             {!showAll && (
-              <span
+              <Span
                 style={{ marginLeft: '4px', cursor: 'pointer' }}
                 onClick={() => setShowAll(true)}
                 aria-hidden="true"
               >
                 & {contactsMap.length - MAX_CONTACTS_UNOPENED} others
-              </span>
+              </Span>
             )}
           </S.FullContactContainer>
         ) : (
@@ -108,9 +107,9 @@ const LinkedContants = ({
     <>
       <S.ContactsContainer>
         <S.ToFromBCCInner>
-          <GS.Span muted small style={{ marginRight: '4px' }}>
+          <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
             {emailDetail.FROM_LABEL}
-          </GS.Span>
+          </Span>
           {firstSenderContact ? (
             <ContactCard userEmail={senderName} contact={firstSenderContact}>
               <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>

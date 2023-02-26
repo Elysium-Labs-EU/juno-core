@@ -11,6 +11,7 @@ import GoogleCallbackTesting from 'components/Login/Callback/GoogleCallBackTesti
 import Login from 'components/Login/Login'
 import PageNotFound from 'components/PageNotFound/PageNotFound'
 import SentEmail from 'components/Sent/Sent'
+import Spam from 'components/Spam/Spam'
 import ToDo from 'components/ToDo/Todo'
 import Trash from 'components/Trash/Trash'
 import RoutesConstants from 'constants/routesConstants'
@@ -20,13 +21,13 @@ import { useAppSelector } from 'store/hooks'
 import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
 
 const ProtectedRoute = ({
+  baseLoaded,
   children,
   isAuthenticated,
-  baseLoaded,
 }: {
+  baseLoaded: boolean
   children: JSX.Element
   isAuthenticated: boolean
-  baseLoaded: boolean
 }) => {
   if (!isAuthenticated) {
     return <Navigate to={RoutesConstants.LOGIN} replace />
@@ -97,7 +98,7 @@ const RoutesComponent = () => {
         />
       </Route>
       <Route
-        path={RoutesConstants.DRAFTS}
+        path={RoutesConstants.DRAFT}
         element={
           <ProtectedRouteTemplate>
             <Draft />
@@ -127,6 +128,14 @@ const RoutesComponent = () => {
         element={
           <ProtectedRouteTemplate>
             <Archive />
+          </ProtectedRouteTemplate>
+        }
+      />
+      <Route
+        path={RoutesConstants.SPAM}
+        element={
+          <ProtectedRouteTemplate>
+            <Spam />
           </ProtectedRouteTemplate>
         }
       />

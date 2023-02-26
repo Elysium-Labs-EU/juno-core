@@ -1,6 +1,6 @@
 import { useAppSelector } from 'store/hooks'
 import { selectIsAvatarVisible } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
@@ -23,7 +23,7 @@ export const EmailAvatarComponent = ({
       data-testid="avatar"
       randomColor={getRandomColor(staticInitials)}
     >
-      <GS.Span small>{staticInitials}</GS.Span>
+      <Span small>{staticInitials}</Span>
     </S.EmailAvatarContainer>
   )
 }

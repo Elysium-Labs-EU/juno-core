@@ -1,24 +1,22 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/button-has-type */
-import { CSSProperties, forwardRef, MouseEvent } from 'react'
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 
 import type { TAriaHaspopup } from 'globalTypes'
+import { Span } from 'styles/globalStyles'
 
-interface ICustomIconButton {
+type TCustomIconButton = {
   ariaControls?: string | undefined
   ariaExpanded?: boolean | undefined
   ariaHaspopup?: TAriaHaspopup
-  className?: string
   dataCy?: string
   disabled?: boolean
   hoverColor?: string
   icon: JSX.Element
   isActive?: boolean
-  onClick: (event: MouseEvent<HTMLButtonElement>) => void
-  style?: CSSProperties
-  title: string
   type?: 'submit' | 'reset' | 'button'
-}
+} & React.HTMLAttributes<HTMLButtonElement>
 
 interface IButton {
   hoverColor: string | undefined
@@ -43,22 +41,19 @@ const Button = styled.button<IButton>`
     cursor: not-allowed;
   }
 `
-const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
+const CustomIconButton = forwardRef<HTMLButtonElement, TCustomIconButton>(
   (
     {
       ariaHaspopup = undefined,
       ariaControls = undefined,
       ariaExpanded = undefined,
-      className = undefined,
       dataCy = undefined,
       disabled = false,
       hoverColor = undefined,
       icon,
       isActive = false,
-      onClick,
-      style = undefined,
-      title,
       type = 'button',
+      ...rest
     },
     ref
   ) => (
@@ -66,18 +61,15 @@ const CustomIconButton = forwardRef<HTMLButtonElement, ICustomIconButton>(
       aria-haspopup={ariaHaspopup}
       aria-controls={ariaControls}
       aria-expanded={ariaExpanded}
-      className={className}
       data-cy={dataCy}
       disabled={disabled}
       hoverColor={hoverColor}
       isActive={isActive}
-      onClick={(event) => onClick(event)}
       ref={ref}
-      style={style}
-      title={title}
       type={type ?? 'button'}
+      {...rest}
     >
-      <span>{icon}</span>
+      <Span>{icon}</Span>
     </Button>
   )
 )
@@ -86,12 +78,10 @@ CustomIconButton.defaultProps = {
   ariaHaspopup: undefined,
   ariaControls: undefined,
   ariaExpanded: undefined,
-  className: undefined,
   dataCy: undefined,
   disabled: false,
   hoverColor: undefined,
   isActive: false,
-  style: undefined,
   type: 'button',
 }
 

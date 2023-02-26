@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
-import BackButton from 'components/Elements/Buttons/BackButton'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Layout from 'components/Layout/Layout'
 import * as local from 'constants/emailDetailConstants'
@@ -33,23 +32,15 @@ import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectIsFlexibleFlowActive,
-  selectIsLoading,
   selectIsProcessing,
   setInSearch,
 } from 'store/utilsSlice'
 import filterTrashMessages from 'utils/filterTrashMessages'
 import { findLabelByName } from 'utils/findLabel'
 
-import DetailNavigationContainer from './DetailNavigation/DetailNavigationContainer'
 import * as S from './EmailDetailStyles'
-import EmailPosition from './EmailPosition/EmailPosition'
-import FilesOverview from './Files/FilesOverview'
 // import PreLoadMessages from './Messages/PreLoadMessages/PreLoadMessages'
-import EmailDetailOptions from './Messages/EmailDetailOptions'
-import ForwardingComposer from './Messages/InlineComposers/ForwardingComposer'
-import ReplyComposer from './Messages/InlineComposers/ReplyComposer'
-import MessagesOverview from './Messages/MessagesOverview'
-import Tabs from './Tabs/Tabs'
+import RenderEmailDetail from './Messages/RenderEmailDetail'
 import getEmailHeader from './Utils/getEmailHeader'
 import useEdgeLoadNextPage from './Utils/useEdgeLoadNextPage'
 import Baseloader from '../BaseLoader/BaseLoader'
@@ -66,7 +57,6 @@ const EmailDetail = () => {
   const emailList = useAppSelector(selectEmailList)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const isForwarding = useAppSelector(selectIsForwarding)
-  const isLoading = useAppSelector(selectIsLoading)
   const isProcessing = useAppSelector(selectIsProcessing)
   const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
@@ -77,13 +67,9 @@ const EmailDetail = () => {
   const dispatch = useAppDispatch()
   const [baseState, setBaseState] = useState(local.STATUS_STATUS_MAP.idle)
   const [currentLocal, setCurrentLocal] = useState<string>('')
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    undefined
-  )
   const [shouldRefreshDetail, setShouldRefreshDetail] = useState(false)
-  const [unsubscribeLink, setUnsubscribeLink] = useState<string | null>(null)
   const isComposerActiveRef = useRef(false)
-  const { threadId, overviewId } = useParams<{
+  const { threadId } = useParams<{
     threadId: string
     overviewId: string
   }>()
@@ -151,6 +137,7 @@ const EmailDetail = () => {
   }, [emailList, activeEmailListIndex, searchList])
 
   // If the current email is found, set the id to the store. Otherwise reroute user to ToDo page.
+  // TODO: Recheck this logic, why do we need a currentLocal?
   useEffect(() => {
     if (
       currentEmail !== currentLocal &&
@@ -162,7 +149,7 @@ const EmailDetail = () => {
         dispatch(push(RoutesConstants.TODO))
       }
     }
-  }, [currentEmail, activeEmailList, baseState])
+  }, [activeEmailList, baseState, currentEmail])
 
   // If the found threadId doesn't match with the Redux version - it will set it.
   // TODO: Convert to listener in Redux
@@ -174,6 +161,8 @@ const EmailDetail = () => {
 
   // Based on the location, set the correct Redux state. Location state comes from openEmail function
   useEffect(() => {
+    // TODO: Fix that the navigation between messsage tab and files tab doesn't reset this
+    console.log('location', location)
     if (isReplying && !location?.state?.isReplying) {
       dispatch(setIsReplying(false))
     }
@@ -197,10 +186,7 @@ const EmailDetail = () => {
     }
   }, [viewIndex, activeEmailList, currentEmail])
 
-  const showNoNavigation =
-    coreStatus === global.CORE_STATUS_MAP.focused ||
-    coreStatus === global.CORE_STATUS_MAP.sorting
-
+  // TODO: This should not filter out thrash messages when the user wants to see a trash message
   const noThrashMessages = useMemo(() => {
     if (activeEmailList) {
       return filterTrashMessages(activeEmailList.threads[viewIndex], labelIds)
@@ -208,27 +194,13 @@ const EmailDetail = () => {
     return undefined
   }, [activeEmailList, labelIds, viewIndex])
 
-  // A callback function that will listen to the discard or cancel event on the composer
-  const messageOverviewListener = useCallback(
-    (eventType: 'cancel' | 'discard') => {
-      // TODO: Discard eventType is currently unused.
-      if (eventType === 'cancel') {
-        setSelectedIndex(undefined)
-      }
-    },
-    []
-  )
+  const showNoNavigation =
+    coreStatus === global.CORE_STATUS_MAP.focused ||
+    coreStatus === global.CORE_STATUS_MAP.sorting
 
   return activeEmailList ? (
     <Layout
-      headerTitle={getEmailHeader({
-        coreStatus,
-        labelIds,
-        location,
-        storageLabels,
-      })}
       activePage={undefined}
-      showNavigation={!showNoNavigation}
       additionalHeader={
         coreStatus === global.CORE_STATUS_MAP.searching ? (
           <S.SearchQuery>
@@ -244,76 +216,21 @@ const EmailDetail = () => {
           </S.SearchQuery>
         ) : undefined
       }
+      headerTitle={getEmailHeader({
+        coreStatus,
+        labelIds,
+        location,
+        storageLabels,
+      })}
+      showBackButton
+      showNavigation={!showNoNavigation}
     >
-      <S.Scroll tabbedView={isForwarding || isReplying}>
-        <S.EmailDetailWrapper>
-          <S.BackButtonContainer>
-            <S.StickyOptions>
-              <BackButton />
-            </S.StickyOptions>
-          </S.BackButtonContainer>
-          <S.EmailWithComposerContainer>
-            <S.EmailCenterContainer>
-              <S.EmailTopControlContainer
-                tabbedView={isForwarding || isReplying}
-              >
-                <Tabs activeEmailList={activeEmailList} />
-                {showNoNavigation ? (
-                  <EmailPosition />
-                ) : (
-                  <DetailNavigationContainer
-                    activeEmailList={activeEmailList}
-                  />
-                )}
-              </S.EmailTopControlContainer>
-              {/* TODO: Create match pattern here */}
-              {overviewId === local.MESSAGES &&
-                noThrashMessages &&
-                viewIndex > -1 && (
-                  <MessagesOverview
-                    threadDetail={noThrashMessages}
-                    isLoading={isLoading}
-                    isReplying={isReplying}
-                    isForwarding={isForwarding}
-                    labelIds={labelIds}
-                    setShouldRefreshDetail={setShouldRefreshDetail}
-                    setUnsubscribeLink={setUnsubscribeLink}
-                  />
-                )}
-              {overviewId === local.FILES && noThrashMessages && (
-                <FilesOverview
-                  threadDetail={noThrashMessages}
-                  isLoading={isLoading}
-                />
-              )}
-            </S.EmailCenterContainer>
-            {isReplying && noThrashMessages && noThrashMessages?.messages && (
-              <ReplyComposer
-                localThreadDetail={noThrashMessages}
-                selectedIndex={selectedIndex}
-                messageOverviewListener={messageOverviewListener}
-              />
-            )}
-            {isForwarding && noThrashMessages && noThrashMessages?.messages && (
-              <ForwardingComposer
-                localThreadDetail={noThrashMessages}
-                selectedIndex={selectedIndex}
-                messageOverviewListener={messageOverviewListener}
-                isForwarding={isForwarding}
-              />
-            )}
-          </S.EmailWithComposerContainer>
-          {noThrashMessages?.messages &&
-            noThrashMessages.messages.length &&
-            !isReplying &&
-            !isForwarding && (
-              <EmailDetailOptions
-                threadDetail={noThrashMessages}
-                unsubscribeLink={unsubscribeLink}
-              />
-            )}
-        </S.EmailDetailWrapper>
-      </S.Scroll>
+      <RenderEmailDetail
+        activeEmailList={activeEmailList}
+        showNoNavigation={showNoNavigation}
+        threadDetail={noThrashMessages}
+        setShouldRefreshDetail={setShouldRefreshDetail}
+      />
     </Layout>
   ) : (
     <Baseloader />

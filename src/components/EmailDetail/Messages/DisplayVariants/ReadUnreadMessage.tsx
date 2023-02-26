@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 
 import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
@@ -11,12 +10,13 @@ import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
 import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import Seo from 'components/Elements/Seo'
 import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
+import type { IReadMessage } from 'components/EmailDetail/EmailDetailTypes'
 import * as global from 'constants/globalConstants'
 import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { TThreadObject } from 'store/storeTypes/emailListTypes'
+import { Span } from 'styles/globalStyles'
 
 import LinkedContacts from './Recipients/LinkedContacts'
 import EmailAttachment from '../../Attachment/EmailAttachment'
@@ -25,28 +25,30 @@ import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
 import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 
-export interface IReadMessage {
-  handleClickListener: ({ mIndex }: { mIndex: number }) => void
-  message: TThreadObject['messages'][0]
-  messageIndex: number
-  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
-  threadDetail: TThreadObject | null | undefined
+const getRemovedTrackers = ({ message }: Pick<IReadMessage, 'message'>) => {
+  if (
+    'body' in message.payload &&
+    message.payload?.body?.removedTrackers &&
+    message.payload.body.removedTrackers.length > 0
+  ) {
+    return message.payload.body.removedTrackers
+  }
+  return null
 }
 
 const ReadUnreadMessage = ({
   handleClickListener,
   message,
   messageIndex,
-  threadDetail,
-  setUnsubscribeLink,
   setShouldRefreshDetail,
+  threadDetail,
 }: IReadMessage) => {
-  const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
-  const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
+  const labelIds = useAppSelector(selectLabelIds)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
+
+  console.log('rerender readUnreadMessage')
 
   useEffect(() => {
     let mounted = true
@@ -133,12 +135,12 @@ const ReadUnreadMessage = ({
               <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
-              <span
+              <Span
                 style={{ fontWeight: 'bold' }}
                 title={staticSenderNamePartial?.emailAddress ?? ''}
               >
                 {staticSenderNamePartial?.name}
-              </span>
+              </Span>
             </S.ClosedSender>
           </S.ClosedAvatarSender>
           <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
@@ -157,10 +159,15 @@ const ReadUnreadMessage = ({
     [message, staticSenderNamePartial, staticSenderNameFull]
   )
 
+  console.log({ threadDetail })
+
+  const staticRemovedTrackers = getRemovedTrackers({ message })
+
+  // TODO: Verify the need for an SEO component here
   return (
     <>
       <Seo title={staticEmailSubject} />
-      {open && (
+      {open ? (
         <S.EmailOpenWrapper>
           <S.TopContainer>
             <S.HeaderFullWidth>
@@ -198,24 +205,23 @@ const ReadUnreadMessage = ({
             </S.HeaderFullWidth>
           </S.TopContainer>
           <LinkedContacts message={message} />
-          {blockedTrackers.length > 0 && (
-            <RemovedTrackers blockedTrackers={blockedTrackers} />
+          {staticRemovedTrackers && (
+            <RemovedTrackers blockedTrackers={staticRemovedTrackers} />
           )}
           <S.GreyDivider />
           <S.EmailBody>
-            {message && message?.payload && message?.id && (
+            {message && message?.payload ? (
               <EmailDetailBody
-                threadDetailBody={message.payload}
                 detailBodyCSS={global.EMAIL_BODY_VISIBLE}
-                setUnsubscribeLink={setUnsubscribeLink}
-                setBlockedTrackers={setBlockedTrackers}
+                threadDetailBody={message.payload}
               />
-            )}
+            ) : null}
           </S.EmailBody>
           <EmailAttachment message={message} />
         </S.EmailOpenWrapper>
+      ) : (
+        memoizedClosedEmail
       )}
-      {!open && memoizedClosedEmail}
     </>
   )
 }

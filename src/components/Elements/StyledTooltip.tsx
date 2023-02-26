@@ -1,6 +1,8 @@
 import * as Tooltip from '@radix-ui/react-tooltip'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import styled from 'styled-components'
+
+import { Span } from 'styles/globalStyles'
 
 const StyledContent = styled(Tooltip.Content)`
   background-color: var(--color-black);
@@ -46,7 +48,7 @@ const StyledToolTip = ({
     <Tooltip.Root>
       <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
       <Content sideOffset={5}>
-        {typeof title === 'string' ? <span>{title}</span> : title}
+        {typeof title === 'string' ? <Span>{title}</Span> : title}
       </Content>
     </Tooltip.Root>
   </Tooltip.Provider>

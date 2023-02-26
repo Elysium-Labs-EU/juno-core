@@ -35,7 +35,7 @@ import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Base, Span } from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
 import isEqual from 'utils/isEqual/isEqual'
 import { setModifierKey } from 'utils/setModifierKey'
@@ -409,20 +409,20 @@ const Composer = ({
   return (
     <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
       <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
-        <GS.Base>
+        <Base>
           <form autoComplete="off">
             <S.TopRowControls>
               <S.UpdateContainer>
                 {saveSuccess && (
-                  <GS.Span small muted>
+                  <Span small muted>
                     {local.DRAFT_SAVED}
-                  </GS.Span>
+                  </Span>
                 )}
               </S.UpdateContainer>
               {memoizedButtons}
             </S.TopRowControls>
             <div style={{ marginBottom: `20px` }}>
-              <GS.Base>
+              <Base>
                 <S.Row>
                   {memoizedToField}
                   <S.CcBccContainer>
@@ -449,11 +449,11 @@ const Composer = ({
                 <S.Row>{memoizedSubjectField}</S.Row>
                 <S.Row>{memoizedBodyField}</S.Row>
                 <S.Row>{memoizedSignatureField}</S.Row>
-              </GS.Base>
+              </Base>
             </div>
           </form>
           {memoizedAttachmentField}
-        </GS.Base>
+        </Base>
       </S.ComposerContainer>
     </S.Wrapper>
   )

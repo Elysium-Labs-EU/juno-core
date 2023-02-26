@@ -42,7 +42,7 @@ export default function defaultItems({
   location,
 }: IDefaultItems): Array<IJsonStructure> {
   const isEmailDetailPage = location.pathname.startsWith('/mail/')
-  const isDraftsPage = location.pathname.startsWith(RoutesConstants.DRAFTS)
+  const isDraftsPage = location.pathname.startsWith(RoutesConstants.DRAFT)
   const isArchivePage = location.pathname.startsWith(RoutesConstants.ARCHIVE)
   const isTrashPage = location.pathname.startsWith(RoutesConstants.TRASH)
   const isComposePage =
@@ -84,7 +84,7 @@ export default function defaultItems({
                 dispatch(selectAllEmailsCurrentInbox(deleteAllEmailCMDK)),
             }
           : undefined,
-        location.pathname === RoutesConstants.DRAFTS && currentEmailBoxHasEmails
+        location.pathname === RoutesConstants.DRAFT && currentEmailBoxHasEmails
           ? {
               id: 'discard-all-current-box',
               children: `Discard all loaded emails of ${
@@ -123,12 +123,12 @@ export default function defaultItems({
               type: 'Link',
             }
           : undefined,
-        location.pathname !== RoutesConstants.DRAFTS
+        location.pathname !== RoutesConstants.DRAFT
           ? {
               id: 'drafts',
               children: 'Drafts',
               icon: <FiEdit2 />,
-              onClick: () => dispatch(navigateTo(RoutesConstants.DRAFTS)),
+              onClick: () => dispatch(navigateTo(RoutesConstants.DRAFT)),
               type: 'Link',
             }
           : undefined,

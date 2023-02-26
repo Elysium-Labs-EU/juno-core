@@ -12,16 +12,16 @@ export interface IDraftDetails {
   draftId: string
 }
 
-export const DraftListEntry = z.object({
+const DraftListEntry = z.object({
   id: z.string(),
   message: z.object({
     id: z.string(),
     threadId: z.string(),
   }),
 })
-export type TDraftListEntry = z.infer<typeof DraftListEntry>
+type TDraftListEntry = z.infer<typeof DraftListEntry>
 
-export const FullDraftMessage = z.object({
+const FullDraftMessage = z.object({
   id: z.string(),
   threadId: z.string(),
   labelIds: z.array(z.string()).optional(),
@@ -42,7 +42,7 @@ export const FullDraftMessage = z.object({
   internalDate: z.string(),
 })
 
-export type TFullDraftMessage = z.infer<typeof FullDraftMessage>
+type TFullDraftMessage = z.infer<typeof FullDraftMessage>
 
 export const DraftResponseEntry = z.object({
   id: z.string(),
@@ -54,9 +54,9 @@ export const DraftListResponse = z.object({
   drafts: z.array(DraftListEntry),
   resultSizeEstimate: z.number(),
 })
-export type TDraftListResponse = z.infer<typeof DraftListResponse>
+type TDraftListResponse = z.infer<typeof DraftListResponse>
 
-export const DraftsState = z.object({
+const DraftsState = z.object({
   draftList: z.array(DraftListEntry),
 })
 

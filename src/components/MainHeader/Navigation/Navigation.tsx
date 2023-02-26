@@ -75,11 +75,10 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
           <StyledTooltip title="To Do">
             <S.NavItem>
               <CustomIconButton
-                icon={<QiToDo size={ICON_SIZE} />}
-                onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
-                isActive={activePage === ACTIVE_PAGE_HEADER.todo}
-                title=""
                 dataCy="todo"
+                icon={<QiToDo size={ICON_SIZE} />}
+                isActive={activePage === ACTIVE_PAGE_HEADER.todo}
+                onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
               />
             </S.NavItem>
           </StyledTooltip>
@@ -88,11 +87,10 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
             <StyledTooltip title="Inbox">
               <S.NavItem>
                 <CustomIconButton
-                  icon={<QiInbox size={ICON_SIZE} />}
-                  onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
-                  isActive={activePage === ACTIVE_PAGE_HEADER.inbox}
-                  title=""
                   dataCy="inbox"
+                  icon={<QiInbox size={ICON_SIZE} />}
+                  isActive={activePage === ACTIVE_PAGE_HEADER.inbox}
+                  onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
                 />
               </S.NavItem>
             </StyledTooltip>
@@ -101,11 +99,10 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
           <StyledTooltip title="Command Palette">
             <S.NavItem>
               <CustomIconButton
+                dataCy="command-palette"
                 icon={<QiSearch size={ICON_SIZE} />}
                 isActive={activePage === ACTIVE_PAGE_HEADER.search}
                 onClick={() => dispatch(setInSearch(true))}
-                title=""
-                dataCy="command-palette"
               />
             </S.NavItem>
           </StyledTooltip>
@@ -113,13 +110,12 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
           <StyledTooltip title="Compose">
             <S.NavItem>
               <CustomIconButton
+                dataCy="compose"
                 icon={<QiCompose size={ICON_SIZE} />}
                 isActive={activePage === ACTIVE_PAGE_HEADER.compose}
                 onClick={() => {
                   dispatch(navigateTo('/compose'))
                 }}
-                title=""
-                dataCy="compose"
               />
             </S.NavItem>
           </StyledTooltip>

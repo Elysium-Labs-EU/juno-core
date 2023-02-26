@@ -1,4 +1,4 @@
-import { baseBase64 } from './decodeBase64'
+import baseBase64 from './decodeBase64'
 
 export default function base64toBlob({
   base64Data,

@@ -41,7 +41,7 @@ const NavigationMore = ({ isActive }: INavigationMore) => {
           title: global.HEADER_DRAFT,
           onClick: () => {
             dispatch(setActiveModal(null))
-            dispatch(push(Routes.DRAFTS))
+            dispatch(push(Routes.DRAFT))
           },
         },
         {
@@ -61,11 +61,19 @@ const NavigationMore = ({ isActive }: INavigationMore) => {
           },
         },
         {
-          id: 'delete-navigation',
+          id: 'trash-navigation',
           title: global.HEADER_TRASH,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.TRASH))
+          },
+        },
+        {
+          id: 'spam-navigation',
+          title: global.HEADER_SPAM,
+          onClick: () => {
+            dispatch(setActiveModal(null))
+            dispatch(push(Routes.SPAM))
           },
         },
       ],

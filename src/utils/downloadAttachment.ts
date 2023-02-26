@@ -78,8 +78,8 @@ export async function downloadAttachmentSingle({
  * @returns
  */
 
-export interface IDownloadAttachmentData {
-  attachmentData: IEmailAttachmentType[] | undefined
+interface IDownloadAttachmentData {
+  attachmentData: Array<IEmailAttachmentType> | undefined
   messageId: string
 }
 

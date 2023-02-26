@@ -5,7 +5,7 @@ import { Children, useRef, useState } from 'react'
 
 import { QiMail, QiSearch } from 'images/svgIcons/quillIcons'
 import { useAppDispatch } from 'store/hooks'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import createComposeViaURL from 'utils/createComposeViaURL'
 import createSearchViaUrl from 'utils/createSearchViaUrl'
 import getRandomColor from 'utils/getRandomColor'
@@ -28,7 +28,7 @@ export const ContactCardContent = ({
   return (
     <S.ContactCard>
       <S.ContactCardAvatar $randomColor={getRandomColor(staticInitials)}>
-        <span>{staticInitials}</span>
+        <Span>{staticInitials}</Span>
       </S.ContactCardAvatar>
       <CardContent>
         <S.ContactCardName title={name ?? ''}>
@@ -50,7 +50,7 @@ export const ContactCardContent = ({
               <QiMail size={20} />
             </S.ContactCardEmailButton>
             <S.EmailContainer>
-              <GS.Span small>Email</GS.Span>
+              <Span small>Email</Span>
               <S.ContactCardEmail
                 title={emailAddress ?? ''}
                 onClick={() => {

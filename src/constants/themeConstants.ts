@@ -18,6 +18,9 @@ export const spacing = {
   '4': '32px',
   '6': '48px',
   '7': '56px',
+  '8': '64px',
+  '9': '72px',
+  '10': '80px',
 }
 
 export const color = {

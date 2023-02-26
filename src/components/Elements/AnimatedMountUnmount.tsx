@@ -1,7 +1,7 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import styled from 'styled-components'
 
-export const StyledAnimatedMountUnmount = styled.div`
+const StyledAnimatedMountUnmount = styled.div`
   transform: translateY(10px);
   transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;

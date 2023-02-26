@@ -6,24 +6,27 @@ import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import * as themeConstants from 'constants/themeConstants'
 import { QiEscape } from 'images/svgIcons/quillIcons'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 
+import {
+  REMOVED_TRACKERS,
+  REMOVED_TRACKER,
+  ICON_SIZE,
+  JUNO_TRACKERS,
+} from './RemovedTrackersConstants'
 import * as S from './RemovedTrackersStyles'
 
-const REMOVED_TRACKERS = 'Trackers removed'
-const REMOVED_TRACKER = 'Tracker removed'
-const JUNO_TRACKERS = 'Juno has blocked trackers on the email.'
-const ICON_SIZE = 16
+interface IDetailModal {
+  showDialog: boolean
+  setShowDialog: (value: boolean) => void
+  blockedTrackers: Array<string>
+}
 
 const DetailModal = ({
   showDialog,
   setShowDialog,
   blockedTrackers,
-}: {
-  showDialog: boolean
-  setShowDialog: (value: boolean) => void
-  blockedTrackers: string[]
-}) => (
+}: IDetailModal) => (
   <Modal
     open={showDialog}
     onClose={() => setShowDialog(false)}
@@ -50,7 +53,7 @@ const DetailModal = ({
             return (
               <S.BlockedItemInformation key={convertedToString.href}>
                 <p>{convertedToString.host}</p>
-                <GS.Span muted>{convertedToString.href}</GS.Span>
+                <Span muted>{convertedToString.href}</Span>
               </S.BlockedItemInformation>
             )
           }
@@ -63,9 +66,7 @@ const DetailModal = ({
 
 const RemovedTrackers = ({
   blockedTrackers,
-}: {
-  blockedTrackers: string[]
-}) => {
+}: Pick<IDetailModal, 'blockedTrackers'>) => {
   const [showDialog, setShowDialog] = useState(false)
 
   return (
@@ -81,7 +82,7 @@ const RemovedTrackers = ({
                     color={themeConstants.color.neutral[400]}
                   />
                 </div>
-                <GS.Span small>{REMOVED_TRACKERS}</GS.Span>
+                <Span small>{REMOVED_TRACKERS}</Span>
               </S.InnerButton>
             </S.StyledButton>
           </StyledTooltip>

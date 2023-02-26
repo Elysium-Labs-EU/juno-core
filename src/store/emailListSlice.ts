@@ -227,7 +227,7 @@ export const handleEmailListChange = ({
   }
 }
 
-export const emailListSlice = createSlice({
+const emailListSlice = createSlice({
   name: 'email',
   initialState,
   reducers: {

@@ -47,6 +47,6 @@ export const MenuItemContentMain = styled.div`
 
 export const MenuItemContentSide = styled.div`
   span:not(:last-child) {
-    margin-left: 8px;
+    margin-left: var(--spacing-1);
   }
 `

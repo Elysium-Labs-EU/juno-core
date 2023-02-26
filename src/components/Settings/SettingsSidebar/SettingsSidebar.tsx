@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 
 import { QiCog, QiSign, QiSignature } from 'images/svgIcons/quillIcons'
+import { Span } from 'styles/globalStyles'
 
 import * as S from './SettingsSidebarStyles'
 
@@ -30,7 +31,7 @@ const SettingsSidebar = ({
         >
           <S.MenuItemContentSide>{item.icon}</S.MenuItemContentSide>
           <S.MenuItemContentMain>
-            <span>{item.title}</span>
+            <Span>{item.title}</Span>
           </S.MenuItemContentMain>
         </S.MenuItem>
       </li>

@@ -7,7 +7,7 @@ import {
   alternateActionsMap,
 } from 'constants/baseConstants'
 
-export const settingMap = {
+const settingMap = {
   isAvatarVisible: showAvatarMap.SA1,
   emailFetchSize: emailFetchSizeMap.FS20,
   isFlexibleFlowActive: flexibleFlowMap.FF1,

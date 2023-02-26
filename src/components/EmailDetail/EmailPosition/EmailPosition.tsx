@@ -11,7 +11,7 @@ import { selectSelectedEmails } from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
 import * as S from './EmailPositionStyles'
 
@@ -30,7 +30,7 @@ const EmailPosition = () => {
     <S.Wrapper>
       {loadingState === global.LOAD_STATE_MAP.loaded && (
         <StyledTooltip title={EXPLANATION}>
-          <GS.P muted style={{ fontSize: 13 }}>
+          <Paragraph muted style={{ fontSize: 13 }}>
             {sessionViewIndex + 1} /{' '}
             {(coreStatus === global.CORE_STATUS_MAP.focused ||
               (isFlexibleFlowActive &&
@@ -39,7 +39,7 @@ const EmailPosition = () => {
             selectedEmails.selectedIds.length > 0
               ? selectedEmails.selectedIds.length
               : totalThreads}
-          </GS.P>
+          </Paragraph>
         </StyledTooltip>
       )}
       {loadingState === global.LOAD_STATE_MAP.loading && (

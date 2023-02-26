@@ -19,7 +19,7 @@ import {
   setActiveModal,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
 import * as S from './FeedbackStyles'
 
@@ -139,7 +139,7 @@ const Feedback = () => {
       open={activeModal === global.ACTIVE_MODAL_MAP.feedback}
       modalTitle={MODAL_TITLE}
       modalAriaLabel="feedback"
-      subTitle={<GS.P muted>{MODAL_SUB_TITLE}</GS.P>}
+      subTitle={<Paragraph muted>{MODAL_SUB_TITLE}</Paragraph>}
     >
       {showSuccess ? (
         <S.SuccessContainer>

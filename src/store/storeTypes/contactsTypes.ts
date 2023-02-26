@@ -7,7 +7,7 @@ export const Contact = z.object({
 
 export type TContact = z.infer<typeof Contact>
 
-export const ContactState = z.object({
+const ContactState = z.object({
   allContacts: z.array(z.union([Contact, z.any()])),
   contactNextPageToken: z.string(),
   contactsLoaded: z.string(),

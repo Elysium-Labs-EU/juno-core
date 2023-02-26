@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { match } from 'ts-pattern'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import EmptyState from 'components/Elements/EmptyState/EmptyState'
@@ -16,7 +17,7 @@ import {
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { OuterContainer, Paragraph } from 'styles/globalStyles'
 import handleChangeFocus from 'utils/handleChangeFocus'
 import loadNextPage from 'utils/loadNextPage'
 import multipleIncludes from 'utils/multipleIncludes'
@@ -115,8 +116,13 @@ const RenderEmailList = ({
   const memoizedThreadList = useMemo(
     () => (
       <S.ThreadList>
-        {threads.length > 0 ? (
-          <GS.Base>
+        {match(threads.length > 0)
+          .with(false, () => (
+            <EmptyState>
+              <EmailListEmptyStates />
+            </EmptyState>
+          ))
+          .with(true, () => (
             <ThreadList
               threads={threads}
               keySuffix="emailList"
@@ -124,13 +130,8 @@ const RenderEmailList = ({
               setFocusedItemIndex={setFocusedItemIndex}
               showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
             />
-          </GS.Base>
-        ) : null}
-        {threads.length === 0 ? (
-          <EmptyState>
-            <EmailListEmptyStates />
-          </EmptyState>
-        ) : null}
+          ))
+          .exhaustive()}
       </S.ThreadList>
     ),
     [threads, focusedItemIndex]
@@ -139,16 +140,18 @@ const RenderEmailList = ({
   const memoizedLoadMore = useMemo(
     () => (
       <S.LoadMoreContainer>
-        {!isLoading && (
-          <CustomButton
-            disabled={isLoading}
-            onClick={handleLoadMore}
-            label={global.LOAD_MORE}
-            suppressed
-            title={global.LOAD_MORE}
-          />
-        )}
-        {isLoading && <LoadingState />}
+        {match(isLoading)
+          .with(false, () => (
+            <CustomButton
+              disabled={isLoading}
+              onClick={handleLoadMore}
+              label={global.LOAD_MORE}
+              suppressed
+              title={global.LOAD_MORE}
+            />
+          ))
+          .with(true, () => <LoadingState />)
+          .exhaustive()}
       </S.LoadMoreContainer>
     ),
     [isLoading, nextPageToken, labelIds, emailFetchSize]
@@ -156,17 +159,17 @@ const RenderEmailList = ({
 
   return (
     <S.Scroll>
-      <GS.OuterContainer>
+      <OuterContainer>
         {memoizedThreadList}
         {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
-            <GS.P small muted>
+            <Paragraph small muted>
               {global.NO_MORE_RESULTS}
-            </GS.P>
+            </Paragraph>
           </S.LoadMoreContainer>
         )}
-      </GS.OuterContainer>
+      </OuterContainer>
     </S.Scroll>
   )
 }

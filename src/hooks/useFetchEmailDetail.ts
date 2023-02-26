@@ -21,14 +21,8 @@ export default function useFetchEmailDetail({
 }: IUseFetchEmailDetail) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
-  const emailThreadObject = activeEmailList?.threads.find(
-    (item) => item.id === threadId
-  )
-  const someThreadHasBody = emailThreadObject
-    ? emailThreadObject.messages.some((message) =>
-        Object.prototype.hasOwnProperty.call(message.payload, 'body')
-      )
-    : undefined
+
+  // The hook may fire to update the emaildetail, whenever no thread has a body element, or whenever the composer closes (forceRefresh).
   useEffect(() => {
     let mounted = true
     if (threadId && activeEmailList) {
@@ -58,5 +52,5 @@ export default function useFetchEmailDetail({
     return () => {
       mounted = false
     }
-  }, [threadId, activeEmailList, forceRefresh, someThreadHasBody])
+  }, [threadId, activeEmailList, forceRefresh])
 }

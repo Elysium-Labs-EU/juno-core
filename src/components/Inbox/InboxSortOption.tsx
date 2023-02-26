@@ -23,6 +23,7 @@ import {
   selectIsFlexibleFlowActive,
   selectIsLoading,
 } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 import labelURL from 'utils/createLabelURL'
 import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import { setModifierKey } from 'utils/setModifierKey'
@@ -128,7 +129,7 @@ const InboxSortOption = () => {
         return (
           <>
             {INBOX_BUTTON}
-            <span> ({selectedEmails.selectedIds.length})</span>
+            <Span> ({selectedEmails.selectedIds.length})</Span>
           </>
         )
       }
@@ -137,9 +138,9 @@ const InboxSortOption = () => {
     return (
       <>
         {INBOX_BUTTON}{' '}
-        <span style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}>
+        <Span style={{ color: `var(--color-neutral-500)`, fontWeight: '200' }}>
           {resultMap[loadingState]}
-        </span>
+        </Span>
       </>
     )
   }, [isFlexibleFlowActive, loadingState, selectedEmails])

@@ -3,38 +3,40 @@ import * as global from 'constants/globalConstants'
 import * as local from 'constants/keycomboConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph, Span } from 'styles/globalStyles'
 import getUserAgent from 'utils/getUserAgent'
 
 import * as S from './KeyboardCombosStyles'
 
 interface IKeyCombos {
-  title: string
+  keys: Array<string> | Array<JSX.Element>
   subTitle?: string
-  keys: string[] | JSX.Element[]
+  title: string
+}
+
+interface ICreateSectionWithKeys {
+  keyCombos: Array<IKeyCombos>
+  subTitle: string
+  title: string
 }
 
 const CreateSectionWithKeys = ({
   keyCombos,
   title,
   subTitle,
-}: {
-  keyCombos: IKeyCombos[]
-  title: string
-  subTitle: string
-}) => (
+}: ICreateSectionWithKeys) => (
   <S.SectionContainer>
     <div>
       <strong>{title}</strong>
     </div>
-    <span>{subTitle}</span>
+    <Span>{subTitle}</Span>
     {keyCombos.map((combo) => (
       <S.KeyComboContainer key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && <GS.Span muted>{combo?.subTitle}</GS.Span>}
+        {combo?.subTitle && <Span muted>{combo?.subTitle}</Span>}
         <S.KeyBindShortcut>
           {combo.keys.map((oneKey) => (
-            <span key={JSON.stringify(oneKey)}>{oneKey}</span>
+            <Span key={JSON.stringify(oneKey)}>{oneKey}</Span>
           ))}
         </S.KeyBindShortcut>
       </S.KeyComboContainer>
@@ -51,10 +53,10 @@ const KeyboardCombos = () => {
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <GS.P muted style={{ marginBottom: '10px' }}>
+        <Paragraph muted style={{ marginBottom: 'var(--spacing-1)' }}>
           {local.MODAL_OS_SUB}{' '}
-          <span style={{ color: `var(--color-black)` }}>{getUserAgent()}</span>
-        </GS.P>
+          <Span style={{ color: `var(--color-black)` }}>{getUserAgent()}</Span>
+        </Paragraph>
       }
     >
       <S.Columns>

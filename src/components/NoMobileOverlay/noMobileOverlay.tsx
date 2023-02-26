@@ -1,5 +1,6 @@
 import LogoutOption from 'components/MainHeader/Navigation/More/Options/LogoutOption'
 import * as local from 'constants/noMobileOverlayConstants'
+import { Paragraph } from 'styles/globalStyles'
 
 import * as S from './noMobileOverlayStyles'
 
@@ -7,7 +8,7 @@ const NoMobileOverlay = () => (
   <S.Wrapper>
     <S.Inner>
       <h1>{local.HEADER}</h1>
-      <p className="text_muxed">{local.CONTENT}</p>
+      <Paragraph muted>{local.CONTENT}</Paragraph>
       <LogoutOption />
     </S.Inner>
   </S.Wrapper>

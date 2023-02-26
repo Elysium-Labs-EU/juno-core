@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react'
 
 import type { TListItemType } from './ListItem/ListItem'
 
-export interface IJsonStructureItem {
+interface IJsonStructureItem {
   children: ReactNode
   href?: string | null | undefined
   icon?: JSX.Element | null | undefined
@@ -69,7 +69,7 @@ function retrieveChildrenFromElement(item: ReactElement) {
   return item
 }
 
-export function getAllItems(items: Array<IJsonStructure>) {
+function getAllItems(items: Array<IJsonStructure>) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))
 }
 

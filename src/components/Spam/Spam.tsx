@@ -1,9 +1,9 @@
 import EmailList from 'components/EmailList/EmailList'
 import Layout from 'components/Layout/Layout'
-import { ACTIVE_PAGE_HEADER } from 'constants/globalConstants'
+import { ACTIVE_PAGE_HEADER, HEADER_SPAM } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 
-import SpamClearOption from './SpamClearOption'
+// import SpamClearOption from './SpamClearOption'
 
 const Spam = () => {
   useSetCurrentLabel()
@@ -11,8 +11,8 @@ const Spam = () => {
   return (
     <Layout
       activePage={ACTIVE_PAGE_HEADER.spam}
-      additionalHeader={<SpamClearOption />}
-      headerTitle="SPAM"
+      // additionalHeader={<SpamClearOption />}
+      headerTitle={HEADER_SPAM}
     >
       <EmailList />
     </Layout>

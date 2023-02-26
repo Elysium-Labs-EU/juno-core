@@ -1,6 +1,7 @@
 import Botpoison from '@botpoison/browser'
 import { useFormspark } from '@formspark/use-formspark'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
+import type { FormEvent } from 'react'
 import { FiCheck } from 'react-icons/fi'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
@@ -9,7 +10,7 @@ import * as global from 'constants/globalConstants'
 import { QiLinkOut } from 'images/svgIcons/quillIcons'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph, Span } from 'styles/globalStyles'
 import assertNonNullish from 'utils/assertNonNullish'
 
 import * as S from './BetaAccessFormStyles'
@@ -58,20 +59,20 @@ const BetaAccesForm = () => {
       modalAriaLabel="beta-access-form"
     >
       <>
-        <GS.P muted>
+        <Paragraph muted>
           Request access to the private beta of Juno. Your email needs to be a
           Google email address.
-        </GS.P>
-        <GS.P muted>
+        </Paragraph>
+        <Paragraph muted>
           You can expect a reply on your request within a few hours. If you want
           to get in direct contact, use the{' '}
           <S.StyledLink href={import.meta.env.VITE_DISCORD_SOCIAL_URL}>
             <QiLinkOut />
-            <span title="Open new tab in your browser with Discord">
+            <Span title="Open new tab in your browser with Discord">
               Discord Community.
-            </span>
+            </Span>
           </S.StyledLink>
-        </GS.P>
+        </Paragraph>
         <S.StyledForm onSubmit={onSubmit}>
           {!complete && (
             <>
@@ -85,7 +86,7 @@ const BetaAccesForm = () => {
               <S.SubmitButton type="submit" disabled={submitting}>
                 {submitting ? (
                   <S.LoadingIconContainer>
-                    <span>Request access</span>{' '}
+                    <Span>Request access</Span>{' '}
                     <StyledCircularProgress size={20} />
                   </S.LoadingIconContainer>
                 ) : (
@@ -97,15 +98,15 @@ const BetaAccesForm = () => {
           {complete && (
             <S.SuccessMessage>
               <FiCheck size={20} />
-              <span>You will be contacted shortly</span>
+              <Span>You will be contacted shortly</Span>
             </S.SuccessMessage>
           )}
         </S.StyledForm>
         {error && (
-          <span>
+          <Span>
             Something went wrong, reach out to us on{' '}
             <a href={import.meta.env.VITE_DISCORD_SOCIAL_URL}>Discord</a>
-          </span>
+          </Span>
         )}
       </>
     </CustomModal>

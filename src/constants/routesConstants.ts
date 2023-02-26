@@ -2,7 +2,7 @@ const ROUTES = {
   TODO: '/',
   EMAIL_DETAIL: '/mail/:labelId/:threadId/:overviewId',
   COMPOSE_EMAIL: '/compose/',
-  DRAFTS: '/drafts',
+  DRAFT: '/draft',
   SENT: '/sent',
   SPAM: '/spam',
   LOGIN: '/login',

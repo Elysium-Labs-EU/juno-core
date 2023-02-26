@@ -19,7 +19,7 @@ import { selectProfile } from 'store/baseSlice'
 import { selectDraftList } from 'store/draftsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import * as GS from 'styles/globalStyles'
+import { Paragraph, Span } from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
 
 import LinkedContacts from './Recipients/LinkedContacts'
@@ -115,20 +115,20 @@ const DraftMessage = ({
               <EmailAvatar userEmail={staticSenderNameFull} />
             </ContactCard>
             <S.ClosedSender>
-              <span
+              <Span
                 style={{ fontStyle: 'italic' }}
                 title={staticSenderNamePartial.emailAddress ?? ''}
               >
                 {staticSenderNamePartial.name}
-              </span>
+              </Span>
             </S.ClosedSender>
           </S.ClosedAvatarSender>
         </S.TopContainer>
         <S.ClosedSnippet>
-          <span style={{ fontWeight: 'bold' }}>
+          <Span style={{ fontWeight: 'bold' }}>
             {local.DRAFT_SNIPPET_INDICATOR}
-          </span>
-          <span style={{ fontStyle: 'italic' }}>{EmailSnippet}</span>
+          </Span>
+          <Span style={{ fontStyle: 'italic' }}>{EmailSnippet}</Span>
         </S.ClosedSnippet>
         <S.TimeAttachmentContainer>
           <TimeStamp threadTimeStamp={message.internalDate} />
@@ -138,9 +138,9 @@ const DraftMessage = ({
   ) : (
     <S.EmailOpenWrapper isDraft hideDraft={hideDraft}>
       <S.DraftHeaderControls>
-        <GS.P muted small style={{ marginRight: '40px' }}>
+        <Paragraph muted small style={{ marginRight: '40px' }}>
           {local.DRAFT_INDICATOR_HEADER}
-        </GS.P>
+        </Paragraph>
         <CustomButton
           style={{ marginRight: '10px' }}
           label="Edit"

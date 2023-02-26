@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { push } from 'redux-first-history'
 
+import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
 import userApi from 'data/userApi'
@@ -11,8 +12,7 @@ import {
   setActiveModal,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
-import AnimatedMountUnmount from 'utils/animatedMountUnmount'
+import { Paragraph, Span } from 'styles/globalStyles'
 
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
 import GoogleButton from './GoogleButton/GoogleButton'
@@ -73,7 +73,7 @@ const Login = () => {
             >
               By Elysium Labs
             </S.StyledLink>
-            <GS.Span muted>{global.BETA_VERSION}</GS.Span>
+            <Span muted>{global.BETA_VERSION}</Span>
           </S.SubHeaderContainer>
         </S.Header>
         <S.LoginContainer>
@@ -87,9 +87,9 @@ const Login = () => {
               }
               showLoadingState={loadState === global.LOAD_STATE_MAP.loading}
             />
-            <GS.P muted small>
+            <Paragraph muted small>
               {ENTER_HINT}
-            </GS.P>
+            </Paragraph>
           </S.Inner>
         </S.LoginContainer>
         <S.AdditionalOptions>

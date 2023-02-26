@@ -20,7 +20,7 @@ import {
   setActiveModal,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
 import viewAttachment from 'utils/viewAttachment'
@@ -114,10 +114,8 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
     ref
   ) => {
     const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-    const [
-      fetchedAttachmentData,
-      setFetchedAttachmentData,
-    ] = useState<null | IFetchedAttachment>(null)
+    const [fetchedAttachmentData, setFetchedAttachmentData] =
+      useState<null | IFetchedAttachment>(null)
     const dispatch = useAppDispatch()
     const activeModal = useAppSelector(selectActiveModal)
 
@@ -274,11 +272,11 @@ const AttachmentBubble = ({
         <S.AttachmentInner>
           <EmailAttachmentIcon mimeType={mimeType} />
           <S.AttachmentDetails>
-            <span className="file_name">{fileName}</span>
-            <GS.Span muted small>
+            <Span className="file_name">{fileName}</Span>
+            <Span muted small>
               {global.FILE}
               {formatBytes(fileSize)}
-            </GS.Span>
+            </Span>
           </S.AttachmentDetails>
         </S.AttachmentInner>
         {/* {memoizedViewAttachmentButton} */}

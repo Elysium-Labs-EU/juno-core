@@ -9,7 +9,7 @@ import type { TLabelState } from 'store/storeTypes/labelsTypes'
  * @returns {number} the index of the threadList object in emailList that contains a label in labelIds, or -1 if no such threadList exists
  */
 
-export interface IEmailListFilteredByLabel {
+interface IEmailListFilteredByLabel {
   emailList: TEmailListState['emailList']
   labelIds: TLabelState['labelIds']
 }

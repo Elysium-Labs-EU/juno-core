@@ -23,6 +23,7 @@ import type { TProfile } from 'store/storeTypes/baseTypes'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 import emailLabels from 'utils/emailLabels'
 import multipleIncludes from 'utils/multipleIncludes'
 
@@ -295,15 +296,15 @@ const EmailListItem = ({
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
               {labelIds.includes(global.DRAFT_LABEL) && (
-                <span
+                <Span
                   style={{ fontWeight: 'bold', marginRight: '10px' }}
                   data-testid="email-draft-snippet-indicator"
                 >
                   {draft.DRAFT_SNIPPET_INDICATOR}
-                </span>
+                </Span>
               )}
               {email.messages && <MessageCount messages={email.messages} />}
-              <span>{memoizedSubject}</span>
+              <Span>{memoizedSubject}</Span>
               <Snippet snippet={memoizedSnippet} />
             </S.TruncatedDiv>
           </S.CellMessage>

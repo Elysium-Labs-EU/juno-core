@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { gmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
 
-export const Profile = z.object({
+const Profile = z.object({
   signature: z.string().nullable().optional(),
   name: z.string().nullable().optional(),
   picture: z.string().nullable().optional(),
@@ -14,7 +14,7 @@ export const Profile = z.object({
 
 export type TProfile = z.infer<typeof Profile>
 
-export const BaseState = z.object({
+const BaseState = z.object({
   baseLoaded: z.boolean(),
   profile: Profile,
   isAuthenticated: z.boolean(),
@@ -22,7 +22,7 @@ export const BaseState = z.object({
 
 export type TBaseState = z.infer<typeof BaseState>
 
-export const PrefetchedBoxes = z.array(z.array(gmailV1SchemaLabelSchema))
+const PrefetchedBoxes = z.array(z.array(gmailV1SchemaLabelSchema))
 
 export type TPrefetchedBoxes = z.infer<typeof PrefetchedBoxes>
 

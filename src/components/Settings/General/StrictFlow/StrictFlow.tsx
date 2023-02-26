@@ -15,12 +15,9 @@ import {
   selectSettingsLabelId,
   setFlexibleFlow,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
-const HEADER = 'Workflow mode'
-const BODY =
-  'Juno has two flows - the strict flow and the flexible flow. The strict flow is enabled by default and hides your inbox.'
-const SWITCH_LABEL = 'Flexible flow'
+import { HEADER, BODY, SWITCH_LABEL } from './StrictFlowConstants'
 
 const StrictFlow = () => {
   const dispatch = useAppDispatch()
@@ -68,8 +65,8 @@ const StrictFlow = () => {
 
   return (
     <S.PageSection>
-      <p>{HEADER}</p>
-      <GS.P muted>{BODY}</GS.P>
+      <Paragraph>{HEADER}</Paragraph>
+      <Paragraph muted>{BODY}</Paragraph>
       <FormControlLabel
         label={SWITCH_LABEL}
         control={

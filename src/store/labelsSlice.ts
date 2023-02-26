@@ -19,13 +19,13 @@ import type { IUpdateSettingsLabel } from 'utils/settings/updateSettingsLabel'
 
 /* eslint-disable no-param-reassign */
 
-export const initialState: TLabelState = Object.freeze({
+const initialState: TLabelState = Object.freeze({
   labelIds: [],
   loadedInbox: [],
   storageLabels: [],
 })
 
-export const labelsSlice = createSlice({
+const labelsSlice = createSlice({
   name: 'labels',
   initialState,
   reducers: {
@@ -88,37 +88,46 @@ export const labelsSlice = createSlice({
   },
 })
 
-export const {
-  setCurrentLabels,
-  setLoadedInbox,
-  setStorageLabels,
-} = labelsSlice.actions
+export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
+  labelsSlice.actions
 
-export const createLabel = (label: string): AppThunk => async (dispatch) => {
-  try {
-    const body =
-      typeof label === 'string'
-        ? {
-            name: label,
-            labelVisibility: 'labelShow',
-            messageListVisibility: 'show',
+export const createLabel =
+  (label: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const body =
+        typeof label === 'string'
+          ? {
+              name: label,
+              labelVisibility: 'labelShow',
+              messageListVisibility: 'show',
+            }
+          : label
+      const response = await labelApi().createLabel(body)
+
+      if ('data' in response) {
+        dispatch(setStorageLabels(response.data))
+        if (
+          response?.data?.name &&
+          // response?.data?.data?.name.startsWith(
+          response.data.name.startsWith(
+            `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
+          )
+        ) {
+          if (response?.data?.id) {
+            dispatch(setSettingsLabelId(response.data.id))
+            // dispatch(setSettingsLabelId(response.data.data.id))
           }
-        : label
-    const response = await labelApi().createLabel(body)
-
-    if ('data' in response) {
-      dispatch(setStorageLabels(response.data))
-      if (
-        response?.data?.name &&
-        // response?.data?.data?.name.startsWith(
-        response.data.name.startsWith(`${SETTINGS_LABEL + SETTINGS_DELIMITER}`)
-      ) {
-        if (response?.data?.id) {
-          dispatch(setSettingsLabelId(response.data.id))
-          // dispatch(setSettingsLabelId(response.data.data.id))
         }
+      } else {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to create the label.',
+          })
+        )
       }
-    } else {
+    } catch (err) {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
@@ -126,20 +135,22 @@ export const createLabel = (label: string): AppThunk => async (dispatch) => {
         })
       )
     }
-  } catch (err) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Unable to create the label.',
-      })
-    )
   }
-}
 
-export const removeLabel = (labelId: string): AppThunk => async (dispatch) => {
-  try {
-    const response = await labelApi().deleteLabel(labelId)
-    if ('status' in response && response.status !== 204) {
+export const removeLabel =
+  (labelId: string): AppThunk =>
+  async (dispatch) => {
+    try {
+      const response = await labelApi().deleteLabel(labelId)
+      if ('status' in response && response.status !== 204) {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to remove the label.',
+          })
+        )
+      }
+    } catch (err) {
       dispatch(
         setSystemStatusUpdate({
           type: 'error',
@@ -147,53 +158,8 @@ export const removeLabel = (labelId: string): AppThunk => async (dispatch) => {
         })
       )
     }
-  } catch (err) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Unable to remove the label.',
-      })
-    )
+    return null
   }
-  return null
-}
-
-export const fetchLabelIds = (LABEL: string): AppThunk => async (dispatch) => {
-  try {
-    const response = await labelApi().fetchLabels()
-    if ('data' in response) {
-      const { labels } = response.data
-      if (labels) {
-        const labelObject = labels.filter((label) => label.name === LABEL)
-        if (labelObject.length > 0 && labelObject[0]?.id) {
-          dispatch(setCurrentLabels([labelObject[0].id]))
-          dispatch(setStorageLabels(labelObject[0]))
-        } else {
-          dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: 'Unable to fetch the label.',
-            })
-          )
-        }
-      } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to fetch the label.',
-          })
-        )
-      }
-    }
-  } catch (err) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Unable to fetch the label.',
-      })
-    )
-  }
-}
 
 export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   const activePath = getState().router.location?.pathname
@@ -224,26 +190,28 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   }
 }
 
-export const updateSettingsLabel = ({
-  settingsLabelId,
-  emailFetchSize,
-  showIntroduction,
-  isAvatarVisible,
-  isFlexibleFlowActive,
-  alternateActions,
-}: IUpdateSettingsLabel): AppThunk => (dispatch) => {
-  storeUpdatedSettingsLabel(
-    parseSettingsLabel({
-      settingsLabelId,
-      emailFetchSize,
-      showIntroduction,
-      isAvatarVisible,
-      isFlexibleFlowActive,
-      alternateActions,
-    }),
-    dispatch
-  )
-}
+export const updateSettingsLabel =
+  ({
+    settingsLabelId,
+    emailFetchSize,
+    showIntroduction,
+    isAvatarVisible,
+    isFlexibleFlowActive,
+    alternateActions,
+  }: IUpdateSettingsLabel): AppThunk =>
+  (dispatch) => {
+    storeUpdatedSettingsLabel(
+      parseSettingsLabel({
+        settingsLabelId,
+        emailFetchSize,
+        showIntroduction,
+        isAvatarVisible,
+        isFlexibleFlowActive,
+        alternateActions,
+      }),
+      dispatch
+    )
+  }
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds
 export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox

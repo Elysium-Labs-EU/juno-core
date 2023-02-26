@@ -39,6 +39,9 @@ export const GlobalStyle = createGlobalStyle`
     --spacing-4: ${themeConstants.spacing[4]};
     --spacing-6: ${themeConstants.spacing[6]};
     --spacing-7: ${themeConstants.spacing[7]};
+    --spacing-8: ${themeConstants.spacing[8]};
+    --spacing-9: ${themeConstants.spacing[9]};
+    --spacing-10: ${themeConstants.spacing[10]};
     --z-index-block-layer: 1000;
     --z-index-modal: 402;
     --z-index-popover: 401;
@@ -64,10 +67,12 @@ export const Base = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0;
+  position: relative;
 `
 
 interface IOuterContainer {
   tabbedView?: boolean
+  position?: string
 }
 
 export const OuterContainer = styled.div<IOuterContainer>`
@@ -76,7 +81,7 @@ export const OuterContainer = styled.div<IOuterContainer>`
   margin-left: auto;
   margin-right: auto;
   max-width: var(--container-max-width);
-  position: relative;
+  position: ${({ position }) => position || 'relative'};
   width: 100%;
 `
 
@@ -85,7 +90,7 @@ interface ITextProps {
   small?: boolean
 }
 
-export const P = styled.p<ITextProps>`
+export const Paragraph = styled.p<ITextProps>`
   ${({ small }) =>
     small &&
     css`

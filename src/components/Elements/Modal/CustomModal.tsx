@@ -34,13 +34,12 @@ const Content = ({
   )
 }
 
-// Exports
-export const Dialog = DialogPrimitive.Root
-export const DialogTrigger = DialogPrimitive.Trigger
-export const DialogContent = Content
-export const DialogTitle = S.StyledTitle
-export const DialogDescription = S.StyledDescription
-export const DialogClose = DialogPrimitive.Close
+const Dialog = DialogPrimitive.Root
+// const DialogTrigger = DialogPrimitive.Trigger
+const DialogContent = Content
+const DialogTitle = S.StyledTitle
+// const DialogDescription = S.StyledDescription
+const DialogClose = DialogPrimitive.Close
 
 interface ICustomDialog<T> {
   children: JSX.Element

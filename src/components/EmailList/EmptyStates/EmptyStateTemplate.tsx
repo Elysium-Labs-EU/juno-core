@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
 const Wrapper = styled.div`
   display: flex;
@@ -17,21 +17,23 @@ const SVGWrapper = styled.div`
   height: auto;
 `
 
+interface IEmptyStateTemplate {
+  header: string
+  paragraph: string
+  SVG: JSX.Element
+}
+
 const EmptyStateTemplate = ({
   header,
   paragraph,
   SVG,
-}: {
-  header: string
-  paragraph: string
-  SVG: JSX.Element
-}) => (
+}: IEmptyStateTemplate) => (
   <Wrapper>
     <SVGWrapper>{SVG}</SVGWrapper>
     <p>{header}</p>
-    <GS.P muted style={{ marginTop: 0 }}>
+    <Paragraph muted style={{ marginTop: 0 }}>
       {paragraph}
-    </GS.P>
+    </Paragraph>
   </Wrapper>
 )
 

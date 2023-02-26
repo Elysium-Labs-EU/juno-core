@@ -18,8 +18,8 @@ import { updateMessageLabel } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 
-import type { IReadMessage } from './DisplayVariants/ReadUnreadMessage'
 import * as S from './SpecificEmailOptionsStyles'
+import type { IReadMessage } from '../EmailDetailTypes'
 
 const SpecificEmailOptions = ({
   handleClickListener,

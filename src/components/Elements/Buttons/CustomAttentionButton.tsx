@@ -1,20 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/button-has-type */
-import type { MouseEvent } from 'react'
 import styled from 'styled-components'
 
-interface ICustomButton {
-  className?: string
+type TCustomAttentionButton = {
   dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | JSX.Element
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
-  onKeyDown?: any
-  tabIndex?: number
-  title: string
   type?: 'submit' | 'reset' | 'button'
   variant?: 'primary' | 'secondary'
-}
+} & React.HTMLAttributes<HTMLButtonElement>
 
 interface IButton {
   variant: 'primary' | 'secondary'
@@ -73,28 +68,21 @@ const InnerButton = styled.div`
 `
 
 const CustomAttentionButton = ({
-  className = undefined,
   dataCy = undefined,
   disabled = false,
   icon = null,
   label,
-  onClick = undefined,
-  onKeyDown = undefined,
-  tabIndex = undefined,
   title,
   type = 'button',
   variant = 'primary',
-}: ICustomButton) => (
+  ...rest
+}: TCustomAttentionButton) => (
   <Button
-    className={className}
     data-cy={dataCy}
     disabled={disabled}
-    onClick={onClick ? (event) => onClick(event) : undefined}
-    onKeyDown={onKeyDown}
-    tabIndex={tabIndex}
-    title={title}
     type={type ?? 'button'}
     variant={variant ?? 'primary'}
+    {...rest}
   >
     <InnerButton>
       {icon && <div className="icon">{icon}</div>}

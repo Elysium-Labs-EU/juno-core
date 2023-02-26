@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { gmailV1SchemaMessagePartSchema } from './gmailBaseTypes/gmailTypes'
 import type { TLabelState } from './labelsTypes'
 
-export const SelectedEmail = z.object({
+const SelectedEmail = z.object({
   labelIds: z.array(z.string()),
   selectedIds: z.array(z.string()),
 })
@@ -26,7 +26,7 @@ const PayloadHeaders = z.object({
   bcc: z.string().nullable(),
 })
 
-export type TPayloadHeaders = z.infer<typeof PayloadHeaders>
+type TPayloadHeaders = z.infer<typeof PayloadHeaders>
 
 export const PayloadHeadersEnhanced = PayloadHeaders.extend({
   listUnsubscribe: z.string().nullable(),
@@ -38,7 +38,7 @@ export type TGmailV1SchemaMessagePartSchema = z.infer<
   typeof gmailV1SchemaMessagePartSchema
 >
 
-export const SimpleMessage = z.object({
+const SimpleMessage = z.object({
   historyId: z.string(),
   id: z.string(),
   internalDate: z.string(),
@@ -54,9 +54,9 @@ export const SimpleMessage = z.object({
   threadId: z.string(),
 })
 
-export type TSimpleMessage = z.infer<typeof SimpleMessage>
+type TSimpleMessage = z.infer<typeof SimpleMessage>
 
-export const FullMessage = SimpleMessage.extend({
+const FullMessage = SimpleMessage.extend({
   payload: z.object({
     mimeType: z.string(),
     headers: PayloadHeadersEnhanced,
@@ -91,7 +91,7 @@ export const EmailListObject = z.object({
 
 export type TEmailListObject = z.infer<typeof EmailListObject>
 
-export const EmailListState = z.object({
+const EmailListState = z.object({
   activeEmailListIndex: z.number(),
   emailList: z.array(EmailListObject),
   isFetching: z.boolean(),
@@ -101,7 +101,7 @@ export const EmailListState = z.object({
 
 export type TEmailListState = z.infer<typeof EmailListState>
 
-export const BaseEmailList = z.array(
+const BaseEmailList = z.array(
   z.object({
     labels: z.array(z.string()),
     nextPageToken: z.string().optional().nullable(),

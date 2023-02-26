@@ -1,20 +1,18 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/button-has-type */
-import type { MouseEvent } from 'react'
 import styled from 'styled-components'
 
-interface ICustomButton {
-  className?: string
+import { Span } from 'styles/globalStyles'
+
+type TCustomButton = {
   dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | null
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
   showIconAfterLabel?: boolean
-  style?: any
   suppressed?: boolean
-  title: string
   type?: 'submit' | 'reset' | 'button'
-}
+} & React.HTMLAttributes<HTMLButtonElement>
 
 interface IButton {
   suppressed: boolean | undefined
@@ -25,7 +23,7 @@ const Button = styled.button<IButton>`
   background-color: transparent;
   border-bottom-color: transparent;
   border-left-color: transparent;
-  border-radius: 4px;
+  border-radius: var(--radius-m);
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;
@@ -75,34 +73,28 @@ const InnerButton = styled.div<IInnerButton>`
 `
 
 const CustomButton = ({
-  className = undefined,
   disabled = false,
   dataCy = undefined,
   icon = null,
   label,
-  onClick = undefined,
   showIconAfterLabel = false,
-  style = undefined,
   suppressed = false,
-  title,
   type = 'button',
-}: ICustomButton) => (
+  ...rest
+}: TCustomButton) => (
   <Button
-    className={className}
     data-cy={dataCy}
     disabled={disabled}
-    onClick={onClick ? (event) => onClick(event) : undefined}
-    style={style}
     suppressed={suppressed}
-    title={title}
     type={type ?? 'button'}
+    {...rest}
   >
     <InnerButton
       hasLabel={Boolean(label)}
       showIconAfterLabel={showIconAfterLabel}
     >
       {icon && !showIconAfterLabel && <div className="icon">{icon}</div>}
-      <span>{label}</span>
+      <Span>{label}</Span>
       {icon && showIconAfterLabel && <div className="icon">{icon}</div>}
     </InnerButton>
   </Button>

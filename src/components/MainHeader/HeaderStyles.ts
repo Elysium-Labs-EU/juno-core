@@ -1,8 +1,21 @@
 import styled, { css } from 'styled-components'
 
 export const Wrapper = styled.div`
+  /* position: relative; */
+  left: 0px;
   padding: 0 var(--spacing-2);
-  position: relative;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: var(--z-index-top-element);
+`
+
+export const NavContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  place-items: center;
+  padding: var(--spacing-2) 0;
+  max-width: var(--container-max-width);
 `
 
 export const InnerMenu = styled.div`
@@ -14,14 +27,6 @@ export const InnerMenu = styled.div`
   margin: var(--spacing-4) auto var(--spacing-2);
   max-width: min(100vw - 340px, 860px);
   min-width: 665px;
-`
-
-export const NavContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
-  padding: var(--spacing-2) 0;
-  max-width: var(--container-max-width);
 `
 
 export const BackButtonWithNavgationContainer = styled.div`
@@ -42,9 +47,9 @@ interface IStrictFlowButtonContainer {
 }
 
 export const StrictFlowButtonContainer = styled.div<IStrictFlowButtonContainer>`
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
   margin: var(--spacing-1) 0 var(--spacing-1);
 

@@ -6,8 +6,9 @@ import Composer from './Composer'
 
 const ComposeEmail = () => (
   <Layout
-    headerTitle={local.COMPOSE}
     activePage={global.ACTIVE_PAGE_HEADER.compose}
+    headerTitle={local.COMPOSE}
+    showBackButton
   >
     <Composer />
   </Layout>

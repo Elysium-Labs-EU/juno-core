@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 
 import { useAppDispatch } from 'store/hooks'
 import { setInSearch } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 
 import * as S from './ListItemStyles'
 
@@ -23,7 +24,7 @@ const ListItemContent = ({
       {icon && <S.IconContainer>{icon}</S.IconContainer>}
       {typeof children === 'string' ? (
         // TODO: Apply max width and truncate
-        <span>{children}</span>
+        <Span>{children}</Span>
       ) : (
         // <span className="max-w-md truncate">{children}</span>
         children

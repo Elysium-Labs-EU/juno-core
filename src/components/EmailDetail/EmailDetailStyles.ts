@@ -12,11 +12,22 @@ export const SearchQuery = styled.div`
   width: 100%;
 `
 
-export const Scroll = styled.div<IEmailDetail>`
+export const Scroll = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  flex: 2;
+  max-height: calc(100vh - 130px);
+  overflow: auto;
+  scrollbar-width: none;
+  width: 100%;
+  &::-webkit-scrollbar {
+    display: none; /* for Chrome, Safari, and Opera */
+  }
+`
+export const Wrapper = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 `
 
@@ -31,6 +42,7 @@ export const EmailDetailWrapper = styled.div`
 export const EmailWithComposerContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
   @media only screen and (max-width: ${breakPoint.lg}) {
     flex-direction: column-reverse;
   }
@@ -40,18 +52,27 @@ export const EmailCenterContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0 var(--spacing-2);
+  position: relative;
 `
 
 export const EmailTopControlContainer = styled.div<IEmailDetail>`
   display: flex;
   justify-content: space-between;
+  margin: 0 auto;
   max-width: min(
     100vw - 340px,
     ${({ tabbedView }) => (tabbedView ? '740px' : '860px')}
   );
   padding-bottom: var(--spacing-2);
-  margin: 0 auto;
   width: 100vw;
+`
+
+interface ITabContainer {
+  isVisible: boolean
+}
+
+export const TabContainer = styled.div<ITabContainer>`
+  display: ${({ isVisible }) => (isVisible ? 'inherit' : 'none')};
 `
 
 interface IEmailWrapper {
@@ -95,27 +116,18 @@ export const DraftHeaderControls = styled.div`
   padding-bottom: var(--spacing-2);
 `
 
-export const BackButtonContainer = styled.div<IEmailDetail>`
-  position: relative;
-  min-height: 200px;
-  padding-top: var(--spacing-7);
+export const Placeholder = styled.div`
+  width: 110px;
 `
 
-export const EmailOptionsContainer = styled.div<IEmailDetail>`
-  position: relative;
+export const EmailOptionsContainer = styled.div`
   min-height: 200px;
   padding-top: var(--spacing-7);
-`
-
-export const EmailOptionsPlaceholder = styled.div`
-  width: 170px;
-  padding: var(--spacing-4);
-  box-sizing: border-box;
 `
 
 export const StickyOptions = styled.div`
   position: sticky;
-  top: 50px;
+  top: var(--spacing-10);
 `
 
 export const InnerOptionsContainer = styled.div`
@@ -158,14 +170,9 @@ export const EmailDetailContainer = styled.div<IEmailDetail>`
   margin-bottom: var(--spacing-2);
   margin-left: auto;
   margin-right: auto;
-  overflow: scroll;
   position: relative;
-  scrollbar-width: none;
+  /* scrollbar-width: none; */
   width: 90vw;
-
-  &::-webkit-scrollbar {
-    display: none; /* for Chrome, Safari, and Opera */
-  }
 `
 
 export const DetailBase = styled.div`
