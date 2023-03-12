@@ -6,12 +6,6 @@ import {
 } from './gmailBaseTypes/gmailTypes'
 import { Location } from './utilsTypes'
 
-// export interface IUpdateRequest {
-//   addLabelIds?: string[]
-//   removeLabelIds?: string[]
-//   delete?: boolean
-// }
-
 export const gmailV1SchemaModifyMessageRequestSchemaEnhanced =
   gmailV1SchemaModifyMessageRequestSchema.extend({
     delete: z.boolean().optional(),

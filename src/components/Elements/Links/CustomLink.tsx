@@ -7,7 +7,7 @@ interface ICustomLink {
 }
 
 const Wrapper = styled(Link)`
-  font-size: 1rem;
+  font-size: var(--text-base);
   font-weight: normal;
   font-stretch: normal;
   font-style: normal;

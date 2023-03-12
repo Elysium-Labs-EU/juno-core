@@ -28,3 +28,4 @@ package-lock.json
 .env
 yarn.lock
 .vscode/settings.json
+.vscode/find-unused-exports.json

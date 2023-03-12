@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-import type { ReactNode } from 'react'
 
 import * as S from 'components/BaseLoader/BaseLoaderStyles'
+import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import LogoutOption, {
   handleLogout,
 } from 'components/MainHeader/Navigation/More/Options/LogoutOption'
@@ -12,13 +12,7 @@ import { useAppSelector } from 'store/hooks'
 import { selectSystemStatusUpdate } from 'store/utilsSlice'
 import { Span } from 'styles/globalStyles'
 
-export const LOGO_ALT = "Juno's Logo"
-const REDIRECTED = 'You will be redirected to the login page in '
-const SECONDS = ' seconds.'
-
-const AnimatedMountUnmount = ({ children }: { children: ReactNode }) => (
-  <S.StyledAnimatedMountUnmount>{children}</S.StyledAnimatedMountUnmount>
-)
+import { LOGO_ALT, REDIRECTED, SECONDS } from './BaseLoaderConstants'
 
 const Baseloader = () => {
   const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)

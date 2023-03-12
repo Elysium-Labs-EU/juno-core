@@ -13,6 +13,8 @@ interface IUseFetchEmailDetail {
   threadId: string | undefined
 }
 
+// TODO: Check out RTK Query?
+
 export default function useFetchEmailDetail({
   activeEmailList,
   forceRefresh,

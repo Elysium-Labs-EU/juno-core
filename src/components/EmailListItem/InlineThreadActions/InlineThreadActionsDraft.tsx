@@ -1,4 +1,5 @@
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Stack from 'components/Elements/Stack/Stack'
 import discardDraft from 'components/EmailOptions/DiscardDraft'
 import { QiDiscard } from 'images/svgIcons/quillIcons'
 import { selectDraftList } from 'store/draftsSlice'
@@ -22,7 +23,7 @@ const InlineThreadActionsDraft = ({
 
   return (
     <S.Wrapper isFocused={isFocused}>
-      <S.Inner>
+      <Stack>
         <CustomIconButton
           onClick={() =>
             discardDraft({
@@ -34,7 +35,7 @@ const InlineThreadActionsDraft = ({
           icon={<QiDiscard size={ICON_SIZE} />}
           title="Discard Draft"
         />
-      </S.Inner>
+      </Stack>
     </S.Wrapper>
   )
 }

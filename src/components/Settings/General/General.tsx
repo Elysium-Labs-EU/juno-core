@@ -1,3 +1,4 @@
+import Stack from 'components/Elements/Stack/Stack'
 import AlternateActions from 'components/Settings/General/AlternateActions/AlternateActions'
 import EmailSize from 'components/Settings/General/EmailSize/EmailSize'
 import SentryToggle from 'components/Settings/General/SentryToggle/SentryToggle'
@@ -8,14 +9,14 @@ import * as S from 'components/Settings/SettingsStyles'
 const TITLE = 'General'
 
 const General = () => (
-  <S.SettingsInnerContainer>
+  <Stack direction="vertical">
     <S.SettingsSubHeader>{TITLE}</S.SettingsSubHeader>
     <ShowAvatar />
     <EmailSize />
     <StrictFlow />
     <AlternateActions />
     <SentryToggle />
-  </S.SettingsInnerContainer>
+  </Stack>
 )
 
 export default General

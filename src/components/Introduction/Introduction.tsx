@@ -1,5 +1,5 @@
 import CustomButton from 'components/Elements/Buttons/CustomButton'
-import CustomModal from 'components/Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Dialog/CustomDialog'
 import StrictFlow from 'components/Settings/General/StrictFlow/StrictFlow'
 import * as global from 'constants/globalConstants'
 import { QiArrowRight, QiCommand } from 'images/svgIcons/quillIcons'
@@ -45,10 +45,10 @@ const Introduction = () => {
 
   return (
     <CustomModal
-      open={activeModal === global.ACTIVE_MODAL_MAP.intro}
-      modalTitle={DIALOG_HEADER}
+      customOnClose={handleClose}
       modalAriaLabel="introduction"
-      additionalOnClose={handleClose}
+      modalTitle={DIALOG_HEADER}
+      open={activeModal === global.ACTIVE_MODAL_MAP.intro}
     >
       <>
         <S.InnerContent>

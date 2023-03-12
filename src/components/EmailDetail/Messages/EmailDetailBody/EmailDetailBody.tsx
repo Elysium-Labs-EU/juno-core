@@ -1,28 +1,18 @@
-import { useEffect, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
+import { useState } from 'react'
 import root from 'react-shadow/styled-components'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import type {
+  IPostTreatmentBody,
+  IShadowBody,
+  IEmailDetailBody,
+} from 'components/EmailDetail/EmailDetailTypes'
 import { useAppDispatch } from 'store/hooks'
-import type { AppDispatch } from 'store/store'
-import type { TFullMessage } from 'store/storeTypes/emailListTypes'
-import changeSignatureColor from 'utils/changeSignatureColor'
-import cleanLink from 'utils/cleanLink'
-import fetchUnsubscribeLink from 'utils/fetchUnsubscribeLink'
 import handleEmailLink from 'utils/handleEmailLink'
-import openLinkInNewTab from 'utils/openLinkInNewTab'
+import openLinkInNewTabTauri from 'utils/openLinkInNewTabTauri'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 
 import Wrapper from './EmailDetailBodyStyles'
-
-// TODO: Type this correctly
-interface IEmailDetailBody {
-  threadDetailBody: any
-  // threadDetailBody: IEmailMessagePayload
-  detailBodyCSS: 'visible' | 'invisible'
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-  setBlockedTrackers?: Dispatch<SetStateAction<Array<string> | Array<any>>>
-}
 
 /**
  * @function postTreatmentBody
@@ -30,32 +20,18 @@ interface IEmailDetailBody {
  * The function will run on the visible document (email) and can only run once, due to the hasRan variable
  * @return {void}
  */
+// TODO: Move all of these functions to the backend. And have the frontend send a header that will indicate if it is Tauri or not.
 const postTreatmentBody = ({
   dispatch,
-  setUnsubscribeLink,
   activeDocument,
-}: {
-  dispatch: AppDispatch
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-  activeDocument: HTMLDivElement | null
-}): void => {
-  openLinkInNewTab(activeDocument)
+}: IPostTreatmentBody): void => {
+  openLinkInNewTabTauri(activeDocument)
   handleEmailLink(activeDocument, dispatch)
-  cleanLink()
-  changeSignatureColor(activeDocument)
-  // Only fetch the unsubscribe link if there isn't one passed from the backend - the setUnsubscribe callback will be undefined if backend provided link already.
-  setUnsubscribeLink && fetchUnsubscribeLink(activeDocument, setUnsubscribeLink)
 }
 
 // Use the shadowRoot body and trigger all the postTreatment functions
 // Otherwise just return an empty div
-const ShadowBody = ({
-  bodyState,
-  setUnsubscribeLink = undefined,
-}: {
-  bodyState: TFullMessage['payload']['body']
-  setUnsubscribeLink?: Dispatch<SetStateAction<string | null>>
-}) => {
+const ShadowBody = ({ email }: IShadowBody) => {
   const dispatch = useAppDispatch()
   const [enhancedBody, setEnhancedBody] = useState(false)
 
@@ -65,14 +41,14 @@ const ShadowBody = ({
       setEnhancedBody(true)
     }
     if (node && node.shadowRoot && node.shadowRoot.innerHTML.length > 0) {
-      postTreatmentBody({ dispatch, setUnsubscribeLink, activeDocument: node })
+      postTreatmentBody({ dispatch, activeDocument: node })
     }
   }
   return (
     // TODO: This is a temporary fix.
     // @ts-ignore
-    <root.div ref={callbackRef}>
-      {sanitizeAndParseHtmlContent(bodyState.emailHTML)}
+    <root.div ref={callbackRef} style={{ all: 'unset', overflow: 'auto' }}>
+      {sanitizeAndParseHtmlContent(email)}
     </root.div>
   )
 }
@@ -80,60 +56,34 @@ const ShadowBody = ({
 const EmailDetailBody = ({
   threadDetailBody,
   detailBodyCSS,
-  setUnsubscribeLink = undefined,
-  setBlockedTrackers = undefined,
 }: IEmailDetailBody) => {
-  const [bodyState, setBodyState] = useState<
-    null | TFullMessage['payload']['body']
-  >(null)
-  const [isDecoding, setIsDecoding] = useState(true)
-  const [fallbackUnsubscribe, setFallbackUnsubscribe] = useState(true)
-
-  useEffect(() => {
-    if (threadDetailBody?.body) {
-      setBodyState(threadDetailBody.body)
-      if (setUnsubscribeLink && threadDetailBody?.headers?.listUnsubscribe) {
-        setUnsubscribeLink(threadDetailBody?.headers?.listUnsubscribe)
-        setFallbackUnsubscribe(false)
-      }
-      if (setBlockedTrackers && threadDetailBody?.body?.removedTrackers) {
-        setBlockedTrackers(threadDetailBody?.body?.removedTrackers)
-      }
-      setIsDecoding(false)
-    }
-  }, [threadDetailBody])
+  const bodyState =
+    'body' in threadDetailBody ? threadDetailBody.body : undefined
+  const email = bodyState?.emailHTML || null
+  const emailFiles = bodyState?.emailFileHTML || []
 
   return (
     <div className={detailBodyCSS}>
-      {isDecoding && (
+      {!bodyState && (
         <Wrapper>
           <StyledCircularProgress size={20} />
         </Wrapper>
       )}
-      {!isDecoding && bodyState?.emailHTML && bodyState.emailHTML.length > 0 && (
-        <ShadowBody
-          bodyState={bodyState}
-          setUnsubscribeLink={
-            // The fallback option will be active whenever the email from the backend doesn't have the unsubscribeLink header
-            fallbackUnsubscribe ? setUnsubscribeLink : undefined
-          }
-        />
-      )}
-      {!isDecoding &&
-        bodyState?.emailFileHTML &&
-        bodyState.emailFileHTML.length > 0 &&
-        bodyState.emailFileHTML.map(
-          (item, itemIdx) =>
-            Object.prototype.hasOwnProperty.call(item, 'mimeType') &&
-            Object.prototype.hasOwnProperty.call(item, 'decodedB64') && (
-              <img
-                key={`${item.filename + itemIdx}`}
-                src={`data:${item.mimeType};base64,${item.decodedB64}`}
-                alt={item?.filename ?? 'embedded image'}
-                style={{ maxWidth: '100%', borderRadius: '5px' }}
-              />
-            )
-        )}
+      {email && email.length > 0 && <ShadowBody email={email} />}
+      {emailFiles.map((emailFile, index) => {
+        const { mimeType, decodedB64, filename } = emailFile
+        if (mimeType && decodedB64) {
+          return (
+            <img
+              key={`${filename + index}`}
+              src={`data:${mimeType};base64,${decodedB64}`}
+              alt={filename || 'embedded image'}
+              style={{ maxWidth: '100%', borderRadius: 'var(--border-m)' }}
+            />
+          )
+        }
+        return null
+      })}
     </div>
   )
 }

@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 // import * as themeConstants from 'constants/themeConstants'
 import { IMessageSendStatus } from 'store/storeTypes/utilsTypes'
 import { selectIsSending, setIsSending } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 
 import * as S from './SendingBannerStyles'
 
@@ -103,7 +104,9 @@ const SendingBanner = () => {
           <S.Inner>
             <S.MessageIcon>
               {iconMap[isSending.type]}
-              <span style={{ marginLeft: '10px' }}>{isSending.message}</span>
+              <Span style={{ marginLeft: 'var(--spacing-2)' }}>
+                {isSending.message}
+              </Span>
             </S.MessageIcon>
             {/* <CustomButton
             label="No no stop"

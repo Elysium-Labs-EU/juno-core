@@ -9,6 +9,12 @@ import App from 'App'
 import { store } from 'store/store'
 import { GlobalStyle } from 'styles/globalStyles'
 
+declare global {
+  interface Window {
+    __TAURI_METADATA__?: any
+  }
+}
+
 // Set a global variable for Buffer, this is used for decoding B64.
 globalThis.Buffer = Buffer
 

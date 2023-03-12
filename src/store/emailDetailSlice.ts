@@ -48,7 +48,7 @@ const initialState: TEmailDetailState = Object.freeze({
   viewIndex: -1,
 })
 
-export const emailDetailSlice = createSlice({
+const emailDetailSlice = createSlice({
   name: 'emailDetail',
   initialState,
   reducers: {
@@ -124,5 +124,7 @@ export const selectIsReplying = (state: RootState) =>
   state.emailDetail.isReplying
 export const selectIsForwarding = (state: RootState) =>
   state.emailDetail.isForwarding
+export const selectFetchStatus = (state: RootState) =>
+  state.emailDetail.fetchStatus
 
 export default emailDetailSlice.reducer

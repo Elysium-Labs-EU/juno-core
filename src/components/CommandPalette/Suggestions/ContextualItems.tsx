@@ -18,6 +18,7 @@ import {
   selectAllEmailsSender,
   startFocusModeCMDK,
 } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 import deduplicateItems from 'utils/deduplicateItems'
 import getRecipientFromList from 'utils/getRecipientFromList'
 import getSenderFromList from 'utils/getSenderFromList'
@@ -25,6 +26,16 @@ import multipleIncludes from 'utils/multipleIncludes'
 
 import defaultItems from './DefaultItems'
 import type { IJsonStructure } from '../commandPaletteUtils'
+
+interface IContextualItems {
+  currentEmailBoxHasEmails: boolean
+  dispatch: AppDispatch
+  emailList: TEmailListState['emailList']
+  isFlexibleFlowActive: boolean
+  labelIds: TLabelState['labelIds']
+  location: Location
+  selectedEmails: TEmailListState['selectedEmails']
+}
 
 export default function contextualItems({
   currentEmailBoxHasEmails,
@@ -34,15 +45,7 @@ export default function contextualItems({
   labelIds,
   location,
   selectedEmails,
-}: {
-  currentEmailBoxHasEmails: boolean
-  dispatch: AppDispatch
-  emailList: TEmailListState['emailList']
-  isFlexibleFlowActive: boolean
-  labelIds: TLabelState['labelIds']
-  location: Location
-  selectedEmails: TEmailListState['selectedEmails']
-}): IJsonStructure[] {
+}: IContextualItems): IJsonStructure[] {
   const itemsArray = defaultItems({
     currentEmailBoxHasEmails,
     dispatch,
@@ -87,39 +90,39 @@ export default function contextualItems({
           ? {
               id: 'select-all-from-all-selected-senders-to-do',
               children: (
-                <span>
+                <Span>
                   Select all available To Do emails from{' '}
-                  <span style={{ fontWeight: 600 }}>all selected senders</span>{' '}
+                  <Span style={{ fontWeight: 600 }}>all selected senders</Span>{' '}
                   for Focus mode
-                </span>
+                </Span>
               ),
               icon: <QiJump />,
               onClick: () =>
                 dispatch(selectAllEmailsSender(startFocusModeCMDK)),
             }
           : undefined,
-        location.pathname !== RoutesConstants.DRAFTS
+        location.pathname !== RoutesConstants.DRAFT
           ? {
               id: 'archive-all-from-all-selected-senders',
               children: (
-                <span>
+                <Span>
                   Archive all available emails from{' '}
-                  <span style={{ fontWeight: 600 }}>all selected senders</span>
-                </span>
+                  <Span style={{ fontWeight: 600 }}>all selected senders</Span>
+                </Span>
               ),
               icon: <QiFolderArchive />,
               onClick: () =>
                 dispatch(selectAllEmailsSender(archiveAllEmailCMDK)),
             }
           : undefined,
-        location.pathname === RoutesConstants.DRAFTS
+        location.pathname === RoutesConstants.DRAFT
           ? {
               id: 'discard-all-from-all-selected-senders',
               children: (
-                <span>
+                <Span>
                   Discard all available drafts from{' '}
-                  <span style={{ fontWeight: 600 }}>all selected senders</span>
-                </span>
+                  <Span style={{ fontWeight: 600 }}>all selected senders</Span>
+                </Span>
               ),
               icon: <QiDiscard />,
               onClick: () =>
@@ -129,7 +132,7 @@ export default function contextualItems({
       )
     }
     baseUseWith.items.push(
-      location.pathname === RoutesConstants.DRAFTS
+      location.pathname === RoutesConstants.DRAFT
         ? {
             id: 'discard-all-selection',
             children: 'Discard all selection',
@@ -165,11 +168,11 @@ export default function contextualItems({
             ? {
                 id: `select-all-from-${nameOfUser}-to-do`,
                 children: (
-                  <span>
+                  <Span>
                     Select all available To Do emails from{' '}
-                    <span style={{ fontWeight: 600 }}>{nameOfUser}</span> for
+                    <Span style={{ fontWeight: 600 }}>{nameOfUser}</Span> for
                     Focus mode
-                  </span>
+                  </Span>
                 ),
                 icon: <QiJump />,
                 onClick: () =>
@@ -179,10 +182,10 @@ export default function contextualItems({
           {
             id: `archive-all-from-${nameOfUser}`,
             children: (
-              <span>
+              <Span>
                 Archive all available emails from{' '}
-                <span style={{ fontWeight: 600 }}>{nameOfUser}</span>
-              </span>
+                <Span style={{ fontWeight: 600 }}>{nameOfUser}</Span>
+              </Span>
             ),
             icon: <QiFolderArchive />,
             onClick: () => dispatch(selectAllEmailsSender(archiveAllEmailCMDK)),

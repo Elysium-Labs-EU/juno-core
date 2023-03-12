@@ -12,10 +12,10 @@ interface IFilesTab {
 
 const FilesTab = ({ activeThread, activeLink, navigateTo }: IFilesTab) => (
   <S.StyedListItem
-    style={{ cursor: 'pointer' }}
-    onClick={() => navigateTo(local.FILES_MENU_ITEM)}
     aria-hidden="true"
     isActive={activeLink === local.FILES_MENU_ITEM.name}
+    onClick={() => navigateTo(local.FILES_MENU_ITEM)}
+    style={{ cursor: 'pointer' }}
   >
     <S.StyledBadge
       badgeContent={activeThread ? countUniqueFiles(activeThread) : 0}

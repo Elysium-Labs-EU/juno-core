@@ -1,22 +1,22 @@
-import { useEffect } from 'react'
-
 import EmailList from 'components/EmailList/EmailList'
-import { selectBaseLoaded } from 'store/baseSlice'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { setCurrentLabels } from 'store/labelsSlice'
+import Layout from 'components/Layout/Layout'
+import { ACTIVE_PAGE_HEADER, HEADER_SPAM } from 'constants/globalConstants'
+import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 
-const LABEL = ['SPAM']
+// import SpamClearOption from './SpamClearOption'
 
 const Spam = () => {
-  const baseLoaded = useAppSelector(selectBaseLoaded)
-  const dispatch = useAppDispatch()
-  useEffect(() => {
-    if (baseLoaded) {
-      dispatch(setCurrentLabels(LABEL))
-    }
-  }, [baseLoaded])
+  useSetCurrentLabel()
 
-  return <EmailList />
+  return (
+    <Layout
+      activePage={ACTIVE_PAGE_HEADER.spam}
+      // additionalHeader={<SpamClearOption />}
+      headerTitle={HEADER_SPAM}
+    >
+      <EmailList />
+    </Layout>
+  )
 }
 
 export default Spam

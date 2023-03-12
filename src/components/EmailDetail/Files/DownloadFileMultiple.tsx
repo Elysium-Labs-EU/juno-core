@@ -78,6 +78,7 @@ const DownloadButtonMultiple = ({
         Promise<
           | { success: boolean; message: string }
           | { success: boolean; message: null }
+          | null
         >
       > = []
       asssesUniqueFiles({ filesObjectArray }).forEach((object) =>

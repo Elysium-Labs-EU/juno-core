@@ -3,6 +3,7 @@ import { MdRefresh } from 'react-icons/md'
 import styled, { css, keyframes } from 'styled-components'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
+import StyledTooltip from 'components/Elements/StyledTooltip'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { refreshEmailFeed, selectIsFetching } from 'store/emailListSlice'
@@ -40,6 +41,7 @@ const LABEL_ACTIVE = 'Refreshing inbox...'
 
 const styles = (showButtonLabel: boolean) => ({
   color: showButtonLabel ? 'var(--color-white)' : undefined,
+  padding: 0,
 })
 
 const InboxRefresh = ({
@@ -81,19 +83,21 @@ const InboxRefresh = ({
   }, [isFetching])
 
   return (
-    <CustomButton
-      label={showButtonLabel ? LABEL_INACTIVE : null}
-      onClick={handleRefreshTrigger}
-      disabled={isLoading || disableRefresh}
-      title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}
-      style={styles(showButtonLabel)}
-      icon={
-        <RotatingIcon disableRefresh={disableRefresh}>
-          <MdRefresh size={20} />
-        </RotatingIcon>
-      }
-      suppressed
-    />
+    <StyledTooltip title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}>
+      <CustomButton
+        label={showButtonLabel ? LABEL_INACTIVE : null}
+        onClick={handleRefreshTrigger}
+        disabled={isLoading || disableRefresh}
+        title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}
+        style={styles(showButtonLabel)}
+        icon={
+          <RotatingIcon disableRefresh={disableRefresh}>
+            <MdRefresh size={20} />
+          </RotatingIcon>
+        }
+        suppressed
+      />
+    </StyledTooltip>
   )
 }
 

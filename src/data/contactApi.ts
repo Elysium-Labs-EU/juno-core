@@ -26,16 +26,17 @@ const contactApi = () => ({
     query: IAllContactsQueryObject
   ): TemplateApiResponse<TPeopleV1SchemaListOtherContactsResponseSchema> => {
     try {
-      const res = await instance.get<TPeopleV1SchemaListOtherContactsResponseSchema>(
-        `/api/contacts/`,
-        {
-          params: {
-            readMask: query.readMask,
-            pageSize: query.pageSize ?? 1000,
-            pageToken: query.nextPageToken ?? undefined,
-          },
-        }
-      )
+      const res =
+        await instance.get<TPeopleV1SchemaListOtherContactsResponseSchema>(
+          `/api/contacts/`,
+          {
+            params: {
+              readMask: query.readMask,
+              pageSize: query.pageSize ?? 1000,
+              pageToken: query.nextPageToken ?? undefined,
+            },
+          }
+        )
       peopleV1SchemaListOtherContactsResponseSchema.parse(res.data)
       return res
     } catch (err) {

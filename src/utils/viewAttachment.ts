@@ -1,6 +1,7 @@
+import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import messageApi from 'data/messageApi'
+
 import base64toBlob from './base64toBlob'
-import type { IEmailAttachmentType } from '../components/EmailDetail/Attachment/EmailAttachmentTypes'
-import messageApi from '../data/messageApi'
 
 const FAIL_RESPONSE_OBJECT = {
   success: false,
@@ -46,7 +47,17 @@ export default async function viewAttachment({
         attachmentId,
       })
       if (fetchedAttachment) {
-        return handleFetchedAttachment(fetchedAttachment, filename, mimeType)
+        const test = handleFetchedAttachment(
+          fetchedAttachment,
+          filename,
+          mimeType
+        )
+        console.log(test)
+        //   // TODO: Write the blob to the file system, but first we need to get the file
+        //  const base64Data = test?.
+        //   const array = new Uint8Array(await test.blobUrl.arrayBuffer())
+        //   console.log(array)
+        return test
       }
       return FAIL_RESPONSE_OBJECT
     }

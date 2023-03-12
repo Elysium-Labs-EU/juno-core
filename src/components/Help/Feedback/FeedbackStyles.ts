@@ -1,44 +1,63 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
+  align-items: stretch;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 20px;
+  gap: var(--spacing-2);
 `
 
 export const Inner = styled.div`
+  align-items: stretch;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 16px;
+  gap: var(--spacing-2);
 `
 
 export const OptionsWrapper = styled.div`
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  gap: 12px;
+  gap: var(--spacing-1-5);
 `
 
 export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-2);
+  margin-top: var(--spacing-2);
 `
 
 export const SuccessContainer = styled.div`
-  min-height: 200px;
-  height: 100vh;
-  max-height: 300px;
   display: flex;
+  height: 100vh;
   justify-content: center;
+  max-height: 300px;
+  min-height: 200px;
   div {
-    justify-content: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
   }
 `
+
+export const customStyles = {
+  background: 'var(--color-white)',
+  border: '1px solid var(--color-neutral-200)',
+  borderRadius: 'var(--radius-m)',
+  boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
+  lineHeight: 1,
+  // TODO: Check these values
+  padding: '10px 12px',
+}
+export const customStylesActive = {
+  background: 'var(--color-black)',
+  border: '1px solid var(--color-neutral-200)',
+  borderRadius: 'var(--radius-m)',
+  boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
+  color: 'var(--color-white)',
+  lineHeight: 1,
+  padding: '10px 12px',
+}

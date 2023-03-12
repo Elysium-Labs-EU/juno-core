@@ -1,3 +1,5 @@
+import Stack from 'components/Elements/Stack/Stack'
+
 import * as S from '../SettingsStyles'
 
 const CONTRIBUTIONS = 'Credits'
@@ -5,7 +7,7 @@ const CONTRIBUTIONS_1 = 'If you want to help please check out any of these '
 const CONTRIBUTIONS_2 = 'Issues.'
 
 const Contributions = () => (
-  <div>
+  <Stack direction="vertical">
     <S.SettingsSubHeader>{CONTRIBUTIONS}</S.SettingsSubHeader>
     <p>
       {CONTRIBUTIONS_1}{' '}
@@ -17,7 +19,7 @@ const Contributions = () => (
         {CONTRIBUTIONS_2}
       </a>
     </p>
-  </div>
+  </Stack>
 )
 
 export default Contributions

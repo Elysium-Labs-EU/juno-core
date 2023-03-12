@@ -1,11 +1,5 @@
 import styled from 'styled-components'
 
-export const Wrapper = styled.nav`
-  .MuiMenuItem-root {
-    height: 32px !important;
-  }
-`
-
 export const StartButtonWrapper = styled.div`
   bottom: 40px;
   position: fixed;
@@ -38,21 +32,6 @@ export const Container = styled.div`
   }
 `
 
-export const MenuSectionContainer = styled.div`
-  margin: 0;
-  padding: 0;
-`
-
-export const MenuSection = styled.div`
-  border-bottom: 1px solid var(--color-neutral-800);
-  display: flex;
-  flex-direction: column;
-  padding: 4px 0px;
-  div:last-child {
-    border-bottom: 0px;
-  }
-`
-
 interface IMenuItem {
   isFocused: boolean
 }
@@ -64,13 +43,14 @@ export const MenuItem = styled.button<IMenuItem>`
   border-radius: var(--radius-m);
   border: 0;
   color: var(--color-white);
+  font-size: var(--text-small);
   display: flex;
   justify-content: space-between;
   letter-spacing: 0.01em;
   line-height: 16px;
-  margin: 0px 4px;
   overflow: hidden;
-  padding: 12px;
+  padding: var(--spacing-1-5);
+  transition: background-color 0.15s ease-in-out;
   text-align: left;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -82,13 +62,14 @@ export const MenuItem = styled.button<IMenuItem>`
 
 export const MenuItemContentMain = styled.span`
   flex: 1 1 0%;
-  margin-right: 16px;
+  margin-right: var(--spacing-2);
+  text-transform: capitalize;
 `
 
 export const MenuItemContentSide = styled.div`
   color: var(--color-neutral-500);
   span:not(:last-child) {
-    margin-right: 8px;
+    margin-right: var(--spacing-1);
   }
 `
 

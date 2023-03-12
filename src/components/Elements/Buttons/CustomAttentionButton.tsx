@@ -1,20 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/button-has-type */
-import type { MouseEvent } from 'react'
 import styled from 'styled-components'
 
-interface ICustomButton {
-  className?: string
+type TCustomAttentionButton = {
   dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
   label: string | JSX.Element
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void
-  onKeyDown?: any
-  tabIndex?: number
-  title: string
   type?: 'submit' | 'reset' | 'button'
   variant?: 'primary' | 'secondary'
-}
+} & React.HTMLAttributes<HTMLButtonElement>
 
 interface IButton {
   variant: 'primary' | 'secondary'
@@ -30,11 +25,11 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
-    margin: 10px 14px;
+    margin: var(--spacing-1) var(--spacing-1-5);
     span {
       color: ${({ variant }) =>
         variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
-      font-size: 1rem;
+      font-size: var(--text-base);
       line-height: 1rem;
     }
   }
@@ -66,35 +61,28 @@ const InnerButton = styled.div`
   .icon {
     line-height: 0;
     margin: 0;
-    margin-right: 5px;
+    margin-right: var(--spacing-0-5);
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
 `
 
 const CustomAttentionButton = ({
-  className = undefined,
   dataCy = undefined,
   disabled = false,
   icon = null,
   label,
-  onClick = undefined,
-  onKeyDown = undefined,
-  tabIndex = undefined,
   title,
   type = 'button',
   variant = 'primary',
-}: ICustomButton) => (
+  ...rest
+}: TCustomAttentionButton) => (
   <Button
-    className={className}
     data-cy={dataCy}
     disabled={disabled}
-    onClick={onClick ? (event) => onClick(event) : undefined}
-    onKeyDown={onKeyDown}
-    tabIndex={tabIndex}
-    title={title}
     type={type ?? 'button'}
     variant={variant ?? 'primary'}
+    {...rest}
   >
     <InnerButton>
       {icon && <div className="icon">{icon}</div>}

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
@@ -19,7 +20,7 @@ import {
   setActiveModal,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
 import viewAttachment from 'utils/viewAttachment'
@@ -113,10 +114,8 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
     ref
   ) => {
     const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-    const [
-      fetchedAttachmentData,
-      setFetchedAttachmentData,
-    ] = useState<null | IFetchedAttachment>(null)
+    const [fetchedAttachmentData, setFetchedAttachmentData] =
+      useState<null | IFetchedAttachment>(null)
     const dispatch = useAppDispatch()
     const activeModal = useAppSelector(selectActiveModal)
 
@@ -134,17 +133,22 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
           messageId,
           attachmentData,
         })
+
         if (response?.success) {
           setLoadState(global.LOAD_STATE_MAP.loaded)
-          setFetchedAttachmentData({
-            blobUrl: response?.blobUrl,
-            mimeType: response?.mimeType,
-          })
-          dispatch(
-            setActiveModal(
-              `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+          if (window.__TAURI_METADATA__) {
+            // TODO: Write to save the file in temp folder, and open it right away.
+          } else {
+            setFetchedAttachmentData({
+              blobUrl: response?.blobUrl,
+              mimeType: response?.mimeType,
+            })
+            dispatch(
+              setActiveModal(
+                `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+              )
             )
-          )
+          }
           return
         }
         setLoadState(global.LOAD_STATE_MAP.error)
@@ -215,6 +219,7 @@ const AttachmentBubble = ({
       ? attachmentData.body?.size
       : attachmentData?.size ?? 0
 
+  // TODO: Reinstate this with using the Tauri API
   const memoizedViewAttachmentButton = useMemo(
     () =>
       'body' in attachmentData ? (
@@ -267,11 +272,11 @@ const AttachmentBubble = ({
         <S.AttachmentInner>
           <EmailAttachmentIcon mimeType={mimeType} />
           <S.AttachmentDetails>
-            <span className="file_name">{fileName}</span>
-            <GS.Span muted small>
+            <Span className="file_name">{fileName}</Span>
+            <Span muted small>
               {global.FILE}
               {formatBytes(fileSize)}
-            </GS.Span>
+            </Span>
           </S.AttachmentDetails>
         </S.AttachmentInner>
         {memoizedViewAttachmentButton}

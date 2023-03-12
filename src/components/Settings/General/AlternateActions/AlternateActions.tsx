@@ -1,6 +1,6 @@
 import { FormControlLabel, Switch } from '@mui/material'
 
-import * as S from 'components/Settings/SettingsStyles'
+import SettingsSection from 'components/Settings/SettingsSection'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
@@ -9,13 +9,9 @@ import {
   selectSettingsLabelId,
   setAlternateActions,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
-const HEADER = 'Alternate actions'
-const BODY =
-  'On the email detail page the application offers two options on one location. These options are stacked and can be alterated by pressing the ALT key.'
-const BODY_1 = 'By default the alternative action is deprioritized.'
-const SWITCH_LABEL = 'Prioritize alternate actions'
+import { HEADER, BODY, SWITCH_LABEL } from './AlternateActionsConstants'
 
 const AlternateActions = () => {
   const dispatch = useAppDispatch()
@@ -45,11 +41,14 @@ const AlternateActions = () => {
   }
 
   return (
-    <S.PageSection>
+    <SettingsSection>
       <p>{HEADER}</p>
       <QiAlt />
-      <GS.P muted>{BODY}</GS.P>
-      <GS.P muted>{BODY_1}</GS.P>
+      {BODY.map((content) => (
+        <Paragraph muted key={content.substring(0, 5)}>
+          {content}
+        </Paragraph>
+      ))}
       <FormControlLabel
         label={SWITCH_LABEL}
         control={
@@ -60,7 +59,7 @@ const AlternateActions = () => {
           />
         }
       />
-    </S.PageSection>
+    </SettingsSection>
   )
 }
 

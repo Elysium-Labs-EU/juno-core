@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const EmailDetailState = z.object({
+const EmailDetailState = z.object({
   coreStatus: z.string().nullable(),
   currEmail: z.string(),
   fetchStatus: z.enum(['idle', 'pending', 'fulfilled', 'rejected']),

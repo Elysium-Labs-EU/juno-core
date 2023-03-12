@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
-export type TUpdateType = 'success' | 'info' | 'warning' | 'error'
-export type TActionType = 'copy' | 'close' | 'undo' | 'unsubscribe'
+type TUpdateType = 'success' | 'info' | 'warning' | 'error'
+type TActionType = 'copy' | 'close' | 'undo' | 'unsubscribe'
 
 export interface ISystemStatusUpdate {
   actionType?: TActionType
@@ -10,18 +10,16 @@ export interface ISystemStatusUpdate {
   type: TUpdateType
 }
 
-export interface ISystemStatusUpdateTimestamp extends ISystemStatusUpdate {
+interface ISystemStatusUpdateTimestamp extends ISystemStatusUpdate {
   timestamp: number
 }
-
-export type TSendStatusType = 'success' | 'info' | 'error'
 
 export interface IMessageSendStatus {
   message: string
   type: TUpdateType
 }
 
-export interface IMessageSendStatusTimestamp extends IMessageSendStatus {
+interface IMessageSendStatusTimestamp extends IMessageSendStatus {
   timestamp: number
 }
 

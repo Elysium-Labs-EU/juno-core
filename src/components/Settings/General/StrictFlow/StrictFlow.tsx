@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
-import * as S from 'components/Settings/SettingsStyles'
+import SettingsSection from 'components/Settings/SettingsSection'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
@@ -15,12 +15,9 @@ import {
   selectSettingsLabelId,
   setFlexibleFlow,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
-const HEADER = 'Workflow mode'
-const BODY =
-  'Juno has two flows - the strict flow and the flexible flow. The strict flow is enabled by default and hides your inbox.'
-const SWITCH_LABEL = 'Flexible flow'
+import { HEADER, BODY, SWITCH_LABEL } from './StrictFlowConstants'
 
 const StrictFlow = () => {
   const dispatch = useAppDispatch()
@@ -67,9 +64,9 @@ const StrictFlow = () => {
   }
 
   return (
-    <S.PageSection>
-      <p>{HEADER}</p>
-      <GS.P muted>{BODY}</GS.P>
+    <SettingsSection>
+      <Paragraph>{HEADER}</Paragraph>
+      <Paragraph muted>{BODY}</Paragraph>
       <FormControlLabel
         label={SWITCH_LABEL}
         control={
@@ -81,7 +78,7 @@ const StrictFlow = () => {
           />
         }
       />
-    </S.PageSection>
+    </SettingsSection>
   )
 }
 

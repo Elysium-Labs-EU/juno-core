@@ -1,10 +1,10 @@
 import type { Dispatch, SetStateAction } from 'react'
 
-export interface IMenuItem {
+interface IMenuItem {
   id: string
   title: string
   onClick: () => void
-  hint?: string[]
+  hint?: Array<string>
 }
 
 export interface IMenuItemCollection {

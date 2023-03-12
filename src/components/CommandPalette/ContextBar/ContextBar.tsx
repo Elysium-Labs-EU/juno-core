@@ -5,7 +5,7 @@ import * as global from 'constants/globalConstants'
 import { selectEmailList, selectSelectedEmails } from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import deduplicateItems from 'utils/deduplicateItems'
 import getRecipientFromList from 'utils/getRecipientFromList'
 import getSenderFromList from 'utils/getSenderFromList'
@@ -47,10 +47,10 @@ const ContextBar = () => {
   return multipleIncludes(selectedEmails.labelIds, labelIds) ? (
     <S.Wrapper>
       <S.Inner>
-        <GS.Span muted small>
+        <Span muted small>
           {' '}
           Selected emails by:{' '}
-        </GS.Span>
+        </Span>
         {filteredUsers.map((user) => (
           <S.FromContainer key={user}>
             <EmailAvatarComponent userEmail={user} />

@@ -7,7 +7,7 @@ export const StyledForm = styled.form`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: var(--spacing-1);
   @media only screen and (max-width: ${breakPoint.md}) {
     display: flex;
     flex-direction: column;
@@ -22,11 +22,11 @@ export const StyledInput = styled.input`
   box-sizing: border-box;
   flex-grow: 1;
   height: 60px;
-  margin-right: 10px;
+  margin-right: var(--spacing-1);
   outline-width: 0;
-  padding: 10px;
+  padding: var(--spacing-1);
   @media only screen and (max-width: ${breakPoint.md}) {
-    margin: 10px 0 20px;
+    margin: var(--spacing-1) 0 var(--spacing-2);
     width: 100%;
   }
 `
@@ -36,13 +36,13 @@ export const SubmitButton = styled.button`
   border-radius: var(--radius-m);
   border: 1px solid transparent;
   color: var(--color-white);
-  font-size: 1rem;
-  padding: 20px;
+  font-size: var(--text-base);
+  padding: var(--spacing-2);
   &:hover {
     background-color: rgb(249, 115, 22);
   }
   @media only screen and (max-width: ${breakPoint.md}) {
-    padding: 10px;
+    padding: var(--spacing-1);
     width: 100%;
   }
 `
@@ -51,7 +51,7 @@ export const LoadingIconContainer = styled.div`
   display: flex;
   place-content: center;
   span {
-    margin-right: 10px;
+    margin-right: var(--spacing-1);
   }
 `
 
@@ -62,7 +62,7 @@ export const StyledLink = styled.a`
   flex-direction: row;
   font-weight: 400;
   span {
-    margin-left: 5px;
+    margin-left: var(--spacing-0-5);
   }
 `
 

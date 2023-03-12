@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Archive from 'components/Archive/Archive'
 import BaseLoader from 'components/BaseLoader/BaseLoader'
 import ComposeEmail from 'components/Compose/ComposeEmail'
-import DraftEmail from 'components/Draft/DraftEmail'
+import Draft from 'components/Draft/Draft'
 import EmailDetail from 'components/EmailDetail/EmailDetail'
 import Inbox from 'components/Inbox/Inbox'
 import GoogleCallback from 'components/Login/Callback/GoogleCallBack'
@@ -11,6 +11,7 @@ import GoogleCallbackTesting from 'components/Login/Callback/GoogleCallBackTesti
 import Login from 'components/Login/Login'
 import PageNotFound from 'components/PageNotFound/PageNotFound'
 import SentEmail from 'components/Sent/Sent'
+import Spam from 'components/Spam/Spam'
 import ToDo from 'components/ToDo/Todo'
 import Trash from 'components/Trash/Trash'
 import RoutesConstants from 'constants/routesConstants'
@@ -20,13 +21,13 @@ import { useAppSelector } from 'store/hooks'
 import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
 
 const ProtectedRoute = ({
+  baseLoaded,
   children,
   isAuthenticated,
-  baseLoaded,
 }: {
+  baseLoaded: boolean
   children: JSX.Element
   isAuthenticated: boolean
-  baseLoaded: boolean
 }) => {
   if (!isAuthenticated) {
     return <Navigate to={RoutesConstants.LOGIN} replace />
@@ -48,7 +49,10 @@ const ProtectedRouteTemplate = ({ children }: { children: JSX.Element }) => {
 
 const RoutesComponent = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
-  useSentry(import.meta.env.VITE_SENTRY_DSN)
+  const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN
+  if (SENTRY_DSN) {
+    useSentry(SENTRY_DSN)
+  }
 
   return (
     <Routes>
@@ -97,10 +101,10 @@ const RoutesComponent = () => {
         />
       </Route>
       <Route
-        path={RoutesConstants.DRAFTS}
+        path={RoutesConstants.DRAFT}
         element={
           <ProtectedRouteTemplate>
-            <DraftEmail />
+            <Draft />
           </ProtectedRouteTemplate>
         }
       />
@@ -112,7 +116,7 @@ const RoutesComponent = () => {
           </ProtectedRouteTemplate>
         }
       />
-      {isFlexibleFlowActive && (
+      {isFlexibleFlowActive ? (
         <Route
           path={RoutesConstants.INBOX}
           element={
@@ -121,12 +125,20 @@ const RoutesComponent = () => {
             </ProtectedRouteTemplate>
           }
         />
-      )}
+      ) : null}
       <Route
         path={RoutesConstants.ARCHIVE}
         element={
           <ProtectedRouteTemplate>
             <Archive />
+          </ProtectedRouteTemplate>
+        }
+      />
+      <Route
+        path={RoutesConstants.SPAM}
+        element={
+          <ProtectedRouteTemplate>
+            <Spam />
           </ProtectedRouteTemplate>
         }
       />

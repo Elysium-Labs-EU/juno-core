@@ -6,6 +6,8 @@ export const breakPoint = {
   twoXL: '1536px',
 }
 
+export const containerMaxWidth = '1480px'
+
 export const spacing = {
   '0.5': '4px',
   '0.75': '6px',
@@ -16,6 +18,20 @@ export const spacing = {
   '4': '32px',
   '6': '48px',
   '7': '56px',
+  '8': '64px',
+  '9': '72px',
+  '10': '80px',
+}
+
+export const gapSpacing = {
+  '0.5': '2px',
+  '1': '4px',
+  '1.5': '6px',
+  '2': '8px',
+  '2.5': '10px',
+  '3': '12px',
+  '4': '16px',
+  '5': '20px',
 }
 
 export const color = {
@@ -61,7 +77,9 @@ export const color = {
   neutral: {
     50: '#fafafa',
     100: '#f5f5f5',
+    '100.03': 'rgba(245, 245, 245, 0.3)',
     200: '#e5e5e5',
+    '200.06': 'rgba(229, 229, 229, 0.6)',
     300: '#d4d4d4',
     400: '#a3a3a3',
     500: '#737373',
@@ -108,13 +126,15 @@ export const color = {
   },
 }
 
-export const fontSize = {
+export const textSize = {
   h1: '3.052rem',
   h2: '2.441rem',
   h3: '1.953rem',
   h4: '1.563rem',
   h5: '1.25rem',
+  base: '1rem',
   small: '0.8rem',
+  xs: '0.625rem',
 }
 export const fontFamily =
   "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,'Fira Sans','Droid Sans','Helvetica Neue',sans-serif"

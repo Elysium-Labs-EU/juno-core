@@ -34,7 +34,7 @@ const initialState: TBaseState = Object.freeze({
   isAuthenticated: false,
 })
 
-export const baseSlice = createSlice({
+const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
@@ -58,23 +58,20 @@ export const baseSlice = createSlice({
   },
 })
 
-export const {
-  setBaseLoaded,
-  setIsAuthenticated,
-  setProfile,
-} = baseSlice.actions
+export const { setBaseLoaded, setIsAuthenticated, setProfile } =
+  baseSlice.actions
 
-export const handleSettings = (
-  labels: Array<TGmailV1SchemaLabelSchema>
-): AppThunk => async (dispatch) => {
-  const settingsLabel = findSettings(labels, dispatch)
-  if (!settingsLabel || !settingsLabel.id) {
-    createSettingsLabel(dispatch)
-    return
+export const handleSettings =
+  (labels: Array<TGmailV1SchemaLabelSchema>): AppThunk =>
+  async (dispatch) => {
+    const settingsLabel = findSettings(labels, dispatch)
+    if (!settingsLabel || !settingsLabel.id) {
+      createSettingsLabel(dispatch)
+      return
+    }
+    dispatch(setSettingsLabelId(settingsLabel.id))
+    parseSettings(dispatch, settingsLabel)
   }
-  dispatch(setSettingsLabelId(settingsLabel.id))
-  parseSettings(dispatch, settingsLabel)
-}
 
 // The base can only be set to be loaded whenever all the labels are created.
 export const recheckBase = (): AppThunk => async (dispatch, getState) => {
@@ -91,32 +88,32 @@ export const recheckBase = (): AppThunk => async (dispatch, getState) => {
  * @returns adding all the required emailboxes as empty shells to the Redux state. To ensure that the position of the boxes are static.
  */
 
-const presetEmailList = (prefetchedBoxes: TPrefetchedBoxes): AppThunk => (
-  dispatch
-) => {
-  const emailListBuffer = [] as TBaseEmailList
+const presetEmailList =
+  (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
+  (dispatch) => {
+    const emailListBuffer = [] as TBaseEmailList
 
-  prefetchedBoxes.forEach((emailContainer) => {
-    const [firstEmailContainer] = emailContainer
-    if (firstEmailContainer && firstEmailContainer?.id) {
-      const presetEmailBox = {
-        labels: [firstEmailContainer.id],
-        threads: [] as Array<any>,
-        nextPageToken: null,
+    prefetchedBoxes.forEach((emailContainer) => {
+      const [firstEmailContainer] = emailContainer
+      if (firstEmailContainer && firstEmailContainer?.id) {
+        const presetEmailBox = {
+          labels: [firstEmailContainer.id],
+          threads: [] as Array<any>,
+          nextPageToken: null,
+        }
+        emailListBuffer.push(presetEmailBox)
+      } else {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'We cannot setup all the email boxes.',
+          })
+        )
       }
-      emailListBuffer.push(presetEmailBox)
-    } else {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'We cannot setup all the email boxes.',
-        })
-      )
-    }
-  })
+    })
 
-  dispatch(setBaseEmailList(emailListBuffer))
-}
+    dispatch(setBaseEmailList(emailListBuffer))
+  }
 
 /**
  * @function finalizeBaseLoading
@@ -124,30 +121,30 @@ const presetEmailList = (prefetchedBoxes: TPrefetchedBoxes): AppThunk => (
  * @returns finalizes the base loading by setting the emaillist and the storagelabels in Redux and parsing the settings.
  */
 
-const finalizeBaseLoading = (
-  labels: Array<TGmailV1SchemaLabelSchema>
-): AppThunk => (dispatch) => {
-  // TODO: Refactor this to not be an array of arrays, but an array of objects
-  const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
-    labels.filter((item) => item.name === baseLabel)
-  )
-  // Add an empty label to have the option to show ALL emails.
-  const addEmptyAllLabel = prefetchedBoxes.concat([
-    [
-      {
-        id: ARCHIVE_LABEL,
-        name: ARCHIVE_LABEL,
-        messageListVisibility: 'show',
-        labelListVisibility: 'labelShow',
-        type: 'junoCustom',
-      },
-    ],
-  ])
-  dispatch(presetEmailList(addEmptyAllLabel))
-  dispatch(setStorageLabels(addEmptyAllLabel))
-  dispatch(handleSettings(labels))
-  dispatch(setBaseLoaded(true))
-}
+const finalizeBaseLoading =
+  (labels: Array<TGmailV1SchemaLabelSchema>): AppThunk =>
+  (dispatch) => {
+    // TODO: Refactor this to not be an array of arrays, but an array of objects
+    const prefetchedBoxes = BASE_ARRAY.map((baseLabel) =>
+      labels.filter((item) => item.name === baseLabel)
+    )
+    // Add an empty label to have the option to show ALL emails.
+    const addEmptyAllLabel = prefetchedBoxes.concat([
+      [
+        {
+          id: ARCHIVE_LABEL,
+          name: ARCHIVE_LABEL,
+          messageListVisibility: 'show',
+          labelListVisibility: 'labelShow',
+          type: 'junoCustom',
+        },
+      ],
+    ])
+    dispatch(presetEmailList(addEmptyAllLabel))
+    dispatch(setStorageLabels(addEmptyAllLabel))
+    dispatch(handleSettings(labels))
+    dispatch(setBaseLoaded(true))
+  }
 
 export const checkBase = (): AppThunk => async (dispatch) => {
   try {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Stack from 'components/Elements/Stack/Stack'
 import StyledPopover from 'components/Elements/StyledPopover'
 import isForwardingListener from 'components/EmailOptions/IsForwardingListener'
 import isReplyingListener from 'components/EmailOptions/IsReplyingListener'
@@ -18,8 +18,8 @@ import { updateMessageLabel } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 
-import type { IReadMessage } from './DisplayVariants/ReadUnreadMessage'
 import * as S from './SpecificEmailOptionsStyles'
+import type { IReadMessage } from '../EmailDetailTypes'
 
 const SpecificEmailOptions = ({
   handleClickListener,
@@ -37,9 +37,9 @@ const SpecificEmailOptions = ({
   const labelIds = useAppSelector(selectLabelIds)
   const isForwarding = useAppSelector(selectIsForwarding)
   const isReplying = useAppSelector(selectIsReplying)
+  const [open, setOpen] = useState<boolean>(false)
   const activeMessage = threadDetail?.messages[messageIndex]
   const isTrash = activeMessage?.labelIds.includes(global.TRASH_LABEL)
-  const [open, setOpen] = useState<boolean>(false)
 
   const handleOpenChange = (isOpen: boolean) => {
     if (isOpen) {
@@ -70,21 +70,21 @@ const SpecificEmailOptions = ({
 
   return (
     <StyledPopover
+      onOpenChange={handleOpenChange}
+      open={open}
       triggerButton={
         <CustomIconButton
-          onClick={() => {}}
-          icon={<QiChevronDown />}
-          title="Show message options"
-          ariaHaspopup="true"
           ariaControls={open ? 'menu' : undefined}
           ariaExpanded={open || undefined}
+          ariaHaspopup="true"
+          icon={<QiChevronDown />}
+          title="Show message options"
         />
       }
-      open={open}
-      onOpenChange={handleOpenChange}
     >
-      <S.Inner>
-        <CustomButton
+      <Stack direction="vertical" spacing="mini">
+        <S.StyledCustomButton
+          icon={<QiReply />}
           label="Reply to this message"
           onClick={() => {
             setOpen(false)
@@ -94,11 +94,10 @@ const SpecificEmailOptions = ({
               isForwarding,
             })
           }}
-          icon={<QiReply />}
-          style={{ color: 'var(--color-white' }}
           title="Reply to this message"
         />
-        <CustomButton
+        <S.StyledCustomButton
+          icon={<QiForward />}
           label="Forward this message"
           onClick={() => {
             setOpen(false)
@@ -108,24 +107,21 @@ const SpecificEmailOptions = ({
               isReplying,
             })
           }}
-          icon={<QiForward />}
-          style={{ color: 'var(--color-white' }}
           title="Forward this message"
         />
-        {!isTrash && (
-          <CustomButton
+        {!isTrash ? (
+          <S.StyledCustomButton
+            icon={<QiFolderTrash />}
             label="Delete this message"
             onClick={() => {
               setOpen(false)
               setShouldRefreshDetail(true)
               thrashMessage()
             }}
-            icon={<QiFolderTrash />}
-            style={{ color: 'var(--color-white' }}
             title="Delete this message"
           />
-        )}
-      </S.Inner>
+        ) : null}
+      </Stack>
     </StyledPopover>
   )
 }

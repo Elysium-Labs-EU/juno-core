@@ -2,21 +2,23 @@ import Badge from '@mui/material/Badge/Badge'
 import styled from 'styled-components'
 
 export const TabContainer = styled.nav`
+  align-content: flex-start;
+  display: flex;
+  justify-content: space-between;
+  margin-left: var(--spacing-2);
   position: relative;
   text-align: center;
-  display: flex;
-  align-content: flex-start;
-  justify-content: space-between;
 `
 
 export const ItemsContainer = styled.ul`
   display: flex;
   flex-direction: row;
+  gap: var(--gap-spacing-2);
   list-style-type: none;
   margin: 0;
   padding: 0;
   li:last-child {
-    margin-left: 40px;
+    margin-left: var(--spacing-4);
   }
 `
 
@@ -25,18 +27,17 @@ interface StyledListItem {
 }
 
 export const StyedListItem = styled.li<StyledListItem>`
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.13;
-  letter-spacing: normal;
-  text-align: left;
+  align-items: center;
   color: ${({ isActive }) =>
     isActive ? `var(--color-black)` : `var(--color-neutral-400)`};
-  display: flex;
-  align-items: center;
-  text-decoration: none;
   cursor: pointer;
-  font-family: var(--font-family);
+  display: flex;
+  font-stretch: normal;
+  font-style: normal;
+  letter-spacing: normal;
+  line-height: 1.13;
+  text-align: left;
+  text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
@@ -59,8 +60,8 @@ export const StyedListItem = styled.li<StyledListItem>`
 export const StyledBadge = styled(Badge)`
   .MuiBadge-badge {
     background-color: var(--color-neutral-400);
-    top: 10px;
     right: -16px;
+    top: 10px;
     transition: background-color 0.1s ease-in;
     &:hover {
       background-color: var(--color-black);

@@ -14,7 +14,11 @@ import { handleLogout } from './Options/LogoutOption'
 
 const SIZE = 16
 
-const NavigationMore = () => {
+interface INavigationMore {
+  isActive: boolean
+}
+
+const NavigationMore = ({ isActive }: INavigationMore) => {
   const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
 
@@ -34,10 +38,10 @@ const NavigationMore = () => {
       items: [
         {
           id: 'draft-navigation',
-          title: global.HEADER_DRAFTS,
+          title: global.HEADER_DRAFT,
           onClick: () => {
             dispatch(setActiveModal(null))
-            dispatch(push(Routes.DRAFTS))
+            dispatch(push(Routes.DRAFT))
           },
         },
         {
@@ -57,11 +61,19 @@ const NavigationMore = () => {
           },
         },
         {
-          id: 'delete-navigation',
+          id: 'trash-navigation',
           title: global.HEADER_TRASH,
           onClick: () => {
             dispatch(setActiveModal(null))
             dispatch(push(Routes.TRASH))
+          },
+        },
+        {
+          id: 'spam-navigation',
+          title: global.HEADER_SPAM,
+          onClick: () => {
+            dispatch(setActiveModal(null))
+            dispatch(push(Routes.SPAM))
           },
         },
       ],
@@ -93,14 +105,15 @@ const NavigationMore = () => {
   return (
     <Menu
       activeModalTag={global.ACTIVE_MODAL_MAP.navigation}
-      menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
       handleClose={handleClose}
+      menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
       triggerButton={
         <CustomIconButton
           ariaControls={isOpen ? 'menu' : undefined}
           ariaExpanded={isOpen || undefined}
           ariaHaspopup="true"
           dataCy="more-menu"
+          isActive={isActive}
           icon={<QiMeatballsH size={SIZE} />}
           onClick={handleOpen}
           title="More menu"

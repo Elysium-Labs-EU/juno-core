@@ -1,4 +1,5 @@
 cypress.config.ts
+env.ts
 **/cypress/**
 lint-staged.config.mjs
 vite.config.ts

@@ -34,9 +34,10 @@ export type TAuthenticateClientResponseSchema = z.infer<
   typeof authenticateClientResponseSchema
 >
 
-export const extendedGmailV1SchemaProfileSchemaSchema = gmailV1SchemaProfileSchema.and(
-  peopleV1SchemaNameSchema.pick({ displayName: true })
-)
+export const extendedGmailV1SchemaProfileSchemaSchema =
+  gmailV1SchemaProfileSchema.and(
+    peopleV1SchemaNameSchema.pick({ displayName: true })
+  )
 
 export type TExtendedGmailV1SchemaProfileSchemaSchema = z.infer<
   typeof extendedGmailV1SchemaProfileSchemaSchema

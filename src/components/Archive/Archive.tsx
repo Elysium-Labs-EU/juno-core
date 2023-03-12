@@ -1,19 +1,15 @@
-import Seo from 'components/Elements/Seo'
 import EmailList from 'components/EmailList/EmailList'
-import { HEADER_ARCHIVE } from 'constants/globalConstants'
+import Layout from 'components/Layout/Layout'
+import { ACTIVE_PAGE_HEADER, HEADER_ARCHIVE } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
-import AnimatedMountUnmount from 'utils/animatedMountUnmount'
 
 const Archive = () => {
   useSetCurrentLabel()
 
   return (
-    <>
-      <Seo title={HEADER_ARCHIVE} />
-      <AnimatedMountUnmount>
-        <EmailList />
-      </AnimatedMountUnmount>
-    </>
+    <Layout activePage={ACTIVE_PAGE_HEADER.more} headerTitle={HEADER_ARCHIVE}>
+      <EmailList />
+    </Layout>
   )
 }
 

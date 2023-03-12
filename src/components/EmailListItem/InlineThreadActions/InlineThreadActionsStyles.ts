@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
 import type { IInlineThreadActions } from './InlineThreadActionsTypes'
@@ -10,7 +11,9 @@ export const Wrapper = styled.div<TWrapper>`
   background: linear-gradient(
     90deg,
     rgba(2, 0, 36, 0) 0%,
-    rgba(226, 226, 226, 1) 25%
+    rgba(229, 229, 229, 1) 25%,
+    rgba(229, 229, 229, 1) 85%,
+    rgba(229, 229, 229, 0.4) 100%
   );
   right: 1rem;
   bottom: 0;
@@ -22,15 +25,4 @@ export const Wrapper = styled.div<TWrapper>`
   top: 0;
   transition: opacity 0.2s ease-in-out;
   z-index: 10;
-`
-
-export const Inner = styled.div`
-  display: flex;
-  flex-direction: row;
-  button {
-    margin-left: var(--spacing-2);
-    span: {
-      display: flex;
-    }
-  }
 `

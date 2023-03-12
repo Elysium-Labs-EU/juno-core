@@ -14,13 +14,6 @@ export interface IComposePayload {
   signature?: string
 }
 
-export interface IComposeEmail {
-  bcc: Array<TContact>
-  body: string
-  cc: Array<TContact>
-  subject: string
-  to: Array<TContact>
-}
 export interface IComposeEmailReceive {
   bcc?: string | Array<TContact> | undefined
   body?: string | undefined

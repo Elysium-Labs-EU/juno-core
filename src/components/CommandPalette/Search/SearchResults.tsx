@@ -2,7 +2,7 @@ import CustomButton from 'components/Elements/Buttons/CustomButton'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import ThreadList from 'components/EmailList/ThreadList'
 import * as global from 'constants/globalConstants'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
 import * as S from '../CommandPaletteStyles'
 import type { ICommandPalletteSearchResults } from '../CommandPaletteTypes'
@@ -41,9 +41,9 @@ const SearchResults = ({
       </S.FooterRow>
     ) : (
       <S.FooterRow>
-        <GS.P small muted>
+        <Paragraph small muted>
           {global.NO_MORE_RESULTS}
-        </GS.P>
+        </Paragraph>
       </S.FooterRow>
     )}
   </>

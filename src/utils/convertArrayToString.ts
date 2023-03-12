@@ -4,7 +4,7 @@
  * @returns a single string, if there is valid input, the output will have no more commas. If no valid input, it will return an empty string.
  */
 
-const convertArrayToString = (data: string | string[]) => {
+const convertArrayToString = (data: string | Array<string>) => {
   if (data && typeof data === 'string') {
     const converted = data.toString().replace(',', '-')
     return converted

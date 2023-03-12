@@ -13,7 +13,7 @@ const initialState: TContactState = Object.freeze({
   contactsLoaded: '',
 })
 
-export const contactsSlice = createSlice({
+const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
   reducers: {
@@ -29,12 +29,6 @@ export const contactsSlice = createSlice({
       )
       state.allContacts = uniqueContacts
     },
-    setContactsNextPageToken: (
-      state,
-      { payload }: PayloadAction<TContactState['contactNextPageToken']>
-    ) => {
-      state.contactNextPageToken = payload
-    },
     setContactsLoaded: (
       state,
       { payload }: PayloadAction<TContactState['contactsLoaded']>
@@ -44,11 +38,7 @@ export const contactsSlice = createSlice({
   },
 })
 
-export const {
-  setAllContacts,
-  setContactsLoaded,
-  setContactsNextPageToken,
-} = contactsSlice.actions
+export const { setAllContacts, setContactsLoaded } = contactsSlice.actions
 
 export const selectAllContacts = (state: RootState) =>
   state.contacts.allContacts

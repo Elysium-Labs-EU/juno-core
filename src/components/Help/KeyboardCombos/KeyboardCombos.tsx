@@ -1,45 +1,50 @@
-import CustomModal from 'components/Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Dialog/CustomDialog'
+import Stack from 'components/Elements/Stack/Stack'
 import * as global from 'constants/globalConstants'
 import * as local from 'constants/keycomboConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph, Span } from 'styles/globalStyles'
 import getUserAgent from 'utils/getUserAgent'
 
 import * as S from './KeyboardCombosStyles'
 
 interface IKeyCombos {
-  title: string
+  keys: Array<string> | Array<JSX.Element>
   subTitle?: string
-  keys: string[] | JSX.Element[]
+  title: string
+}
+
+interface ICreateSectionWithKeys {
+  keyCombos: Array<IKeyCombos>
+  subTitle: string
+  title: string
 }
 
 const CreateSectionWithKeys = ({
   keyCombos,
   title,
   subTitle,
-}: {
-  keyCombos: IKeyCombos[]
-  title: string
-  subTitle: string
-}) => (
-  <S.SectionContainer>
+}: ICreateSectionWithKeys) => (
+  <Stack direction="vertical" spacing="mini" style={{ width: '100%' }}>
     <div>
       <strong>{title}</strong>
     </div>
-    <span>{subTitle}</span>
+    <Span>{subTitle}</Span>
     {keyCombos.map((combo) => (
-      <S.KeyComboContainer key={combo.title}>
+      <Stack direction="vertical" key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && <GS.Span muted>{combo?.subTitle}</GS.Span>}
-        <S.KeyBindShortcut>
+        {combo?.subTitle ? <Span muted>{combo?.subTitle}</Span> : null}
+        <Stack direction="horizontal" spacing="mini">
           {combo.keys.map((oneKey) => (
-            <span key={JSON.stringify(oneKey)}>{oneKey}</span>
+            <S.KeyBindShortcut key={JSON.stringify(oneKey)}>
+              {oneKey}
+            </S.KeyBindShortcut>
           ))}
-        </S.KeyBindShortcut>
-      </S.KeyComboContainer>
+        </Stack>
+      </Stack>
     ))}
-  </S.SectionContainer>
+  </Stack>
 )
 
 const KeyboardCombos = () => {
@@ -51,29 +56,29 @@ const KeyboardCombos = () => {
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <GS.P muted style={{ marginBottom: '10px' }}>
+        <Paragraph muted style={{ marginBottom: 'var(--spacing-1)' }}>
           {local.MODAL_OS_SUB}{' '}
-          <span style={{ color: `var(--color-black)` }}>{getUserAgent()}</span>
-        </GS.P>
+          <Span style={{ color: `var(--color-black)` }}>{getUserAgent()}</Span>
+        </Paragraph>
       }
     >
-      <S.Columns>
+      <Stack spacing="huge">
         <CreateSectionWithKeys
-          title={local.GLOBAL_KEY_TITLE}
+          keyCombos={local.GLOBAL_KEY_SHORTCUTS}
           subTitle={local.GLOBAL_KEY_SUB_TITLE}
-          keyCombos={local.GLOBAL_KEY_COMBOS}
+          title={local.GLOBAL_KEY_TITLE}
         />
         <CreateSectionWithKeys
-          title={local.EMAIL_KEY_TITLE}
+          keyCombos={local.EMAIL_DETAIL_SHORTCUTS}
           subTitle={local.EMAIL_KEY_SUB_TITLE}
-          keyCombos={local.EMAIL_DETAIL_COMBOS}
+          title={local.EMAIL_KEY_TITLE}
         />
         <CreateSectionWithKeys
-          title={local.COMPOSE_KEY_TITLE}
+          keyCombos={local.COMPOSE_KEY_SHORTCUTS}
           subTitle={local.COMPOSE_KEY_SUB_TITLE}
-          keyCombos={local.COMPOSE_KEY_COMBOS}
+          title={local.COMPOSE_KEY_TITLE}
         />
-      </S.Columns>
+      </Stack>
     </CustomModal>
   )
 }

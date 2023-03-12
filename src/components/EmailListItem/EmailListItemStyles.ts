@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import * as global from 'constants/globalConstants'
 
 interface IThreadBaseProps {
-  emailLabels: string[] | string
+  emailLabels: Array<string>
 }
 
 export const ThreadBase = styled.div<IThreadBaseProps>`
@@ -12,8 +12,8 @@ export const ThreadBase = styled.div<IThreadBaseProps>`
   position: relative;
   user-select: none;
   &:hover {
-    text-decoration: none;
     cursor: pointer;
+    text-decoration: none;
   }
 `
 
@@ -24,13 +24,13 @@ interface IThreadRow {
 
 export const ThreadRow = styled.div<IThreadRow>`
   background-color: ${({ isFocused }) =>
-    isFocused ? `var(--color-neutral-200)` : 'transparent'};
+    isFocused ? 'var(--color-neutral-200-06)' : 'var(--color-neutral-100-03)'};
   border-radius: var(--radius-m);
   border: 1px solid
     ${({ isFocused }) =>
-      isFocused ? `var(--color-neutral-300)` : 'transparent'};
+      isFocused ? ' var(--color-neutral-300)' : 'transparent'};
   display: grid;
-  font-size: var(--small);
+  font-size: var(--text-small);
   grid-template-columns: ${({ showLabel }) =>
     !showLabel
       ? '30px 20px 215px auto max-content 105px 20px 30px'
@@ -41,7 +41,7 @@ export const ThreadRow = styled.div<IThreadRow>`
   z-index: 2;
 
   &:hover {
-    background-color: var(--color-neutral-200);
+    background-color: var(--color-neutral-200-06);
   }
 `
 
@@ -78,7 +78,7 @@ export const UnreadDot = styled.div`
 `
 
 export const Avatars = styled.div`
-  margin-right: 15px;
+  margin-right: var(--spacing-2);
 `
 
 export const CellName = styled.div`
@@ -97,7 +97,7 @@ export const CellLabels = styled.div`
   flex-direction: row;
   min-width: 0px;
   overflow: hidden;
-  padding-left: 15px;
+  padding-left: var(--spacing-2);
   user-select: none;
   white-space: nowrap;
 `
@@ -108,7 +108,7 @@ export const CellMessage = styled.div`
   display: flex;
   flex-direction: row;
   min-width: 0;
-  padding-left: 15px;
+  padding-left: var(--spacing-2);
   white-space: nowrap;
 `
 
@@ -118,7 +118,7 @@ export const CellAttachment = styled.div`
   display: flex;
   flex-direction: row;
   justify-self: end;
-  padding-left: 10px;
+  padding-left: var(--spacing-1);
 `
 
 export const CellDate = styled.div`

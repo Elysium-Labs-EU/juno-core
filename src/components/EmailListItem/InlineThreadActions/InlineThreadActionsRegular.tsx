@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Stack from 'components/Elements/Stack/Stack'
+import StyledTooltip from 'components/Elements/StyledTooltip'
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import ReplyOverview from 'components/EmailOptions/ReplyOverview'
 import setToDoMail from 'components/EmailOptions/SetToDoMail'
@@ -46,17 +48,19 @@ const InlineThreadActionsRegular = ({
 
   const memoizedReplyButton = useMemo(
     () => (
-      <CustomIconButton
-        icon={<QiReply size={ICON_SIZE} />}
-        onClick={() =>
-          ReplyOverview({
-            id: threadId,
-            dispatch,
-          })
-        }
-        title="Reply"
-        dataCy="reply-inline-button"
-      />
+      <StyledTooltip title="Reply">
+        <CustomIconButton
+          icon={<QiReply size={ICON_SIZE} />}
+          onClick={() =>
+            ReplyOverview({
+              id: threadId,
+              dispatch,
+            })
+          }
+          title="Reply"
+          dataCy="reply-inline-button"
+        />
+      </StyledTooltip>
     ),
     [threadId]
   )
@@ -73,19 +77,21 @@ const InlineThreadActionsRegular = ({
             LABEL_NAME: global.TODO_LABEL_NAME,
           })?.id
       ) && (
-        <CustomIconButton
-          onClick={() =>
-            setToDoMail({
-              threadId,
-              labelIds: staticAllMessageLabelIds,
-              dispatch,
-              storageLabels,
-            })
-          }
-          icon={<QiToDo size={ICON_SIZE} />}
-          title="Mark as To Do"
-          dataCy="mark-todo-inline-button"
-        />
+        <StyledTooltip title="Mark as To Do">
+          <CustomIconButton
+            onClick={() =>
+              setToDoMail({
+                threadId,
+                labelIds: staticAllMessageLabelIds,
+                dispatch,
+                storageLabels,
+              })
+            }
+            icon={<QiToDo size={ICON_SIZE} />}
+            title="Mark as To Do"
+            dataCy="mark-todo-inline-button"
+          />
+        </StyledTooltip>
       )
     )
   }, [labelIds, threadId, storageLabels])
@@ -94,18 +100,20 @@ const InlineThreadActionsRegular = ({
     const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
     return (
       staticAllMessageLabelIds.length > 0 && (
-        <CustomIconButton
-          onClick={() =>
-            archiveMail({
-              threadId,
-              dispatch,
-              labelIds: staticAllMessageLabelIds,
-            })
-          }
-          icon={<QiFolderArchive size={ICON_SIZE} />}
-          title="Archive"
-          dataCy="archive-inline-button"
-        />
+        <StyledTooltip title="Archive">
+          <CustomIconButton
+            onClick={() =>
+              archiveMail({
+                threadId,
+                dispatch,
+                labelIds: staticAllMessageLabelIds,
+              })
+            }
+            icon={<QiFolderArchive size={ICON_SIZE} />}
+            title="Archive"
+            dataCy="archive-inline-button"
+          />
+        </StyledTooltip>
       )
     )
   }, [threadId, labelIds])
@@ -116,25 +124,27 @@ const InlineThreadActionsRegular = ({
       return null
     }
     return (
-      <CustomIconButton
-        onClick={() => thrashMail({ threadId, dispatch, labelIds })}
-        icon={<QiFolderTrash size={ICON_SIZE} />}
-        title="Delete"
-        hoverColor={themeConstants.color.red[500]}
-        dataCy="delete-inline-button"
-      />
+      <StyledTooltip title="Delete">
+        <CustomIconButton
+          onClick={() => thrashMail({ threadId, dispatch, labelIds })}
+          icon={<QiFolderTrash size={ICON_SIZE} />}
+          title="Delete"
+          hoverColor={themeConstants.color.red[600]}
+          dataCy="delete-inline-button"
+        />
+      </StyledTooltip>
     )
   }, [threadId, labelIds])
 
   return (
     <S.Wrapper data-testid="email-regular-inline-actions" isFocused={isFocused}>
       {threadId && labelIds && (
-        <S.Inner>
+        <Stack spacing="large">
           {memoizedReplyButton}
           {memoizeMarkToDoButton}
           {memoizedArchiveButton}
           {memoizedDeleteButton}
-        </S.Inner>
+        </Stack>
       )}
     </S.Wrapper>
   )

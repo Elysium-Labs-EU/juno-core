@@ -5,9 +5,9 @@ import type {
 import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
-import CustomModal from '../Modal/CustomModal'
+import CustomModal from '../Dialog/CustomDialog'
 
 const AttachmentModal = ({
   fetchedAttachmentData,
@@ -33,10 +33,10 @@ const AttachmentModal = ({
           alt={attachmentData?.filename ?? 'undefined'}
         />
       ) : (
-        <GS.P muted>
+        <Paragraph muted>
           This file in format {fetchedAttachmentData?.mimeType} is not yet
           supported
-        </GS.P>
+        </Paragraph>
       )}
     </CustomModal>
   )

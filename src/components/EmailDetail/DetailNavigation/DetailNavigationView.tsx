@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import Stack from 'components/Elements/Stack/Stack'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
@@ -19,19 +20,17 @@ import {
 } from 'store/utilsSlice'
 import loadNextPage from 'utils/loadNextPage'
 
-import * as S from './DetailNavigationStyles'
-
 const ICON_SIZE = 20
 interface IDetailNavigationView {
-  isDisabledPrev: boolean
-  isDisabledNext: boolean
   activeEmailList: TEmailListObject
+  isDisabledNext: boolean
+  isDisabledPrev: boolean
 }
 
 const DetailNavigationView = ({
-  isDisabledPrev,
-  isDisabledNext,
   activeEmailList,
+  isDisabledNext,
+  isDisabledPrev,
 }: IDetailNavigationView) => {
   const coreStatus = useAppSelector(selectCoreStatus)
   const dispatch = useAppDispatch()
@@ -88,32 +87,28 @@ const DetailNavigationView = ({
 
   const NavigationView = useMemo(
     () => (
-      <S.Wrapper>
-        <S.NavButton>
-          <CustomIconButton
-            onClick={handleNavPrevEvent}
-            disabled={isDisabledPrev}
-            title="Previous email"
-            icon={<QiChevronLeft size={ICON_SIZE} />}
-          />
-        </S.NavButton>
-        <S.NavButton>
-          <CustomIconButton
-            onClick={handleNavNextEvent}
-            disabled={isDisabledNext || isLoading}
-            title="Next email"
-            icon={
-              !isLoading ? (
-                <QiChevronRight size={ICON_SIZE} />
-              ) : (
-                <StyledCircularProgress size={10} />
-              )
-            }
-          />
-        </S.NavButton>
-      </S.Wrapper>
+      <Stack style={{ marginRight: 'var(--spacing-2)' }}>
+        <CustomIconButton
+          onClick={handleNavPrevEvent}
+          disabled={isDisabledPrev}
+          title="Previous email"
+          icon={<QiChevronLeft size={ICON_SIZE} />}
+        />
+        <CustomIconButton
+          onClick={handleNavNextEvent}
+          disabled={isDisabledNext || isLoading}
+          title="Next email"
+          icon={
+            !isLoading ? (
+              <QiChevronRight size={ICON_SIZE} />
+            ) : (
+              <StyledCircularProgress size={10} />
+            )
+          }
+        />
+      </Stack>
     ),
-    [isDisabledPrev, isDisabledNext, isLoading, activeEmailList]
+    [activeEmailList, isDisabledNext, isDisabledPrev, isLoading]
   )
 
   return NavigationView

@@ -3,15 +3,10 @@ import { useCallback, useEffect, useState } from 'react'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
-import CustomModal from 'components/Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Dialog/CustomDialog'
 import * as global from 'constants/globalConstants'
 import feedbackApi, { ISendFeedback } from 'data/feedbackApi'
-import {
-  QiChat,
-  QiCheckmark,
-  QiGift,
-  QiWarningAlt,
-} from 'images/svgIcons/quillIcons'
+import { QiCheckmark } from 'images/svgIcons/quillIcons'
 import { selectProfile } from 'store/baseSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import {
@@ -19,50 +14,21 @@ import {
   setActiveModal,
   setSystemStatusUpdate,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { Paragraph } from 'styles/globalStyles'
 
+import {
+  FEEDBACK_TEXT_AREA_PLACEHOLDER,
+  FEEDBACK_TYPE_MAP,
+  ICON_MAP,
+  MODAL_SUB_TITLE,
+  MODAL_TITLE,
+  SUCCESS_MESSAGE,
+} from './FeedbackConstants'
 import * as S from './FeedbackStyles'
 
-interface IFeedbackTypeMapItem {
+export interface IFeedbackTypeMapItem {
   [key: string]: 'BUG' | 'FEEDBACK' | 'IDEA'
 }
-
-const FEEDBACK_TYPE_MAP: IFeedbackTypeMapItem[] = [
-  { type: 'BUG' },
-  { type: 'FEEDBACK' },
-  { type: 'IDEA' },
-]
-
-const ICON_MAP: { [key: string]: JSX.Element } = {
-  BUG: <QiWarningAlt />,
-  FEEDBACK: <QiChat />,
-  IDEA: <QiGift />,
-}
-
-const customStyles = {
-  background: 'var(--color-white)',
-  padding: '10px 12px',
-  borderRadius: '4px',
-  boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
-  lineHeight: 1,
-  border: '1px solid var(--color-neutral-200)',
-}
-const customStylesActive = {
-  background: 'var(--color-black)',
-  color: 'var(--color-white)',
-  padding: '10px 12px',
-  borderRadius: '4px',
-  boxShadow: `rgba(0, 0, 0, 0.1) 0px 0px 10px`,
-  lineHeight: 1,
-  border: '1px solid var(--color-neutral-200)',
-}
-
-const MODAL_TITLE = 'Send feedback'
-const MODAL_SUB_TITLE =
-  'Your feedback is highly appreciated. We are here to get this right for you.'
-const FEEDBACK_TEXT_AREA_PLACEHOLDER =
-  'How can Juno improve for you? (If you are reporting a bug, how did it happen?)'
-const SUCCESS_MESSAGE = 'Thank you for submitting the feedback!'
 
 const Feedback = () => {
   const [selectedType, setSelectedType] = useState<IFeedbackTypeMapItem>(
@@ -136,10 +102,10 @@ const Feedback = () => {
 
   return (
     <CustomModal
-      open={activeModal === global.ACTIVE_MODAL_MAP.feedback}
-      modalTitle={MODAL_TITLE}
       modalAriaLabel="feedback"
-      subTitle={<GS.P muted>{MODAL_SUB_TITLE}</GS.P>}
+      modalTitle={MODAL_TITLE}
+      open={activeModal === global.ACTIVE_MODAL_MAP.feedback}
+      subTitle={<Paragraph muted>{MODAL_SUB_TITLE}</Paragraph>}
     >
       {showSuccess ? (
         <S.SuccessContainer>
@@ -165,8 +131,8 @@ const Feedback = () => {
                           icon={icon}
                           style={
                             option.type === selectedType.type
-                              ? customStylesActive
-                              : customStyles
+                              ? S.customStylesActive
+                              : S.customStyles
                           }
                           onClick={() => setSelectedType(feedbackType)}
                         />

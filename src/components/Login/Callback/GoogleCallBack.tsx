@@ -22,12 +22,8 @@ const GoogleCallBack = () => {
 
   useEffect(() => {
     const getTokens = async () => {
-      const {
-        code,
-        state,
-      }: { code?: string; state?: string } = parseQueryString(
-        window.location.search
-      )
+      const { code, state }: { code?: string; state?: string } =
+        parseQueryString(window.location.search)
       try {
         const body = {
           code,

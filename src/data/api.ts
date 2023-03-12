@@ -26,7 +26,7 @@ validateLocalSetup(
   import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND
 )
 
-export const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
+const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 export const fetchToken = () => {
   if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {
@@ -61,7 +61,7 @@ instance.interceptors.request.use(
       accessToken &&
       config.headers &&
       !config.url?.includes(`/api/auth/oauth/google/`) &&
-      !config.url?.includes(import.meta.env.VITE_HEADLESS_FEEDBACK_URL)
+      !config.url?.includes(import.meta.env.VITE_HEADLESS_FEEDBACK_URL ?? '')
     ) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `${accessToken}`

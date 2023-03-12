@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { match } from 'ts-pattern'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import EmptyState from 'components/Elements/EmptyState/EmptyState'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import SelectedOptions from 'components/MainHeader/SelectedOptions/SelectedOptions'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
@@ -16,7 +18,7 @@ import {
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
-import * as GS from 'styles/globalStyles'
+import { OuterContainer, Paragraph } from 'styles/globalStyles'
 import handleChangeFocus from 'utils/handleChangeFocus'
 import loadNextPage from 'utils/loadNextPage'
 import multipleIncludes from 'utils/multipleIncludes'
@@ -27,18 +29,22 @@ import ThreadList from './ThreadList'
 
 const SOURCE_TAG_EMAILLIST = 'emailList-thread-list-item'
 
+interface IRenderEmailList {
+  filteredOnLabel: TEmailListObject
+  hasLargeHeader: boolean
+}
+
 const RenderEmailList = ({
   filteredOnLabel,
-}: {
-  filteredOnLabel: TEmailListObject
-}) => {
+  hasLargeHeader,
+}: IRenderEmailList) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()
-  const isLoading = useAppSelector(selectIsLoading)
-  const labelIds = useAppSelector(selectLabelIds)
+  const activeModal = useAppSelector(selectActiveModal)
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const inSearch = useAppSelector(selectInSearch)
-  const activeModal = useAppSelector(selectActiveModal)
+  const isLoading = useAppSelector(selectIsLoading)
+  const labelIds = useAppSelector(selectLabelIds)
   const selectedEmails = useAppSelector(selectSelectedEmails)
 
   const handleEscapeKeyDown = useCallback(() => {
@@ -53,7 +59,7 @@ const RenderEmailList = ({
     ) {
       dispatch(setSelectedEmails([]))
     }
-  }, [focusedItemIndex, selectedEmails, labelIds, dispatch])
+  }, [dispatch, focusedItemIndex, labelIds, selectedEmails])
 
   const handleFocusDown = useCallback(() => {
     handleChangeFocus({
@@ -92,6 +98,10 @@ const RenderEmailList = ({
 
   const { threads, nextPageToken } = filteredOnLabel
 
+  const showSelectedOptions =
+    selectedEmails.selectedIds.length > 0 &&
+    multipleIncludes(selectedEmails.labelIds, labelIds)
+
   const handleLoadMore = useCallback(
     () =>
       loadNextPage({
@@ -101,7 +111,7 @@ const RenderEmailList = ({
         maxResults: emailFetchSize,
         fetchSimple: true,
       }),
-    [nextPageToken, labelIds, emailFetchSize]
+    [emailFetchSize, labelIds, nextPageToken]
   )
 
   // Listen to the thread count, if it reaches 0, but there is a nextPageToken
@@ -110,64 +120,74 @@ const RenderEmailList = ({
     if (threads && threads.length === 0 && nextPageToken) {
       handleLoadMore()
     }
-  }, [threads, nextPageToken])
+  }, [nextPageToken, threads])
+
+  const memoizedFadeOrOptions = useMemo(
+    () => (showSelectedOptions ? <SelectedOptions /> : <S.TopFade />),
+    [showSelectedOptions]
+  )
 
   const memoizedThreadList = useMemo(
     () => (
-      <S.ThreadList>
-        {threads.length > 0 ? (
-          <GS.Base>
-            <ThreadList
-              threads={threads}
-              keySuffix="emailList"
-              focusedItemIndex={focusedItemIndex}
-              setFocusedItemIndex={setFocusedItemIndex}
-              showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
-            />
-          </GS.Base>
-        ) : null}
-        {threads.length === 0 ? (
-          <EmptyState>
-            <EmailListEmptyStates />
-          </EmptyState>
-        ) : null}
-      </S.ThreadList>
+      <>
+        {memoizedFadeOrOptions}
+        <S.ThreadList>
+          {match(threads.length > 0)
+            .with(false, () => (
+              <EmptyState>
+                <EmailListEmptyStates />
+              </EmptyState>
+            ))
+            .with(true, () => (
+              <ThreadList
+                focusedItemIndex={focusedItemIndex}
+                keySuffix="emailList"
+                setFocusedItemIndex={setFocusedItemIndex}
+                showLabel={labelIds.includes(global.ARCHIVE_LABEL)}
+                threads={threads}
+              />
+            ))
+            .exhaustive()}
+        </S.ThreadList>
+      </>
     ),
-    [threads, focusedItemIndex]
+    [focusedItemIndex, showSelectedOptions, threads]
   )
 
   const memoizedLoadMore = useMemo(
     () => (
       <S.LoadMoreContainer>
-        {!isLoading && (
-          <CustomButton
-            disabled={isLoading}
-            onClick={handleLoadMore}
-            label={global.LOAD_MORE}
-            suppressed
-            title={global.LOAD_MORE}
-          />
-        )}
-        {isLoading && <LoadingState />}
+        {match(isLoading)
+          .with(false, () => (
+            <CustomButton
+              disabled={isLoading}
+              onClick={handleLoadMore}
+              label={global.LOAD_MORE}
+              suppressed
+              title={global.LOAD_MORE}
+            />
+          ))
+          .with(true, () => <LoadingState />)
+          .exhaustive()}
       </S.LoadMoreContainer>
     ),
-    [isLoading, nextPageToken, labelIds, emailFetchSize]
+    [emailFetchSize, isLoading, labelIds, nextPageToken]
   )
 
   return (
-    <S.Scroll>
-      <GS.OuterContainer>
+    <OuterContainer>
+      <S.Scroll hasLargeHeader={hasLargeHeader}>
         {memoizedThreadList}
         {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
-            <GS.P small muted>
+            <Paragraph small muted>
               {global.NO_MORE_RESULTS}
-            </GS.P>
+            </Paragraph>
           </S.LoadMoreContainer>
         )}
-      </GS.OuterContainer>
-    </S.Scroll>
+      </S.Scroll>
+    </OuterContainer>
   )
 }
 

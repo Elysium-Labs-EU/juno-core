@@ -1,6 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react'
 
+import Stack from 'components/Elements/Stack/Stack'
 import { QiCog, QiSign, QiSignature } from 'images/svgIcons/quillIcons'
+import { Span } from 'styles/globalStyles'
 
 import * as S from './SettingsSidebarStyles'
 
@@ -10,14 +12,20 @@ const SETTINGS_OPTIONS = [
   { title: 'Credits', icon: <QiSign /> },
 ]
 
+interface ISettingsSidebar {
+  focusedItemIndex: number
+  setFocusedItemIndex: Dispatch<SetStateAction<number>>
+}
+
 const SettingsSidebar = ({
   focusedItemIndex,
   setFocusedItemIndex,
-}: {
-  focusedItemIndex: number
-  setFocusedItemIndex: Dispatch<SetStateAction<number>>
-}) => (
-  <S.Wrapper data-test-id="settings-menu">
+}: ISettingsSidebar) => (
+  <Stack
+    direction="vertical"
+    data-test-id="settings-menu"
+    style={{ listStyleType: 'none' }}
+  >
     {SETTINGS_OPTIONS.map((item, index) => (
       <li
         key={item.title}
@@ -30,12 +38,12 @@ const SettingsSidebar = ({
         >
           <S.MenuItemContentSide>{item.icon}</S.MenuItemContentSide>
           <S.MenuItemContentMain>
-            <span>{item.title}</span>
+            <Span>{item.title}</Span>
           </S.MenuItemContentMain>
         </S.MenuItem>
       </li>
     ))}
-  </S.Wrapper>
+  </Stack>
 )
 
 export default SettingsSidebar

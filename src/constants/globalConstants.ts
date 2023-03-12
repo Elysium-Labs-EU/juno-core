@@ -1,5 +1,20 @@
 // SYSTEM CODE
 export const ACCESS_TOKEN = 'accessToken'
+export type TActivePageHeader =
+  | 'compose'
+  | 'inbox'
+  | 'more'
+  | 'search'
+  | 'spam'
+  | 'todo'
+export const ACTIVE_PAGE_HEADER = {
+  compose: 'compose' as TActivePageHeader,
+  inbox: 'inbox' as TActivePageHeader,
+  more: 'more' as TActivePageHeader,
+  search: 'search' as TActivePageHeader,
+  spam: 'spam' as TActivePageHeader,
+  todo: 'todo' as TActivePageHeader,
+}
 export const ACTIVE_MODAL_MAP = {
   attachment: 'attachment',
   betaAccess: 'betaAccess',
@@ -53,13 +68,13 @@ export const BUTTON_BACK = 'Back'
 export const BUTTON_FOCUS = 'Focus mode'
 export const ERROR_MESSAGE = 'Something went wrong, try again.'
 export const FILE = 'File - '
-export const HEADER_ARCHIVE = 'Archive'
-export const HEADER_DRAFTS = 'Drafts'
-export const HEADER_INBOX = 'Inbox'
-export const HEADER_SENT = 'Sent'
-export const HEADER_SPAM = 'Spam'
-export const HEADER_TODO = 'To Do'
-export const HEADER_TRASH = 'Trash'
+export const HEADER_ARCHIVE = 'archive'
+export const HEADER_DRAFT = 'drafts'
+export const HEADER_INBOX = 'inbox'
+export const HEADER_SENT = 'sent'
+export const HEADER_SPAM = 'spam'
+export const HEADER_TODO = 'todo'
+export const HEADER_TRASH = 'trash'
 export const INVALID_SESSION = 'Invalid session'
 export const INVALID_TOKEN = 'Invalid token'
 export const LINUX_OS = 'Linux OS'

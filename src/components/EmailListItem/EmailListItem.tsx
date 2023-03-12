@@ -2,12 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
 import EmailLabel from 'components/Elements/EmailLabel'
-import emailSnippet from 'components/Elements/EmailSnippet'
-import emailSubject from 'components/Elements/EmailSubject'
 import MessageCount from 'components/Elements/MessageCount'
-import recipientName from 'components/Elements/RecipientName'
-import senderNameFull from 'components/Elements/SenderName/senderNameFull'
-import senderNamePartial from 'components/Elements/SenderName/senderNamePartial'
 import CustomCheckbox from 'components/Elements/StyledCheckbox/StyledCheckbox'
 import getTimeStamp from 'components/Elements/TimeStamp/GetTimeStamp'
 import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
@@ -16,13 +11,14 @@ import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyPress from 'hooks/useKeyPress'
 import { selectProfile } from 'store/baseSlice'
+import { setViewIndex } from 'store/emailDetailSlice'
 import { selectSelectedEmails, setSelectedEmails } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import type { TProfile } from 'store/storeTypes/baseTypes'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import { openEmail, selectActiveModal, selectInSearch } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 import emailLabels from 'utils/emailLabels'
 import multipleIncludes from 'utils/multipleIncludes'
 
@@ -32,106 +28,21 @@ import InlineThreadActionsDraft from './InlineThreadActions/InlineThreadActionsD
 import InlineThreadActionsRegular from './InlineThreadActions/InlineThreadActionsRegular'
 import SenderRecipientName from './SenderRecipientName'
 import Snippet from './Snippet'
-
-// If the user is on Draft list, show only draft emails.
-
-/**
- * @function shouldUseDraftOrRegular
- * @param labelIds - all the label ids stored in Redux
- * @param email - the email list object
- * @returns a filtered version of the emaillist object, if the draft label is found.
- */
-const shouldUseDraftOrRegular = (
-  labelIds: TLabelState['labelIds'],
-  email: TThreadObject
-) => {
-  if (Array.isArray(labelIds) && labelIds.includes(global.DRAFT_LABEL)) {
-    if (email?.messages) {
-      return {
-        ...email,
-        messages: email.messages.filter((message) =>
-          message.labelIds.includes(global.DRAFT_LABEL)
-        ),
-      }
-    }
-    return email
-  }
-  return email
-}
+import getRecipientName from './Utils/getRecipientName'
+import getSenderFull from './Utils/getSenderFull'
+import getSenderPartial from './Utils/getSenderPartial'
+import getSnippet from './Utils/getSnippet'
+import getSubject from './Utils/getSubject'
+import shouldUseDraftOrRegular from './Utils/shouldUseDraftOrRegular'
 
 const hasUnreadLabel = (emailListThreadItem: TThreadObject) =>
   emailListThreadItem.messages.some((message) =>
     message?.labelIds?.includes(global.UNREAD_LABEL)
   )
 
-interface ExtractEmailData {
+export interface IExtractEmailData {
   emailAddress: TProfile['emailAddress']
   memoizedDraftOrRegular: TThreadObject
-}
-
-export const getRecipientName = ({
-  emailAddress,
-  memoizedDraftOrRegular,
-}: ExtractEmailData) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
-  if (lastMessage) {
-    return recipientName(lastMessage?.payload?.headers?.to, emailAddress)
-  }
-  return null
-}
-export const getSenderPartial = ({
-  emailAddress,
-  memoizedDraftOrRegular,
-}: ExtractEmailData) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
-  if (lastMessage) {
-    return senderNamePartial(lastMessage?.payload?.headers?.from, emailAddress)
-  }
-  return null
-}
-export const getSenderFull = ({
-  emailAddress,
-  memoizedDraftOrRegular,
-}: ExtractEmailData) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
-  if (lastMessage) {
-    return senderNameFull(lastMessage?.payload?.headers?.from, emailAddress)
-  }
-  return null
-}
-
-const getSubject = ({
-  memoizedDraftOrRegular,
-}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
-  if (lastMessage) {
-    return emailSubject(lastMessage?.payload?.headers?.subject)
-  }
-  return null
-}
-const getSnippet = ({
-  memoizedDraftOrRegular,
-}: Pick<ExtractEmailData, 'memoizedDraftOrRegular'>) => {
-  const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
-  if (lastMessage) {
-    return emailSnippet(lastMessage)
-  }
-  return null
 }
 
 interface IEmailListItem {
@@ -215,20 +126,21 @@ const EmailListItem = ({
   )
 
   const handleOpenEvent = useCallback(() => {
+    dispatch(setViewIndex(index))
     dispatch(
       openEmail({
         id,
         email: memoizedDraftOrRegular,
       })
     )
-  }, [memoizedDraftOrRegular])
+  }, [index, memoizedDraftOrRegular])
 
   useEffect(() => {
     // This is not triggered in search mode.
-    if (EnterKeyListener && isFocused && !inSearch && !activeModal) {
+    if (!activeModal && EnterKeyListener && !inSearch && isFocused) {
       handleOpenEvent()
     }
-  }, [EnterKeyListener, isFocused, inSearch, activeModal])
+  }, [activeModal, EnterKeyListener, inSearch, isFocused])
 
   const handleCheckBox = (isChecked: boolean) => {
     dispatch(
@@ -295,15 +207,15 @@ const EmailListItem = ({
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
             <S.TruncatedDiv>
               {labelIds.includes(global.DRAFT_LABEL) && (
-                <span
+                <Span
                   style={{ fontWeight: 'bold', marginRight: '10px' }}
                   data-testid="email-draft-snippet-indicator"
                 >
                   {draft.DRAFT_SNIPPET_INDICATOR}
-                </span>
+                </Span>
               )}
               {email.messages && <MessageCount messages={email.messages} />}
-              <span>{memoizedSubject}</span>
+              <Span>{memoizedSubject}</Span>
               <Snippet snippet={memoizedSnippet} />
             </S.TruncatedDiv>
           </S.CellMessage>

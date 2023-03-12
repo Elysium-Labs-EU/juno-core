@@ -14,13 +14,12 @@ export const peopleV1SchemaContactGroupMetadataSchema = z.object({
   updateTime: z.string().optional().nullable(),
 })
 
-export const peopleV1SchemaCopyOtherContactToMyContactsGroupRequestSchema = z.object(
-  {
+export const peopleV1SchemaCopyOtherContactToMyContactsGroupRequestSchema =
+  z.object({
     copyMask: z.string().optional().nullable(),
     readMask: z.string().optional().nullable(),
     sources: z.array(z.string()).optional().nullable(),
-  }
-)
+  })
 
 export const peopleV1SchemaDateSchema = z.object({
   day: z.number().optional().nullable(),

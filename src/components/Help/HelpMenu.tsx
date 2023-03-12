@@ -20,9 +20,10 @@ const SIZE = 16
 const customStyles = {
   background: 'var(--color-white)',
   border: '1px solid var(--color-neutral-200)',
-  borderRadius: '4px',
+  borderRadius: 'var(--radius-m)',
   boxShadow: 'var(--box-shadow-low)',
   lineHeight: 1,
+  // TODO: Check these values
   padding: '10px 12px',
 }
 
@@ -34,8 +35,10 @@ const HelpMenu = () => {
 
   const isOpen = activeModal === global.ACTIVE_MODAL_MAP.help
 
-  const MENU_ITEMS_HELP = useMemo(
-    (): IMenuItemCollection => ({
+  const MENU_ITEMS_HELP = useMemo((): IMenuItemCollection => {
+    const DOCUMENTATION_URL = import.meta.env.VITE_DOCUMENTATION_URL
+
+    return {
       id: 'help-menu-keyboard-shortcuts',
       items: [
         {
@@ -51,18 +54,16 @@ const HelpMenu = () => {
           onClick: () =>
             dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
         },
-        import.meta.env.VITE_DOCUMENTATION_URL
+        DOCUMENTATION_URL
           ? {
               id: 'documentation',
               title: 'Documentation',
-              onClick: () =>
-                window.open(import.meta.env.VITE_DOCUMENTATION_URL, '_blank'),
+              onClick: () => window.open(DOCUMENTATION_URL, '_blank'),
             }
           : null,
       ],
-    }),
-    []
-  )
+    }
+  }, [])
 
   const MENU_ITEMS_FEEDBACK = useMemo(
     (): IMenuItemCollection => ({
@@ -79,27 +80,24 @@ const HelpMenu = () => {
     }),
     []
   )
-  const MENU_ITEMS_SOCIAL = useMemo(
-    (): IMenuItemCollection => ({
-      id: 'help-menu-social',
-      items: [
-        {
-          id: 'discord-social',
-          title: 'Join us @ Discord',
-          onClick: () =>
-            window.open(import.meta.env.VITE_DISCORD_SOCIAL_URL, '_blank'),
-        },
-      ],
-    }),
-    []
-  )
+  const MENU_ITEMS_SOCIAL = useMemo((): IMenuItemCollection | undefined => {
+    const DISCORD_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
+    return DISCORD_URL
+      ? {
+          id: 'help-menu-social',
+          items: [
+            {
+              id: 'discord-social',
+              title: 'Join us @ Discord',
+              onClick: () => window.open(DISCORD_URL, '_blank'),
+            },
+          ],
+        }
+      : undefined
+  }, [])
 
   const combinedMenuItems = useCallback(() => {
-    // If the Discord Social is defined, show the menu item
-    if (
-      import.meta.env.VITE_DISCORD_SOCIAL_URL &&
-      import.meta.env.VITE_DISCORD_SOCIAL_URL.length > 0
-    ) {
+    if (MENU_ITEMS_SOCIAL) {
       return [MENU_ITEMS_SOCIAL, MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
     }
     return [MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
@@ -150,14 +148,14 @@ const HelpMenu = () => {
       triggerButton={
         <S.StartButtonWrapper>
           <CustomIconButton
-            icon={<QiInfo size={SIZE} />}
-            onClick={handleOpenHelpMenu}
-            style={customStyles}
-            title="More menu"
-            ref={buttonRef}
-            ariaHaspopup="true"
             ariaControls={isOpen ? 'menu' : undefined}
             ariaExpanded={isOpen || undefined}
+            ariaHaspopup="true"
+            icon={<QiInfo size={SIZE} />}
+            onClick={handleOpenHelpMenu}
+            ref={buttonRef}
+            style={customStyles}
+            title="More menu"
           />
         </S.StartButtonWrapper>
       }

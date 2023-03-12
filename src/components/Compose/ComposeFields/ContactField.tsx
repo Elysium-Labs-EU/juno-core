@@ -7,8 +7,14 @@ import isEqual from 'utils/isEqual/isEqual'
 
 import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
-import { recipientListTransform } from '../ComposeEmail'
 import type { IRecipientsList } from '../ComposeEmailTypes'
+
+const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
+  fieldId: recipientListRaw.fieldId,
+  newValue: recipientListRaw.newValue.map((item: string | TContact) =>
+    typeof item === 'string' ? { name: item, emailAddress: item } : item
+  ),
+})
 
 const ContactField = ({
   composeValue = undefined,

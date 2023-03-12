@@ -1,4 +1,4 @@
-import ComposeEmail from 'components/Compose/ComposeEmail'
+import Composer from 'components/Compose/Composer'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
 import { useAppDispatch } from 'store/hooks'
@@ -47,14 +47,14 @@ const ReplyComposer = ({
     )
     return (
       <ES.ComposeWrapper data-cy="reply-composer">
-        <ComposeEmail messageOverviewListener={messageOverviewListener} />
+        <Composer messageOverviewListener={messageOverviewListener} />
       </ES.ComposeWrapper>
     )
   }
 
   return (
     <ES.ComposeWrapper data-cy="reply-composer">
-      <ComposeEmail
+      <Composer
         presetValue={{
           // This should only be used when the message is a draft
           bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
-import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
+import Stack from 'components/Elements/Stack/Stack'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
@@ -9,25 +10,24 @@ import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import * as GS from 'styles/globalStyles'
+import { Span } from 'styles/globalStyles'
 import { handleContactConversion } from 'utils/convertToContact'
 
 const MAX_CONTACTS_UNOPENED = 3
 
-const MappedContacts = ({
-  contactsMap,
-  title,
-}: {
+interface IMappedContacts {
   contactsMap: Array<TContact>
   title: string
-}) => {
+}
+
+const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
   const [showAll, setShowAll] = useState(false)
 
   return (
     <S.ToFromBCCInner>
-      <GS.Span muted small style={{ marginRight: '4px' }}>
+      <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
         {title}
-      </GS.Span>
+      </Span>
       <S.SmallTextTruncated>
         {contactsMap.length > MAX_CONTACTS_UNOPENED ? (
           <S.FullContactContainer>
@@ -54,13 +54,13 @@ const MappedContacts = ({
                 </S.ContactContainer>
               ))}
             {!showAll && (
-              <span
-                style={{ marginLeft: '4px', cursor: 'pointer' }}
+              <Span
+                style={{ marginLeft: 'var(--spacing-0-5)', cursor: 'pointer' }}
                 onClick={() => setShowAll(true)}
                 aria-hidden="true"
               >
                 & {contactsMap.length - MAX_CONTACTS_UNOPENED} others
-              </span>
+              </Span>
             )}
           </S.FullContactContainer>
         ) : (
@@ -86,7 +86,10 @@ const LinkedContants = ({
   message: TThreadObject['messages'][0]
 }) => {
   const { emailAddress } = useAppSelector(selectProfile)
-  const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
+  const senderName = getSenderNameFull(
+    message.payload.headers?.from,
+    emailAddress
+  )
   const [firstSenderContact] = handleContactConversion(
     message?.payload?.headers?.from,
     emailAddress
@@ -105,33 +108,33 @@ const LinkedContants = ({
   )
 
   return (
-    <>
-      <S.ContactsContainer>
+    <Stack direction="vertical">
+      <Stack>
         <S.ToFromBCCInner>
-          <GS.Span muted small style={{ marginRight: '4px' }}>
+          <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
             {emailDetail.FROM_LABEL}
-          </GS.Span>
+          </Span>
           {firstSenderContact ? (
             <ContactCard userEmail={senderName} contact={firstSenderContact}>
               <S.SmallTextTruncated>{senderName}</S.SmallTextTruncated>
             </ContactCard>
           ) : null}
         </S.ToFromBCCInner>
-      </S.ContactsContainer>
-      <S.ContactsContainer>
+      </Stack>
+      <Stack>
         <MappedContacts contactsMap={toNameFull} title={emailDetail.TO_LABEL} />
-      </S.ContactsContainer>
+      </Stack>
       {ccNameFull.length > 0 && (
-        <S.ContactsContainer>
+        <Stack>
           <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
-        </S.ContactsContainer>
+        </Stack>
       )}
       {bccNameFull.length > 0 && (
-        <S.ContactsContainer>
+        <Stack>
           <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
-        </S.ContactsContainer>
+        </Stack>
       )}
-    </>
+    </Stack>
   )
 }
 

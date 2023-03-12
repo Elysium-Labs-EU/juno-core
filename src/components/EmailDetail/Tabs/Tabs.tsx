@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
@@ -43,7 +43,10 @@ const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
     }
   }, [location])
 
-  const viewedThread = activeEmailList.threads[viewIndex]
+  const memoizedActiveThread = useMemo(() => {
+    const viewedThread = activeEmailList.threads[viewIndex]
+    return filterTrashMessages(viewedThread, labelIds)
+  }, [activeEmailList, labelIds, viewIndex])
 
   return (
     <S.TabContainer>
@@ -51,12 +54,12 @@ const Tabs = ({ activeEmailList }: { activeEmailList: TEmailListObject }) => {
         <MessagesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(viewedThread, labelIds)}
+          activeThread={memoizedActiveThread}
         />
         <FilesTab
           activeLink={activeLink}
           navigateTo={navigateTo}
-          activeThread={filterTrashMessages(viewedThread, labelIds)}
+          activeThread={memoizedActiveThread}
         />
       </S.ItemsContainer>
     </S.TabContainer>

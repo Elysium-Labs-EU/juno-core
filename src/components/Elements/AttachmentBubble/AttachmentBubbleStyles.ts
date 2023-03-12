@@ -5,7 +5,6 @@ export const AttachmentWrapper = styled.div`
   border-radius: var(--radius-m);
   border: 1px solid var(--color-neutral-200);
   display: flex;
-  margin-bottom: 8px;
   width: 100%;
   &:hover {
     box-shadow: var(--box-shadow-low);
@@ -15,7 +14,6 @@ export const AttachmentWrapper = styled.div`
 `
 
 export const Attachment = styled.div`
-    border-color 0.15s ease-in-out;
   align-items: center;
   background-color: var(--color-neutral-100);
   border-radius: var(--radius-m);
@@ -24,6 +22,7 @@ export const Attachment = styled.div`
   flex: 1 1 0%;
   justify-content: space-between;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
   width: 100%;
 `
 
@@ -32,15 +31,15 @@ export const AttachmentInner = styled.div`
   flex-direction: row;
   flex: 1 1 0%;
   min-width: 0px;
-  padding: 10px 9px 10px 18px;
+  padding: var(--spacing-1) var(--spacing-1) var(--spacing-1) var(--spacing-2);
 `
 
 export const AttachmentDetails = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 8px;
+  margin-left: var(--spacing-1);
   .file_name {
-    font-size: var(--small);
+    font-size: var(--text-small);
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;

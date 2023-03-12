@@ -1,61 +1,45 @@
-import { useLocation } from 'react-router-dom'
-
-import ArchiveHeader from 'components/Archive/ArchiveHeader'
-import CommandPalette from 'components/CommandPalette/CommandPalette'
-import ComposeHeader from 'components/Compose/ComposeHeader'
-import DraftHeader from 'components/Draft/DraftHeader'
-import Feedback from 'components/Help/Feedback/Feedback'
-import KeyboardCombos from 'components/Help/KeyboardCombos/KeyboardCombos'
-import InboxHeader from 'components/Inbox/InboxHeader'
-import Introduction from 'components/Introduction/Introduction'
-import NoMobileOverlay from 'components/NoMobileOverlay/noMobileOverlay'
-import SentHeader from 'components/Sent/SentHeader'
-import Settings from 'components/Settings/Settings'
-import SpamHeader from 'components/Spam/SpamHeader'
-import TodoHeader from 'components/ToDo/TodoHeader'
-import TrashHeader from 'components/Trash/TrashHeader'
-import * as global from 'constants/globalConstants'
+import BackButton from 'components/Elements/Buttons/BackButton'
+import type { ILayout } from 'components/Layout/Layout'
+import * as S from 'components/MainHeader/HeaderStyles'
+import {
+  selectActiveEmailListIndex,
+  selectEmailList,
+} from 'store/emailListSlice'
 import { useAppSelector } from 'store/hooks'
-import { selectActiveModal } from 'store/utilsSlice'
+import { OuterContainer } from 'styles/globalStyles'
+import getEmailListTimeStamp from 'utils/getEmailListTimeStamp'
 
-// The mail path has its own header logic.
-const pathToHeader = {
-  '/inbox': <InboxHeader />,
-  '/compose': <ComposeHeader />,
-  '/drafts': <DraftHeader />,
-  '/sent': <SentHeader />,
-  '/spam': <SpamHeader />,
-  '/archive': <ArchiveHeader />,
-  '/delete': <TrashHeader />,
-  '/mail': null,
-  '/': <TodoHeader />,
-}
+import Navigation from './Navigation/Navigation'
 
-const SetHeader = () => {
-  const location = useLocation()
-  const matchedPaths = Object.keys(pathToHeader).filter((path) =>
-    location.pathname.match(path)
-  )
-  if (matchedPaths[0]) {
-    const header = pathToHeader[matchedPaths[0] as keyof typeof pathToHeader]
-    return header || null
-  }
-  return null
-}
-
-const Header = () => {
-  const activeModal = useAppSelector(selectActiveModal)
+const Header = ({
+  activePage,
+  additionalHeader = undefined,
+  headerTitle,
+  showNavigation,
+  showBackButton,
+}: Omit<ILayout, 'children'>) => {
+  const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const emailList = useAppSelector(selectEmailList)
 
   return (
-    <>
-      <CommandPalette />
-      {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
-      {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
-      <NoMobileOverlay />
-      <SetHeader />
-      {global.ACTIVE_MODAL_MAP.settings === activeModal && <Settings />}
-      {global.ACTIVE_MODAL_MAP.intro === activeModal && <Introduction />}
-    </>
+    <OuterContainer>
+      <S.NavContainer>
+        {showBackButton ? (
+          <S.BackButtonContainer>
+            <BackButton />
+          </S.BackButtonContainer>
+        ) : (
+          <div />
+        )}
+        <S.PageTitle
+          title={getEmailListTimeStamp(emailList, activeEmailListIndex)}
+        >
+          {headerTitle}
+        </S.PageTitle>
+        {showNavigation ? <Navigation activePage={activePage} /> : null}
+      </S.NavContainer>
+      {additionalHeader}
+    </OuterContainer>
   )
 }
 

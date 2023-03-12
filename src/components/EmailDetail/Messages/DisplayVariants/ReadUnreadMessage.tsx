@@ -1,50 +1,42 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { Dispatch, SetStateAction } from 'react'
 
-import EmailAvatar from 'components/Elements/Avatar/EmailAvatar'
-import ContactCard from 'components/Elements/ContactCard/ContactCard'
-import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimple'
-import EmailLabel from 'components/Elements/EmailLabel'
 import EmailSnippet from 'components/Elements/EmailSnippet'
 import EmailSubject from 'components/Elements/EmailSubject'
-import SenderNameFull from 'components/Elements/SenderName/senderNameFull'
-import SenderNamePartial from 'components/Elements/SenderName/senderNamePartial'
-import Seo from 'components/Elements/Seo'
-import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
+import getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
+import getSenderNamePartial from 'components/Elements/SenderName/getSenderNamePartial'
+import type { IReadMessage } from 'components/EmailDetail/EmailDetailTypes'
 import * as global from 'constants/globalConstants'
 import { selectProfile } from 'store/baseSlice'
 import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
-import LinkedContacts from './Recipients/LinkedContacts'
-import EmailAttachment from '../../Attachment/EmailAttachment'
-import * as S from '../../EmailDetailStyles'
-import EmailDetailBody from '../EmailDetailBody/EmailDetailBody'
-import RemovedTrackers from '../RemovedTrackers/RemovedTrackers'
+import ClosedMessageLayout from './Layouts/ClosedMessageLayout'
+import OpenMessageLayout from './Layouts/OpenMessageLayout'
 import SpecificEmailOptions from '../SpecificEmailOptions'
 
-export interface IReadMessage {
-  handleClickListener: ({ mIndex }: { mIndex: number }) => void
-  message: TThreadObject['messages'][0]
-  messageIndex: number
-  setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
-  setUnsubscribeLink: Dispatch<SetStateAction<string | null>>
-  threadDetail: TThreadObject | null | undefined
+export const getRemovedTrackers = ({
+  message,
+}: Pick<IReadMessage, 'message'>) => {
+  if (
+    'body' in message.payload &&
+    message.payload?.body?.removedTrackers &&
+    message.payload.body.removedTrackers.length > 0
+  ) {
+    return message.payload.body.removedTrackers
+  }
+  return null
 }
 
 const ReadUnreadMessage = ({
   handleClickListener,
   message,
   messageIndex,
-  threadDetail,
-  setUnsubscribeLink,
   setShouldRefreshDetail,
+  threadDetail,
 }: IReadMessage) => {
-  const labelIds = useAppSelector(selectLabelIds)
   const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
-  const [blockedTrackers, setBlockedTrackers] = useState<string[] | []>([])
+  const labelIds = useAppSelector(selectLabelIds)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
@@ -107,11 +99,11 @@ const ReadUnreadMessage = ({
   }
 
   const staticSenderNameFull = useMemo(
-    () => SenderNameFull(message.payload.headers?.from, emailAddress),
+    () => getSenderNameFull(message.payload.headers?.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => SenderNamePartial(message.payload.headers?.from, emailAddress),
+    () => getSenderNamePartial(message.payload.headers?.from, emailAddress),
     []
   )
   const staticEmailSubject = useMemo(
@@ -120,103 +112,44 @@ const ReadUnreadMessage = ({
   )
   const staticSnippet = useMemo(() => EmailSnippet(message), [])
 
+  // TODO: Check this
+  // <Seo title={staticEmailSubject} />
+
   const memoizedClosedEmail = useMemo(
     () => (
-      <S.EmailClosedWrapper onClick={handleClick} aria-hidden="true">
-        <S.ClosedMessageWrapper>
-          <S.ClosedAvatarSender>
-            <ContactCard
-              offset={[30, 10]}
-              userEmail={staticSenderNameFull}
-              contact={staticSenderNamePartial}
-            >
-              <EmailAvatar userEmail={staticSenderNameFull} />
-            </ContactCard>
-            <S.ClosedSender>
-              <span
-                style={{ fontWeight: 'bold' }}
-                title={staticSenderNamePartial?.emailAddress ?? ''}
-              >
-                {staticSenderNamePartial?.name}
-              </span>
-            </S.ClosedSender>
-          </S.ClosedAvatarSender>
-          <S.ClosedSnippet>{staticSnippet}</S.ClosedSnippet>
-          <S.TimeAttachmentContainer>
-            <S.ChildDiv>
-              <EmailHasAttachmentSimple files={message?.payload?.files} />
-            </S.ChildDiv>
-
-            <S.ChildDiv>
-              <TimeStamp threadTimeStamp={message.internalDate} />
-            </S.ChildDiv>
-          </S.TimeAttachmentContainer>
-        </S.ClosedMessageWrapper>
-      </S.EmailClosedWrapper>
+      <ClosedMessageLayout
+        handleClick={handleClick}
+        message={message}
+        emailSnippet={staticSnippet}
+        senderNameFull={staticSenderNameFull}
+        senderNamePartial={staticSenderNamePartial}
+      />
     ),
     [message, staticSenderNamePartial, staticSenderNameFull]
   )
 
-  return (
-    <>
-      <Seo title={staticEmailSubject} />
-      {open && (
-        <S.EmailOpenWrapper>
-          <S.TopContainer>
-            <S.HeaderFullWidth>
-              <S.ClickHeader onClick={handleClick} aria-hidden="true">
-                <ContactCard
-                  offset={[30, 10]}
-                  userEmail={staticSenderNameFull}
-                  contact={staticSenderNamePartial}
-                >
-                  <EmailAvatar userEmail={staticSenderNameFull} />
-                </ContactCard>
-                <S.EmailDetailTitle title={staticEmailSubject}>
-                  {staticEmailSubject}
-                </S.EmailDetailTitle>
-              </S.ClickHeader>
-              <S.TimeAttachmentContainer>
-                <S.ChildDiv>
-                  <EmailHasAttachmentSimple files={message?.payload?.files} />
-                </S.ChildDiv>
-                {labelIds.includes(global.SEARCH_LABEL) && (
-                  <EmailLabel labelNames={message.labelIds} />
-                )}
-                <S.ChildDiv>
-                  <TimeStamp threadTimeStamp={message.internalDate} />
-                </S.ChildDiv>
-                <S.ChildDiv>
-                  <SpecificEmailOptions
-                    handleClickListener={handleClickListener}
-                    messageIndex={messageIndex}
-                    setShouldRefreshDetail={setShouldRefreshDetail}
-                    threadDetail={threadDetail}
-                  />
-                </S.ChildDiv>
-              </S.TimeAttachmentContainer>
-            </S.HeaderFullWidth>
-          </S.TopContainer>
-          <LinkedContacts message={message} />
-          {blockedTrackers.length > 0 && (
-            <RemovedTrackers blockedTrackers={blockedTrackers} />
-          )}
-          <S.GreyDivider />
-          <S.EmailBody>
-            {message && message?.payload && message?.id && (
-              <EmailDetailBody
-                threadDetailBody={message.payload}
-                detailBodyCSS={global.EMAIL_BODY_VISIBLE}
-                setUnsubscribeLink={setUnsubscribeLink}
-                setBlockedTrackers={setBlockedTrackers}
-              />
-            )}
-          </S.EmailBody>
-          <EmailAttachment message={message} />
-        </S.EmailOpenWrapper>
-      )}
-      {!open && memoizedClosedEmail}
-    </>
+  const staticRemovedTrackers = getRemovedTrackers({ message })
+
+  return open ? (
+    <OpenMessageLayout
+      emailSubject={staticEmailSubject}
+      handleClick={handleClick}
+      labelIds={labelIds}
+      message={message}
+      removedTrackers={staticRemovedTrackers}
+      senderNameFull={staticSenderNameFull}
+      senderNamePartial={staticSenderNamePartial}
+      specificEmailOptions={
+        <SpecificEmailOptions
+          handleClickListener={handleClickListener}
+          messageIndex={messageIndex}
+          setShouldRefreshDetail={setShouldRefreshDetail}
+          threadDetail={threadDetail}
+        />
+      }
+    />
+  ) : (
+    memoizedClosedEmail
   )
 }
 

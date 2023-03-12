@@ -1,5 +1,5 @@
 import * as PopoverPrimitive from '@radix-ui/react-popover'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import styled, { keyframes } from 'styled-components'
 
 import { QiEscape } from 'images/svgIcons/quillIcons'
@@ -26,30 +26,29 @@ const slideLeftAndFade = keyframes({
   '100%': { opacity: 1, transform: 'translateX(0)' },
 })
 const StyledContent = styled(PopoverPrimitive.Content)`
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   background-color: var(--color-black);
   border-radius: var(--radius-l);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   color: var(--color-white);
-  padding: 20px;
+  padding: var(--spacing-3) var(--spacing-2) var(--spacing-2);
   position: relative;
   width: 260px;
+  will-change: transform, opacity;
   z-index: var(--z-index-popover);
-  /* @media (prefers-reduced-motion: no-preference): { }*/
-    animationDuration: 400ms;
-    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform, opacity;
-    &[data-state=open][data-side=top]: { 
-      animation-name: ${slideDownAndFade} 
-    };
-    &[data-state=open][data-side=right]: { 
-      animation-name: ${slideLeftAndFade} 
-    };
-    &[data-state=open][data-side=bottom]: { 
-      animation-name: ${slideUpAndFade} 
-    };
-    &[data-state=open][data-side=left]: { 
-      animation-name: ${slideRightAndFade} 
-    };
+  &[data-state="open"][data-side="top"] { 
+    animation-name: ${slideDownAndFade};
+  };
+  &[data-state="open"][data-side="right"] { 
+    animation-name: ${slideLeftAndFade};
+  };
+  &[data-state="open"][data-side="bottom"] { 
+    animation-name: ${slideUpAndFade};
+  };
+  &[data-state="open"][data-side="left"] { 
+    animation-name: ${slideRightAndFade}; 
+  };
   &:focus {
     box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px, 0 0 0 2px var(--colors-neutral-500);
   },

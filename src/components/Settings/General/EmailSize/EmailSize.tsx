@@ -8,7 +8,7 @@ import {
   setEmailFetchSize,
 } from 'store/utilsSlice'
 
-const selectOptions = {
+export const selectOptions = {
   id: 'emailSize',
   label: 'Emails fetched at a time',
   options: [{ value: '20' }, { value: '25' }, { value: '30' }, { value: '35' }],

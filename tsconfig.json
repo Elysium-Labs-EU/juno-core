@@ -11,6 +11,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "noEmit": true,
+    "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
@@ -24,6 +25,6 @@
     ],
     "useDefineForClassFields": true
   },
-  "include": ["src", "env.d.ts", "global.d.ts", "cypress.config.ts"],
+  "include": ["src", "env.d.ts", "env.ts", "global.d.ts", "cypress.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

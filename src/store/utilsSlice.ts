@@ -39,7 +39,7 @@ import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 /* eslint-disable no-param-reassign */
 
-export const initialState: IUtilsState = Object.freeze({
+const initialState: IUtilsState = Object.freeze({
   activeModal: null,
   alternateActions: true,
   emailFetchSize: 20,
@@ -55,7 +55,7 @@ export const initialState: IUtilsState = Object.freeze({
   systemStatusUpdate: null,
 })
 
-export const utilsSlice = createSlice({
+const utilsSlice = createSlice({
   name: 'utils',
   initialState,
   reducers: {
@@ -256,28 +256,23 @@ export const openEmail =
     const { labelIds, storageLabels } = getState().labels
 
     const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
-    const draftMessageArray = email?.messages.filter((message) =>
-      message.labelIds.includes(global.DRAFT_LABEL)
-    )
+    const messageArray = email?.messages
     const lastMessage = email?.messages[email.messages.length - 1]
+
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
-    if (draftMessageArray && lastMessage) {
-      if (
-        draftMessageArray.length === 1
-        // onlyLegalLabels.includes(global.DRAFT_LABEL)
-      ) {
-        const messageId = lastMessage.id
-        dispatch(openDraftEmail({ id, messageId }))
-        return
-      }
-      if (draftMessageArray.length > 1) {
-        dispatch(setCurrentEmail(id))
-        // We are sending the state here to override a possible closing of the composer on email detail load.
-        dispatch(push(`/mail/drafts/${id}/messages`))
-      }
+    if (
+      messageArray?.length === 1 &&
+      messageArray?.every((message) =>
+        message.labelIds.includes(global.DRAFT_LABEL)
+      ) &&
+      lastMessage
+    ) {
+      const messageId = lastMessage.id
+      dispatch(openDraftEmail({ id, messageId }))
+      return
     }
-    dispatch(setCurrentEmail(id))
     // We are sending the state here to override a possible closing of the composer on email detail load.
+    dispatch(setCurrentEmail(id))
     dispatch(
       push(
         `/mail/${labelURL(onlyLegalLabels)}/${id}/messages`,

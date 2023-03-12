@@ -56,7 +56,7 @@ const initialState: TDraftsState = Object.freeze({
   draftList: [],
 })
 
-export const draftsSlice = createSlice({
+const draftsSlice = createSlice({
   name: 'drafts',
   initialState,
   reducers: {

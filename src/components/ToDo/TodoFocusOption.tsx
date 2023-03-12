@@ -15,6 +15,7 @@ import {
   selectInSearch,
   selectIsLoading,
 } from 'store/utilsSlice'
+import { Span } from 'styles/globalStyles'
 import { findLabelByName } from 'utils/findLabel'
 import { setModifierKey } from 'utils/setModifierKey'
 
@@ -76,7 +77,7 @@ const TodoFocusOption = () => {
         ) ? (
           <>
             {global.BUTTON_FOCUS}
-            <span> ({selectedEmails.selectedIds.length})</span>
+            <Span> ({selectedEmails.selectedIds.length})</Span>
           </>
         ) : (
           global.BUTTON_FOCUS

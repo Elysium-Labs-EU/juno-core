@@ -32,10 +32,10 @@ const BackButton = () => {
 
   return (
     <CustomButton
-      onClick={handleEvent}
-      label={global.BUTTON_BACK}
-      suppressed
       icon={<QiChevronLeft />}
+      label={global.BUTTON_BACK}
+      onClick={handleEvent}
+      suppressed
       title="Back"
     />
   )

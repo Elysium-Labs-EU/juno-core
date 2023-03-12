@@ -1,3 +1,5 @@
+import { Span } from 'styles/globalStyles'
+
 import * as S from './MenuStyles'
 import type { IMenuItemComponent } from './MenuTypes'
 
@@ -30,7 +32,7 @@ const MenuItemComponent = ({
     {item?.hint && (
       <S.MenuItemContentSide data-cy="item-hint">
         {item.hint.map((it) => (
-          <span key={it}>{it}</span>
+          <Span key={it}>{it}</Span>
         ))}
       </S.MenuItemContentSide>
     )}
