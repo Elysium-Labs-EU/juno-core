@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  background-color: var(--color-neutral-100);
-  border: 2px solid transparent;
-  padding: 10px 20px;
   border-radius: var(--radius-m);
+  border: 2px solid transparent;
   color: var(--color-neutral-500);
+  padding: var(--spacing-1) var(--spacing-2);
   &:hover,
   &:focus {
     border-color: var(--color-blue-100);
@@ -19,12 +18,13 @@ export const Wrapper = styled.div`
 `
 
 export const Inner = styled.div`
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  // TODO: Reverse control by setting this on the P global?
   p {
-    margin-left: 10px;
+    font-size: var(--text-small);
+    margin-left: var(--spacing-1);
     text-align: center;
-    font-size: var(--small);
   }
 `

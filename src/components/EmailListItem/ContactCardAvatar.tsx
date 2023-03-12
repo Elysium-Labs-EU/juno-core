@@ -3,11 +3,9 @@ import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import { DRAFT_LABEL } from 'constants/globalConstants'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
-import {
-  getRecipientName,
-  getSenderFull,
-  getSenderPartial,
-} from './EmailListItem'
+import getRecipientName from './Utils/getRecipientName'
+import getSenderFull from './Utils/getSenderFull'
+import getSenderPartial from './Utils/getSenderPartial'
 
 interface IContactCardAvatar {
   labelIds: TLabelState['labelIds']

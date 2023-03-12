@@ -1,7 +1,6 @@
 import * as SelectPrimitive from '@radix-ui/react-select'
 import styled from 'styled-components'
 
-
 export const StyledTrigger = styled(SelectPrimitive.SelectTrigger)`
   all: unset;
   align-items: center;
@@ -9,11 +8,11 @@ export const StyledTrigger = styled(SelectPrimitive.SelectTrigger)`
   border-radius: var(--radius-m);
   box-shadow: var(--box-shadow-low);
   display: inline-flex;
-  gap: 5px;
+  gap: var(--gap-spacing-1);
   height: 35px;
   justify-content: center;
   line-height: 1;
-  padding: 0 15px;
+  padding: 0 var(--spacing-2);
   min-width: 150px;
   max-width: max-content;
 

@@ -1,11 +1,13 @@
+import * as Separator from '@radix-ui/react-separator'
+import { Fragment } from 'react'
 import type { KeyboardEvent } from 'react'
 
 import * as keyConstants from 'constants/keyConstants'
 import handleChangeFocus from 'utils/handleChangeFocus'
 
 import MenuItemComponent from './MenuItemComponent'
-import { MenuSection, MenuSectionContainer } from './MenuStyles'
 import type { IMenuSection, IMenuItemCollection } from './MenuTypes'
+import Stack from '../Stack/Stack'
 
 function getAllItems(items: Array<IMenuItemCollection>) {
   return items.map((list) => list.items).reduce((a, b) => a.concat(b))
@@ -76,27 +78,44 @@ const MenuSectionComponent = ({
   }
 
   return (
-    <MenuSectionContainer tabIndex={-1} onKeyDown={keyDownHandler} role="menu">
-      {menuItems.map(({ id, items }) => (
-        <MenuSection key={id}>
-          {items.map((item) => {
-            if (item) {
-              return (
-                <MenuItemComponent
-                  absoluteIndex={getItemIndex(menuItems, item.id)}
-                  activeModalTag={activeModalTag}
-                  focusedItemIndex={focusedItemIndex}
-                  item={item}
-                  key={item?.title}
-                  setFocusedItemIndex={setFocusedItemIndex}
-                />
-              )
-            }
-            return null
-          })}
-        </MenuSection>
+    <Stack
+      direction="vertical"
+      onKeyDown={keyDownHandler}
+      role="menu"
+      tabIndex={-1}
+    >
+      {menuItems.map(({ id, items }, index, array) => (
+        <Fragment key={id}>
+          <Stack direction="vertical" spacing="mini">
+            {items.map((item) => {
+              if (item) {
+                return (
+                  <MenuItemComponent
+                    absoluteIndex={getItemIndex(menuItems, item.id)}
+                    activeModalTag={activeModalTag}
+                    focusedItemIndex={focusedItemIndex}
+                    item={item}
+                    key={item?.title}
+                    setFocusedItemIndex={setFocusedItemIndex}
+                  />
+                )
+              }
+              return null
+            })}
+          </Stack>
+          {/* Only add a separator whenever the batch of items isn't the last one */}
+          {array.length - 1 > index ? (
+            <Separator.Root
+              style={{
+                backgroundColor: 'var(--color-neutral-700)',
+                height: '1px',
+                width: '100%',
+              }}
+            />
+          ) : null}
+        </Fragment>
       ))}
-    </MenuSectionContainer>
+    </Stack>
   )
 }
 

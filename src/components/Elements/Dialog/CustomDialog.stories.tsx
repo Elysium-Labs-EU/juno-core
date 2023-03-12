@@ -1,24 +1,24 @@
 import { StoryFn, Meta } from '@storybook/react'
 
-import CustomModal from './CustomModal'
+import CustomDialog from './CustomDialog'
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Example/CustomModal',
-  component: CustomModal,
+  title: 'Example/CustomDialog',
+  component: CustomDialog,
   args: {
-    modalAriaLabel: 'modal-aria-label',
-    modalTitle: 'modal-title',
+    DialogAriaLabel: 'Dialog-aria-label',
+    DialogTitle: 'Dialog-title',
     open: false,
   },
-} as Meta<typeof CustomModal>
+} as Meta<typeof CustomDialog>
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: StoryFn<typeof CustomModal> = (args) => (
+const Template: StoryFn<typeof CustomDialog> = (args) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <CustomModal {...args}>
-    <div>Modal Content</div>
-  </CustomModal>
+  <CustomDialog {...args}>
+    <div>Dialog Content</div>
+  </CustomDialog>
 )
 
 export const Regular = Template.bind({})

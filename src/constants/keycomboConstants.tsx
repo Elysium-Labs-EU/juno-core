@@ -1,13 +1,13 @@
 import { modifierKeyDisplay } from 'utils/setModifierKey'
 
-export const MODAL_TITLE = 'Keyboard Combos'
+export const MODAL_TITLE = 'Keyboard Shortcuts'
 export const MODAL_OS_SUB =
-  'Your keyboard combos have been set based on the detected platform:'
+  'Your keyboard shortcuts have been set based on the detected platform:'
 
 export const GLOBAL_KEY_TITLE = 'Global'
 export const GLOBAL_KEY_SUB_TITLE = 'Use these shortcuts to navigate.'
 
-export const GLOBAL_KEY_COMBOS = [
+export const GLOBAL_KEY_SHORTCUTS = [
   { title: "Open Todo's", keys: ['1'] },
   { title: 'Open Inbox', keys: ['2'] },
   { title: 'Open Search', keys: [modifierKeyDisplay, 'K'] },
@@ -31,7 +31,7 @@ export const EMAIL_KEY_TITLE = 'Email'
 export const EMAIL_KEY_SUB_TITLE =
   'These shortcuts are available when you are on the email detail page.'
 
-export const EMAIL_DETAIL_COMBOS = [
+export const EMAIL_DETAIL_SHORTCUTS = [
   { title: 'Mark Email as To Do', keys: [modifierKeyDisplay, 'E'] },
   { title: 'Archive Email', keys: [modifierKeyDisplay, 'BACKSPACE'] },
   {
@@ -58,6 +58,6 @@ export const EMAIL_DETAIL_COMBOS = [
 export const COMPOSE_KEY_TITLE = 'Compose'
 export const COMPOSE_KEY_SUB_TITLE = 'Use these shortcuts when composing.'
 
-export const COMPOSE_KEY_COMBOS = [
+export const COMPOSE_KEY_SHORTCUTS = [
   { title: 'Send Email', keys: [modifierKeyDisplay, 'ENTER'] },
 ]

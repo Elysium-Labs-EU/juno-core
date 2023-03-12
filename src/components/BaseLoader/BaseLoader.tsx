@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import * as S from 'components/BaseLoader/BaseLoaderStyles'
+import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import LogoutOption, {
   handleLogout,
 } from 'components/MainHeader/Navigation/More/Options/LogoutOption'
@@ -10,7 +11,6 @@ import Logo from 'images/Juno_logo_dark.png'
 import { useAppSelector } from 'store/hooks'
 import { selectSystemStatusUpdate } from 'store/utilsSlice'
 import { Span } from 'styles/globalStyles'
-import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 
 import { LOGO_ALT, REDIRECTED, SECONDS } from './BaseLoaderConstants'
 

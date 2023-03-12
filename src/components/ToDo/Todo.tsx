@@ -1,7 +1,7 @@
+import Stack from 'components/Elements/Stack/Stack'
 import EmailList from 'components/EmailList/EmailList'
 import InboxSortOption from 'components/Inbox/InboxSortOption'
 import Layout from 'components/Layout/Layout'
-import * as S from 'components/MainHeader/HeaderStyles'
 import { ACTIVE_PAGE_HEADER, HEADER_TODO } from 'constants/globalConstants'
 import useSetCurrentLabel from 'hooks/useSetCurrentLabel'
 import { useAppSelector } from 'store/hooks'
@@ -16,21 +16,15 @@ const Todo = () => {
   return (
     <Layout
       activePage={ACTIVE_PAGE_HEADER.todo}
-      headerTitle={HEADER_TODO}
       additionalHeader={
-        !isFlexibleFlowActive ? (
-          <S.StrictFlowButtonContainer>
-            <TodoFocusOption />
-            <InboxSortOption />
-          </S.StrictFlowButtonContainer>
-        ) : (
-          <S.StrictFlowButtonContainer>
-            <TodoFocusOption />
-          </S.StrictFlowButtonContainer>
-        )
+        <Stack align="center" justify="center">
+          <TodoFocusOption />
+          {!isFlexibleFlowActive ? <InboxSortOption /> : null}
+        </Stack>
       }
+      headerTitle={HEADER_TODO}
     >
-      <EmailList />
+      <EmailList hasLargeHeader />
     </Layout>
   )
 }

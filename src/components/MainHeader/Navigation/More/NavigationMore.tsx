@@ -105,8 +105,8 @@ const NavigationMore = ({ isActive }: INavigationMore) => {
   return (
     <Menu
       activeModalTag={global.ACTIVE_MODAL_MAP.navigation}
-      menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
       handleClose={handleClose}
+      menuItems={[MENU_OPTIONS, MENU_ITEMS_GLOBAL]}
       triggerButton={
         <CustomIconButton
           ariaControls={isOpen ? 'menu' : undefined}

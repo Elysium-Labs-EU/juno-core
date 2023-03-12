@@ -28,11 +28,11 @@ const Button = styled.button<IButton>`
   background-color: transparent;
   border: none;
   color: ${({ isActive }) =>
-    isActive ? `var(--color-black) ` : `var(--color-neutral-400) `};
+    isActive ? 'var(--color-black)' : 'var(--color-neutral-400)'};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${({ hoverColor }) => hoverColor || `var(--color-black)`};
+    color: ${({ hoverColor }) => hoverColor || 'var(--color-black)'};
     cursor: pointer;
   }
 
@@ -69,7 +69,7 @@ const CustomIconButton = forwardRef<HTMLButtonElement, TCustomIconButton>(
       type={type ?? 'button'}
       {...rest}
     >
-      <Span>{icon}</Span>
+      <Span style={{ display: 'flex' }}>{icon}</Span>
     </Button>
   )
 )
@@ -84,5 +84,7 @@ CustomIconButton.defaultProps = {
   isActive: false,
   type: 'button',
 }
+
+CustomIconButton.displayName = 'CustomIconButton'
 
 export default CustomIconButton

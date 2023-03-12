@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import Stack from 'components/Elements/Stack/Stack'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import ArchiveOption from 'components/EmailDetail/Options/ArchiveOption'
 import DeleteOption from 'components/EmailDetail/Options/DeleteOption'
@@ -10,11 +11,7 @@ import ToDoOption from 'components/EmailDetail/Options/ToDoOption'
 import UnsubscribeOption from 'components/EmailDetail/Options/UnsubscribeOption'
 import * as global from 'constants/globalConstants'
 import { QiFolderTrash } from 'images/svgIcons/quillIcons'
-import {
-  selectCoreStatus,
-  selectIsForwarding,
-  selectIsReplying,
-} from 'store/emailDetailSlice'
+import { selectCoreStatus } from 'store/emailDetailSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
@@ -40,8 +37,6 @@ const EmailDetailOptions = ({
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const alternateActions = useAppSelector(selectAlternateActions)
-  const isReplying = useAppSelector(selectIsReplying)
-  const isForwarding = useAppSelector(selectIsForwarding)
 
   const staticEmailLabels = emailLabels(threadDetail, storageLabels)
 
@@ -95,28 +90,28 @@ const EmailDetailOptions = ({
         }
         secondOption={
           <DeleteOption
-            threadId={threadDetail.id}
             icon={<QiFolderTrash size={ICON_SIZE} />}
-            suppressed
             noArchive
+            suppressed
+            threadId={threadDetail.id}
           />
         }
         prioritizeSecondOption={alternateActions}
       />
     ) : (
       <DeleteOption
-        threadId={threadDetail.id}
         icon={<QiFolderTrash size={ICON_SIZE} />}
-        suppressed
         noArchive
+        suppressed
+        threadId={threadDetail.id}
       />
     )
   }, [threadDetail, storageLabels])
 
   return (
-    <S.EmailOptionsContainer tabbedView={isReplying || isForwarding}>
+    <S.EmailOptionsContainer>
       <S.StickyOptions>
-        <S.InnerOptionsContainer>
+        <Stack direction="vertical" spacing="mini">
           {memoizedReplyOption}
           {memoizedForwardOption}
           {memoizedToDoOption}
@@ -135,7 +130,7 @@ const EmailDetailOptions = ({
               />
             </>
           )}
-        </S.InnerOptionsContainer>
+        </Stack>
       </S.StickyOptions>
     </S.EmailOptionsContainer>
   )

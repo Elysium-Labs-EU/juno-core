@@ -1,4 +1,5 @@
-import CustomModal from 'components/Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Dialog/CustomDialog'
+import Stack from 'components/Elements/Stack/Stack'
 import * as global from 'constants/globalConstants'
 import * as local from 'constants/keycomboConstants'
 import { useAppSelector } from 'store/hooks'
@@ -25,23 +26,25 @@ const CreateSectionWithKeys = ({
   title,
   subTitle,
 }: ICreateSectionWithKeys) => (
-  <S.SectionContainer>
+  <Stack direction="vertical" spacing="mini" style={{ width: '100%' }}>
     <div>
       <strong>{title}</strong>
     </div>
     <Span>{subTitle}</Span>
     {keyCombos.map((combo) => (
-      <S.KeyComboContainer key={combo.title}>
+      <Stack direction="vertical" key={combo.title}>
         <div>{combo.title}</div>
-        {combo?.subTitle && <Span muted>{combo?.subTitle}</Span>}
-        <S.KeyBindShortcut>
+        {combo?.subTitle ? <Span muted>{combo?.subTitle}</Span> : null}
+        <Stack direction="horizontal" spacing="mini">
           {combo.keys.map((oneKey) => (
-            <Span key={JSON.stringify(oneKey)}>{oneKey}</Span>
+            <S.KeyBindShortcut key={JSON.stringify(oneKey)}>
+              {oneKey}
+            </S.KeyBindShortcut>
           ))}
-        </S.KeyBindShortcut>
-      </S.KeyComboContainer>
+        </Stack>
+      </Stack>
     ))}
-  </S.SectionContainer>
+  </Stack>
 )
 
 const KeyboardCombos = () => {
@@ -59,23 +62,23 @@ const KeyboardCombos = () => {
         </Paragraph>
       }
     >
-      <S.Columns>
+      <Stack spacing="huge">
         <CreateSectionWithKeys
-          title={local.GLOBAL_KEY_TITLE}
+          keyCombos={local.GLOBAL_KEY_SHORTCUTS}
           subTitle={local.GLOBAL_KEY_SUB_TITLE}
-          keyCombos={local.GLOBAL_KEY_COMBOS}
+          title={local.GLOBAL_KEY_TITLE}
         />
         <CreateSectionWithKeys
-          title={local.EMAIL_KEY_TITLE}
+          keyCombos={local.EMAIL_DETAIL_SHORTCUTS}
           subTitle={local.EMAIL_KEY_SUB_TITLE}
-          keyCombos={local.EMAIL_DETAIL_COMBOS}
+          title={local.EMAIL_KEY_TITLE}
         />
         <CreateSectionWithKeys
-          title={local.COMPOSE_KEY_TITLE}
+          keyCombos={local.COMPOSE_KEY_SHORTCUTS}
           subTitle={local.COMPOSE_KEY_SUB_TITLE}
-          keyCombos={local.COMPOSE_KEY_COMBOS}
+          title={local.COMPOSE_KEY_TITLE}
         />
-      </S.Columns>
+      </Stack>
     </CustomModal>
   )
 }

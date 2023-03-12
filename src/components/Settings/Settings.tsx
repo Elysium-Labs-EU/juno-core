@@ -9,7 +9,7 @@ import General from './General/General'
 import SettingsSidebar from './SettingsSidebar/SettingsSidebar'
 import * as S from './SettingsStyles'
 import Signature from './Signature/Signature'
-import CustomModal from '../Elements/Modal/CustomModal'
+import CustomModal from '../Elements/Dialog/CustomDialog'
 
 const SETTINGS = 'Settings'
 
@@ -75,18 +75,18 @@ const Settings = () => {
 
   return (
     <CustomModal
-      open={activeModal === global.ACTIVE_MODAL_MAP.settings}
-      modalTitle={SETTINGS}
       modalAriaLabel="settings"
+      modalTitle={SETTINGS}
+      open={activeModal === global.ACTIVE_MODAL_MAP.settings}
     >
       <S.SettingsContainer>
         <SettingsSidebar
           focusedItemIndex={focusedItemIndex}
           setFocusedItemIndex={setFocusedItemIndex}
         />
-        {focusedItemIndex === 0 && memoizedGeneral}
-        {focusedItemIndex === 1 && memoizedSignature}
-        {focusedItemIndex === 2 && <Contributions />}
+        {focusedItemIndex === 0 ? memoizedGeneral : null}
+        {focusedItemIndex === 1 ? memoizedSignature : null}
+        {focusedItemIndex === 2 ? <Contributions /> : null}
       </S.SettingsContainer>
     </CustomModal>
   )

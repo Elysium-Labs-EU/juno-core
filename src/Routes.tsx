@@ -49,7 +49,10 @@ const ProtectedRouteTemplate = ({ children }: { children: JSX.Element }) => {
 
 const RoutesComponent = () => {
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
-  useSentry(import.meta.env.VITE_SENTRY_DSN)
+  const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN
+  if (SENTRY_DSN) {
+    useSentry(SENTRY_DSN)
+  }
 
   return (
     <Routes>
@@ -113,7 +116,7 @@ const RoutesComponent = () => {
           </ProtectedRouteTemplate>
         }
       />
-      {isFlexibleFlowActive && (
+      {isFlexibleFlowActive ? (
         <Route
           path={RoutesConstants.INBOX}
           element={
@@ -122,7 +125,7 @@ const RoutesComponent = () => {
             </ProtectedRouteTemplate>
           }
         />
-      )}
+      ) : null}
       <Route
         path={RoutesConstants.ARCHIVE}
         element={

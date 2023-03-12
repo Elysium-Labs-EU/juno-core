@@ -1,14 +1,12 @@
 import type { Dispatch, SetStateAction } from 'react'
 
 import type { AppDispatch } from 'store/store'
-import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type {
   TEmailListObject,
   TFullMessage,
   TThreadObject,
 } from 'store/storeTypes/emailListTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
-import type { IUtilsState } from 'store/storeTypes/utilsTypes'
 
 export interface IRenderEmailDetail {
   activeEmailList: TEmailListObject
@@ -17,13 +15,15 @@ export interface IRenderEmailDetail {
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
+export interface IFilesOverview {
+  threadDetail: TThreadObject | null | undefined
+}
+
 export interface IMessagesOverview
   extends Pick<IRenderEmailDetail, 'threadDetail'> {
   children: JSX.Element
-  isForwarding: TEmailDetailState['isForwarding']
-  isLoading: IUtilsState['isLoading']
-  isReplying: TEmailDetailState['isReplying']
   labelIds: TLabelState['labelIds']
+  tabbedViewActive: boolean
 }
 
 export interface IMappedMessages

@@ -2,22 +2,22 @@ import LinearProgress from '@mui/material/LinearProgress'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  display: flex;
-  place-content: center;
-  height: 100vh;
-  width: 100vw;
-  justify-content: center;
   align-items: center;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  place-content: center;
+  width: 100vw;
 `
 
 export const Inner = styled.div`
   display: flex;
-  place-items: center;
   flex-direction: column;
+  place-items: center;
 `
 
 export const ServiceUnavailableParagraph = styled.p`
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-2);
 `
 
 export const Container = styled.div`
@@ -42,25 +42,5 @@ export const StyledLinearProgress = styled(LinearProgress)`
   }
   .MuiLinearProgress-bar2Indeterminate {
     background-color: var(--color-black);
-  }
-`
-
-export const StyledAnimatedMountUnmount = styled.div`
-  transition: all 150ms cubic-bezier(0.16, , 0.3, 1);
-  position: relative;
-  opacity: 0;
-  animation: scaleFadeIn 0.3s both;
-
-  /* Animation */
-  @keyframes scaleFadeIn {
-    0% {
-      opacity: 0.7;
-      transform: scale(0.9);
-    }
-
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
   }
 `

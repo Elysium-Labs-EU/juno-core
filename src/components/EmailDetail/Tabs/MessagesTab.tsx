@@ -15,10 +15,10 @@ const MessagesTab = ({
   navigateTo,
 }: IMesssageTab) => (
   <S.StyedListItem
-    style={{ cursor: 'pointer' }}
-    onClick={() => navigateTo(local.MESSAGE_MENU_ITEM)}
     aria-hidden="true"
     isActive={activeLink === local.MESSAGE_MENU_ITEM.name}
+    onClick={() => navigateTo(local.MESSAGE_MENU_ITEM)}
+    style={{ cursor: 'pointer' }}
   >
     <S.StyledBadge
       badgeContent={activeThread?.messages?.length ?? 0}

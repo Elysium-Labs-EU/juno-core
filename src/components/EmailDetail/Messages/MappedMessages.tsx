@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from 'constants/globalConstants'
 import { openDraftEmail } from 'store/draftsSlice'
@@ -16,8 +16,6 @@ const MappedMessages = ({
 }: IMappedMessages) => {
   const [hideDraft, setHideDraft] = useState<number | null>(null)
   const dispatch = useAppDispatch()
-
-  console.log('BOOM', threadDetail?.messages[0])
 
   const handleClickDraft = useCallback(
     ({
@@ -59,7 +57,7 @@ const MappedMessages = ({
   return reversedMessagesOrder ? (
     <>
       {reversedMessagesOrder.map((message, index) => (
-        <div key={message.id}>
+        <Fragment key={message.id}>
           {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
             <DraftMessage
               draftIndex={index}
@@ -76,7 +74,7 @@ const MappedMessages = ({
               threadDetail={threadDetail}
             />
           )}
-        </div>
+        </Fragment>
       ))}
     </>
   ) : (

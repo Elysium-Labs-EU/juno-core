@@ -31,11 +31,11 @@ const App = () => {
 
   useEffect(() => {
     const token = fetchToken()
-    if (token) {
+    if (token && !isAuthenticated) {
       dispatch(setIsAuthenticated(true))
       dispatch(push(RoutesConstants.TODO))
     }
-  }, [])
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {

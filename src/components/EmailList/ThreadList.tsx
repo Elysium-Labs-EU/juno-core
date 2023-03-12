@@ -25,13 +25,13 @@ interface IThreadList {
 }
 
 const ThreadList = ({
-  threads,
   focusedItemIndex,
-  setFocusedItemIndex,
-  showLabel = false,
-  showCheckbox = true,
   keySuffix,
   searchOnClickHandeler = undefined,
+  setFocusedItemIndex,
+  showCheckbox = true,
+  showLabel = false,
+  threads,
 }: IThreadList) => (
   <>
     {threads.map((thread, index) => (

@@ -1,13 +1,17 @@
 import type { ReactNode } from 'react'
 import styled from 'styled-components'
 
+const Wrapper = styled.div`
+  overflow: hidden;
+`
+
 const StyledAnimatedMountUnmount = styled.div`
-  transform: translateY(10px);
-  transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  opacity: 0;
-  transform: translateZ(0) rotate(0deg) scaleY(1);
   animation: fadeInUp 0.3s both;
+  opacity: 0;
+  position: relative;
+  transform: translateY(10px);
+  transform: translateZ(0) rotate(0deg) scaleY(1);
+  transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Animation */
   @keyframes fadeInUp {
@@ -27,7 +31,9 @@ const StyledAnimatedMountUnmount = styled.div`
 `
 
 const AnimatedMountUnmount = ({ children }: { children: ReactNode }) => (
-  <StyledAnimatedMountUnmount>{children}</StyledAnimatedMountUnmount>
+  <Wrapper>
+    <StyledAnimatedMountUnmount>{children}</StyledAnimatedMountUnmount>
+  </Wrapper>
 )
 
 export default AnimatedMountUnmount

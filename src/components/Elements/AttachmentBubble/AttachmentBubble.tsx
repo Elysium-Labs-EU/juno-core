@@ -279,7 +279,7 @@ const AttachmentBubble = ({
             </Span>
           </S.AttachmentDetails>
         </S.AttachmentInner>
-        {/* {memoizedViewAttachmentButton} */}
+        {memoizedViewAttachmentButton}
       </S.Attachment>
       {memoizedDownloadButton}
       {memoizedDeleteButton}

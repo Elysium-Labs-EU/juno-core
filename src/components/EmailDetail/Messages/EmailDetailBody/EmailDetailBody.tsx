@@ -47,7 +47,9 @@ const ShadowBody = ({ email }: IShadowBody) => {
   return (
     // TODO: This is a temporary fix.
     // @ts-ignore
-    <root.div ref={callbackRef}>{sanitizeAndParseHtmlContent(email)}</root.div>
+    <root.div ref={callbackRef} style={{ all: 'unset', overflow: 'auto' }}>
+      {sanitizeAndParseHtmlContent(email)}
+    </root.div>
   )
 }
 

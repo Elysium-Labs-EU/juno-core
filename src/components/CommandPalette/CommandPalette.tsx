@@ -1,12 +1,13 @@
-import InputBase from '@mui/material/InputBase'
-import Modal from '@mui/material/Modal'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, KeyboardEvent } from 'react'
 import { push } from 'redux-first-history'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import CustomDialog from 'components/Elements/Dialog/CustomDialog'
+import Input from 'components/Elements/Input/Input'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
+import Stack from 'components/Elements/Stack/Stack'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import threadApi from 'data/threadApi'
@@ -296,7 +297,7 @@ const CommandPallette = () => {
             setFocusedItemIndex={setFocusedItemIndex}
           />
         ) : (
-          <S.NoSearchResults>
+          <Stack direction="vertical">
             {loadState === global.LOAD_STATE_MAP.loading ? (
               <LoadingState />
             ) : (
@@ -305,71 +306,72 @@ const CommandPallette = () => {
                 searchValue={searchValue}
               />
             )}
-          </S.NoSearchResults>
+          </Stack>
         )}
       </S.SearchOuput>
     ),
     [loadState, searchResults, searchValue, focusedItemIndex]
   )
 
+  const searchButtonIsDisabled =
+    searchValue.length < 1 || searchValue === searchValueRef.current
+
   return (
-    <Modal
+    <CustomDialog
+      enableDynamicHeight
+      modalAriaLabel="command-pallette"
+      noCloseButton
+      noContentPadding
+      onKeyDown={keyDownHandler}
       open={inSearch}
-      onClose={() => handleClose(dispatch)}
-      aria-labelledby="modal-command-pallette"
-      aria-describedby="modal-command-pallette-box"
     >
-      <S.Dialog onKeyDown={keyDownHandler}>
-        <S.InputRow>
-          <S.Icon>
-            {searchValue.length > 0 ? (
-              <CustomIconButton
-                onClick={resetSearch}
-                aria-label="clear-search"
-                icon={<QiArrowLeft size={20} />}
-                title="Clear search input and results"
-              />
-            ) : (
-              <QiSearch size={20} />
-            )}
-          </S.Icon>
-          <InputBase
-            autoComplete="off"
-            fullWidth
-            id="search"
-            autoFocus
-            onKeyDown={handleResetIndexOnNewSearch}
-            inputRef={searchInputRef}
-            onChange={handleSearchChange}
-            placeholder="Search for emails and commands"
-            spellCheck={false}
-            value={searchValue}
-          />
+      <S.InputRow>
+        <S.Icon>
+          {searchValue.length > 0 ? (
+            <CustomIconButton
+              onClick={resetSearch}
+              aria-label="clear-search"
+              icon={<QiArrowLeft size={20} />}
+              title="Clear search input and results"
+            />
+          ) : (
+            <QiSearch size={20} />
+          )}
+        </S.Icon>
+        <Input
+          autoComplete="off"
+          autoFocus
+          fullWidth
+          id="search"
+          ref={searchInputRef}
+          onChange={handleSearchChange}
+          onKeyDown={handleResetIndexOnNewSearch}
+          placeholder="Search for emails and commands"
+          spellCheck={false}
+          value={searchValue}
+        />
+        <Stack direction="horizontal">
           <CustomButton
             onClick={() => intitialSearch()}
-            disabled={
-              searchValue.length < 1 || searchValue === searchValueRef.current
-            }
+            disabled={searchButtonIsDisabled}
             label={SEARCH}
-            style={{ marginRight: '10px' }}
             title="Search"
-            suppressed={
-              searchValue.length < 1 || searchValue === searchValueRef.current
-            }
+            suppressed={searchButtonIsDisabled}
           />
+
           <CustomIconButton
             onClick={() => handleClose(dispatch)}
             aria-label="close-modal"
             icon={<QiEscape size={16} />}
             title="Close"
           />
-        </S.InputRow>
-        {!searchResults && selectedEmails.selectedIds.length > 0 && (
-          <ContextBar />
-        )}
-        {memoizedCommandSuggestionsAndSearchResults}
-      </S.Dialog>
-    </Modal>
+        </Stack>
+      </S.InputRow>
+      {!searchResults && selectedEmails.selectedIds.length > 0 && (
+        <ContextBar />
+      )}
+      {memoizedCommandSuggestionsAndSearchResults}
+    </CustomDialog>
   )
 }
 

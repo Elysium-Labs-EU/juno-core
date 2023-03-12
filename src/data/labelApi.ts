@@ -9,17 +9,18 @@ import { instance, errorBlockTemplate } from './api'
 import type { TemplateApiResponse } from './api'
 
 const labelApi = () => ({
-  fetchLabels: async (): TemplateApiResponse<TGmailV1SchemaListLabelsResponseSchema> => {
-    try {
-      const res = await instance.get<TGmailV1SchemaListLabelsResponseSchema>(
-        `/api/labels`
-      )
-      gmailV1SchemaListLabelsResponseSchema.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  fetchLabels:
+    async (): TemplateApiResponse<TGmailV1SchemaListLabelsResponseSchema> => {
+      try {
+        const res = await instance.get<TGmailV1SchemaListLabelsResponseSchema>(
+          `/api/labels`
+        )
+        gmailV1SchemaListLabelsResponseSchema.parse(res.data)
+        return res
+      } catch (err) {
+        return errorBlockTemplate(err)
+      }
+    },
   fetchSingleLabel: async (
     id: string
   ): TemplateApiResponse<TGmailV1SchemaLabelSchema> => {

@@ -9,22 +9,32 @@ const overlayShow = keyframes({
 })
 
 const contentShow = keyframes({
-  '0%': { opacity: 0, transform: 'translate(-50%, -48%) scale(.96)' },
-  '100%': { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+  '0%': {
+    opacity: 0,
+    transform: 'translate(-50%, -2%) scale(.96)',
+  },
+  '100%': {
+    opacity: 1,
+    transform: 'translate(-50%, 0%) scale(1)',
+  },
 })
 
 export const StyledOverlay = styled(DialogPrimitive.Overlay)`
+  animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
   background-color: var(--color-neutral-500);
   opacity: 0.6;
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-index-modal) - 1);
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${overlayShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
 `
 
-export const StyledContent = styled(DialogPrimitive.Content)`
+interface IStyledContent {
+  height: string
+  nocontentpadding?: string
+}
+
+export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
+  animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
   background-color: var(--color-white);
   border-radius: var(--radius-l);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
@@ -33,15 +43,28 @@ export const StyledContent = styled(DialogPrimitive.Content)`
   max-height: calc(100% - 64px);
   outline: 0;
   overflow-y: auto;
-  padding: 25px;
+  padding: ${({ nocontentpadding }) =>
+    nocontentpadding === 'true' ? '0' : 'var(--spacing-3)'};
   position: fixed;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 825px;
-  z-index: var(--z-index-modal);
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  scrollbar-width: none;
+  ::-webkit-scrollbar {
+    display: none;
   }
+  top: 20%;
+  transform: translateX(-50%);
+  transition: height 0.3s ease-in-out;
+  min-width: 300px;
+  width: 100%;
+  max-width: 825px;
+  z-index: var(--z-index-modal);
+  &[data-state='open'] {
+    height: ${({ height }) => height};
+  }
+  &[data-state='closed'] {
+    height: 0;
+    overflow: hidden;
+  }
+
   &:focus: {
     outline: none;
   }
@@ -53,40 +76,28 @@ export const StyledContent = styled(DialogPrimitive.Content)`
   }
 `
 
-export const Inner = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
 export const ModalHeader = styled.div`
   border-bottom: 1px solid var(--color-neutral-200);
-  margin-bottom: 20px;
-`
-
-export const HeaderRow = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
 `
 
 export const StyledTitle = styled(DialogPrimitive.Title)`
-  margin: 0;
-  font-weight: 400;
   color: var(--color-neutral-800);
-  padding-bottom: 10px;
+  font-weight: 400;
+  margin: 0;
+  padding-bottom: var(--spacing-1);
 `
 
 export const StyledDescription = styled(DialogPrimitive.Description)`
-  margin: 10px 0 20px;
   color: var(--color-neutral-800);
-  font-size: 15px;
+  font-size: var(--text-base);
   line-height: 1.5;
+  margin: var(--spacing-1) 0 var(--spacing-2);
 `
 
 export const ModalIconButton = styled.button`
-  align-items: center;
   all: unset;
+  align-items: center;
   border-radius: 100%;
   cursor: pointer;
   display: inline-flex;

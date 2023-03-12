@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import Stack from 'components/Elements/Stack/Stack'
 import * as global from 'constants/globalConstants'
 import { QiGift, QiSearch } from 'images/svgIcons/quillIcons'
 import {
@@ -111,9 +112,15 @@ const CommandPaletteSuggestions = ({
     <div>
       {filteredItems.length > 0 ? (
         filteredItems.map(({ heading, id, items }) => (
-          <div key={id} tabIndex={-1}>
+          <Stack direction="vertical" key={id} tabIndex={-1}>
             {heading && <S.ListHeader>{heading}</S.ListHeader>}
-            <S.ListUnordered tabIndex={-1}>
+            <Stack
+              direction="vertical"
+              renderAs="ul"
+              spacing="none"
+              style={{ margin: '0', padding: '0' }}
+              tabIndex={-1}
+            >
               {items.map((item) => {
                 if (item) {
                   return (
@@ -128,8 +135,8 @@ const CommandPaletteSuggestions = ({
                 }
                 return undefined
               })}
-            </S.ListUnordered>
-          </div>
+            </Stack>
+          </Stack>
         ))
       ) : (
         <S.ListHeader>{global.SOMETHING_WRONG}</S.ListHeader>

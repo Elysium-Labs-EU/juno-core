@@ -26,7 +26,7 @@ const Inbox = () => {
         </S.OptionsContainer>
       }
     >
-      <EmailList />
+      <EmailList hasLargeHeader />
     </Layout>
   )
 }

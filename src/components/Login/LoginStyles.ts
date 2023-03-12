@@ -12,25 +12,24 @@ export const Wrapper = styled.div`
   width: 100vw;
 `
 
+export const LoginWrapper = styled.div`
+  padding: var(--spacing-2);
+`
+
 export const LoginHeader = styled.h1`
   color: var(--color-black) !important;
   font-family: var(--font-family) !important;
-  font-size: 4rem;
-  line-height: 1;
+  font-size: var(--text-h1);
   font-weight: 400;
-  margin: 40px 0 0;
+  line-height: 1;
+  margin: var(--spacing-4) 0 0;
   user-select: none;
-`
-
-export const SubHeaderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
 `
 
 export const StyledLink = styled.a`
   color: var(--color-black) !important;
-  margin-bottom: 20px;
   font-weight: 500;
+  margin-bottom: var(--spacing-2);
   text-decoration: none;
 `
 
@@ -38,17 +37,17 @@ export const AdditionalOptions = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 10px;
+  margin-top: var(--spacing-1);
 `
 
 export const LoginContainer = styled.div`
   background-color: var(--color-white);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-l);
   box-shadow: var(--box-shadow-low);
-  padding: 10px;
+  padding: var(--spacing-1);
   @media only screen and (min-width: ${breakPoint.md}) {
     min-width: 375px;
-    padding: 20px;
+    padding: var(--spacing-2);
   }
 `
 
@@ -56,17 +55,17 @@ export const Inner = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
-  padding: 40px 20px;
+  padding: var(--spacing-4) var(--spacing-2);
 `
 
 export const Header = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-4);
   text-align: center;
 `
 
 export const ErrorBox = styled.div`
   background-color: var(--color-blue-100);
-  padding: 1rem;
-  border-radius: 5px;
+  border-radius: var(--radius-m);
+  padding: var(--spacing-2);
   text-align: center;
 `

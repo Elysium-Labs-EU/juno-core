@@ -161,10 +161,10 @@ const InboxSortOption = () => {
         icon={<QiSort color="var(--color-black)" size={20} />}
         dataCy="inbox-sort-button"
       />
-      {/* TO-DO: Complete InboxSortPopper options dropdown */}
+      {/* TODO: Complete InboxSortPopper options dropdown */}
       {/* {!isFlexibleFlowActive && <InboxSortPopper />} */}
 
-      {/* TO-DO: Delete if implmenting dropdown options */}
+      {/* TODO: Delete if implmenting dropdown options */}
       {!isFlexibleFlowActive && <InboxRefresh />}
     </>
   )

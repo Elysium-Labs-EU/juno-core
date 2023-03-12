@@ -14,7 +14,9 @@ import getUserInitials from 'utils/getUserInitials'
 import * as S from './ContactCardStyles'
 import type { IContactCard, IContactCardPopper } from './ContactCardTypes'
 import CustomButton from '../Buttons/CustomButton'
+import Stack from '../Stack/Stack'
 
+const EMAIL_HEADER = 'Email'
 const NO_EMAIL = 'No address available'
 const NO_NAME = 'No display name'
 
@@ -34,8 +36,8 @@ export const ContactCardContent = ({
         <S.ContactCardName title={name ?? ''}>
           {name || NO_NAME}
         </S.ContactCardName>
-        <S.ContactCardDetails>
-          <S.ContactCardEmailContainer>
+        <Stack direction="vertical">
+          <Stack align="center">
             <S.ContactCardEmailButton
               disabled={!emailAddress}
               $randomColor={getRandomColor(staticInitials)}
@@ -49,8 +51,12 @@ export const ContactCardContent = ({
             >
               <QiMail size={20} />
             </S.ContactCardEmailButton>
-            <S.EmailContainer>
-              <Span small>Email</Span>
+            <Stack
+              direction="vertical"
+              spacing="none"
+              style={{ overflow: 'hidden' }}
+            >
+              <Span small>{EMAIL_HEADER}</Span>
               <S.ContactCardEmail
                 title={emailAddress ?? ''}
                 onClick={() => {
@@ -62,24 +68,22 @@ export const ContactCardContent = ({
               >
                 {emailAddress || NO_EMAIL}
               </S.ContactCardEmail>
-            </S.EmailContainer>
-          </S.ContactCardEmailContainer>
-          <S.AdditionalButtonsContainer>
+            </Stack>
+          </Stack>
+          {emailAddress ? (
             <CustomButton
               icon={<QiSearch />}
               label="Search for emails"
               title="Search for emails with this user"
               onClick={() => {
-                if (emailAddress) {
-                  createSearchViaUrl({
-                    dispatch,
-                    searchQuery: emailAddress,
-                  })
-                }
+                createSearchViaUrl({
+                  dispatch,
+                  searchQuery: emailAddress,
+                })
               }}
             />
-          </S.AdditionalButtonsContainer>
-        </S.ContactCardDetails>
+          ) : null}
+        </Stack>
       </CardContent>
     </S.ContactCard>
   )

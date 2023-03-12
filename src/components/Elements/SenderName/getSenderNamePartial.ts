@@ -5,10 +5,10 @@ import { convertToContact } from 'utils/convertToContact'
 
 export const NO_SENDER = '(No sender)'
 
-const senderNamePartial = (
+export default function getSenderNamePartial(
   fromHeaders: string | null,
   emailAddress: TProfile['emailAddress']
-): TContact => {
+): TContact {
   if (fromHeaders) {
     if (fromHeaders.length > 0) {
       if (emailAddress && fromHeaders.includes(emailAddress)) {
@@ -20,5 +20,3 @@ const senderNamePartial = (
   }
   return { name: NO_SENDER, emailAddress: NO_SENDER }
 }
-
-export default senderNamePartial

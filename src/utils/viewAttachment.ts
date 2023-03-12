@@ -1,5 +1,6 @@
 import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
+
 import base64toBlob from './base64toBlob'
 
 const FAIL_RESPONSE_OBJECT = {

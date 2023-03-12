@@ -9,9 +9,8 @@ export const Wrapper = styled.div`
   flex-direction: row;
   min-height: 51px;
   position: relative;
-  /* text-align: right; */
   p {
-    font-size: var(--small);
+    font-size: var(--text-small);
     padding-left: var(--spacing-1-5);
   }
 `
@@ -24,13 +23,17 @@ export const SettingsInner = styled.div`
 export const SettingsButtonContainer = styled.div`
   margin-top: var(--small);
   @media only screen and (min-width: ${breakPoint.xl}) {
-    width: 100px;
-    position: absolute;
     left: -120px;
+    position: absolute;
     text-align: right;
+    width: 100px;
   }
 `
 
 export const ActiveSignatureContainer = styled.div`
   position: relative;
+  p {
+    margin-top: 0;
+    padding-left: 0;
+  }
 `

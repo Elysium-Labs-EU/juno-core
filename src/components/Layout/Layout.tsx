@@ -39,10 +39,12 @@ const Layout = ({
   const activeModal = useAppSelector(selectActiveModal)
   return (
     <Base>
-      {global.ACTIVE_MODAL_MAP.feedback === activeModal && <Feedback />}
-      {global.ACTIVE_MODAL_MAP.intro === activeModal && <Introduction />}
-      {global.ACTIVE_MODAL_MAP.keyboard === activeModal && <KeyboardCombos />}
-      {global.ACTIVE_MODAL_MAP.settings === activeModal && <Settings />}
+      {global.ACTIVE_MODAL_MAP.feedback === activeModal ? <Feedback /> : null}
+      {global.ACTIVE_MODAL_MAP.intro === activeModal ? <Introduction /> : null}
+      {global.ACTIVE_MODAL_MAP.keyboard === activeModal ? (
+        <KeyboardCombos />
+      ) : null}
+      {global.ACTIVE_MODAL_MAP.settings === activeModal ? <Settings /> : null}
 
       <Header
         activePage={activePage}

@@ -18,24 +18,16 @@ const Header = ({
   showNavigation,
   showBackButton,
 }: Omit<ILayout, 'children'>) => {
-  const emailList = useAppSelector(selectEmailList)
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
+  const emailList = useAppSelector(selectEmailList)
 
   return (
-    <OuterContainer
-      position="sticky"
-      style={{
-        top: '0',
-        left: '0',
-        zIndex: 'var(--z-index-top-element)',
-        backgroundColor: 'var(--color-neutral-100)',
-      }}
-    >
+    <OuterContainer>
       <S.NavContainer>
         {showBackButton ? (
-          <div style={{ position: 'relative', right: 'var(--spacing-2)' }}>
+          <S.BackButtonContainer>
             <BackButton />
-          </div>
+          </S.BackButtonContainer>
         ) : (
           <div />
         )}

@@ -1,44 +1,36 @@
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
-import { ERROR_EMAIL } from 'constants/emailDetailConstants'
+// import { ERROR_EMAIL } from 'constants/emailDetailConstants'
+import Stack from 'components/Elements/Stack/Stack'
 
 import useMarkEmailAsRead from './Hooks/useMarkEmailAsRead'
-import * as ES from '../EmailDetailStyles'
+import * as S from '../EmailDetailStyles'
 import type { IMessagesOverview } from '../EmailDetailTypes'
 
 const MessagesOverview = ({
   children,
   threadDetail,
-  isLoading,
-  isReplying,
-  isForwarding,
+  tabbedViewActive,
   labelIds,
 }: IMessagesOverview) => {
   // On mount of the email detail - mark the email as read when it is unread.
-  useMarkEmailAsRead({ threadDetail, labelIds })
+  useMarkEmailAsRead({ labelIds, threadDetail })
+
+  // TODO: Create an error state for this. Potentially by using RTK Query
 
   return (
-    <ES.MessageFeedComposerContainer>
-      <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
-        <ES.DetailBase>
-          <ES.CardFullWidth>
-            {/* TODO: Introduce match pattern */}
-            {threadDetail?.messages && !isLoading ? (
-              children
-            ) : (
-              <ES.LoadingErrorWrapper>
-                <StyledCircularProgress />
-              </ES.LoadingErrorWrapper>
-            )}
-            {!threadDetail && (
-              <ES.LoadingErrorWrapper>
-                {isLoading && <StyledCircularProgress />}
-                {!isLoading && <p>{ERROR_EMAIL}</p>}
-              </ES.LoadingErrorWrapper>
-            )}
-          </ES.CardFullWidth>
-        </ES.DetailBase>
-      </ES.EmailDetailContainer>
-    </ES.MessageFeedComposerContainer>
+    <S.MessageFeedComposerContainer>
+      <S.EmailDetailContainer tabbedView={tabbedViewActive}>
+        <Stack direction="vertical" style={{ width: '100%' }}>
+          {threadDetail?.messages ? (
+            children
+          ) : (
+            <S.LoadingErrorWrapper>
+              <StyledCircularProgress />
+            </S.LoadingErrorWrapper>
+          )}
+        </Stack>
+      </S.EmailDetailContainer>
+    </S.MessageFeedComposerContainer>
   )
 }
 export default MessagesOverview

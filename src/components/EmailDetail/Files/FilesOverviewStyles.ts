@@ -1,61 +1,16 @@
 import styled from 'styled-components'
 
 export const FilesWrapper = styled.div`
-  border-radius: var(--radius-l);
   background-color: var(--color-white);
-  margin-bottom: 10px;
-  padding: 20px;
+  border-radius: var(--radius-l);
   box-shadow: var(--box-shadow-low);
-`
-
-export const FilesHeader = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-2);
-`
-
-export const DownloadAllContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-`
-
-export const FileEmailRow = styled.div`
-  margin-bottom: 24px;
+  padding: var(--spacing-2);
 `
 
 export const NameOptionsRow = styled.div`
+  border-bottom: 1px solid var(--color-neutral-200);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--color-neutral-200);
-`
-
-export const DownloadTimestampRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  button {
-    margin-right: 20px;
-  }
-`
-
-export const AvatarName = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  div {
-    margin-right: 10px;
-  }
-`
-
-export const BubbleWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  padding-bottom: var(--spacing-1-5);
 `

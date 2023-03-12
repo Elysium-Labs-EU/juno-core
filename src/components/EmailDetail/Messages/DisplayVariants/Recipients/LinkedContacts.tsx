@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
 import ContactCard from 'components/Elements/ContactCard/ContactCard'
-import senderNameFull from 'components/Elements/SenderName/senderNameFull'
+import getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
+import Stack from 'components/Elements/Stack/Stack'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
@@ -24,7 +25,7 @@ const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
 
   return (
     <S.ToFromBCCInner>
-      <Span muted small style={{ marginRight: '4px' }}>
+      <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
         {title}
       </Span>
       <S.SmallTextTruncated>
@@ -54,7 +55,7 @@ const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
               ))}
             {!showAll && (
               <Span
-                style={{ marginLeft: '4px', cursor: 'pointer' }}
+                style={{ marginLeft: 'var(--spacing-0-5)', cursor: 'pointer' }}
                 onClick={() => setShowAll(true)}
                 aria-hidden="true"
               >
@@ -85,7 +86,10 @@ const LinkedContants = ({
   message: TThreadObject['messages'][0]
 }) => {
   const { emailAddress } = useAppSelector(selectProfile)
-  const senderName = senderNameFull(message.payload.headers?.from, emailAddress)
+  const senderName = getSenderNameFull(
+    message.payload.headers?.from,
+    emailAddress
+  )
   const [firstSenderContact] = handleContactConversion(
     message?.payload?.headers?.from,
     emailAddress
@@ -104,8 +108,8 @@ const LinkedContants = ({
   )
 
   return (
-    <>
-      <S.ContactsContainer>
+    <Stack direction="vertical">
+      <Stack>
         <S.ToFromBCCInner>
           <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
             {emailDetail.FROM_LABEL}
@@ -116,21 +120,21 @@ const LinkedContants = ({
             </ContactCard>
           ) : null}
         </S.ToFromBCCInner>
-      </S.ContactsContainer>
-      <S.ContactsContainer>
+      </Stack>
+      <Stack>
         <MappedContacts contactsMap={toNameFull} title={emailDetail.TO_LABEL} />
-      </S.ContactsContainer>
+      </Stack>
       {ccNameFull.length > 0 && (
-        <S.ContactsContainer>
+        <Stack>
           <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
-        </S.ContactsContainer>
+        </Stack>
       )}
       {bccNameFull.length > 0 && (
-        <S.ContactsContainer>
+        <Stack>
           <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
-        </S.ContactsContainer>
+        </Stack>
       )}
-    </>
+    </Stack>
   )
 }
 

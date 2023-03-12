@@ -184,7 +184,7 @@ const SystemUpdateSnackbarOrchestrator = () => {
     ),
   }
 
-  return (
+  return messageInfo ? (
     <Snackbar
       key={messageInfo ? messageInfo.key : undefined}
       open={open}
@@ -196,16 +196,14 @@ const SystemUpdateSnackbarOrchestrator = () => {
       onClose={handleClose}
       TransitionProps={{ onExited: handleExited }}
     >
-      {messageInfo ? (
-        <Alert
-          severity={messageInfo.type ?? 'success'}
-          action={buttonMap[messageInfo?.actionType as keyof typeof buttonMap]}
-        >
-          {messageInfo.message}
-        </Alert>
-      ) : undefined}
+      <Alert
+        severity={messageInfo.type ?? 'success'}
+        action={buttonMap[messageInfo?.actionType as keyof typeof buttonMap]}
+      >
+        {messageInfo.message}
+      </Alert>
     </Snackbar>
-  )
+  ) : null
 }
 
 export default SystemUpdateSnackbarOrchestrator

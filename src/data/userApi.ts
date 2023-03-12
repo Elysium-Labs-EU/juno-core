@@ -45,17 +45,19 @@ const userApi = () => ({
       return errorBlockTemplate(err)
     }
   },
-  fetchUser: async (): TemplateApiResponse<TExtendedGmailV1SchemaProfileSchemaSchema> => {
-    try {
-      const res = await instance.get<TExtendedGmailV1SchemaProfileSchemaSchema>(
-        `/api/user`
-      )
-      extendedGmailV1SchemaProfileSchemaSchema.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  fetchUser:
+    async (): TemplateApiResponse<TExtendedGmailV1SchemaProfileSchemaSchema> => {
+      try {
+        const res =
+          await instance.get<TExtendedGmailV1SchemaProfileSchemaSchema>(
+            `/api/user`
+          )
+        extendedGmailV1SchemaProfileSchemaSchema.parse(res.data)
+        return res
+      } catch (err) {
+        return errorBlockTemplate(err)
+      }
+    },
   logoutUser: async (): TemplateApiResponse<any> => {
     try {
       const res = await instance.get<any>(`/api/user/logout`)

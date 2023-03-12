@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
+import Stack from 'components/Elements/Stack/Stack'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import type { ILayout } from 'components/Layout/Layout'
 import { ACTIVE_PAGE_HEADER } from 'constants/globalConstants'
@@ -71,63 +72,55 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
   const NavControllers = useMemo(
     () => (
       <S.NavControls>
-        <S.NavList>
+        <Stack spacing="huge" style={{ listStyleType: 'none' }}>
           <StyledTooltip title="To Do">
-            <S.NavItem>
-              <CustomIconButton
-                dataCy="todo"
-                icon={<QiToDo size={ICON_SIZE} />}
-                isActive={activePage === ACTIVE_PAGE_HEADER.todo}
-                onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
-              />
-            </S.NavItem>
+            <CustomIconButton
+              dataCy="todo"
+              icon={<QiToDo size={ICON_SIZE} />}
+              isActive={activePage === ACTIVE_PAGE_HEADER.todo}
+              onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
+            />
           </StyledTooltip>
 
           {isFlexibleFlowActive ? (
             <StyledTooltip title="Inbox">
-              <S.NavItem>
-                <CustomIconButton
-                  dataCy="inbox"
-                  icon={<QiInbox size={ICON_SIZE} />}
-                  isActive={activePage === ACTIVE_PAGE_HEADER.inbox}
-                  onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
-                />
-              </S.NavItem>
+              <CustomIconButton
+                dataCy="inbox"
+                icon={<QiInbox size={ICON_SIZE} />}
+                isActive={activePage === ACTIVE_PAGE_HEADER.inbox}
+                onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
+              />
             </StyledTooltip>
           ) : null}
 
           <StyledTooltip title="Command Palette">
-            <S.NavItem>
-              <CustomIconButton
-                dataCy="command-palette"
-                icon={<QiSearch size={ICON_SIZE} />}
-                isActive={activePage === ACTIVE_PAGE_HEADER.search}
-                onClick={() => dispatch(setInSearch(true))}
-              />
-            </S.NavItem>
+            <CustomIconButton
+              dataCy="command-palette"
+              icon={<QiSearch size={ICON_SIZE} />}
+              isActive={activePage === ACTIVE_PAGE_HEADER.search}
+              onClick={() => dispatch(setInSearch(true))}
+            />
           </StyledTooltip>
 
           <StyledTooltip title="Compose">
-            <S.NavItem>
-              <CustomIconButton
-                dataCy="compose"
-                icon={<QiCompose size={ICON_SIZE} />}
-                isActive={activePage === ACTIVE_PAGE_HEADER.compose}
-                onClick={() => {
-                  dispatch(navigateTo('/compose'))
-                }}
-              />
-            </S.NavItem>
+            <CustomIconButton
+              dataCy="compose"
+              icon={<QiCompose size={ICON_SIZE} />}
+              isActive={activePage === ACTIVE_PAGE_HEADER.compose}
+              onClick={() => {
+                dispatch(navigateTo('/compose'))
+              }}
+            />
           </StyledTooltip>
 
           <StyledTooltip title="More options">
-            <S.NavItem>
+            <div>
               <NavigationMore
                 isActive={activePage === ACTIVE_PAGE_HEADER.more}
               />
-            </S.NavItem>
+            </div>
           </StyledTooltip>
-        </S.NavList>
+        </Stack>
       </S.NavControls>
     ),
     [activePage, isFlexibleFlowActive]

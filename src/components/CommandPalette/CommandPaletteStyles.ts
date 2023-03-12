@@ -1,43 +1,16 @@
 import styled from 'styled-components'
 
-export const Dialog = styled.div`
-  background-color: var(--color-white);
-  border-radius: var(--radius-m);
-  box-shadow: var(--box-shadow-low);
-  display: flex;
-  flex-direction: column;
-  left: 50%;
-  max-height: calc(100vh - 225px);
-  min-height: 400px;
-  overflow: hidden;
-  position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 825px;
-  z-index: var(--z-index-modal);
-`
-
 export const Icon = styled.div`
   display: flex;
-  padding-right: 10px;
+  padding-right: var(--spacing-1);
   place-items: center;
 `
 
 export const InputRow = styled.div`
-  display: flex;
-  flex-direction: row;
   align-items: center;
-  padding: 15px 30px;
-`
-
-export const InfoAndButton = styled.div`
   display: flex;
   flex-direction: row;
-`
-
-export const NoSearchResults = styled.div`
-  display: flex;
-  flex-direction: column;
+  padding: var(--spacing-2) var(--spacing-4);
 `
 
 export const SearchOuput = styled.div`
@@ -45,6 +18,7 @@ export const SearchOuput = styled.div`
   border-top: 1px solid var(--color-neutral-200);
   flex-grow: 1;
   overflow-y: auto;
+  padding-top: var(--spacing-1);
   position: relative;
 `
 

@@ -25,11 +25,11 @@ const Button = styled.button<IButton>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   div {
-    margin: 10px 14px;
+    margin: var(--spacing-1) var(--spacing-1-5);
     span {
       color: ${({ variant }) =>
         variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
-      font-size: 1rem;
+      font-size: var(--text-base);
       line-height: 1rem;
     }
   }
@@ -61,7 +61,7 @@ const InnerButton = styled.div`
   .icon {
     line-height: 0;
     margin: 0;
-    margin-right: 5px;
+    margin-right: var(--spacing-0-5);
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }

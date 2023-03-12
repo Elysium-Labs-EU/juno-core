@@ -1,24 +1,17 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
-  backdrop-filter: blur(20px);
-  background: linear-gradient(
-    180deg,
-    rgba(246, 246, 246, 1) 34%,
-    rgba(246, 246, 246, 0.7) 81%
-  );
-  background: rgb(246, 246, 246);
-  box-shadow: none;
+  background-color: var(--color-neutral-100);
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  left: 50%;
   margin: 0 auto;
   max-width: var(--container-max-width);
-  padding: 5px 40px;
-  position: absolute;
-  transform: translate(-50%);
+  min-height: var(--spacing-6);
+  padding: var(--spacing-1) var(--spacing-4);
+  position: sticky;
+  top: 0;
   width: 100%;
   z-index: var(--z-index-top-element);
 `
@@ -26,8 +19,8 @@ export const Wrapper = styled.div`
 export const Inner = styled.div``
 
 export const SelectedLabelsText = styled.span`
-  font-size: var(--small);
-  user-select: none;
   color: var(--color-neutral-400);
-  margin-right: 16px;
+  font-size: var(--text-small);
+  margin-right: var(--spacing-2);
+  user-select: none;
 `

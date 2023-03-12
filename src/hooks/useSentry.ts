@@ -5,7 +5,6 @@ import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectIsSentryActive, setIsSentryActive } from 'store/utilsSlice'
 
-
 export default function useSentry(sentryDSN: string | undefined) {
   const isSentryActive = useAppSelector(selectIsSentryActive)
   const dispatch = useAppDispatch()

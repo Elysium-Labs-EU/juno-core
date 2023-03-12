@@ -32,7 +32,11 @@ export default function getEmailHeader({
     const matchedLabel = findLabelById({ storageLabels, labelIds })
     if (matchedLabel) {
       const splitHeader = matchedLabel.name.split('/')
-      return splitHeader[splitHeader.length - 1]?.toLowerCase() ?? ''
+      return (
+        splitHeader[splitHeader.length - 1]
+          ?.replace(/\s/g, '')
+          ?.toLowerCase() ?? ''
+      )
     }
     return SEARCH_LABEL.toLowerCase()
   }

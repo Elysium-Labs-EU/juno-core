@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
+import Stack from 'components/Elements/Stack/Stack'
 import * as local from 'constants/emailDetailConstants'
 import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { selectIsLoading } from 'store/utilsSlice'
 
 import EmailDetailOptions from './EmailDetailOptions'
 import ForwardingComposer from './InlineComposers/ForwardingComposer'
@@ -44,18 +44,23 @@ const RenderTab = ({
   isVisible: boolean
 }) => (
   <S.TabContainer isVisible={isVisible}>
-    <S.Scroll>{children}</S.Scroll>
+    <Stack
+      align="center"
+      direction="vertical"
+      style={{ paddingBottom: 'var(--spacing-1)' }}
+    >
+      {children}
+    </Stack>
   </S.TabContainer>
 )
 
 const RenderEmailDetail = ({
   activeEmailList,
+  setShouldRefreshDetail,
   showNoNavigation,
   threadDetail,
-  setShouldRefreshDetail,
 }: IRenderEmailDetail) => {
   const isForwarding = useAppSelector(selectIsForwarding)
-  const isLoading = useAppSelector(selectIsLoading)
   const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
@@ -84,12 +89,12 @@ const RenderEmailDetail = ({
     []
   )
 
+  const tabbedViewActive = isForwarding || isReplying
+
   const messagesTab = (
     <MessagesOverview
-      isForwarding={isForwarding}
-      isLoading={isLoading}
-      isReplying={isReplying}
       labelIds={labelIds}
+      tabbedViewActive={tabbedViewActive}
       threadDetail={threadDetail}
     >
       <MappedMessages
@@ -109,12 +114,12 @@ const RenderEmailDetail = ({
     !isForwarding
 
   return (
-    <S.Wrapper>
+    <S.Wrapper tabbedView={tabbedViewActive}>
       <S.EmailDetailWrapper>
-        <S.Placeholder />
+        <S.Placeholder tabbedView={tabbedViewActive} />
         <S.EmailWithComposerContainer>
-          <S.EmailCenterContainer>
-            <S.EmailTopControlContainer tabbedView={isForwarding || isReplying}>
+          <S.Scroll>
+            <S.EmailTopControlContainer tabbedView={tabbedViewActive}>
               <Tabs activeEmailList={activeEmailList} />
               {showNoNavigation ? (
                 <EmailPosition />
@@ -126,27 +131,24 @@ const RenderEmailDetail = ({
               {messagesTab}
             </RenderTab>
             <RenderTab isVisible={overviewId === local.FILES}>
-              <FilesOverview
-                threadDetail={threadDetail}
-                isLoading={isLoading}
-              />
+              <FilesOverview threadDetail={threadDetail} />
             </RenderTab>
-          </S.EmailCenterContainer>
-          {isReplying && threadDetail && threadDetail?.messages && (
+          </S.Scroll>
+          {isReplying && threadDetail && threadDetail?.messages ? (
             <ReplyComposer
               localThreadDetail={threadDetail}
-              selectedIndex={selectedIndex}
               messageOverviewListener={messageOverviewListener}
+              selectedIndex={selectedIndex}
             />
-          )}
-          {isForwarding && threadDetail && threadDetail?.messages && (
+          ) : null}
+          {isForwarding && threadDetail && threadDetail?.messages ? (
             <ForwardingComposer
-              localThreadDetail={threadDetail}
-              selectedIndex={selectedIndex}
-              messageOverviewListener={messageOverviewListener}
               isForwarding={isForwarding}
+              localThreadDetail={threadDetail}
+              messageOverviewListener={messageOverviewListener}
+              selectedIndex={selectedIndex}
             />
-          )}
+          ) : null}
         </S.EmailWithComposerContainer>
         {showDetailOptions ? (
           <EmailDetailOptions

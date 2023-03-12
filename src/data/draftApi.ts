@@ -49,20 +49,21 @@ const draftApi = (signal?: AbortSignal) => ({
     }
   },
 
-  getDrafts: async (): TemplateApiResponse<TGmailV1SchemaListDraftsResponseSchema> => {
-    try {
-      const res = await instance.get<TGmailV1SchemaListDraftsResponseSchema>(
-        `/api/drafts/`,
-        {
-          signal,
-        }
-      )
-      DraftListResponse.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  getDrafts:
+    async (): TemplateApiResponse<TGmailV1SchemaListDraftsResponseSchema> => {
+      try {
+        const res = await instance.get<TGmailV1SchemaListDraftsResponseSchema>(
+          `/api/drafts/`,
+          {
+            signal,
+          }
+        )
+        DraftListResponse.parse(res.data)
+        return res
+      } catch (err) {
+        return errorBlockTemplate(err)
+      }
+    },
 
   getDraftDetail: async (
     draftId: string

@@ -10,6 +10,7 @@ import type { MouseEvent } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
+import Stack from 'components/Elements/Stack/Stack'
 import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
@@ -49,10 +50,10 @@ import * as S from './ComposeStyles'
 import DiscardDraftButton from './DiscardDraftButton'
 import useParsePresetValues from './Hooks/useParsePresetValues'
 
-const isTContactArray = (value: any): value is TContact[] =>
+const isTContactArray = (value: unknown): value is TContact[] =>
   Array.isArray(value) && value.every((item) => 'emailAddress' in item)
 
-const isFileArray = (value: any): value is File[] =>
+const isFileArray = (value: unknown): value is File[] =>
   Array.isArray(value) && value.every((item) => item instanceof File)
 
 const isIEmailAttachmentTypeArray = (
@@ -421,36 +422,34 @@ const Composer = ({
               </S.UpdateContainer>
               {memoizedButtons}
             </S.TopRowControls>
-            <div style={{ marginBottom: `20px` }}>
-              <Base>
-                <S.Row>
-                  {memoizedToField}
-                  <S.CcBccContainer>
-                    {!showCC && (
-                      <CustomButton
-                        label={local.CC_LABEL}
-                        onClick={() => setShowCC(true)}
-                        title="Show CC recipients"
-                        suppressed
-                      />
-                    )}
-                    {!showBCC && (
-                      <CustomButton
-                        label={local.BCC_LABEL}
-                        onClick={() => setShowBCC(true)}
-                        title="Show BCC recipients"
-                        suppressed
-                      />
-                    )}
-                  </S.CcBccContainer>
-                </S.Row>
-                {showCC && <S.Row>{memoizedCCField}</S.Row>}
-                {showBCC && <S.Row>{memoizedBCCField}</S.Row>}
-                <S.Row>{memoizedSubjectField}</S.Row>
-                <S.Row>{memoizedBodyField}</S.Row>
-                <S.Row>{memoizedSignatureField}</S.Row>
-              </Base>
-            </div>
+            <Stack direction="vertical">
+              <S.Row>
+                {memoizedToField}
+                <S.CcBccContainer>
+                  {!showCC ? (
+                    <CustomButton
+                      label={local.CC_LABEL}
+                      onClick={() => setShowCC(true)}
+                      suppressed
+                      title="Show CC recipients"
+                    />
+                  ) : null}
+                  {!showBCC ? (
+                    <CustomButton
+                      label={local.BCC_LABEL}
+                      onClick={() => setShowBCC(true)}
+                      suppressed
+                      title="Show BCC recipients"
+                    />
+                  ) : null}
+                </S.CcBccContainer>
+              </S.Row>
+              {showCC ? <S.Row>{memoizedCCField}</S.Row> : null}
+              {showBCC ? <S.Row>{memoizedBCCField}</S.Row> : null}
+              <S.Row>{memoizedSubjectField}</S.Row>
+              <S.Row>{memoizedBodyField}</S.Row>
+              <S.Row>{memoizedSignatureField}</S.Row>
+            </Stack>
           </form>
           {memoizedAttachmentField}
         </Base>

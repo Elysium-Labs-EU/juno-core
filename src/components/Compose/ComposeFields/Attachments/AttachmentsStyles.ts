@@ -23,12 +23,12 @@ export const StyledBadge = styled(Badge)`
 
 export const AttachmentHeader = styled.p`
   margin: 0;
-  margin-bottom: 20px;
-  margin-right: 10px;
+  margin-bottom: var(--spacing-2);
+  margin-right: var(--spacing-1);
 `
 
 export const UploadedFiles = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin-left: -8px;
+  margin-left: -(var(--spacing-1));
 `

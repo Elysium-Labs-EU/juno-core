@@ -7,7 +7,7 @@ import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 import { Paragraph } from 'styles/globalStyles'
 
-import CustomModal from '../Modal/CustomModal'
+import CustomModal from '../Dialog/CustomDialog'
 
 const AttachmentModal = ({
   fetchedAttachmentData,

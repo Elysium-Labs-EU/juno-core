@@ -18,6 +18,6 @@ export const PageHeaderText = styled.h1`
   font-size: 2.441rem;
   font-weight: 200;
   line-height: 1.3;
-  margin: 40px 0 0;
+  margin: var(--spacing-4) 0 0;
   user-select: none;
 `

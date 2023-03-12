@@ -5,35 +5,29 @@ import type { FormEvent } from 'react'
 import { FiCheck } from 'react-icons/fi'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
-import CustomModal from 'components/Elements/Modal/CustomModal'
+import CustomModal from 'components/Elements/Dialog/CustomDialog'
 import * as global from 'constants/globalConstants'
 import { QiLinkOut } from 'images/svgIcons/quillIcons'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
 import { Paragraph, Span } from 'styles/globalStyles'
-import assertNonNullish from 'utils/assertNonNullish'
 
 import * as S from './BetaAccessFormStyles'
 
-if (process.env.NODE_ENV === 'production') {
-  assertNonNullish(
-    import.meta.env.VITE_BOTPOISON_PUBLIC_KEY,
-    'Botpoison PK not found'
-  )
-}
+const FORMSPARK_FORM_ID = import.meta.env.VITE_FORMSPARK_FORM_ID
+const DISCORD_SOCIAL_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
+const BOTPOSION_PUBLIC_KEY = import.meta.env.VITE_BOTPOISON_PUBLIC_KEY
+
 const botpoison = new Botpoison({
-  publicKey: import.meta.env.VITE_BOTPOISON_PUBLIC_KEY ?? '',
+  publicKey: BOTPOSION_PUBLIC_KEY ?? '',
 })
 
-const FORMSPARK_FORM_ID = import.meta.env.VITE_FORMSPARK_FORM_ID
-
 const BetaAccesForm = () => {
-  const activeModal = useAppSelector(selectActiveModal)
-
-  // Only assess this when the production version is active
-  if (process.env.NODE_ENV === 'production') {
-    assertNonNullish(FORMSPARK_FORM_ID, 'FormSpark ID not defined')
+  if (!FORMSPARK_FORM_ID) {
+    return null
   }
+
+  const activeModal = useAppSelector(selectActiveModal)
   const [submit, submitting] = useFormspark({
     formId: FORMSPARK_FORM_ID,
   })
@@ -63,16 +57,18 @@ const BetaAccesForm = () => {
           Request access to the private beta of Juno. Your email needs to be a
           Google email address.
         </Paragraph>
-        <Paragraph muted>
-          You can expect a reply on your request within a few hours. If you want
-          to get in direct contact, use the{' '}
-          <S.StyledLink href={import.meta.env.VITE_DISCORD_SOCIAL_URL}>
-            <QiLinkOut />
-            <Span title="Open new tab in your browser with Discord">
-              Discord Community.
-            </Span>
-          </S.StyledLink>
-        </Paragraph>
+        {DISCORD_SOCIAL_URL ? (
+          <Paragraph muted>
+            You can expect a reply on your request within a few hours. If you
+            want to get in direct contact, use the{' '}
+            <S.StyledLink href={DISCORD_SOCIAL_URL}>
+              <QiLinkOut />
+              <Span title="Open new tab in your browser with Discord">
+                Discord Community.
+              </Span>
+            </S.StyledLink>
+          </Paragraph>
+        ) : null}
         <S.StyledForm onSubmit={onSubmit}>
           {!complete && (
             <>
@@ -102,12 +98,12 @@ const BetaAccesForm = () => {
             </S.SuccessMessage>
           )}
         </S.StyledForm>
-        {error && (
+        {error && DISCORD_SOCIAL_URL ? (
           <Span>
             Something went wrong, reach out to us on{' '}
-            <a href={import.meta.env.VITE_DISCORD_SOCIAL_URL}>Discord</a>
+            <a href={DISCORD_SOCIAL_URL}>Discord</a>
           </Span>
-        )}
+        ) : null}
       </>
     </CustomModal>
   )

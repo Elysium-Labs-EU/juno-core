@@ -1,6 +1,6 @@
 import { FormControlLabel, Switch } from '@mui/material'
 
-import * as S from 'components/Settings/SettingsStyles'
+import SettingsSection from 'components/Settings/SettingsSection'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
@@ -41,7 +41,7 @@ const AlternateActions = () => {
   }
 
   return (
-    <S.PageSection>
+    <SettingsSection>
       <p>{HEADER}</p>
       <QiAlt />
       {BODY.map((content) => (
@@ -59,7 +59,7 @@ const AlternateActions = () => {
           />
         }
       />
-    </S.PageSection>
+    </SettingsSection>
   )
 }
 

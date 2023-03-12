@@ -1,10 +1,5 @@
 import styled from 'styled-components'
 
-export const Wrapper = styled.nav`
-  .MuiMenuItem-root {
-    height: 32px !important;
-  }
-`
 export const TopMenu = styled.ul`
   margin: 0;
   padding: 0;
@@ -14,7 +9,7 @@ export const MenuItemButton = styled.button`
   background-color: transparent;
   border: none;
   color: var(--color-neutral-500);
-  font-size: 1rem;
+  font-size: var(--text-base);
   text-align: left;
   font-weight: normal;
   font-stretch: normal;

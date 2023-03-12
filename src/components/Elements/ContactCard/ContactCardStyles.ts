@@ -36,77 +36,62 @@ export const ContactCardAvatar = styled(CardMedia)<IContactCardColors>`
   color: ${({ $randomColor }) =>
     $randomColor.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
   font-weight: 600;
-  font-size: 1.8rem;
+  font-size: var(--text-h3);
   align-items: center;
   position: relative;
 `
 
 export const ContactCardName = styled.div`
-  font-size: 1rem;
-  margin-bottom: 0.8rem;
+  color: var(--color-black);
+  font-size: var(--text-base);
   font-weight: bold;
   line-height: 1.21;
-  color: var(--color-black);
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  margin-bottom: 0.8rem;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const ContactCardEmail = styled.span`
-  font-size: var(--small);
-  display: block;
-  font-weight: bold;
   color: var(--color-black);
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: block;
+  font-size: var(--text-small);
+  font-weight: bold;
   overflow: hidden;
-`
-
-export const ContactCardDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-export const ContactCardEmailContainer = styled.div`
-  align-items: center;
-  display: flex;
-  justify-content: flex-start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 
 export const EmailContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 0.6rem;
+  margin-left: var(--spacing-0-75);
   overflow: hidden;
 `
 
-export const AdditionalButtonsContainer = styled.div`
-  margin-top: var(--spacing-2);
-`
-
 export const ContactCardEmailButton = styled.button<IContactCardColors>`
-  background-color: ${({ $randomColor }) =>
-    $randomColor || 'rgba(165, 165, 165, 0.68)'} !important;
-  color: ${({ $randomColor }) =>
-    $randomColor?.replace('0.2', '0.8') || 'rgba(165, 165, 165, 0.68)'};
-  border-radius: var(--radius-m);
-  padding: 0.4rem;
-  display: flex;
   align-items: center;
-  height: 100%;
-  border: none;
-  outline: none;
+  background-color: ${({ $randomColor }) =>
+    $randomColor || 'var(--color-purple-100)'} !important;
+  color: ${({ $randomColor }) =>
+    $randomColor?.replace('0.2', '0.8') || 'var(--color-purple-100)'};
   background-color: transparent;
+  border-radius: var(--radius-m);
+  border: none;
+  display: flex;
+  height: 100%;
+  outline: none;
+  padding: var(--spacing-0-75);
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: white !important;
+    color: var(--color-white) !important;
     cursor: pointer;
   }
 
   &:disabled {
-    color: var(--color-neutral-400);
     background-color: var(--color-neutral-200) !important;
+    color: var(--color-neutral-400);
     cursor: not-allowed;
   }
 `

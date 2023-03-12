@@ -31,32 +31,25 @@ const DetailNavigationContainer = ({
 
   // Load additional emails when the first, current viewed email happens to be the last in the list
   useEffect(() => {
-    let mounted = true
     if (viewIndex > -1 && !isSilentLoading) {
-      if (activeEmailList.threads.length - 1 === viewIndex && mounted) {
-        const { nextPageToken } = activeEmailList
-        const silentLoading = true
-        if (
-          nextPageToken &&
-          activeEmailList.threads[viewIndex + 1] === undefined &&
-          mounted
-        ) {
-          if (!labelIds.includes(global.SEARCH_LABEL) && mounted) {
-            return loadNextPage({
-              nextPageToken,
-              labelIds,
-              dispatch,
-              silentLoading,
-              maxResults: emailFetchSize,
-            })
-          }
-        }
+      const { threads, nextPageToken } = activeEmailList
+      const threadAtViewIndex = threads[viewIndex]
+      const lastThread = threads[threads.length - 1]
+      const silentLoading = true
+      const shouldLoadNextPage =
+        lastThread === threadAtViewIndex && nextPageToken
+
+      if (shouldLoadNextPage && !labelIds.includes(global.SEARCH_LABEL)) {
+        loadNextPage({
+          nextPageToken,
+          labelIds,
+          dispatch,
+          silentLoading,
+          maxResults: emailFetchSize,
+        })
       }
     }
-    return () => {
-      mounted = false
-    }
-  }, [viewIndex, isSilentLoading])
+  }, [activeEmailList, isSilentLoading, labelIds, viewIndex])
 
   return (
     <DetailNavigationView

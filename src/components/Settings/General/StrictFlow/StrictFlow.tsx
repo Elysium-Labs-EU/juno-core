@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
-import * as S from 'components/Settings/SettingsStyles'
+import SettingsSection from 'components/Settings/SettingsSection'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
@@ -64,7 +64,7 @@ const StrictFlow = () => {
   }
 
   return (
-    <S.PageSection>
+    <SettingsSection>
       <Paragraph>{HEADER}</Paragraph>
       <Paragraph muted>{BODY}</Paragraph>
       <FormControlLabel
@@ -78,7 +78,7 @@ const StrictFlow = () => {
           />
         }
       />
-    </S.PageSection>
+    </SettingsSection>
   )
 }
 

@@ -70,8 +70,8 @@ export const gmailV1SchemaMessagePartHeaderSchema = z.object({
   value: z.string().optional().nullable(),
 })
 
-export const gmailV1SchemaMessagePartSchema: z.ZodSchema<Schema$MessagePart> = z.lazy(
-  () =>
+export const gmailV1SchemaMessagePartSchema: z.ZodSchema<Schema$MessagePart> =
+  z.lazy(() =>
     z.object({
       body: gmailV1SchemaMessagePartBodySchema.optional(),
       filename: z.string().optional().nullable(),
@@ -80,7 +80,7 @@ export const gmailV1SchemaMessagePartSchema: z.ZodSchema<Schema$MessagePart> = z
       partId: z.string().optional().nullable(),
       parts: z.array(gmailV1SchemaMessagePartSchema).optional(),
     })
-)
+  )
 
 export const gmailV1SchemaLabelColorSchema = z.object({
   backgroundColor: z.string().optional().nullable(),

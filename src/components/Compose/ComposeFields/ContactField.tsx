@@ -4,6 +4,7 @@ import * as global from 'constants/globalConstants'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import emailValidation from 'utils/emailValidation'
 import isEqual from 'utils/isEqual/isEqual'
+
 import type { IContactField } from './ComposeFieldTypes'
 import RecipientField from './Generic/RecipientField'
 import type { IRecipientsList } from '../ComposeEmailTypes'

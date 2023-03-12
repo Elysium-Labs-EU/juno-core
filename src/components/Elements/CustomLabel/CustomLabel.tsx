@@ -1,25 +1,25 @@
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
-  background-color: var(--color-neutral-100);
-  border-color: var(--color-neutral-200);
-  display: inline-flex;
-  height: 21px;
-  padding: 0px 8px;
-  line-height: 21px;
-  border-radius: 5px;
-  cursor: default;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  outline: 0px;
-  vertical-align: top;
-  user-select: none;
-  white-space: nowrap;
   -webkit-box-align: center;
   align-items: center;
-  border-width: 1px;
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-200);
+  border-radius: 5px;
   border-style: solid;
+  border-width: 1px;
+  cursor: default;
+  display: inline-flex;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  height: 21px;
+  letter-spacing: 0.05em;
+  line-height: 21px;
+  outline: 0px;
+  padding: 0px var(--spacing-1);
+  user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
   transition: background-color 0.2s ease 0s, border-color 0.2s ease 0s,
     color 0.2s ease 0s;
 

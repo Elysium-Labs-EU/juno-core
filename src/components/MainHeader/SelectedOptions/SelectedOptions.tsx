@@ -15,13 +15,14 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import { selectAllEmailsCurrentInbox, setInSearch } from 'store/utilsSlice'
 
+import {
+  EMAILS_SELECTED_PLURAL,
+  EMAILS_SELECTED_SINGLE,
+  ARCHIVE_BUTTON_LABEL,
+  DISCARD_BUTTON_LABEL,
+  DELETE_BUTTON_LABEL,
+} from './SelectedOptionsConstants'
 import * as S from './SelectedOptionsStyles'
-
-const ARCHIVE_BUTTON_LABEL = 'Archive'
-const DELETE_BUTTON_LABEL = 'Delete'
-const DISCARD_BUTTON_LABEL = 'Discard'
-const EMAILS_SELECTED_SINGLE = 'email selected'
-const EMAILS_SELECTED_PLURAL = 'emails selected'
 
 const SelectedOptions = () => {
   const dispatch = useAppDispatch()
