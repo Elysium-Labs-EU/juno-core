@@ -387,6 +387,7 @@ const Composer = ({
             icon={<QiEscape />}
           />
         )}
+        {/* // TODO add disabled state, email should at least have a recipient, adjust the suppressed state after there is a recipient, subject, and body */}
         <CustomButton
           type="button"
           label={local.SEND_BUTTON}
