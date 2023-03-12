@@ -103,7 +103,7 @@
     "redux-first-history": "5.1.1",
     "string-similarity": "4.0.4",
     "styled-components": "5.3.6",
-    "ts-pattern": "^4.1.4",
+    "ts-pattern": "^4.2.0",
     "typescript": "4.9.5",
     "zod": "^3.20.2"
   },
