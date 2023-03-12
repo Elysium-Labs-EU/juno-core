@@ -42,6 +42,10 @@ Contributing guidelines
 
 - When encountering a bug, create a Github issue with the bug label in the active project. Be as specific as possible.
 - To suggest a new feature, create a Github issue with the enhancement label in the active project.
+- Please do not stack features/chores/refactors/enhancements in one PR. Describe your feature/implementation in the PR. If you're unsure its useful or if it is a major change, please open an issue first and get feedback.
+- Follow eslint provided
+- Comment your code
+- Write Clean code
 
 In the project directory, you can run:
 
