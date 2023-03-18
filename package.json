@@ -43,7 +43,7 @@
     "@mui/base": "5.0.0-alpha.118",
     "@mui/material": "5.11.9",
     "@mui/system": "5.11.9",
-    "@radix-ui/react-checkbox": "1.0.1",
+    "@radix-ui/react-checkbox": "1.0.2",
     "@radix-ui/react-dialog": "1.0.2",
     "@radix-ui/react-label": "2.0.0",
     "@radix-ui/react-popover": "1.0.3",
