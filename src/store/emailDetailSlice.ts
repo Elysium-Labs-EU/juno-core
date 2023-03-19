@@ -164,7 +164,7 @@ export const startSort =
     }
   }
 
-export const activateSort =
+export const activateInboxSort =
   ({
     alternateEmailListIndex,
     onActivateAdditionalFns,
