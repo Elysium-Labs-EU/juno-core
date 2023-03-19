@@ -8,7 +8,7 @@ import useFetchEmailsSimple from 'hooks/useFetchEmailsSimple'
 import useFetchThreadsTotalNumber from 'hooks/useFetchThreadsTotalNumber'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiSort } from 'images/svgIcons/quillIcons'
-import { activateSort } from 'store/emailDetailSlice'
+import { activateInboxSort } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -62,7 +62,7 @@ const InboxSortOption = () => {
       labelIds: [INBOX_LABEL],
     })
     dispatch(
-      activateSort({
+      activateInboxSort({
         alternateEmailListIndex: emailListIndex,
         onActivateAdditionalFns: () => {
           dispatch(setActiveEmailListIndex(emailListIndex))
@@ -73,7 +73,7 @@ const InboxSortOption = () => {
   }, [dispatch, emailList])
 
   const handleEventFlexibleFlow = useCallback(() => {
-    dispatch(activateSort({}))
+    dispatch(activateInboxSort({}))
   }, [dispatch])
 
   useKeyboardShortcut({
