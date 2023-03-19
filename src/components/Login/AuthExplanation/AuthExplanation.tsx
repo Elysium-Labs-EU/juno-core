@@ -80,11 +80,14 @@ const AuthExplanation = () => {
                   icon={<QiArrowRight />}
                   label="Continue"
                   onClick={handleContinueToGoogle}
-                  title="Continue to Juno"
+                  title={
+                    googleURL ? 'Continue to Juno' : 'We have no target page'
+                  }
                   style={{
                     backgroundColor: 'var(--color-black)',
                     color: 'var(--color-white)',
                   }}
+                  disabled={!googleURL}
                 />
               </Stack>
             </Stack>
