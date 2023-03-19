@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { push } from 'redux-first-history'
 
-import activateTodo from 'components/ToDo/activateTodo'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routesConstants'
@@ -12,6 +11,7 @@ import {
   openDraftEmail,
 } from 'store/draftsSlice'
 import {
+  activateTodo,
   setCoreStatus,
   setCurrentEmail,
   setIsForwarding,
@@ -407,17 +407,8 @@ export const discardAllEmailCMDK = (): AppThunk => (dispatch) => {
   dispatch(deleteDraftBatch())
 }
 
-export const startFocusModeCMDK = (): AppThunk => (dispatch, getState) => {
-  const { activeEmailListIndex, emailList, selectedEmails } = getState().email
-  const { labelIds } = getState().labels
-
-  activateTodo({
-    activeEmailListIndex,
-    dispatch,
-    emailList,
-    labelIds,
-    selectedEmails,
-  })
+export const startFocusModeCMDK = (): AppThunk => (dispatch) => {
+  dispatch(activateTodo())
 }
 
 export const selectAllEmailsSender =
