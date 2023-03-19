@@ -1,6 +1,10 @@
 import { z } from 'zod'
 
-import { gmailV1SchemaProfileSchema } from './gmailTypes'
+import {
+  gmailV1SchemaLabelSchema,
+  gmailV1SchemaProfileSchema,
+  gmailV1SchemaSendAsSchema,
+} from './gmailTypes'
 import { peopleV1SchemaNameSchema } from './peopleTypes'
 
 export const getAuthUrlResponseSchema = z.string()
@@ -42,3 +46,15 @@ export const extendedGmailV1SchemaProfileSchemaSchema =
 export type TExtendedGmailV1SchemaProfileSchemaSchema = z.infer<
   typeof extendedGmailV1SchemaProfileSchemaSchema
 >
+
+export const profileExtendWithSignature = gmailV1SchemaSendAsSchema
+  .pick({ signature: true })
+  .merge(gmailV1SchemaProfileSchema)
+
+export const baseCheckSchema = z.object({
+  labels: z.array(gmailV1SchemaLabelSchema),
+  prefetchedBoxes: z.array(gmailV1SchemaLabelSchema),
+  profile: profileExtendWithSignature,
+})
+
+export type TBaseCheckSchema = z.infer<typeof baseCheckSchema>

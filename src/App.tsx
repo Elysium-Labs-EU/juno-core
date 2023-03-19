@@ -7,10 +7,10 @@ import RoutesConstants from 'constants/routesConstants'
 import { fetchToken } from 'data/api'
 import RoutesComponent from 'Routes'
 import {
-  checkBase,
-  recheckBase,
+  getBase,
   selectBaseLoaded,
   selectIsAuthenticated,
+  setBaseLoaded,
   setIsAuthenticated,
 } from 'store/baseSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -25,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
-      dispatch(checkBase())
+      dispatch(getBase())
     }
   }, [baseLoaded, isAuthenticated])
 
@@ -37,9 +37,11 @@ const App = () => {
     }
   }, [isAuthenticated])
 
+  // TODO: Do we still need this?
   useEffect(() => {
     if (!baseLoaded && storageLabels.length === BASE_ARRAY.length) {
-      dispatch(recheckBase())
+      // The base can only be set to be loaded whenever all the labels are created.
+      dispatch(setBaseLoaded(true))
     }
   }, [baseLoaded, storageLabels])
 

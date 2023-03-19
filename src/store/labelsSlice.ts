@@ -46,7 +46,7 @@ const labelsSlice = createSlice({
       {
         payload,
       }: PayloadAction<
-        TGmailV1SchemaLabelSchema | TGmailV1SchemaLabelSchema[][]
+        TGmailV1SchemaLabelSchema | Array<TGmailV1SchemaLabelSchema>
       >
     ) => {
       if (!Array.isArray(payload)) {
@@ -62,12 +62,11 @@ const labelsSlice = createSlice({
       if (Array.isArray(payload)) {
         const labelIdNameArray = [] as TLabelState['storageLabels']
         payload.forEach((label) => {
-          const [firstLabel] = label
-          if (firstLabel && firstLabel.name && firstLabel.id) {
+          if (label && label.name && label.id) {
             const labelIdName = {
-              id: firstLabel.id,
-              name: firstLabel.name,
-              type: firstLabel?.type ?? 'user',
+              id: label.id,
+              name: label.name,
+              type: label?.type ?? 'user',
             }
             labelIdNameArray.push(labelIdName)
           }
@@ -95,14 +94,12 @@ export const createLabel =
   (label: string): AppThunk =>
   async (dispatch) => {
     try {
-      const body =
-        typeof label === 'string'
-          ? {
-              name: label,
-              labelVisibility: 'labelShow',
-              messageListVisibility: 'show',
-            }
-          : label
+      const body = {
+        name: label,
+        labelVisibility: 'labelShow',
+        messageListVisibility: 'show',
+      }
+
       const response = await labelApi().createLabel(body)
 
       if ('data' in response) {
