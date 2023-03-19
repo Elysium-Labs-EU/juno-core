@@ -1,4 +1,4 @@
-import type { ElementType } from 'react'
+import type { ElementType, ReactNode } from 'react'
 
 export type TStackSpacing =
   | 'none'
@@ -18,7 +18,7 @@ export type TStackAlignment =
 
 export type TStackProps<T extends ElementType> = {
   align?: TStackAlignment
-  children: React.ReactNode
+  children: ReactNode
   direction?: 'vertical' | 'horizontal'
   justify?: TStackAlignment
   renderAs?: keyof JSX.IntrinsicElements

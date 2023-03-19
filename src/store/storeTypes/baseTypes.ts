@@ -22,7 +22,7 @@ const BaseState = z.object({
 
 export type TBaseState = z.infer<typeof BaseState>
 
-const PrefetchedBoxes = z.array(z.array(gmailV1SchemaLabelSchema))
+const PrefetchedBoxes = z.array(gmailV1SchemaLabelSchema)
 
 export type TPrefetchedBoxes = z.infer<typeof PrefetchedBoxes>
 

@@ -90,7 +90,7 @@ export const errorBlockTemplate = (err: unknown) => {
     return errorHandling(err)
   }
   if (err instanceof z.ZodError) {
-    console.log(err.issues)
+    console.error(err.issues)
   }
   // Handle unexpected error
   return err as ICustomError

@@ -54,6 +54,7 @@ const Layout = ({
         showBackButton={showBackButton}
       />
       <CommandPalette />
+
       <NoMobileOverlay />
       <SendingBanner />
       <Seo title={headerTitle} />
