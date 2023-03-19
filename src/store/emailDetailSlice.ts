@@ -1,10 +1,21 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { push } from 'redux-first-history'
 
+import {
+  CORE_STATUS_MAP,
+  INBOX_LABEL,
+  TODO_LABEL_NAME,
+} from 'constants/globalConstants'
 import threadApi from 'data/threadApi'
-import type { RootState } from 'store/store'
+import type { AppThunk, RootState } from 'store/store'
 import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
+import labelURL from 'utils/createLabelURL'
+import { findLabelByName } from 'utils/findLabel'
+
+import type { TEmailListState } from './storeTypes/emailListTypes'
+import { setSystemStatusUpdate } from './utilsSlice'
 
 /* eslint-disable no-param-reassign */
 
@@ -112,6 +123,123 @@ export const {
   setIsReplying,
   setIsForwarding,
 } = emailDetailSlice.actions
+
+interface IStartSort {
+  toUseActiveEmailListIndex: number
+  toUseLabelURL: string
+  toUseSelectedEmails: TEmailListState['selectedEmails'] | undefined
+}
+
+export const startSort =
+  ({
+    toUseActiveEmailListIndex,
+    toUseLabelURL,
+    toUseSelectedEmails,
+  }: IStartSort): AppThunk =>
+  (dispatch, getState) => {
+    const { emailList } = getState().email
+    if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
+      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
+        dispatch(
+          push(
+            `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
+          )
+        )
+      } else {
+        const firstThreadObject =
+          emailList[toUseActiveEmailListIndex]?.threads[0]
+        if (firstThreadObject) {
+          dispatch(
+            push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+          )
+        }
+      }
+    } else {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to start sorting.',
+        })
+      )
+    }
+  }
+
+export const activateSort =
+  ({
+    alternateEmailListIndex,
+    onActivateAdditionalFns,
+  }: {
+    alternateEmailListIndex?: number
+    onActivateAdditionalFns?: () => void
+  }): AppThunk =>
+  (dispatch, getState) => {
+    const staticLabelURL = labelURL([INBOX_LABEL])
+    if (!staticLabelURL) {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to start sorting.',
+        })
+      )
+      return
+    }
+    const { activeEmailListIndex, selectedEmails } = getState().email
+    if (onActivateAdditionalFns) {
+      onActivateAdditionalFns()
+    }
+    dispatch(
+      startSort({
+        toUseLabelURL: staticLabelURL,
+        toUseActiveEmailListIndex:
+          alternateEmailListIndex !== undefined
+            ? alternateEmailListIndex
+            : activeEmailListIndex,
+        toUseSelectedEmails: selectedEmails,
+      })
+    )
+
+    dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
+    dispatch(setSessionViewIndex(0))
+    dispatch(setViewIndex(0))
+  }
+
+export const activateTodo = (): AppThunk => (dispatch, getState) => {
+  const { labelIds } = getState().labels
+  const staticLabelURL = labelURL(labelIds)
+  if (!staticLabelURL) {
+    dispatch(
+      setSystemStatusUpdate({
+        type: 'error',
+        message: 'Unable to start focus mode.',
+      })
+    )
+    return
+  }
+
+  const { activeEmailListIndex, selectedEmails } = getState().email
+  const { storageLabels } = getState().labels
+
+  const toUseSelectedEmails = selectedEmails.labelIds.includes(
+    findLabelByName({
+      storageLabels,
+      LABEL_NAME: TODO_LABEL_NAME,
+    })?.id ?? ''
+  )
+    ? selectedEmails
+    : undefined
+
+  dispatch(
+    startSort({
+      toUseActiveEmailListIndex: activeEmailListIndex,
+      toUseLabelURL: staticLabelURL,
+      toUseSelectedEmails,
+    })
+  )
+
+  dispatch(setCoreStatus(CORE_STATUS_MAP.focused))
+  dispatch(setSessionViewIndex(0))
+  dispatch(setViewIndex(0))
+}
 
 export const selectCoreStatus = (state: RootState) =>
   state.emailDetail.coreStatus

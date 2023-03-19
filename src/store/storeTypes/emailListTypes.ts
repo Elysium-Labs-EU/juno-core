@@ -26,8 +26,6 @@ const PayloadHeaders = z.object({
   bcc: z.string().nullable(),
 })
 
-type TPayloadHeaders = z.infer<typeof PayloadHeaders>
-
 export const PayloadHeadersEnhanced = PayloadHeaders.extend({
   listUnsubscribe: z.string().nullable(),
 })
@@ -53,8 +51,6 @@ const SimpleMessage = z.object({
   snippet: z.string(),
   threadId: z.string(),
 })
-
-type TSimpleMessage = z.infer<typeof SimpleMessage>
 
 const FullMessage = SimpleMessage.extend({
   payload: z.object({

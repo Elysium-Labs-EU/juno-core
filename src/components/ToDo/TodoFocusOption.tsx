@@ -3,6 +3,7 @@ import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
 import { QiJump } from 'images/svgIcons/quillIcons'
+import { activateTodo } from 'store/emailDetailSlice'
 import {
   selectActiveEmailListIndex,
   selectEmailList,
@@ -19,8 +20,6 @@ import { Span } from 'styles/globalStyles'
 import { findLabelByName } from 'utils/findLabel'
 import { setModifierKey } from 'utils/setModifierKey'
 
-import activateTodo from './activateTodo'
-
 const TodoFocusOption = () => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const activeModal = useAppSelector(selectActiveModal)
@@ -33,20 +32,7 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const handleEvent = () => {
-    activateTodo({
-      activeEmailListIndex,
-      dispatch,
-      emailList,
-      labelIds,
-      selectedEmails: selectedEmails.labelIds.includes(
-        findLabelByName({
-          storageLabels,
-          LABEL_NAME: global.TODO_LABEL_NAME,
-        })?.id ?? ''
-      )
-        ? selectedEmails
-        : undefined,
-    })
+    dispatch(activateTodo())
   }
 
   useKeyboardShortcut({
