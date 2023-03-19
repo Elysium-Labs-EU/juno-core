@@ -26,8 +26,9 @@ export const ACTIVE_MODAL_MAP = {
   search: 'search',
   settings: 'settings',
   signature: 'signature',
-}
+} as const
 export const ARCHIVE_LABEL = 'ARCHIVE'
+export const AUTH_SCREEN_ACCEPTED = 'authScreenAccepted'
 export const CORE_STATUS_MAP = {
   focused: 'isFocused',
   searching: 'isSearching',

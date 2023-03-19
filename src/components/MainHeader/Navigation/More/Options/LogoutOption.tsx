@@ -5,7 +5,7 @@ import * as S from '../NavigationMoreStyles'
 
 export const handleLogout = () => {
   userApi().logoutUser()
-  handleUserTokens().removeAllTokens()
+  handleUserTokens().removeAllAuthTokens()
   window.location.reload()
 }
 
