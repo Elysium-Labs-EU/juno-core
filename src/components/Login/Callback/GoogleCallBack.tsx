@@ -60,6 +60,7 @@ const GoogleCallBack = () => {
           dispatch(push(RoutesConstants.LOGIN))
         }
       } catch (err) {
+        console.error(err)
         dispatch(
           setSystemStatusUpdate({
             type: 'error',

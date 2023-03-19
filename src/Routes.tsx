@@ -6,6 +6,7 @@ import ComposeEmail from 'components/Compose/ComposeEmail'
 import Draft from 'components/Draft/Draft'
 import EmailDetail from 'components/EmailDetail/EmailDetail'
 import Inbox from 'components/Inbox/Inbox'
+import AuthExplanation from 'components/Login/AuthExplanation/AuthExplanation'
 import GoogleCallback from 'components/Login/Callback/GoogleCallBack'
 import GoogleCallbackTesting from 'components/Login/Callback/GoogleCallBackTesting'
 import Login from 'components/Login/Login'
@@ -57,6 +58,10 @@ const RoutesComponent = () => {
   return (
     <Routes>
       <Route path={RoutesConstants.LOGIN} element={<Login />} />
+      <Route
+        path={RoutesConstants.GOOGLE_AUTH_EXPLANATION}
+        element={<AuthExplanation />}
+      />
       <Route
         path={RoutesConstants.GOOGLE_CALLBACK}
         element={<GoogleCallback />}

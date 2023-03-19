@@ -178,32 +178,54 @@ export const BACKGROUND_FADE = css`
 `
 
 interface ITextProps {
+  extraBold?: boolean
+  bold?: boolean
   muted?: boolean
   small?: boolean
 }
 
 export const Paragraph = styled.p<ITextProps>`
+  ${({ bold }) =>
+    bold &&
+    css`
+      font-weight: 500;
+    `}
+  ${({ extraBold }) =>
+    extraBold &&
+    css`
+      font-weight: 700;
+    `}
+    ${({ muted }) =>
+    muted &&
+    css`
+      color: var(--color-neutral-400);
+    `}
   ${({ small }) =>
     small &&
     css`
       font-size: var(--text-small);
-    `}
-  ${({ muted }) =>
-    muted &&
-    css`
-      color: var(--color-neutral-400);
     `}
 `
 
 export const Span = styled.span<ITextProps>`
-  ${({ small }) =>
-    small &&
+  ${({ bold }) =>
+    bold &&
     css`
-      font-size: var(--text-small);
+      font-weight: 500;
+    `}
+  ${({ extraBold }) =>
+    extraBold &&
+    css`
+      font-weight: 700;
     `}
   ${({ muted }) =>
     muted &&
     css`
       color: var(--color-neutral-400);
+    `}
+    ${({ small }) =>
+    small &&
+    css`
+      font-size: var(--text-small);
     `}
 `
