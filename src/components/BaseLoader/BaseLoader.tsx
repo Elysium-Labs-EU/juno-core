@@ -16,7 +16,7 @@ import { LOGO_ALT, REDIRECTED, SECONDS } from './BaseLoaderConstants'
 
 const Baseloader = () => {
   const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)
-  const { countDown } = useCountDownTimer({ startSeconds: 150000 })
+  const { countDown } = useCountDownTimer({ startSeconds: 8 })
 
   useEffect(() => {
     let mounted = true
