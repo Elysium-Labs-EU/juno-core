@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import { SETTINGS_DELIMITER, SETTINGS_LABEL } from 'constants/baseConstants'
 import { getLabelByRoute } from 'constants/labelMapConstant'
 import labelApi from 'data/labelApi'
 import { fetchEmailsSimple } from 'store/emailListSlice'
@@ -9,13 +8,10 @@ import type { AppThunk, RootState } from 'store/store'
 import type {
   TGmailV1SchemaLabelSchema,
   TLabelState,
+  TUpdateSettingsLabelKeys,
 } from 'store/storeTypes/labelsTypes'
-import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
-import {
-  parseSettingsLabel,
-  storeUpdatedSettingsLabel,
-} from 'utils/settings/updateSettingsLabel'
-import type { IUpdateSettingsLabel } from 'utils/settings/updateSettingsLabel'
+import { setSystemStatusUpdate } from 'store/utilsSlice'
+import isEmpty from 'utils/isEmpty'
 
 /* eslint-disable no-param-reassign */
 
@@ -90,50 +86,6 @@ const labelsSlice = createSlice({
 export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
   labelsSlice.actions
 
-export const createLabel =
-  (label: string): AppThunk =>
-  async (dispatch) => {
-    try {
-      const body = {
-        name: label,
-        labelVisibility: 'labelShow',
-        messageListVisibility: 'show',
-      }
-
-      const response = await labelApi().createLabel(body)
-
-      if ('data' in response) {
-        dispatch(setStorageLabels(response.data))
-        if (
-          response?.data?.name &&
-          // response?.data?.data?.name.startsWith(
-          response.data.name.startsWith(
-            `${SETTINGS_LABEL + SETTINGS_DELIMITER}`
-          )
-        ) {
-          if (response?.data?.id) {
-            dispatch(setSettingsLabelId(response.data.id))
-            // dispatch(setSettingsLabelId(response.data.data.id))
-          }
-        }
-      } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to create the label.',
-          })
-        )
-      }
-    } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to create the label.',
-        })
-      )
-    }
-  }
-
 export const removeLabel =
   (labelId: string): AppThunk =>
   async (dispatch) => {
@@ -189,25 +141,67 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
 
 export const updateSettingsLabel =
   ({
-    settingsLabelId,
-    emailFetchSize,
-    showIntroduction,
-    isAvatarVisible,
-    isFlexibleFlowActive,
-    alternateActions,
-  }: IUpdateSettingsLabel): AppThunk =>
-  (dispatch) => {
-    storeUpdatedSettingsLabel(
-      parseSettingsLabel({
-        settingsLabelId,
-        emailFetchSize,
-        showIntroduction,
-        isAvatarVisible,
-        isFlexibleFlowActive,
-        alternateActions,
-      }),
-      dispatch
-    )
+    key,
+    value,
+  }: {
+    key: TUpdateSettingsLabelKeys
+    value: string | number | boolean
+  }): AppThunk =>
+  async (dispatch, getState) => {
+    const showIntroduction = false
+
+    const {
+      alternateActions,
+      emailFetchSize,
+      isAvatarVisible,
+      isFlexibleFlowActive,
+      settingsLabel,
+    } = getState().utils
+
+    const storedSettings = {
+      alternateActions,
+      emailFetchSize,
+      isAvatarVisible,
+      isFlexibleFlowActive,
+      showIntroduction,
+    }
+
+    const adjustedSettings = { ...storedSettings, [key]: value }
+
+    if (
+      !adjustedSettings ||
+      !settingsLabel ||
+      isEmpty(adjustedSettings) ||
+      !settingsLabel.id
+    ) {
+      throw Error('Cannot find settingsLabel')
+    }
+
+    try {
+      const response = await labelApi().updateLabel({
+        id: settingsLabel.id,
+        requestBody: {
+          value: adjustedSettings,
+          isSettings: true,
+          settingsLabel,
+        },
+      })
+      if ('data' in response && response.data?.type !== 'user') {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to store settings.',
+          })
+        )
+      }
+    } catch (err) {
+      dispatch(
+        setSystemStatusUpdate({
+          type: 'error',
+          message: 'Unable to store settings.',
+        })
+      )
+    }
   }
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds

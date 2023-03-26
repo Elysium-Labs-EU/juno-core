@@ -6,6 +6,7 @@ export default async function copyToClipboard(text: string | undefined) {
     await navigator.clipboard.writeText(text)
     return true
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('Failed to copy text: ', err)
     return false
   }

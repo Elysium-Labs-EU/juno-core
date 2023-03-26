@@ -1,11 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/button-has-type */
 import { forwardRef } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { Span } from 'styles/globalStyles'
 
 type TCustomButton = {
+  attention?: boolean
   dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
@@ -16,6 +17,7 @@ type TCustomButton = {
 } & React.HTMLAttributes<HTMLButtonElement>
 
 interface IButton {
+  attention: boolean | undefined
   suppressed: boolean | undefined
 }
 
@@ -28,8 +30,7 @@ const Button = styled.button<IButton>`
   border-right-color: transparent;
   border-top-color: transparent;
   border: 1px solid transparent;
-  color: ${({ suppressed }) =>
-    suppressed ? `var(--color-neutral-400) ` : `var(--color-black) `};
+  color: var(--color-black);
   cursor: pointer;
   display: inline-block;
   font-family: var(--font-family);
@@ -42,6 +43,18 @@ const Button = styled.button<IButton>`
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   user-select: none;
   vertical-align: middle;
+
+  ${({ attention }) =>
+    attention &&
+    css`
+      color: var(--color-white);
+      background-color: var(--color-black);
+    `}
+  ${({ suppressed }) =>
+    suppressed &&
+    css`
+      color: var(--color-neutral-400);
+    `}
 
   &:hover {
     box-shadow: (--box-shadow-low);
@@ -76,6 +89,7 @@ const InnerButton = styled.div<IInnerButton>`
 const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
   (
     {
+      attention = false,
       dataCy = undefined,
       disabled = false,
       icon = null,
@@ -88,6 +102,7 @@ const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
     ref
   ) => (
     <Button
+      attention={attention}
       data-cy={dataCy}
       disabled={disabled}
       ref={ref}
@@ -108,6 +123,7 @@ const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
 )
 
 CustomButton.defaultProps = {
+  attention: false,
   dataCy: undefined,
   disabled: false,
   icon: null,

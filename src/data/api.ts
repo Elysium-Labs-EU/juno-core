@@ -44,9 +44,10 @@ export const fetchToken = () => {
 }
 
 export const instance = axios.create({
+  baseURL: BASE_API_URL,
+  timeout: 4000,
   withCredentials:
     import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'false',
-  baseURL: BASE_API_URL,
 })
 axiosRetry(instance, { retries: 3, retryDelay: axiosRetry.exponentialDelay })
 
@@ -73,7 +74,8 @@ instance.interceptors.request.use(
   }
 )
 
-export const errorHandling = async (err: any) => {
+export const errorHandling = (err: any) => {
+  // eslint-disable-next-line no-console
   process.env.NODE_ENV === 'development' && console.error(err)
   const originalRequest = err.config
   if (
@@ -90,6 +92,7 @@ export const errorBlockTemplate = (err: unknown) => {
     return errorHandling(err)
   }
   if (err instanceof z.ZodError) {
+    // eslint-disable-next-line no-console
     console.error(err.issues)
   }
   // Handle unexpected error

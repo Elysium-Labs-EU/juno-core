@@ -36,6 +36,7 @@ import { findLabelById } from 'utils/findLabel'
 import getSenderFromList from 'utils/getSenderFromList'
 import multipleIncludes from 'utils/multipleIncludes'
 import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
+import reduxKeyPresentInObject from 'utils/reduxKeyPresentInObject'
 
 /* eslint-disable no-param-reassign */
 
@@ -51,7 +52,7 @@ const initialState: IUtilsState = Object.freeze({
   isSending: null,
   isSentryActive: true,
   isSilentLoading: false,
-  settingsLabelId: null,
+  settingsLabel: null,
   systemStatusUpdate: null,
 })
 
@@ -147,20 +148,31 @@ const utilsSlice = createSlice({
         state.systemStatusUpdate = null
       }
     },
-    setSettings: (state, { payload }: PayloadAction<any>) => {
-      state.isAvatarVisible = payload.isAvatarVisible
-      state.emailFetchSize = payload.emailFetchSize
+    setSettings: (
+      state,
+      { payload }: PayloadAction<Record<string, string | boolean | number>>
+    ) => {
       state.activeModal = payload.showIntroduction
         ? global.ACTIVE_MODAL_MAP.intro
         : null
-      state.isFlexibleFlowActive = payload.isFlexibleFlowActive
-      state.alternateActions = payload.alternateActions
+
+      let currentState = { ...state }
+      Object.keys(payload).forEach((key) => {
+        const typedKey = key as keyof typeof currentState
+        const output = reduxKeyPresentInObject({
+          key: typedKey,
+          payload,
+          state: currentState,
+        })
+        currentState = output
+      })
+      return currentState
     },
-    setSettingsLabelId(
+    setSettingsLabel(
       state,
-      { payload }: PayloadAction<IUtilsState['settingsLabelId']>
+      { payload }: PayloadAction<IUtilsState['settingsLabel']>
     ) {
-      state.settingsLabelId = payload
+      state.settingsLabel = payload
     },
     setShowAvatar: (
       state,
@@ -218,7 +230,7 @@ export const {
   setIsSentryActive,
   setIsSilentLoading,
   setSettings,
-  setSettingsLabelId,
+  setSettingsLabel,
   setShowAvatar,
   setSystemStatusUpdate,
 } = utilsSlice.actions
@@ -487,7 +499,7 @@ export const selectIsSilentLoading = (state: RootState) =>
   state.utils.isSilentLoading
 export const selectSystemStatusUpdate = (state: RootState) =>
   state.utils.systemStatusUpdate
-export const selectSettingsLabelId = (state: RootState) =>
-  state.utils.settingsLabelId
+export const selectSettingsLabel = (state: RootState) =>
+  state.utils.settingsLabel
 
 export default utilsSlice.reducer

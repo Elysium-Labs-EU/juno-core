@@ -51,10 +51,21 @@ export const profileExtendWithSignature = gmailV1SchemaSendAsSchema
   .pick({ signature: true })
   .merge(gmailV1SchemaProfileSchema)
 
+export const userSettingsSchema = z.object({
+  alternateActions: z.boolean(),
+  emailFetchSize: z.union([z.literal(20), z.literal(25), z.literal(30)]),
+  isAvatarVisible: z.boolean(),
+  isFlexibleFlowActive: z.boolean(),
+  showIntroduction: z.boolean(),
+})
+
+export type TUserSettings = z.infer<typeof userSettingsSchema>
+
 export const baseCheckSchema = z.object({
-  labels: z.array(gmailV1SchemaLabelSchema),
   prefetchedBoxes: z.array(gmailV1SchemaLabelSchema),
   profile: profileExtendWithSignature,
+  userSettings: userSettingsSchema,
+  userSettingsLabel: gmailV1SchemaLabelSchema,
 })
 
 export type TBaseCheckSchema = z.infer<typeof baseCheckSchema>

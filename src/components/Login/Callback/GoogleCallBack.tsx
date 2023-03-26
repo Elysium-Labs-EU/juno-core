@@ -31,8 +31,10 @@ const GoogleCallBack = () => {
         }
 
         const response = await userApi().authGoogleCallback(body)
+
         // If the cloud backend is used with the local frontend, the authorization requires the complete Credentials object.
         if (
+          typeof response === 'object' &&
           'status' in response &&
           response?.status === 200 &&
           'data' in response
@@ -48,9 +50,9 @@ const GoogleCallBack = () => {
           dispatch(push(RoutesConstants.TODO))
         } else {
           const message =
-            'error' in response
+            typeof response === 'object' && 'error' in response
               ? response?.error ?? global.SOMETHING_WRONG
-              : global.SOMETHING_WRONG
+              : response
           dispatch(
             setSystemStatusUpdate({
               type: 'error',
@@ -60,6 +62,7 @@ const GoogleCallBack = () => {
           dispatch(push(RoutesConstants.LOGIN))
         }
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err)
         dispatch(
           setSystemStatusUpdate({

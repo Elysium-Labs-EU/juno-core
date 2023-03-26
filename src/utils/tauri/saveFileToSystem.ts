@@ -22,6 +22,7 @@ export default async function saveFileToFilesystem(
       await writeBinaryFile(filePath, array)
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('Error saving file:', err)
   }
 }

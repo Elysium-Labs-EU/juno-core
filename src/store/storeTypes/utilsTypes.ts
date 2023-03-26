@@ -1,5 +1,8 @@
 import { z } from 'zod'
 
+import type { TGmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
+import type { TUserSettings } from './gmailBaseTypes/otherTypes'
+
 type TUpdateType = 'success' | 'info' | 'warning' | 'error'
 type TActionType = 'copy' | 'close' | 'undo' | 'unsubscribe'
 
@@ -23,19 +26,16 @@ interface IMessageSendStatusTimestamp extends IMessageSendStatus {
   timestamp: number
 }
 
-export interface IUtilsState {
+// We do not require the showIntroduction key here, since we will intercept it when setting the Settings.
+export interface IUtilsState extends Omit<TUserSettings, 'showIntroduction'> {
   activeModal: null | string
-  alternateActions: boolean
-  emailFetchSize: number
   inSearch: boolean
-  isAvatarVisible: boolean
-  isFlexibleFlowActive: boolean
   isLoading: boolean
   isProcessing: boolean
   isSending: IMessageSendStatusTimestamp | null
   isSentryActive: boolean
   isSilentLoading: boolean
-  settingsLabelId: string | null
+  settingsLabel: TGmailV1SchemaLabelSchema | null
   systemStatusUpdate: ISystemStatusUpdateTimestamp | null
 }
 

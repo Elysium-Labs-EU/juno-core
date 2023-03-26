@@ -15,7 +15,7 @@ const tauriOpenFunction = async (event: MouseEvent) => {
  * @return {void}
  */
 
-export default async function openAnchorElement({
+export default function openAnchorElement({
   element,
 }: {
   element: HTMLAnchorElement
@@ -24,11 +24,11 @@ export default async function openAnchorElement({
   const tauriOpenFunctionString = tauriOpenFunction.toString()
 
   if (!existingOnClick || existingOnClick !== tauriOpenFunctionString) {
-    element.addEventListener('click', async (event) => {
+    element.addEventListener('click', (event) => {
       event.preventDefault()
       if (event?.currentTarget) {
         const currentTarget = event.currentTarget as HTMLAnchorElement
-        await open(currentTarget.href)
+        open(currentTarget.href)
       }
     })
   }

@@ -1,41 +1,59 @@
 import StyledSelect from 'components/Elements/Select/StyledSelect'
-import { emailFetchSizeKeyMap } from 'constants/baseConstants'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
+import type { TUserSettings } from 'store/storeTypes/gmailBaseTypes/otherTypes'
+import type { ISystemStatusUpdate } from 'store/storeTypes/utilsTypes'
 import {
   selectEmailListSize,
-  selectSettingsLabelId,
   setEmailFetchSize,
+  setSystemStatusUpdate,
 } from 'store/utilsSlice'
 
 export const selectOptions = {
   id: 'emailSize',
   label: 'Emails fetched at a time',
-  options: [{ value: '20' }, { value: '25' }, { value: '30' }, { value: '35' }],
+  options: [{ value: '20' }, { value: '25' }, { value: '30' }],
+}
+
+const valueToNumber: Record<string, TUserSettings['emailFetchSize']> = {
+  '20': 20,
+  '25': 25,
+  '30': 30,
+}
+
+const errorMessage: ISystemStatusUpdate = {
+  type: 'error',
+  message: 'Could not update the email size.',
 }
 
 const EmailSize = () => {
   const fetchCount = useAppSelector(selectEmailListSize)
-  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const dispatch = useAppDispatch()
 
-  const handleEmailListSizeChange = (selectedValue: string) => {
+  const handleEmailListSizeChange = (
+    selectedValue: (typeof selectOptions)['options'][0]['value']
+  ) => {
+    const selectedValueToNumber = valueToNumber[selectedValue]
+    if (!selectedValueToNumber) {
+      dispatch(setSystemStatusUpdate(errorMessage))
+      return
+    }
     dispatch(
       updateSettingsLabel({
-        settingsLabelId,
-        emailFetchSize: emailFetchSizeKeyMap[parseInt(selectedValue, 10)],
+        key: 'emailFetchSize',
+        value: selectedValueToNumber,
       })
     )
-    dispatch(setEmailFetchSize(parseInt(selectedValue, 10)))
+    dispatch(setEmailFetchSize(selectedValueToNumber))
   }
 
   return (
     <StyledSelect
       ariaLabelTrigger="Email fetch size"
-      selectOptions={selectOptions}
-      onValueChange={handleEmailListSizeChange}
-      value={fetchCount.toString()}
       label={selectOptions.label}
+      onValueChange={handleEmailListSizeChange}
+      selectOptions={selectOptions}
+      value={fetchCount.toString()}
     />
   )
 }

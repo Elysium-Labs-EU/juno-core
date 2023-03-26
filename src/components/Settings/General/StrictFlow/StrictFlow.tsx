@@ -12,7 +12,6 @@ import { updateSettingsLabel } from 'store/labelsSlice'
 import {
   selectEmailListSize,
   selectIsFlexibleFlowActive,
-  selectSettingsLabelId,
   setFlexibleFlow,
 } from 'store/utilsSlice'
 import { Paragraph } from 'styles/globalStyles'
@@ -23,7 +22,6 @@ const StrictFlow = () => {
   const dispatch = useAppDispatch()
   const emailFetchSize = useAppSelector(selectEmailListSize)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
-  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const location = useLocation()
 
   // In case the flexibleFlow is activated, rehydrate the inbox.
@@ -42,8 +40,8 @@ const StrictFlow = () => {
       dispatch(setFlexibleFlow(false))
       dispatch(
         updateSettingsLabel({
-          settingsLabelId,
-          isFlexibleFlowActive: 'false',
+          key: 'isFlexibleFlowActive',
+          value: false,
         })
       )
       if (location.pathname.includes(RoutesConstants.INBOX)) {
@@ -56,8 +54,8 @@ const StrictFlow = () => {
       rehydrateInbox()
       dispatch(
         updateSettingsLabel({
-          settingsLabelId,
-          isFlexibleFlowActive: 'true',
+          key: 'isFlexibleFlowActive',
+          value: true,
         })
       )
     }

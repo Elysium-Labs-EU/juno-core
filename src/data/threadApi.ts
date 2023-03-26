@@ -88,7 +88,7 @@ const threadApi = ({
   >): TemplateApiResponse<TGmailV1SchemaThreadSchema> => {
     try {
       const res = await instance.patch<TGmailV1SchemaThreadSchema>(
-        `/api/thread/${threadId}`,
+        `/api/update-thread/${threadId}`,
         request
       )
       return res

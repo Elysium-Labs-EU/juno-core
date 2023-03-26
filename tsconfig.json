@@ -25,6 +25,6 @@
     ],
     "useDefineForClassFields": true
   },
-  "include": ["src", "env.d.ts", "env.ts", "global.d.ts", "cypress.config.ts"],
+  "include": ["src", "env.d.ts", "env.ts", "globals.d.ts", "cypress.config.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

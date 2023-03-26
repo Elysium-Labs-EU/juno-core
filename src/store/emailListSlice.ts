@@ -688,7 +688,7 @@ export const updateEmailLabelBatch =
     request,
     request: { removeLabelIds },
   }: TUpdateRequestParamsBatchThread): AppThunk =>
-  async (dispatch, getState) => {
+  (dispatch, getState) => {
     try {
       const { selectedEmails } = getState().email
       if (
@@ -834,8 +834,10 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     }
   } catch (err) {
     const typedError: any = err
-    process.env.NODE_ENV === 'development' &&
+    if (process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
       console.error(typedError?.response?.message || typedError)
+    }
     dispatch(
       setSystemStatusUpdate({
         type: 'error',
