@@ -28,6 +28,7 @@ const handleSaveAttachment = (
     }
     return { success: true, message: null }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error('Error downloading attachment:', err)
     return FAIL_RESPONSE_OBJECT
   }
@@ -65,6 +66,7 @@ export async function downloadAttachmentSingle({
     }
     return FAIL_RESPONSE_OBJECT
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log('err', err)
     return FAIL_RESPONSE_OBJECT
   }
@@ -116,6 +118,7 @@ export async function downloadAttachmentMultiple({
     }
     return null
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log('err', err)
     return FAIL_RESPONSE_OBJECT
   }

@@ -9,6 +9,7 @@ export default function useDocumentVisibility() {
     const handleVisibilityChange = () => {
       const visibleElement = document.visibilityState === 'visible'
       setIsVisible(visibleElement)
+      // eslint-disable-next-line no-console
       console.log('Visible element:', visibleElement)
     }
 

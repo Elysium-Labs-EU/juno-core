@@ -89,7 +89,7 @@ const EmailInput = ({
       debouncedInputValue.length > 1 &&
       !completedSearch
     ) {
-      ;(async () => {
+      ;(() => {
         const foundResults = filterOptions(availableContacts, {
           inputValue: debouncedInputValue,
         })

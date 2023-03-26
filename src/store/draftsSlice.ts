@@ -211,7 +211,7 @@ const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 
 const pushDraftDetails =
   ({ draft }: { draft: TDraftResponseEntry }): AppThunk =>
-  async (dispatch, getState) => {
+  (dispatch, getState) => {
     const { message } = draft
     try {
       if (draft?.id && message?.threadId) {
@@ -279,7 +279,7 @@ const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk => {
 
 export const openDraftEmail =
   ({ messageId, id }: IOpenDraftEmailType): AppThunk =>
-  async (dispatch, getState) => {
+  (dispatch, getState) => {
     try {
       const { draftList } = getState().drafts
 
@@ -313,7 +313,7 @@ export const openDraftEmail =
     }
   }
 
-export const deleteDraftBatch = (): AppThunk => async (dispatch, getState) => {
+export const deleteDraftBatch = (): AppThunk => (dispatch, getState) => {
   const { selectedEmails } = getState().email
   const { draftList } = getState().drafts
   dispatch(
@@ -469,6 +469,7 @@ export const sendComposedEmail =
         }
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error(err)
       dispatch(
         setIsSending({ message: 'Error sending your mail', type: 'error' })

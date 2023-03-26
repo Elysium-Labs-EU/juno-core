@@ -19,7 +19,6 @@ const DraftListEntry = z.object({
     threadId: z.string(),
   }),
 })
-type TDraftListEntry = z.infer<typeof DraftListEntry>
 
 const FullDraftMessage = z.object({
   id: z.string(),
@@ -42,8 +41,6 @@ const FullDraftMessage = z.object({
   internalDate: z.string(),
 })
 
-type TFullDraftMessage = z.infer<typeof FullDraftMessage>
-
 export const DraftResponseEntry = z.object({
   id: z.string(),
   message: FullDraftMessage,
@@ -54,7 +51,6 @@ export const DraftListResponse = z.object({
   drafts: z.array(DraftListEntry),
   resultSizeEstimate: z.number(),
 })
-type TDraftListResponse = z.infer<typeof DraftListResponse>
 
 const DraftsState = z.object({
   draftList: z.array(DraftListEntry),

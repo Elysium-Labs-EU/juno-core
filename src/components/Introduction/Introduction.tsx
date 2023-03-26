@@ -5,11 +5,7 @@ import { ACTIVE_MODAL_MAP } from 'constants/globalConstants'
 import { QiArrowRight, QiCommand } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
-import {
-  selectActiveModal,
-  selectSettingsLabelId,
-  setActiveModal,
-} from 'store/utilsSlice'
+import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
 
 import {
   DIALOG_HEADER,
@@ -24,14 +20,11 @@ import {
 import * as S from './IntroductionStyles'
 
 const Introduction = () => {
-  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const activeModal = useAppSelector(selectActiveModal)
   const dispatch = useAppDispatch()
 
   const handleClose = () => {
-    dispatch(
-      updateSettingsLabel({ settingsLabelId, showIntroduction: 'false' })
-    )
+    dispatch(updateSettingsLabel({ key: 'showIntroduction', value: false }))
     dispatch(setActiveModal(null))
   }
 
@@ -65,14 +58,11 @@ const Introduction = () => {
             title="Show keyboard shortcuts"
           />
           <CustomButton
+            attention
             icon={<QiArrowRight />}
             label={CONFIRM_BUTTON}
             onClick={handleClose}
             title="Close Introduction"
-            style={{
-              backgroundColor: 'var(--color-black)',
-              color: 'var(--color-white)',
-            }}
           />
         </S.ButtonContainer>
       </>

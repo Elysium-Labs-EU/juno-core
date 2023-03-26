@@ -1,18 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
+import { JUNO_SETTINGS_LOCAL } from 'constants/globalConstants'
 import userApi from 'data/userApi'
 import { setBaseEmailList } from 'store/emailListSlice'
 import { setStorageLabels } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
 import type { TBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
-import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
-import { setSettingsLabelId, setSystemStatusUpdate } from 'store/utilsSlice'
-import createSettingsLabel from 'utils/settings/createSettingsLabel'
-import findSettings from 'utils/settings/findSettings'
-import parseSettings from 'utils/settings/parseSettings'
+import {
+  setSettings,
+  setSettingsLabel,
+  setSystemStatusUpdate,
+} from 'store/utilsSlice'
 
 import type { TBaseEmailList } from './storeTypes/emailListTypes'
+import type { TGmailV1SchemaLabelSchema } from './storeTypes/gmailBaseTypes/gmailTypes'
+import type { TUserSettings } from './storeTypes/gmailBaseTypes/otherTypes'
 
 /* eslint-disable no-param-reassign */
 
@@ -58,15 +61,14 @@ export const { setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
 export const handleSettings =
-  (labels: Array<TGmailV1SchemaLabelSchema>): AppThunk =>
-  async (dispatch) => {
-    const settingsLabel = findSettings(labels, dispatch)
-    if (!settingsLabel || !settingsLabel.id) {
-      createSettingsLabel(dispatch)
-      return
-    }
-    dispatch(setSettingsLabelId(settingsLabel.id))
-    parseSettings(dispatch, settingsLabel)
+  (
+    userSettings: TUserSettings,
+    userSettingsLabel: TGmailV1SchemaLabelSchema
+  ): AppThunk =>
+  (dispatch) => {
+    dispatch(setSettingsLabel(userSettingsLabel))
+    dispatch(setSettings(userSettings))
+    localStorage.setItem(JUNO_SETTINGS_LOCAL, JSON.stringify(userSettings))
   }
 
 /**
@@ -80,10 +82,10 @@ const presetEmailList =
   (dispatch) => {
     const emailListBuffer = [] as TBaseEmailList
 
-    prefetchedBoxes.forEach((emailContainer) => {
-      if (emailContainer && emailContainer?.id) {
+    prefetchedBoxes.forEach(({ id }) => {
+      if (id) {
         const presetEmailBox = {
-          labels: [emailContainer.id],
+          labels: [id],
           threads: [] as Array<any>,
           nextPageToken: null,
         }
@@ -104,14 +106,19 @@ const presetEmailList =
 export const getBase = (): AppThunk => async (dispatch) => {
   try {
     const response = await userApi().baseCheck()
+
     if ('data' in response && response.status === 200) {
-      dispatch(setProfile(response.data?.profile))
-      dispatch(presetEmailList(response.data?.prefetchedBoxes))
-      dispatch(setStorageLabels(response.data?.prefetchedBoxes))
-      dispatch(handleSettings(response.data?.labels))
+      const { profile, prefetchedBoxes, userSettingsLabel, userSettings } =
+        response.data
+
+      dispatch(setProfile(profile))
+      dispatch(presetEmailList(prefetchedBoxes))
+      dispatch(setStorageLabels(prefetchedBoxes))
+      dispatch(handleSettings(userSettings, userSettingsLabel))
       dispatch(setBaseLoaded(true))
     }
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err)
     dispatch(
       setSystemStatusUpdate({

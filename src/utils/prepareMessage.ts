@@ -3,7 +3,7 @@ import type { IComposePayload } from 'store/storeTypes/composeTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import convertToGmailEmail from 'utils/convertToGmailEmail'
 
-export async function prepareFilesForSave({
+export function prepareFilesForSave({
   files,
   formData,
 }: {

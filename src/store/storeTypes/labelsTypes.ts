@@ -16,3 +16,10 @@ const LabelState = z.object({
 })
 
 export type TLabelState = z.infer<typeof LabelState>
+
+export type TUpdateSettingsLabelKeys =
+  | 'alternateActions'
+  | 'emailFetchSize'
+  | 'isAvatarVisible'
+  | 'isFlexibleFlowActive'
+  | 'showIntroduction'

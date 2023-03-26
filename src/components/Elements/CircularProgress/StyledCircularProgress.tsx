@@ -23,16 +23,6 @@ const RotatingIcon = styled.span<IRotatingIcon>`
   height: ${({ size }) => size}px;
 `
 
-// animation: animation-61bdi0 1.4s linear infinite;
-//     animation-duration: 1.4s;
-//     animation-timing-function: linear;
-//     animation-delay: 0s;
-//     animation-iteration-count: infinite;
-//     animation-direction: normal;
-//     animation-fill-mode: none;
-//     animation-play-state: running;
-//     animation-name: animation-61bdi0;
-
 const StyledCircularProgress = ({ size = 18 }: { size?: number }) => (
   <RotatingIcon size={size}>
     <FiLoader size={size} color="var(--color-neutral-400)" />

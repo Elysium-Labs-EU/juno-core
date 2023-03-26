@@ -16,7 +16,7 @@ import { LOGO_ALT, REDIRECTED, SECONDS } from './BaseLoaderConstants'
 
 const Baseloader = () => {
   const systemStatusUpdate = useAppSelector(selectSystemStatusUpdate)
-  const { countDown } = useCountDownTimer({ startSeconds: 15 })
+  const { countDown } = useCountDownTimer({ startSeconds: 150000 })
 
   useEffect(() => {
     let mounted = true
@@ -58,7 +58,7 @@ const Baseloader = () => {
               {countDown}
               {SECONDS}
             </S.ServiceUnavailableParagraph>
-            <LogoutOption />
+            <LogoutOption asRegularButton />
           </>
         )}
       </S.Inner>

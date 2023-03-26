@@ -4,18 +4,13 @@ import SettingsSection from 'components/Settings/SettingsSection'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
-import {
-  selectAlternateActions,
-  selectSettingsLabelId,
-  setAlternateActions,
-} from 'store/utilsSlice'
+import { selectAlternateActions, setAlternateActions } from 'store/utilsSlice'
 import { Paragraph } from 'styles/globalStyles'
 
 import { HEADER, BODY, SWITCH_LABEL } from './AlternateActionsConstants'
 
 const AlternateActions = () => {
   const dispatch = useAppDispatch()
-  const settingsLabelId = useAppSelector(selectSettingsLabelId)
   const alternateActions = useAppSelector(selectAlternateActions)
 
   const alternateActionHandeler = (event: any) => {
@@ -24,8 +19,8 @@ const AlternateActions = () => {
       dispatch(setAlternateActions(false))
       dispatch(
         updateSettingsLabel({
-          settingsLabelId,
-          alternateActions: 'false',
+          key: 'alternateActions',
+          value: false,
         })
       )
     } else {
@@ -33,8 +28,8 @@ const AlternateActions = () => {
       dispatch(setAlternateActions(true))
       dispatch(
         updateSettingsLabel({
-          settingsLabelId,
-          alternateActions: 'true',
+          key: 'alternateActions',
+          value: true,
         })
       )
     }

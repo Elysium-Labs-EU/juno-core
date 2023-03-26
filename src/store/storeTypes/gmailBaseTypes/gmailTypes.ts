@@ -100,6 +100,8 @@ export const gmailV1SchemaLabelSchema = z.object({
   type: z.string().optional().nullable(),
 })
 
+export type TGmailV1SchemaLabelSchema = z.infer<typeof gmailV1SchemaLabelSchema>
+
 export const gmailV1SchemaListLabelsResponseSchema = z.object({
   labels: z.array(gmailV1SchemaLabelSchema).optional(),
 })
