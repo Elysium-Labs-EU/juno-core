@@ -65,21 +65,21 @@ const HelpMenu = () => {
     }
   }, [])
 
-  const MENU_ITEMS_FEEDBACK = useMemo(
-    (): IMenuItemCollection => ({
-      id: 'help-menu-feedback',
-      items: [
-        {
-          id: 'send-feedback',
-          title: 'Send feedback',
-          onClick: () =>
-            dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback)),
-          hint: [modifierKeyDisplay, '.'],
-        },
-      ],
-    }),
-    []
-  )
+  // const MENU_ITEMS_FEEDBACK = useMemo(
+  //   (): IMenuItemCollection => ({
+  //     id: 'help-menu-feedback',
+  //     items: [
+  //       {
+  //         id: 'send-feedback',
+  //         title: 'Send feedback',
+  //         onClick: () =>
+  //           dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback)),
+  //         hint: [modifierKeyDisplay, '.'],
+  //       },
+  //     ],
+  //   }),
+  //   []
+  // )
   const MENU_ITEMS_SOCIAL = useMemo((): IMenuItemCollection | undefined => {
     const DISCORD_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
     return DISCORD_URL
@@ -98,9 +98,9 @@ const HelpMenu = () => {
 
   const combinedMenuItems = useCallback(() => {
     if (MENU_ITEMS_SOCIAL) {
-      return [MENU_ITEMS_SOCIAL, MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
+      return [MENU_ITEMS_SOCIAL, MENU_ITEMS_HELP]
     }
-    return [MENU_ITEMS_HELP, MENU_ITEMS_FEEDBACK]
+    return [MENU_ITEMS_HELP]
   }, [])
 
   const handleOpenHelpMenu = useCallback(() => {
