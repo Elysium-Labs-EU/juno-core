@@ -2,7 +2,6 @@ import CommandPalette from 'components/CommandPalette/CommandPalette'
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import Seo from 'components/Elements/Seo'
 import StyledTooltip from 'components/Elements/StyledTooltip'
-import Feedback from 'components/Help/Feedback/Feedback'
 import HelpMenu from 'components/Help/HelpMenu'
 import { HelpMenuContainer } from 'components/Help/HelpMenuStyles'
 import KeyboardCombos from 'components/Help/KeyboardCombos/KeyboardCombos'
@@ -39,7 +38,6 @@ const Layout = ({
   const activeModal = useAppSelector(selectActiveModal)
   return (
     <Base>
-      {global.ACTIVE_MODAL_MAP.feedback === activeModal ? <Feedback /> : null}
       {global.ACTIVE_MODAL_MAP.intro === activeModal ? <Introduction /> : null}
       {global.ACTIVE_MODAL_MAP.keyboard === activeModal ? (
         <KeyboardCombos />

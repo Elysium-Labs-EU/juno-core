@@ -129,16 +129,16 @@ const HelpMenu = () => {
     isDisabled: inSearch,
   })
 
-  const handleShowFeedback = useCallback(() => {
-    dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback))
-  }, [dispatch])
+  // const handleShowFeedback = useCallback(() => {
+  //   dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback))
+  // }, [dispatch])
 
-  useKeyboardShortcut({
-    handleEvent: handleShowFeedback,
-    modifierKey: setModifierKey,
-    key: keyConstants.KEY_SPECIAL.dot,
-    isDisabled: inSearch,
-  })
+  // useKeyboardShortcut({
+  //   handleEvent: handleShowFeedback,
+  //   modifierKey: setModifierKey,
+  //   key: keyConstants.KEY_SPECIAL.dot,
+  //   isDisabled: inSearch,
+  // })
 
   return (
     <Menu

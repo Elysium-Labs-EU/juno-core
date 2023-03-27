@@ -15,6 +15,8 @@ interface IJsonStructureItem {
     | undefined
     | Promise<any>
     | { payload: string | null; type: string }
+    | null
+    | Window
   showType?: boolean
   type?: TListItemType
 }
