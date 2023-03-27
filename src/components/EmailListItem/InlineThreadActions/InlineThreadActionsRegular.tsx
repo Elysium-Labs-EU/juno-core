@@ -12,6 +12,7 @@ import * as themeConstants from 'constants/themeConstants'
 import {
   QiFolderArchive,
   QiFolderTrash,
+  QiForward,
   QiReply,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
@@ -22,6 +23,7 @@ import { findLabelByName } from 'utils/findLabel'
 
 import * as S from './InlineThreadActionsStyles'
 import type { IInlineThreadActionsRegular } from './InlineThreadActionsTypes'
+import ForwardOverview from 'components/EmailOptions/ForwardOverview'
 
 const ICON_SIZE = 18
 
@@ -35,6 +37,7 @@ const ICON_SIZE = 18
 const InlineThreadActionsRegular = ({
   threadId,
   email,
+  emailIndex,
   isFocused,
 }: IInlineThreadActionsRegular) => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -54,6 +57,7 @@ const InlineThreadActionsRegular = ({
           onClick={() =>
             ReplyOverview({
               id: threadId,
+              emailIndex,
               dispatch,
             })
           }
@@ -62,8 +66,29 @@ const InlineThreadActionsRegular = ({
         />
       </StyledTooltip>
     ),
-    [threadId]
+    [emailIndex, threadId]
   )
+
+  // TODO: Do not enable right now. This takes more time to implement, due to the loading of the email detail only on email detail mount.
+  // const memoizedForwardButton = useMemo(
+  //   () => (
+  //     <StyledTooltip title="Forward">
+  //       <CustomIconButton
+  //         icon={<QiForward size={ICON_SIZE} />}
+  //         onClick={() =>
+  //           ForwardOverview({
+  //             id: threadId,
+  //             emailIndex,
+  //             dispatch,
+  //           })
+  //         }
+  //         title="Forward"
+  //         dataCy="forward-inline-button"
+  //       />
+  //     </StyledTooltip>
+  //   ),
+  //   [emailIndex, threadId]
+  // )
 
   const memoizeMarkToDoButton = useMemo(() => {
     const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
@@ -141,6 +166,7 @@ const InlineThreadActionsRegular = ({
       {threadId && labelIds && (
         <Stack spacing="large">
           {memoizedReplyButton}
+          {/* {memoizedForwardButton} */}
           {memoizeMarkToDoButton}
           {memoizedArchiveButton}
           {memoizedDeleteButton}
