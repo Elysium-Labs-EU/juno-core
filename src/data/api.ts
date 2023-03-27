@@ -61,8 +61,7 @@ instance.interceptors.request.use(
     if (
       accessToken &&
       config.headers &&
-      !config.url?.includes(`/api/auth/oauth/google/`) &&
-      !config.url?.includes(import.meta.env.VITE_HEADLESS_FEEDBACK_URL ?? '')
+      !config.url?.includes(`/api/auth/oauth/google/`)
     ) {
       // eslint-disable-next-line no-param-reassign
       config.headers.Authorization = `${accessToken}`

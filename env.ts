@@ -7,7 +7,6 @@ const envVariables = z.object({
   VITE_DISCORD_SOCIAL_URL: z.string().optional().nullable(),
   VITE_DOCUMENTATION_URL: z.string().optional().nullable(),
   VITE_FORMSPARK_FORM_ID: z.string().optional().nullable(),
-  VITE_HEADLESS_FEEDBACK_URL: z.string().optional().nullable(),
   VITE_SENTRY_DSN: z.string().optional().nullable(),
   VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND: z.string(),
 })

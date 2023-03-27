@@ -18,7 +18,7 @@ export const ACTIVE_PAGE_HEADER = {
 export const ACTIVE_MODAL_MAP = {
   attachment: 'attachment',
   betaAccess: 'betaAccess',
-  feedback: 'feedback',
+  // feedback: 'feedback',
   help: 'help',
   intro: 'intro',
   keyboard: 'keyboard',

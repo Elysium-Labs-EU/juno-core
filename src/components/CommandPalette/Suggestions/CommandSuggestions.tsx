@@ -11,7 +11,7 @@ import {
 } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
-import { selectIsFlexibleFlowActive, setActiveModal } from 'store/utilsSlice'
+import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
 
 import contextualItems from './ContextualItems'
 import SearchSuggestion from './SearchSuggestion'
@@ -44,6 +44,7 @@ const CommandPaletteSuggestions = ({
   }, [emailList, activeEmailListIndex])
 
   const filteredItems = useMemo(() => {
+    const DISCORD_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
     if (searchValue) {
       const searchSuggestion: Array<IJsonStructure> = [
         {
@@ -59,23 +60,25 @@ const CommandPaletteSuggestions = ({
           ],
         },
       ]
-      const newSuggestion: IJsonStructure[] = [
-        {
-          heading: 'More',
-          id: 'suggestion-header',
-          items: [
+      const newSuggestion: Array<IJsonStructure> | undefined = DISCORD_URL
+        ? [
             {
-              id: 'suggestion',
-              children:
-                'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
-              icon: <QiGift />,
-              type: 'Link',
-              onClick: () =>
-                dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.feedback)),
+              heading: 'More',
+              id: 'suggestion-header',
+              items: [
+                {
+                  id: 'suggestion',
+                  children:
+                    'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
+                  icon: <QiGift />,
+                  type: 'Link',
+                  onClick: () => window.open(DISCORD_URL, '_blank'),
+                },
+              ],
             },
-          ],
-        },
-      ]
+          ]
+        : undefined
+
       const filteredItemsWithSearch = [
         ...searchSuggestion,
         ...filterItems(
@@ -90,8 +93,10 @@ const CommandPaletteSuggestions = ({
           }),
           searchValue ?? ''
         ),
-        ...newSuggestion,
       ]
+      if (newSuggestion) {
+        filteredItemsWithSearch.push(...newSuggestion)
+      }
       return filteredItemsWithSearch
     }
     return filterItems(
