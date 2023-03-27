@@ -12,7 +12,6 @@ import * as themeConstants from 'constants/themeConstants'
 import {
   QiFolderArchive,
   QiFolderTrash,
-  QiForward,
   QiReply,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
@@ -23,7 +22,6 @@ import { findLabelByName } from 'utils/findLabel'
 
 import * as S from './InlineThreadActionsStyles'
 import type { IInlineThreadActionsRegular } from './InlineThreadActionsTypes'
-import ForwardOverview from 'components/EmailOptions/ForwardOverview'
 
 const ICON_SIZE = 18
 
