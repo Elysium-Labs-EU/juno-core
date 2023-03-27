@@ -4,7 +4,6 @@ import { useLocation, useParams } from 'react-router-dom'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
 import Layout from 'components/Layout/Layout'
-import * as global from 'constants/globalConstants'
 import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import { QiSearch } from 'images/svgIcons/quillIcons'
@@ -40,6 +39,7 @@ import RenderEmailDetail from './Messages/RenderEmailDetail'
 import getEmailHeader from './Utils/getEmailHeader'
 import useEdgeLoadNextPage from './Utils/useEdgeLoadNextPage'
 import Baseloader from '../BaseLoader/BaseLoader'
+import { CORE_STATUS_MAP, DRAFT_LABEL, INBOX_LABEL, SEARCH_LABEL, TODO_LABEL_NAME } from 'constants/globalConstants'
 
 const SearchButtonInHeader = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -47,7 +47,7 @@ const SearchButtonInHeader = () => {
   const dispatch = useAppDispatch()
   return (
     <Stack align="center" justify="center">
-      {labelIds.includes(global.SEARCH_LABEL) && (
+      {labelIds.includes(SEARCH_LABEL) && (
         <CustomButton
           icon={<QiSearch />}
           label={`Search Query: "${searchList?.q}"`}
@@ -89,6 +89,12 @@ const EmailDetail = () => {
   const location = useLocation()
   const [activeEmailList, setActiveEmailList] = useState<TEmailListObject>()
 
+  const showNoNavigation =
+    coreStatus === CORE_STATUS_MAP.focused ||
+    coreStatus === CORE_STATUS_MAP.sorting
+
+  const isSearching = coreStatus === CORE_STATUS_MAP.searching
+
   useFetchEmailDetail({
     threadId,
     activeEmailList,
@@ -98,7 +104,7 @@ const EmailDetail = () => {
   useFetchDraftList({
     shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
       thread.messages.some((message) =>
-        message?.labelIds?.includes(global.DRAFT_LABEL)
+        message?.labelIds?.includes(DRAFT_LABEL)
       )
     ),
   })
@@ -115,23 +121,23 @@ const EmailDetail = () => {
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
   useEffect(() => {
-    if (coreStatus === global.CORE_STATUS_MAP.searching && searchList) {
+    if (coreStatus === CORE_STATUS_MAP.searching && searchList) {
       setActiveEmailList(searchList)
     } else {
       const targetEmailList = emailList[activeEmailListIndex]
       if (targetEmailList) {
         const selectedIds = selectedEmails?.selectedIds ?? []
         const hasTodoLabel = selectedEmails?.labelIds.includes(
-          findLabelByName({ storageLabels, LABEL_NAME: global.TODO_LABEL_NAME })
+          findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })
             ?.id ?? ''
         )
         const hasInboxLabel = selectedEmails?.labelIds.includes(
-          global.INBOX_LABEL
+          INBOX_LABEL
         )
         const isFocusedOrSorting =
-          coreStatus === global.CORE_STATUS_MAP.focused ||
+          coreStatus === CORE_STATUS_MAP.focused ||
           (isFlexibleFlowActive &&
-            coreStatus === global.CORE_STATUS_MAP.sorting)
+            coreStatus === CORE_STATUS_MAP.sorting)
         if (
           isFocusedOrSorting &&
           selectedIds.length > 0 &&
@@ -182,12 +188,6 @@ const EmailDetail = () => {
     }
     return undefined
   }, [activeEmailList, labelIds, viewIndex])
-
-  const showNoNavigation =
-    coreStatus === global.CORE_STATUS_MAP.focused ||
-    coreStatus === global.CORE_STATUS_MAP.sorting
-
-  const isSearching = coreStatus === global.CORE_STATUS_MAP.searching
 
   return activeEmailList ? (
     <Layout
