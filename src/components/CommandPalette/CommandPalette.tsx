@@ -36,7 +36,7 @@ import SearchResults from './Search/SearchResults'
 import CommandPalleteSuggestions from './Suggestions/CommandSuggestions'
 
 const SEARCH = 'Search'
-const COMMAND_PALLETE = 'command-palette-list-item'
+export const COMMAND_PALLETE_ITEM = 'command-palette-list-item'
 
 const openDetail = ({
   currentEmail,
@@ -52,7 +52,7 @@ const openDetail = ({
 }
 
 function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
-  const items = document.querySelectorAll(`.${COMMAND_PALLETE}`) as NodeListOf<
+  const items = document.querySelectorAll(`.${COMMAND_PALLETE_ITEM}`) as NodeListOf<
     HTMLButtonElement | HTMLAnchorElement
   >
 
@@ -212,7 +212,7 @@ const CommandPallette = () => {
     handleChangeFocus({
       focusedItemIndex,
       setFocusedItemIndex,
-      sourceTag: COMMAND_PALLETE,
+      sourceTag: COMMAND_PALLETE_ITEM,
       doNotMoveFocus: true,
     })
   }
@@ -229,6 +229,7 @@ const CommandPallette = () => {
 
   const handleKeyEnter = () => {
     if (inSearch) {
+      // TODO: Check if this should be -1
       if (focusedItemIndex > 0) {
         handleSelect({ focusedItemIndex })
         return
@@ -256,7 +257,7 @@ const CommandPallette = () => {
           direction: 'down',
           focusedItemIndex,
           setFocusedItemIndex,
-          sourceTag: COMMAND_PALLETE,
+          sourceTag: COMMAND_PALLETE_ITEM,
           doNotMoveFocus: true,
         })
       }
@@ -267,7 +268,7 @@ const CommandPallette = () => {
           direction: 'up',
           focusedItemIndex,
           setFocusedItemIndex,
-          sourceTag: COMMAND_PALLETE,
+          sourceTag: COMMAND_PALLETE_ITEM,
           doNotMoveFocus: true,
         })
       }

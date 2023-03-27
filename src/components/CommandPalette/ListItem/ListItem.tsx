@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { useAppDispatch } from 'store/hooks'
 import { setInSearch } from 'store/utilsSlice'
 import { Span } from 'styles/globalStyles'
+import { COMMAND_PALLETE_ITEM } from '../CommandPalette'
 
 import * as S from './ListItemStyles'
 
@@ -74,7 +75,7 @@ const ListItem = ({
       isFocused={index === focusedItemIndex}
       onClick={clickAndClose}
       // The className is used to target it.
-      className="command-palette-list-item"
+      className={COMMAND_PALLETE_ITEM}
       data-cy="command-palette-list-item"
     >
       <ListItemContent showType={showType} itemType={itemType} icon={icon}>
