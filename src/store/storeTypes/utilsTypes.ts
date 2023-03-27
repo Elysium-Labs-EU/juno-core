@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { ACTIVE_MODAL_MAP } from 'constants/globalConstants'
+
 import type { TGmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
 import type { TUserSettings } from './gmailBaseTypes/otherTypes'
 
@@ -26,9 +28,12 @@ interface IMessageSendStatusTimestamp extends IMessageSendStatus {
   timestamp: number
 }
 
+type ActiveModalMapType =
+  (typeof ACTIVE_MODAL_MAP)[keyof typeof ACTIVE_MODAL_MAP]
+
 // We do not require the showIntroduction key here, since we will intercept it when setting the Settings.
 export interface IUtilsState extends Omit<TUserSettings, 'showIntroduction'> {
-  activeModal: null | string
+  activeModal: null | ActiveModalMapType | string
   inSearch: boolean
   isLoading: boolean
   isProcessing: boolean

@@ -60,6 +60,23 @@ const CommandPaletteSuggestions = ({
           ],
         },
       ]
+      // const introduction: Array<IJsonStructure> = [
+      //   {
+      //     heading: 'Introduction',
+      //     id: 'introduction-option',
+      //     items: [
+      //       {
+      //         id: 'introduction',
+      //         children: 'Show introduction',
+      //         icon: <QiLinkOut />,
+      //         type: 'Link',
+      //         onClick: () =>
+      //           dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
+      //       },
+      //     ],
+      //   },
+      // ]
+
       const newSuggestion: Array<IJsonStructure> | undefined = DISCORD_URL
         ? [
             {
@@ -93,6 +110,7 @@ const CommandPaletteSuggestions = ({
           }),
           searchValue ?? ''
         ),
+        // ...introduction,
       ]
       if (newSuggestion) {
         filteredItemsWithSearch.push(...newSuggestion)

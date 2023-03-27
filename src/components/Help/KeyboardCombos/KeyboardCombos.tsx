@@ -21,6 +21,20 @@ interface ICreateSectionWithKeys {
   title: string
 }
 
+export const KeyCombinationSection = ({ combo }: { combo: IKeyCombos }) => (
+  <>
+    <div>{combo.title}</div>
+    {combo?.subTitle ? <Span muted>{combo?.subTitle}</Span> : null}
+    <Stack direction="horizontal" spacing="mini">
+      {combo.keys.map((oneKey) => (
+        <S.KeyBindShortcut key={JSON.stringify(oneKey)}>
+          {oneKey}
+        </S.KeyBindShortcut>
+      ))}
+    </Stack>
+  </>
+)
+
 const CreateSectionWithKeys = ({
   keyCombos,
   title,
@@ -33,15 +47,7 @@ const CreateSectionWithKeys = ({
     <Span>{subTitle}</Span>
     {keyCombos.map((combo) => (
       <Stack direction="vertical" key={combo.title}>
-        <div>{combo.title}</div>
-        {combo?.subTitle ? <Span muted>{combo?.subTitle}</Span> : null}
-        <Stack direction="horizontal" spacing="mini">
-          {combo.keys.map((oneKey) => (
-            <S.KeyBindShortcut key={JSON.stringify(oneKey)}>
-              {oneKey}
-            </S.KeyBindShortcut>
-          ))}
-        </Stack>
+        <KeyCombinationSection combo={combo} />
       </Stack>
     ))}
   </Stack>

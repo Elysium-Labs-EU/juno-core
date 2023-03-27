@@ -30,9 +30,10 @@ const Content = <T,>({
   noContentPadding,
   onKeyDown,
   height,
+  enableDynamicHeight,
 }: Pick<
   ICustomDialog<T>,
-  'children' | 'open' | 'noContentPadding' | 'onKeyDown'
+  'children' | 'open' | 'noContentPadding' | 'onKeyDown' | 'enableDynamicHeight'
 > & { inSearch: boolean; height: string }) => {
   const dispatch = useAppDispatch()
   const handleCloseModal = () => {
@@ -54,6 +55,7 @@ const Content = <T,>({
         onInteractOutside={handleCloseModal}
         onKeyDown={onKeyDown}
         onOpenAutoFocus={(e) => e.preventDefault()}
+        enableDynamicHeight={enableDynamicHeight}
       >
         {children}
       </S.StyledContent>
@@ -101,11 +103,12 @@ const CustomDialog = <T extends (...args: any[]) => any>({
       open={open}
     >
       <DialogContent
+        enableDynamicHeight={enableDynamicHeight}
+        height={height}
         inSearch={inSearch}
         noContentPadding={noContentPadding}
         onKeyDown={onKeyDown}
         open={open}
-        height={height}
       >
         {modalTitle ? (
           <S.ModalHeader>
