@@ -1,5 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 
 import { breakPoint } from 'constants/themeConstants'
 
@@ -8,7 +8,7 @@ const overlayShow = keyframes({
   '100%': { opacity: 0.6 },
 })
 
-const contentShow = keyframes({
+const contentShowDynamic = keyframes({
   '0%': {
     opacity: 0,
     transform: 'translate(-50%, -2%) scale(.96)',
@@ -16,6 +16,16 @@ const contentShow = keyframes({
   '100%': {
     opacity: 1,
     transform: 'translate(-50%, 0%) scale(1)',
+  },
+})
+const contentShow = keyframes({
+  '0%': {
+    opacity: 0,
+    transform: 'translate(-50%, -48%) scale(.96)',
+  },
+  '100%': {
+    opacity: 1,
+    transform: 'translate(-50%, -50%) scale(1)',
   },
 })
 
@@ -31,6 +41,7 @@ export const StyledOverlay = styled(DialogPrimitive.Overlay)`
 interface IStyledContent {
   height: string
   nocontentpadding?: string
+  enableDynamicHeight: boolean | undefined
 }
 
 export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
@@ -39,7 +50,7 @@ export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
   border-radius: var(--radius-l);
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
-  left: 50%;
+
   max-height: calc(100% - 64px);
   outline: 0;
   overflow-y: auto;
@@ -50,26 +61,40 @@ export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
   ::-webkit-scrollbar {
     display: none;
   }
-  top: 20%;
-  transform: translateX(-50%);
-  transition: height 0.3s ease-in-out;
   min-width: 300px;
   width: 100%;
   max-width: 825px;
   z-index: var(--z-index-modal);
-  &[data-state='open'] {
-    height: ${({ height }) => height};
-  }
-  &[data-state='closed'] {
-    height: 0;
-    overflow: hidden;
-  }
 
-  &:focus: {
+  ${({ enableDynamicHeight, height }) =>
+    enableDynamicHeight
+      ? css`
+          animation: ${contentShowDynamic} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+          left: 50%;
+          top: 20%;
+          transform: translateX(-50%);
+          transition: height 0.3s ease-in-out;
+          &[data-state='open'] {
+            height: ${height};
+          }
+          &[data-state='closed'] {
+            height: 0;
+            overflow: hidden;
+          }
+        `
+      : css`
+          animation: ${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1);
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        `};
+
+  &:focus {
     outline: none;
   }
+
   @media only screen and (max-width: ${breakPoint.lg}) {
-    width: 100%;
+    width: 95vw;
   }
   @media only screen and (max-width: ${breakPoint.md}) {
     min-height: 50%;
