@@ -136,33 +136,33 @@ export const startSort =
     toUseLabelURL,
     toUseSelectedEmails,
   }: IStartSort): AppThunk =>
-  (dispatch, getState) => {
-    const { emailList } = getState().email
-    if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
-      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
-        dispatch(
-          push(
-            `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
-          )
-        )
-      } else {
-        const firstThreadObject =
-          emailList[toUseActiveEmailListIndex]?.threads[0]
-        if (firstThreadObject) {
+    (dispatch, getState) => {
+      const { emailList } = getState().email
+      if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
+        if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
           dispatch(
-            push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+            push(
+              `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
+            )
           )
+        } else {
+          const firstThreadObject =
+            emailList[toUseActiveEmailListIndex]?.threads[0]
+          if (firstThreadObject) {
+            dispatch(
+              push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+            )
+          }
         }
+      } else {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to start sorting.',
+          })
+        )
       }
-    } else {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to start sorting.',
-        })
-      )
     }
-  }
 
 export const activateInboxSort =
   ({
@@ -172,36 +172,38 @@ export const activateInboxSort =
     alternateEmailListIndex?: number
     onActivateAdditionalFns?: () => void
   }): AppThunk =>
-  (dispatch, getState) => {
-    const staticLabelURL = labelURL([INBOX_LABEL])
-    if (!staticLabelURL) {
+    (dispatch, getState) => {
+      const staticLabelURL = labelURL([INBOX_LABEL])
+      if (!staticLabelURL) {
+        dispatch(
+          setSystemStatusUpdate({
+            type: 'error',
+            message: 'Unable to start sorting.',
+          })
+        )
+        return
+      }
+      const { activeEmailListIndex, selectedEmails } = getState().email
+      console.log({ activeEmailListIndex }, { alternateEmailListIndex })
+      const toUseSelectedEmails = selectedEmails.labelIds.includes(INBOX_LABEL) ? selectedEmails : undefined
+      if (onActivateAdditionalFns) {
+        onActivateAdditionalFns()
+      }
       dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to start sorting.',
+        startSort({
+          toUseLabelURL: staticLabelURL,
+          toUseActiveEmailListIndex:
+            alternateEmailListIndex !== undefined
+              ? alternateEmailListIndex
+              : activeEmailListIndex,
+          toUseSelectedEmails,
         })
       )
-      return
-    }
-    const { activeEmailListIndex, selectedEmails } = getState().email
-    if (onActivateAdditionalFns) {
-      onActivateAdditionalFns()
-    }
-    dispatch(
-      startSort({
-        toUseLabelURL: staticLabelURL,
-        toUseActiveEmailListIndex:
-          alternateEmailListIndex !== undefined
-            ? alternateEmailListIndex
-            : activeEmailListIndex,
-        toUseSelectedEmails: selectedEmails,
-      })
-    )
 
-    dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
-    dispatch(setSessionViewIndex(0))
-    dispatch(setViewIndex(0))
-  }
+      dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
+      dispatch(setSessionViewIndex(0))
+      dispatch(setViewIndex(0))
+    }
 
 export const activateTodo = (): AppThunk => (dispatch, getState) => {
   const { labelIds } = getState().labels
