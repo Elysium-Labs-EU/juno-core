@@ -7,4 +7,5 @@ export interface IInlineThreadActions {
 
 export interface IInlineThreadActionsRegular extends IInlineThreadActions {
   email: TThreadObject
+  emailIndex: number
 }

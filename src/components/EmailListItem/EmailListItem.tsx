@@ -162,6 +162,7 @@ const EmailListItem = ({
             <InlineThreadActionsRegular
               threadId={id}
               email={email}
+              emailIndex={index}
               isFocused={isFocused}
             />
           ) : (
