@@ -1,13 +1,14 @@
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
 import Baseloader from 'components/BaseLoader/BaseLoader'
-import * as global from 'constants/globalConstants'
+import CustomToast from 'components/Elements/Toast/Toast'
+import { SOMETHING_WRONG } from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import userApi from 'data/userApi'
 import { setIsAuthenticated } from 'store/baseSlice'
 import { useAppDispatch } from 'store/hooks'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import handleUserTokens from 'utils/handleUserTokens'
 import parseQueryString from 'utils/parseQueryString'
 
@@ -51,25 +52,24 @@ const GoogleCallBack = () => {
         } else {
           const message =
             typeof response === 'object' && 'error' in response
-              ? response?.error ?? global.SOMETHING_WRONG
+              ? response?.error ?? SOMETHING_WRONG
               : response
-          dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message,
-            })
-          )
+
+          toast.custom((t) => (
+            <CustomToast specificToast={t} title={message} variant="error" />
+          ))
           dispatch(push(RoutesConstants.LOGIN))
         }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: global.SOMETHING_WRONG,
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={SOMETHING_WRONG}
+            variant="error"
+          />
+        ))
       }
     }
     getTokens()

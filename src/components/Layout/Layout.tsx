@@ -1,16 +1,13 @@
+import AppWrapper from 'components/AppWrapper/AppWrapper'
 import CommandPalette from 'components/CommandPalette/CommandPalette'
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
-import Seo from 'components/Elements/Seo'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import HelpMenu from 'components/Help/HelpMenu'
 import { HelpMenuContainer } from 'components/Help/HelpMenuStyles'
 import KeyboardCombos from 'components/Help/KeyboardCombos/KeyboardCombos'
 import Introduction from 'components/Introduction/Introduction'
 import Header from 'components/MainHeader/Header'
-import NoMobileOverlay from 'components/NoMobileOverlay/noMobileOverlay'
-import SendingBanner from 'components/SendingBanner/SendingBanner'
 import Settings from 'components/Settings/Settings'
-import SnackbarOrchestrator from 'components/SnackbarOrchestrator/SnackbarOrchestrator'
 import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectActiveModal } from 'store/utilsSlice'
@@ -37,37 +34,36 @@ const Layout = ({
 }: ILayout) => {
   const activeModal = useAppSelector(selectActiveModal)
   return (
-    <Base>
-      {global.ACTIVE_MODAL_MAP.intro === activeModal ? <Introduction /> : null}
-      {global.ACTIVE_MODAL_MAP.keyboard === activeModal ? (
-        <KeyboardCombos />
-      ) : null}
-      {global.ACTIVE_MODAL_MAP.settings === activeModal ? <Settings /> : null}
+    <AppWrapper headerTitle={headerTitle}>
+      <Base>
+        {global.ACTIVE_MODAL_MAP.intro === activeModal ? (
+          <Introduction />
+        ) : null}
+        {global.ACTIVE_MODAL_MAP.keyboard === activeModal ? (
+          <KeyboardCombos />
+        ) : null}
+        {global.ACTIVE_MODAL_MAP.settings === activeModal ? <Settings /> : null}
 
-      <Header
-        activePage={activePage}
-        additionalHeader={additionalHeader}
-        headerTitle={headerTitle}
-        showNavigation={showNavigation}
-        showBackButton={showBackButton}
-      />
-      <CommandPalette />
+        <Header
+          activePage={activePage}
+          additionalHeader={additionalHeader}
+          headerTitle={headerTitle}
+          showNavigation={showNavigation}
+          showBackButton={showBackButton}
+        />
+        <CommandPalette />
 
-      <NoMobileOverlay />
-      <SendingBanner />
-      <Seo title={headerTitle} />
-      <SnackbarOrchestrator />
+        <AnimatedMountUnmount>{children}</AnimatedMountUnmount>
 
-      <AnimatedMountUnmount>{children}</AnimatedMountUnmount>
-
-      <HelpMenuContainer>
-        <StyledTooltip title={BUTTON_TITLE}>
-          <div>
-            <HelpMenu />
-          </div>
-        </StyledTooltip>
-      </HelpMenuContainer>
-    </Base>
+        <HelpMenuContainer>
+          <StyledTooltip title={BUTTON_TITLE}>
+            <div>
+              <HelpMenu />
+            </div>
+          </StyledTooltip>
+        </HelpMenuContainer>
+      </Base>
+    </AppWrapper>
   )
 }
 

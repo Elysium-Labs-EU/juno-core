@@ -1,13 +1,11 @@
+import toast from 'react-hot-toast'
+
 import StyledSelect from 'components/Elements/Select/StyledSelect'
+import CustomToast from 'components/Elements/Toast/Toast'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
 import type { TUserSettings } from 'store/storeTypes/gmailBaseTypes/otherTypes'
-import type { ISystemStatusUpdate } from 'store/storeTypes/utilsTypes'
-import {
-  selectEmailListSize,
-  setEmailFetchSize,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { selectEmailListSize, setEmailFetchSize } from 'store/utilsSlice'
 
 export const selectOptions = {
   id: 'emailSize',
@@ -21,11 +19,6 @@ const valueToNumber: Record<string, TUserSettings['emailFetchSize']> = {
   '30': 30,
 }
 
-const errorMessage: ISystemStatusUpdate = {
-  type: 'error',
-  message: 'Could not update the email size.',
-}
-
 const EmailSize = () => {
   const fetchCount = useAppSelector(selectEmailListSize)
   const dispatch = useAppDispatch()
@@ -35,7 +28,13 @@ const EmailSize = () => {
   ) => {
     const selectedValueToNumber = valueToNumber[selectedValue]
     if (!selectedValueToNumber) {
-      dispatch(setSystemStatusUpdate(errorMessage))
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Could not update the email size."
+          variant="error"
+        />
+      ))
       return
     }
     dispatch(

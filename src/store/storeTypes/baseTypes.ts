@@ -15,6 +15,9 @@ const Profile = z.object({
 export type TProfile = z.infer<typeof Profile>
 
 const BaseState = z.object({
+  baseError: z
+    .object({ message: z.string(), cause: z.string().optional() })
+    .nullable(),
   baseLoaded: z.boolean(),
   profile: Profile,
   isAuthenticated: z.boolean(),

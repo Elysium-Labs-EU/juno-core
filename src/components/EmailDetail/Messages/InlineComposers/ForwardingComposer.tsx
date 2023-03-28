@@ -1,8 +1,9 @@
+import toast from 'react-hot-toast'
+
 import Composer from 'components/Compose/Composer'
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
-import { useAppDispatch } from 'store/hooks'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
 import isBodyWithEmailHTML from './getEmailHTML'
@@ -32,19 +33,19 @@ const ForwardingComposer = ({
   messageOverviewListener,
   isForwarding,
 }: IForwardingComposer) => {
-  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
 
   if (!relevantMessage) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Cannot open composer with relevant message',
-      })
-    )
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Cannot open composer with relevant message"
+        variant="error"
+      />
+    ))
     return (
       <ES.ComposeWrapper data-cy="forward-composer">
         <Composer messageOverviewListener={messageOverviewListener} />

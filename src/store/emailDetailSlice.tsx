@@ -1,7 +1,9 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import {
   CORE_STATUS_MAP,
   INBOX_LABEL,
@@ -15,7 +17,6 @@ import labelURL from 'utils/createLabelURL'
 import { findLabelByName } from 'utils/findLabel'
 
 import type { TEmailListState } from './storeTypes/emailListTypes'
-import { setSystemStatusUpdate } from './utilsSlice'
 
 /* eslint-disable no-param-reassign */
 
@@ -136,33 +137,34 @@ export const startSort =
     toUseLabelURL,
     toUseSelectedEmails,
   }: IStartSort): AppThunk =>
-    (dispatch, getState) => {
-      const { emailList } = getState().email
-      if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
-        if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
-          dispatch(
-            push(
-              `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
-            )
-          )
-        } else {
-          const firstThreadObject =
-            emailList[toUseActiveEmailListIndex]?.threads[0]
-          if (firstThreadObject) {
-            dispatch(
-              push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
-            )
-          }
-        }
-      } else {
+  (dispatch, getState) => {
+    const { emailList } = getState().email
+    if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
+      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
         dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to start sorting.',
-          })
+          push(
+            `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
+          )
         )
+      } else {
+        const firstThreadObject =
+          emailList[toUseActiveEmailListIndex]?.threads[0]
+        if (firstThreadObject) {
+          dispatch(
+            push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+          )
+        }
       }
+    } else {
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to start sorting."
+          variant="error"
+        />
+      ))
     }
+  }
 
 export const activateInboxSort =
   ({
@@ -172,49 +174,52 @@ export const activateInboxSort =
     alternateEmailListIndex?: number
     onActivateAdditionalFns?: () => void
   }): AppThunk =>
-    (dispatch, getState) => {
-      const staticLabelURL = labelURL([INBOX_LABEL])
-      if (!staticLabelURL) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to start sorting.',
-          })
-        )
-        return
-      }
-      const { activeEmailListIndex, selectedEmails } = getState().email
-      console.log({ activeEmailListIndex }, { alternateEmailListIndex })
-      const toUseSelectedEmails = selectedEmails.labelIds.includes(INBOX_LABEL) ? selectedEmails : undefined
-      if (onActivateAdditionalFns) {
-        onActivateAdditionalFns()
-      }
-      dispatch(
-        startSort({
-          toUseLabelURL: staticLabelURL,
-          toUseActiveEmailListIndex:
-            alternateEmailListIndex !== undefined
-              ? alternateEmailListIndex
-              : activeEmailListIndex,
-          toUseSelectedEmails,
-        })
-      )
-
-      dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
-      dispatch(setSessionViewIndex(0))
-      dispatch(setViewIndex(0))
+  (dispatch, getState) => {
+    const staticLabelURL = labelURL([INBOX_LABEL])
+    if (!staticLabelURL) {
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to start sorting."
+          variant="error"
+        />
+      ))
+      return
     }
+    const { activeEmailListIndex, selectedEmails } = getState().email
+    const toUseSelectedEmails = selectedEmails.labelIds.includes(INBOX_LABEL)
+      ? selectedEmails
+      : undefined
+    if (onActivateAdditionalFns) {
+      onActivateAdditionalFns()
+    }
+    dispatch(
+      startSort({
+        toUseLabelURL: staticLabelURL,
+        toUseActiveEmailListIndex:
+          alternateEmailListIndex !== undefined
+            ? alternateEmailListIndex
+            : activeEmailListIndex,
+        toUseSelectedEmails,
+      })
+    )
+
+    dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
+    dispatch(setSessionViewIndex(0))
+    dispatch(setViewIndex(0))
+  }
 
 export const activateTodo = (): AppThunk => (dispatch, getState) => {
   const { labelIds } = getState().labels
   const staticLabelURL = labelURL(labelIds)
   if (!staticLabelURL) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Unable to start focus mode.',
-      })
-    )
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Unable to start focus mode."
+        variant="error"
+      />
+    ))
     return
   }
 

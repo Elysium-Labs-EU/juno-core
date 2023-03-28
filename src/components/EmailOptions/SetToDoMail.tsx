@@ -1,23 +1,25 @@
+import toast from 'react-hot-toast'
+
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import { updateEmailLabel } from 'store/emailListSlice'
 import type { AppDispatch } from 'store/store'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { findLabelByName } from 'utils/findLabel'
 import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 interface ISetToDoMail {
-  threadId: string
-  labelIds: TLabelState['labelIds']
   dispatch: AppDispatch
+  labelIds: TLabelState['labelIds']
   storageLabels: TLabelState['storageLabels']
+  threadId: string
 }
 
 const setToDoMail = ({
-  threadId,
-  labelIds,
   dispatch,
+  labelIds,
   storageLabels,
+  threadId,
 }: ISetToDoMail) => {
   const toDoLabel = findLabelByName({
     storageLabels,
@@ -34,12 +36,13 @@ const setToDoMail = ({
     }
     dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
   } else {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: "Cannot find 'To Do' label",
-      })
-    )
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Cannot find 'To Do' label"
+        variant="error"
+      />
+    ))
   }
 }
 

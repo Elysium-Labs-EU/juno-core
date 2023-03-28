@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { ChangeEvent, KeyboardEvent } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
@@ -8,7 +9,12 @@ import CustomDialog from 'components/Elements/Dialog/CustomDialog'
 import Input from 'components/Elements/Input/Input'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import Stack from 'components/Elements/Stack/Stack'
-import * as global from 'constants/globalConstants'
+import CustomToast from 'components/Elements/Toast/Toast'
+import {
+  ERROR_MESSAGE,
+  LOAD_STATE_MAP,
+  SEARCH_LABEL,
+} from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import threadApi from 'data/threadApi'
 import { QiArrowLeft, QiEscape, QiSearch } from 'images/svgIcons/quillIcons'
@@ -20,11 +26,7 @@ import {
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
 import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
-import {
-  selectInSearch,
-  setInSearch,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { selectInSearch, setInSearch } from 'store/utilsSlice'
 import handleChangeFocus from 'utils/handleChangeFocus'
 import parseQueryString from 'utils/parseQueryString'
 import sortThreads from 'utils/sortThreads'
@@ -52,9 +54,9 @@ const openDetail = ({
 }
 
 function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
-  const items = document.querySelectorAll(`.${COMMAND_PALLETE_ITEM}`) as NodeListOf<
-    HTMLButtonElement | HTMLAnchorElement
-  >
+  const items = document.querySelectorAll(
+    `.${COMMAND_PALLETE_ITEM}`
+  ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
 
   if (items[focusedItemIndex]) {
     items[focusedItemIndex]?.click()
@@ -65,7 +67,7 @@ const handleClose = (dispatch: AppDispatch) => dispatch(setInSearch(false))
 
 const CommandPallette = () => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(0)
-  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [loadState, setLoadState] = useState(LOAD_STATE_MAP.idle)
   const [searchResults, setSearchResults] = useState<TEmailListObject>()
   const [searchValue, setSearchValue] = useState('')
   const searchInputRef = useRef<HTMLInputElement | null>(null)
@@ -96,7 +98,7 @@ const CommandPallette = () => {
     searchValueRef.current = ''
     setSearchValue('')
     setSearchResults(undefined)
-    setLoadState(global.LOAD_STATE_MAP.idle)
+    setLoadState(LOAD_STATE_MAP.idle)
     if (searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
@@ -147,10 +149,10 @@ const CommandPallette = () => {
               q: searchBody.q,
               threads: sortThreads(threads),
               nextPageToken: nextPageToken ?? null,
-              labels: [global.SEARCH_LABEL],
+              labels: [SEARCH_LABEL],
             }
             setSearchResults(newStateObject)
-            setLoadState(global.LOAD_STATE_MAP.loaded)
+            setLoadState(LOAD_STATE_MAP.loaded)
             return
           }
           // If there is already a search result use this
@@ -159,22 +161,23 @@ const CommandPallette = () => {
               q: searchBody.q,
               threads: sortThreads(searchResults.threads.concat(threads)),
               nextPageToken: nextPageToken ?? null,
-              labels: [global.SEARCH_LABEL],
+              labels: [SEARCH_LABEL],
             }
             setSearchResults(newStateObject)
-            setLoadState(global.LOAD_STATE_MAP.loaded)
+            setLoadState(LOAD_STATE_MAP.loaded)
           }
         } else {
-          setLoadState(global.LOAD_STATE_MAP.error)
+          setLoadState(LOAD_STATE_MAP.error)
         }
       } catch (err) {
-        setLoadState(global.LOAD_STATE_MAP.error)
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: global.ERROR_MESSAGE,
-          })
-        )
+        setLoadState(LOAD_STATE_MAP.error)
+        toast.custom((t) => (
+          <CustomToast
+            variant="error"
+            specificToast={t}
+            title={ERROR_MESSAGE}
+          />
+        ))
       }
     },
     [loadState, searchValueRef, searchValue, searchResults]
@@ -184,7 +187,7 @@ const CommandPallette = () => {
     const searchBody = {
       q: searchValue,
     }
-    setLoadState(global.LOAD_STATE_MAP.loading)
+    setLoadState(LOAD_STATE_MAP.loading)
     shouldClearOutPreviousResults()
     fetchSearchThreads(searchBody)
   }, [dispatch, searchValue, searchValueRef])
@@ -194,7 +197,7 @@ const CommandPallette = () => {
       q: searchValue,
       nextPageToken: searchResults?.nextPageToken,
     }
-    setLoadState(global.LOAD_STATE_MAP.loading)
+    setLoadState(LOAD_STATE_MAP.loading)
     fetchSearchThreads(searchBody)
   }, [searchValue, searchResults])
 
@@ -299,7 +302,7 @@ const CommandPallette = () => {
           />
         ) : (
           <Stack direction="vertical">
-            {loadState === global.LOAD_STATE_MAP.loading ? (
+            {loadState === LOAD_STATE_MAP.loading ? (
               <LoadingState />
             ) : (
               <CommandPalleteSuggestions

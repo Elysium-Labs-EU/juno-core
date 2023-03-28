@@ -3,9 +3,10 @@ import type { ReactNode } from 'react'
 import { useAppDispatch } from 'store/hooks'
 import { setInSearch } from 'store/utilsSlice'
 import { Span } from 'styles/globalStyles'
-import { COMMAND_PALLETE_ITEM } from '../CommandPalette'
 
 import * as S from './ListItemStyles'
+import { COMMAND_PALLETE_ITEM } from '../CommandPalette'
+
 
 export type TListItemType = 'Link' | 'Command'
 

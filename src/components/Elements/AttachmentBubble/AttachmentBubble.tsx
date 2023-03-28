@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { forwardRef, useCallback, useMemo, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
@@ -15,11 +16,7 @@ import {
   QiEye,
 } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import {
-  selectActiveModal,
-  setActiveModal,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
 import { Span } from 'styles/globalStyles'
 import { downloadAttachmentSingle } from 'utils/downloadAttachment'
 import formatBytes from 'utils/prettierBytes'
@@ -28,6 +25,7 @@ import viewAttachment from 'utils/viewAttachment'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
 import AttachmentModal from '../AttachmentModal/AttachmentModal'
+import CustomToast from '../Toast/Toast'
 
 const ICON_SIZE = 20
 
@@ -51,7 +49,6 @@ const DownloadButton = ({
   messageId?: string
 }) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-  const dispatch = useAppDispatch()
 
   const handleClick = useCallback(async () => {
     setLoadState(global.LOAD_STATE_MAP.loading)
@@ -65,12 +62,13 @@ const DownloadButton = ({
         return
       }
       setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: response.message ?? global.NETWORK_ERROR,
-        })
-      )
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={response.message ?? global.NETWORK_ERROR}
+          variant="error"
+        />
+      ))
     }
   }, [attachmentData, messageId])
 
@@ -152,12 +150,13 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
           return
         }
         setLoadState(global.LOAD_STATE_MAP.error)
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: response.message ?? global.NETWORK_ERROR,
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={response.message ?? global.NETWORK_ERROR}
+            variant="error"
+          />
+        ))
       } else {
         // If the data is already fetched, just open the modal
         dispatch(

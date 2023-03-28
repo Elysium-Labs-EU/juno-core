@@ -215,12 +215,13 @@ const Composer = ({
 
   const handleSubmit = useCallback(
     (e?: MouseEvent<HTMLButtonElement>) => {
+      if (!composedEmail) {
+        return
+      }
       if (e) {
         e.preventDefault()
       }
-      if (composedEmail) {
-        dispatch(sendComposedEmail({ composedEmail, localDraftDetails }))
-      }
+      dispatch(sendComposedEmail({ composedEmail, localDraftDetails }))
     },
     [composedEmail, localDraftDetails]
   )

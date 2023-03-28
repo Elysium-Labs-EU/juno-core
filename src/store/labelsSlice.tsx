@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import { getLabelByRoute } from 'constants/labelMapConstant'
 import labelApi from 'data/labelApi'
 import { fetchEmailsSimple } from 'store/emailListSlice'
@@ -10,7 +12,6 @@ import type {
   TLabelState,
   TUpdateSettingsLabelKeys,
 } from 'store/storeTypes/labelsTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import isEmpty from 'utils/isEmpty'
 
 /* eslint-disable no-param-reassign */
@@ -88,24 +89,26 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
 
 export const removeLabel =
   (labelId: string): AppThunk =>
-  async (dispatch) => {
+  async () => {
     try {
       const response = await labelApi().deleteLabel(labelId)
       if ('status' in response && response.status !== 204) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to remove the label.',
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Unable to store the settings."
+            variant="error"
+          />
+        ))
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to remove the label.',
-        })
-      )
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to store the settings."
+          variant="error"
+        />
+      ))
     }
     return null
   }
@@ -122,20 +125,22 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
     if (labelObject && labelObject.id) {
       dispatch(setCurrentLabels([labelObject.id]))
     } else {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to set current label - label is not found.',
-        })
-      )
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to set current label - label is not found."
+          variant="error"
+        />
+      ))
     }
   } else {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Error getting the current location',
-      })
-    )
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Error getting the current location."
+        variant="error"
+      />
+    ))
   }
 }
 
@@ -187,20 +192,22 @@ export const updateSettingsLabel =
         },
       })
       if ('data' in response && response.data?.type !== 'user') {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to store settings.',
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Unable to store settings."
+            variant="error"
+          />
+        ))
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to store settings.',
-        })
-      )
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to store settings."
+          variant="error"
+        />
+      ))
     }
   }
 

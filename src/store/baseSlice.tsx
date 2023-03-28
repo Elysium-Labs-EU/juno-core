@@ -1,17 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import { JUNO_SETTINGS_LOCAL } from 'constants/globalConstants'
 import userApi from 'data/userApi'
 import { setBaseEmailList } from 'store/emailListSlice'
 import { setStorageLabels } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
 import type { TBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
-import {
-  setSettings,
-  setSettingsLabel,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { setSettings, setSettingsLabel } from 'store/utilsSlice'
 
 import type { TBaseEmailList } from './storeTypes/emailListTypes'
 import type { TGmailV1SchemaLabelSchema } from './storeTypes/gmailBaseTypes/gmailTypes'
@@ -20,6 +18,7 @@ import type { TUserSettings } from './storeTypes/gmailBaseTypes/otherTypes'
 /* eslint-disable no-param-reassign */
 
 const initialState: TBaseState = Object.freeze({
+  baseError: null,
   baseLoaded: false,
   profile: {
     signature: '',
@@ -37,6 +36,12 @@ const baseSlice = createSlice({
   name: 'base',
   initialState,
   reducers: {
+    setBaseError: (
+      state,
+      { payload }: PayloadAction<TBaseState['baseError']>
+    ) => {
+      state.baseError = payload
+    },
     setBaseLoaded: (
       state,
       { payload }: PayloadAction<TBaseState['baseLoaded']>
@@ -57,7 +62,7 @@ const baseSlice = createSlice({
   },
 })
 
-export const { setBaseLoaded, setIsAuthenticated, setProfile } =
+export const { setBaseError, setBaseLoaded, setIsAuthenticated, setProfile } =
   baseSlice.actions
 
 export const handleSettings =
@@ -91,12 +96,13 @@ const presetEmailList =
         }
         emailListBuffer.push(presetEmailBox)
       } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'We cannot setup all the email boxes.',
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="We cannot setup all the email boxes."
+            variant="error"
+          />
+        ))
       }
     })
 
@@ -121,14 +127,22 @@ export const getBase = (): AppThunk => async (dispatch) => {
     // eslint-disable-next-line no-console
     console.error(err)
     dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
+      setBaseError({
         message: 'An error occured during loading the base.',
+        cause: JSON.stringify(err),
       })
     )
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="An error occured during loading the base."
+        variant="error"
+      />
+    ))
   }
 }
 
+export const selectBaseError = (state: RootState) => state.base.baseError
 export const selectBaseLoaded = (state: RootState) => state.base.baseLoaded
 export const selectIsAuthenticated = (state: RootState) =>
   state.base.isAuthenticated

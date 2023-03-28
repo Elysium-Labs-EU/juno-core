@@ -4,6 +4,13 @@ import { useLocation, useParams } from 'react-router-dom'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
 import Layout from 'components/Layout/Layout'
+import {
+  CORE_STATUS_MAP,
+  DRAFT_LABEL,
+  INBOX_LABEL,
+  SEARCH_LABEL,
+  TODO_LABEL_NAME,
+} from 'constants/globalConstants'
 import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import { QiSearch } from 'images/svgIcons/quillIcons'
@@ -39,7 +46,6 @@ import RenderEmailDetail from './Messages/RenderEmailDetail'
 import getEmailHeader from './Utils/getEmailHeader'
 import useEdgeLoadNextPage from './Utils/useEdgeLoadNextPage'
 import Baseloader from '../BaseLoader/BaseLoader'
-import { CORE_STATUS_MAP, DRAFT_LABEL, INBOX_LABEL, SEARCH_LABEL, TODO_LABEL_NAME } from 'constants/globalConstants'
 
 const SearchButtonInHeader = () => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -128,16 +134,13 @@ const EmailDetail = () => {
       if (targetEmailList) {
         const selectedIds = selectedEmails?.selectedIds ?? []
         const hasTodoLabel = selectedEmails?.labelIds.includes(
-          findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })
-            ?.id ?? ''
+          findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })?.id ??
+            ''
         )
-        const hasInboxLabel = selectedEmails?.labelIds.includes(
-          INBOX_LABEL
-        )
+        const hasInboxLabel = selectedEmails?.labelIds.includes(INBOX_LABEL)
         const isFocusedOrSorting =
           coreStatus === CORE_STATUS_MAP.focused ||
-          (isFlexibleFlowActive &&
-            coreStatus === CORE_STATUS_MAP.sorting)
+          (isFlexibleFlowActive && coreStatus === CORE_STATUS_MAP.sorting)
         if (
           isFocusedOrSorting &&
           selectedIds.length > 0 &&

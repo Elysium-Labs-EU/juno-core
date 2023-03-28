@@ -1,33 +1,32 @@
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import AppWrapper from 'components/AppWrapper/AppWrapper'
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
+import CustomToast from 'components/Elements/Toast/Toast'
 import {
-  LOAD_STATE_MAP,
-  BETA_VERSION,
   ACTIVE_MODAL_MAP,
   AUTH_SCREEN_ACCEPTED,
+  BETA_VERSION,
+  LOAD_STATE_MAP,
 } from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import userApi from 'data/userApi'
 import { QiArrowRight } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import {
-  selectActiveModal,
-  setActiveModal,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { selectActiveModal, setActiveModal } from 'store/utilsSlice'
 import { Paragraph, Span } from 'styles/globalStyles'
 
 import BetaAccesForm from './BetaAccessForm/BetaAccessForm'
 import GoogleButton from './GoogleButton/GoogleButton'
 import {
-  ERROR_LOGIN,
-  PRODUCT_NAME,
   COMPANY_TAG,
   ENTER_HINT,
+  ERROR_LOGIN,
+  PRODUCT_NAME,
 } from './LoginConstants'
 import * as S from './LoginStyles'
 
@@ -69,21 +68,15 @@ const Login = () => {
         }
       } else {
         setLoadState(LOAD_STATE_MAP.error)
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: ERROR_LOGIN,
-          })
-        )
+        toast.custom((t) => (
+          <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+        ))
       }
     } catch (err) {
       setLoadState(LOAD_STATE_MAP.error)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: ERROR_LOGIN,
-        })
-      )
+      toast.custom((t) => (
+        <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+      ))
     }
   }
 
@@ -100,75 +93,77 @@ const Login = () => {
   }, [isError])
 
   return (
-    <S.Wrapper>
-      <AnimatedMountUnmount>
-        <S.LoginWrapper>
-          <S.Header>
-            <S.LoginHeader>{PRODUCT_NAME}</S.LoginHeader>
-            <Stack direction="vertical">
-              <S.StyledLink
-                href="https://elysiumlabs.io"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {COMPANY_TAG}
-              </S.StyledLink>
-              <Span muted>{BETA_VERSION}</Span>
-            </Stack>
-          </S.Header>
-          <S.LoginContainer>
-            <S.Inner>
-              <div style={{ marginBottom: 'var(--spacing-4)' }} />
-              <GoogleButton
-                onClick={fetchUrl}
-                disabled={isDisabled}
-                showLoadingState={isLoading}
-              />
-              {isError ? (
-                <Paragraph
-                  muted
-                  small
-                  style={{ color: 'var(--color-red-500)' }}
+    <AppWrapper headerTitle="Login">
+      <S.Wrapper>
+        <AnimatedMountUnmount>
+          <S.LoginWrapper>
+            <S.Header>
+              <S.LoginHeader>{PRODUCT_NAME}</S.LoginHeader>
+              <Stack direction="vertical">
+                <S.StyledLink
+                  href="https://elysiumlabs.io"
+                  target="_blank"
+                  rel="noreferrer"
                 >
-                  {ERROR_LOGIN}
-                </Paragraph>
-              ) : (
-                <Paragraph muted small>
-                  {ENTER_HINT}
-                </Paragraph>
-              )}
-            </S.Inner>
-          </S.LoginContainer>
-          <S.AdditionalOptions>
-            {DISCORD_URL ? (
-              <CustomButton
-                onClick={() => window.open(DISCORD_URL, '_blank')}
-                icon={<QiArrowRight />}
-                title="Open Discord invitation and be welcome!"
-                label="Join Discord Community"
-                suppressed
-              />
-            ) : null}
-            {FORMSPARK_ID ? (
-              <>
+                  {COMPANY_TAG}
+                </S.StyledLink>
+                <Span muted>{BETA_VERSION}</Span>
+              </Stack>
+            </S.Header>
+            <S.LoginContainer>
+              <S.Inner>
+                <div style={{ marginBottom: 'var(--spacing-4)' }} />
+                <GoogleButton
+                  onClick={fetchUrl}
+                  disabled={isDisabled}
+                  showLoadingState={isLoading}
+                />
+                {isError ? (
+                  <Paragraph
+                    muted
+                    small
+                    style={{ color: 'var(--color-red-500)' }}
+                  >
+                    {ERROR_LOGIN}
+                  </Paragraph>
+                ) : (
+                  <Paragraph muted small>
+                    {ENTER_HINT}
+                  </Paragraph>
+                )}
+              </S.Inner>
+            </S.LoginContainer>
+            <S.AdditionalOptions>
+              {DISCORD_URL ? (
                 <CustomButton
-                  onClick={() =>
-                    dispatch(setActiveModal(ACTIVE_MODAL_MAP.betaAccess))
-                  }
+                  onClick={() => window.open(DISCORD_URL, '_blank')}
                   icon={<QiArrowRight />}
-                  title="Show beta form to request access"
-                  label="Request beta access"
+                  title="Open Discord invitation and be welcome!"
+                  label="Join Discord Community"
                   suppressed
                 />
-                {activeModal === ACTIVE_MODAL_MAP.betaAccess && (
-                  <BetaAccesForm />
-                )}
-              </>
-            ) : null}
-          </S.AdditionalOptions>
-        </S.LoginWrapper>
-      </AnimatedMountUnmount>
-    </S.Wrapper>
+              ) : null}
+              {FORMSPARK_ID ? (
+                <>
+                  <CustomButton
+                    onClick={() =>
+                      dispatch(setActiveModal(ACTIVE_MODAL_MAP.betaAccess))
+                    }
+                    icon={<QiArrowRight />}
+                    title="Show beta form to request access"
+                    label="Request beta access"
+                    suppressed
+                  />
+                  {activeModal === ACTIVE_MODAL_MAP.betaAccess && (
+                    <BetaAccesForm />
+                  )}
+                </>
+              ) : null}
+            </S.AdditionalOptions>
+          </S.LoginWrapper>
+        </AnimatedMountUnmount>
+      </S.Wrapper>
+    </AppWrapper>
   )
 }
 

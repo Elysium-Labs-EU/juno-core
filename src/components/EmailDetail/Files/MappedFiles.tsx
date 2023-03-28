@@ -8,8 +8,8 @@ import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
 import { Span } from 'styles/globalStyles'
 
-import DownloadButtonMultiple from './DownloadFileMultiple'
-import { NO_IDENTICAL_FILES } from './FilesOverviewConstants'
+// import DownloadButtonMultiple from './DownloadFileMultiple'
+// import { NO_IDENTICAL_FILES } from './FilesOverviewConstants'
 import * as S from './FilesOverviewStyles'
 import EmailAttachmentBubble from '../Attachment/EmailAttachmentBubble'
 import type { IFilesOverview } from '../EmailDetailTypes'
@@ -21,7 +21,7 @@ const MappedFiles = ({
 
   return threadDetail?.messages ? (
     <Stack direction="vertical" spacing="huge">
-      <Stack align="center" justify="space-between">
+      {/* <Stack align="center" justify="space-between">
         <Span muted small>
           {NO_IDENTICAL_FILES}
         </Span>
@@ -32,7 +32,7 @@ const MappedFiles = ({
           }))}
           isMainButton
         />
-      </Stack>
+      </Stack> */}
       {threadDetail.messages
         .slice(0)
         .reverse()
@@ -61,13 +61,13 @@ const MappedFiles = ({
                     <Span>{staticSenderNameFull}</Span>
                   </Stack>
                   <Stack align="center">
-                    {message.payload.files.length > 1 && (
+                    {/* {message.payload.files.length > 1 && (
                       <DownloadButtonMultiple
                         filesObjectArray={[
                           { id: message.id, files: message.payload.files },
                         ]}
                       />
-                    )}
+                    )} */}
                     <TimeStampDisplay threadTimeStamp={message.internalDate} />
                   </Stack>
                 </S.NameOptionsRow>

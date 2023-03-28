@@ -30,7 +30,6 @@ const labelApi = () => ({
       const parsedResponse = gmailV1SchemaLabelSchema.parse(res.data)
       return { ...res, data: parsedResponse }
     } catch (err) {
-      console.error(err)
       return errorBlockTemplate(err)
     }
   },
