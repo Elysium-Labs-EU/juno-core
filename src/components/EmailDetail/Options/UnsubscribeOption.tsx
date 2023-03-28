@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import toast from 'react-hot-toast'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyboardShortcut from 'hooks/useKeyboardShortcut'
@@ -40,17 +41,21 @@ const handleUnsubscribe = ({
 
     setTimeout(() => {
       if (newWindow?.closed || !newWindow) {
-        toast.error((t) => (
-          <span>
-            {messageContent}
-            <CustomButton
-              onClick={() => {
-                handleOpenLink({ action: unsubscribeLink })
-                toast.dismiss(t.id)
-              }}
-              label="Open link"
-            />
-          </span>
+        toast.custom((t) => (
+          <CustomToast
+            button={
+              <CustomButton
+                onClick={() => {
+                  handleOpenLink({ action: unsubscribeLink })
+                }}
+                label="Open link"
+              />
+            }
+            specificToast={t}
+            title="Content blocker active"
+            description={messageContent}
+            variant="error"
+          />
         ))
       }
     }, 1000)

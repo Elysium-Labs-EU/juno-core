@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
+import CustomToast from 'components/Elements/Toast/Toast'
 import contactApi from 'data/contactApi'
 import useDebounce from 'hooks/useDebounce'
 import {
@@ -47,7 +48,13 @@ const fetchContacts = async ({
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))
     }
   } catch (err) {
-    toast.error('Error fetching contacts.')
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Error fetching contacts."
+        variant="error"
+      />
+    ))
   } finally {
     setCompletedSearch(true)
   }

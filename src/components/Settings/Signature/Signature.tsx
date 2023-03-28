@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import settingsApi from 'data/settingsApi'
 import useDebounce from 'hooks/useDebounce'
@@ -72,17 +73,36 @@ const Signature = () => {
             request
           )
           if (!('data' in response)) {
-            toast.error('Cannot update signature.')
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Cannot update signature."
+                variant="error"
+              />
+            ))
+
             return
           }
           dispatch(
             setProfile({ ...profile, signature: response?.data?.signature })
           )
         } catch (err) {
-          toast.error('Cannot update signature.')
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Cannot update signature."
+              variant="error"
+            />
+          ))
         }
       } else {
-        toast.error('Cannot update signature.')
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Cannot update signature."
+            variant="error"
+          />
+        ))
       }
     }
     if (

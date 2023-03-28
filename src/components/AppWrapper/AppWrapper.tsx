@@ -9,9 +9,16 @@ interface IAppWrapper {
   headerTitle: string
 }
 
+const SHOW_TOAST_3_SECONDS = 3000
+
 const AppWrapper = ({ children, headerTitle }: IAppWrapper) => (
   <>
-    <Toaster position="bottom-left" />
+    <Toaster
+      position="bottom-left"
+      toastOptions={{
+        duration: SHOW_TOAST_3_SECONDS,
+      }}
+    />
     <NoMobileOverlay />
     <Seo title={headerTitle} />
     {children}

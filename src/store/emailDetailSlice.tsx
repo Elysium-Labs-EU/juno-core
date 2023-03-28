@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import {
   CORE_STATUS_MAP,
   INBOX_LABEL,
@@ -155,7 +156,13 @@ export const startSort =
         }
       }
     } else {
-      toast.error('Unable to start sorting.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to start sorting."
+          variant="error"
+        />
+      ))
     }
   }
 
@@ -170,7 +177,13 @@ export const activateInboxSort =
   (dispatch, getState) => {
     const staticLabelURL = labelURL([INBOX_LABEL])
     if (!staticLabelURL) {
-      toast.error('Unable to start sorting.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to start sorting."
+          variant="error"
+        />
+      ))
       return
     }
     const { activeEmailListIndex, selectedEmails } = getState().email
@@ -200,7 +213,13 @@ export const activateTodo = (): AppThunk => (dispatch, getState) => {
   const { labelIds } = getState().labels
   const staticLabelURL = labelURL(labelIds)
   if (!staticLabelURL) {
-    toast.error('Unable to start focus mode.')
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Unable to start focus mode."
+        variant="error"
+      />
+    ))
     return
   }
 

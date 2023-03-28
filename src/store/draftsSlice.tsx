@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
@@ -170,7 +171,13 @@ export const createUpdateDraft =
             })
 
       if (!response || ('status' in response && response.status !== 200)) {
-        toast.error('Cannot create or update draft.')
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Cannot update or create draft."
+            variant="error"
+          />
+        ))
       }
 
       if (typeof response === 'object' && 'data' in response) {
@@ -186,7 +193,13 @@ export const createUpdateDraft =
       }
       return null
     } catch (err) {
-      toast.error('Cannot create or update draft.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Cannot update or create draft."
+          variant="error"
+        />
+      ))
       return null
     }
   }
@@ -223,7 +236,13 @@ const pushDraftDetails =
         dispatch(push(RoutesConstants.COMPOSE_EMAIL))
       }
     } catch (err) {
-      toast.error(ERROR_OPEN_DRAFT_EMAIL)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={ERROR_OPEN_DRAFT_EMAIL}
+          variant="error"
+        />
+      ))
     }
   }
 
@@ -240,10 +259,22 @@ const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> => {
         DraftResponseEntry.parse(response.data)
         dispatch(pushDraftDetails({ draft: response.data }))
       } else {
-        toast.error(ERROR_OPEN_DRAFT_EMAIL)
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={ERROR_OPEN_DRAFT_EMAIL}
+            variant="error"
+          />
+        ))
       }
     } catch (err) {
-      toast.error(ERROR_OPEN_DRAFT_EMAIL)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={ERROR_OPEN_DRAFT_EMAIL}
+          variant="error"
+        />
+      ))
     }
   }
 }
@@ -265,12 +296,24 @@ export const openDraftEmail =
         if (!isEmpty(draftId)) {
           dispatch(loadDraftDetails({ draftId }))
         } else {
-          toast.error(ERROR_OPEN_DRAFT_EMAIL)
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title={ERROR_OPEN_DRAFT_EMAIL}
+              variant="error"
+            />
+          ))
         }
       }
       // }
     } catch (err) {
-      toast.error(ERROR_OPEN_DRAFT_EMAIL)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={ERROR_OPEN_DRAFT_EMAIL}
+          variant="error"
+        />
+      ))
     }
   }
 
@@ -299,7 +342,13 @@ export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
         draftApi().deleteDraft(draftObject.id)
       }
     } catch (err) {
-      toast.error('Error deleting draft.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Error deleting draft."
+          variant="error"
+        />
+      ))
     }
   }
 }
@@ -312,12 +361,24 @@ export const deleteDraft =
     try {
       await draftApi().deleteDraft(id)
     } catch (err) {
-      toast.error('Error deleting draft.')
+      toast.custom((t) => (
+        <CustomToast
+          variant="error"
+          specificToast={t}
+          title="Error deleting draft."
+        />
+      ))
     } finally {
       dispatch(setIsProcessing(false))
       // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
       if (coreStatus === global.CORE_STATUS_MAP.searching) {
-        toast.success('Draft has been deleted.')
+        toast.custom((t) => (
+          <CustomToast
+            variant="success"
+            specificToast={t}
+            title="Draft has been deleted."
+          />
+        ))
       }
     }
   }
@@ -391,9 +452,17 @@ export const sendComposedEmail =
               })
             )
           }
-          toast('Sent your email.')
+          toast.custom((t) => (
+            <CustomToast specificToast={t} title="Sent your email." />
+          ))
         }
-        toast.error('Error sending your mail.')
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Error sending your mail."
+            variant="error"
+          />
+        ))
       }
       // If the id cannot be found on the draft details, send the email via the sendMessage function
       if (!localDraftDetails?.id) {
@@ -410,15 +479,39 @@ export const sendComposedEmail =
           timeOut: global.MESSAGE_SEND_DELAY,
         })
         if (!('status' in response) || response?.status !== 200) {
-          toast.error('Error sending your mail.')
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Error sending your mail."
+              variant="error"
+            />
+          ))
         }
-        toast('Sent your email.')
+        toast.custom((t) => (
+          <CustomToast
+            variant="success"
+            specificToast={t}
+            title="Sent your email."
+          />
+        ))
       }
-      toast.error('Error sending your mail.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Error sending your mail."
+          variant="error"
+        />
+      ))
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err)
-      toast.error('Error sending your mail.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Error sending your mail."
+          variant="error"
+        />
+      ))
     }
   }
 

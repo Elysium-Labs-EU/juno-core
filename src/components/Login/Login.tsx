@@ -6,6 +6,7 @@ import AppWrapper from 'components/AppWrapper/AppWrapper'
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
+import CustomToast from 'components/Elements/Toast/Toast'
 import {
   ACTIVE_MODAL_MAP,
   AUTH_SCREEN_ACCEPTED,
@@ -67,11 +68,15 @@ const Login = () => {
         }
       } else {
         setLoadState(LOAD_STATE_MAP.error)
-        toast.error(ERROR_LOGIN)
+        toast.custom((t) => (
+          <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+        ))
       }
     } catch (err) {
       setLoadState(LOAD_STATE_MAP.error)
-      toast.error(ERROR_LOGIN)
+      toast.custom((t) => (
+        <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+      ))
     }
   }
 

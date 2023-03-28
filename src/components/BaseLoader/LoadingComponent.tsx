@@ -7,8 +7,8 @@ import { Span } from 'styles/globalStyles'
 import { LOGO_ALT } from './BaseLoaderConstants'
 import type { ILoadingComponent } from './BaseLoaderTypes'
 
-const LoadingComponent = ({ hasErrorToast }: ILoadingComponent) =>
-  !hasErrorToast ? (
+const LoadingComponent = ({ hasError }: ILoadingComponent) =>
+  !hasError ? (
     <>
       <AnimatedMountUnmount>
         <S.Container>

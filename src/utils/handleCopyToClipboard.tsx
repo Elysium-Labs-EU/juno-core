@@ -1,5 +1,6 @@
 import toast from 'react-hot-toast'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import copyToClipboard from 'utils/copyToClipboard/copyToClipboard'
 
 export default async function handleCopyToClipboard({
@@ -10,9 +11,21 @@ export default async function handleCopyToClipboard({
   if (action) {
     const result = await copyToClipboard(action)
     if (result) {
-      toast.success('Link successfully copied to clipboard.')
+      toast.custom((t) => (
+        <CustomToast
+          variant="success"
+          specificToast={t}
+          title="Link successfully copied to clipboard."
+        />
+      ))
     } else {
-      toast.error('Link copy to clipboard failed.')
+      toast.custom((t) => (
+        <CustomToast
+          variant="error"
+          specificToast={t}
+          title="Link copy to clipboard failed."
+        />
+      ))
     }
   }
 }

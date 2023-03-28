@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import FileUpload from 'components/Elements/FileUpload/FileUpload'
+import CustomToast from 'components/Elements/Toast/Toast'
 import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
@@ -92,7 +93,14 @@ const Attachments = ({
             ])
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           } else {
-            toast.error('Unable to restore attachments.')
+            toast.custom((t) => (
+              <CustomToast
+                variant="error"
+                specificToast={t}
+                title="Unable to restore attachments."
+              />
+            ))
+
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           }
         }
@@ -115,9 +123,15 @@ const Attachments = ({
   const onDropHandeler = useCallback(
     (data: File[]) => {
       if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
-        toast.error(
-          `File size can not exceed ${formatBytes(MAX_MB_UPLOAD_DIRECT)}`
-        )
+        toast.custom((t) => (
+          <CustomToast
+            variant="error"
+            specificToast={t}
+            title={`File size can not exceed ${formatBytes(
+              MAX_MB_UPLOAD_DIRECT
+            )}`}
+          />
+        ))
         return
       }
       // if (data.every((item) => item.type.includes('image'))) {

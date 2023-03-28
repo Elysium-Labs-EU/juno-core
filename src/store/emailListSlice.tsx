@@ -5,6 +5,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import historyApi from 'data/historyApi'
 import messageApi from 'data/messageApi'
@@ -520,9 +521,13 @@ export const loadEmailDetails =
                     })
                   )
                 } else {
-                  toast.error(
-                    'Cannot add emails to the list - we cannot find the labels.'
-                  )
+                  toast.custom((t) => (
+                    <CustomToast
+                      specificToast={t}
+                      title="Error updating label."
+                      variant="error"
+                    />
+                  ))
                 }
               }
             }
@@ -625,7 +630,13 @@ export const updateEmailLabel =
               })
             }
           } catch (err) {
-            toast.error('Error updating label.')
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Error updating label."
+                variant="error"
+              />
+            ))
           }
         }
         // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
@@ -637,7 +648,13 @@ export const updateEmailLabel =
               })
             }
           } catch (err) {
-            toast.error('Error updating label.')
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Error updating label."
+                variant="error"
+              />
+            ))
           }
         }
         // If the request is to delete the thread or message, or to remove a label (except the unread label)
@@ -652,10 +669,22 @@ export const updateEmailLabel =
           )
         }
       } else {
-        toast.error('Error updating label.')
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Error updating label."
+            variant="error"
+          />
+        ))
       }
     } catch (err) {
-      toast.error('Error updating label.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Error updating label."
+          variant="error"
+        />
+      ))
     }
   }
 
@@ -687,10 +716,22 @@ export const updateEmailLabelBatch =
                 request,
               })
             } catch (err) {
-              toast.error('Error updating label.')
+              toast.custom((t) => (
+                <CustomToast
+                  specificToast={t}
+                  title="Error updating label."
+                  variant="error"
+                />
+              ))
             }
           } else {
-            toast.error('Error updating label.')
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Error updating label."
+                variant="error"
+              />
+            ))
           }
         }
         if (request.delete) {
@@ -701,15 +742,33 @@ export const updateEmailLabelBatch =
                 threadId: selectedId,
               })
             } catch (err) {
-              toast.error('Error updating label.')
+              toast.custom((t) => (
+                <CustomToast
+                  specificToast={t}
+                  title="Error updating label."
+                  variant="error"
+                />
+              ))
             }
           } else {
-            toast.error('Error updating label.')
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Error updating label."
+                variant="error"
+              />
+            ))
           }
         }
       }
     } catch (err) {
-      toast.error('Error updating label.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Error updating label."
+          variant="error"
+        />
+      ))
     }
   }
 
@@ -728,7 +787,13 @@ export const updateMessageLabel =
       try {
         await messageApi().thrashMessage({ messageId })
       } catch {
-        toast.error('Error updating label.')
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Error updating label."
+            variant="error"
+          />
+        ))
       }
     }
 
@@ -771,7 +836,13 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       }
       handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
     } else {
-      toast.error('Unable to refresh the feed.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable the refresh the feed."
+          variant="error"
+        />
+      ))
     }
   } catch (err) {
     const typedError: any = err
@@ -779,7 +850,13 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       // eslint-disable-next-line no-console
       console.error(typedError?.response?.message || typedError)
     }
-    toast.error('Unable to refresh the feed.')
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Unable the refresh the feed."
+        variant="error"
+      />
+    ))
   } finally {
     dispatch(setIsFetching(false))
   }

@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
 import Baseloader from 'components/BaseLoader/BaseLoader'
+import CustomToast from 'components/Elements/Toast/Toast'
 import { SOMETHING_WRONG } from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import userApi from 'data/userApi'
@@ -54,14 +55,21 @@ const GoogleCallBack = () => {
               ? response?.error ?? SOMETHING_WRONG
               : response
 
-          toast.error(message)
+          toast.custom((t) => (
+            <CustomToast specificToast={t} title={message} variant="error" />
+          ))
           dispatch(push(RoutesConstants.LOGIN))
         }
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
-
-        toast.error(SOMETHING_WRONG)
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={SOMETHING_WRONG}
+            variant="error"
+          />
+        ))
       }
     }
     getTokens()

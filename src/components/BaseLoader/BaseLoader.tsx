@@ -1,36 +1,45 @@
 import { useEffect } from 'react'
-import { useToasterStore } from 'react-hot-toast'
 
 import * as S from 'components/BaseLoader/BaseLoaderStyles'
 import { handleLogout } from 'components/MainHeader/Navigation/More/Options/LogoutOption'
 import useCountDownTimer from 'hooks/useCountDownTimer'
+import { selectBaseError, setBaseError } from 'store/baseSlice'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
 
+import { EIGHT_SECONDS_BEFORE_LOGOUT } from './BaseLoaderConstants'
 import ErrorNotification from './ErrorNotification'
 import LoadingComponent from './LoadingComponent'
 
 const Baseloader = () => {
-  const { countDown } = useCountDownTimer({ startSeconds: 8 })
-  const { toasts } = useToasterStore()
+  const baseError = useAppSelector(selectBaseError)
+  const { countDown } = useCountDownTimer({
+    startSeconds: EIGHT_SECONDS_BEFORE_LOGOUT,
+  })
+  const dispatch = useAppDispatch()
 
-  const hasErrorToast = toasts.some((toast) => toast.type === 'error')
+  const hasError = Boolean(baseError)
 
   useEffect(() => {
     let mounted = true
+    if (baseError && mounted && countDown === 1) {
+      dispatch(setBaseError(null))
+    }
     if (mounted && countDown === 0) {
       handleLogout()
     }
     return () => {
       mounted = false
     }
-  }, [countDown])
+  }, [baseError, countDown])
 
   return (
     <S.Wrapper data-testid="base-loader">
       <S.Inner>
-        <LoadingComponent hasErrorToast={hasErrorToast} />
+        <LoadingComponent hasError={hasError} />
         <ErrorNotification
+          baseError={baseError}
           countDown={countDown}
-          hasErrorToast={hasErrorToast}
+          hasError={hasError}
         />
       </S.Inner>
     </S.Wrapper>

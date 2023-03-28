@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 
 import Composer from 'components/Compose/Composer'
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
@@ -38,7 +39,13 @@ const ReplyComposer = ({
   })
 
   if (!relevantMessage) {
-    toast.error('Cannot open composer with relevant message')
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Cannot open composer with relevant message"
+        variant="error"
+      />
+    ))
     return (
       <ES.ComposeWrapper data-cy="reply-composer">
         <Composer messageOverviewListener={messageOverviewListener} />

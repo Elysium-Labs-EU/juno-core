@@ -25,6 +25,7 @@ import viewAttachment from 'utils/viewAttachment'
 import * as S from './AttachmentBubbleStyles'
 import EmailAttachmentIcon from './AttachmentIcon'
 import AttachmentModal from '../AttachmentModal/AttachmentModal'
+import CustomToast from '../Toast/Toast'
 
 const ICON_SIZE = 20
 
@@ -61,7 +62,13 @@ const DownloadButton = ({
         return
       }
       setLoadState(global.LOAD_STATE_MAP.error)
-      toast.error(response.message ?? global.NETWORK_ERROR)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={response.message ?? global.NETWORK_ERROR}
+          variant="error"
+        />
+      ))
     }
   }, [attachmentData, messageId])
 
@@ -143,7 +150,13 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
           return
         }
         setLoadState(global.LOAD_STATE_MAP.error)
-        toast.error(response.message ?? global.NETWORK_ERROR)
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={response.message ?? global.NETWORK_ERROR}
+            variant="error"
+          />
+        ))
       } else {
         // If the data is already fetched, just open the modal
         dispatch(

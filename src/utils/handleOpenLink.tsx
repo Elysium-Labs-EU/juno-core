@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
+import CustomToast from 'components/Elements/Toast/Toast'
 import handleCopyToClipboard from 'utils/handleCopyToClipboard'
 
 interface IHandleOpenLink {
@@ -16,17 +17,21 @@ export default function handleOpenLink({ action }: IHandleOpenLink) {
         const messageContent =
           'Unable to open link at this time. Please try copying and pasting the link in your browser.'
 
-        toast.error((t) => (
-          <span>
-            {messageContent}
-            <CustomButton
-              onClick={() => {
-                handleCopyToClipboard({ action })
-                toast.dismiss(t.id)
-              }}
-              label="Copy"
-            />
-          </span>
+        toast.custom((t) => (
+          <CustomToast
+            button={
+              <CustomButton
+                onClick={() => {
+                  handleCopyToClipboard({ action })
+                }}
+                label="Copy"
+              />
+            }
+            specificToast={t}
+            title="We failed to copy"
+            description={messageContent}
+            variant="info"
+          />
         ))
       }
     }, 1000)

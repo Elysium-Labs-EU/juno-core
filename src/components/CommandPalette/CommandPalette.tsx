@@ -9,6 +9,7 @@ import CustomDialog from 'components/Elements/Dialog/CustomDialog'
 import Input from 'components/Elements/Input/Input'
 import LoadingState from 'components/Elements/LoadingState/LoadingState'
 import Stack from 'components/Elements/Stack/Stack'
+import CustomToast from 'components/Elements/Toast/Toast'
 import {
   ERROR_MESSAGE,
   LOAD_STATE_MAP,
@@ -170,7 +171,13 @@ const CommandPallette = () => {
         }
       } catch (err) {
         setLoadState(LOAD_STATE_MAP.error)
-        toast.error(ERROR_MESSAGE)
+        toast.custom((t) => (
+          <CustomToast
+            variant="error"
+            specificToast={t}
+            title={ERROR_MESSAGE}
+          />
+        ))
       }
     },
     [loadState, searchValueRef, searchValue, searchResults]

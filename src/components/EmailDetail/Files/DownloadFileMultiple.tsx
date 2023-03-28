@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
 import type { TFullMessage } from 'store/storeTypes/emailListTypes'
@@ -95,10 +96,22 @@ const DownloadButtonMultiple = ({
         return
       }
       setLoadState(global.LOAD_STATE_MAP.error)
-      toast.error(response[0]?.message ?? global.NETWORK_ERROR)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={response[0]?.message ?? global.NETWORK_ERROR}
+          variant="error"
+        />
+      ))
     } catch (err) {
       setLoadState(global.LOAD_STATE_MAP.error)
-      toast.error(global.NETWORK_ERROR)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={global.NETWORK_ERROR}
+          variant="error"
+        />
+      ))
     }
   }, [])
 

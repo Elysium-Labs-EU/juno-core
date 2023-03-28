@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 
 import StyledSelect from 'components/Elements/Select/StyledSelect'
+import CustomToast from 'components/Elements/Toast/Toast'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
 import type { TUserSettings } from 'store/storeTypes/gmailBaseTypes/otherTypes'
@@ -27,7 +28,13 @@ const EmailSize = () => {
   ) => {
     const selectedValueToNumber = valueToNumber[selectedValue]
     if (!selectedValueToNumber) {
-      toast.error('Could not update the email size.')
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Could not update the email size."
+          variant="error"
+        />
+      ))
       return
     }
     dispatch(

@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
+import CustomToast from 'components/Elements/Toast/Toast'
 import * as global from 'constants/globalConstants'
 import { getRouteByLabelMap } from 'constants/labelMapConstant'
 import RouteConstants from 'constants/routesConstants'
@@ -146,7 +147,13 @@ const utilsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchDrafts.rejected, (_, { meta }) => {
       if (!meta.aborted) {
-        toast.error(`Drafts - ${global.SOMETHING_WRONG}`)
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={`Drafts - ${global.SOMETHING_WRONG}`}
+            variant="error"
+          />
+        ))
       }
     })
     builder.addCase(fetchEmailsSimple.pending, (state, { meta: { arg } }) => {
@@ -166,7 +173,13 @@ const utilsSlice = createSlice({
       state.isLoading = false
       state.isSilentLoading = false
       if (!meta.aborted) {
-        toast.error(`Emails - ${global.SOMETHING_WRONG}`)
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={`Emails - ${global.SOMETHING_WRONG}`}
+            variant="error"
+          />
+        ))
       }
     })
   },
