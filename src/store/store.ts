@@ -38,11 +38,12 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   })
 export type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
-export type AppThunk<ReturnType = void | Promise<any | void>> = ThunkAction<
+export type AppThunk<ReturnType = void | Promise<any>> = ThunkAction<
   ReturnType,
   RootState,
   any,
   Action<string>
 >
+
 export const store = setupStore()
 export const history = createReduxHistory(store)

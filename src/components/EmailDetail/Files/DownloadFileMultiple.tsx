@@ -1,12 +1,11 @@
 import { useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import * as global from 'constants/globalConstants'
 import { QiCheckmark, QiDownload } from 'images/svgIcons/quillIcons'
-import { useAppDispatch } from 'store/hooks'
 import type { TFullMessage } from 'store/storeTypes/emailListTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { downloadAttachmentMultiple } from 'utils/downloadAttachment'
 
 interface IDownloadButtonMultiple {
@@ -69,7 +68,6 @@ const DownloadButtonMultiple = ({
 }: IDownloadButtonMultiple) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [downloaded, setDownloaded] = useState(false)
-  const dispatch = useAppDispatch()
 
   const handleClick = useCallback(async () => {
     setLoadState(global.LOAD_STATE_MAP.loading)
@@ -97,20 +95,10 @@ const DownloadButtonMultiple = ({
         return
       }
       setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: response[0]?.message ?? global.NETWORK_ERROR,
-        })
-      )
+      toast.error(response[0]?.message ?? global.NETWORK_ERROR)
     } catch (err) {
       setLoadState(global.LOAD_STATE_MAP.error)
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: global.NETWORK_ERROR,
-        })
-      )
+      toast.error(global.NETWORK_ERROR)
     }
   }, [])
 

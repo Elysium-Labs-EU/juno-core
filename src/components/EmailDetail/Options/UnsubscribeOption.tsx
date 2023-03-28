@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import toast from 'react-hot-toast'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
@@ -8,19 +9,22 @@ import { QiMailUnsub } from 'images/svgIcons/quillIcons'
 import { selectCoreStatus, setCoreStatus } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
-import { selectInSearch, setSystemStatusUpdate } from 'store/utilsSlice'
+import { selectInSearch } from 'store/utilsSlice'
 import createComposeViaURL from 'utils/createComposeViaURL'
+import handleOpenLink from 'utils/handleOpenLink'
 import { setModifierKey } from 'utils/setModifierKey'
+
+interface IHandleUnsubscribe {
+  dispatch: AppDispatch
+  coreStatus: string | null
+  unsubscribeLink: string
+}
 
 const handleUnsubscribe = ({
   coreStatus,
   dispatch,
   unsubscribeLink,
-}: {
-  dispatch: AppDispatch
-  coreStatus: string | null
-  unsubscribeLink: string
-}) => {
+}: IHandleUnsubscribe) => {
   if (unsubscribeLink.includes('mailto:')) {
     if (
       coreStatus === global.CORE_STATUS_MAP.focused ||
@@ -36,14 +40,18 @@ const handleUnsubscribe = ({
 
     setTimeout(() => {
       if (newWindow?.closed || !newWindow) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: messageContent,
-            actionType: 'unsubscribe',
-            action: unsubscribeLink,
-          })
-        )
+        toast.error((t) => (
+          <span>
+            {messageContent}
+            <CustomButton
+              onClick={() => {
+                handleOpenLink({ action: unsubscribeLink })
+                toast.dismiss(t.id)
+              }}
+              label="Open link"
+            />
+          </span>
+        ))
       }
     }, 1000)
   }
@@ -51,15 +59,17 @@ const handleUnsubscribe = ({
 
 const UNSUBSCRIBE = 'Unsubscribe'
 
+interface IUnsubscribeOption {
+  dispatch: AppDispatch
+  unsubscribeLink: string
+  iconSize: number
+}
+
 const UnsubscribeOption = ({
   dispatch,
   unsubscribeLink,
   iconSize,
-}: {
-  dispatch: AppDispatch
-  unsubscribeLink: string
-  iconSize: number
-}) => {
+}: IUnsubscribeOption) => {
   const inSearch = useAppSelector(selectInSearch)
   const coreStatus = useAppSelector(selectCoreStatus)
 

@@ -55,7 +55,7 @@ const Content = <T,>({
         onInteractOutside={handleCloseModal}
         onKeyDown={onKeyDown}
         onOpenAutoFocus={(e) => e.preventDefault()}
-        enableDynamicHeight={enableDynamicHeight}
+        enabledynamicheight={enableDynamicHeight ? 'true' : 'false'}
       >
         {children}
       </S.StyledContent>

@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 
 import { JUNO_SETTINGS_LOCAL } from 'constants/globalConstants'
 import userApi from 'data/userApi'
@@ -7,11 +8,7 @@ import { setBaseEmailList } from 'store/emailListSlice'
 import { setStorageLabels } from 'store/labelsSlice'
 import type { AppThunk, RootState } from 'store/store'
 import type { TBaseState, TPrefetchedBoxes } from 'store/storeTypes/baseTypes'
-import {
-  setSettings,
-  setSettingsLabel,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { setSettings, setSettingsLabel } from 'store/utilsSlice'
 
 import type { TBaseEmailList } from './storeTypes/emailListTypes'
 import type { TGmailV1SchemaLabelSchema } from './storeTypes/gmailBaseTypes/gmailTypes'
@@ -91,12 +88,7 @@ const presetEmailList =
         }
         emailListBuffer.push(presetEmailBox)
       } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'We cannot setup all the email boxes.',
-          })
-        )
+        toast.error('We cannot setup all the email boxes.')
       }
     })
 
@@ -120,12 +112,7 @@ export const getBase = (): AppThunk => async (dispatch) => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err)
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'An error occured during loading the base.',
-      })
-    )
+    toast.error('An error occured during loading the base.')
   }
 }
 

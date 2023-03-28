@@ -41,7 +41,7 @@ export const StyledOverlay = styled(DialogPrimitive.Overlay)`
 interface IStyledContent {
   height: string
   nocontentpadding?: string
-  enableDynamicHeight: boolean | undefined
+  enabledynamicheight: string
 }
 
 export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
@@ -66,8 +66,8 @@ export const StyledContent = styled(DialogPrimitive.Content)<IStyledContent>`
   max-width: 825px;
   z-index: var(--z-index-modal);
 
-  ${({ enableDynamicHeight, height }) =>
-    enableDynamicHeight
+  ${({ enabledynamicheight, height }) =>
+    enabledynamicheight === 'true'
       ? css`
           animation: ${contentShowDynamic} 150ms cubic-bezier(0.16, 1, 0.3, 1);
           left: 50%;

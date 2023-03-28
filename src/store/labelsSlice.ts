@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 
 import { getLabelByRoute } from 'constants/labelMapConstant'
 import labelApi from 'data/labelApi'
@@ -10,7 +11,6 @@ import type {
   TLabelState,
   TUpdateSettingsLabelKeys,
 } from 'store/storeTypes/labelsTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import isEmpty from 'utils/isEmpty'
 
 /* eslint-disable no-param-reassign */
@@ -88,24 +88,14 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
 
 export const removeLabel =
   (labelId: string): AppThunk =>
-  async (dispatch) => {
+  async () => {
     try {
       const response = await labelApi().deleteLabel(labelId)
       if ('status' in response && response.status !== 204) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to remove the label.',
-          })
-        )
+        toast.error('Unable to remove the label.')
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to remove the label.',
-        })
-      )
+      toast.error('Unable to remove the label.')
     }
     return null
   }
@@ -122,20 +112,10 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
     if (labelObject && labelObject.id) {
       dispatch(setCurrentLabels([labelObject.id]))
     } else {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to set current label - label is not found.',
-        })
-      )
+      toast.error('Unable to set current label - label is not found.')
     }
   } else {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Error getting the current location',
-      })
-    )
+    toast.error('Error getting the current location')
   }
 }
 
@@ -187,20 +167,10 @@ export const updateSettingsLabel =
         },
       })
       if ('data' in response && response.data?.type !== 'user') {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Unable to store settings.',
-          })
-        )
+        toast.error('Unable to store settings.')
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to store settings.',
-        })
-      )
+      toast.error('Unable to store settings.')
     }
   }
 

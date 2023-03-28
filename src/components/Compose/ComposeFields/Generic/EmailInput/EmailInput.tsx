@@ -2,6 +2,7 @@
 import Autocomplete from '@mui/material/Autocomplete'
 import { matchSorter } from 'match-sorter'
 import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import RecipientChip from 'components/Elements/RecipientChip/RecipientChip'
@@ -15,7 +16,6 @@ import {
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { TContact } from 'store/storeTypes/contactsTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import emailValidation from 'utils/emailValidation'
 
 import StyledTextField from './EmailInputStyles'
@@ -47,12 +47,7 @@ const fetchContacts = async ({
       dispatch(setContactsLoaded(JSON.stringify(Date.now())))
     }
   } catch (err) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Error fetching contacts.',
-      })
-    )
+    toast.error('Error fetching contacts.')
   } finally {
     setCompletedSearch(true)
   }

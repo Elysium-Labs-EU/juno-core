@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
 import archiveMail from 'components/EmailOptions/ArchiveMail'
 import * as global from 'constants/globalConstants'
+import RoutesConstants from 'constants/routesConstants'
 import draftApi from 'data/draftApi'
 import messageApi from 'data/messageApi'
 import {
@@ -26,13 +28,7 @@ import type {
   IOpenDraftEmailType,
   TDraftResponseEntry,
 } from 'store/storeTypes/draftsTypes'
-import {
-  closeMail,
-  navigateNextMail,
-  setIsProcessing,
-  setIsSending,
-  setSystemStatusUpdate,
-} from 'store/utilsSlice'
+import { closeMail, navigateNextMail, setIsProcessing } from 'store/utilsSlice'
 import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 import isEmpty from 'utils/isEmpty'
 import { prepareFormData } from 'utils/prepareMessage'
@@ -151,7 +147,10 @@ interface ICreateUpdateDraft {
 }
 
 export const createUpdateDraft =
-  ({ composedEmail, localDraftDetails }: ICreateUpdateDraft): AppThunk =>
+  ({
+    composedEmail,
+    localDraftDetails,
+  }: ICreateUpdateDraft): AppThunk<null | any> =>
   async (dispatch, getState) => {
     try {
       const { emailAddress, name } = getState().base.profile
@@ -171,20 +170,10 @@ export const createUpdateDraft =
             })
 
       if (!response || ('status' in response && response.status !== 200)) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Cannot create or update draft.',
-          })
-        )
+        toast.error('Cannot create or update draft.')
       }
 
-      if (
-        response &&
-        'status' in response &&
-        response?.status === 200 &&
-        'data' in response
-      ) {
+      if (typeof response === 'object' && 'data' in response) {
         if (localDraftDetails?.message?.threadId) {
           // Remove the previous entry from Redux Emaillist. History will create a new one.
           dispatch(
@@ -197,12 +186,7 @@ export const createUpdateDraft =
       }
       return null
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Cannot create or update draft.',
-        })
-      )
+      toast.error('Cannot create or update draft.')
       return null
     }
   }
@@ -210,7 +194,7 @@ export const createUpdateDraft =
 const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 
 const pushDraftDetails =
-  ({ draft }: { draft: TDraftResponseEntry }): AppThunk =>
+  ({ draft }: { draft: TDraftResponseEntry }): AppThunk<void> =>
   (dispatch, getState) => {
     const { message } = draft
     try {
@@ -231,22 +215,19 @@ const pushDraftDetails =
             // Push the files as B64 objects to the state, to be decoded on the component. Files cannot be stored into Redux.
             files: message.payload?.files,
           }
-          dispatch(push(`/compose/${draft.id}`, loadEmail))
+          dispatch(
+            push(`${RoutesConstants.COMPOSE_EMAIL}${draft.id}`, loadEmail)
+          )
         }
       } else {
-        dispatch(push(`/compose/`))
+        dispatch(push(RoutesConstants.COMPOSE_EMAIL))
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: ERROR_OPEN_DRAFT_EMAIL,
-        })
-      )
+      toast.error(ERROR_OPEN_DRAFT_EMAIL)
     }
   }
 
-const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk => {
+const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> => {
   const { draftId } = draftDetails
   return async (dispatch) => {
     try {
@@ -259,26 +240,16 @@ const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk => {
         DraftResponseEntry.parse(response.data)
         dispatch(pushDraftDetails({ draft: response.data }))
       } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: ERROR_OPEN_DRAFT_EMAIL,
-          })
-        )
+        toast.error(ERROR_OPEN_DRAFT_EMAIL)
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: ERROR_OPEN_DRAFT_EMAIL,
-        })
-      )
+      toast.error(ERROR_OPEN_DRAFT_EMAIL)
     }
   }
 }
 
 export const openDraftEmail =
-  ({ messageId, id }: IOpenDraftEmailType): AppThunk =>
+  ({ messageId, id }: IOpenDraftEmailType): AppThunk<void> =>
   (dispatch, getState) => {
     try {
       const { draftList } = getState().drafts
@@ -294,26 +265,16 @@ export const openDraftEmail =
         if (!isEmpty(draftId)) {
           dispatch(loadDraftDetails({ draftId }))
         } else {
-          dispatch(
-            setSystemStatusUpdate({
-              type: 'error',
-              message: ERROR_OPEN_DRAFT_EMAIL,
-            })
-          )
+          toast.error(ERROR_OPEN_DRAFT_EMAIL)
         }
       }
       // }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: ERROR_OPEN_DRAFT_EMAIL,
-        })
-      )
+      toast.error(ERROR_OPEN_DRAFT_EMAIL)
     }
   }
 
-export const deleteDraftBatch = (): AppThunk => (dispatch, getState) => {
+export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
   const { selectedEmails } = getState().email
   const { draftList } = getState().drafts
   dispatch(
@@ -338,40 +299,25 @@ export const deleteDraftBatch = (): AppThunk => (dispatch, getState) => {
         draftApi().deleteDraft(draftObject.id)
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error deleting draft.',
-        })
-      )
+      toast.error('Error deleting draft.')
     }
   }
 }
 
 export const deleteDraft =
-  (id: string): AppThunk =>
+  (id: string): AppThunk<void> =>
   async (dispatch, getState) => {
     const { coreStatus } = getState().emailDetail
     dispatch(setIsProcessing(true))
     try {
       await draftApi().deleteDraft(id)
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error deleting draft.',
-        })
-      )
+      toast.error('Error deleting draft.')
     } finally {
       dispatch(setIsProcessing(false))
       // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
       if (coreStatus === global.CORE_STATUS_MAP.searching) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'info',
-            message: 'Draft has been deleted',
-          })
-        )
+        toast.success('Draft has been deleted.')
       }
     }
   }
@@ -388,7 +334,6 @@ export const sendComposedEmail =
     try {
       const { emailList } = getState().email
       const { coreStatus, isForwarding, isReplying } = getState().emailDetail
-      dispatch(setIsSending({ message: 'Sending your mail...', type: 'info' }))
       // Reset the replying state to false on sending, to close the composer.
       if (isReplying) {
         dispatch(setIsReplying(false))
@@ -436,17 +381,19 @@ export const sendComposedEmail =
             emailList,
             labelIds: [global.DRAFT_LABEL],
           })
-          if (staticIndexActiveEmailList > -1 && localDraftDetails?.message?.id)
+          if (
+            staticIndexActiveEmailList > -1 &&
+            localDraftDetails?.message?.id
+          ) {
             dispatch(
               listRemoveItemDetail({
                 threadId: localDraftDetails.message.id,
               })
             )
-        } else {
-          dispatch(
-            setIsSending({ message: 'Error sending your mail', type: 'error' })
-          )
+          }
+          toast('Sent your email.')
         }
+        toast.error('Error sending your mail.')
       }
       // If the id cannot be found on the draft details, send the email via the sendMessage function
       if (!localDraftDetails?.id) {
@@ -463,17 +410,15 @@ export const sendComposedEmail =
           timeOut: global.MESSAGE_SEND_DELAY,
         })
         if (!('status' in response) || response?.status !== 200) {
-          dispatch(
-            setIsSending({ message: 'Error sending your mail', type: 'error' })
-          )
+          toast.error('Error sending your mail.')
         }
+        toast('Sent your email.')
       }
+      toast.error('Error sending your mail.')
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error(err)
-      dispatch(
-        setIsSending({ message: 'Error sending your mail', type: 'error' })
-      )
+      toast.error('Error sending your mail.')
     }
   }
 

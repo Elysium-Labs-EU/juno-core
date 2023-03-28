@@ -5,29 +5,6 @@ import { ACTIVE_MODAL_MAP } from 'constants/globalConstants'
 import type { TGmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
 import type { TUserSettings } from './gmailBaseTypes/otherTypes'
 
-type TUpdateType = 'success' | 'info' | 'warning' | 'error'
-type TActionType = 'copy' | 'close' | 'undo' | 'unsubscribe'
-
-export interface ISystemStatusUpdate {
-  actionType?: TActionType
-  action?: string
-  message: string
-  type: TUpdateType
-}
-
-interface ISystemStatusUpdateTimestamp extends ISystemStatusUpdate {
-  timestamp: number
-}
-
-export interface IMessageSendStatus {
-  message: string
-  type: TUpdateType
-}
-
-interface IMessageSendStatusTimestamp extends IMessageSendStatus {
-  timestamp: number
-}
-
 type ActiveModalMapType =
   (typeof ACTIVE_MODAL_MAP)[keyof typeof ACTIVE_MODAL_MAP]
 
@@ -37,11 +14,9 @@ export interface IUtilsState extends Omit<TUserSettings, 'showIntroduction'> {
   inSearch: boolean
   isLoading: boolean
   isProcessing: boolean
-  isSending: IMessageSendStatusTimestamp | null
   isSentryActive: boolean
   isSilentLoading: boolean
   settingsLabel: TGmailV1SchemaLabelSchema | null
-  systemStatusUpdate: ISystemStatusUpdateTimestamp | null
 }
 
 export const Location = z.object({

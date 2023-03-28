@@ -1,9 +1,9 @@
+import toast from 'react-hot-toast'
+
 import Composer from 'components/Compose/Composer'
 import * as ES from 'components/EmailDetail/EmailDetailStyles'
 import * as global from 'constants/globalConstants'
-import { useAppDispatch } from 'store/hooks'
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import { handleContactConversion } from 'utils/convertToContact'
 import emailBody from 'utils/emailDetailDisplayData/emailBody'
 
@@ -32,19 +32,13 @@ const ReplyComposer = ({
   selectedIndex,
   messageOverviewListener,
 }: IReplyComposer) => {
-  const dispatch = useAppDispatch()
   const relevantMessage = getRelevantMessage({
     selectedIndex,
     localThreadDetail,
   })
 
   if (!relevantMessage) {
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Cannot open composer with relevant message',
-      })
-    )
+    toast.error('Cannot open composer with relevant message')
     return (
       <ES.ComposeWrapper data-cy="reply-composer">
         <Composer messageOverviewListener={messageOverviewListener} />

@@ -1,5 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
@@ -7,8 +8,6 @@ import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
-import { useAppDispatch } from 'store/hooks'
-import { setSystemStatusUpdate } from 'store/utilsSlice'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'
 import isEqual from 'utils/isEqual/isEqual'
 import formatBytes from 'utils/prettierBytes'
@@ -54,7 +53,6 @@ const Attachments = ({
   const [localLoadState, setLocalLoadState] = useState(
     global.LOAD_STATE_MAP.idle
   )
-  const dispatch = useAppDispatch()
 
   //! Watch out for a loop, where the draft update on the parent component keeps sending new attachments as preset values.
   /**
@@ -94,12 +92,7 @@ const Attachments = ({
             ])
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           } else {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Unable to restore attachments.',
-              })
-            )
+            toast.error('Unable to restore attachments.')
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           }
         }
@@ -122,13 +115,8 @@ const Attachments = ({
   const onDropHandeler = useCallback(
     (data: File[]) => {
       if (data.some((item) => item.size > MAX_MB_UPLOAD_DIRECT)) {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: `File size can not exceed ${formatBytes(
-              MAX_MB_UPLOAD_DIRECT
-            )}`,
-          })
+        toast.error(
+          `File size can not exceed ${formatBytes(MAX_MB_UPLOAD_DIRECT)}`
         )
         return
       }

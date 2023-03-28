@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
+import toast from 'react-hot-toast'
 import { push } from 'redux-first-history'
 
 import * as global from 'constants/globalConstants'
@@ -36,7 +37,6 @@ import {
   navigateNextMail,
   setIsLoading,
   setIsSilentLoading,
-  setSystemStatusUpdate,
 } from 'store/utilsSlice'
 import deduplicateItems from 'utils/deduplicateItems'
 import handleSessionStorage from 'utils/handleSessionStorage'
@@ -520,12 +520,8 @@ export const loadEmailDetails =
                     })
                   )
                 } else {
-                  dispatch(
-                    setSystemStatusUpdate({
-                      type: 'error',
-                      message:
-                        'Cannot add emails to the list - we cannot find the labels.',
-                    })
+                  toast.error(
+                    'Cannot add emails to the list - we cannot find the labels.'
                   )
                 }
               }
@@ -629,12 +625,7 @@ export const updateEmailLabel =
               })
             }
           } catch (err) {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
+            toast.error('Error updating label.')
           }
         }
         // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
@@ -646,12 +637,7 @@ export const updateEmailLabel =
               })
             }
           } catch (err) {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
+            toast.error('Error updating label.')
           }
         }
         // If the request is to delete the thread or message, or to remove a label (except the unread label)
@@ -666,20 +652,10 @@ export const updateEmailLabel =
           )
         }
       } else {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Error updating label.',
-          })
-        )
+        toast.error('Error updating label.')
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error updating label.',
-        })
-      )
+      toast.error('Error updating label.')
     }
   }
 
@@ -711,20 +687,10 @@ export const updateEmailLabelBatch =
                 request,
               })
             } catch (err) {
-              dispatch(
-                setSystemStatusUpdate({
-                  type: 'error',
-                  message: 'Error updating label.',
-                })
-              )
+              toast.error('Error updating label.')
             }
           } else {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
+            toast.error('Error updating label.')
           }
         }
         if (request.delete) {
@@ -735,30 +701,15 @@ export const updateEmailLabelBatch =
                 threadId: selectedId,
               })
             } catch (err) {
-              dispatch(
-                setSystemStatusUpdate({
-                  type: 'error',
-                  message: 'Error updating label.',
-                })
-              )
+              toast.error('Error updating label.')
             }
           } else {
-            dispatch(
-              setSystemStatusUpdate({
-                type: 'error',
-                message: 'Error updating label.',
-              })
-            )
+            toast.error('Error updating label.')
           }
         }
       }
     } catch (err) {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Error updating label.',
-        })
-      )
+      toast.error('Error updating label.')
     }
   }
 
@@ -777,12 +728,7 @@ export const updateMessageLabel =
       try {
         await messageApi().thrashMessage({ messageId })
       } catch {
-        dispatch(
-          setSystemStatusUpdate({
-            type: 'error',
-            message: 'Error updating label.',
-          })
-        )
+        toast.error('Error updating label.')
       }
     }
 
@@ -825,12 +771,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       }
       handleSessionStorage(global.LAST_REFRESH, Date.now().toString())
     } else {
-      dispatch(
-        setSystemStatusUpdate({
-          type: 'error',
-          message: 'Unable to refresh the feed.',
-        })
-      )
+      toast.error('Unable to refresh the feed.')
     }
   } catch (err) {
     const typedError: any = err
@@ -838,12 +779,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       // eslint-disable-next-line no-console
       console.error(typedError?.response?.message || typedError)
     }
-    dispatch(
-      setSystemStatusUpdate({
-        type: 'error',
-        message: 'Unable to refresh the feed.',
-      })
-    )
+    toast.error('Unable to refresh the feed.')
   } finally {
     dispatch(setIsFetching(false))
   }
