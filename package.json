@@ -53,7 +53,7 @@
     "@reduxjs/toolkit": "1.9.3",
     "@rella-so/sdk": "^1.2.4",
     "@sentry/react": "7.42.0",
-    "@sentry/tracing": "7.42.0",
+    "@sentry/tracing": "7.43.0",
     "@tauri-apps/api": "^1.2.0",
     "@tauri-apps/cli": "^1.2.3",
     "@testing-library/react": "^13.4.0",
