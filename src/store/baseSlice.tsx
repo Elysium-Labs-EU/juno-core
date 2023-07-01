@@ -70,11 +70,11 @@ export const handleSettings =
     userSettings: TUserSettings,
     userSettingsLabel: TGmailV1SchemaLabelSchema
   ): AppThunk =>
-  (dispatch) => {
-    dispatch(setSettingsLabel(userSettingsLabel))
-    dispatch(setSettings(userSettings))
-    localStorage.setItem(JUNO_SETTINGS_LOCAL, JSON.stringify(userSettings))
-  }
+    (dispatch) => {
+      dispatch(setSettingsLabel(userSettingsLabel))
+      dispatch(setSettings(userSettings))
+      localStorage.setItem(JUNO_SETTINGS_LOCAL, JSON.stringify(userSettings))
+    }
 
 /**
  * @function presetEmailList
@@ -84,35 +84,35 @@ export const handleSettings =
 
 const presetEmailList =
   (prefetchedBoxes: TPrefetchedBoxes): AppThunk =>
-  (dispatch) => {
-    const emailListBuffer = [] as TBaseEmailList
+    (dispatch) => {
+      const emailListBuffer = [] as TBaseEmailList
 
-    prefetchedBoxes.forEach(({ id }) => {
-      if (id) {
-        const presetEmailBox = {
-          labels: [id],
-          threads: [] as Array<any>,
-          nextPageToken: null,
+      prefetchedBoxes.forEach(({ id }) => {
+        if (id) {
+          const presetEmailBox = {
+            labels: [id],
+            threads: [] as Array<any>,
+            nextPageToken: null,
+          }
+          emailListBuffer.push(presetEmailBox)
+        } else {
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="We cannot setup all the email boxes."
+              variant="error"
+            />
+          ))
         }
-        emailListBuffer.push(presetEmailBox)
-      } else {
-        toast.custom((t) => (
-          <CustomToast
-            specificToast={t}
-            title="We cannot setup all the email boxes."
-            variant="error"
-          />
-        ))
-      }
-    })
+      })
 
-    dispatch(setBaseEmailList(emailListBuffer))
-  }
+      dispatch(setBaseEmailList(emailListBuffer))
+    }
 
 export const getBase = (): AppThunk => async (dispatch) => {
   try {
     const response = await userApi().baseCheck()
-
+    console.log(response)
     if ('data' in response && response.status === 200) {
       const { profile, prefetchedBoxes, userSettingsLabel, userSettings } =
         response.data
