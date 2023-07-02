@@ -10,13 +10,17 @@
     "airbnb-typescript",
     "prettier"
   ],
-
   "parser": "@typescript-eslint/parser",
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
       "parserOptions": {
-        "project": ["./tsconfig.json"]
+        "project": [
+          "./tsconfig.json"
+        ]
       }
     }
   ],
@@ -28,7 +32,10 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["import", "@typescript-eslint"],
+  "plugins": [
+    "import",
+    "@typescript-eslint"
+  ],
   "rules": {
     "import/extensions": [
       "error",
@@ -47,7 +54,10 @@
           "builtin", // Built-in imports (come from NodeJS native) go first
           "external", // <- External imports
           "internal", // <- Absolute imports
-          ["sibling", "parent"], // <- Relative imports, the sibling and parent types they can be mingled together
+          [
+            "sibling",
+            "parent"
+          ], // <- Relative imports, the sibling and parent types they can be mingled together
           "index", // <- index imports
           "unknown" // <- unknown
         ],
@@ -60,15 +70,25 @@
         }
       }
     ],
-    "@typescript-eslint/semi": ["error", "never"],
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/no-misused-promises": "error",
+    "@typescript-eslint/semi": [
+      "error",
+      "never"
+    ],
     "@typescript-eslint/react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-unused-expressions": [
       "error",
-      { "allowShortCircuit": true }
+      {
+        "allowShortCircuit": true
+      }
     ],
     "@typescript-eslint/no-useless-concat": "off",
-    "@typescript-eslint/no-use-before-define": ["error"],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
     "@typescript-eslint/require-await": "error",
     "import/no-cycle": "off",
     "import/no-extraneous-dependencies": [
@@ -86,20 +106,48 @@
     "no-restricted-syntax": 1,
     "no-use-before-define": "warn",
     "react/function-component-definition": "off",
-    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [
+          ".tsx",
+          ".ts"
+        ]
+      }
+    ],
     "react/react-in-jsx-scope": "off",
-    "react/require-default-props": [2, { "functions": "defaultArguments" }],
+    "react/require-default-props": [
+      2,
+      {
+        "functions": "defaultArguments"
+      }
+    ],
     "require-await": "off"
   },
   "settings": {
-    "import/extensions": [".js", ".jsx", ".ts", ".tsx"],
+    "import/extensions": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ],
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
     },
     "import/resolver": {
       "node": {
-        "paths": ["src"],
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "paths": [
+          "src"
+        ],
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
       },
       "typescript": {
         "project": "./tsconfig.json"
