@@ -9,7 +9,6 @@ const ROUTES = {
   GOOGLE_CALLBACK: '/oauth2callback',
   GOOGLE_AUTH_EXPLANATION: '/google_auth_explanation',
   GOOGLE_CALLBACK_TEST: '/oauth2callback_test',
-  LOGIN_SUCCESS: '/login_success',
   INBOX: '/inbox',
   ARCHIVE: '/archive',
   TRASH: '/delete',

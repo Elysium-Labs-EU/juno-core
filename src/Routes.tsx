@@ -70,7 +70,6 @@ const RoutesComponent = () => {
         path={RoutesConstants.GOOGLE_CALLBACK_TEST}
         element={<GoogleCallbackTesting />}
       />
-      <Route path={RoutesConstants.LOGIN_SUCCESS} element={<Login />} />
       <Route
         path={RoutesConstants.TODO}
         element={

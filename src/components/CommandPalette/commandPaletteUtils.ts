@@ -72,7 +72,7 @@ function retrieveChildrenFromElement(item: ReactElement) {
 }
 
 function getAllItems(items: Array<IJsonStructure>) {
-  return items.map((list) => list.items).reduce((a, b) => a.concat(b))
+  return items.flatMap((list) => list.items)
 }
 
 export function getItemIndex(
