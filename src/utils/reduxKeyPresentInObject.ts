@@ -1,6 +1,6 @@
 import type { Draft, PayloadAction } from '@reduxjs/toolkit'
 
-interface IReduxKeyPresentInObject<Payload, State> {
+interface ReduxKeyPresentInObject<Payload, State> {
   key: keyof State
   payload: PayloadAction<Payload>['payload']
   state: Draft<State>
@@ -10,7 +10,7 @@ interface IReduxKeyPresentInObject<Payload, State> {
 export default function reduxKeyPresentInObject<
   State extends Record<string, unknown>,
   Payload extends Record<string, unknown>
->({ key, payload, state }: IReduxKeyPresentInObject<Payload, State>) {
+>({ key, payload, state }: ReduxKeyPresentInObject<Payload, State>) {
   if (key in payload) {
     const newState = {
       ...state,
