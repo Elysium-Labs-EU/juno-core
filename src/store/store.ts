@@ -10,9 +10,11 @@ import emailDetailReducer from 'store/emailDetailSlice'
 import emailReducer from 'store/emailListSlice'
 import labelsReducer from 'store/labelsSlice'
 import utilsReducer from 'store/utilsSlice'
+import { unstable_batchedUpdates } from 'react-dom'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({
+    batch: unstable_batchedUpdates,
     history: createBrowserHistory(),
   })
 

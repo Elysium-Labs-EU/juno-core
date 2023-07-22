@@ -38,5 +38,6 @@ export const PageTitle = styled.h1`
   font-weight: 300;
   line-height: 1.3;
   margin: 0;
+  text-transform: lowercase;
   user-select: none;
 `

@@ -57,7 +57,7 @@ const RemovedTrackers = ({
 
   return (
     <>
-      <div>
+      <div style={{ display: 'flex' }}>
         <StyledTooltip title={JUNO_TRACKERS}>
           <S.StyledButton onClick={() => setShowDialog(true)}>
             <Stack spacing="mini">

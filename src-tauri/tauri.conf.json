@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Juno",
-    "version": "0.1.9"
+    "version": "0.1.91"
   },
   "tauri": {
     "allowlist": {
@@ -32,7 +32,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -82,7 +82,7 @@
         "hiddenTitle": true,
         "width": 1400,
         "minWidth": 900,
-        "titleBarStyle": "Overlay"
+        "titleBarStyle": "Transparent"
       }
     ]
   }

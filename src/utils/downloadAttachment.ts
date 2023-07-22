@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
 import base64toBlob from 'utils/base64toBlob'
 import downloadBlob from 'utils/fileSaver'
@@ -45,7 +45,7 @@ export async function downloadAttachmentSingle({
   attachmentData,
   messageId,
 }: {
-  attachmentData: IEmailAttachmentType
+  attachmentData: EmailAttachmentType
   messageId: string
 }) {
   const {
@@ -81,7 +81,7 @@ export async function downloadAttachmentSingle({
  */
 
 interface IDownloadAttachmentData {
-  attachmentData: Array<IEmailAttachmentType> | undefined
+  attachmentData: Array<EmailAttachmentType> | undefined
   messageId: string
 }
 

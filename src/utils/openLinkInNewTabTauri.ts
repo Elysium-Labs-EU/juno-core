@@ -19,6 +19,7 @@ export default function openLinkInNewTabTauri(
         element.getAttribute('href') &&
         !element.getAttribute('href')?.includes('mailto:')
       ) {
+        console.log('triggered', window.__TAURI_METADATA__)
         if (window.__TAURI_METADATA__) {
           openAnchorElement({ element })
         }

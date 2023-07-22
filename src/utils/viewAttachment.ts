@@ -1,4 +1,4 @@
-import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
 
 import base64toBlob from './base64toBlob'
@@ -32,7 +32,7 @@ export default async function viewAttachment({
   attachmentData,
   messageId,
 }: {
-  attachmentData: IEmailAttachmentType
+  attachmentData: EmailAttachmentType
   messageId: string
 }) {
   const {

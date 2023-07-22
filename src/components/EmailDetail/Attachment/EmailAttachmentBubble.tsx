@@ -1,12 +1,12 @@
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
 
-import { IEmailAttachmentType } from './EmailAttachmentTypes'
+import { EmailAttachmentType } from './EmailAttachmentTypes'
 
 const EmailAttachmentBubble = ({
   attachmentData,
   messageId,
 }: {
-  attachmentData: IEmailAttachmentType
+  attachmentData: EmailAttachmentType
   messageId: string
 }) =>
   attachmentData.filename.length > 0 && messageId.length > 0 ? (
