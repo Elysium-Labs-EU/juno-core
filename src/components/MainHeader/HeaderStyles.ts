@@ -32,10 +32,10 @@ export const BackButtonContainer = styled.div`
 `
 
 export const PageTitle = styled.h1`
-  color: var(--color-black) !important;
+  color: var(--color-neutral-600) !important;
   font-family: var(--font-family) !important;
-  font-size: var(--text-h3);
-  font-weight: 600;
+  font-size: var(--text-h4);
+  font-weight: 300;
   line-height: 1.3;
   margin: 0;
   user-select: none;

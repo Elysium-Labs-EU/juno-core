@@ -23,12 +23,6 @@ export const Regular = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Regular.args = {}
 
-export const CustomWidth = Template.bind({})
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-CustomWidth.args = {
-  customWidth: 100,
-}
-
 export const CustomIcon = Template.bind({})
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 CustomIcon.args = {

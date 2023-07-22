@@ -18,7 +18,7 @@ type TCustomButton = {
 
 interface IButton {
   attention: boolean | undefined
-  suppressed: boolean | undefined
+  suppressed: string | undefined
 }
 
 const Button = styled.button<IButton>`
@@ -51,7 +51,7 @@ const Button = styled.button<IButton>`
       background-color: var(--color-black);
     `}
   ${({ suppressed }) =>
-    suppressed &&
+    suppressed === 'true' &&
     css`
       color: var(--color-neutral-400);
     `}
@@ -107,7 +107,7 @@ const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
       data-cy={dataCy}
       disabled={disabled}
       ref={ref}
-      suppressed={suppressed}
+      suppressed={suppressed.toString()}
       type={type ?? 'button'}
       {...rest}
     >
