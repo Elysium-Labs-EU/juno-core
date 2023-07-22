@@ -55,12 +55,12 @@ const TodoFocusOption = () => {
       disabled={isDisabled}
       label={
         selectedEmails.selectedIds.length > 0 &&
-        selectedEmails.labelIds.includes(
-          findLabelByName({
-            storageLabels,
-            LABEL_NAME: global.TODO_LABEL_NAME,
-          })?.id ?? ''
-        ) ? (
+          selectedEmails.labelIds.includes(
+            findLabelByName({
+              storageLabels,
+              LABEL_NAME: global.TODO_LABEL_NAME,
+            })?.id ?? ''
+          ) ? (
           <>
             {global.BUTTON_FOCUS}
             <Span> ({selectedEmails.selectedIds.length})</Span>

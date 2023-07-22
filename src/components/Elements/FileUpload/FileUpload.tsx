@@ -5,11 +5,10 @@ import { FiFile } from 'react-icons/fi'
 
 import * as S from './FileUploadStyles'
 
-interface IFileUpload {
+interface FileUploadProps {
   onDropHandeler: (file: File[]) => void
   dropTextActive?: string
   dropTextInactive?: string
-  customWidth?: number
   icon?: JSX.Element
 }
 
@@ -21,16 +20,15 @@ const FileUpload = ({
   onDropHandeler,
   dropTextActive = undefined,
   dropTextInactive = undefined,
-  customWidth = undefined,
   icon = <FiFile size={16} />,
-}: IFileUpload) => {
+}: FileUploadProps) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onDropHandeler(acceptedFiles)
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
-    <S.Wrapper {...getRootProps()} customWidth={customWidth}>
+    <S.Wrapper {...getRootProps()}>
       <S.Inner>
         <input {...getInputProps()} />
         {icon}

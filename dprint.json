@@ -1,6 +1,10 @@
 {
-  "includes": ["src/**/*.{js,jsx,json,md,tsx,ts}"],
-  "excludes": ["/node_modules, /build, /dist, /.git, /public"],
+  "includes": [
+    "src/**/*.{js,jsx,json,md,tsx,ts}"
+  ],
+  "excludes": [
+    "/node_modules, /build, /dist, /.git, /public"
+  ],
   "prettier": {
     "trailingComma": "es5",
     "tabWidth": 2,
@@ -8,6 +12,6 @@
     "singleQuote": true
   },
   "plugins": [
-    "https://plugins.dprint.dev/prettier-0.10.0.json@ca9a97de84cbb2cd60534eb72c0455f3ca8704743917569ace70499136cf5c9c"
+    "https://plugins.dprint.dev/prettier-0.26.6.json@0118376786f37496e41bb19dbcfd1e7214e2dc859a55035c5e54d1107b4c9c57"
   ]
 }

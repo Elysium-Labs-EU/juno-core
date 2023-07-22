@@ -2,14 +2,14 @@
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
     "beforeBuildCommand": "yarn build",
-    "beforeDevCommand": "yarn start",
+    "beforeDevCommand": "yarn dev",
     "devPath": "http://localhost:3000",
     "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
     "productName": "Juno",
-    "version": "0.1.9"
+    "version": "0.1.91"
   },
   "tauri": {
     "allowlist": {
@@ -21,7 +21,10 @@
       },
       "fs": {
         "writeFile": true,
-        "scope": ["$DOWNLOAD/*", "$TEMP/*"]
+        "scope": [
+          "$DOWNLOAD/*",
+          "$TEMP/*"
+        ]
       },
       "shell": {
         "open": true
@@ -29,7 +32,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Productivity",
       "copyright": "",
       "deb": {
         "depends": []
@@ -76,8 +79,10 @@
         "height": 900,
         "resizable": true,
         "title": "Juno",
+        "hiddenTitle": true,
         "width": 1400,
-        "minWidth": 900
+        "minWidth": 900,
+        "titleBarStyle": "Transparent"
       }
     ]
   }

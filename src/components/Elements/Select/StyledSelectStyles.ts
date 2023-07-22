@@ -91,7 +91,7 @@ const scrollButtonStyles = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: 25,
+  height: '25px',
   backgroundColor: 'white',
   cursor: 'default',
 }

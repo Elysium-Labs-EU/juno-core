@@ -6,7 +6,7 @@ import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBub
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import CustomToast from 'components/Elements/Toast/Toast'
-import { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'
@@ -19,11 +19,11 @@ const ATTACHMENTS = 'Attachments'
 const MAX_MB_UPLOAD_DIRECT = 25000000
 
 const customIsEqual = (
-  composeValue: Array<File> | Array<IEmailAttachmentType> | undefined,
+  composeValue: Array<File> | Array<EmailAttachmentType> | undefined,
   uploadedFiles: Array<File>
 ) =>
   isEqual(
-    composeValue?.map((item: File | IEmailAttachmentType) => ({
+    composeValue?.map((item: File | EmailAttachmentType) => ({
       size: 'size' in item ? item.size : item.body.size,
       name: 'name' in item ? item.name : item.filename,
     })),
@@ -34,7 +34,7 @@ const customIsEqual = (
   )
 
 interface IAttachments {
-  composeValue: Array<File> | Array<IEmailAttachmentType> | undefined
+  composeValue: Array<File> | Array<EmailAttachmentType> | undefined
   hasInteracted: boolean
   loadState: string
   messageId: string | undefined
@@ -69,8 +69,8 @@ const Attachments = ({
       if (composeValue.some((value: any) => 'partId' in value) && messageId) {
         setLocalLoadState(global.LOAD_STATE_MAP.loading)
         const fetchAttachments = async () => {
-          const noneFileTypeItems: IEmailAttachmentType[] = []
-          composeValue.forEach((item: File | IEmailAttachmentType) => {
+          const noneFileTypeItems: EmailAttachmentType[] = []
+          composeValue.forEach((item: File | EmailAttachmentType) => {
             if ('partId' in item) {
               noneFileTypeItems.push(item)
             }
@@ -81,7 +81,7 @@ const Attachments = ({
           })
           if (response && response.length > 0) {
             const fileTypeItems: File[] = []
-            composeValue.forEach((item: File | IEmailAttachmentType) => {
+            composeValue.forEach((item: File | EmailAttachmentType) => {
               if (!('partId' in item)) {
                 fileTypeItems.push(item)
               }

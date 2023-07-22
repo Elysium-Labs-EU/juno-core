@@ -20,7 +20,7 @@ const Seo = ({
   ogType?: string
 }) => (
   <Helmet>
-    <title>{`${`${title} - ${APP_TITLE}`}`}</title>
+    <title>{`${title} - ${APP_TITLE}`}</title>
     {/* <meta name="description" content={metaDescription} /> */}
     <meta property="twitter:title" content={ogTitle} />
     <meta property="twitter:description" content={ogDescription} />

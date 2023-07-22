@@ -1,5 +1,5 @@
 import type {
-  IEmailAttachmentType,
+  EmailAttachmentType,
   IFetchedAttachment,
 } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as global from 'constants/globalConstants'
@@ -14,7 +14,7 @@ const AttachmentModal = ({
   attachmentData,
 }: {
   fetchedAttachmentData: IFetchedAttachment | null
-  attachmentData: IEmailAttachmentType
+  attachmentData: EmailAttachmentType
 }) => {
   const activeModal = useAppSelector(selectActiveModal)
 

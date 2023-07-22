@@ -1,7 +1,9 @@
 import { push } from 'redux-first-history'
 
+import { BACK_TO_EMAIL } from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import type { AppDispatch } from 'store/store'
+
 /**
  * @function createComposeViaURL
  * @property {object} - the object containing the params for the function.
@@ -18,6 +20,6 @@ export default function createComposeViaURL({
   mailToLink: string
 }): void {
   dispatch(
-    push(`${RoutesConstants.COMPOSE_EMAIL}?${mailToLink.replace(':', '=')}`)
+    push(`${RoutesConstants.COMPOSE_EMAIL}?${mailToLink.replace(':', '=')}`, BACK_TO_EMAIL)
   )
 }

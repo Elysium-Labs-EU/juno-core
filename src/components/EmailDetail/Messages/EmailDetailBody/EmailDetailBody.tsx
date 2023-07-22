@@ -47,7 +47,10 @@ const ShadowBody = ({ email }: IShadowBody) => {
   return (
     // TODO: This is a temporary fix.
     // @ts-ignore
-    <root.div ref={callbackRef} style={{ all: 'unset', overflow: 'auto' }}>
+    <root.div
+      ref={callbackRef}
+      style={{ all: 'unset', overflow: 'auto', textAlign: 'left' }}
+    >
       {sanitizeAndParseHtmlContent(email)}
     </root.div>
   )
@@ -70,12 +73,12 @@ const EmailDetailBody = ({
         </Wrapper>
       )}
       {email && email.length > 0 && <ShadowBody email={email} />}
-      {emailFiles.map((emailFile, index) => {
+      {emailFiles.map((emailFile) => {
         const { mimeType, decodedB64, filename } = emailFile
         if (mimeType && decodedB64) {
           return (
             <img
-              key={`${filename + index}`}
+              key={filename}
               src={`data:${mimeType};base64,${decodedB64}`}
               alt={filename || 'embedded image'}
               style={{ maxWidth: '100%', borderRadius: 'var(--border-m)' }}

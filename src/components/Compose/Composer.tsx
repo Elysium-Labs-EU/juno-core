@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
-import type { IEmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
@@ -56,9 +56,9 @@ const isTContactArray = (value: unknown): value is TContact[] =>
 const isFileArray = (value: unknown): value is File[] =>
   Array.isArray(value) && value.every((item) => item instanceof File)
 
-const isIEmailAttachmentTypeArray = (
+const isEmailAttachmentTypeArray = (
   value: any
-): value is IEmailAttachmentType[] =>
+): value is EmailAttachmentType[] =>
   Array.isArray(value) &&
   value.every(
     (item) =>
@@ -340,7 +340,7 @@ const Composer = ({
       <Attachments
         composeValue={
           isFileArray(composedEmail?.files) ||
-          isIEmailAttachmentTypeArray(composedEmail?.files)
+            isEmailAttachmentTypeArray(composedEmail?.files)
             ? composedEmail?.files
             : undefined
         }

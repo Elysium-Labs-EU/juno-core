@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import type {
-  IEmailAttachmentType,
+  EmailAttachmentType,
   IFetchedAttachment,
 } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as global from 'constants/globalConstants'
@@ -45,7 +45,7 @@ const DownloadButton = ({
   attachmentData,
   messageId = undefined,
 }: {
-  attachmentData: IEmailAttachmentType
+  attachmentData: EmailAttachmentType
   messageId?: string
 }) => {
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
@@ -106,7 +106,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
       attachmentData,
       messageId = undefined,
     }: {
-      attachmentData: IEmailAttachmentType
+      attachmentData: EmailAttachmentType
       messageId?: string
     },
     ref
@@ -189,7 +189,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
 )
 
 interface IAttachmentBubble {
-  attachmentData: IEmailAttachmentType | File
+  attachmentData: EmailAttachmentType | File
   handleDelete?: (attachmentIndex: number) => void
   hasDownloadOption?: boolean
   index?: number | undefined
