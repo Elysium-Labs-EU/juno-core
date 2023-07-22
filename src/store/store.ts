@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import type { Action, PreloadedState, ThunkAction } from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
+import { unstable_batchedUpdates } from 'react-dom'
 import { createReduxHistoryContext } from 'redux-first-history'
 
 import baseReducer from 'store/baseSlice'
@@ -10,7 +11,6 @@ import emailDetailReducer from 'store/emailDetailSlice'
 import emailReducer from 'store/emailListSlice'
 import labelsReducer from 'store/labelsSlice'
 import utilsReducer from 'store/utilsSlice'
-import { unstable_batchedUpdates } from 'react-dom'
 
 const { createReduxHistory, routerMiddleware, routerReducer } =
   createReduxHistoryContext({

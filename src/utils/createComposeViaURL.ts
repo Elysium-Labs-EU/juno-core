@@ -1,8 +1,9 @@
 import { push } from 'redux-first-history'
 
+import { BACK_TO_EMAIL } from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import type { AppDispatch } from 'store/store'
-import { BACK_TO_EMAIL } from 'constants/globalConstants'
+
 /**
  * @function createComposeViaURL
  * @property {object} - the object containing the params for the function.

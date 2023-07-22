@@ -1,4 +1,4 @@
-import { expect } from 'vitest'
+import { describe, expect } from 'vitest'
 
 import isEqual from '../isEqual'
 

@@ -160,7 +160,5 @@
     "vite": "4.4.6",
     "vite-tsconfig-paths": "4.2.0",
     "vitest": "0.33.0"
-  },
-  "readme": "ERROR: No README data found!",
-  "_id": "juno-core@0.1.8"
+  }
 }

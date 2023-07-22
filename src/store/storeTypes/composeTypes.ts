@@ -1,7 +1,8 @@
+import { z } from 'zod'
+
 import { EmailAttachmentTypeSchema } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import { Contact } from 'store/storeTypes/contactsTypes'
-import { z } from 'zod'
 
 export interface IComposePayload {
   bcc?: Array<TContact>

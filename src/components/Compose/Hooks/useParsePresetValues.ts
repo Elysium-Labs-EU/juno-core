@@ -2,7 +2,10 @@ import { useEffect } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
 import * as global from 'constants/globalConstants'
-import { ComposeEmailReceiveSchema, IComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import {
+  ComposeEmailReceiveSchema,
+  IComposeEmailReceive,
+} from 'store/storeTypes/composeTypes'
 import { handleContactConversion } from 'utils/convertToContact'
 import parseQueryString from 'utils/parseQueryString'
 
@@ -66,17 +69,16 @@ export default function useParsePresetValues({
     if (mounted && loadState === global.LOAD_STATE_MAP.idle) {
       // composeEmail object coming from the passed props
       if (presetValueObject) {
-        if (!ComposeEmailReceiveSchema.safeParse(presetValueObject).success) {
-          return
+        if (ComposeEmailReceiveSchema.safeParse(presetValueObject).success) {
+          const output = handlePresetvalueConversions(presetValueObject)
+          if ('cc' in output) {
+            setShowCC(true)
+          }
+          if ('bcc' in output) {
+            setShowBCC(true)
+          }
+          setComposedEmail(output)
         }
-        const output = handlePresetvalueConversions(presetValueObject)
-        if ('cc' in output) {
-          setShowCC(true)
-        }
-        if ('bcc' in output) {
-          setShowBCC(true)
-        }
-        setComposedEmail(output)
       }
       // composeEmail object coming from a draft item on the draft list via the pushed route
       const {

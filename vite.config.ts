@@ -31,5 +31,5 @@ export default defineConfig({
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
-  // test: vitestConfig.test,
+  test: vitestConfig.test,
 })
