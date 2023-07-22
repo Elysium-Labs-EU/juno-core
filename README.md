@@ -27,7 +27,7 @@ There are two ways to get started. With installer or without installer.
 2. Create a file named `.env` in the root of the project
 3. If you want to run the backend on your local machine, follow the steps [here](https://github.com/Elysium-Labs-EU/juno-backend-service/blob/main/README.md) or skip to the next step.
 4. Add `VITE_BACKEND_URL=YOUR_BACKEND_URL` to the `.env` file. If you want to use our hosted cloud backend, set `VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND=true` and `VITE_BACKEND_URL=https://juno-api.elysiumlabs.io`. And request to be added to the Google Test users via Discord
-5. Run the app using `yarn start`. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+5. Run the app using `yarn dev`. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Contributing
 

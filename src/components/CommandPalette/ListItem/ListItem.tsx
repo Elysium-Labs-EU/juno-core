@@ -7,7 +7,6 @@ import { Span } from 'styles/globalStyles'
 import * as S from './ListItemStyles'
 import { COMMAND_PALLETE_ITEM } from '../CommandPalette'
 
-
 export type TListItemType = 'Link' | 'Command'
 
 const ListItemContent = ({
