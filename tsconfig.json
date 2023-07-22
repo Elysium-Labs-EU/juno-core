@@ -14,7 +14,7 @@
     ],
     "module": "ESNext",
     "moduleDetection": "force",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "noEmit": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,

@@ -78,15 +78,18 @@ export const HEADER_TODO = 'todo'
 export const HEADER_TRASH = 'trash'
 export const INVALID_SESSION = 'Invalid session'
 export const INVALID_TOKEN = 'Invalid token'
-export const LINUX_OS = 'Linux OS'
 export const LOAD_MORE = 'Load more messages'
 export const LOADING_TEXT = 'Loading'
-export const MAC_OS = 'MacOS'
 export const ME_LABEL = 'me'
 export const NETWORK_ERROR = 'Network Error. Please try again later'
 export const NO_MORE_RESULTS = "You've reached the end."
 export const NO_SUBJECT = '(No subject)'
 export const NOTHING_TO_SEE = 'Nothing to see here'
 export const SOMETHING_WRONG = 'Something went wrong whilst loading data.'
-export const UNIX_OS = 'UNIX OS'
-export const WINDOWS_OS = 'Windows OS'
+
+export const OPERATING_SYSTEMS = {
+  LINUX_OS: 'Linux OS',
+  MAC_OS: 'MacOS',
+  UNIX_OS: 'UNIX OS',
+  WINDOWS_OS: 'Windows OS',
+} as const
