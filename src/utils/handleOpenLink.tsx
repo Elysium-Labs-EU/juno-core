@@ -4,11 +4,11 @@ import CustomButton from 'components/Elements/Buttons/CustomButton'
 import CustomToast from 'components/Elements/Toast/Toast'
 import handleCopyToClipboard from 'utils/handleCopyToClipboard'
 
-interface IHandleOpenLink {
-  action: string | undefined
+interface HandleOpenLinkProps {
+  action: string | null | undefined
 }
 
-export default function handleOpenLink({ action }: IHandleOpenLink) {
+export default function handleOpenLink({ action }: HandleOpenLinkProps) {
   if (action) {
     const newWindow = window.open(action)
 

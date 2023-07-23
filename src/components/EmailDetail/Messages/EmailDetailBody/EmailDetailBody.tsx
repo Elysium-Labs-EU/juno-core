@@ -9,7 +9,7 @@ import type {
 } from 'components/EmailDetail/EmailDetailTypes'
 import { useAppDispatch } from 'store/hooks'
 import handleEmailLink from 'utils/handleEmailLink'
-import openLinkInNewTabTauri from 'utils/openLinkInNewTabTauri'
+import openLinkInNewTabTauri from 'utils/tauri/openLinkInNewTabTauri'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 
 import Wrapper from './EmailDetailBodyStyles'
