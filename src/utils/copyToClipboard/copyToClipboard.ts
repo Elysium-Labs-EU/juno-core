@@ -1,4 +1,4 @@
-export default async function copyToClipboard(text: string | undefined) {
+export default async function copyToClipboard(text: string | null | undefined) {
   try {
     if (!text) {
       throw new Error('Text to copy is undefined')
