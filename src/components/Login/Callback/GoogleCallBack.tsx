@@ -32,6 +32,7 @@ const GoogleCallBack = () => {
         }
 
         const response = await userApi().authGoogleCallback(body)
+        console.log(response)
 
         // If the cloud backend is used with the local frontend, the authorization requires the complete Credentials object.
         if (
@@ -41,11 +42,11 @@ const GoogleCallBack = () => {
           'data' in response
         ) {
           if (
-            import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
+            import.meta.env.VITE_USE_SESSION === 'true'
           ) {
-            handleUserTokens(response).setCredentials()
-          } else {
             handleUserTokens(response).setIdToken()
+          } else {
+            handleUserTokens(response).setCredentials()
           }
           dispatch(setIsAuthenticated(true))
           dispatch(push(RoutesConstants.TODO))
@@ -72,7 +73,7 @@ const GoogleCallBack = () => {
         ))
       }
     }
-    getTokens()
+    void getTokens()
   }, [])
 
   return <Baseloader />

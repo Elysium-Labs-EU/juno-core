@@ -35,8 +35,8 @@ const GoogleButton = ({
       onClick={() => onClick()}
       disabled={disabled}
       type="button"
-      isActive={disabled}
-      showLoadingState={showLoadingState}
+      isactive={disabled ? 'true' : 'false'}
+      showloadingstate={showLoadingState ? 'true' : 'false'}
     >
       <S.IconContainer>
         <FcGoogle size={20} />

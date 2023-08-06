@@ -5,9 +5,9 @@ import handleUserTokens from 'utils/handleUserTokens'
 import * as S from '../NavigationMoreStyles'
 
 export const handleLogout = () => {
-  userApi().logoutUser()
-  handleUserTokens().removeAllAuthTokens()
-  window.location.reload()
+  // void userApi().logoutUser()
+  // handleUserTokens().removeAllAuthTokens()
+  // window.location.reload()
 }
 
 interface ILogoutOption {

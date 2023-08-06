@@ -1,11 +1,9 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/button-has-type */
 import { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Span } from 'styles/globalStyles'
 
-type TCustomButton = {
+type CustomButton = {
   attention?: boolean
   dataCy?: string
   disabled?: boolean
@@ -16,12 +14,12 @@ type TCustomButton = {
   type?: 'submit' | 'reset' | 'button'
 } & React.HTMLAttributes<HTMLButtonElement>
 
-interface IButton {
+interface Button {
   attention: boolean | undefined
   suppressed: string | undefined
 }
 
-const Button = styled.button<IButton>`
+const Button = styled.button<Button>`
   all: unset;
   background-color: transparent;
   border-bottom-color: transparent;
@@ -67,27 +65,27 @@ const Button = styled.button<IButton>`
   }
 `
 
-interface IInnerButton {
+interface InnerButton {
   hasLabel: boolean
   showIconAfterLabel: boolean
 }
 
-const InnerButton = styled.div<IInnerButton>`
+const InnerButton = styled.div<InnerButton>`
   align-items: center;
   display: flex;
 
   .icon {
     line-height: 0;
     margin-right: ${({ hasLabel, showIconAfterLabel }) =>
-      hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
+    hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
     margin-left: ${({ hasLabel, showIconAfterLabel }) =>
-      hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
+    hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
 `
 
-const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
+const CustomButton = forwardRef<HTMLButtonElement, CustomButton>(
   (
     {
       attention = false,
@@ -108,7 +106,7 @@ const CustomButton = forwardRef<HTMLButtonElement, TCustomButton>(
       disabled={disabled}
       ref={ref}
       suppressed={suppressed.toString()}
-      type={type ?? 'button'}
+      type={type}
       {...rest}
     >
       <InnerButton

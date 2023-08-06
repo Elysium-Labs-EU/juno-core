@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import type { TAriaHaspopup } from 'globalTypes'
 import { Span } from 'styles/globalStyles'
 
-type TCustomIconButton = {
+type CustomIconButton = {
   ariaControls?: string | undefined
   ariaExpanded?: boolean | undefined
   ariaHaspopup?: TAriaHaspopup
@@ -14,21 +14,21 @@ type TCustomIconButton = {
   disabled?: boolean
   hoverColor?: string
   icon: JSX.Element
-  isActive?: boolean
+  isactive?: string
   type?: 'submit' | 'reset' | 'button'
 } & React.HTMLAttributes<HTMLButtonElement>
 
-interface IButton {
+interface Button {
   hoverColor: string | undefined
-  isActive: boolean | undefined
+  isactive: string | undefined
 }
 
-const Button = styled.button<IButton>`
+const Button = styled.button<Button>`
   all: unset;
   background-color: transparent;
   border: none;
-  color: ${({ isActive }) =>
-    isActive ? 'var(--color-black)' : 'var(--color-neutral-400)'};
+  color: ${({ isactive }) =>
+    isactive === 'true' ? 'var(--color-black)' : 'var(--color-neutral-400)'};
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
@@ -41,7 +41,7 @@ const Button = styled.button<IButton>`
     cursor: not-allowed;
   }
 `
-const CustomIconButton = forwardRef<HTMLButtonElement, TCustomIconButton>(
+const CustomIconButton = forwardRef<HTMLButtonElement, CustomIconButton>(
   (
     {
       ariaHaspopup = undefined,
@@ -51,7 +51,7 @@ const CustomIconButton = forwardRef<HTMLButtonElement, TCustomIconButton>(
       disabled = false,
       hoverColor = undefined,
       icon,
-      isActive = false,
+      isactive = 'false',
       type = 'button',
       ...rest
     },
@@ -64,9 +64,9 @@ const CustomIconButton = forwardRef<HTMLButtonElement, TCustomIconButton>(
       data-cy={dataCy}
       disabled={disabled}
       hoverColor={hoverColor}
-      isActive={isActive}
+      isactive={isactive}
       ref={ref}
-      type={type ?? 'button'}
+      type={type}
       {...rest}
     >
       <Span style={{ display: 'flex' }}>{icon}</Span>
@@ -81,7 +81,7 @@ CustomIconButton.defaultProps = {
   dataCy: undefined,
   disabled: false,
   hoverColor: undefined,
-  isActive: false,
+  isactive: 'false',
   type: 'button',
 }
 

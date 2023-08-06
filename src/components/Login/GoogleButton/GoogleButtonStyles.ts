@@ -15,21 +15,21 @@ export const Inner = styled.div`
   box-shadow: 0 1px 2px 0 rgb(9 30 66 / 25%);
 `
 
-interface StyledButton {
-  isActive: boolean
-  showLoadingState: boolean
+interface StyledButtonProps {
+  isactive: string
+  showloadingstate: string
 }
 
-export const StyledButton = styled.button<StyledButton>`
+export const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  background-color: ${({ isActive }) =>
-    isActive ? `var(--color-neutral-800)` : `var(--color-black)`};
+  background-color: ${({ isactive }) =>
+    isactive === 'true' ? `var(--color-neutral-800)` : `var(--color-black)`};
   border-radius: var(--radius-m);
   border: none;
   box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
   color: var(--color-white);
-  cursor: ${({ showLoadingState }) =>
-    showLoadingState ? 'progress' : 'pointer'};
+  cursor: ${({ showloadingstate }) =>
+    showloadingstate === 'true' ? 'progress' : 'pointer'};
   display: flex;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;

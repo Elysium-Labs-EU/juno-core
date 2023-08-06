@@ -177,14 +177,14 @@ export const BACKGROUND_FADE = css`
   );
 `
 
-interface ITextProps {
+interface TextProps {
   extraBold?: boolean
   bold?: boolean
   muted?: boolean
   small?: boolean
 }
 
-export const Paragraph = styled.p<ITextProps>`
+export const Paragraph = styled.p<TextProps>`
   ${({ bold }) =>
     bold &&
     css`
@@ -207,7 +207,7 @@ export const Paragraph = styled.p<ITextProps>`
     `}
 `
 
-export const Span = styled.span<ITextProps>`
+export const Span = styled.span<TextProps>`
   ${({ bold }) =>
     bold &&
     css`

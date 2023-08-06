@@ -1,5 +1,3 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-param-reassign */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
@@ -466,25 +464,25 @@ export const useSearchResults =
     searchResults: TEmailListObject
     currentEmail: string
   }): AppThunk =>
-  (dispatch, getState) => {
-    const { searchList } = getState().email
-    const { coreStatus } = getState().emailDetail
-    if (searchList !== searchResults) {
-      dispatch(listUpdateSearchResults(searchResults))
-    }
-    if (coreStatus !== global.CORE_STATUS_MAP.searching) {
-      dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
-      dispatch(setCurrentLabels([global.SEARCH_LABEL]))
-    }
+    (dispatch, getState) => {
+      const { searchList } = getState().email
+      const { coreStatus } = getState().emailDetail
+      if (searchList !== searchResults) {
+        dispatch(listUpdateSearchResults(searchResults))
+      }
+      if (coreStatus !== global.CORE_STATUS_MAP.searching) {
+        dispatch(setCoreStatus(global.CORE_STATUS_MAP.searching))
+        dispatch(setCurrentLabels([global.SEARCH_LABEL]))
+      }
 
-    dispatch(
-      setViewIndex(
-        searchResults.threads.findIndex((item) => item.id === currentEmail)
+      dispatch(
+        setViewIndex(
+          searchResults.threads.findIndex((item) => item.id === currentEmail)
+        )
       )
-    )
-    dispatch(setCurrentEmail(currentEmail))
-    dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
-  }
+      dispatch(setCurrentEmail(currentEmail))
+      dispatch(push(`/mail/${global.SEARCH_LABEL}/${currentEmail}/messages`))
+    }
 
 /**
  * Async thunk function that loads email details.
@@ -496,73 +494,73 @@ export const useSearchResults =
 
 export const loadEmailDetails =
   (emailListObjectArray: Array<TEmailListObject>): AppThunk =>
-  (dispatch, getState) => {
-    const { storageLabels } = getState().labels
-    // TODO: Introduce filtering on historyId, to understand which emails are new to the system and update the system for that.
-    emailListObjectArray.forEach((labeledThreads) => {
-      const { threads, labels, nextPageToken } = labeledThreads
-      if (threads.length > 0) {
-        const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
-        if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
-          const labelNames = lastMessage.labelIds
-          if (labelNames) {
-            const legalLabels = onlyLegalLabelObjects({
-              storageLabels,
-              labelNames,
-            })
-            if (legalLabels.length > 0) {
-              for (const label of legalLabels) {
-                if (label.id) {
-                  dispatch(
-                    listAddEmailList({
-                      labels: [label.id],
-                      threads,
-                      nextPageToken: nextPageToken ?? null,
-                    })
-                  )
-                } else {
-                  toast.custom((t) => (
-                    <CustomToast
-                      specificToast={t}
-                      title="Error updating label."
-                      variant="error"
-                    />
-                  ))
+    (dispatch, getState) => {
+      const { storageLabels } = getState().labels
+      // TODO: Introduce filtering on historyId, to understand which emails are new to the system and update the system for that.
+      emailListObjectArray.forEach((labeledThreads) => {
+        const { threads, labels, nextPageToken } = labeledThreads
+        if (threads.length > 0) {
+          const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
+          if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
+            const labelNames = lastMessage.labelIds
+            if (labelNames) {
+              const legalLabels = onlyLegalLabelObjects({
+                storageLabels,
+                labelNames,
+              })
+              if (legalLabels.length > 0) {
+                for (const label of legalLabels) {
+                  if (label.id) {
+                    dispatch(
+                      listAddEmailList({
+                        labels: [label.id],
+                        threads,
+                        nextPageToken: nextPageToken ?? null,
+                      })
+                    )
+                  } else {
+                    toast.custom((t) => (
+                      <CustomToast
+                        specificToast={t}
+                        title="Error updating label."
+                        variant="error"
+                      />
+                    ))
+                  }
                 }
               }
             }
+          } else {
+            dispatch(
+              listAddEmailList({
+                labels,
+                threads,
+                nextPageToken: nextPageToken ?? null,
+              })
+            )
+            dispatch(setLoadedInbox(labels))
           }
+          getState().utils.isLoading && dispatch(setIsLoading(false))
+          getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
         } else {
-          dispatch(
-            listAddEmailList({
-              labels,
-              threads,
-              nextPageToken: nextPageToken ?? null,
-            })
-          )
-          dispatch(setLoadedInbox(labels))
-        }
-        getState().utils.isLoading && dispatch(setIsLoading(false))
-        getState().utils.isSilentLoading && dispatch(setIsSilentLoading(false))
-      } else {
-        if (
-          !getState().base.baseLoaded &&
-          labels.some((val) => !getState().labels.loadedInbox.includes(val))
-        ) {
-          dispatch(setLoadedInbox(labels))
-        }
-        if (
-          !getState().base.baseLoaded &&
-          getState().labels.storageLabels.length ===
+          if (
+            !getState().base.baseLoaded &&
+            labels.some((val) => !getState().labels.loadedInbox.includes(val))
+          ) {
+            dispatch(setLoadedInbox(labels))
+          }
+          if (
+            !getState().base.baseLoaded &&
+            getState().labels.storageLabels.length ===
             getState().labels.loadedInbox.length
-        ) {
-          dispatch(setIsLoading(false))
-          getState().utils.isSilentLoading &&
-            dispatch(setIsSilentLoading(false))
+          ) {
+            dispatch(setIsLoading(false))
+            getState().utils.isSilentLoading &&
+              dispatch(setIsSilentLoading(false))
+          }
         }
-      }
-    })
-  }
+      })
+    }
 
 /**
  * @function updateEmailLabel
@@ -576,97 +574,106 @@ export const updateEmailLabel =
     request: { removeLabelIds },
     labelIds,
   }: TUpdateRequestParamsSingleThread): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { coreStatus, viewIndex } = getState().emailDetail
-      const { activeEmailListIndex, emailList, searchList } = getState().email
-      const { isSilentLoading } = getState().utils
-      const staticActiveEmailList =
-        activeEmailListIndex === -1
-          ? searchList
-          : emailList[activeEmailListIndex]
+    async (dispatch, getState) => {
+      try {
+        const { coreStatus, viewIndex } = getState().emailDetail
+        const { activeEmailListIndex, emailList, searchList } = getState().email
+        const { isSilentLoading } = getState().utils
+        const staticActiveEmailList =
+          activeEmailListIndex === -1
+            ? searchList
+            : emailList[activeEmailListIndex]
 
-      if (
-        staticActiveEmailList &&
-        Object.keys(staticActiveEmailList).length > 0
-      ) {
         if (
-          getState().router.location?.pathname.includes('/mail/') &&
-          !getState().labels.labelIds.includes(global.DRAFT_LABEL)
+          staticActiveEmailList &&
+          Object.keys(staticActiveEmailList).length > 0
         ) {
-          // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
-          // This action is done first, to speed up the UX.
           if (
-            (request.removeLabelIds &&
-              !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+            getState().router.location?.pathname.includes('/mail/') &&
+            !getState().labels.labelIds.includes(global.DRAFT_LABEL)
+          ) {
+            // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
+            // This action is done first, to speed up the UX.
+            if (
+              (request.removeLabelIds &&
+                !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+              request.delete
+            ) {
+              const blockViewIndexUpdate = true
+              const forceNavigateBack =
+                !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
+              dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
+              if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
+                const { emailFetchSize } = getState().utils
+                edgeLoadingNextPage({
+                  activeEmailList: staticActiveEmailList,
+                  dispatch,
+                  emailFetchSize,
+                  isSilentLoading,
+                  labelIds,
+                })
+              }
+            }
+          }
+
+          // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
+          if (!request.delete) {
+            try {
+              if (threadId) {
+                await threadApi({}).updateThread({
+                  threadId,
+                  request,
+                })
+              }
+            } catch (err) {
+              toast.custom((t) => (
+                <CustomToast
+                  specificToast={t}
+                  title="Error updating label."
+                  variant="error"
+                />
+              ))
+            }
+          }
+          // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
+          if (request.delete) {
+            try {
+              if (threadId) {
+                threadApi({}).thrashThread({
+                  threadId,
+                })
+              }
+            } catch (err) {
+              toast.custom((t) => (
+                <CustomToast
+                  specificToast={t}
+                  title="Error updating label."
+                  variant="error"
+                />
+              ))
+            }
+          }
+          // If the request is to delete the thread or message, or to remove a label (except the unread label)
+          if (
+            (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
             request.delete
           ) {
-            const blockViewIndexUpdate = true
-            const forceNavigateBack =
-              !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
-            dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
-            if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
-              const { emailFetchSize } = getState().utils
-              edgeLoadingNextPage({
-                activeEmailList: staticActiveEmailList,
-                dispatch,
-                emailFetchSize,
-                isSilentLoading,
-                labelIds,
-              })
-            }
-          }
-        }
-
-        // If the request is NOT to delete the message, it is a request to update the label. Send the request for updating the thread or message to the Gmail API.
-        if (!request.delete) {
-          try {
-            if (threadId) {
-              await threadApi({}).updateThread({
-                threadId,
-                request,
-              })
-            }
-          } catch (err) {
-            toast.custom((t) => (
-              <CustomToast
-                specificToast={t}
-                title="Error updating label."
-                variant="error"
-              />
-            ))
-          }
-        }
-        // If the request is to delete the thread or message, dispatch the thrash action to the Gmail API.
-        if (request.delete) {
-          try {
-            if (threadId) {
-              threadApi({}).thrashThread({
+            dispatch(
+              listRemoveItemDetail({
                 threadId,
               })
-            }
-          } catch (err) {
-            toast.custom((t) => (
-              <CustomToast
-                specificToast={t}
-                title="Error updating label."
-                variant="error"
-              />
-            ))
+            )
           }
+        } else {
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Error updating label."
+              variant="error"
+            />
+          ))
         }
-        // If the request is to delete the thread or message, or to remove a label (except the unread label)
-        if (
-          (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
-          request.delete
-        ) {
-          dispatch(
-            listRemoveItemDetail({
-              threadId,
-            })
-          )
-        }
-      } else {
+      } catch (err) {
         toast.custom((t) => (
           <CustomToast
             specificToast={t}
@@ -675,45 +682,45 @@ export const updateEmailLabel =
           />
         ))
       }
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Error updating label."
-          variant="error"
-        />
-      ))
     }
-  }
 
 export const updateEmailLabelBatch =
   ({
     request,
     request: { removeLabelIds },
   }: TUpdateRequestParamsBatchThread): AppThunk =>
-  (dispatch, getState) => {
-    try {
-      const { selectedEmails } = getState().email
-      if (
-        (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
-        request.delete
-      ) {
-        dispatch(
-          listRemoveItemDetailBatch({
-            messageIds: selectedEmails.selectedIds,
-          })
-        )
-      }
-      for (let i = 0; i < selectedEmails.selectedIds.length; i += 1) {
-        if (!request.delete) {
-          const selectedId = selectedEmails.selectedIds[i]
-          if (selectedId) {
-            try {
-              threadApi({}).updateThread({
-                threadId: selectedId,
-                request,
-              })
-            } catch (err) {
+    (dispatch, getState) => {
+      try {
+        const { selectedEmails } = getState().email
+        if (
+          (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
+          request.delete
+        ) {
+          dispatch(
+            listRemoveItemDetailBatch({
+              messageIds: selectedEmails.selectedIds,
+            })
+          )
+        }
+        for (let i = 0; i < selectedEmails.selectedIds.length; i += 1) {
+          if (!request.delete) {
+            const selectedId = selectedEmails.selectedIds[i]
+            if (selectedId) {
+              try {
+                threadApi({}).updateThread({
+                  threadId: selectedId,
+                  request,
+                })
+              } catch (err) {
+                toast.custom((t) => (
+                  <CustomToast
+                    specificToast={t}
+                    title="Error updating label."
+                    variant="error"
+                  />
+                ))
+              }
+            } else {
               toast.custom((t) => (
                 <CustomToast
                   specificToast={t}
@@ -722,24 +729,24 @@ export const updateEmailLabelBatch =
                 />
               ))
             }
-          } else {
-            toast.custom((t) => (
-              <CustomToast
-                specificToast={t}
-                title="Error updating label."
-                variant="error"
-              />
-            ))
           }
-        }
-        if (request.delete) {
-          const selectedId = selectedEmails.selectedIds[i]
-          if (selectedId) {
-            try {
-              threadApi({}).thrashThread({
-                threadId: selectedId,
-              })
-            } catch (err) {
+          if (request.delete) {
+            const selectedId = selectedEmails.selectedIds[i]
+            if (selectedId) {
+              try {
+                threadApi({}).thrashThread({
+                  threadId: selectedId,
+                })
+              } catch (err) {
+                toast.custom((t) => (
+                  <CustomToast
+                    specificToast={t}
+                    title="Error updating label."
+                    variant="error"
+                  />
+                ))
+              }
+            } else {
               toast.custom((t) => (
                 <CustomToast
                   specificToast={t}
@@ -748,27 +755,18 @@ export const updateEmailLabelBatch =
                 />
               ))
             }
-          } else {
-            toast.custom((t) => (
-              <CustomToast
-                specificToast={t}
-                title="Error updating label."
-                variant="error"
-              />
-            ))
           }
         }
+      } catch (err) {
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Error updating label."
+            variant="error"
+          />
+        ))
       }
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Error updating label."
-          variant="error"
-        />
-      ))
     }
-  }
 
 export const updateMessageLabel =
   ({
@@ -780,28 +778,28 @@ export const updateMessageLabel =
     threadId: string
     request: TGmailV1SchemaModifyThreadRequestSchemaEnhanced
   }): AppThunk =>
-  async (dispatch) => {
-    if (request.delete) {
-      try {
-        await messageApi().thrashMessage({ messageId })
-      } catch {
-        toast.custom((t) => (
-          <CustomToast
-            specificToast={t}
-            title="Error updating label."
-            variant="error"
-          />
-        ))
+    async (dispatch) => {
+      if (request.delete) {
+        try {
+          await messageApi().thrashMessage({ messageId })
+        } catch {
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Error updating label."
+              variant="error"
+            />
+          ))
+        }
       }
-    }
 
-    dispatch(
-      listRemoveItemMessage({
-        messageId,
-        threadId,
-      })
-    )
-  }
+      dispatch(
+        listRemoveItemMessage({
+          messageId,
+          threadId,
+        })
+      )
+    }
 
 /**
  * @function refreshEmailFeed
@@ -824,7 +822,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       }
       const userResponse = await userApi().fetchUser()
       const { signature } = getState().base.profile
-      if ('data' in userResponse) {
+      if (userResponse && 'data' in userResponse) {
         const { data } = userResponse
         dispatch(setProfile({ signature, ...data }))
       }

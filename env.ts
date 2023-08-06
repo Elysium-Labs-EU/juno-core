@@ -8,16 +8,16 @@ const envVariables = z.object({
   VITE_DOCUMENTATION_URL: z.string().optional().nullable(),
   VITE_FORMSPARK_FORM_ID: z.string().optional().nullable(),
   VITE_SENTRY_DSN: z.string().optional().nullable(),
-  VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND: z.string(),
+  VITE_USE_SESSION: z.string(),
 })
 
 envVariables.parse(process.env)
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends z.infer<typeof envVariables> {}
+    interface ProcessEnv extends z.infer<typeof envVariables> { }
   }
-  interface ImportMetaEnv extends z.infer<typeof envVariables> {}
+  interface ImportMetaEnv extends z.infer<typeof envVariables> { }
   interface ImportMeta {
     readonly env: ImportMetaEnv
   }

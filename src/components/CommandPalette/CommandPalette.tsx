@@ -49,7 +49,7 @@ const openDetail = ({
   dispatch: AppDispatch
   searchResults: TEmailListObject
 }) => {
-  dispatch(useSearchResults({ searchResults, currentEmail }))
+  void dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
 }
 
@@ -112,15 +112,11 @@ const CommandPallette = () => {
   }
 
   useEffect(() => {
-    let mounted = true
     if (
       searchList &&
       (searchResults?.threads.length ?? 0) < searchList.threads.length
     ) {
-      mounted && setSearchResults(searchList)
-    }
-    return () => {
-      mounted = false
+      setSearchResults(searchList)
     }
   }, [searchList])
 
@@ -187,7 +183,7 @@ const CommandPallette = () => {
     }
     setLoadState(LOAD_STATE_MAP.loading)
     shouldClearOutPreviousResults()
-    fetchSearchThreads(searchBody)
+    void fetchSearchThreads(searchBody)
   }, [dispatch, searchValue, searchValueRef])
 
   const loadMoreSearchResults = useCallback(() => {
@@ -196,7 +192,7 @@ const CommandPallette = () => {
       nextPageToken: searchResults?.nextPageToken,
     }
     setLoadState(LOAD_STATE_MAP.loading)
-    fetchSearchThreads(searchBody)
+    void fetchSearchThreads(searchBody)
   }, [searchValue, searchResults])
 
   const handleOpenEmailEvent = (threadId: string) => {
@@ -250,7 +246,7 @@ const CommandPallette = () => {
 
   const keyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
     if (inSearch) {
-      if (event.code === undefined) return
+      if (!event.code) return
       if (event.code === keyConstants.KEY_ARROWS.down) {
         event.preventDefault()
         event.stopPropagation()

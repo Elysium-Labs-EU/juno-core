@@ -1,6 +1,5 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import axiosRetry from 'axios-retry'
 import { z } from 'zod'
 
 import * as global from 'constants/globalConstants'
@@ -23,7 +22,7 @@ assertNonNullish(
 
 validateLocalSetup(
   import.meta.env.VITE_BACKEND_URL,
-  import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND
+  import.meta.env.VITE_USE_SESSION as string | null | undefined
 )
 
 const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
@@ -39,23 +38,48 @@ interface ResponseType<T>
   data: T
 }
 
+export const fetchToken = () => {
+  if (import.meta.env.VITE_USE_SESSION === 'true') {
+    const token = localStorage.getItem(global.ID_TOKEN)
+    if (token) {
+      return token
+    }
+    return null
+  }
+  const credentials = localStorage.getItem(global.CREDENTIALS)
+  if (credentials) {
+    return credentials
+  }
+  return null
+}
+
 export async function fetchWrapper<T>(
   url: string,
   options: FetchOptions,
   schema?: z.ZodSchema<T>
 ): Promise<ResponseType<T> | undefined> {
+  console.log(options)
   try {
     const defaultHeaders = {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     }
 
-    const fetchOptions: RequestInit = {
-      method: options?.method,
-      headers: { ...defaultHeaders, ...options?.headers },
+    if (!url.includes('/api/auth/oauth/google/callback/')) {
+      const token = fetchToken()
+      if (token) {
+        defaultHeaders.Authorization = `${token}`
+      }
     }
 
-    if (options?.body) {
+    const fetchOptions: RequestInit = {
+      method: options.method,
+      headers: { ...defaultHeaders, ...options.headers },
+    }
+
+    console.log({ fetchOptions })
+
+    if (options.body) {
       fetchOptions.body = JSON.stringify(options.body)
     }
 
@@ -82,28 +106,14 @@ export async function fetchWrapper<T>(
   }
 }
 
-export const fetchToken = () => {
-  if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {
-    const credentials = localStorage.getItem(global.CREDENTIALS)
-    if (credentials) {
-      return credentials
-    }
-    return null
-  }
-  const token = localStorage.getItem(global.ID_TOKEN)
-  if (token) {
-    return token
-  }
-  return null
-}
+
 
 export const instance = axios.create({
   baseURL: BASE_API_URL,
   timeout: 4000,
   withCredentials:
-    import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'false',
+    import.meta.env.VITE_USE_SESSION === 'false',
 })
-axiosRetry(instance, { retries: 3, retryDelay: axiosRetry.exponentialDelay })
 
 /**
  * Set an accessToken for all the urls within the system, barring the Google oAuth API and external api.

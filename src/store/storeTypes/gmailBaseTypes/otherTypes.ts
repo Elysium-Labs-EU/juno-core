@@ -28,8 +28,8 @@ export type TSessionResponseSchema = z.infer<typeof sessionResponseSchema>
 
 export const authenticateClientResponseSchema = z.union([
   z.string(),
-  credentialsSchema,
   sessionResponseSchema,
+  credentialsSchema,
 ])
 
 export type TAuthenticateClientResponseSchema = z.infer<

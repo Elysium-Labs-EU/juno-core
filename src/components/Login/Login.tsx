@@ -46,9 +46,9 @@ const Login = () => {
   const fetchUrl = async () => {
     try {
       setLoadState(LOAD_STATE_MAP.loading)
-      // A flag that can be set via the .env variable. If this is set, and witht the value of true, the auth mechanism will be changed.
+      // A flag that can be set via the .env variable. If this is set, and with the value of true, the auth mechanism will be changed.
       const response = await userApi().authGoogle(
-        import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
+        import.meta.env.VITE_USE_SESSION === 'true'
       )
       console.log({ response })
       if (response && response.status === 200) {

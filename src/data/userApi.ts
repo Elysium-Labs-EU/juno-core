@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 import { BASE_ARRAY } from 'constants/baseConstants'
 import { fetchWrapper } from 'data/api'
 import {
@@ -7,16 +9,15 @@ import {
   getAuthUrlResponseSchema,
 } from 'store/storeTypes/gmailBaseTypes/otherTypes'
 
-import { z } from 'zod'
 
 const userApi = () => ({
-  authGoogle: async (noSession?: boolean) =>
+  authGoogle: async (useSession?: boolean) =>
     fetchWrapper(
       '/api/auth/oauth/google/',
       {
         method: 'POST',
         body: {
-          noSession,
+          useSession,
         },
       },
       getAuthUrlResponseSchema
