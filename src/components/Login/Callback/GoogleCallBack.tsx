@@ -41,9 +41,7 @@ const GoogleCallBack = () => {
           response.status === 200 &&
           'data' in response
         ) {
-          if (
-            import.meta.env.VITE_USE_SESSION === 'true'
-          ) {
+          if (import.meta.env.VITE_USE_SESSION === 'true') {
             handleUserTokens(response).setIdToken()
           } else {
             handleUserTokens(response).setCredentials()

@@ -29,7 +29,7 @@ const PrefetchedBoxes = z.array(gmailV1SchemaLabelSchema)
 
 export type TPrefetchedBoxes = z.infer<typeof PrefetchedBoxes>
 
-export interface ICustomError {
+export interface CustomError {
   error: any
   message?: any
 }

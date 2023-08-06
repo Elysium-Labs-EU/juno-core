@@ -77,7 +77,9 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
             <CustomIconButton
               dataCy="todo"
               icon={<QiToDo size={ICON_SIZE} />}
-              isactive={activePage === ACTIVE_PAGE_HEADER.todo ? 'true' : 'false'}
+              isactive={
+                activePage === ACTIVE_PAGE_HEADER.todo ? 'true' : 'false'
+              }
               onClick={() => void dispatch(navigateTo(RoutesConstants.TODO))}
             />
           </StyledTooltip>
@@ -87,7 +89,9 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
               <CustomIconButton
                 dataCy="inbox"
                 icon={<QiInbox size={ICON_SIZE} />}
-                isactive={activePage === ACTIVE_PAGE_HEADER.inbox ? 'true' : 'false'}
+                isactive={
+                  activePage === ACTIVE_PAGE_HEADER.inbox ? 'true' : 'false'
+                }
                 onClick={() => void dispatch(navigateTo(RoutesConstants.INBOX))}
               />
             </StyledTooltip>
@@ -97,7 +101,9 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
             <CustomIconButton
               dataCy="command-palette"
               icon={<QiSearch size={ICON_SIZE} />}
-              isactive={activePage === ACTIVE_PAGE_HEADER.search ? 'true' : 'false'}
+              isactive={
+                activePage === ACTIVE_PAGE_HEADER.search ? 'true' : 'false'
+              }
               onClick={() => dispatch(setInSearch(true))}
             />
           </StyledTooltip>
@@ -106,7 +112,9 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
             <CustomIconButton
               dataCy="compose"
               icon={<QiCompose size={ICON_SIZE} />}
-              isactive={activePage === ACTIVE_PAGE_HEADER.compose ? 'true' : 'false'}
+              isactive={
+                activePage === ACTIVE_PAGE_HEADER.compose ? 'true' : 'false'
+              }
               onClick={() => {
                 void dispatch(navigateTo('/compose'))
               }}
@@ -116,7 +124,9 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
           <StyledTooltip title="More options">
             <div>
               <NavigationMore
-                isactive={activePage === ACTIVE_PAGE_HEADER.more ? 'true' : 'false'}
+                isactive={
+                  activePage === ACTIVE_PAGE_HEADER.more ? 'true' : 'false'
+                }
               />
             </div>
           </StyledTooltip>

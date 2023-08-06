@@ -9,7 +9,6 @@ import {
   getAuthUrlResponseSchema,
 } from 'store/storeTypes/gmailBaseTypes/otherTypes'
 
-
 const userApi = () => ({
   authGoogle: async (useSession?: boolean) =>
     fetchWrapper(

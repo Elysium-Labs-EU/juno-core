@@ -1,29 +1,19 @@
-import { instance } from 'data/api'
-import type { TemplateApiResponse } from 'data/api'
+import { fetchWrapper } from 'data/api'
 import type { TGmailV1SchemaSendAsSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
-import { errorBlockTemplate } from './api'
 
 const settingsApi = () => ({
-  updateSendAs: async (
+  updateSendAs: (
     emailId: string,
     request: { signature: string }
-  ): TemplateApiResponse<TGmailV1SchemaSendAsSchema> => {
-    try {
-      const res = await instance.put<TGmailV1SchemaSendAsSchema>(
-        `/api/settings/updateSendAs`,
-        {
-          params: {
-            emailId,
-            request,
-          },
-        }
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  ) =>
+    fetchWrapper<TGmailV1SchemaSendAsSchema>(
+      `/api/settings/updateSendAs`,
+      {
+        method: 'PUT',
+        body: { emailId, ...request }
+      }
+    )
 })
 
 export default settingsApi

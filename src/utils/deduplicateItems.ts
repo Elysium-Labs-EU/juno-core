@@ -4,16 +4,17 @@
  * @returns the threadlist object with single threads
  */
 
-export default function deduplicateItems<T>(undoubleObject: T[]) {
-  if (undoubleObject && undoubleObject.length > 0) {
+export default function deduplicateItems<T>(undoubleObject: T[]): T[] {
+  if (undoubleObject.length > 0) {
     return [...new Set(undoubleObject.map((item) => JSON.stringify(item)))].map(
       (string) => {
         if (string) {
-          return JSON.parse(string)
+          return JSON.parse(string) as T
         }
         return undefined
       }
-    )
+    ).filter((item): item is T => item !== undefined)
   }
   return []
 }
+

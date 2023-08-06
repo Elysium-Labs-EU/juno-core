@@ -77,7 +77,7 @@ export const ThreadObject = z.object({
 export type TThreadObject = z.infer<typeof ThreadObject>
 
 export const EmailListObject = z.object({
-  labels: z.array(z.string()),
+  labels: z.array(z.string()).optional().nullable(),
   nextPageToken: z.string().optional().nullable(),
   q: z.string().optional(),
   resultSizeEstimate: z.number().optional().nullable(),
@@ -89,7 +89,7 @@ export type TEmailListObject = z.infer<typeof EmailListObject>
 
 const EmailListState = z.object({
   activeEmailListIndex: z.number(),
-  emailList: z.array(EmailListObject),
+  emailList: z.array(z.union([EmailListObject, z.any()])),
   isFetching: z.boolean(),
   searchList: EmailListObject.nullable(),
   selectedEmails: SelectedEmail,

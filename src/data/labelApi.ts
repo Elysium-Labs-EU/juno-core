@@ -1,49 +1,36 @@
 import { gmailV1SchemaLabelSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import type { TGmailV1SchemaLabelSchema } from 'store/storeTypes/labelsTypes'
 
-import { instance, errorBlockTemplate } from './api'
-import type { TemplateApiResponse } from './api'
+import { fetchWrapper } from './api'
 
 const labelApi = () => ({
-  fetchSingleLabel: async (
-    id: string
-  ): TemplateApiResponse<TGmailV1SchemaLabelSchema> => {
-    try {
-      const res = await instance.get<TGmailV1SchemaLabelSchema>(
-        `/api/label/${id}`
-      )
-      gmailV1SchemaLabelSchema.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  updateLabel: async (body: {
-    id: string
-    requestBody: any
-  }): TemplateApiResponse<TGmailV1SchemaLabelSchema> => {
-    try {
-      const res = await instance.patch<TGmailV1SchemaLabelSchema>(
-        `/api/labels`,
-        body
-      )
-      const parsedResponse = gmailV1SchemaLabelSchema.parse(res.data)
-      return { ...res, data: parsedResponse }
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  fetchSingleLabel: (id: string) =>
+    fetchWrapper<TGmailV1SchemaLabelSchema>(
+      `/api/label/${id}`,
+      {
+        method: 'GET'
+      },
+      gmailV1SchemaLabelSchema
+    ),
 
-  deleteLabel: async (id: string): TemplateApiResponse<''> => {
-    try {
-      const res = await instance.delete<''>(`/api/labels`, {
-        data: { id },
-      })
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  updateLabel: (body: { id: string, requestBody: Record<string, unknown> }) =>
+    fetchWrapper<TGmailV1SchemaLabelSchema>(
+      `/api/labels`,
+      {
+        method: 'PATCH',
+        body
+      },
+      gmailV1SchemaLabelSchema
+    ),
+
+  deleteLabel: (id: string) =>
+    fetchWrapper<''>(
+      `/api/labels`,
+      {
+        method: 'DELETE',
+        body: { id }
+      }
+    )
 })
 
 export default labelApi

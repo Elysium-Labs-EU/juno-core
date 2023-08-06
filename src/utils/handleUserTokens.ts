@@ -7,11 +7,17 @@ const possibleAuthLocalStorageItems = { CREDENTIALS, ID_TOKEN } as const
 
 type UserApiReturnType = ReturnType<typeof userApi>
 
-const handleUserTokens = (response?: Awaited<ReturnType<UserApiReturnType['authGoogleCallback']>>) => ({
+const handleUserTokens = (
+  response?: Awaited<ReturnType<UserApiReturnType['authGoogleCallback']>>
+) => ({
   setIdToken: () => {
     try {
       const data = response?.data
-      if (!data || typeof data === 'string' || !(data instanceof Object && 'idToken' in data)) {
+      if (
+        !data ||
+        typeof data === 'string' ||
+        !(data instanceof Object && 'idToken' in data)
+      ) {
         throw new Error('No idToken found in response')
       }
       localStorage.setItem(ID_TOKEN, data.idToken)
@@ -23,13 +29,14 @@ const handleUserTokens = (response?: Awaited<ReturnType<UserApiReturnType['authG
   setCredentials: () => {
     try {
       const data = response?.data
-      if (!data || typeof data === 'string' || !(data instanceof Object && 'credentials' in data)) {
+      if (
+        !data ||
+        typeof data === 'string' ||
+        !(data instanceof Object && 'credentials' in data)
+      ) {
         throw new Error('No credentials found in response')
       }
-      localStorage.setItem(
-        CREDENTIALS,
-        JSON.stringify(data.credentials)
-      )
+      localStorage.setItem(CREDENTIALS, JSON.stringify(data.credentials))
     } catch (error) {
       console.error('Error setting item to localStorage:', error)
     }

@@ -77,9 +77,9 @@ const InnerButton = styled.div<InnerButton>`
   .icon {
     line-height: 0;
     margin-right: ${({ hasLabel, showIconAfterLabel }) =>
-    hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
+      hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
     margin-left: ${({ hasLabel, showIconAfterLabel }) =>
-    hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
+      hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }

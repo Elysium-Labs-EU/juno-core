@@ -1,17 +1,13 @@
-import { instance } from 'data/api'
-import type { TemplateApiResponse } from 'data/api'
+import { z } from 'zod'
+
+import { fetchWrapper } from 'data/api'
 import { EmailListObject, ThreadObject } from 'store/storeTypes/emailListTypes'
-import type {
-  TThreadObject,
-  TEmailListObject,
-} from 'store/storeTypes/emailListTypes'
-import type { TGmailV1SchemaThreadSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
+import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
+import { gmailV1SchemaThreadSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import type { TUpdateRequestParamsSingleThread } from 'store/storeTypes/metaEmailListTypes'
 
-import { errorBlockTemplate } from './api'
-
-export interface IEmailQueryObject {
+export interface EmailQueryObject {
   labelIds?: TLabelState['labelIds']
   maxResults?: number
   nextPageToken: TEmailListObject['nextPageToken']
@@ -19,114 +15,79 @@ export interface IEmailQueryObject {
   silentLoading?: boolean
 }
 
-const threadApi = ({
-  controller,
-  signal,
-}: {
-  controller?: AbortController
-  signal?: AbortSignal
-}) => ({
-  getSimpleThreads: async (
-    query: IEmailQueryObject
-  ): TemplateApiResponse<TEmailListObject> => {
-    try {
-      const res = await instance.get(`/api/threads/`, {
+const threadApi = () => ({
+  getSimpleThreads: async (query: EmailQueryObject) =>
+    fetchWrapper(
+      '/api/threads/',
+      {
+        method: 'GET',
         params: {
           labelIds: query.labelIds?.toString() ?? '',
           maxResults: query.maxResults ?? 20,
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,
         },
-      })
-      EmailListObject.omit({ labels: true }).parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  getFullThreads: async (
-    query: IEmailQueryObject
-  ): TemplateApiResponse<TThreadObject> => {
-    try {
-      const res = await instance.get<TThreadObject>(`/api/threads_full/`, {
+      },
+      EmailListObject.omit({ labels: true })
+    ),
+  getFullThreads: async (query: EmailQueryObject) =>
+    fetchWrapper(
+      '/api/threads_full/',
+      {
+        method: 'GET',
         params: {
           labelIds: query.labelIds?.toString() ?? '',
           maxResults: query.maxResults ?? 20,
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,
         },
-        signal: controller?.signal || signal,
-      })
-      EmailListObject.omit({ labels: true }).parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-
+      },
+      EmailListObject.omit({ labels: true })
+    ),
   getThreadDetail: async ({
     threadId,
-  }: Pick<
-    TUpdateRequestParamsSingleThread,
-    'threadId'
-  >): TemplateApiResponse<TThreadObject> => {
-    try {
-      const res = await instance.get<TThreadObject>(`/api/thread/${threadId}`)
-      ThreadObject.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  }: Pick<TUpdateRequestParamsSingleThread, 'threadId'>) =>
+    fetchWrapper(
+      `/api/thread/${threadId}`,
+      {
+        method: 'GET',
+      },
+      ThreadObject
+    ),
   updateThread: async ({
     threadId,
     request,
-  }: Pick<
-    TUpdateRequestParamsSingleThread,
-    'threadId' | 'request'
-  >): TemplateApiResponse<TGmailV1SchemaThreadSchema> => {
-    try {
-      const res = await instance.patch<TGmailV1SchemaThreadSchema>(
-        `/api/update-thread/${threadId}`,
-        request
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  }: Pick<TUpdateRequestParamsSingleThread, 'threadId' | 'request'>) =>
+    fetchWrapper(
+      `/api/update-thread/${threadId}`,
+      {
+        method: 'PATCH',
+        body: request,
+      },
+      gmailV1SchemaThreadSchema
+    ),
   thrashThread: async ({
     threadId,
-  }: Pick<
-    TUpdateRequestParamsSingleThread,
-    'threadId'
-  >): TemplateApiResponse<TGmailV1SchemaThreadSchema> => {
-    const data = {}
-    try {
-      const res = await instance.post<TGmailV1SchemaThreadSchema>(
-        `/api/thread/thrash/${threadId}`,
-        data
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  }: Pick<TUpdateRequestParamsSingleThread, 'threadId'>) =>
+    fetchWrapper(
+      `/api/thread/thrash/${threadId}`,
+      {
+        method: 'POST',
+        body: {},
+      },
+      gmailV1SchemaThreadSchema
+    ),
   deleteThread: async ({
     threadId,
-  }: Pick<
-    TUpdateRequestParamsSingleThread,
-    'threadId'
-  >): TemplateApiResponse<''> => {
-    try {
-      const res = await instance.delete<''>(`/api/thread/`, {
-        data: { id: threadId },
-      })
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  }: Pick<TUpdateRequestParamsSingleThread, 'threadId'>) =>
+    fetchWrapper(
+      `/api/thread/`,
+      {
+        method: 'DELETE',
+        body: { id: threadId },
+      },
+      z.any()
+    ),
 })
 
 export default threadApi

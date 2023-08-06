@@ -8,7 +8,7 @@ import * as global from 'constants/globalConstants'
 import historyApi from 'data/historyApi'
 import messageApi from 'data/messageApi'
 import threadApi from 'data/threadApi'
-import type { IEmailQueryObject } from 'data/threadApi'
+import type { EmailQueryObject } from 'data/threadApi'
 import userApi from 'data/userApi'
 import { setProfile } from 'store/baseSlice'
 import {
@@ -46,9 +46,9 @@ import sortThreads from 'utils/sortThreads'
 
 export const fetchEmailsSimple = createAsyncThunk(
   'email/fetchEmailsSimple',
-  async (query: IEmailQueryObject, { signal }) => {
-    const response = await threadApi({ signal }).getSimpleThreads(query)
-    if ('data' in response) {
+  async (query: EmailQueryObject, { signal }) => {
+    const response = await threadApi().getSimpleThreads(query)
+    if (response && 'data' in response) {
       return { response: response.data, labels: query.labelIds, q: query.q }
     }
     return null
@@ -63,14 +63,14 @@ export const initialState: TEmailListState = Object.freeze({
   selectedEmails: { labelIds: [], selectedIds: [] },
 })
 
-interface IHandleEmailListChange
+interface HandleEmailListChange
   extends Omit<TEmailListObject, 'resultSizeEstimate'> {
   state: TEmailListState
 }
 
-interface IHandleAdditionToExistingEmailArray extends IHandleEmailListChange {
+interface HandleAdditionToExistingEmailArray extends HandleEmailListChange {
   arrayIndex?: number
-  labels: TLabelState['labelIds']
+  labels: TLabelState['labelIds'] | undefined
   targetEmailListObject: TEmailListObject
 }
 
@@ -83,7 +83,7 @@ export const handleAdditionToExistingEmailArray = ({
   arrayIndex,
   nextPageToken,
   q,
-}: IHandleAdditionToExistingEmailArray) => {
+}: HandleAdditionToExistingEmailArray) => {
   const tempArray: Array<TThreadObject> = []
   let activeCount: number = 0
   const completeCount: number = threads.length
@@ -113,7 +113,7 @@ export const handleAdditionToExistingEmailArray = ({
   if (activeCount === completeCount) {
     const sortedThreads = sortThreads(
       [...existingThreads.values()].concat(tempArray),
-      labels.includes(global.DRAFT_LABEL)
+      labels?.includes(global.DRAFT_LABEL)
     )
 
     // Here we create the final object that will be pushed to the Redux state
@@ -147,82 +147,83 @@ export const handleEmailListChange = ({
   timestamp,
   nextPageToken,
   q,
-}: IHandleEmailListChange) => {
+}: HandleEmailListChange) => {
   // The flow can only work if there are labels to use
-  if (labels) {
-    // Find emailList sub-array index
-    const [firstLabel] = labels
-    const arrayIndex = state.emailList.findIndex((emailArray) =>
-      firstLabel ? emailArray.labels.includes(firstLabel) : -1
-    )
-    if (threads && threads.length) {
-      // If the input contains a q - it is search request.
-      if (q) {
-        // This function is used to update the search List.
-        // If there is one, use the function, otherwise just assign the state.
-        const targetEmailListObject = state.searchList
-        if (targetEmailListObject && q === targetEmailListObject.q) {
-          handleAdditionToExistingEmailArray({
-            targetEmailListObject,
-            state,
-            labels,
-            threads,
-            timestamp,
-            arrayIndex,
-            nextPageToken,
-            q,
-          })
-        } else {
-          const sortedThreads = sortThreads(threads)
-          const sortedEmailList: TEmailListObject = {
-            nextPageToken,
-            labels,
-            threads: sortedThreads,
-            q,
-          }
-          state.searchList = sortedEmailList
-        }
-        return
-      }
-      // If emailList sub-array index exists, if exists concat threads.
-      // If not, push the new emailList
-      if (arrayIndex > -1) {
-        const targetEmailListObject = state.emailList[arrayIndex]
-        // It loops through all the newly fetched threads, and if check what to do with this.
-        // Either push it to the tempArray, or update the entry in the emailList state.
-        if (targetEmailListObject) {
-          handleAdditionToExistingEmailArray({
-            targetEmailListObject,
-            state,
-            labels,
-            threads,
-            timestamp,
-            arrayIndex,
-            nextPageToken,
-          })
-          return
-        }
-      }
-      if (arrayIndex === -1 && !labels.includes(global.SEARCH_LABEL)) {
+  if (!labels) {
+    return null
+  }
+  // Find emailList sub-array index
+  const [firstLabel] = labels
+  const arrayIndex = state.emailList.findIndex((emailArray) =>
+    firstLabel ? emailArray.labels.includes(firstLabel) : -1
+  )
+  if (threads.length) {
+    // If the input contains a q - it is search request.
+    if (q) {
+      // This function is used to update the search List.
+      // If there is one, use the function, otherwise just assign the state.
+      const targetEmailListObject = state.searchList
+      if (targetEmailListObject && q === targetEmailListObject.q) {
+        handleAdditionToExistingEmailArray({
+          targetEmailListObject,
+          state,
+          labels,
+          threads,
+          timestamp,
+          arrayIndex,
+          nextPageToken,
+          q,
+        })
+      } else {
         const sortedThreads = sortThreads(threads)
-
         const sortedEmailList: TEmailListObject = {
           nextPageToken,
           labels,
-          threads: deduplicateItems(sortedThreads),
+          threads: sortedThreads,
+          q,
         }
-        state.emailList.push(sortedEmailList)
+        state.searchList = sortedEmailList
       }
       return
     }
-    if (arrayIndex === -1 && (!threads || threads.length === 0)) {
-      const emptyResultObject = {
-        labels,
-        threads: [],
-        nextPageToken: null,
+    // If emailList sub-array index exists, if exists concat threads.
+    // If not, push the new emailList
+    if (arrayIndex > -1) {
+      const targetEmailListObject = state.emailList[arrayIndex]
+      // It loops through all the newly fetched threads, and if check what to do with this.
+      // Either push it to the tempArray, or update the entry in the emailList state.
+      if (targetEmailListObject) {
+        handleAdditionToExistingEmailArray({
+          targetEmailListObject,
+          state,
+          labels,
+          threads,
+          timestamp,
+          arrayIndex,
+          nextPageToken,
+        })
+        return
       }
-      state.emailList.push(emptyResultObject)
     }
+    if (arrayIndex === -1 && !labels.includes(global.SEARCH_LABEL)) {
+      const sortedThreads = sortThreads(threads)
+
+      const sortedEmailList: TEmailListObject = {
+        nextPageToken,
+        labels,
+        threads: deduplicateItems(sortedThreads),
+      }
+      state.emailList.push(sortedEmailList)
+    }
+    return
+  }
+  if (arrayIndex === -1 && (threads.length === 0)) {
+    const emptyResultObject = {
+      labels,
+      threads: [],
+      nextPageToken: null,
+    }
+    state.emailList.push(emptyResultObject)
   }
 }
 
@@ -602,7 +603,7 @@ export const updateEmailLabel =
               const blockViewIndexUpdate = true
               const forceNavigateBack =
                 !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
-              dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
+              void dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
               if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
                 const { emailFetchSize } = getState().utils
                 edgeLoadingNextPage({
@@ -620,7 +621,7 @@ export const updateEmailLabel =
           if (!request.delete) {
             try {
               if (threadId) {
-                await threadApi({}).updateThread({
+                void await threadApi().updateThread({
                   threadId,
                   request,
                 })
@@ -639,7 +640,7 @@ export const updateEmailLabel =
           if (request.delete) {
             try {
               if (threadId) {
-                threadApi({}).thrashThread({
+                void threadApi().thrashThread({
                   threadId,
                 })
               }
@@ -707,7 +708,7 @@ export const updateEmailLabelBatch =
             const selectedId = selectedEmails.selectedIds[i]
             if (selectedId) {
               try {
-                threadApi({}).updateThread({
+                void threadApi().updateThread({
                   threadId: selectedId,
                   request,
                 })
@@ -734,7 +735,7 @@ export const updateEmailLabelBatch =
             const selectedId = selectedEmails.selectedIds[i]
             if (selectedId) {
               try {
-                threadApi({}).thrashThread({
+                void threadApi().thrashThread({
                   threadId: selectedId,
                 })
               } catch (err) {
@@ -781,7 +782,7 @@ export const updateMessageLabel =
     async (dispatch) => {
       if (request.delete) {
         try {
-          await messageApi().thrashMessage({ messageId })
+          await messageApi().thrashMessage(messageId)
         } catch {
           toast.custom((t) => (
             <CustomToast
@@ -816,9 +817,9 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       savedHistoryId,
       storageLabels
     )
-    if ('status' in response && response.status === 200 && 'data' in response) {
+    if (response && 'status' in response && response.status === 200 && 'data' in response) {
       if (Array.isArray(response.data)) {
-        dispatch(loadEmailDetails(response.data))
+        void dispatch(loadEmailDetails(response.data))
       }
       const userResponse = await userApi().fetchUser()
       const { signature } = getState().base.profile
@@ -831,21 +832,26 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       toast.custom((t) => (
         <CustomToast
           specificToast={t}
-          title="Unable the refresh the feed."
+          title="Unable to refresh the feed."
           variant="error"
         />
       ))
     }
   } catch (err) {
-    const typedError: any = err
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
-      console.error(typedError?.response?.message || typedError)
+      let ouputError = err
+      if (err instanceof Object && 'response' in err) {
+        const { response } = err
+        if (response instanceof Object && 'message' in response)
+          ouputError = response.message
+      }
+      console.error(ouputError)
     }
     toast.custom((t) => (
       <CustomToast
         specificToast={t}
-        title="Unable the refresh the feed."
+        title="Unable to refresh the feed."
         variant="error"
       />
     ))

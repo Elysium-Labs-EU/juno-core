@@ -1,62 +1,31 @@
 import type { TGmailV1SchemaMessageSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
-import { errorBlockTemplate, instance } from './api'
-import type { TemplateApiResponse } from './api'
+import { fetchWrapper } from './api'
 
 const messageApi = () => ({
-  getAttachment: async ({
-    messageId,
-    attachmentId,
-  }: {
-    messageId: string
-    attachmentId: string
-  }): TemplateApiResponse<any> => {
-    try {
-      const res = await instance.get(
-        `/api/message/attachment/${messageId}/${attachmentId}`
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  getAttachment: ({ messageId, attachmentId }: { messageId: string; attachmentId: string }) =>
+    fetchWrapper(
+      `/api/message/attachment/${messageId}/${attachmentId}`,
+      { method: 'GET' }
+    ),
 
-  sendMessage: async ({
-    data,
-    timeOut,
-  }: {
-    data: FormData
-    timeOut: number
-  }): TemplateApiResponse<TGmailV1SchemaMessageSchema> => {
-    try {
-      const res = await instance.post<TGmailV1SchemaMessageSchema>(
-        `/api/send-message`,
-        {
-          data,
-          timeOut,
-        }
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  thrashMessage: async ({
-    messageId,
-  }: {
-    messageId: string
-  }): TemplateApiResponse<TGmailV1SchemaMessageSchema> => {
-    const data = {}
-    try {
-      const res = await instance.post<TGmailV1SchemaMessageSchema>(
-        `/api/message/thrash/${messageId}`,
-        data
-      )
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+  sendMessage: ({ data, timeOut }: { data: FormData; timeOut: number }) =>
+    fetchWrapper<TGmailV1SchemaMessageSchema>(
+      `/api/send-message`,
+      {
+        method: 'POST',
+        body: { data, timeOut }
+      }
+    ),
+
+  thrashMessage: (messageId: string) =>
+    fetchWrapper<TGmailV1SchemaMessageSchema>(
+      `/api/message/thrash/${messageId}`,
+      {
+        method: 'POST',
+        body: {}
+      }
+    )
 })
 
 export default messageApi

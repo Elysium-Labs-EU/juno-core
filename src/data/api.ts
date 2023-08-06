@@ -1,19 +1,9 @@
-import axios from 'axios'
-import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { z } from 'zod'
+import type { z } from 'zod'
 
 import * as global from 'constants/globalConstants'
-import type { ICustomError } from 'store/storeTypes/baseTypes'
+// import type { CustomError } from 'store/storeTypes/baseTypes'
 import assertNonNullish from 'utils/assertNonNullish'
 import validateLocalSetup from 'utils/validateLocalSetup'
-
-export type TemplateApiResponse<T> = Promise<
-  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
->
-
-export type TemplateApiResponseSettled<T> = PromiseSettledResult<
-  AxiosResponse<T, AxiosRequestConfig> | AxiosError | ICustomError
->
 
 assertNonNullish(
   import.meta.env.VITE_BACKEND_URL,
@@ -28,9 +18,10 @@ validateLocalSetup(
 const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
 
 interface FetchOptions {
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
   headers?: HeadersInit
-  body?: any
+  params?: Record<string, string | number | undefined>
+  body?: Record<string, unknown> | FormData
 }
 
 interface ResponseType<T>
@@ -58,11 +49,9 @@ export async function fetchWrapper<T>(
   options: FetchOptions,
   schema?: z.ZodSchema<T>
 ): Promise<ResponseType<T> | undefined> {
-  console.log(options)
   try {
-    const defaultHeaders = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+    const defaultHeaders: Record<string, string> = {
+      Accept: 'application/json, text/plain, */*',
     }
 
     if (!url.includes('/api/auth/oauth/google/callback/')) {
@@ -72,15 +61,31 @@ export async function fetchWrapper<T>(
       }
     }
 
+    if (!(options.body instanceof FormData)) {
+      defaultHeaders['Content-Type'] = 'application/json'
+    }
+
     const fetchOptions: RequestInit = {
       method: options.method,
       headers: { ...defaultHeaders, ...options.headers },
     }
 
-    console.log({ fetchOptions })
-
     if (options.body) {
-      fetchOptions.body = JSON.stringify(options.body)
+      if (options.body instanceof FormData) {
+        fetchOptions.body = options.body
+      } else {
+        fetchOptions.body = JSON.stringify(options.body)
+      }
+    }
+
+    if (options.params) {
+      let output = ''
+      Object.keys(options.params).forEach((key) => {
+        if (options.params?.[key]) {
+          output += `${key}=${options.params[key]}&`
+        }
+      })
+      url += `?${output}`
     }
 
     const res = await fetch(`${BASE_API_URL}${url}`, fetchOptions)
@@ -89,75 +94,21 @@ export async function fetchWrapper<T>(
       throw new Error(res.statusText)
     }
 
-    console.log(res)
-    const data = await res.json()
-    schema.parse(data)
-    const response = {
-      data,
-      status: res.status,
-      statusText: res.statusText,
-      headers: res.headers,
-      url: res.url,
+    const data: unknown = await res.json()
+    const parsedData = schema?.parse(data)
+
+    if (parsedData instanceof Object && !('error' in parsedData)) {
+      const response = {
+        data: parsedData,
+        status: res.status,
+        statusText: res.statusText,
+        headers: res.headers,
+        url: res.url,
+      }
+      return response
     }
-    return response
   } catch (err) {
     console.error(err)
     return undefined
   }
-}
-
-
-
-export const instance = axios.create({
-  baseURL: BASE_API_URL,
-  timeout: 4000,
-  withCredentials:
-    import.meta.env.VITE_USE_SESSION === 'false',
-})
-
-/**
- * Set an accessToken for all the urls within the system, barring the Google oAuth API and external api.
- */
-instance.interceptors.request.use(
-  (config) => {
-    // (config: AxiosRequestConfig) => {
-    const accessToken = fetchToken()
-    if (
-      accessToken &&
-      config.headers &&
-      !config.url?.includes(`/api/auth/oauth/google/`)
-    ) {
-      // eslint-disable-next-line no-param-reassign
-      config.headers.Authorization = `${accessToken}`
-    }
-    return config
-  },
-  (error) => {
-    Promise.reject(error)
-  }
-)
-
-export const errorHandling = (err: any) => {
-  // eslint-disable-next-line no-console
-  process.env.NODE_ENV === 'development' && console.error(err)
-  const originalRequest = err.config
-  if (
-    err?.response?.data === global.INVALID_TOKEN &&
-    !originalRequest.isRetry
-  ) {
-    originalRequest.isRetry = true
-  }
-  return err?.response?.data ?? err?.message
-}
-
-export const errorBlockTemplate = (err: unknown) => {
-  if (axios.isAxiosError(err)) {
-    return errorHandling(err)
-  }
-  if (err instanceof z.ZodError) {
-    // eslint-disable-next-line no-console
-    console.error(err.issues)
-  }
-  // Handle unexpected error
-  return err as ICustomError
 }
