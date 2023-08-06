@@ -26,7 +26,7 @@ export default function useFetchEmailsSimple() {
       (timestampLastFired === 0 ||
         timestampLastFired - Date.now() > global.MIN_DELAY_REFRESH) &&
       !isFlexibleFlowActive &&
-      loadedInbox.indexOf(global.INBOX_LABEL) === -1
+      !loadedInbox.includes(global.INBOX_LABEL)
     ) {
       timestampLastFired = Date.now()
       const params = {

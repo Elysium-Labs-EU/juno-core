@@ -36,10 +36,10 @@ interface IMessages {
 
 const LengthMessageCount = ({ messages }: IMessages) => {
   const regularCount: number = messages.filter(
-    (item) => !item?.labelIds?.includes(global.DRAFT_LABEL)
+    (item) => !item.labelIds.includes(global.DRAFT_LABEL)
   ).length
   const draftCount: number = messages.filter((item) =>
-    item?.labelIds?.includes(global.DRAFT_LABEL)
+    item.labelIds.includes(global.DRAFT_LABEL)
   ).length
 
   return (

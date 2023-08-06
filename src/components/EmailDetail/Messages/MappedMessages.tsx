@@ -58,7 +58,7 @@ const MappedMessages = ({
     <>
       {reversedMessagesOrder.map((message, index) => (
         <Fragment key={message.id}>
-          {message?.labelIds?.includes(global.DRAFT_LABEL) ? (
+          {message.labelIds.includes(global.DRAFT_LABEL) ? (
             <DraftMessage
               draftIndex={index}
               handleClickListener={handleClickDraft}

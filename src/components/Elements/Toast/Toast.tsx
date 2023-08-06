@@ -26,7 +26,7 @@ const CustomToast = ({
         <S.ToastAction>
           {cloneElement(button, {
             onClick: () => {
-              button?.props?.onClick()
+              button.props?.onClick()
               toast.dismiss(specificToast.id)
             },
           })}

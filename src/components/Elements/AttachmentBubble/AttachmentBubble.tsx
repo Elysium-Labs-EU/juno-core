@@ -57,7 +57,7 @@ const DownloadButton = ({
         messageId,
         attachmentData,
       })
-      if (response?.success) {
+      if (response.success) {
         setLoadState(global.LOAD_STATE_MAP.loaded)
         return
       }
@@ -121,7 +121,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
       // Do not trigger this function if the attachment is already previewed
       if (
         activeModal ===
-        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
       ) {
         return
       }
@@ -132,18 +132,18 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
           attachmentData,
         })
 
-        if (response?.success) {
+        if (response.success) {
           setLoadState(global.LOAD_STATE_MAP.loaded)
           if (window.__TAURI_METADATA__) {
             // TODO: Write to save the file in temp folder, and open it right away.
           } else {
             setFetchedAttachmentData({
-              blobUrl: response?.blobUrl,
-              mimeType: response?.mimeType,
+              blobUrl: response.blobUrl,
+              mimeType: response.mimeType,
             })
             dispatch(
               setActiveModal(
-                `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+                `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
               )
             )
           }
@@ -161,7 +161,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
         // If the data is already fetched, just open the modal
         dispatch(
           setActiveModal(
-            `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+            `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
           )
         )
       }
@@ -208,15 +208,15 @@ const AttachmentBubble = ({
   const mimeType =
     'mimeType' in attachmentData
       ? attachmentData.mimeType
-      : attachmentData?.type ?? 'no file type found'
+      : attachmentData.type ?? 'no file type found'
   const fileName =
     'filename' in attachmentData
       ? attachmentData.filename
-      : attachmentData?.name ?? 'no file name found'
+      : attachmentData.name ?? 'no file name found'
   const fileSize =
     'body' in attachmentData
-      ? attachmentData.body?.size
-      : attachmentData?.size ?? 0
+      ? attachmentData.body.size
+      : attachmentData.size ?? 0
 
   // TODO: Reinstate this with using the Tauri API
   const memoizedViewAttachmentButton = useMemo(
@@ -264,7 +264,7 @@ const AttachmentBubble = ({
         aria-hidden="true"
         id={
           'body' in attachmentData
-            ? attachmentData?.body?.attachmentId
+            ? attachmentData.body.attachmentId
             : undefined
         }
       >

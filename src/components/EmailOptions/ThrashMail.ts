@@ -19,7 +19,7 @@ const thrashMail = ({ threadId, labelIds, dispatch }: IThrashMailProps) => {
     )
   }
 
-  return markEmailThrashed()
+  markEmailThrashed()
 }
 
 export default thrashMail

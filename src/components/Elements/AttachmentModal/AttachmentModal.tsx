@@ -22,15 +22,15 @@ const AttachmentModal = ({
     <CustomModal
       open={
         activeModal ===
-        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData?.body?.attachmentId}`
+        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
       }
-      modalTitle={attachmentData?.filename}
+      modalTitle={attachmentData.filename}
       modalAriaLabel="attachment"
     >
       {fetchedAttachmentData?.mimeType?.includes('image') ? (
         <img
-          src={fetchedAttachmentData?.blobUrl ?? undefined}
-          alt={attachmentData?.filename ?? 'undefined'}
+          src={fetchedAttachmentData.blobUrl ?? undefined}
+          alt={attachmentData.filename ?? 'undefined'}
         />
       ) : (
         <Paragraph muted>

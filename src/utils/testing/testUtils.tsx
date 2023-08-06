@@ -1,7 +1,7 @@
 import type { PreloadedState } from '@reduxjs/toolkit'
 import { render } from '@testing-library/react'
 import type { RenderOptions } from '@testing-library/react'
-import {
+import type {
   // createMemoryHistory,
   History,
 } from 'history'

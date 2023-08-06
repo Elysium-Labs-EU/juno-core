@@ -25,7 +25,7 @@ const setToDoMail = ({
     storageLabels,
     LABEL_NAME: global.TODO_LABEL_NAME,
   })
-  if (toDoLabel && toDoLabel.id) {
+  if (toDoLabel?.id) {
     const onlyLegalLabels = onlyLegalLabelStrings({ labelIds, storageLabels })
     const request = {
       // Take out the SENT label, since that label can never be removed.

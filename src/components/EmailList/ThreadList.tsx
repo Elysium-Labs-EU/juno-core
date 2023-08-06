@@ -36,7 +36,7 @@ const ThreadList = ({
   <>
     {threads.map((thread, index) => (
       <div
-        key={keySuffix ? `${thread.id}-${keySuffix}` : thread?.id}
+        key={keySuffix ? `${thread.id}-${keySuffix}` : thread.id}
         onClick={
           searchOnClickHandeler
             ? () => searchOnClickHandeler(thread.id)

@@ -1,4 +1,5 @@
-import { SaveDialogOptions, save } from '@tauri-apps/api/dialog'
+import type { SaveDialogOptions } from '@tauri-apps/api/dialog'
+import { save } from '@tauri-apps/api/dialog'
 import { writeBinaryFile } from '@tauri-apps/api/fs'
 
 /**

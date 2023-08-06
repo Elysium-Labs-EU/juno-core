@@ -12,7 +12,7 @@ const messageApi = () => ({
     attachmentId: string
   }): TemplateApiResponse<any> => {
     try {
-      const res = await instance.get<any>(
+      const res = await instance.get(
         `/api/message/attachment/${messageId}/${attachmentId}`
       )
       return res

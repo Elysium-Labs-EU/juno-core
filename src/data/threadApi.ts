@@ -1,11 +1,10 @@
 import { instance } from 'data/api'
 import type { TemplateApiResponse } from 'data/api'
-import {
-  EmailListObject,
+import { EmailListObject, ThreadObject } from 'store/storeTypes/emailListTypes'
+import type {
+  TThreadObject,
   TEmailListObject,
-  ThreadObject,
 } from 'store/storeTypes/emailListTypes'
-import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 import type { TGmailV1SchemaThreadSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import type { TUpdateRequestParamsSingleThread } from 'store/storeTypes/metaEmailListTypes'
@@ -33,7 +32,7 @@ const threadApi = ({
     try {
       const res = await instance.get(`/api/threads/`, {
         params: {
-          labelIds: query?.labelIds?.toString() ?? '',
+          labelIds: query.labelIds?.toString() ?? '',
           maxResults: query.maxResults ?? 20,
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,
@@ -51,7 +50,7 @@ const threadApi = ({
     try {
       const res = await instance.get<TThreadObject>(`/api/threads_full/`, {
         params: {
-          labelIds: query?.labelIds?.toString() ?? '',
+          labelIds: query.labelIds?.toString() ?? '',
           maxResults: query.maxResults ?? 20,
           pageToken: query.nextPageToken ?? undefined,
           q: query.q ?? undefined,

@@ -8,7 +8,7 @@ const EmailAttachment = ({
 }: {
   message: TThreadObject['messages'][0]
 }) =>
-  message?.payload?.files && message.payload.files.length > 0 ? (
+  message.payload.files && message.payload.files.length > 0 ? (
     <Stack direction="vertical">
       {message.payload.files.map((item) => (
         <EmailAttachmentBubble

@@ -140,7 +140,7 @@ export const startSort =
   (dispatch, getState) => {
     const { emailList } = getState().email
     if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
-      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds?.length > 0) {
+      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds.length > 0) {
         dispatch(
           push(
             `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`

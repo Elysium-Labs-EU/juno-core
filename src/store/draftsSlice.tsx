@@ -64,7 +64,7 @@ const draftsSlice = createSlice({
       const { threadId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList = copyCurrentDraftList.filter(
-        (item) => item.message?.threadId !== threadId
+        (item) => item.message.threadId !== threadId
       )
       state.draftList = newDraftList
     },
@@ -75,7 +75,7 @@ const draftsSlice = createSlice({
       const { messageId } = payload
       const copyCurrentDraftList = state.draftList
       const newDraftList = copyCurrentDraftList.filter(
-        (item) => item.message?.id !== messageId
+        (item) => item.message.id !== messageId
       )
       state.draftList = newDraftList
     },
@@ -89,9 +89,7 @@ const draftsSlice = createSlice({
       // TODO: Check how this functions, whenever there are drafts in the system without a threadId, how do we remove them?
       const filterArray = () => {
         const filtered = copyCurrentDraftList.filter((el) =>
-          el?.message?.threadId
-            ? threadIds.indexOf(el.message.threadId) === -1
-            : false
+          el.message.threadId ? !threadIds.includes(el.message.threadId) : false
         )
         return filtered
       }
@@ -105,12 +103,12 @@ const draftsSlice = createSlice({
         if (payload.drafts) {
           const restructuredDraftList: TDraftsState['draftList'] = []
           payload.drafts.forEach((draft) => {
-            if (draft.id && draft.message?.id && draft.message?.threadId) {
+            if (draft.id && draft.message?.id && draft.message.threadId) {
               restructuredDraftList.push({
                 id: draft.id,
                 message: {
-                  id: draft.message?.id,
-                  threadId: draft.message?.threadId,
+                  id: draft.message.id,
+                  threadId: draft.message.threadId,
                 },
               })
             }
@@ -162,13 +160,12 @@ export const createUpdateDraft =
         name,
       })
 
-      const response =
-        !localDraftDetails || !localDraftDetails?.id
-          ? await draftApi().createDrafts(formData)
-          : await draftApi().updateDrafts({
-              id: localDraftDetails?.id,
-              formData,
-            })
+      const response = !localDraftDetails?.id
+        ? await draftApi().createDrafts(formData)
+        : await draftApi().updateDrafts({
+            id: localDraftDetails.id,
+            formData,
+          })
 
       if (!response || ('status' in response && response.status !== 200)) {
         toast.custom((t) => (
@@ -211,22 +208,22 @@ const pushDraftDetails =
   (dispatch, getState) => {
     const { message } = draft
     try {
-      if (draft?.id && message?.threadId) {
+      if (draft.id && message.threadId) {
         dispatch(setCurrentEmail(message.threadId))
         if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
           dispatch(setIsReplying(true))
         } else {
           // From headers are not taken in account here - since we only allow for one account
           const loadEmail = {
-            id: message?.id,
-            threadId: message?.threadId,
-            to: message?.payload?.headers?.to,
-            cc: message?.payload?.headers?.cc,
-            bcc: message?.payload?.headers?.bcc,
-            subject: message?.payload?.headers?.subject,
-            body: message?.payload?.body?.emailHTML,
+            id: message.id,
+            threadId: message.threadId,
+            to: message.payload.headers.to,
+            cc: message.payload.headers.cc,
+            bcc: message.payload.headers.bcc,
+            subject: message.payload.headers.subject,
+            body: message.payload.body.emailHTML,
             // Push the files as B64 objects to the state, to be decoded on the component. Files cannot be stored into Redux.
-            files: message.payload?.files,
+            files: message.payload.files,
           }
           dispatch(
             push(`${RoutesConstants.COMPOSE_EMAIL}${draft.id}`, loadEmail)
@@ -332,7 +329,7 @@ export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
       const draftObject =
         draftList.length > 0 &&
         draftList.find(
-          (draft) => draft?.message?.threadId === selectedEmails.selectedIds[i]
+          (draft) => draft.message.threadId === selectedEmails.selectedIds[i]
         )
       if (
         typeof draftObject === 'object' &&
@@ -423,15 +420,15 @@ export const sendComposedEmail =
       // If the id is found on the draft details, send the draft email via the Google servers as a draft.
       if (localDraftDetails?.id) {
         const response = await draftApi().sendDraft({
-          id: localDraftDetails?.id,
+          id: localDraftDetails.id,
           timeOut: global.MESSAGE_SEND_DELAY,
         })
 
         // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
-        if ('status' in response && response?.status === 200) {
+        if ('status' in response && response.status === 200) {
           const { labelIds } = getState().labels
           // We can only archive the previous draft if it has a threadId
-          if (localDraftDetails?.message?.threadId) {
+          if (localDraftDetails.message?.threadId) {
             archiveMail({
               threadId: localDraftDetails.message.threadId,
               dispatch,
@@ -444,7 +441,7 @@ export const sendComposedEmail =
           })
           if (
             staticIndexActiveEmailList > -1 &&
-            localDraftDetails?.message?.id
+            localDraftDetails.message?.id
           ) {
             dispatch(
               listRemoveItemDetail({
@@ -478,7 +475,7 @@ export const sendComposedEmail =
           data: formData,
           timeOut: global.MESSAGE_SEND_DELAY,
         })
-        if (!('status' in response) || response?.status !== 200) {
+        if (!('status' in response) || response.status !== 200) {
           toast.custom((t) => (
             <CustomToast
               specificToast={t}

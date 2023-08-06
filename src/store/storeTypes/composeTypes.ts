@@ -25,7 +25,7 @@ export const ComposeEmailReceiveSchema = z.object({
   id: z.string().optional(),
   subject: z.string().optional().nullable(),
   threadId: z.string().optional(),
-  to: z.union([z.string(), z.array(Contact)]).optional()
+  to: z.union([z.string(), z.array(Contact)]).optional(),
 })
 
 export type IComposeEmailReceive = z.infer<typeof ComposeEmailReceiveSchema>

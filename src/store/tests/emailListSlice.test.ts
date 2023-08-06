@@ -320,7 +320,7 @@ test('removes all the threads that are sent as the payload', () => {
 
   assert.equal(check.emailList[0]?.threads.length, 2)
   assert.notEqual(
-    check?.emailList[0]?.threads.filter((thread) =>
+    check.emailList[0]?.threads.filter((thread) =>
       messageIds.includes(thread.id)
     ),
     undefined

@@ -1,5 +1,5 @@
-import axios, { AxiosError } from 'axios'
-import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios from 'axios'
+import type { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import axiosRetry from 'axios-retry'
 import { z } from 'zod'
 
@@ -27,6 +27,60 @@ validateLocalSetup(
 )
 
 const BASE_API_URL = import.meta.env.VITE_BACKEND_URL.replace(/\/$/, '')
+
+interface FetchOptions {
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  headers?: HeadersInit
+  body?: any
+}
+
+interface ResponseType<T>
+  extends Pick<Response, 'status' | 'statusText' | 'headers' | 'url'> {
+  data: T
+}
+
+export async function fetchWrapper<T>(
+  url: string,
+  options: FetchOptions,
+  schema?: z.ZodSchema<T>
+): Promise<ResponseType<T> | undefined> {
+  try {
+    const defaultHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    }
+
+    const fetchOptions: RequestInit = {
+      method: options?.method,
+      headers: { ...defaultHeaders, ...options?.headers },
+    }
+
+    if (options?.body) {
+      fetchOptions.body = JSON.stringify(options.body)
+    }
+
+    const res = await fetch(`${BASE_API_URL}${url}`, fetchOptions)
+
+    if (!res.ok) {
+      throw new Error(res.statusText)
+    }
+
+    console.log(res)
+    const data = await res.json()
+    schema.parse(data)
+    const response = {
+      data,
+      status: res.status,
+      statusText: res.statusText,
+      headers: res.headers,
+      url: res.url,
+    }
+    return response
+  } catch (err) {
+    console.error(err)
+    return undefined
+  }
+}
 
 export const fetchToken = () => {
   if (import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true') {

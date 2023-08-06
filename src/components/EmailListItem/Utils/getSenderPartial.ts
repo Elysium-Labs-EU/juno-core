@@ -9,14 +9,9 @@ export default function getSenderPartial({
   memoizedDraftOrRegular,
 }: IExtractEmailData) {
   const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+    memoizedDraftOrRegular.messages[memoizedDraftOrRegular.messages.length - 1]
   if (lastMessage) {
-    return getSenderNamePartial(
-      lastMessage?.payload?.headers?.from,
-      emailAddress
-    )
+    return getSenderNamePartial(lastMessage.payload.headers.from, emailAddress)
   }
   return null
 }

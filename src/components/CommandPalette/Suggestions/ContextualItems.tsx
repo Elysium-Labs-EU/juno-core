@@ -9,7 +9,7 @@ import {
   QiJump,
 } from 'images/svgIcons/quillIcons'
 import type { AppDispatch } from 'store/store'
-import { TEmailListState } from 'store/storeTypes/emailListTypes'
+import type { TEmailListState } from 'store/storeTypes/emailListTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import {
   archiveAllEmailCMDK,

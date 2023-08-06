@@ -37,7 +37,7 @@ const GoogleCallBack = () => {
         if (
           typeof response === 'object' &&
           'status' in response &&
-          response?.status === 200 &&
+          response.status === 200 &&
           'data' in response
         ) {
           if (
@@ -52,7 +52,7 @@ const GoogleCallBack = () => {
         } else {
           const message =
             typeof response === 'object' && 'error' in response
-              ? response?.error ?? SOMETHING_WRONG
+              ? response.error ?? SOMETHING_WRONG
               : response
 
           toast.custom((t) => (

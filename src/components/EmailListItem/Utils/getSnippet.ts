@@ -6,9 +6,7 @@ export default function getSnippet({
   memoizedDraftOrRegular,
 }: Pick<IExtractEmailData, 'memoizedDraftOrRegular'>) {
   const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+    memoizedDraftOrRegular.messages[memoizedDraftOrRegular.messages.length - 1]
   if (lastMessage) {
     return emailSnippet(lastMessage)
   }

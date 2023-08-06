@@ -22,7 +22,7 @@ import { GlobalStyle } from 'styles/globalStyles'
 globalThis.Buffer = Buffer
 
 // Set a global variable to check if we're in a Tauri window.
-new WebviewWindow(window.__TAURI_METADATA__?.__currentWindow.label)
+new WebviewWindow(window?.__TAURI_METADATA__?.__currentWindow.label)
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>

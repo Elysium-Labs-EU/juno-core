@@ -18,6 +18,7 @@
     "noEmit": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
+    "noUnusedVariables": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,

@@ -33,7 +33,7 @@ const MenuSectionComponent = ({
     ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
 
     // eslint-disable-next-line default-case
-    switch (event?.code) {
+    switch (event.code) {
       case keyConstants.KEY_ARROWS.up:
       case keyConstants.KEY_ARROWS.left:
         event.preventDefault()
@@ -63,13 +63,13 @@ const MenuSectionComponent = ({
         break
       case 'End':
         event.preventDefault()
-        nodeList?.[nodeList.length - 1]?.focus()
+        nodeList[nodeList.length - 1]?.focus()
         setFocusedItemIndex(nodeList.length - 1)
         break
       case 'Enter':
         event.preventDefault()
         event.stopPropagation()
-        nodeList?.[focusedItemIndex]?.click()
+        nodeList[focusedItemIndex]?.click()
         break
       // default:
       // ;(event.target as HTMLButtonElement).focus()
@@ -95,7 +95,7 @@ const MenuSectionComponent = ({
                     activeModalTag={activeModalTag}
                     focusedItemIndex={focusedItemIndex}
                     item={item}
-                    key={item?.title}
+                    key={item.title}
                     setFocusedItemIndex={setFocusedItemIndex}
                   />
                 )

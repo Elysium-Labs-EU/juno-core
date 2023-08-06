@@ -7,7 +7,7 @@
  */
 
 export default function getLuminance(backgroundColor: string) {
-  const colorMap = backgroundColor?.match(/\d+/g)?.map((c) => parseInt(c, 10))
+  const colorMap = backgroundColor.match(/\d+/g)?.map((c) => parseInt(c, 10))
   if (colorMap) {
     const [r, g, b] = colorMap
 

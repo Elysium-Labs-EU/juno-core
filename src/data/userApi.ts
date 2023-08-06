@@ -1,83 +1,58 @@
 import { BASE_ARRAY } from 'constants/baseConstants'
-import { instance } from 'data/api'
-import type { TemplateApiResponse } from 'data/api'
+import { fetchWrapper } from 'data/api'
 import {
   authenticateClientResponseSchema,
   baseCheckSchema,
   extendedGmailV1SchemaProfileSchemaSchema,
   getAuthUrlResponseSchema,
 } from 'store/storeTypes/gmailBaseTypes/otherTypes'
-import type {
-  TBaseCheckSchema,
-  TExtendedGmailV1SchemaProfileSchemaSchema,
-  TAuthenticateClientResponseSchema,
-  TGetAuthUrlResponseSchema,
-} from 'store/storeTypes/gmailBaseTypes/otherTypes'
 
-import { errorBlockTemplate } from './api'
+import { z } from 'zod'
 
 const userApi = () => ({
-  authGoogle: async (
-    noSession?: boolean
-  ): TemplateApiResponse<TGetAuthUrlResponseSchema> => {
-    try {
-      const res = await instance.post<TGetAuthUrlResponseSchema>(
-        `/api/auth/oauth/google/`,
-        {
+  authGoogle: async (noSession?: boolean) =>
+    fetchWrapper(
+      '/api/auth/oauth/google/',
+      {
+        method: 'POST',
+        body: {
           noSession,
-        }
-      )
-      getAuthUrlResponseSchema.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  authGoogleCallback: async (body: {
-    code?: string
-    state?: string
-  }): TemplateApiResponse<TAuthenticateClientResponseSchema> => {
-    try {
-      const res = await instance.post<TAuthenticateClientResponseSchema>(
-        `/api/auth/oauth/google/callback/`,
-        body
-      )
-      authenticateClientResponseSchema.parse(res.data)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  fetchUser:
-    async (): TemplateApiResponse<TExtendedGmailV1SchemaProfileSchemaSchema> => {
-      try {
-        const res =
-          await instance.get<TExtendedGmailV1SchemaProfileSchemaSchema>(
-            `/api/user`
-          )
-        extendedGmailV1SchemaProfileSchemaSchema.parse(res.data)
-        return res
-      } catch (err) {
-        return errorBlockTemplate(err)
-      }
-    },
-  baseCheck: async (): TemplateApiResponse<TBaseCheckSchema> => {
-    try {
-      const res = await instance.post(`/api/base`, { BASE_ARRAY })
-      const validatedResponse = baseCheckSchema.parse(res.data)
-      return { ...res, data: validatedResponse }
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
-  logoutUser: async (): TemplateApiResponse<any> => {
-    try {
-      const res = await instance.get<any>(`/api/user/logout`)
-      return res
-    } catch (err) {
-      return errorBlockTemplate(err)
-    }
-  },
+        },
+      },
+      getAuthUrlResponseSchema
+    ),
+
+  authGoogleCallback: async (body: { code?: string; state?: string }) =>
+    fetchWrapper(
+      '/api/auth/oauth/google/callback/',
+      {
+        method: 'POST',
+        body,
+      },
+      authenticateClientResponseSchema
+    ),
+
+  fetchUser: async () =>
+    fetchWrapper(
+      '/api/user',
+      {
+        method: 'GET',
+      },
+      extendedGmailV1SchemaProfileSchemaSchema
+    ),
+
+  baseCheck: async () =>
+    fetchWrapper(
+      '/api/base',
+      {
+        method: 'POST',
+        body: { BASE_ARRAY },
+      },
+      baseCheckSchema
+    ),
+
+  logoutUser: async () =>
+    fetchWrapper('/api/user/logout', { method: 'GET' }, z.any()),
 })
 
 export default userApi

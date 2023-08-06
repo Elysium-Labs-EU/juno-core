@@ -109,9 +109,7 @@ const EmailDetail = () => {
   })
   useFetchDraftList({
     shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
-      thread.messages.some((message) =>
-        message?.labelIds?.includes(DRAFT_LABEL)
-      )
+      thread.messages.some((message) => message.labelIds.includes(DRAFT_LABEL))
     ),
   })
   useEdgeLoadNextPage({ activeEmailList })
@@ -132,12 +130,12 @@ const EmailDetail = () => {
     } else {
       const targetEmailList = emailList[activeEmailListIndex]
       if (targetEmailList) {
-        const selectedIds = selectedEmails?.selectedIds ?? []
-        const hasTodoLabel = selectedEmails?.labelIds.includes(
+        const selectedIds = selectedEmails.selectedIds ?? []
+        const hasTodoLabel = selectedEmails.labelIds.includes(
           findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })?.id ??
             ''
         )
-        const hasInboxLabel = selectedEmails?.labelIds.includes(INBOX_LABEL)
+        const hasInboxLabel = selectedEmails.labelIds.includes(INBOX_LABEL)
         const isFocusedOrSorting =
           coreStatus === CORE_STATUS_MAP.focused ||
           (isFlexibleFlowActive && coreStatus === CORE_STATUS_MAP.sorting)
@@ -162,10 +160,10 @@ const EmailDetail = () => {
 
   // Based on the location and threadId, set the correct Redux state. Location state comes from openEmail function
   useEffect(() => {
-    if (isReplying && !location?.state?.isReplying) {
+    if (isReplying && !location.state?.isReplying) {
       dispatch(setIsReplying(false))
     }
-    if (isForwarding && !location?.state?.isForwarding) {
+    if (isForwarding && !location.state?.isForwarding) {
       dispatch(setIsForwarding(false))
     }
   }, [threadId])

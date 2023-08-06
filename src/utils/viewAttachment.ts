@@ -11,14 +11,26 @@ const FAIL_RESPONSE_OBJECT = {
 }
 
 const handleFetchedAttachment = (
-  fetchedAttachment: any,
+  fetchedAttachment: unknown,
   filename: string,
   mimeType: string
 ) => {
-  const base64Data = fetchedAttachment?.data?.data
-  const blobData = base64toBlob({ base64Data, mimeType })
-  const blobUrl = URL.createObjectURL(blobData)
-  return { success: true, message: null, blobUrl, mimeType }
+  if (
+    typeof fetchedAttachment === 'object' &&
+    fetchedAttachment !== null &&
+    'data' in fetchedAttachment
+  ) {
+    if (
+      typeof fetchedAttachment.data === 'object' &&
+      fetchedAttachment.data !== null &&
+      'data' in fetchedAttachment.data
+    ) {
+      const base64Data = fetchedAttachment?.data?.data
+      const blobData = base64toBlob({ base64Data, mimeType })
+      const blobUrl = URL.createObjectURL(blobData)
+      return { success: true, message: null, blobUrl, mimeType }
+    }
+  }
 }
 
 /**

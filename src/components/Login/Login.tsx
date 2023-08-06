@@ -50,11 +50,8 @@ const Login = () => {
       const response = await userApi().authGoogle(
         import.meta.env.VITE_USE_LOCAL_FRONTEND_CLOUD_BACKEND === 'true'
       )
-      if (
-        'status' in response &&
-        response?.status === 200 &&
-        'data' in response
-      ) {
+      console.log({ response })
+      if (response && response.status === 200) {
         const authScreenAccepted = localStorage.getItem(AUTH_SCREEN_ACCEPTED)
 
         if (authScreenAccepted === 'true') {
@@ -73,6 +70,7 @@ const Login = () => {
         ))
       }
     } catch (err) {
+      console.log({ err })
       setLoadState(LOAD_STATE_MAP.error)
       toast.custom((t) => (
         <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />

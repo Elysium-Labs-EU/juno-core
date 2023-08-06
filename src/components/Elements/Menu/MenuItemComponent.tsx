@@ -29,7 +29,7 @@ const MenuItemComponent = ({
     >
       {item.title}
     </S.MenuItemContentMain>
-    {item?.hint && (
+    {item.hint && (
       <S.MenuItemContentSide data-cy="item-hint">
         {item.hint.map((it) => (
           <Span key={it}>{it}</Span>

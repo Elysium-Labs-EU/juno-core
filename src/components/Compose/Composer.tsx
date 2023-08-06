@@ -304,7 +304,7 @@ const Composer = ({
       <SubjectField
         composeValue={
           typeof composedEmail?.subject === 'string'
-            ? composedEmail?.subject
+            ? composedEmail.subject
             : undefined
         }
         hasInteracted={hasInteracted}
@@ -322,7 +322,7 @@ const Composer = ({
         autofocus={isReplying ? 'start' : false}
         composeValue={
           typeof composedEmail?.body === 'string'
-            ? composedEmail?.body
+            ? composedEmail.body
             : undefined
         }
         composerMode={assertComposerMode({ isForwarding, isReplying })}
@@ -340,14 +340,14 @@ const Composer = ({
       <Attachments
         composeValue={
           isFileArray(composedEmail?.files) ||
-            isEmailAttachmentTypeArray(composedEmail?.files)
+          isEmailAttachmentTypeArray(composedEmail?.files)
             ? composedEmail?.files
             : undefined
         }
         hasInteracted={hasInteracted}
         loadState={loadState}
         messageId={
-          typeof composedEmail?.id === 'string' ? composedEmail?.id : ''
+          typeof composedEmail?.id === 'string' ? composedEmail.id : ''
         }
         setHasInteracted={setHasInteracted}
         updateComposeEmail={updateComposedEmail}
@@ -370,8 +370,8 @@ const Composer = ({
     () => (
       <S.ButtonContainer>
         {localDraftDetails?.id &&
-          localDraftDetails?.message?.threadId &&
-          localDraftDetails?.message?.id && (
+          localDraftDetails.message?.threadId &&
+          localDraftDetails.message.id && (
             <DiscardDraftButton
               draftId={localDraftDetails.id}
               threadId={localDraftDetails.message.threadId}

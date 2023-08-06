@@ -16,7 +16,7 @@ export default function useFetchThreadsTotalNumber(labelIds: Array<string>) {
       const [firstLabelId] = labelIds
       if (firstLabelId) {
         const response = await labelApi().fetchSingleLabel(firstLabelId)
-        if ('data' in response && response?.data?.threadsTotal) {
+        if ('data' in response && response.data.threadsTotal) {
           mounted && setTotalThreads(response.data.threadsTotal)
           mounted && setLoadingState(global.LOAD_STATE_MAP.loaded)
         } else {

@@ -15,9 +15,8 @@ import StarterKit from '@tiptap/starter-kit'
 import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useState } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
-import { compareTwoStrings } from 'string-similarity'
 
-import { assertComposerMode } from 'components/Compose/Composer'
+import type { assertComposerMode } from 'components/Compose/Composer'
 import * as Compose from 'components/Compose/ComposeStyles'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
@@ -27,6 +26,7 @@ import removeSignature from 'utils/removeSignature'
 
 import MenuBar from './BodyFieldMenubar'
 import * as S from './BodyFieldStyles'
+import stringSimilarity from 'utils/stringSimilarity'
 
 /**
  * @param composeValue - the body value fetched from an external source.
@@ -98,7 +98,7 @@ const BodyField = ({
         const response = removeSignature(composeValue)
 
         // Compare the input fetched body value and the stored body value - if below a certain treshhold, overwrite the local state.
-        if (compareTwoStrings(composeValue, value) < 0.9) {
+        if (stringSimilarity(composeValue, value) < 0.9) {
           editorInstance.commands.setContent(response.outerHTML, true)
         }
       } else {

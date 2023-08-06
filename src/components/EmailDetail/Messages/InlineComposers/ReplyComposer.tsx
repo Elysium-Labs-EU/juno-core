@@ -58,16 +58,16 @@ const ReplyComposer = ({
       <Composer
         presetValue={{
           // This should only be used when the message is a draft
-          bcc: handleContactConversion(relevantMessage?.payload.headers.bcc),
-          body: relevantMessage?.labelIds.includes(global.DRAFT_LABEL)
+          bcc: handleContactConversion(relevantMessage.payload.headers.bcc),
+          body: relevantMessage.labelIds.includes(global.DRAFT_LABEL)
             ? emailBody(isBodyWithEmailHTML(relevantMessage))
             : undefined,
-          cc: handleContactConversion(relevantMessage?.payload.headers.cc),
-          files: relevantMessage?.payload?.files,
-          id: relevantMessage?.id,
-          subject: relevantMessage?.payload.headers.subject,
-          threadId: relevantMessage?.threadId,
-          to: handleContactConversion(relevantMessage?.payload.headers.from),
+          cc: handleContactConversion(relevantMessage.payload.headers.cc),
+          files: relevantMessage.payload.files,
+          id: relevantMessage.id,
+          subject: relevantMessage.payload.headers.subject,
+          threadId: relevantMessage.threadId,
+          to: handleContactConversion(relevantMessage.payload.headers.from),
         }}
         messageOverviewListener={messageOverviewListener}
       />

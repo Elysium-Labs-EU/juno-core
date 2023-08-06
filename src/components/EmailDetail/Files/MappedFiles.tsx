@@ -38,15 +38,15 @@ const MappedFiles = ({
         .reverse()
         .map((message) => {
           const staticSenderNameFull = getSenderNameFull(
-            message.payload.headers?.from,
+            message.payload.headers.from,
             emailAddress
           )
           const staticSenderNamePartial = getSenderNamePartial(
-            message.payload.headers?.from,
+            message.payload.headers.from,
             emailAddress
           )
 
-          if (message?.payload?.files && message.payload.files.length > 0) {
+          if (message.payload.files && message.payload.files.length > 0) {
             return (
               <Stack direction="vertical" key={message.id} spacing="huge">
                 <S.NameOptionsRow>

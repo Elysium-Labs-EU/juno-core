@@ -7,11 +7,9 @@ export default function getRecipientName({
   memoizedDraftOrRegular,
 }: IExtractEmailData) {
   const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+    memoizedDraftOrRegular.messages[memoizedDraftOrRegular.messages.length - 1]
   if (lastMessage) {
-    return recipientName(lastMessage?.payload?.headers?.to, emailAddress)
+    return recipientName(lastMessage.payload.headers.to, emailAddress)
   }
   return null
 }

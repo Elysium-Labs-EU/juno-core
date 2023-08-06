@@ -6,8 +6,7 @@
   "extends": [
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
-    "airbnb",
-    "airbnb-typescript",
+    "plugin:@typescript-eslint/strict-type-checked",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
@@ -71,25 +70,32 @@
       }
     ],
     "@typescript-eslint/await-thenable": "warn",
-    "@typescript-eslint/no-floating-promises": "warn",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "@typescript-eslint/no-confusing-void-expression": [
+      "error",
+      {
+        "ignoreArrowShorthand": true
+      }
+    ],
+    "@typescript-eslint/no-floating-promises": "error",
     "@typescript-eslint/no-misused-promises": "warn",
     "@typescript-eslint/semi": [
       "error",
       "never"
     ],
-    "@typescript-eslint/react/prop-types": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-expressions": [
-      "error",
-      {
-        "allowShortCircuit": true
-      }
-    ],
-    "@typescript-eslint/no-useless-concat": "off",
-    "@typescript-eslint/no-use-before-define": [
-      "error"
-    ],
+    // "@typescript-eslint/no-unused-expressions": [
+    //   "error",
+    //   {
+    //     "allowShortCircuit": true
+    //   }
+    // ],
+    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/no-useless-constructor": "error",
     "@typescript-eslint/require-await": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/prefer-reduce-type-parameter": "off",
+    "@typescript-eslint/switch-exhaustiveness-check": "error",
     "import/no-cycle": "off",
     "import/no-extraneous-dependencies": [
       "error",

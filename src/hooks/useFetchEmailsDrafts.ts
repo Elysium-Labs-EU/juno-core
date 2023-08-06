@@ -60,9 +60,7 @@ export default function useFetchEmailsDrafts(
       !labelIds.includes(global.SEARCH_LABEL)
     ) {
       // Prevent this hook to be fired when the user comes back from Search mode. There is no Search label.
-      const inboxIsLoaded = labelIds.some(
-        (val) => loadedInbox.indexOf(val) !== -1
-      )
+      const inboxIsLoaded = labelIds.some((val) => loadedInbox.includes(val))
       if (!inboxIsLoaded) {
         const params = {
           labelIds,

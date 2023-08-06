@@ -84,7 +84,7 @@ const Signature = () => {
             return
           }
           dispatch(
-            setProfile({ ...profile, signature: response?.data?.signature })
+            setProfile({ ...profile, signature: response.data.signature })
           )
         } catch (err) {
           toast.custom((t) => (
@@ -106,12 +106,12 @@ const Signature = () => {
       }
     }
     if (
-      debouncedValue !== profile?.signature &&
+      debouncedValue !== profile.signature &&
       loadState === global.LOAD_STATE_MAP.loaded
     ) {
       updateSignature()
     }
-  }, [debouncedValue, profile?.signature])
+  }, [debouncedValue, profile.signature])
 
   // Load the state from Redux into the editor.
   useEffect(() => {
@@ -120,15 +120,15 @@ const Signature = () => {
       setLoadState(global.LOAD_STATE_MAP.loading)
     }
     if (
-      typeof profile?.signature === 'string' &&
+      typeof profile.signature === 'string' &&
       value.length < 1 &&
       editorInstance
     ) {
-      setValue(profile?.signature)
-      editorInstance.commands.setContent(profile?.signature)
+      setValue(profile.signature)
+      editorInstance.commands.setContent(profile.signature)
       setLoadState(global.LOAD_STATE_MAP.loaded)
     }
-  }, [profile?.signature, editorInstance])
+  }, [profile.signature, editorInstance])
 
   return (
     <div>

@@ -90,7 +90,7 @@ export async function downloadAttachmentMultiple({
   messageId,
 }: IDownloadAttachmentData) {
   try {
-    if (attachmentData && attachmentData.length) {
+    if (attachmentData?.length) {
       const buffer: Promise<any>[] = []
       attachmentData.forEach((attachment) => {
         const { attachmentId } = attachment.body

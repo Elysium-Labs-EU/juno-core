@@ -25,7 +25,7 @@ const AuthExplanation = () => {
   const dispatch = useAppDispatch()
   const location = useLocation()
 
-  const googleURL = location?.state?.googleURL
+  const googleURL = location.state?.googleURL
 
   const handleContinueToGoogle = () => {
     localStorage.setItem(AUTH_SCREEN_ACCEPTED, 'true')

@@ -1,4 +1,4 @@
-import getRelevantMessage from './getRelevantMessage'
+import type getRelevantMessage from './getRelevantMessage'
 
 export default function isBodyWithEmailHTML(
   relevantMessage: ReturnType<typeof getRelevantMessage>

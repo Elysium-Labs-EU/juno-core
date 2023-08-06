@@ -9,8 +9,8 @@ import type {
 } from 'components/EmailDetail/EmailDetailTypes'
 import { useAppDispatch } from 'store/hooks'
 import handleEmailLink from 'utils/handleEmailLink'
-import openLinkInNewTabTauri from 'utils/tauri/openLinkInNewTabTauri'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
+import openLinkInNewTabTauri from 'utils/tauri/openLinkInNewTabTauri'
 
 import Wrapper from './EmailDetailBodyStyles'
 
@@ -46,7 +46,7 @@ const ShadowBody = ({ email }: IShadowBody) => {
   }
   return (
     // TODO: This is a temporary fix.
-    // @ts-ignore
+    // @ts-expect-error
     <root.div
       ref={callbackRef}
       style={{ all: 'unset', overflow: 'auto', textAlign: 'left' }}

@@ -27,7 +27,7 @@ const asssesUniqueFiles = ({
   >['filesObjectArray'] = []
 
   filesObjectArray.forEach((fileObject) => {
-    if (fileObject?.files) {
+    if (fileObject.files) {
       uniqueFiles.push({
         id: fileObject.id,
         files: fileObject.files.filter((file) => {

@@ -20,7 +20,7 @@ export const getRemovedTrackers = ({
 }: Pick<IReadMessage, 'message'>) => {
   if (
     'body' in message.payload &&
-    message.payload?.body?.removedTrackers &&
+    message.payload.body.removedTrackers &&
     message.payload.body.removedTrackers.length > 0
   ) {
     return message.payload.body.removedTrackers
@@ -42,9 +42,9 @@ const ReadUnreadMessage = ({
 
   useEffect(() => {
     let mounted = true
-    if (threadDetail && threadDetail?.messages) {
+    if (threadDetail?.messages) {
       if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message?.labelIds?.includes(global.UNREAD_LABEL)) {
+        if (message && message.labelIds.includes(global.UNREAD_LABEL)) {
           setOpen(true)
         }
         if (
@@ -61,7 +61,7 @@ const ReadUnreadMessage = ({
       if (
         threadDetail.messages.length > 1 &&
         threadDetail.messages.some((item) =>
-          item?.labelIds?.includes(global.DRAFT_LABEL)
+          item.labelIds.includes(global.DRAFT_LABEL)
         )
       ) {
         setOpen(true)
@@ -77,7 +77,7 @@ const ReadUnreadMessage = ({
    */
   useEffect(() => {
     let mounted = true
-    if (threadDetail && threadDetail.messages && !open) {
+    if (threadDetail?.messages && !open) {
       if (
         isReplying &&
         threadDetail.messages.length === 2 &&
@@ -99,15 +99,15 @@ const ReadUnreadMessage = ({
   }
 
   const staticSenderNameFull = useMemo(
-    () => getSenderNameFull(message.payload.headers?.from, emailAddress),
+    () => getSenderNameFull(message.payload.headers.from, emailAddress),
     []
   )
   const staticSenderNamePartial = useMemo(
-    () => getSenderNamePartial(message.payload.headers?.from, emailAddress),
+    () => getSenderNamePartial(message.payload.headers.from, emailAddress),
     []
   )
   const staticEmailSubject = useMemo(
-    () => EmailSubject(message.payload.headers?.subject),
+    () => EmailSubject(message.payload.headers.subject),
     []
   )
   const staticSnippet = useMemo(() => EmailSnippet(message), [])

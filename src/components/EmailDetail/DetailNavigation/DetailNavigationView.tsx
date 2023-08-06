@@ -54,18 +54,19 @@ const DetailNavigationView = ({
       }
       if (coreStatus !== global.CORE_STATUS_MAP.searching) {
         // If loading isn't already happening, load the nextPage
-        const { nextPageToken } = activeEmailList as TEmailListObject
+        const { nextPageToken } = activeEmailList
         if (
           activeEmailList.nextPageToken !== null &&
           activeEmailList.threads[viewIndex + 1] === undefined &&
           !isSilentLoading
         ) {
-          return loadNextPage({
+          loadNextPage({
             nextPageToken,
             labelIds,
             dispatch,
             maxResults: emailFetchSize,
           })
+          return
         }
       }
 

@@ -19,11 +19,12 @@ const ReplyOption = ({ iconSize, threadDetail }: IEmailDetailOptions) => {
   const isForwarding = useAppSelector(selectIsForwarding)
 
   const handleEvent = useCallback(() => {
-    if (threadDetail?.messages) {
-      return isReplyingListener({
+    if (threadDetail.messages) {
+      isReplyingListener({
         dispatch,
         isForwarding,
       })
+      return
     }
     return null
   }, [threadDetail, dispatch])

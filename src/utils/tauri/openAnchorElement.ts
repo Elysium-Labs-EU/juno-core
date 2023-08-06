@@ -1,9 +1,10 @@
 import { open } from '@tauri-apps/api/shell'
+
 import handleOpenLink from 'utils/handleOpenLink'
 
 const tauriOpenFunction = async (event: MouseEvent) => {
   event.preventDefault()
-  if (event?.currentTarget) {
+  if (event.currentTarget) {
     const currentTarget = event.currentTarget as HTMLAnchorElement
     // await open(currentTarget.href)
     handleOpenLink({ action: currentTarget.href })
@@ -28,7 +29,7 @@ export default function openAnchorElement({
   if (!existingOnClick || existingOnClick !== tauriOpenFunctionString) {
     element.addEventListener('click', (event) => {
       event.preventDefault()
-      if (event?.currentTarget) {
+      if (event.currentTarget) {
         const currentTarget = event.currentTarget as HTMLAnchorElement
         open(currentTarget.href)
       }

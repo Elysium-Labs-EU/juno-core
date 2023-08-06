@@ -58,9 +58,7 @@ const ListItem = ({
 }) => {
   const dispatch = useAppDispatch()
 
-  const clickAndClose = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const clickAndClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       onClick(e)
 

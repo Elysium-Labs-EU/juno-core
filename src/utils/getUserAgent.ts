@@ -10,16 +10,16 @@ export default function getUserAgent() {
   if (typeof navigator !== 'undefined') {
     const value = navigator.userAgent
     if (value) {
-      if (value.indexOf('Win') !== -1) {
+      if (value.includes('Win')) {
         return OPERATING_SYSTEMS.WINDOWS_OS
       }
-      if (value.indexOf('Mac') !== -1) {
+      if (value.includes('Mac')) {
         return OPERATING_SYSTEMS.MAC_OS
       }
-      if (value.indexOf('X11') !== -1) {
+      if (value.includes('X11')) {
         return OPERATING_SYSTEMS.UNIX_OS
       }
-      if (value.indexOf('Linux') !== -1) {
+      if (value.includes('Linux')) {
         return OPERATING_SYSTEMS.LINUX_OS
       }
     }

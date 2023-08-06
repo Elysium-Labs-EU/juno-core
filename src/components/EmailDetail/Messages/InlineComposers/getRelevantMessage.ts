@@ -1,4 +1,4 @@
-import { TThreadObject } from 'store/storeTypes/emailListTypes'
+import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
 /**
  * @function getRelevantMessage

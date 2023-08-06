@@ -47,7 +47,7 @@ export async function prepareFormData({
   formData.append('draftId', localDraftDetails?.id ?? '')
   formData.append(
     'threadId',
-    composedEmail?.threadId
+    composedEmail.threadId
       ? composedEmail.threadId
       : localDraftDetails?.message?.threadId ?? ''
   )
@@ -60,21 +60,21 @@ export async function prepareFormData({
   }
   formData.append(
     'to',
-    composedEmail?.to ? convertToGmailEmail(composedEmail.to) : ''
+    composedEmail.to ? convertToGmailEmail(composedEmail.to) : ''
   )
   formData.append(
     'cc',
-    composedEmail?.cc ? convertToGmailEmail(composedEmail.cc) : ''
+    composedEmail.cc ? convertToGmailEmail(composedEmail.cc) : ''
   )
   formData.append(
     'bcc',
-    composedEmail?.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
+    composedEmail.bcc ? convertToGmailEmail(composedEmail.bcc) : ''
   )
-  formData.append('subject', composedEmail?.subject ?? '')
-  formData.append('body', composedEmail?.body ?? '')
-  formData.append('signature', composedEmail?.signature ?? '')
-  if (composedEmail?.files && composedEmail.files.length > 0) {
-    await prepareFilesForSave({ files: composedEmail?.files, formData })
+  formData.append('subject', composedEmail.subject ?? '')
+  formData.append('body', composedEmail.body ?? '')
+  formData.append('signature', composedEmail.signature ?? '')
+  if (composedEmail.files && composedEmail.files.length > 0) {
+    await prepareFilesForSave({ files: composedEmail.files, formData })
   } else {
     formData.append('files', '')
   }

@@ -1,4 +1,4 @@
-import { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
 import base64toBlob from 'utils/base64toBlob'
 
@@ -19,7 +19,7 @@ export default async function convertB64AttachmentToFile({
     const buffer: Promise<any>[] = []
     for (let i = 0; i < files.length; i += 1) {
       const loopFile = files[i]
-      if (loopFile?.body?.attachmentId) {
+      if (loopFile?.body.attachmentId) {
         buffer.push(
           messageApi().getAttachment({
             messageId: id,

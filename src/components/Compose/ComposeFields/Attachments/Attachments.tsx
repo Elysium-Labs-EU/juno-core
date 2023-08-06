@@ -6,7 +6,7 @@ import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBub
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import CustomToast from 'components/Elements/Toast/Toast'
-import { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'

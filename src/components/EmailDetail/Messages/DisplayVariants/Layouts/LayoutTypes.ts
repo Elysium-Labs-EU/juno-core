@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 
-import getEmailSubject from 'components/Elements/EmailSubject'
-import getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
-import getSenderNamePartial from 'components/Elements/SenderName/getSenderNamePartial'
+import type getEmailSubject from 'components/Elements/EmailSubject'
+import type getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
+import type getSenderNamePartial from 'components/Elements/SenderName/getSenderNamePartial'
 import type { IReadMessage } from 'components/EmailDetail/EmailDetailTypes'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
-import { getRemovedTrackers } from '../ReadUnreadMessage'
+import type { getRemovedTrackers } from '../ReadUnreadMessage'
 
 interface IBaseLayoutType {
   handleClick: () => void

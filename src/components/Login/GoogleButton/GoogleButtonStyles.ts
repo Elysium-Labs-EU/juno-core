@@ -15,12 +15,12 @@ export const Inner = styled.div`
   box-shadow: 0 1px 2px 0 rgb(9 30 66 / 25%);
 `
 
-interface IStyledButton {
+interface StyledButton {
   isActive: boolean
   showLoadingState: boolean
 }
 
-export const StyledButton = styled.button<IStyledButton>`
+export const StyledButton = styled.button<StyledButton>`
   align-items: center;
   background-color: ${({ isActive }) =>
     isActive ? `var(--color-neutral-800)` : `var(--color-black)`};

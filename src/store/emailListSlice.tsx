@@ -51,7 +51,7 @@ export const fetchEmailsSimple = createAsyncThunk(
   async (query: IEmailQueryObject, { signal }) => {
     const response = await threadApi({ signal }).getSimpleThreads(query)
     if ('data' in response) {
-      return { response: response.data, labels: query.labelIds, q: query?.q }
+      return { response: response.data, labels: query.labelIds, q: query.q }
     }
     return null
   }
@@ -115,7 +115,7 @@ export const handleAdditionToExistingEmailArray = ({
   if (activeCount === completeCount) {
     const sortedThreads = sortThreads(
       [...existingThreads.values()].concat(tempArray),
-      labels?.includes(global.DRAFT_LABEL)
+      labels.includes(global.DRAFT_LABEL)
     )
 
     // Here we create the final object that will be pushed to the Redux state
@@ -163,7 +163,7 @@ export const handleEmailListChange = ({
         // This function is used to update the search List.
         // If there is one, use the function, otherwise just assign the state.
         const targetEmailListObject = state.searchList
-        if (targetEmailListObject && q === targetEmailListObject?.q) {
+        if (targetEmailListObject && q === targetEmailListObject.q) {
           handleAdditionToExistingEmailArray({
             targetEmailListObject,
             state,
@@ -261,7 +261,7 @@ const emailListSlice = createSlice({
         const [firstPayload] = payload
         if (firstPayload) {
           if (
-            state.selectedEmails?.labelIds &&
+            state.selectedEmails.labelIds &&
             multipleIncludes(
               firstPayload.labelIds,
               state.selectedEmails.labelIds
@@ -504,7 +504,7 @@ export const loadEmailDetails =
       if (threads.length > 0) {
         const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
         if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
-          const labelNames = lastMessage?.labelIds
+          const labelNames = lastMessage.labelIds
           if (labelNames) {
             const legalLabels = onlyLegalLabelObjects({
               storageLabels,
@@ -547,9 +547,7 @@ export const loadEmailDetails =
       } else {
         if (
           !getState().base.baseLoaded &&
-          labels.some(
-            (val) => getState().labels.loadedInbox.indexOf(val) === -1
-          )
+          labels.some((val) => !getState().labels.loadedInbox.includes(val))
         ) {
           dispatch(setLoadedInbox(labels))
         }
@@ -599,9 +597,9 @@ export const updateEmailLabel =
           // The push route method should only work when the action is Archive, ToDo or Delete via Detail actions and the user is on the email detail page (/mail/).
           // This action is done first, to speed up the UX.
           if (
-            (request?.removeLabelIds &&
-              !request?.removeLabelIds.includes(global.UNREAD_LABEL)) ||
-            request?.delete
+            (request.removeLabelIds &&
+              !request.removeLabelIds.includes(global.UNREAD_LABEL)) ||
+            request.delete
           ) {
             const blockViewIndexUpdate = true
             const forceNavigateBack =
@@ -820,11 +818,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       savedHistoryId,
       storageLabels
     )
-    if (
-      'status' in response &&
-      response?.status === 200 &&
-      'data' in response
-    ) {
+    if ('status' in response && response.status === 200 && 'data' in response) {
       if (Array.isArray(response.data)) {
         dispatch(loadEmailDetails(response.data))
       }

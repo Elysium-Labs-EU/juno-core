@@ -36,7 +36,7 @@ const CommandPaletteSuggestions = ({
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
 
   const currentEmailBoxHasEmails = useMemo(() => {
-    const threads = emailList?.[activeEmailListIndex]?.threads
+    const threads = emailList[activeEmailListIndex]?.threads
     if (threads) {
       return threads.length > 0
     }

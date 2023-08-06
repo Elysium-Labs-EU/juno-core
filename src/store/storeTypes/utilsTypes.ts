@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { ACTIVE_MODAL_MAP } from 'constants/globalConstants'
+import type { ACTIVE_MODAL_MAP } from 'constants/globalConstants'
 
 import type { TGmailV1SchemaLabelSchema } from './gmailBaseTypes/gmailTypes'
 import type { TUserSettings } from './gmailBaseTypes/otherTypes'

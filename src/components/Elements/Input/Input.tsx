@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { forwardRef } from 'react'
+import type React from 'react'
+import { forwardRef } from 'react'
 
 import * as S from './InputStyles'
 

@@ -108,10 +108,7 @@ const RenderEmailDetail = ({
   )
 
   const showDetailOptions =
-    threadDetail?.messages &&
-    threadDetail.messages.length &&
-    !isReplying &&
-    !isForwarding
+    threadDetail?.messages.length && !isReplying && !isForwarding
 
   return (
     <S.Wrapper tabbedView={tabbedViewActive}>
@@ -134,14 +131,14 @@ const RenderEmailDetail = ({
               <FilesOverview threadDetail={threadDetail} />
             </RenderTab>
           </S.Scroll>
-          {isReplying && threadDetail && threadDetail?.messages ? (
+          {isReplying && threadDetail?.messages ? (
             <ReplyComposer
               localThreadDetail={threadDetail}
               messageOverviewListener={messageOverviewListener}
               selectedIndex={selectedIndex}
             />
           ) : null}
-          {isForwarding && threadDetail && threadDetail?.messages ? (
+          {isForwarding && threadDetail?.messages ? (
             <ForwardingComposer
               isForwarding={isForwarding}
               localThreadDetail={threadDetail}

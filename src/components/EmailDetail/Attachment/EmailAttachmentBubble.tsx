@@ -1,6 +1,6 @@
 import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBubble'
 
-import { EmailAttachmentType } from './EmailAttachmentTypes'
+import type { EmailAttachmentType } from './EmailAttachmentTypes'
 
 const EmailAttachmentBubble = ({
   attachmentData,

@@ -9,8 +9,6 @@ import { peopleV1SchemaNameSchema } from './peopleTypes'
 
 export const getAuthUrlResponseSchema = z.string()
 
-export type TGetAuthUrlResponseSchema = z.infer<typeof getAuthUrlResponseSchema>
-
 export const credentialsSchema = z.object({
   refresh_token: z.string().optional().nullable(),
   expiry_date: z.number().optional().nullable(),

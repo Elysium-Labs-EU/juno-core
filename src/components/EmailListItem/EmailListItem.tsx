@@ -37,7 +37,7 @@ import shouldUseDraftOrRegular from './Utils/shouldUseDraftOrRegular'
 
 const hasUnreadLabel = (emailListThreadItem: TThreadObject) =>
   emailListThreadItem.messages.some((message) =>
-    message?.labelIds?.includes(global.UNREAD_LABEL)
+    message.labelIds.includes(global.UNREAD_LABEL)
   )
 
 export interface IExtractEmailData {
@@ -116,8 +116,8 @@ const EmailListItem = ({
     () => (
       <EmailHasAttachmentSimple
         files={
-          memoizedDraftOrRegular.messages![
-            memoizedDraftOrRegular.messages!.length - 1
+          memoizedDraftOrRegular.messages[
+            memoizedDraftOrRegular.messages.length - 1
           ]?.payload?.files
         }
       />

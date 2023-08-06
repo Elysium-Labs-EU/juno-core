@@ -49,7 +49,7 @@ const OpenMessageLayout = ({
           </S.EmailDetailTitle>
         </S.EmailAvatarGrid>
         <Stack>
-          <EmailHasAttachmentSimple files={message?.payload?.files} />
+          <EmailHasAttachmentSimple files={message.payload.files} />
 
           {labelIds && labelIds.includes(SEARCH_LABEL) ? (
             <EmailLabel labelNames={message.labelIds} />
@@ -73,7 +73,7 @@ const OpenMessageLayout = ({
           width: '100%',
         }}
       />
-      {message?.payload ? (
+      {message.payload ? (
         <S.EmailBody>
           <EmailDetailBody
             threadDetailBody={message.payload}

@@ -45,7 +45,7 @@ export default function useFetchEmailDetail({
               fetchEmailDetail({
                 threadId,
                 labelIds,
-                q: activeEmailList?.q,
+                q: activeEmailList.q,
               })
             )
         }

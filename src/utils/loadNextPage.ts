@@ -56,7 +56,7 @@ export const edgeLoadingNextPage = ({
   if (!isSilentLoading) {
     if ('q' in activeEmailList && activeEmailList.q !== undefined) {
       const { q, nextPageToken } = activeEmailList
-      return loadNextPage({
+      loadNextPage({
         q,
         nextPageToken,
         dispatch,
@@ -64,15 +64,17 @@ export const edgeLoadingNextPage = ({
         silentLoading: true,
         labelIds: [],
       })
+      return
     }
     const { nextPageToken } = activeEmailList
-    return loadNextPage({
+    loadNextPage({
       nextPageToken,
       labelIds,
       dispatch,
       maxResults: emailFetchSize,
       silentLoading: true,
     })
+    return
   }
   return null
 }

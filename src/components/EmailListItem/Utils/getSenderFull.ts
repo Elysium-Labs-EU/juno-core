@@ -7,11 +7,9 @@ export default function getSenderFull({
   memoizedDraftOrRegular,
 }: IExtractEmailData) {
   const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+    memoizedDraftOrRegular.messages[memoizedDraftOrRegular.messages.length - 1]
   if (lastMessage) {
-    return getSenderNameFull(lastMessage?.payload?.headers?.from, emailAddress)
+    return getSenderNameFull(lastMessage.payload.headers.from, emailAddress)
   }
   return null
 }

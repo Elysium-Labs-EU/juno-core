@@ -9,13 +9,13 @@ import type { TPeopleV1SchemaListOtherContactsResponseSchema } from 'store/store
 
 import { errorBlockTemplate } from './api'
 
-interface IAllContactsQueryObject {
+interface AllContactsQueryObject {
   readMask: string
   pageSize?: number
   nextPageToken?: string
 }
 
-interface IQueryContactObject {
+interface QueryContactObject {
   readMask: string
   query: string
 }
@@ -23,7 +23,7 @@ interface IQueryContactObject {
 const contactApi = () => ({
   // TODO: We currently do not use this api endpoint
   getAllContacts: async (
-    query: IAllContactsQueryObject
+    query: AllContactsQueryObject
   ): TemplateApiResponse<TPeopleV1SchemaListOtherContactsResponseSchema> => {
     try {
       const res =
@@ -44,7 +44,7 @@ const contactApi = () => ({
     }
   },
   queryContacts: async (
-    query: IQueryContactObject
+    query: QueryContactObject
   ): TemplateApiResponse<TContactState['allContacts']> => {
     try {
       const res = await instance.get<TContactState['allContacts']>(

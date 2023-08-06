@@ -19,7 +19,7 @@ export default function sortThreads(
     let { messages } = thread
     if (!forceSort) {
       messages = messages.filter(
-        (message) => message.labelIds.indexOf(global.DRAFT_LABEL) === -1
+        (message) => !message.labelIds.includes(global.DRAFT_LABEL)
       )
     }
     return {
@@ -29,6 +29,6 @@ export default function sortThreads(
   })
 
   return mappedArray
-    .sort((a, b) => Number(b?.internalDate) - Number(a?.internalDate))
+    .sort((a, b) => Number(b.internalDate) - Number(a.internalDate))
     .map((item) => item.thread)
 }

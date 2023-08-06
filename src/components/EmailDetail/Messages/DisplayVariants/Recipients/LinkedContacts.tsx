@@ -87,23 +87,23 @@ const LinkedContants = ({
 }) => {
   const { emailAddress } = useAppSelector(selectProfile)
   const senderName = getSenderNameFull(
-    message.payload.headers?.from,
+    message.payload.headers.from,
     emailAddress
   )
   const [firstSenderContact] = handleContactConversion(
-    message?.payload?.headers?.from,
+    message.payload.headers.from,
     emailAddress
   )
   const toNameFull = handleContactConversion(
-    message?.payload?.headers?.to,
+    message.payload.headers.to,
     emailAddress
   )
   const ccNameFull = handleContactConversion(
-    message?.payload?.headers?.cc,
+    message.payload.headers.cc,
     emailAddress
   )
   const bccNameFull = handleContactConversion(
-    message?.payload?.headers?.bcc,
+    message.payload.headers.bcc,
     emailAddress
   )
 

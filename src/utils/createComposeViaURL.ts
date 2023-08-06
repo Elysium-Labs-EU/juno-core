@@ -20,6 +20,9 @@ export default function createComposeViaURL({
   mailToLink: string
 }): void {
   dispatch(
-    push(`${RoutesConstants.COMPOSE_EMAIL}?${mailToLink.replace(':', '=')}`, BACK_TO_EMAIL)
+    push(
+      `${RoutesConstants.COMPOSE_EMAIL}?${mailToLink.replace(':', '=')}`,
+      BACK_TO_EMAIL
+    )
   )
 }

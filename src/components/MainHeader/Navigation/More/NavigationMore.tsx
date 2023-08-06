@@ -3,7 +3,7 @@ import { push } from 'redux-first-history'
 
 import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Menu from 'components/Elements/Menu/Menu'
-import { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
+import type { IMenuItemCollection } from 'components/Elements/Menu/MenuTypes'
 import * as global from 'constants/globalConstants'
 import Routes from 'constants/routesConstants'
 import { QiMeatballsH } from 'images/svgIcons/quillIcons'

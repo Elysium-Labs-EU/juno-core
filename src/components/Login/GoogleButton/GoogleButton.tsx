@@ -7,7 +7,7 @@ import * as S from './GoogleButtonStyles'
 
 const GOOGLE = 'Login with Google'
 
-interface IGoogleButton {
+interface GoogleButtonProps {
   disabled: boolean
   onClick: () => void
   showLoadingState: boolean
@@ -23,7 +23,7 @@ const GoogleButton = ({
   disabled,
   onClick,
   showLoadingState,
-}: IGoogleButton) => {
+}: GoogleButtonProps) => {
   useKeyboardShortcut({
     handleEvent: () => onClick(),
     key: keyConstants.KEY_SPECIAL.enter,

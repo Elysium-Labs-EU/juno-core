@@ -74,7 +74,7 @@ export const ContactCardEmailButton = styled.button<IContactCardColors>`
   background-color: ${({ $randomColor }) =>
     $randomColor || 'var(--color-purple-100)'} !important;
   color: ${({ $randomColor }) =>
-    $randomColor?.replace('0.2', '0.8') || 'var(--color-purple-100)'};
+    $randomColor.replace('0.2', '0.8') || 'var(--color-purple-100)'};
   background-color: transparent;
   border-radius: var(--radius-m);
   border: none;

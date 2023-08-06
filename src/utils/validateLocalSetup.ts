@@ -16,12 +16,12 @@ export default function validateLocalSetup(
   }
   // These checks are only valid for local development setup
   if (process.env.NODE_ENV === 'development') {
-    if (backendURL?.includes('localhost') && cloudFlag === 'true') {
+    if (backendURL.includes('localhost') && cloudFlag === 'true') {
       throw Error(
         'This combination is invalid. Your backendURL is pointing to localhost and you have a flag indicating to connect to the cloud backend.'
       )
     }
-    if (!backendURL?.includes('localhost') && cloudFlag === 'false') {
+    if (!backendURL.includes('localhost') && cloudFlag === 'false') {
       throw Error(
         'This combination is invalid. Your backendURL is pointing to a cloud environment and you have a flag indicating to connect to the local backend.'
       )

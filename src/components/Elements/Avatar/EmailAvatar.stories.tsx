@@ -1,4 +1,4 @@
-import { StoryFn, Meta } from '@storybook/react'
+import type { StoryFn, Meta } from '@storybook/react'
 
 import { EmailAvatarComponent } from './EmailAvatar'
 

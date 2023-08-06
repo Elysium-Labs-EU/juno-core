@@ -200,7 +200,7 @@ export const {
 export const closeMail = (): AppThunk => (dispatch, getState) => {
   const { labelIds, storageLabels } = getState().labels
   const foundLabel = findLabelById({ storageLabels, labelIds })
-  if (foundLabel && foundLabel?.name) {
+  if (foundLabel?.name) {
     const { isFlexibleFlowActive } = getState().utils
     // If the flexibleFlow isn't active, thus no dedicated Inbox page, reroute the user to To Do page
     if (!isFlexibleFlowActive && foundLabel.id === global.INBOX_LABEL) {
@@ -238,7 +238,7 @@ export const openEmail =
     // Open the regular view if there are more than 1 message (draft and regular combined). If it is only a Draft, it should open the draft right away
     if (
       messageArray?.length === 1 &&
-      messageArray?.every((message) =>
+      messageArray.every((message) =>
         message.labelIds.includes(global.DRAFT_LABEL)
       ) &&
       lastMessage

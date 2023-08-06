@@ -2,7 +2,7 @@ const isSymbol = (value: any): value is symbol =>
   !!value && value.constructor === Symbol
 
 const isFunction = (value: any): value is Function =>
-  !!(value && value.constructor && value.call && value.apply)
+  !!(value?.constructor && value.call && value.apply)
 
 const isDate = (value: any): value is Date =>
   Object.prototype.toString.call(value) === '[object Date]'
@@ -29,9 +29,9 @@ export default function isEmpty(value: any) {
   if (isDate(value)) return Number.isNaN(value.getTime())
   if (isFunction(value)) return false
   if (isSymbol(value)) return false
-  const { length } = value as any
+  const { length } = value
   if (isNumber(length)) return length === 0
-  const { size } = value as any
+  const { size } = value
   if (isNumber(size)) return size === 0
   const keys = Object.keys(value).length
   return keys === 0

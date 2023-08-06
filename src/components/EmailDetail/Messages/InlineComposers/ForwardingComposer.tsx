@@ -57,10 +57,10 @@ const ForwardingComposer = ({
     <ES.ComposeWrapper data-cy="forward-composer">
       <Composer
         presetValue={{
-          subject: relevantMessage?.payload.headers.subject,
+          subject: relevantMessage.payload.headers.subject,
           body: emailBody(isBodyWithEmailHTML(relevantMessage), isForwarding),
-          threadId: relevantMessage?.threadId,
-          id: relevantMessage?.id,
+          threadId: relevantMessage.threadId,
+          id: relevantMessage.id,
         }}
         messageOverviewListener={messageOverviewListener}
       />

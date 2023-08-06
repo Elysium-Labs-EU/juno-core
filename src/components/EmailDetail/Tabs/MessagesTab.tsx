@@ -21,7 +21,7 @@ const MessagesTab = ({
     style={{ cursor: 'pointer' }}
   >
     <S.StyledBadge
-      badgeContent={activeThread?.messages?.length ?? 0}
+      badgeContent={activeThread?.messages.length ?? 0}
       color="primary"
     >
       {local.MESSAGE_MENU_ITEM.name}

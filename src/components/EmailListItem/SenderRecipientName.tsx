@@ -2,9 +2,9 @@ import { DRAFT_LABEL } from 'constants/globalConstants'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 import * as S from './EmailListItemStyles'
-import getRecipientName from './Utils/getRecipientName'
-import getSenderFull from './Utils/getSenderFull'
-import getSenderPartial from './Utils/getSenderPartial'
+import type getRecipientName from './Utils/getRecipientName'
+import type getSenderFull from './Utils/getSenderFull'
+import type getSenderPartial from './Utils/getSenderPartial'
 
 interface ISenderRecipientName {
   handleOpenEvent: () => void

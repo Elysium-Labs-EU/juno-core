@@ -28,8 +28,8 @@ export default function useMarkEmailAsRead({
   useEffect(() => {
     if (
       threadDetail?.messages &&
-      threadDetail.messages.filter(
-        (message) => message.labelIds?.includes(global.UNREAD_LABEL) === true
+      threadDetail.messages.filter((message) =>
+        message.labelIds.includes(global.UNREAD_LABEL)
       ).length > 0
     ) {
       markEmailAsRead({

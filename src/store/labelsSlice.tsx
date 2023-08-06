@@ -49,8 +49,8 @@ const labelsSlice = createSlice({
       if (!Array.isArray(payload)) {
         const label = {
           id: payload.id,
-          name: payload?.name,
-          type: payload?.type ?? 'user',
+          name: payload.name,
+          type: payload.type ?? 'user',
         } as TLabelState['storageLabels'][0]
         if (label.id && label.name) {
           state.storageLabels = [...state.storageLabels, label]
@@ -59,11 +59,11 @@ const labelsSlice = createSlice({
       if (Array.isArray(payload)) {
         const labelIdNameArray = [] as TLabelState['storageLabels']
         payload.forEach((label) => {
-          if (label && label.name && label.id) {
+          if (label.name && label.id) {
             const labelIdName = {
               id: label.id,
               name: label.name,
-              type: label?.type ?? 'user',
+              type: label.type ?? 'user',
             }
             labelIdNameArray.push(labelIdName)
           }
@@ -122,7 +122,7 @@ export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
     const labelObject = storageLabels.find(
       (label) => label.name === currentLabelName
     )
-    if (labelObject && labelObject.id) {
+    if (labelObject?.id) {
       dispatch(setCurrentLabels([labelObject.id]))
     } else {
       toast.custom((t) => (
@@ -191,7 +191,7 @@ export const updateSettingsLabel =
           settingsLabel,
         },
       })
-      if ('data' in response && response.data?.type !== 'user') {
+      if ('data' in response && response.data.type !== 'user') {
         toast.custom((t) => (
           <CustomToast
             specificToast={t}

@@ -6,11 +6,9 @@ export default function getSubject({
   memoizedDraftOrRegular,
 }: Pick<IExtractEmailData, 'memoizedDraftOrRegular'>) {
   const lastMessage =
-    memoizedDraftOrRegular.messages![
-      memoizedDraftOrRegular.messages!.length - 1
-    ]
+    memoizedDraftOrRegular.messages[memoizedDraftOrRegular.messages.length - 1]
   if (lastMessage) {
-    return emailSubject(lastMessage?.payload?.headers?.subject)
+    return emailSubject(lastMessage.payload.headers.subject)
   }
   return null
 }

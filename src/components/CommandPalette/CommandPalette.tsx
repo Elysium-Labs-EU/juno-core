@@ -54,9 +54,7 @@ const openDetail = ({
 }
 
 function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
-  const items = document.querySelectorAll(
-    `.${COMMAND_PALLETE_ITEM}`
-  ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
+  const items = document.querySelectorAll(`.${COMMAND_PALLETE_ITEM}`)
 
   if (items[focusedItemIndex]) {
     items[focusedItemIndex]?.click()
@@ -130,7 +128,7 @@ const CommandPallette = () => {
     async (searchBody: ISearchBody) => {
       const searchBodyWithNextPageToken = {
         q: `${searchBody.q} in:all -label:spam`,
-        nextPageToken: searchBody?.nextPageToken ?? null,
+        nextPageToken: searchBody.nextPageToken ?? null,
       }
       try {
         const response = await threadApi({}).getSimpleThreads(
@@ -138,7 +136,7 @@ const CommandPallette = () => {
         )
         if (
           'data' in response &&
-          response.data?.resultSizeEstimate &&
+          response.data.resultSizeEstimate &&
           response.data.resultSizeEstimate > 0
         ) {
           const { threads, nextPageToken }: TEmailListObject = response.data
@@ -242,7 +240,7 @@ const CommandPallette = () => {
         return
       }
       if (searchResults && focusedItemIndex > -1) {
-        const id = searchResults?.threads?.[focusedItemIndex]?.id
+        const id = searchResults.threads[focusedItemIndex]?.id
         if (id) {
           handleOpenEmailEvent(id)
         }
@@ -252,7 +250,7 @@ const CommandPallette = () => {
 
   const keyDownHandler = (event: KeyboardEvent<HTMLInputElement>) => {
     if (inSearch) {
-      if (event?.code === undefined) return
+      if (event.code === undefined) return
       if (event.code === keyConstants.KEY_ARROWS.down) {
         event.preventDefault()
         event.stopPropagation()
@@ -291,7 +289,7 @@ const CommandPallette = () => {
   const memoizedCommandSuggestionsAndSearchResults = useMemo(
     () => (
       <S.SearchOuput>
-        {searchResults && searchResults?.threads ? (
+        {searchResults?.threads ? (
           <SearchResults
             focusedItemIndex={focusedItemIndex}
             handleOpenEmailEvent={handleOpenEmailEvent}

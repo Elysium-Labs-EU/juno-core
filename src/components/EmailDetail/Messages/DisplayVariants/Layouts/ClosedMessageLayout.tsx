@@ -56,7 +56,7 @@ const ClosedMessageLayout = ({
           ) : null}
           <Span style={{ fontStyle: 'italic' }}>{emailSnippet}</Span>
           {!isDraft ? (
-            <EmailHasAttachmentSimple files={message?.payload?.files} />
+            <EmailHasAttachmentSimple files={message.payload.files} />
           ) : null}
         </Stack>
       </S.ClosedSnippet>

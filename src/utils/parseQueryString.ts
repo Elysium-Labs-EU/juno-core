@@ -17,12 +17,7 @@ export default function parseQueryString(
     const query = queryStringWithoutPlus.split(delimiter)
     for (const queryParam of query) {
       const [key, value] = queryParam.split('=')
-      if (
-        key !== null &&
-        key !== undefined &&
-        value !== null &&
-        value !== undefined
-      ) {
+      if (key !== null && key !== undefined && value !== undefined) {
         result[key] = decodeURIComponent(value)
       }
     }
