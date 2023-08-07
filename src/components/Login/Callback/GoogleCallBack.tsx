@@ -32,7 +32,6 @@ const GoogleCallBack = () => {
         }
 
         const response = await userApi().authGoogleCallback(body)
-        console.log(response)
 
         // If the cloud backend is used with the local frontend, the authorization requires the complete Credentials object.
         if (
@@ -52,8 +51,8 @@ const GoogleCallBack = () => {
           toast.custom((t) => (
             <CustomToast specificToast={t} title={SOMETHING_WRONG} variant="error" />
           ))
+          dispatch(push(RoutesConstants.LOGIN))
         }
-        dispatch(push(RoutesConstants.LOGIN))
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)

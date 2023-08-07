@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { useRef, useEffect } from 'react'
 
 // Hook
 export default function useWhyDidYouUpdate(name: string, props: any) {
   // Get a mutable ref object where we can store props ...
   // ... for comparison next time this hook runs.
-  const previousProps = useRef<any | null>(null)
+  const previousProps = useRef<any>(null)
   useEffect(() => {
     if (previousProps.current) {
       // Get all keys from previous and current props

@@ -68,4 +68,6 @@ const draftApi = () => ({
     )
 })
 
+export type DraftApiReturnType = ReturnType<typeof draftApi>
+
 export default draftApi

@@ -10,7 +10,7 @@ type ActiveModalMapType =
 
 // We do not require the showIntroduction key here, since we will intercept it when setting the Settings.
 export interface IUtilsState extends Omit<TUserSettings, 'showIntroduction'> {
-  activeModal: null | ActiveModalMapType | string
+  activeModal: null | ActiveModalMapType | (string & Record<string, never>)
   inSearch: boolean
   isLoading: boolean
   isProcessing: boolean

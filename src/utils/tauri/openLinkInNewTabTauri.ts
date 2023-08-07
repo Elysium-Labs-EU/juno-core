@@ -19,6 +19,7 @@ export default function openLinkInNewTabTauri(
         element.getAttribute('href') &&
         !element.getAttribute('href')?.includes('mailto:')
       ) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (window.__TAURI_METADATA__) {
           openAnchorElement({ element })
         }

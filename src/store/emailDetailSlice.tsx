@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import toast from 'react-hot-toast'
@@ -18,8 +19,6 @@ import { findLabelByName } from 'utils/findLabel'
 
 import type { TEmailListState } from './storeTypes/emailListTypes'
 
-/* eslint-disable no-param-reassign */
-
 export const fetchEmailDetail = createAsyncThunk(
   'emailDetail/fetchEmailDetail',
   async (
@@ -28,18 +27,18 @@ export const fetchEmailDetail = createAsyncThunk(
       labelIds,
       q,
     }: { threadId: string; labelIds: TLabelState['labelIds']; q?: string },
-    { signal }
   ) => {
-    const response = await threadApi({ signal }).getThreadDetail({ threadId })
+    const response = await threadApi().getThreadDetail({ threadId })
     // Convert the output to facilite the current code to update and email in the emaillist.
-    if ('data' in response) {
+    if (response) {
       return { response: { threads: [response.data] }, labels: labelIds, q }
     }
     return { response: { threads: [] }, labels: labelIds, q }
   },
   {
-    condition: (arg, { getState }: { getState: any }) => {
-      const { fetchStatus } = getState().emailDetail
+    condition: ({ threadId }, { getState }) => {
+      const { emailDetail } = getState()
+      const fetchStatus = emailDetail.requests[threadId]
       // Don't retry a request that's currently in-flight
       if (fetchStatus === 'pending') {
         return false
@@ -125,7 +124,7 @@ export const {
   setIsForwarding,
 } = emailDetailSlice.actions
 
-interface IStartSort {
+interface StartSort {
   toUseActiveEmailListIndex: number
   toUseLabelURL: string
   toUseSelectedEmails: TEmailListState['selectedEmails'] | undefined
@@ -136,35 +135,35 @@ export const startSort =
     toUseActiveEmailListIndex,
     toUseLabelURL,
     toUseSelectedEmails,
-  }: IStartSort): AppThunk =>
-  (dispatch, getState) => {
-    const { emailList } = getState().email
-    if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
-      if (toUseSelectedEmails && toUseSelectedEmails.selectedIds.length > 0) {
-        dispatch(
-          push(
-            `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
-          )
-        )
-      } else {
-        const firstThreadObject =
-          emailList[toUseActiveEmailListIndex]?.threads[0]
-        if (firstThreadObject) {
+  }: StartSort): AppThunk =>
+    (dispatch, getState) => {
+      const { emailList } = getState().email
+      if (toUseLabelURL && emailList && toUseActiveEmailListIndex > -1) {
+        if (toUseSelectedEmails && toUseSelectedEmails.selectedIds.length > 0) {
           dispatch(
-            push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+            push(
+              `/mail/${toUseLabelURL}/${toUseSelectedEmails.selectedIds[0]}/messages`
+            )
           )
+        } else {
+          const firstThreadObject =
+            emailList[toUseActiveEmailListIndex]?.threads[0]
+          if (firstThreadObject) {
+            dispatch(
+              push(`/mail/${toUseLabelURL}/${firstThreadObject.id}/messages`)
+            )
+          }
         }
+      } else {
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Unable to start sorting."
+            variant="error"
+          />
+        ))
       }
-    } else {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Unable to start sorting."
-          variant="error"
-        />
-      ))
     }
-  }
 
 export const activateInboxSort =
   ({
@@ -174,40 +173,40 @@ export const activateInboxSort =
     alternateEmailListIndex?: number
     onActivateAdditionalFns?: () => void
   }): AppThunk =>
-  (dispatch, getState) => {
-    const staticLabelURL = labelURL([INBOX_LABEL])
-    if (!staticLabelURL) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Unable to start sorting."
-          variant="error"
-        />
-      ))
-      return
-    }
-    const { activeEmailListIndex, selectedEmails } = getState().email
-    const toUseSelectedEmails = selectedEmails.labelIds.includes(INBOX_LABEL)
-      ? selectedEmails
-      : undefined
-    if (onActivateAdditionalFns) {
-      onActivateAdditionalFns()
-    }
-    dispatch(
-      startSort({
-        toUseLabelURL: staticLabelURL,
-        toUseActiveEmailListIndex:
-          alternateEmailListIndex !== undefined
-            ? alternateEmailListIndex
-            : activeEmailListIndex,
-        toUseSelectedEmails,
-      })
-    )
+    (dispatch, getState) => {
+      const staticLabelURL = labelURL([INBOX_LABEL])
+      if (!staticLabelURL) {
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title="Unable to start sorting."
+            variant="error"
+          />
+        ))
+        return
+      }
+      const { activeEmailListIndex, selectedEmails } = getState().email
+      const toUseSelectedEmails = selectedEmails?.labelIds.includes(INBOX_LABEL)
+        ? selectedEmails
+        : undefined
+      if (onActivateAdditionalFns) {
+        onActivateAdditionalFns()
+      }
+      dispatch(
+        startSort({
+          toUseLabelURL: staticLabelURL,
+          toUseActiveEmailListIndex:
+            alternateEmailListIndex !== undefined
+              ? alternateEmailListIndex
+              : activeEmailListIndex,
+          toUseSelectedEmails,
+        })
+      )
 
-    dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
-    dispatch(setSessionViewIndex(0))
-    dispatch(setViewIndex(0))
-  }
+      dispatch(setCoreStatus(CORE_STATUS_MAP.sorting))
+      dispatch(setSessionViewIndex(0))
+      dispatch(setViewIndex(0))
+    }
 
 export const activateTodo = (): AppThunk => (dispatch, getState) => {
   const { labelIds } = getState().labels
@@ -226,7 +225,7 @@ export const activateTodo = (): AppThunk => (dispatch, getState) => {
   const { activeEmailListIndex, selectedEmails } = getState().email
   const { storageLabels } = getState().labels
 
-  const toUseSelectedEmails = selectedEmails.labelIds.includes(
+  const toUseSelectedEmails = selectedEmails?.labelIds.includes(
     findLabelByName({
       storageLabels,
       LABEL_NAME: TODO_LABEL_NAME,

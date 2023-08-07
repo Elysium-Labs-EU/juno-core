@@ -1,5 +1,4 @@
-import { FormControlLabel, Switch } from '@mui/material'
-
+import Switch from 'components/Elements/Switch/Switch'
 import SettingsSection from 'components/Settings/SettingsSection'
 import { QiAlt } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -13,8 +12,8 @@ const AlternateActions = () => {
   const dispatch = useAppDispatch()
   const alternateActions = useAppSelector(selectAlternateActions)
 
-  const alternateActionHandeler = (event: any) => {
-    if (!event.target.checked) {
+  const alternateActionHandeler = (checked: boolean) => {
+    if (!checked) {
       localStorage.setItem('alternateActions', 'false')
       dispatch(setAlternateActions(false))
       dispatch(
@@ -44,16 +43,7 @@ const AlternateActions = () => {
           {content}
         </Paragraph>
       ))}
-      <FormControlLabel
-        label={SWITCH_LABEL}
-        control={
-          <Switch
-            onClick={alternateActionHandeler}
-            checked={alternateActions}
-            color="secondary"
-          />
-        }
-      />
+      <Switch id="alternate-actions" checked={alternateActions} onCheckedChange={(e) => alternateActionHandeler(e)}>{SWITCH_LABEL}</Switch>
     </SettingsSection>
   )
 }

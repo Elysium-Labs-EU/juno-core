@@ -1,8 +1,6 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/button-has-type */
 import styled from 'styled-components'
 
-type TCustomAttentionButton = {
+type CustomAttentionButton = {
   dataCy?: string
   disabled?: boolean
   icon?: JSX.Element | null
@@ -28,7 +26,7 @@ const Button = styled.button<IButton>`
     margin: var(--spacing-1) var(--spacing-1-5);
     span {
       color: ${({ variant }) =>
-        variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
+    variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
       font-size: var(--text-base);
       line-height: 1rem;
     }
@@ -36,9 +34,9 @@ const Button = styled.button<IButton>`
 
   &:hover {
     background-color: ${({ variant }) =>
-      variant === 'primary'
-        ? `var(--color-neutral-800)`
-        : `var(--color-neutral-200)`};
+    variant === 'primary'
+      ? `var(--color-neutral-800)`
+      : `var(--color-neutral-200)`};
     cursor: pointer;
     box-shadow: var(--box-shadow-low);
   }
@@ -76,12 +74,13 @@ const CustomAttentionButton = ({
   type = 'button',
   variant = 'primary',
   ...rest
-}: TCustomAttentionButton) => (
+}: CustomAttentionButton) => (
   <Button
     data-cy={dataCy}
     disabled={disabled}
-    type={type ?? 'button'}
-    variant={variant ?? 'primary'}
+    type={type}
+    variant={variant}
+    title={title}
     {...rest}
   >
     <InnerButton>

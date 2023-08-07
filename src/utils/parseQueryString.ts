@@ -17,16 +17,14 @@ export default function parseQueryString(
     const query = queryStringWithoutPlus.split(delimiter)
     for (const queryParam of query) {
       const [key, value] = queryParam.split('=')
-      if (key !== null && key !== undefined && value !== undefined) {
+      if (key !== undefined && value !== undefined) {
         result[key] = decodeURIComponent(value)
       }
     }
   } else {
     const searchParams = new URLSearchParams(queryString)
     for (const [key, value] of searchParams.entries()) {
-      if (key !== null && value !== null) {
-        result[key] = value
-      }
+      result[key] = value
     }
   }
   return result

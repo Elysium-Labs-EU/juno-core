@@ -1,8 +1,8 @@
-import { FormControlLabel, Switch } from '@mui/material'
 import { useCallback } from 'react'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
+import Switch from 'components/Elements/Switch/Switch'
 import SettingsSection from 'components/Settings/SettingsSection'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
@@ -16,7 +16,7 @@ import {
 } from 'store/utilsSlice'
 import { Paragraph } from 'styles/globalStyles'
 
-import { HEADER, BODY, SWITCH_LABEL } from './StrictFlowConstants'
+import { HEADER, BODY, SWITCH_LABEL, SWITCH_ID } from './StrictFlowConstants'
 
 const StrictFlow = () => {
   const dispatch = useAppDispatch()
@@ -31,11 +31,11 @@ const StrictFlow = () => {
       maxResults: emailFetchSize,
       nextPageToken: null,
     }
-    dispatch(fetchEmailsSimple(params))
+    void dispatch(fetchEmailsSimple(params))
   }, [])
 
-  const switchWorkFlow = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.checked) {
+  const switchWorkFlow = (checked: boolean) => {
+    if (!checked) {
       localStorage.setItem('isFlexibleFlowActive', 'false')
       dispatch(setFlexibleFlow(false))
       dispatch(
@@ -65,17 +65,8 @@ const StrictFlow = () => {
     <SettingsSection>
       <Paragraph>{HEADER}</Paragraph>
       <Paragraph muted>{BODY}</Paragraph>
-      <FormControlLabel
-        label={SWITCH_LABEL}
-        control={
-          <Switch
-            onChange={switchWorkFlow}
-            checked={isFlexibleFlowActive}
-            color="secondary"
-            data-cy="flexible-flow-switch"
-          />
-        }
-      />
+
+      <Switch id={SWITCH_ID} checked={isFlexibleFlowActive} onCheckedChange={(e) => switchWorkFlow(e)} data-cy="flexible-flow-switch">{SWITCH_LABEL}</Switch>
     </SettingsSection>
   )
 }

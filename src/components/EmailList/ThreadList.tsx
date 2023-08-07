@@ -14,7 +14,7 @@ import type { TThreadObject } from 'store/storeTypes/emailListTypes'
  * @returns {JSX.Element}
  */
 
-interface IThreadList {
+interface ThreadListProps {
   focusedItemIndex: number
   keySuffix: 'search' | 'emailList'
   searchOnClickHandeler?: (id: string) => void
@@ -32,11 +32,11 @@ const ThreadList = ({
   showCheckbox = true,
   showLabel = false,
   threads,
-}: IThreadList) => (
+}: ThreadListProps) => (
   <>
     {threads.map((thread, index) => (
       <div
-        key={keySuffix ? `${thread.id}-${keySuffix}` : thread.id}
+        key={`${thread.id}-${keySuffix}`}
         onClick={
           searchOnClickHandeler
             ? () => searchOnClickHandeler(thread.id)

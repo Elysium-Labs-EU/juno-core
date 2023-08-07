@@ -80,7 +80,7 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
               isactive={
                 activePage === ACTIVE_PAGE_HEADER.todo ? 'true' : 'false'
               }
-              onClick={() => void dispatch(navigateTo(RoutesConstants.TODO))}
+              onClick={() => dispatch(navigateTo(RoutesConstants.TODO))}
             />
           </StyledTooltip>
 
@@ -92,7 +92,7 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
                 isactive={
                   activePage === ACTIVE_PAGE_HEADER.inbox ? 'true' : 'false'
                 }
-                onClick={() => void dispatch(navigateTo(RoutesConstants.INBOX))}
+                onClick={() => dispatch(navigateTo(RoutesConstants.INBOX))}
               />
             </StyledTooltip>
           ) : null}
@@ -116,7 +116,7 @@ const Navigation = ({ activePage }: Pick<ILayout, 'activePage'>) => {
                 activePage === ACTIVE_PAGE_HEADER.compose ? 'true' : 'false'
               }
               onClick={() => {
-                void dispatch(navigateTo('/compose'))
+                dispatch(navigateTo('/compose'))
               }}
             />
           </StyledTooltip>

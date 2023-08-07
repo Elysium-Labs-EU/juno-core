@@ -5,7 +5,7 @@ export default function countUniqueFiles(activeThread: TThreadObject) {
   const uniqueFilesArray = [
     ...new Set(
       activeThread.messages.map((message) =>
-        'files' in message.payload ? message.payload.files : []
+        'files' in message.payload ? message.payload.files ?? [] : []
       )
     ),
   ]

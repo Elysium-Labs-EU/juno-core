@@ -43,39 +43,42 @@ const Login = () => {
   const isLoading = loadState === LOAD_STATE_MAP.loading
   const isError = loadState === LOAD_STATE_MAP.error
 
-  const fetchUrl = async () => {
-    try {
-      setLoadState(LOAD_STATE_MAP.loading)
-      // A flag that can be set via the .env variable. If this is set, and with the value of true, the auth mechanism will be changed.
-      const response = await userApi().authGoogle(
-        import.meta.env.VITE_USE_SESSION === 'true'
-      )
-      console.log({ response })
-      if (response && response.status === 200) {
-        const authScreenAccepted = localStorage.getItem(AUTH_SCREEN_ACCEPTED)
+  const handleClick = () => {
+    const fetchUrl = async () => {
+      try {
+        setLoadState(LOAD_STATE_MAP.loading)
+        // A flag that can be set via the .env variable. If this is set, and with the value of true, the auth mechanism will be changed.
+        const response = await userApi().authGoogle(
+          import.meta.env.VITE_USE_SESSION === 'true'
+        )
 
-        if (authScreenAccepted === 'true') {
-          dispatch(push(response.data))
+        if (response && response.status === 200) {
+          const authScreenAccepted = localStorage.getItem(AUTH_SCREEN_ACCEPTED)
+
+          if (authScreenAccepted === 'true') {
+            dispatch(push(response.data))
+          } else {
+            dispatch(
+              push(RoutesConstants.GOOGLE_AUTH_EXPLANATION, {
+                googleURL: response.data,
+              })
+            )
+          }
         } else {
-          dispatch(
-            push(RoutesConstants.GOOGLE_AUTH_EXPLANATION, {
-              googleURL: response.data,
-            })
-          )
+          setLoadState(LOAD_STATE_MAP.error)
+          toast.custom((t) => (
+            <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+          ))
         }
-      } else {
+      } catch (err) {
+        console.log({ err })
         setLoadState(LOAD_STATE_MAP.error)
         toast.custom((t) => (
           <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
         ))
       }
-    } catch (err) {
-      console.log({ err })
-      setLoadState(LOAD_STATE_MAP.error)
-      toast.custom((t) => (
-        <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
-      ))
     }
+    void fetchUrl()
   }
 
   useEffect(() => {
@@ -83,7 +86,7 @@ const Login = () => {
     if (isError) {
       timer = setTimeout(() => {
         setLoadState(LOAD_STATE_MAP.idle)
-      }, 3000)
+      }, 999999)
     }
     return () => {
       clearTimeout(timer)
@@ -112,7 +115,7 @@ const Login = () => {
               <S.Inner>
                 <div style={{ marginBottom: 'var(--spacing-4)' }} />
                 <GoogleButton
-                  onClick={fetchUrl}
+                  onClick={handleClick}
                   disabled={isDisabled}
                   showLoadingState={isLoading}
                 />

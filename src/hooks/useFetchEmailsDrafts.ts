@@ -82,7 +82,7 @@ export default function useFetchEmailsDrafts(
           labelIds,
           timeStamp: Date.now(),
         }
-        void dispatch(refreshEmailFeed())
+        dispatch(refreshEmailFeed())
       }
       if (labelIds.includes(global.DRAFT_LABEL)) {
         draftPromise = dispatch(fetchDrafts())

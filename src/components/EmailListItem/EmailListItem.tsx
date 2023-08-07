@@ -127,7 +127,7 @@ const EmailListItem = ({
 
   const handleOpenEvent = useCallback(() => {
     dispatch(setViewIndex(index))
-    void dispatch(
+    dispatch(
       openEmail({
         id,
         email: memoizedDraftOrRegular,

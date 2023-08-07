@@ -14,27 +14,24 @@ const emailLabels = (
   emailListThreadItem: TThreadObject,
   storageLabels: TLabelState['storageLabels']
 ) => {
-  if (emailListThreadItem.messages) {
-    const getAllLegalMessagesLabelIds = () => {
-      const foundLabels: string[] = []
-      emailListThreadItem.messages.forEach((message) =>
-        message.labelIds.forEach((label) => foundLabels.push(label))
-      )
-      return [
-        ...new Set(
-          onlyLegalLabelStrings({
-            labelIds: foundLabels,
-            storageLabels,
-          }).filter(
-            (label) =>
-              label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
-          )
-        ),
-      ]
-    }
-    return getAllLegalMessagesLabelIds() ?? [global.ARCHIVE_LABEL]
+  const getAllLegalMessagesLabelIds = () => {
+    const foundLabels: string[] = []
+    emailListThreadItem.messages.forEach((message) =>
+      message.labelIds.forEach((label) => foundLabels.push(label))
+    )
+    return [
+      ...new Set(
+        onlyLegalLabelStrings({
+          labelIds: foundLabels,
+          storageLabels,
+        }).filter(
+          (label) =>
+            label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
+        )
+      ),
+    ]
   }
-  return [global.ARCHIVE_LABEL]
+  return getAllLegalMessagesLabelIds()
 }
 
 export default emailLabels

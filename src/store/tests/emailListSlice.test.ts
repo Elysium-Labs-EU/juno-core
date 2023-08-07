@@ -318,9 +318,9 @@ test('removes all the threads that are sent as the payload', () => {
     listRemoveItemDetailBatch({ messageIds })
   )
 
-  assert.equal(check.emailList[0]?.threads.length, 2)
+  assert.equal(check.emailList?.[0]?.threads.length, 2)
   assert.notEqual(
-    check.emailList[0]?.threads.filter((thread) =>
+    check.emailList?.[0]?.threads.filter((thread) =>
       messageIds.includes(thread.id)
     ),
     undefined
@@ -385,7 +385,7 @@ describe('handleAdditionToExistingEmailArray', () => {
       timestamp: Date.now(),
     })
 
-    expect(state.searchList!.threads).toEqual(updatedThreads)
+    expect(state.searchList.threads).toEqual(updatedThreads)
   })
 })
 

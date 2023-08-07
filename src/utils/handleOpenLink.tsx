@@ -22,7 +22,7 @@ export default function handleOpenLink({ action }: HandleOpenLinkProps) {
             button={
               <CustomButton
                 onClick={() => {
-                  handleCopyToClipboard({ action })
+                  void handleCopyToClipboard({ action })
                 }}
                 label="Copy"
               />

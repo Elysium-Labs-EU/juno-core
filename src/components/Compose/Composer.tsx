@@ -31,7 +31,7 @@ import {
 } from 'store/emailDetailSlice'
 import { refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
-import type { IComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import type { ComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
@@ -83,8 +83,8 @@ export const assertComposerMode = ({
 }
 
 // Props are coming from ReplyComposer or ForwardComposer
-interface IComposeEmailProps {
-  presetValue?: IComposeEmailReceive
+interface ComposeEmailProps {
+  presetValue?: ComposeEmailReceive
   messageOverviewListener?: (
     evenType: 'cancel' | 'discard',
     messageId?: string
@@ -94,7 +94,7 @@ interface IComposeEmailProps {
 const Composer = ({
   presetValue = undefined,
   messageOverviewListener = undefined,
-}: IComposeEmailProps) => {
+}: ComposeEmailProps) => {
   const location = useLocation()
   const dispatch = useAppDispatch()
   const isReplying = useAppSelector(selectIsReplying)
@@ -110,8 +110,7 @@ const Composer = ({
   >(undefined)
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
-  const userInteractedRef = useRef(false)
-  const snapshotComposeEmailRef = useRef<any>(null)
+
 
   const [composedEmail, updateComposedEmail] = useReducer(
     (
@@ -121,7 +120,7 @@ const Composer = ({
       if (Array.isArray(action)) {
         let updatedState = state
         action.forEach((item) => {
-          if ('id' in item && 'value' in item) {
+          if (typeof item === 'object' && 'id' in item && 'value' in item) {
             const { id, value } = item
             updatedState = {
               ...updatedState,
@@ -143,6 +142,9 @@ const Composer = ({
     null
   )
 
+  const userInteractedRef = useRef(false)
+  const snapshotComposeEmailRef = useRef<typeof composedEmail>(null)
+
   // Use this hook to parse possible preset values at component mount
   useParsePresetValues({
     setShowCC,
@@ -150,7 +152,7 @@ const Composer = ({
     setComposedEmail: updateComposedEmail,
     setLoadState,
     loadState,
-    presetValueObject: presetValue || (location.state as IComposeEmailReceive),
+    presetValueObject: presetValue || (location.state as ComposeEmailReceive),
   })
 
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
@@ -163,6 +165,9 @@ const Composer = ({
 
   // Listen to any changes of the composeEmail object to update the draft
   useEffect(() => {
+    if (!composedEmail) {
+      return
+    }
     const storedDraftDetails = findDraftMessageInList({
       draftList,
       target: composedEmail,
@@ -178,14 +183,13 @@ const Composer = ({
       setLocalDraftDetails(storedDraftDetails)
       snapshotComposeEmailRef.current = composedEmail
     } else if (
-      composedEmail &&
       userInteractedRef.current &&
       !isEqual(snapshotComposeEmailRef.current, composedEmail)
     ) {
       snapshotComposeEmailRef.current = composedEmail
       // If the user is interacting with the draft, send an update request and set the response as the local state
       const asyncDispatchAction = async () => {
-        const response: TGmailV1SchemaDraftSchema = await dispatch(
+        const response = await dispatch(
           createUpdateDraft({ composedEmail, localDraftDetails })
         )
         if (response) {
@@ -198,8 +202,7 @@ const Composer = ({
 
   // Based on the changes in the draftDetails, notify the user that the save was successful
   useEffect(() => {
-    let mounted = true
-    if (localDraftDetails && mounted && userInteractedRef.current) {
+    if (localDraftDetails && userInteractedRef.current) {
       setSaveSuccess(true)
       const timer = setTimeout(() => {
         setSaveSuccess(false)
@@ -207,9 +210,6 @@ const Composer = ({
       return () => {
         clearTimeout(timer)
       }
-    }
-    return () => {
-      mounted = false
     }
   }, [localDraftDetails])
 
@@ -238,7 +238,7 @@ const Composer = ({
       dispatch(setIsForwarding(false))
     }
     dispatch(refreshEmailFeed())
-    dispatch(fetchDrafts())
+    void dispatch(fetchDrafts())
     // On the emailDetail a refresh for EmailDetail is dispatched if this composer was opened in a reply or forward mode.
   }, [isReplying, isForwarding, dispatch])
 
@@ -410,8 +410,8 @@ const Composer = ({
   })
 
   return (
-    <S.Wrapper tabbedView={(isReplying || isForwarding) ?? false}>
-      <S.ComposerContainer tabbedView={(isReplying || isForwarding) ?? false}>
+    <S.Wrapper tabbedView={(isReplying || isForwarding)}>
+      <S.ComposerContainer tabbedView={(isReplying || isForwarding)}>
         <Base>
           <form autoComplete="off">
             <S.TopRowControls>

@@ -35,7 +35,7 @@ const SelectedOptions = () => {
   }, [])
 
   const handleSelectAll = useCallback(() => {
-    void dispatch(selectAllEmailsCurrentInbox())
+    dispatch(selectAllEmailsCurrentInbox())
   }, [])
 
   const handleArchiveAll = useCallback(() => {
@@ -45,12 +45,12 @@ const SelectedOptions = () => {
       ],
     }
 
-    void dispatch(updateEmailLabelBatch({ request }))
+    dispatch(updateEmailLabelBatch({ request }))
     dispatch(setSelectedEmails([]))
   }, [labelIds])
 
   const handleDeleteAll = useCallback(() => {
-    void dispatch(
+    dispatch(
       updateEmailLabelBatch({
         request: { delete: true },
       })

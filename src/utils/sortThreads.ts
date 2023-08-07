@@ -12,7 +12,7 @@ export default function sortThreads(
   sortObject: Array<TThreadObject>,
   forceSort?: boolean
 ) {
-  if (!sortObject || sortObject.length === 0) {
+  if (sortObject.length === 0) {
     return []
   }
   const mappedArray = sortObject.map((thread) => {

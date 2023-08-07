@@ -288,7 +288,7 @@ export const navigateBack = (): AppThunk => (dispatch, getState) => {
     dispatch(goBack())
     return
   }
-  void dispatch(closeMail())
+  dispatch(closeMail())
   if (coreStatus) {
     dispatch(setCoreStatus(null))
   }
@@ -339,7 +339,7 @@ export const navigateNextMail =
         dispatch(setCurrentEmail(staticNextID))
         dispatch(push(`/mail/${labelURL(labelIds)}/${staticNextID}/messages`))
       } else {
-        void dispatch(navigateBack())
+        dispatch(navigateBack())
       }
     }
 
@@ -359,7 +359,7 @@ export const navigatePreviousMail = (): AppThunk => (dispatch, getState) => {
     // dispatch(setCurrentEmail(prevID))
     dispatch(push(`/mail/${labelURL(labelIds)}/${prevID}/messages`))
   } else {
-    void dispatch(navigateBack())
+    dispatch(navigateBack())
   }
 }
 
@@ -372,12 +372,12 @@ export const archiveAllEmailCMDK = (): AppThunk => (dispatch, getState) => {
     ],
   }
 
-  void dispatch(updateEmailLabelBatch({ request }))
+  dispatch(updateEmailLabelBatch({ request }))
   dispatch(setSelectedEmails([]))
 }
 
 export const deleteAllEmailCMDK = (): AppThunk => (dispatch) => {
-  void dispatch(
+  dispatch(
     updateEmailLabelBatch({
       request: { delete: true },
     })
@@ -390,7 +390,7 @@ export const discardAllEmailCMDK = (): AppThunk => (dispatch) => {
 }
 
 export const startFocusModeCMDK = (): AppThunk => (dispatch) => {
-  void dispatch(activateTodo())
+  dispatch(activateTodo())
 }
 
 export const selectAllEmailsSender =
@@ -422,7 +422,7 @@ export const selectAllEmailsSender =
           )
         )
         if (emailsFromSameSender.length > 0 && callback) {
-          void dispatch(callback())
+          dispatch(callback())
         }
       }
     }
@@ -445,7 +445,7 @@ export const selectAllEmailsCurrentInbox =
           )
         )
         if (emailsFromCurrentInbox.length > 0 && callback) {
-          void dispatch(callback())
+          dispatch(callback())
         }
       }
     }

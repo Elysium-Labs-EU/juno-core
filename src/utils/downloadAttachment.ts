@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
+import type { MessageApiReturnType } from 'data/messageApi'
 import messageApi from 'data/messageApi'
 import base64toBlob from 'utils/base64toBlob'
 import downloadBlob from 'utils/fileSaver'
@@ -11,18 +12,21 @@ const FAIL_RESPONSE_OBJECT = {
 }
 
 const handleSaveAttachment = (
-  fetchedAttachment: any,
+  fetchedAttachment: Awaited<ReturnType<MessageApiReturnType[
+    'getAttachment'
+  ]>>,
   filename: string,
   mimeType: string
 ): { success: boolean; message: string | null } => {
-  if (!fetchedAttachment?.data?.data) {
+  if (!fetchedAttachment?.data.data) {
     return { success: false, message: 'No attachment data found' }
   }
   try {
     const base64Data = fetchedAttachment.data.data
     const blobData = base64toBlob({ base64Data, mimeType })
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (window.__TAURI_METADATA__) {
-      saveFileToFilesystem(blobData, filename)
+      void saveFileToFilesystem(blobData, filename)
     } else {
       downloadBlob({ blob: blobData, fileName: filename })
     }
@@ -80,7 +84,7 @@ export async function downloadAttachmentSingle({
  * @returns
  */
 
-interface IDownloadAttachmentData {
+interface DownloadAttachmentData {
   attachmentData: Array<EmailAttachmentType> | undefined
   messageId: string
 }
@@ -88,10 +92,10 @@ interface IDownloadAttachmentData {
 export async function downloadAttachmentMultiple({
   attachmentData,
   messageId,
-}: IDownloadAttachmentData) {
+}: DownloadAttachmentData) {
   try {
     if (attachmentData?.length) {
-      const buffer: Promise<any>[] = []
+      const buffer: ReturnType<MessageApiReturnType['getAttachment']>[] = []
       attachmentData.forEach((attachment) => {
         const { attachmentId } = attachment.body
         if (attachmentId) {

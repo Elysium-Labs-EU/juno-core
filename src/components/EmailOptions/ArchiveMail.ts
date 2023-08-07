@@ -1,12 +1,12 @@
 import * as global from 'constants/globalConstants'
 import { updateEmailLabel } from 'store/emailListSlice'
-import type { AppDispatch } from 'store/store'
+import type { AppThunkDispatch } from 'store/store'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
-interface IArchiveEmail {
+interface ArchiveEmail {
   threadId: string
   labelIds: TLabelState['labelIds']
-  dispatch: AppDispatch
+  dispatch: AppThunkDispatch
 }
 
 /**
@@ -15,7 +15,7 @@ interface IArchiveEmail {
  * @returns {void}
  */
 
-const archiveMail = ({ threadId, labelIds, dispatch }: IArchiveEmail) => {
+const archiveMail = ({ threadId, labelIds, dispatch }: ArchiveEmail) => {
   const request = {
     removeLabelIds: [
       ...labelIds.filter((item) => item !== global.UNREAD_LABEL),

@@ -4,3 +4,4 @@ export const BODY = [
   'By default the alternative action is deprioritized.',
 ]
 export const SWITCH_LABEL = 'Prioritize alternate actions'
+export const SWITCH_ID = 'prioritize-alternate-actions'

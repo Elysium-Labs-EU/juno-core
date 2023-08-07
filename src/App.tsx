@@ -25,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     if (!baseLoaded && isAuthenticated) {
-      void dispatch(getBase())
+      dispatch(getBase())
     }
   }, [baseLoaded, isAuthenticated])
 

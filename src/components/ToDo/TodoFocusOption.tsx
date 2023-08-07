@@ -32,7 +32,7 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const handleEvent = () => {
-    void dispatch(activateTodo())
+    dispatch(activateTodo())
   }
 
   useKeyboardShortcut({

@@ -13,15 +13,12 @@ export default function shouldUseDraftOrRegular(
   email: TThreadObject
 ) {
   if (Array.isArray(labelIds) && labelIds.includes(DRAFT_LABEL)) {
-    if (email.messages) {
-      return {
-        ...email,
-        messages: email.messages.filter((message) =>
-          message.labelIds.includes(DRAFT_LABEL)
-        ),
-      }
+    return {
+      ...email,
+      messages: email.messages.filter((message) =>
+        message.labelIds.includes(DRAFT_LABEL)
+      ),
     }
-    return email
   }
   return email
 }

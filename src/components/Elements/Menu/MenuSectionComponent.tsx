@@ -30,7 +30,7 @@ const MenuSectionComponent = ({
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>) => {
     const nodeList = document.querySelectorAll(
       `.${activeModalTag}-menu-item`
-    ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
+    ) 
 
     // eslint-disable-next-line default-case
     switch (event.code) {

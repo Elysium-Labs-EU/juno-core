@@ -1,17 +1,17 @@
-import { FormControlLabel, Switch } from '@mui/material'
-
+import Switch from 'components/Elements/Switch/Switch'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { updateSettingsLabel } from 'store/labelsSlice'
 import { selectIsAvatarVisible, setShowAvatar } from 'store/utilsSlice'
 
 const SWITCH_LABEL = 'Show avatars'
+const SWITCH_ID = 'show-avatars'
 
 const ShowAvatar = () => {
   const dispatch = useAppDispatch()
   const isAvatarVisible = useAppSelector(selectIsAvatarVisible)
 
-  const switchAvatarView = (event: any) => {
-    if (!event.target.checked) {
+  const switchAvatarView = (checked: boolean) => {
+    if (!checked) {
       localStorage.setItem('showAvatar', 'false')
       dispatch(setShowAvatar(false))
       dispatch(
@@ -33,16 +33,7 @@ const ShowAvatar = () => {
   }
 
   return (
-    <FormControlLabel
-      label={SWITCH_LABEL}
-      control={
-        <Switch
-          onClick={switchAvatarView}
-          checked={isAvatarVisible}
-          color="secondary"
-        />
-      }
-    />
+    <Switch id={SWITCH_ID} checked={isAvatarVisible} onCheckedChange={(e) => switchAvatarView(e)}>{SWITCH_LABEL}</Switch>
   )
 }
 

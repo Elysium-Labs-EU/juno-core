@@ -58,7 +58,7 @@ const InboxSortOption = () => {
       emailList,
       labelIds: [INBOX_LABEL],
     })
-    void dispatch(
+    dispatch(
       activateInboxSort({
         alternateEmailListIndex: emailListIndex,
         onActivateAdditionalFns: () => {
@@ -70,7 +70,7 @@ const InboxSortOption = () => {
   }, [dispatch, emailList])
 
   const handleEventFlexibleFlow = useCallback(() => {
-    void dispatch(activateInboxSort({}))
+    dispatch(activateInboxSort({}))
   }, [dispatch])
 
   useKeyboardShortcut({

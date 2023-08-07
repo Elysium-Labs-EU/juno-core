@@ -19,7 +19,7 @@ import findDraftMessageInList from 'utils/findDraftMessageInList'
 import ClosedMessageLayout from './Layouts/ClosedMessageLayout'
 import OpenMessageLayout from './Layouts/OpenMessageLayout'
 
-interface IDraftMessage {
+interface DraftMessageProps {
   message: TThreadObject['messages'][0]
   draftIndex: number
   handleClickListener: ({
@@ -39,14 +39,13 @@ const DraftMessage = ({
   draftIndex,
   handleClickListener,
   hideDraft,
-}: IDraftMessage) => {
+}: DraftMessageProps) => {
   const [open, setOpen] = useState<boolean>(true)
   const { emailAddress } = useAppSelector(selectProfile)
   const draftList = useAppSelector(selectDraftList)
   const dispatch = useAppDispatch()
 
-  const emailSnippet =
-    message && `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
+  const emailSnippet = `${message.snippet.replace(/^(.{65}[^\s]*).*/, '$1')}...`
 
   const staticSenderNameFull = useMemo(
     () => getSenderNameFull(message.payload.headers.from, emailAddress),
@@ -67,9 +66,9 @@ const DraftMessage = ({
     const foundDraft = findDraftMessageInList({ draftList, target: message })
     if (foundDraft) {
       handleClickListener({
+        dIndex: draftIndex,
         id: foundDraft.message.id,
         messageId: foundDraft.message.id,
-        dIndex: draftIndex,
       })
     }
   }, [draftList, message])
@@ -82,20 +81,20 @@ const DraftMessage = ({
     const foundDraft = findDraftMessageInList({ draftList, target: message })
     if (foundDraft) {
       discardDraft({
-        messageId: foundDraft.message.id,
-        threadId: foundDraft.message.threadId,
         dispatch,
         draftId: foundDraft.id,
+        messageId: foundDraft.message.id,
+        threadId: foundDraft.message.threadId,
       })
     }
   }, [draftList, message])
 
   return !open ? (
     <ClosedMessageLayout
+      emailSnippet={emailSnippet}
       handleClick={handleOpenClose}
       isDraft
       message={message}
-      emailSnippet={emailSnippet}
       senderNameFull={staticSenderNameFull}
       senderNamePartial={staticSenderNamePartial}
     />

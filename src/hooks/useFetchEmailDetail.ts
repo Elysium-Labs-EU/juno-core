@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 
-interface IUseFetchEmailDetail {
+interface UseFetchEmailDetail {
   activeEmailList: TEmailListObject | undefined
   forceRefresh: boolean
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
@@ -20,13 +20,12 @@ export default function useFetchEmailDetail({
   forceRefresh,
   setShouldRefreshDetail,
   threadId,
-}: IUseFetchEmailDetail) {
+}: UseFetchEmailDetail) {
   const dispatch = useAppDispatch()
   const labelIds = useAppSelector(selectLabelIds)
 
   // The hook may fire to update the emaildetail, whenever no thread has a body element, or whenever the composer closes (forceRefresh).
   useEffect(() => {
-    let mounted = true
     if (threadId && activeEmailList) {
       // Create a map of threadIds to emailThreads
       const emailThreadsMap = new Map(
@@ -40,19 +39,15 @@ export default function useFetchEmailDetail({
         )
         if (!emailWithBody.length || forceRefresh) {
           setShouldRefreshDetail(false)
-          mounted &&
-            dispatch(
-              fetchEmailDetail({
-                threadId,
-                labelIds,
-                q: activeEmailList.q,
-              })
-            )
+          void dispatch(
+            fetchEmailDetail({
+              threadId,
+              labelIds,
+              q: activeEmailList.q,
+            })
+          )
         }
       }
-    }
-    return () => {
-      mounted = false
     }
   }, [threadId, activeEmailList, forceRefresh])
 }

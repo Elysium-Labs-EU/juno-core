@@ -1,5 +1,5 @@
 import type { TBaseState } from 'store/storeTypes/baseTypes'
-import type { IComposePayload } from 'store/storeTypes/composeTypes'
+import type { ComposePayload } from 'store/storeTypes/composeTypes'
 import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import convertToGmailEmail from 'utils/convertToGmailEmail'
 
@@ -30,8 +30,8 @@ export function prepareFilesForSave({
  * @returns {FormData} - Returns a FormData object containing the data to be sent to the server
  */
 
-interface IPrepareFormData {
-  composedEmail: IComposePayload
+interface PrepareFormData {
+  composedEmail: ComposePayload
   emailAddress: TBaseState['profile']['emailAddress']
   localDraftDetails: TGmailV1SchemaDraftSchema | undefined
   name: TBaseState['profile']['name']
@@ -42,7 +42,7 @@ export async function prepareFormData({
   emailAddress,
   localDraftDetails,
   name,
-}: IPrepareFormData) {
+}: PrepareFormData) {
   const formData = new FormData()
   formData.append('draftId', localDraftDetails?.id ?? '')
   formData.append(

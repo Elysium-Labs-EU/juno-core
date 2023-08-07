@@ -21,7 +21,7 @@ import {
   setSelectedEmails,
 } from 'store/emailListSlice'
 import type { AppThunk, RootState } from 'store/store'
-import type { IComposePayload } from 'store/storeTypes/composeTypes'
+import type { ComposePayload } from 'store/storeTypes/composeTypes'
 import { DraftResponseEntry } from 'store/storeTypes/draftsTypes'
 import type {
   IDraftDetails,
@@ -150,15 +150,18 @@ export const {
  */
 
 interface CreateUpdateDraft {
-  composedEmail: IComposePayload
+  composedEmail: ComposePayload
   localDraftDetails: TGmailV1SchemaDraftSchema | undefined
 }
+
+// type CreateUpdateDraftReturnType = DraftApiReturnType['createDrafts'] | DraftApiReturnType['updateDrafts']
+// type test = Awaited<ReturnType<CreateUpdateDraftReturnType>>
 
 export const createUpdateDraft =
   ({
     composedEmail,
     localDraftDetails,
-  }: CreateUpdateDraft): AppThunk<void> =>
+  }: CreateUpdateDraft): AppThunk<unknown> =>
     async (dispatch, getState) => {
       try {
         const { emailAddress, name } = getState().base.profile
@@ -176,7 +179,7 @@ export const createUpdateDraft =
             formData,
           })
 
-        if (!response || ('status' in response && response.status !== 200)) {
+        if (!response || response.status !== 200) {
           toast.custom((t) => (
             <CustomToast
               specificToast={t}
@@ -184,6 +187,7 @@ export const createUpdateDraft =
               variant="error"
             />
           ))
+          return null
         }
 
         if (typeof response === 'object' && 'data' in response) {
@@ -213,7 +217,7 @@ export const createUpdateDraft =
 const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 
 const pushDraftDetails =
-  ({ draft }: { draft: TDraftResponseEntry }): AppThunk<void> =>
+  ({ draft }: { draft: TDraftResponseEntry }): AppThunk =>
     (dispatch, getState) => {
       const { message } = draft
       try {
@@ -252,7 +256,7 @@ const pushDraftDetails =
       }
     }
 
-const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> =>
+const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk =>
   async (dispatch) => {
     const { draftId } = draftDetails
     try {
@@ -286,7 +290,7 @@ const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> =>
 
 
 export const openDraftEmail =
-  ({ messageId, id }: IOpenDraftEmailType): AppThunk<void> =>
+  ({ messageId, id }: IOpenDraftEmailType): AppThunk =>
     (dispatch, getState) => {
       try {
         const { draftList } = getState().drafts
@@ -333,7 +337,7 @@ export const openDraftEmail =
       }
     }
 
-export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
+export const deleteDraftBatch = (): AppThunk => (dispatch, getState) => {
   const { selectedEmails } = getState().email
   const { draftList } = getState().drafts
   if (!selectedEmails?.selectedIds || !draftList || draftList.length === 0) {
@@ -377,7 +381,7 @@ export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
 }
 
 export const deleteDraft =
-  (id: string): AppThunk<void> =>
+  (id: string): AppThunk =>
     async (dispatch, getState) => {
       const { coreStatus } = getState().emailDetail
       dispatch(setIsProcessing(true))
@@ -411,7 +415,7 @@ export const sendComposedEmail =
     composedEmail,
     localDraftDetails,
   }: {
-    composedEmail: IComposePayload
+    composedEmail: ComposePayload
     localDraftDetails: TGmailV1SchemaDraftSchema | undefined
   }): AppThunk =>
     async (dispatch, getState) => {
@@ -432,7 +436,7 @@ export const sendComposedEmail =
           coreStatus !== global.CORE_STATUS_MAP.focused
         ) {
           dispatch(setCurrentEmail(''))
-          void dispatch(closeMail())
+          dispatch(closeMail())
         }
 
         // Send the user to the next email when it is sorting of focused
@@ -440,7 +444,7 @@ export const sendComposedEmail =
           coreStatus === global.CORE_STATUS_MAP.sorting ||
           coreStatus === global.CORE_STATUS_MAP.focused
         ) {
-          void dispatch(navigateNextMail())
+          dispatch(navigateNextMail())
         }
         // TODO: Set the timeout for sending on the backend.
         // If the id is found on the draft details, send the draft email via the Google servers as a draft.

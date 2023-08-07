@@ -57,7 +57,7 @@ const InboxRefresh = ({
   const dispatch = useAppDispatch()
 
   const handleRefreshTrigger = useCallback(() => {
-    void dispatch(refreshEmailFeed())
+    dispatch(refreshEmailFeed())
   }, [])
 
   useKeyboardShortcut({

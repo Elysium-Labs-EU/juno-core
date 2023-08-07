@@ -7,7 +7,7 @@
  */
 
 /* eslint-disable no-restricted-syntax */
-export default function isEqual(obj1: any, obj2: any): boolean {
+export default function isEqual(obj1: unknown, obj2: unknown): boolean {
   if (obj1 === obj2) {
     return true
   }
@@ -33,7 +33,7 @@ export default function isEqual(obj1: any, obj2: any): boolean {
       return false
     }
 
-    if (!isEqual(obj1[key], obj2[key])) {
+    if (!isEqual(obj1[key as keyof typeof obj1], obj2[key as keyof typeof obj1])) {
       return false
     }
   }

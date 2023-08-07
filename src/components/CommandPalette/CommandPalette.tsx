@@ -49,7 +49,7 @@ const openDetail = ({
   dispatch: AppDispatch
   searchResults: TEmailListObject
 }) => {
-  void dispatch(useSearchResults({ searchResults, currentEmail }))
+  dispatch(useSearchResults({ searchResults, currentEmail }))
   dispatch(setInSearch(false))
 }
 

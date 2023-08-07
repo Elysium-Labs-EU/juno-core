@@ -32,16 +32,10 @@ interface ResponseType<T>
 export const fetchToken = () => {
   if (import.meta.env.VITE_USE_SESSION === 'true') {
     const token = localStorage.getItem(global.ID_TOKEN)
-    if (token) {
-      return token
-    }
-    return null
+    return token
   }
   const credentials = localStorage.getItem(global.CREDENTIALS)
-  if (credentials) {
-    return credentials
-  }
-  return null
+  return credentials
 }
 
 export async function fetchWrapper<T>(
@@ -97,7 +91,7 @@ export async function fetchWrapper<T>(
     const data: unknown = await res.json()
     const parsedData = schema?.parse(data)
 
-    if (parsedData instanceof Object && !('error' in parsedData)) {
+    if (parsedData) {
       const response = {
         data: parsedData,
         status: res.status,

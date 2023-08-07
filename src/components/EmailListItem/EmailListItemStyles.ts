@@ -8,7 +8,7 @@ interface IThreadBaseProps {
 
 export const ThreadBase = styled.div<IThreadBaseProps>`
   font-weight: ${({ emailLabels }) =>
-    emailLabels && emailLabels.includes(global.UNREAD_LABEL) ? '550' : '400'};
+    emailLabels.includes(global.UNREAD_LABEL) ? '550' : '400'};
   position: relative;
   user-select: none;
   &:hover {
@@ -28,7 +28,7 @@ export const ThreadRow = styled.div<IThreadRow>`
   border-radius: var(--radius-m);
   border: 1px solid
     ${({ isFocused }) =>
-      isFocused ? ' var(--color-neutral-300)' : 'transparent'};
+    isFocused ? ' var(--color-neutral-300)' : 'transparent'};
   display: grid;
   font-size: var(--text-small);
   grid-template-columns: ${({ showLabel }) =>

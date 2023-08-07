@@ -7,21 +7,18 @@ import type { TDraftsState } from '../store/storeTypes/draftsTypes'
  * @returns the draft message or compose object or undefined
  */
 
-export default function findDraftMessageInList({
+export default function findDraftMessageInList<T extends Record<string, unknown>>({
   draftList,
   target,
 }: {
   draftList: TDraftsState['draftList']
-  target: any
+  target: T
 }) {
   // Target can be composedEmail or message
-  return draftList.find((draft) => {
-    if (draft.message) {
-      return (
-        draft.message.threadId === target?.threadId &&
-        draft.message.id === target?.id
-      )
-    }
-    return undefined
+  return draftList?.find((draft) => {
+    return (
+      draft.message.threadId === target.threadId &&
+      draft.message.id === target.id
+    )
   })
 }

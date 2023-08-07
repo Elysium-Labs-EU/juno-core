@@ -4,7 +4,7 @@ import { EmailAttachmentTypeSchema } from 'components/EmailDetail/Attachment/Ema
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import { Contact } from 'store/storeTypes/contactsTypes'
 
-export interface IComposePayload {
+export interface ComposePayload {
   bcc?: Array<TContact>
   body?: string
   cc?: Array<TContact>
@@ -28,4 +28,4 @@ export const ComposeEmailReceiveSchema = z.object({
   to: z.union([z.string(), z.array(Contact)]).optional(),
 })
 
-export type IComposeEmailReceive = z.infer<typeof ComposeEmailReceiveSchema>
+export type ComposeEmailReceive = z.infer<typeof ComposeEmailReceiveSchema>

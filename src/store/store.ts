@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { Action, PreloadedState, ThunkAction } from '@reduxjs/toolkit'
+import type { Action, PreloadedState, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
 import { unstable_batchedUpdates } from 'react-dom'
 import { createReduxHistoryContext } from 'redux-first-history'
@@ -30,6 +30,7 @@ const rootReducer = combineReducers({
 })
 
 export type RootState = ReturnType<typeof rootReducer>
+
 export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
   configureStore({
     reducer: rootReducer,
@@ -38,14 +39,18 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
       getDefaultMiddleware().concat(routerMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
   })
-export type AppStore = ReturnType<typeof setupStore>
-export type AppDispatch = AppStore['dispatch']
-export type AppThunk<ReturnType = void | Promise<any>> = ThunkAction<
-  ReturnType,
-  RootState,
-  any,
-  Action<string>
->
+
 
 export const store = setupStore()
 export const history = createReduxHistory(store)
+
+export type AppStore = ReturnType<typeof setupStore>
+export type AppDispatch = AppStore['dispatch']
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>
+
+export type AppThunkDispatch = ThunkDispatch<RootState, unknown, Action<string>>

@@ -604,7 +604,7 @@ export const updateEmailLabel =
               const blockViewIndexUpdate = true
               const forceNavigateBack =
                 !coreStatus || coreStatus === global.CORE_STATUS_MAP.searching
-              void dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
+              dispatch(navigateNextMail(blockViewIndexUpdate, forceNavigateBack))
               if (staticActiveEmailList.threads.length - 1 - viewIndex <= 4) {
                 const { emailFetchSize } = getState().utils
                 edgeLoadingNextPage({
@@ -830,7 +830,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     )
     if (response && 'status' in response && response.status === 200 && 'data' in response) {
       if (Array.isArray(response.data)) {
-        void dispatch(loadEmailDetails(response.data))
+        dispatch(loadEmailDetails(response.data))
       }
       const userResponse = await userApi().fetchUser()
       const { signature } = getState().base.profile
@@ -843,7 +843,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
       toast.custom((t) => (
         <CustomToast
           specificToast={t}
-          title="Unable to refresh the feed."
+          title="Unable to refresh the feed 2."
           variant="error"
         />
       ))
@@ -862,7 +862,7 @@ export const refreshEmailFeed = (): AppThunk => async (dispatch, getState) => {
     toast.custom((t) => (
       <CustomToast
         specificToast={t}
-        title="Unable to refresh the feed."
+        title="Unable to refresh the feed 1."
         variant="error"
       />
     ))

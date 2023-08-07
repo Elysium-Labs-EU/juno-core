@@ -117,9 +117,9 @@ export const getBase = (): AppThunk => async (dispatch) => {
         response.data
 
       dispatch(setProfile(profile))
-      void dispatch(presetEmailList(prefetchedBoxes))
+      dispatch(presetEmailList(prefetchedBoxes))
       dispatch(setStorageLabels(prefetchedBoxes))
-      void dispatch(handleSettings(userSettings, userSettingsLabel))
+      dispatch(handleSettings(userSettings, userSettingsLabel))
       dispatch(setBaseLoaded(true))
     } else {
       dispatch(setBaseError({ message: 'An error occured during loading.' }))

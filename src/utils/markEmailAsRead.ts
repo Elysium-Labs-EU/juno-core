@@ -3,7 +3,7 @@ import { updateEmailLabel } from 'store/emailListSlice'
 import type { AppDispatch } from 'store/store'
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
-interface IMarkEmailAsRead {
+interface MarkEmailAsRead {
   dispatch: AppDispatch
   labelIds: TLabelState['labelIds']
   threadId: string
@@ -11,7 +11,7 @@ interface IMarkEmailAsRead {
 
 /**
  * @function markEmailAsRead
- * @param IMarkEmailAsRead - takes in labelIds and threadId to update the message's labels.
+ * @param MarkEmailAsRead - takes in labelIds and threadId to update the message's labels.
  * The output of the function is to remove the unread label.
  */
 
@@ -19,8 +19,8 @@ const markEmailAsRead = ({
   dispatch,
   labelIds,
   threadId,
-}: IMarkEmailAsRead) => {
-  if (threadId.length > 0 && dispatch) {
+}: MarkEmailAsRead) => {
+  if (threadId.length > 0) {
     dispatch(
       updateEmailLabel({
         threadId,
