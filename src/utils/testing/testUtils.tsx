@@ -33,7 +33,7 @@ export default function renderWithProviders(
 ) {
   function Wrapper({
     children = undefined,
-  }: PropsWithChildren<{}>): JSX.Element {
+  }: PropsWithChildren<Record<string, unknown>>): JSX.Element {
     return (
       <Provider store={store}>
         {children}

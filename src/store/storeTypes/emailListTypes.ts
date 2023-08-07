@@ -8,8 +8,6 @@ const SelectedEmail = z.object({
   selectedIds: z.array(z.string()),
 })
 
-export type TSelectedEmail = z.infer<typeof SelectedEmail>
-
 export interface ISelectedEmailAction {
   event: 'add' | 'remove'
   id: string
@@ -89,10 +87,10 @@ export type TEmailListObject = z.infer<typeof EmailListObject>
 
 const EmailListState = z.object({
   activeEmailListIndex: z.number(),
-  emailList: z.array(z.union([EmailListObject, z.any()])),
+  emailList: z.array(EmailListObject).nullable(),
   isFetching: z.boolean(),
   searchList: EmailListObject.nullable(),
-  selectedEmails: SelectedEmail,
+  selectedEmails: SelectedEmail.nullable(),
 })
 
 export type TEmailListState = z.infer<typeof EmailListState>

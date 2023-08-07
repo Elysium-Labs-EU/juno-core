@@ -53,7 +53,7 @@ export const DraftListResponse = z.object({
 })
 
 const DraftsState = z.object({
-  draftList: z.array(DraftListEntry),
+  draftList: z.array(DraftListEntry).nullable(),
 })
 
 export type TDraftsState = z.infer<typeof DraftsState>

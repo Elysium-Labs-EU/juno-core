@@ -32,7 +32,7 @@ const TodoFocusOption = () => {
   const dispatch = useAppDispatch()
 
   const handleEvent = () => {
-    dispatch(activateTodo())
+    void dispatch(activateTodo())
   }
 
   useKeyboardShortcut({
@@ -46,7 +46,7 @@ const TodoFocusOption = () => {
   const isDisabled =
     isLoading ||
     activeEmailListIndex < 0 ||
-    emailList[activeEmailListIndex]?.threads.length === 0
+    emailList?.[activeEmailListIndex]?.threads.length === 0
 
   return (
     <CustomAttentionButton
@@ -54,13 +54,13 @@ const TodoFocusOption = () => {
       onClick={handleEvent}
       disabled={isDisabled}
       label={
-        selectedEmails.selectedIds.length > 0 &&
-        selectedEmails.labelIds.includes(
-          findLabelByName({
-            storageLabels,
-            LABEL_NAME: global.TODO_LABEL_NAME,
-          })?.id ?? ''
-        ) ? (
+        selectedEmails && selectedEmails.selectedIds.length > 0 &&
+          selectedEmails.labelIds.includes(
+            findLabelByName({
+              storageLabels,
+              LABEL_NAME: global.TODO_LABEL_NAME,
+            })?.id ?? ''
+          ) ? (
           <>
             {global.BUTTON_FOCUS}
             <Span> ({selectedEmails.selectedIds.length})</Span>

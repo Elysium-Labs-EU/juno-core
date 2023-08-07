@@ -7,7 +7,7 @@ import * as S from 'components/EmailDetail/EmailDetailStyles'
 import { DRAFT_SNIPPET_INDICATOR } from 'constants/draftConstants'
 import { Span } from 'styles/globalStyles'
 
-import type { IClosedMessageLayout } from './LayoutTypes'
+import type { ClosedMessageLayoutProps } from './LayoutTypes'
 
 const ClosedMessageLayout = ({
   handleClick,
@@ -17,7 +17,7 @@ const ClosedMessageLayout = ({
   emailSnippet,
   senderNameFull,
   senderNamePartial,
-}: IClosedMessageLayout) => (
+}: ClosedMessageLayoutProps) => (
   <S.EmailClosedWrapper
     aria-hidden="true"
     isDraft={isDraft}

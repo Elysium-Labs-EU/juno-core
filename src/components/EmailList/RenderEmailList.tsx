@@ -29,7 +29,7 @@ import ThreadList from './ThreadList'
 
 const SOURCE_TAG_EMAILLIST = 'emailList-thread-list-item'
 
-interface IRenderEmailList {
+interface RenderEmailListProps {
   filteredOnLabel: TEmailListObject
   hasLargeHeader: boolean
 }
@@ -37,7 +37,7 @@ interface IRenderEmailList {
 const RenderEmailList = ({
   filteredOnLabel,
   hasLargeHeader,
-}: IRenderEmailList) => {
+}: RenderEmailListProps) => {
   const [focusedItemIndex, setFocusedItemIndex] = useState(-1)
   const dispatch = useAppDispatch()
   const activeModal = useAppSelector(selectActiveModal)
@@ -54,7 +54,7 @@ const RenderEmailList = ({
       sourceTag: SOURCE_TAG_EMAILLIST,
     })
     if (
-      selectedEmails.selectedIds.length > 0 &&
+      selectedEmails && selectedEmails.selectedIds.length > 0 &&
       multipleIncludes(selectedEmails.labelIds, labelIds)
     ) {
       dispatch(setSelectedEmails([]))
@@ -99,7 +99,7 @@ const RenderEmailList = ({
   const { threads, nextPageToken } = filteredOnLabel
 
   const showSelectedOptions =
-    selectedEmails.selectedIds.length > 0 &&
+    selectedEmails && selectedEmails.selectedIds.length > 0 &&
     multipleIncludes(selectedEmails.labelIds, labelIds)
 
   const handleLoadMore = useCallback(
@@ -117,7 +117,7 @@ const RenderEmailList = ({
   // Listen to the thread count, if it reaches 0, but there is a nextPageToken
   // trigger automatically to load the next page.
   useEffect(() => {
-    if (threads && threads.length === 0 && nextPageToken) {
+    if (threads.length === 0 && nextPageToken) {
       handleLoadMore()
     }
   }, [nextPageToken, threads])

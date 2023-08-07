@@ -1,7 +1,7 @@
 import { setIsForwarding, setIsReplying } from 'store/emailDetailSlice'
 import type { AppDispatch } from 'store/store'
 
-interface IIsReplyingListener {
+interface IsReplyingListener {
   dispatch: AppDispatch
   isForwarding?: boolean
 }
@@ -16,7 +16,7 @@ interface IIsReplyingListener {
 const isReplyingListener = ({
   dispatch,
   isForwarding,
-}: IIsReplyingListener) => {
+}: IsReplyingListener) => {
   if (isForwarding) {
     dispatch(setIsForwarding(false))
   }

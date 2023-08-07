@@ -11,7 +11,7 @@ interface IReplyOverview {
 const ReplyOverview = ({ id, emailIndex, dispatch }: IReplyOverview) => {
   dispatch(setIsReplying(true))
   dispatch(setViewIndex(emailIndex))
-  dispatch(openEmail({ id, isReplying: true }))
+  void dispatch(openEmail({ id, isReplying: true }))
 }
 
 export default ReplyOverview

@@ -21,30 +21,30 @@ const ContextBar = () => {
 
   useEffect(() => {
     if (selectedEmails && selectedEmails.labelIds.length > 0) {
-      let uniqueUsers = []
       if (
         !selectedEmails.labelIds.includes(global.DRAFT_LABEL) &&
         !selectedEmails.labelIds.includes(global.SENT_LABEL)
       ) {
-        uniqueUsers = deduplicateItems(
+        const uniqueUsers = deduplicateItems(
           getSenderFromList({
             selectedEmails,
             emailList,
-          })
+          }).filter(Boolean) as string[]
         )
+        setFilteredUsers(uniqueUsers)
       } else {
-        uniqueUsers = deduplicateItems(
+        const uniqueUsers = deduplicateItems(
           getRecipientFromList({
             selectedEmails,
             emailList,
-          })
+          }).filter(Boolean) as string[]
         )
+        setFilteredUsers(uniqueUsers)
       }
-      setFilteredUsers(uniqueUsers)
     }
   }, [emailList, selectedEmails])
 
-  return multipleIncludes(selectedEmails.labelIds, labelIds) ? (
+  return selectedEmails && multipleIncludes(selectedEmails.labelIds, labelIds) ? (
     <S.Wrapper>
       <S.Inner>
         <Span muted small>

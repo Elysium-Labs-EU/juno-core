@@ -128,14 +128,14 @@ const EmailDetail = () => {
     if (coreStatus === CORE_STATUS_MAP.searching && searchList) {
       setActiveEmailList(searchList)
     } else {
-      const targetEmailList = emailList[activeEmailListIndex]
+      const targetEmailList = emailList?.[activeEmailListIndex]
       if (targetEmailList) {
-        const selectedIds = selectedEmails.selectedIds ?? []
-        const hasTodoLabel = selectedEmails.labelIds.includes(
+        const selectedIds = selectedEmails?.selectedIds ?? []
+        const hasTodoLabel = selectedEmails?.labelIds.includes(
           findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })?.id ??
-            ''
+          ''
         )
-        const hasInboxLabel = selectedEmails.labelIds.includes(INBOX_LABEL)
+        const hasInboxLabel = selectedEmails?.labelIds.includes(INBOX_LABEL)
         const isFocusedOrSorting =
           coreStatus === CORE_STATUS_MAP.focused ||
           (isFlexibleFlowActive && coreStatus === CORE_STATUS_MAP.sorting)
@@ -160,11 +160,19 @@ const EmailDetail = () => {
 
   // Based on the location and threadId, set the correct Redux state. Location state comes from openEmail function
   useEffect(() => {
-    if (isReplying && !location.state?.isReplying) {
-      dispatch(setIsReplying(false))
+    const locationState = location.state as unknown
+    if (!(locationState instanceof Object)) {
+      return
     }
-    if (isForwarding && !location.state?.isForwarding) {
-      dispatch(setIsForwarding(false))
+    if (isReplying && 'isReplying' in locationState) {
+      if (!locationState.isReplying) {
+        dispatch(setIsReplying(false))
+      }
+    }
+    if (isForwarding && 'isForwarding' in locationState) {
+      if (!locationState.isForwarding) {
+        dispatch(setIsForwarding(false))
+      }
     }
   }, [threadId])
 

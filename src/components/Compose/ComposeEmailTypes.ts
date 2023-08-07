@@ -1,6 +1,6 @@
 import type { TContact } from 'store/storeTypes/contactsTypes'
 
-export interface IRecipientsList {
+export interface RecipientsList {
   fieldId: string
   newValue: Array<TContact>
 }

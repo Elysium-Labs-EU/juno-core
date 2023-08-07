@@ -1,18 +1,16 @@
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable react/jsx-props-no-spreading */
-import type React from 'react'
+import type { ComponentPropsWithoutRef } from 'react'
 import { forwardRef } from 'react'
 
 import * as S from './InputStyles'
 
-export interface IInput extends React.HTMLAttributes<HTMLInputElement> {
+export interface InputProps extends ComponentPropsWithoutRef<'input'> {
   autoComplete?: string
   autoFocus?: boolean
   fullWidth?: boolean
   value?: string | undefined
 }
 
-const Input = forwardRef<HTMLInputElement, IInput>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       autoComplete = 'on',
@@ -34,11 +32,6 @@ const Input = forwardRef<HTMLInputElement, IInput>(
   )
 )
 
-Input.defaultProps = {
-  autoComplete: 'on',
-  autoFocus: false,
-  fullWidth: false,
-  value: undefined,
-}
+Input.displayName = 'Input'
 
 export default Input

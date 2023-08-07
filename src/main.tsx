@@ -12,18 +12,14 @@ import App from 'App'
 import { store } from 'store/store'
 import { GlobalStyle } from 'styles/globalStyles'
 
-// declare global {
-//   interface Window {
-//     __TAURI_METADATA__?: any
-//   }
-// }
-
 // Set a global variable for Buffer, this is used for decoding B64.
 globalThis.Buffer = Buffer
 
 // Set a global variable to check if we're in a Tauri window.
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 new WebviewWindow(window?.__TAURI_METADATA__?.__currentWindow.label)
 
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>

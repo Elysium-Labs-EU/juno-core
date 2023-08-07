@@ -54,7 +54,8 @@ const openDetail = ({
 }
 
 function handleSelect({ focusedItemIndex }: { focusedItemIndex: number }) {
-  const items = document.querySelectorAll(`.${COMMAND_PALLETE_ITEM}`)
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const items = document.querySelectorAll(`.${COMMAND_PALLETE_ITEM}`) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
 
   if (items[focusedItemIndex]) {
     items[focusedItemIndex]?.click()
@@ -127,12 +128,10 @@ const CommandPallette = () => {
         nextPageToken: searchBody.nextPageToken ?? null,
       }
       try {
-        const response = await threadApi({}).getSimpleThreads(
+        const response = await threadApi().getSimpleThreads(
           searchBodyWithNextPageToken
         )
-        if (
-          'data' in response &&
-          response.data.resultSizeEstimate &&
+        if (response?.data.resultSizeEstimate &&
           response.data.resultSizeEstimate > 0
         ) {
           const { threads, nextPageToken }: TEmailListObject = response.data
@@ -365,7 +364,7 @@ const CommandPallette = () => {
           />
         </Stack>
       </S.InputRow>
-      {!searchResults && selectedEmails.selectedIds.length > 0 && (
+      {!searchResults && selectedEmails && selectedEmails.selectedIds.length > 0 && (
         <ContextBar />
       )}
       {memoizedCommandSuggestionsAndSearchResults}

@@ -41,16 +41,16 @@ import type { TGmailV1SchemaDraftSchema } from './storeTypes/gmailBaseTypes/gmai
 export const fetchDrafts = createAsyncThunk(
   'drafts/fetchDrafts',
   async (_, { signal }) => {
-    const response = await draftApi(signal).getDrafts()
-    if ('data' in response) {
-      return response.data
+    const response = await draftApi().getDrafts()
+    if (!response) {
+      return null
     }
-    return null
+    return response.data
   }
 )
 
 const initialState: TDraftsState = Object.freeze({
-  draftList: [],
+  draftList: null,
 })
 
 const draftsSlice = createSlice({
@@ -63,6 +63,9 @@ const draftsSlice = createSlice({
     ) => {
       const { threadId } = payload
       const copyCurrentDraftList = state.draftList
+      if (!copyCurrentDraftList) {
+        return
+      }
       const newDraftList = copyCurrentDraftList.filter(
         (item) => item.message.threadId !== threadId
       )
@@ -74,6 +77,9 @@ const draftsSlice = createSlice({
     ) => {
       const { messageId } = payload
       const copyCurrentDraftList = state.draftList
+      if (!copyCurrentDraftList) {
+        return
+      }
       const newDraftList = copyCurrentDraftList.filter(
         (item) => item.message.id !== messageId
       )
@@ -85,6 +91,9 @@ const draftsSlice = createSlice({
     ) => {
       const { threadIds } = payload
       const copyCurrentDraftList = state.draftList
+      if (!copyCurrentDraftList) {
+        return
+      }
 
       // TODO: Check how this functions, whenever there are drafts in the system without a threadId, how do we remove them?
       const filterArray = () => {
@@ -140,7 +149,7 @@ export const {
  * Otherwise, it creates a new draft.
  */
 
-interface ICreateUpdateDraft {
+interface CreateUpdateDraft {
   composedEmail: IComposePayload
   localDraftDetails: TGmailV1SchemaDraftSchema | undefined
 }
@@ -149,25 +158,47 @@ export const createUpdateDraft =
   ({
     composedEmail,
     localDraftDetails,
-  }: ICreateUpdateDraft): AppThunk<null | any> =>
-  async (dispatch, getState) => {
-    try {
-      const { emailAddress, name } = getState().base.profile
-      const formData = await prepareFormData({
-        composedEmail,
-        emailAddress,
-        localDraftDetails,
-        name,
-      })
+  }: CreateUpdateDraft): AppThunk<void> =>
+    async (dispatch, getState) => {
+      try {
+        const { emailAddress, name } = getState().base.profile
+        const formData = await prepareFormData({
+          composedEmail,
+          emailAddress,
+          localDraftDetails,
+          name,
+        })
 
-      const response = !localDraftDetails?.id
-        ? await draftApi().createDrafts(formData)
-        : await draftApi().updateDrafts({
+        const response = !localDraftDetails?.id
+          ? await draftApi().createDrafts(formData)
+          : await draftApi().updateDrafts({
             id: localDraftDetails.id,
             formData,
           })
 
-      if (!response || ('status' in response && response.status !== 200)) {
+        if (!response || ('status' in response && response.status !== 200)) {
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Cannot update or create draft."
+              variant="error"
+            />
+          ))
+        }
+
+        if (typeof response === 'object' && 'data' in response) {
+          if (localDraftDetails?.message?.threadId) {
+            // Remove the previous entry from Redux Emaillist. History will create a new one.
+            dispatch(
+              listRemoveItemDetailDraft({
+                threadId: localDraftDetails.message.threadId,
+              })
+            )
+          }
+          return response.data
+        }
+        return null
+      } catch (err) {
         toast.custom((t) => (
           <CustomToast
             specificToast={t}
@@ -175,80 +206,58 @@ export const createUpdateDraft =
             variant="error"
           />
         ))
+        return null
       }
-
-      if (typeof response === 'object' && 'data' in response) {
-        if (localDraftDetails?.message?.threadId) {
-          // Remove the previous entry from Redux Emaillist. History will create a new one.
-          dispatch(
-            listRemoveItemDetailDraft({
-              threadId: localDraftDetails.message.threadId,
-            })
-          )
-        }
-        return response.data
-      }
-      return null
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Cannot update or create draft."
-          variant="error"
-        />
-      ))
-      return null
     }
-  }
 
 const ERROR_OPEN_DRAFT_EMAIL = 'Error setting up compose email.'
 
 const pushDraftDetails =
   ({ draft }: { draft: TDraftResponseEntry }): AppThunk<void> =>
-  (dispatch, getState) => {
-    const { message } = draft
-    try {
-      if (draft.id && message.threadId) {
-        dispatch(setCurrentEmail(message.threadId))
-        if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
-          dispatch(setIsReplying(true))
-        } else {
-          // From headers are not taken in account here - since we only allow for one account
-          const loadEmail = {
-            id: message.id,
-            threadId: message.threadId,
-            to: message.payload.headers.to,
-            cc: message.payload.headers.cc,
-            bcc: message.payload.headers.bcc,
-            subject: message.payload.headers.subject,
-            body: message.payload.body.emailHTML,
-            // Push the files as B64 objects to the state, to be decoded on the component. Files cannot be stored into Redux.
-            files: message.payload.files,
+    (dispatch, getState) => {
+      const { message } = draft
+      try {
+        if (draft.id && message.threadId) {
+          dispatch(setCurrentEmail(message.threadId))
+          if (!getState().labels.labelIds.includes(global.DRAFT_LABEL)) {
+            dispatch(setIsReplying(true))
+          } else {
+            // From headers are not taken in account here - since we only allow for one account
+            const loadEmail = {
+              id: message.id,
+              threadId: message.threadId,
+              to: message.payload.headers.to,
+              cc: message.payload.headers.cc,
+              bcc: message.payload.headers.bcc,
+              subject: message.payload.headers.subject,
+              body: message.payload.body.emailHTML,
+              // Push the files as B64 objects to the state, to be decoded on the component. Files cannot be stored into Redux.
+              files: message.payload.files,
+            }
+            dispatch(
+              push(`${RoutesConstants.COMPOSE_EMAIL}${draft.id}`, loadEmail)
+            )
           }
-          dispatch(
-            push(`${RoutesConstants.COMPOSE_EMAIL}${draft.id}`, loadEmail)
-          )
+        } else {
+          dispatch(push(RoutesConstants.COMPOSE_EMAIL))
         }
-      } else {
-        dispatch(push(RoutesConstants.COMPOSE_EMAIL))
+      } catch (err) {
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={ERROR_OPEN_DRAFT_EMAIL}
+            variant="error"
+          />
+        ))
       }
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title={ERROR_OPEN_DRAFT_EMAIL}
-          variant="error"
-        />
-      ))
     }
-  }
 
-const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> => {
-  const { draftId } = draftDetails
-  return async (dispatch) => {
+const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> =>
+  async (dispatch) => {
+    const { draftId } = draftDetails
     try {
       const response = await draftApi().getDraftDetail(draftId)
-      if (
+      if (response &&
         'status' in response &&
         response.status === 200 &&
         'data' in response
@@ -274,25 +283,14 @@ const loadDraftDetails = (draftDetails: IDraftDetails): AppThunk<void> => {
       ))
     }
   }
-}
+
 
 export const openDraftEmail =
   ({ messageId, id }: IOpenDraftEmailType): AppThunk<void> =>
-  (dispatch, getState) => {
-    try {
-      const { draftList } = getState().drafts
-
-      // Search the draftList on message.threadId to get the id. Use that Id to fetch all the details of the draft.
-      const selectedEmail =
-        draftList && messageId
-          ? draftList.find((draft) => draft.message.id === messageId)
-          : draftList.find((draft) => draft.message.threadId === id)
-
-      if (selectedEmail) {
-        const draftId = selectedEmail.id
-        if (!isEmpty(draftId)) {
-          dispatch(loadDraftDetails({ draftId }))
-        } else {
+    (dispatch, getState) => {
+      try {
+        const { draftList } = getState().drafts
+        if (!draftList) {
           toast.custom((t) => (
             <CustomToast
               specificToast={t}
@@ -300,23 +298,54 @@ export const openDraftEmail =
               variant="error"
             />
           ))
+          return
         }
+
+        // Search the draftList on message.threadId to get the id. Use that Id to fetch all the details of the draft.
+        const selectedEmail =
+          messageId
+            ? draftList.find((draft) => draft.message.id === messageId)
+            : draftList.find((draft) => draft.message.threadId === id)
+
+        if (selectedEmail) {
+          const draftId = selectedEmail.id
+          if (!isEmpty(draftId)) {
+            dispatch(loadDraftDetails({ draftId }))
+          } else {
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title={ERROR_OPEN_DRAFT_EMAIL}
+                variant="error"
+              />
+            ))
+          }
+        }
+        // }
+      } catch (err) {
+        toast.custom((t) => (
+          <CustomToast
+            specificToast={t}
+            title={ERROR_OPEN_DRAFT_EMAIL}
+            variant="error"
+          />
+        ))
       }
-      // }
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title={ERROR_OPEN_DRAFT_EMAIL}
-          variant="error"
-        />
-      ))
     }
-  }
 
 export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
   const { selectedEmails } = getState().email
   const { draftList } = getState().drafts
+  if (!selectedEmails?.selectedIds || !draftList || draftList.length === 0) {
+    toast.custom((t) => (
+      <CustomToast
+        specificToast={t}
+        title="Error deleting draft."
+        variant="error"
+      />
+    ))
+    return
+  }
   dispatch(
     listRemoveItemDetailBatch({
       messageIds: selectedEmails.selectedIds,
@@ -327,16 +356,13 @@ export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
   for (let i = 0; selectedEmails.selectedIds.length > i; i += 1) {
     try {
       const draftObject =
-        draftList.length > 0 &&
         draftList.find(
           (draft) => draft.message.threadId === selectedEmails.selectedIds[i]
         )
       if (
-        typeof draftObject === 'object' &&
-        !Array.isArray(draftObject) &&
-        draftObject !== null
+        draftObject instanceof Object
       ) {
-        draftApi().deleteDraft(draftObject.id)
+        void draftApi().deleteDraft(draftObject.id)
       }
     } catch (err) {
       toast.custom((t) => (
@@ -352,33 +378,33 @@ export const deleteDraftBatch = (): AppThunk<void> => (dispatch, getState) => {
 
 export const deleteDraft =
   (id: string): AppThunk<void> =>
-  async (dispatch, getState) => {
-    const { coreStatus } = getState().emailDetail
-    dispatch(setIsProcessing(true))
-    try {
-      await draftApi().deleteDraft(id)
-    } catch (err) {
-      toast.custom((t) => (
-        <CustomToast
-          variant="error"
-          specificToast={t}
-          title="Error deleting draft."
-        />
-      ))
-    } finally {
-      dispatch(setIsProcessing(false))
-      // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
-      if (coreStatus === global.CORE_STATUS_MAP.searching) {
+    async (dispatch, getState) => {
+      const { coreStatus } = getState().emailDetail
+      dispatch(setIsProcessing(true))
+      try {
+        await draftApi().deleteDraft(id)
+      } catch (err) {
         toast.custom((t) => (
           <CustomToast
-            variant="success"
+            variant="error"
             specificToast={t}
-            title="Draft has been deleted."
+            title="Error deleting draft."
           />
         ))
+      } finally {
+        dispatch(setIsProcessing(false))
+        // When in search mode, and the discard of the draft is complete, send a notification, since the searchList is a separate state that is not updated.
+        if (coreStatus === global.CORE_STATUS_MAP.searching) {
+          toast.custom((t) => (
+            <CustomToast
+              variant="success"
+              specificToast={t}
+              title="Draft has been deleted."
+            />
+          ))
+        }
       }
     }
-  }
 
 export const sendComposedEmail =
   ({
@@ -388,69 +414,108 @@ export const sendComposedEmail =
     composedEmail: IComposePayload
     localDraftDetails: TGmailV1SchemaDraftSchema | undefined
   }): AppThunk =>
-  async (dispatch, getState) => {
-    try {
-      const { emailList } = getState().email
-      const { coreStatus, isForwarding, isReplying } = getState().emailDetail
-      // Reset the replying state to false on sending, to close the composer.
-      if (isReplying) {
-        dispatch(setIsReplying(false))
-      }
-      // Reset the forwarding state to false on sending, to close the composer.
-      if (isForwarding) {
-        dispatch(setIsForwarding(false))
-      }
-      // Reset the emailDetail state and return to the main page on sending whenever the user is not in sorting or focused mode.
-      if (
-        coreStatus !== global.CORE_STATUS_MAP.sorting &&
-        coreStatus !== global.CORE_STATUS_MAP.focused
-      ) {
-        dispatch(setCurrentEmail(''))
-        dispatch(closeMail())
-      }
+    async (dispatch, getState) => {
+      try {
+        const { emailList } = getState().email
+        const { coreStatus, isForwarding, isReplying } = getState().emailDetail
+        // Reset the replying state to false on sending, to close the composer.
+        if (isReplying) {
+          dispatch(setIsReplying(false))
+        }
+        // Reset the forwarding state to false on sending, to close the composer.
+        if (isForwarding) {
+          dispatch(setIsForwarding(false))
+        }
+        // Reset the emailDetail state and return to the main page on sending whenever the user is not in sorting or focused mode.
+        if (
+          coreStatus !== global.CORE_STATUS_MAP.sorting &&
+          coreStatus !== global.CORE_STATUS_MAP.focused
+        ) {
+          dispatch(setCurrentEmail(''))
+          void dispatch(closeMail())
+        }
 
-      // Send the user to the next email when it is sorting of focused
-      if (
-        coreStatus === global.CORE_STATUS_MAP.sorting ||
-        coreStatus === global.CORE_STATUS_MAP.focused
-      ) {
-        dispatch(navigateNextMail())
-      }
-      // TODO: Set the timeout for sending on the backend.
-      // If the id is found on the draft details, send the draft email via the Google servers as a draft.
-      if (localDraftDetails?.id) {
-        const response = await draftApi().sendDraft({
-          id: localDraftDetails.id,
-          timeOut: global.MESSAGE_SEND_DELAY,
-        })
-
-        // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
-        if ('status' in response && response.status === 200) {
-          const { labelIds } = getState().labels
-          // We can only archive the previous draft if it has a threadId
-          if (localDraftDetails.message?.threadId) {
-            archiveMail({
-              threadId: localDraftDetails.message.threadId,
-              dispatch,
-              labelIds,
-            })
-          }
-          const staticIndexActiveEmailList: number = getEmailListIndex({
-            emailList,
-            labelIds: [global.DRAFT_LABEL],
+        // Send the user to the next email when it is sorting of focused
+        if (
+          coreStatus === global.CORE_STATUS_MAP.sorting ||
+          coreStatus === global.CORE_STATUS_MAP.focused
+        ) {
+          void dispatch(navigateNextMail())
+        }
+        // TODO: Set the timeout for sending on the backend.
+        // If the id is found on the draft details, send the draft email via the Google servers as a draft.
+        if (localDraftDetails?.id) {
+          const response = await draftApi().sendDraft({
+            id: localDraftDetails.id,
+            timeOut: global.MESSAGE_SEND_DELAY,
           })
-          if (
-            staticIndexActiveEmailList > -1 &&
-            localDraftDetails.message?.id
-          ) {
-            dispatch(
-              listRemoveItemDetail({
-                threadId: localDraftDetails.message.id,
+
+          // When succesfully sending the email - the system removes the draft from the draft inbox, the draft list, and the thread's other inbox location.
+          if (response && response.status === 200) {
+            const { labelIds } = getState().labels
+            // We can only archive the previous draft if it has a threadId
+            if (localDraftDetails.message?.threadId) {
+              archiveMail({
+                threadId: localDraftDetails.message.threadId,
+                dispatch,
+                labelIds,
               })
-            )
+            }
+            const staticIndexActiveEmailList: number = getEmailListIndex({
+              emailList,
+              labelIds: [global.DRAFT_LABEL],
+            })
+            if (
+              staticIndexActiveEmailList > -1 &&
+              localDraftDetails.message?.id
+            ) {
+              dispatch(
+                listRemoveItemDetail({
+                  threadId: localDraftDetails.message.id,
+                })
+              )
+            }
+            toast.custom((t) => (
+              <CustomToast specificToast={t} title="Sent your email." />
+            ))
           }
           toast.custom((t) => (
-            <CustomToast specificToast={t} title="Sent your email." />
+            <CustomToast
+              specificToast={t}
+              title="Error sending your mail."
+              variant="error"
+            />
+          ))
+        }
+        // If the id cannot be found on the draft details, send the email via the sendMessage function
+        if (!localDraftDetails?.id) {
+          const { emailAddress, name } = getState().base.profile
+          const formData = await prepareFormData({
+            composedEmail,
+            emailAddress,
+            localDraftDetails,
+            name,
+          })
+
+          const response = await messageApi().sendMessage({
+            data: formData,
+            timeOut: global.MESSAGE_SEND_DELAY,
+          })
+          if (!response || response.status !== 200) {
+            toast.custom((t) => (
+              <CustomToast
+                specificToast={t}
+                title="Error sending your mail."
+                variant="error"
+              />
+            ))
+          }
+          toast.custom((t) => (
+            <CustomToast
+              variant="success"
+              specificToast={t}
+              title="Sent your email."
+            />
           ))
         }
         toast.custom((t) => (
@@ -460,57 +525,18 @@ export const sendComposedEmail =
             variant="error"
           />
         ))
-      }
-      // If the id cannot be found on the draft details, send the email via the sendMessage function
-      if (!localDraftDetails?.id) {
-        const { emailAddress, name } = getState().base.profile
-        const formData = await prepareFormData({
-          composedEmail,
-          emailAddress,
-          localDraftDetails,
-          name,
-        })
-
-        const response = await messageApi().sendMessage({
-          data: formData,
-          timeOut: global.MESSAGE_SEND_DELAY,
-        })
-        if (!('status' in response) || response.status !== 200) {
-          toast.custom((t) => (
-            <CustomToast
-              specificToast={t}
-              title="Error sending your mail."
-              variant="error"
-            />
-          ))
-        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
         toast.custom((t) => (
           <CustomToast
-            variant="success"
             specificToast={t}
-            title="Sent your email."
+            title="Error sending your mail."
+            variant="error"
           />
         ))
       }
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Error sending your mail."
-          variant="error"
-        />
-      ))
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err)
-      toast.custom((t) => (
-        <CustomToast
-          specificToast={t}
-          title="Error sending your mail."
-          variant="error"
-        />
-      ))
     }
-  }
 
 export const selectDraftList = (state: RootState) => state.drafts.draftList
 

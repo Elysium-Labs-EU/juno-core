@@ -192,7 +192,7 @@ const Composer = ({
           setLocalDraftDetails(response)
         }
       }
-      asyncDispatchAction()
+      void asyncDispatchAction()
     }
   }, [composedEmail, localDraftDetails])
 
@@ -340,7 +340,7 @@ const Composer = ({
       <Attachments
         composeValue={
           isFileArray(composedEmail?.files) ||
-          isEmailAttachmentTypeArray(composedEmail?.files)
+            isEmailAttachmentTypeArray(composedEmail?.files)
             ? composedEmail?.files
             : undefined
         }

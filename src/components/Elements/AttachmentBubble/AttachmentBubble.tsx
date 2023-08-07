@@ -77,7 +77,7 @@ const DownloadButton = ({
   if (buttonIcon && buttonTitle) {
     return (
       <CustomIconButton
-        onClick={handleClick}
+        onClick={() => void handleClick()}
         icon={buttonIcon}
         title={buttonTitle}
       />
@@ -100,14 +100,16 @@ const DeleteButton = ({
   />
 )
 
-const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
+interface ViewAttachmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  attachmentData: EmailAttachmentType
+  messageId?: string
+}
+
+const ViewAttachmentButton = forwardRef<HTMLButtonElement, ViewAttachmentButtonProps>(
   (
     {
       attachmentData,
       messageId = undefined,
-    }: {
-      attachmentData: EmailAttachmentType
-      messageId?: string
     },
     ref
   ) => {
@@ -132,9 +134,9 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
           attachmentData,
         })
 
-        if (response.success) {
+        if (response?.success) {
           setLoadState(global.LOAD_STATE_MAP.loaded)
-          if (window.__TAURI_METADATA__) {
+          if (window.__TAURI_METADATA__.__currentWindow.label) {
             // TODO: Write to save the file in temp folder, and open it right away.
           } else {
             setFetchedAttachmentData({
@@ -153,7 +155,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
         toast.custom((t) => (
           <CustomToast
             specificToast={t}
-            title={response.message ?? global.NETWORK_ERROR}
+            title={response?.message ?? global.NETWORK_ERROR}
             variant="error"
           />
         ))
@@ -177,7 +179,7 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
         )}
         <CustomIconButton
           ref={ref}
-          onClick={handleClick}
+          onClick={() => void handleClick()}
           icon={<QiEye />}
           title="View attachment"
         />
@@ -188,7 +190,9 @@ const ViewAttachmentButton = forwardRef<HTMLButtonElement, any>(
   }
 )
 
-interface IAttachmentBubble {
+ViewAttachmentButton.displayName = 'ViewAttachmentButton'
+
+interface AttachmentBubbleProps {
   attachmentData: EmailAttachmentType | File
   handleDelete?: (attachmentIndex: number) => void
   hasDownloadOption?: boolean
@@ -202,21 +206,21 @@ const AttachmentBubble = ({
   hasDownloadOption = true,
   index = undefined,
   messageId = undefined,
-}: IAttachmentBubble) => {
+}: AttachmentBubbleProps) => {
   const previewButtonRef = useRef<HTMLButtonElement>(null)
 
   const mimeType =
     'mimeType' in attachmentData
       ? attachmentData.mimeType
-      : attachmentData.type ?? 'no file type found'
+      : attachmentData.type
   const fileName =
     'filename' in attachmentData
       ? attachmentData.filename
-      : attachmentData.name ?? 'no file name found'
+      : attachmentData.name
   const fileSize =
     'body' in attachmentData
       ? attachmentData.body.size
-      : attachmentData.size ?? 0
+      : attachmentData.size
 
   // TODO: Reinstate this with using the Tauri API
   const memoizedViewAttachmentButton = useMemo(

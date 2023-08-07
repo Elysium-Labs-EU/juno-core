@@ -2,7 +2,6 @@ import { z } from 'zod'
 
 import { fetchWrapper } from 'data/api'
 import { Contact } from 'store/storeTypes/contactsTypes'
-import type { TContactState } from 'store/storeTypes/contactsTypes'
 import { peopleV1SchemaListOtherContactsResponseSchema } from 'store/storeTypes/gmailBaseTypes/peopleTypes'
 
 interface AllContactsQueryObject {
@@ -34,7 +33,7 @@ const contactApi = () => ({
   ),
   queryContacts: (
     query: QueryContactObject
-  ) => fetchWrapper<TContactState['allContacts']>(
+  ) => fetchWrapper(
     `/api/contact/search/`,
     {
       method: 'GET',

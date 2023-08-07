@@ -49,16 +49,11 @@ const GoogleCallBack = () => {
           dispatch(setIsAuthenticated(true))
           dispatch(push(RoutesConstants.TODO))
         } else {
-          const message =
-            typeof response === 'object' && 'error' in response
-              ? response.error ?? SOMETHING_WRONG
-              : response
-
           toast.custom((t) => (
-            <CustomToast specificToast={t} title={message} variant="error" />
+            <CustomToast specificToast={t} title={SOMETHING_WRONG} variant="error" />
           ))
-          dispatch(push(RoutesConstants.LOGIN))
         }
+        dispatch(push(RoutesConstants.LOGIN))
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)

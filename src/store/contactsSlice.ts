@@ -2,13 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
 import type { RootState } from 'store/store'
+import deduplicateItems from 'utils/deduplicateItems'
 
 import type { TContact, TContactState } from './storeTypes/contactsTypes'
 
-/* eslint-disable no-param-reassign */
-
 const initialState: TContactState = Object.freeze({
-  allContacts: [],
+  allContacts: null,
   contactNextPageToken: '',
   contactsLoaded: '',
 })
@@ -18,15 +17,7 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     setAllContacts: (state, { payload }: PayloadAction<Array<TContact>>) => {
-      const uniqueContacts = Object.values(
-        [...state.allContacts, ...payload].reduce((acc, contact) => {
-          const key = JSON.stringify(contact)
-          if (!acc[key]) {
-            acc[key] = contact
-          }
-          return acc
-        }, {})
-      )
+      const uniqueContacts = deduplicateItems(state.allContacts ? [...state.allContacts, ...payload] : payload)
       state.allContacts = uniqueContacts
     },
     setContactsLoaded: (

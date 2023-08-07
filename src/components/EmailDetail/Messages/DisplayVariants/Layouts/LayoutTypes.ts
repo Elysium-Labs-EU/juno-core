@@ -8,7 +8,7 @@ import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
 import type { getRemovedTrackers } from '../ReadUnreadMessage'
 
-interface IBaseLayoutType {
+interface BaseLayoutType {
   handleClick: () => void
   isDraft?: boolean
   message: IReadMessage['message']
@@ -16,7 +16,7 @@ interface IBaseLayoutType {
   senderNamePartial: ReturnType<typeof getSenderNamePartial>
 }
 
-export interface IOpenMessageLayout extends IBaseLayoutType {
+export interface OpenMessageLayoutProps extends BaseLayoutType {
   draftHeaderControls?: ReactNode
   emailSubject: ReturnType<typeof getEmailSubject>
   hideMessage?: boolean
@@ -25,6 +25,6 @@ export interface IOpenMessageLayout extends IBaseLayoutType {
   specificEmailOptions?: ReactNode
 }
 
-export interface IClosedMessageLayout extends IBaseLayoutType {
+export interface ClosedMessageLayoutProps extends BaseLayoutType {
   emailSnippet: string
 }

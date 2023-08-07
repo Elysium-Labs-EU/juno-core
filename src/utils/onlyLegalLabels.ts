@@ -1,24 +1,24 @@
 import type { TLabelState } from 'store/storeTypes/labelsTypes'
 
-interface IOnlyLegalLabelObjects {
-  labelNames: Array<string>
+interface OnlyLegalLabelObjects {
+  labelIds: TLabelState['labelIds']
   storageLabels: TLabelState['storageLabels']
 }
 
 /**
  * @function onlyLegalLabelObjects
- * @param labelNames an array of Labels as strings
+ * @param labelIds an array of Labels as strings
  * @param storageLabels an array of labels as objects
  * @returns an array with label objects that are allowed (already in the Redux storage labels)
  */
 
 export function onlyLegalLabelObjects({
-  labelNames,
+  labelIds,
   storageLabels,
-}: IOnlyLegalLabelObjects) {
+}: OnlyLegalLabelObjects) {
   const idMapStorageLabels = storageLabels.map((label) => label.id)
 
-  const filterArray = labelNames.filter((el) => idMapStorageLabels.includes(el))
+  const filterArray = labelIds.filter((el) => idMapStorageLabels.includes(el))
 
   const newArray: TLabelState['storageLabels'] = []
   for (let i = 0; i < filterArray.length; i += 1) {

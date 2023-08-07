@@ -36,7 +36,7 @@ const CommandPaletteSuggestions = ({
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
 
   const currentEmailBoxHasEmails = useMemo(() => {
-    const threads = emailList[activeEmailListIndex]?.threads
+    const threads = emailList?.[activeEmailListIndex]?.threads
     if (threads) {
       return threads.length > 0
     }
@@ -45,90 +45,93 @@ const CommandPaletteSuggestions = ({
 
   const filteredItems = useMemo(() => {
     const DISCORD_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
-    if (searchValue) {
-      const searchSuggestion: Array<IJsonStructure> = [
+    if (!searchValue) {
+      const emptySearchValue = ''
+      return filterItems(
+        contextualItems({
+          currentEmailBoxHasEmails,
+          dispatch,
+          emailList,
+          isFlexibleFlowActive,
+          labelIds,
+          location,
+          selectedEmails,
+        }),
+        emptySearchValue
+      )
+    }
+    const searchSuggestion: Array<IJsonStructure> = [
+      {
+        heading: undefined,
+        id: 'search-option',
+        items: [
+          {
+            id: 'search',
+            children: <SearchSuggestion searchValue={searchValue} />,
+            icon: <QiSearch />,
+            type: 'Command',
+          },
+        ],
+      },
+    ]
+    // const introduction: Array<IJsonStructure> = [
+    //   {
+    //     heading: 'Introduction',
+    //     id: 'introduction-option',
+    //     items: [
+    //       {
+    //         id: 'introduction',
+    //         children: 'Show introduction',
+    //         icon: <QiLinkOut />,
+    //         type: 'Link',
+    //         onClick: () =>
+    //           dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
+    //       },
+    //     ],
+    //   },
+    // ]
+
+    const newSuggestion: Array<IJsonStructure> | undefined = DISCORD_URL
+      ? [
         {
-          heading: undefined,
-          id: 'search-option',
+          heading: 'More',
+          id: 'suggestion-header',
           items: [
             {
-              id: 'search',
-              children: <SearchSuggestion searchValue={searchValue} />,
-              icon: <QiSearch />,
-              type: 'Command',
+              id: 'suggestion',
+              children:
+                'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
+              icon: <QiGift />,
+              type: 'Link',
+              onClick: () => window.open(DISCORD_URL, '_blank'),
             },
           ],
         },
       ]
-      // const introduction: Array<IJsonStructure> = [
-      //   {
-      //     heading: 'Introduction',
-      //     id: 'introduction-option',
-      //     items: [
-      //       {
-      //         id: 'introduction',
-      //         children: 'Show introduction',
-      //         icon: <QiLinkOut />,
-      //         type: 'Link',
-      //         onClick: () =>
-      //           dispatch(setActiveModal(global.ACTIVE_MODAL_MAP.intro)),
-      //       },
-      //     ],
-      //   },
-      // ]
+      : undefined
 
-      const newSuggestion: Array<IJsonStructure> | undefined = DISCORD_URL
-        ? [
-            {
-              heading: 'More',
-              id: 'suggestion-header',
-              items: [
-                {
-                  id: 'suggestion',
-                  children:
-                    'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
-                  icon: <QiGift />,
-                  type: 'Link',
-                  onClick: () => window.open(DISCORD_URL, '_blank'),
-                },
-              ],
-            },
-          ]
-        : undefined
-
-      const filteredItemsWithSearch = [
-        ...searchSuggestion,
-        ...filterItems(
-          contextualItems({
-            currentEmailBoxHasEmails,
-            dispatch,
-            emailList,
-            isFlexibleFlowActive,
-            labelIds,
-            location,
-            selectedEmails,
-          }),
-          searchValue ?? ''
-        ),
-        // ...introduction,
-      ]
-      if (newSuggestion) {
-        filteredItemsWithSearch.push(...newSuggestion)
-      }
-      return filteredItemsWithSearch
+    const filteredItemsWithSearch = [
+      ...searchSuggestion,
+      ...filterItems(
+        contextualItems({
+          currentEmailBoxHasEmails,
+          dispatch,
+          emailList,
+          isFlexibleFlowActive,
+          labelIds,
+          location,
+          selectedEmails,
+        }),
+        searchValue
+      ),
+      // ...introduction,
+    ]
+    if (newSuggestion) {
+      filteredItemsWithSearch.push(...newSuggestion)
     }
-    return filterItems(
-      contextualItems({
-        currentEmailBoxHasEmails,
-        dispatch,
-        emailList,
-        isFlexibleFlowActive,
-        labelIds,
-        location,
-        selectedEmails,
-      }),
-      searchValue ?? ''
-    )
+    return filteredItemsWithSearch
+
+
   }, [searchValue])
 
   return (

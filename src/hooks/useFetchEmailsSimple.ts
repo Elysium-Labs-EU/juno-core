@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import * as global from 'constants/globalConstants'
 import { fetchEmailsSimple } from 'store/emailListSlice'
@@ -13,29 +13,28 @@ import { selectIsFlexibleFlowActive } from 'store/utilsSlice'
  * @return {void} sends the response to the Redux state
  */
 
-let timestampLastFired = 0
-
 export default function useFetchEmailsSimple() {
+  const dispatch = useAppDispatch()
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
   const loadedInbox = useAppSelector(selectLoadedInbox)
-  const dispatch = useAppDispatch()
+  const timestampLastFired = useRef(0)
 
   useEffect(() => {
     // Only preload the messages when the strict flow is active
     if (
-      (timestampLastFired === 0 ||
-        timestampLastFired - Date.now() > global.MIN_DELAY_REFRESH) &&
+      (timestampLastFired.current === 0 ||
+        timestampLastFired.current - Date.now() > global.MIN_DELAY_REFRESH) &&
       !isFlexibleFlowActive &&
       !loadedInbox.includes(global.INBOX_LABEL)
     ) {
-      timestampLastFired = Date.now()
+      timestampLastFired.current = Date.now()
       const params = {
         labelIds: [global.INBOX_LABEL],
         maxResults: 10,
         nextPageToken: null,
       }
 
-      dispatch(fetchEmailsSimple(params))
+      void dispatch(fetchEmailsSimple(params))
     }
   }, [isFlexibleFlowActive, loadedInbox])
 }

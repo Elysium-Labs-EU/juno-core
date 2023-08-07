@@ -17,13 +17,13 @@ import {
 } from 'store/contactsSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { TContact } from 'store/storeTypes/contactsTypes'
-import emailValidation from 'utils/emailValidation'
+import { emailValidationArray } from 'utils/emailValidation'
 
 import StyledTextField from './EmailInputStyles'
 import type {
-  IEmailInputProps,
-  IFetchContacts,
-  IHandleIncompleteInput,
+  EmailInputProps,
+  FetchContacts,
+  HandleIncompleteInput,
 } from './EmailInputTypes'
 
 // TODO: Check contactsSlice to unduplicate the code.
@@ -31,14 +31,14 @@ const fetchContacts = async ({
   inputValue,
   dispatch,
   setCompletedSearch,
-}: IFetchContacts) => {
+}: FetchContacts) => {
   const params = {
     query: inputValue,
     readMask: 'emailAddresses,names',
   }
   try {
     const responseQueryContacts = await contactApi().queryContacts(params)
-    if (
+    if (responseQueryContacts &&
       'data' in responseQueryContacts &&
       responseQueryContacts.status === 200
     ) {
@@ -60,7 +60,7 @@ const fetchContacts = async ({
   }
 }
 
-const filterOptions: any = (
+const filterOptions = (
   options: Array<TContact>,
   { inputValue }: { inputValue: string }
 ) => matchSorter(options, inputValue, { keys: ['name', 'emailAddress'] })
@@ -74,43 +74,39 @@ const EmailInput = ({
   setInputValue,
   valueState,
   willAutoFocus,
-}: IEmailInputProps) => {
+}: EmailInputProps) => {
   const [open, setOpen] = useState(false)
   const [options, setOptions] = useState<readonly TContact[]>([])
   const [completedSearch, setCompletedSearch] = useState(true)
-  const debouncedInputValue: string = useDebounce(inputValue, 500)
-  const availableContacts: TContact[] = useAppSelector(selectAllContacts)
+  const debouncedInputValue = useDebounce(inputValue, 500)
+  const availableContacts = useAppSelector(selectAllContacts)
   const contactsLoaded = useAppSelector(selectContactsLoaded)
   const dispatch = useAppDispatch()
 
   // Wait for fetching new results, if the current query already has some results. Only search for more after 1 sec.
   useEffect(() => {
-    let mounted = true
     if (
       debouncedInputValue &&
       debouncedInputValue.length > 1 &&
       !completedSearch
     ) {
-      ;(() => {
-        const foundResults = filterOptions(availableContacts, {
+      ; (() => {
+        const foundResults = availableContacts ? filterOptions(availableContacts, {
           inputValue: debouncedInputValue,
-        })
+        }) : []
         if (foundResults.length === 0) {
-          fetchContacts({ dispatch, inputValue, setCompletedSearch })
+          void fetchContacts({ dispatch, inputValue, setCompletedSearch })
         }
         if (foundResults.length > 0) {
           setTimeout(
-            () => fetchContacts({ dispatch, inputValue, setCompletedSearch }),
+            () => void fetchContacts({ dispatch, inputValue, setCompletedSearch }),
             1000
           )
         }
       })()
     }
-    if (mounted) {
+    if (availableContacts) {
       setOptions(availableContacts)
-    }
-    return () => {
-      mounted = false
     }
   }, [debouncedInputValue, contactsLoaded, completedSearch])
 
@@ -129,12 +125,12 @@ const EmailInput = ({
 
   // If user changes focus and there is incomplete input, attempt to complete it.
   const handleIncompleteInput = useCallback(
-    (incompleteProps: IHandleIncompleteInput) => {
+    (incompleteProps: HandleIncompleteInput) => {
       const inputObject = {
         name: incompleteProps.inputValue,
         emailAddress: incompleteProps.inputValue,
       }
-      const validation = emailValidation([inputObject])
+      const validation = emailValidationArray([inputObject])
       if (validation) {
         handleChange({
           newValue: [...valueState, inputObject],
@@ -147,7 +143,7 @@ const EmailInput = ({
 
   // Clear input when a new contact chip is created.
   useEffect(() => {
-    if (valueState) {
+    if (valueState.length > 0) {
       setInputValue('')
     }
   }, [valueState])
@@ -168,36 +164,40 @@ const EmailInput = ({
         setOpen(false)
         handleIncompleteInput({ id, inputValue })
       }}
-      value={valueState ?? []}
+      value={valueState}
       isOptionEqualToValue={(option, value) =>
         option.emailAddress === value.emailAddress
       }
-      getOptionLabel={(option: any) =>
-        `${option.name} <${option.emailAddress}>`
-      }
+      getOptionLabel={(option) => {
+        if (typeof option === 'string') {
+          return option
+        }
+        return `${option.name} <${option.emailAddress}>`
+      }}
       options={options}
       freeSolo
-      onChange={(event: any, newValue: any) =>
-        handleChange({ newValue, fieldId: id })
-      }
+      onChange={(_, newValue) => {
+        const validatedEmails = emailValidationArray(newValue)
+        if (!validatedEmails || validatedEmails.length === 0) {
+          return
+        }
+        handleChange({ newValue: validatedEmails, fieldId: id })
+      }}
       inputValue={inputValue}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue)
       }}
       renderTags={(value: readonly TContact[], getTagProps) =>
         value.map((option: TContact, index: number) => {
-          if (option) {
-            return (
-              <RecipientChip
-                key={option.emailAddress}
-                option={option}
-                getTagProps={getTagProps}
-                handleDelete={handleDelete}
-                index={index}
-              />
-            )
-          }
-          return null
+          return (
+            <RecipientChip
+              key={option.emailAddress}
+              option={option}
+              getTagProps={getTagProps}
+              handleDelete={handleDelete}
+              index={index}
+            />
+          )
         })
       }
       renderInput={(params) => (

@@ -25,7 +25,8 @@ const handleFetchedAttachment = (
       fetchedAttachment.data !== null &&
       'data' in fetchedAttachment.data
     ) {
-      const base64Data = fetchedAttachment?.data?.data
+      const base64Data = fetchedAttachment.data.data
+      if (typeof base64Data !== 'string') { return FAIL_RESPONSE_OBJECT }
       const blobData = base64toBlob({ base64Data, mimeType })
       const blobUrl = URL.createObjectURL(blobData)
       return { success: true, message: null, blobUrl, mimeType }

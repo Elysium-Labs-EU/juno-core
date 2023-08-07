@@ -16,11 +16,11 @@ import getEmailListIndex from 'utils/getEmailListIndex/getEmailListIndex'
 
 import RenderEmailList from './RenderEmailList'
 
-interface IEmailList {
+interface EmailListProps {
   hasLargeHeader?: boolean
 }
 
-interface ILabeledInbox {
+interface LabeledInboxProps {
   activeEmailListIndex: number
   emailList: TEmailListState['emailList']
   hasLargeHeader: boolean
@@ -30,8 +30,8 @@ const LabeledInbox = ({
   emailList,
   activeEmailListIndex,
   hasLargeHeader,
-}: ILabeledInbox) => {
-  const specificEmailList = emailList[activeEmailListIndex]
+}: LabeledInboxProps) => {
+  const specificEmailList = emailList?.[activeEmailListIndex]
   if (specificEmailList) {
     // Show the list of emails that are connected to the labelId mailbox.
     return (
@@ -44,7 +44,7 @@ const LabeledInbox = ({
   return <EmptyState />
 }
 
-const EmailList = ({ hasLargeHeader = false }: IEmailList) => {
+const EmailList = ({ hasLargeHeader = false }: EmailListProps) => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   // const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)

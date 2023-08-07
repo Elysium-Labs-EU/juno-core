@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 
 import CustomAttentionButton from 'components/Elements/Buttons/CustomAttentionButton'
-import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import { INBOX_LABEL, LOAD_STATE_MAP } from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useFetchEmailsSimple from 'hooks/useFetchEmailsSimple'
@@ -49,9 +48,7 @@ const InboxSortOption = () => {
 
   const resultMap = {
     [LOAD_STATE_MAP.loaded]: totalThreads > 0 && `(${totalThreads})`,
-    [LOAD_STATE_MAP.loading]: totalThreads > 0 && (
-      <StyledCircularProgress size={10} />
-    ),
+    [LOAD_STATE_MAP.loading]: totalThreads > 0 && `(${totalThreads})`,
     [LOAD_STATE_MAP.error]: undefined,
     [LOAD_STATE_MAP.idle]: undefined,
   }
@@ -61,7 +58,7 @@ const InboxSortOption = () => {
       emailList,
       labelIds: [INBOX_LABEL],
     })
-    dispatch(
+    void dispatch(
       activateInboxSort({
         alternateEmailListIndex: emailListIndex,
         onActivateAdditionalFns: () => {
@@ -73,7 +70,7 @@ const InboxSortOption = () => {
   }, [dispatch, emailList])
 
   const handleEventFlexibleFlow = useCallback(() => {
-    dispatch(activateInboxSort({}))
+    void dispatch(activateInboxSort({}))
   }, [dispatch])
 
   useKeyboardShortcut({
@@ -92,8 +89,8 @@ const InboxSortOption = () => {
     if (isFlexibleFlowActive) {
       return (
         isLoading ||
-        activeEmailListIndex < 0 ||
-        emailList[activeEmailListIndex]?.threads.length === 0
+        activeEmailListIndex === -1 ||
+        totalThreads === 0
       )
     }
     return isLoading || totalThreads === 0
@@ -102,7 +99,7 @@ const InboxSortOption = () => {
   const selectLabel = useCallback(() => {
     if (isFlexibleFlowActive) {
       if (
-        selectedEmails.selectedIds.length > 0 &&
+        selectedEmails && selectedEmails.selectedIds.length > 0 &&
         selectedEmails.labelIds.includes(INBOX_LABEL)
       ) {
         return (
@@ -140,10 +137,6 @@ const InboxSortOption = () => {
         icon={<QiSort color="var(--color-black)" size={20} />}
         dataCy="inbox-sort-button"
       />
-      {/* TODO: Complete InboxSortPopper options dropdown */}
-      {/* {!isFlexibleFlowActive && <InboxSortPopper />} */}
-
-      {/* TODO: Delete if implmenting dropdown options */}
       {!isFlexibleFlowActive && <InboxRefresh />}
     </>
   )

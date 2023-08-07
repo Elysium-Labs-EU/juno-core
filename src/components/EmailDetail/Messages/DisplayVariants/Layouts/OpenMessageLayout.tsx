@@ -10,7 +10,7 @@ import EmailAttachment from 'components/EmailDetail/Attachment/EmailAttachment'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import { EMAIL_BODY_VISIBLE, SEARCH_LABEL } from 'constants/globalConstants'
 
-import type { IOpenMessageLayout } from './LayoutTypes'
+import type { OpenMessageLayoutProps } from './LayoutTypes'
 import EmailDetailBody from '../../EmailDetailBody/EmailDetailBody'
 import RemovedTrackers from '../../RemovedTrackers/RemovedTrackers'
 import LinkedContacts from '../Recipients/LinkedContacts'
@@ -27,7 +27,7 @@ const OpenMessageLayout = ({
   senderNameFull,
   senderNamePartial,
   specificEmailOptions = undefined,
-}: IOpenMessageLayout) => (
+}: OpenMessageLayoutProps) => (
   <S.EmailOpenWrapper isDraft={isDraft} hideDraft={hideMessage}>
     {draftHeaderControls || null}
     <Stack direction="vertical" spacing="huge">
@@ -52,7 +52,7 @@ const OpenMessageLayout = ({
           <EmailHasAttachmentSimple files={message.payload.files} />
 
           {labelIds && labelIds.includes(SEARCH_LABEL) ? (
-            <EmailLabel labelNames={message.labelIds} />
+            <EmailLabel labelIds={message.labelIds} />
           ) : null}
 
           <TimeStamp threadTimeStamp={message.internalDate} />
@@ -73,14 +73,12 @@ const OpenMessageLayout = ({
           width: '100%',
         }}
       />
-      {message.payload ? (
-        <S.EmailBody>
-          <EmailDetailBody
-            threadDetailBody={message.payload}
-            detailBodyCSS={EMAIL_BODY_VISIBLE}
-          />
-        </S.EmailBody>
-      ) : null}
+      <S.EmailBody>
+        <EmailDetailBody
+          threadDetailBody={message.payload}
+          detailBodyCSS={EMAIL_BODY_VISIBLE}
+        />
+      </S.EmailBody>
       <EmailAttachment message={message} />
     </Stack>
   </S.EmailOpenWrapper>

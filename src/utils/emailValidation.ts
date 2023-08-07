@@ -1,7 +1,15 @@
 import type { TContact } from 'store/storeTypes/contactsTypes'
 
+import { convertToContact } from './convertToContact'
+
 const regexTest =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
+const isValidEmailString = (emailEntry: string) => regexTest.test(emailEntry)
+
+const isValidEmailInContact = (emailEntry: TContact) =>
+  emailEntry.emailAddress ? regexTest.test(emailEntry.emailAddress) : false
+
 
 /**
  * @function emailValidation
@@ -9,19 +17,38 @@ const regexTest =
  * @returns - the input if validation is succesful, otherwise returns false.
  */
 
-const emailValidation = (email: Array<TContact>) => {
-  if (Array.isArray(email)) {
-    const isValidEmail = (emailEntry: TContact) =>
-      emailEntry.emailAddress ? regexTest.test(emailEntry.emailAddress) : false
-    const arrayTestResult = email.every(isValidEmail)
-    if (arrayTestResult) {
-      return email
+
+export const emailValidationArray = (email: Array<TContact | string>) => {
+  const invalidEmails: Array<string | Record<string, unknown>> = []
+  const validEmails: Array<TContact> = []
+
+  for (const entry of email) {
+    if (typeof entry === 'string') {
+      if (isValidEmailString(entry)) {
+        validEmails.push(convertToContact(entry))
+      } else {
+        invalidEmails.push(entry)
+      }
+      return
+    }
+    if (entry instanceof Object) {
+      if (isValidEmailInContact(entry)) {
+        validEmails.push(entry)
+      } else {
+        invalidEmails.push(entry)
+      }
     }
   }
-  if (typeof email === 'string' && regexTest.test(email)) {
-    return email
-  }
-  return false
+
+  // if (invalidEmails.length > 0) {
+  //   return null
+  // }
+  return validEmails
 }
 
-export default emailValidation
+export const emailValidationString = (email: string) => {
+  if (isValidEmailString(email)) {
+    return convertToContact(email)
+  }
+  return null
+}

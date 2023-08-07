@@ -23,10 +23,10 @@ import * as global from 'constants/globalConstants'
 import useDebounce from 'hooks/useDebounce'
 import isEqual from 'utils/isEqual/isEqual'
 import removeSignature from 'utils/removeSignature'
+import stringSimilarity from 'utils/stringSimilarity'
 
 import MenuBar from './BodyFieldMenubar'
 import * as S from './BodyFieldStyles'
-import stringSimilarity from 'utils/stringSimilarity'
 
 /**
  * @param composeValue - the body value fetched from an external source.

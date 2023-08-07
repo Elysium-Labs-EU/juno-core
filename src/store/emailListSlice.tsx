@@ -57,7 +57,7 @@ export const fetchEmailsSimple = createAsyncThunk(
 
 export const initialState: TEmailListState = Object.freeze({
   activeEmailListIndex: -1,
-  emailList: [],
+  emailList: null,
   isFetching: false,
   searchList: null,
   selectedEmails: { labelIds: [], selectedIds: [] },
@@ -84,9 +84,9 @@ export const handleAdditionToExistingEmailArray = ({
   nextPageToken,
   q,
 }: HandleAdditionToExistingEmailArray) => {
+  const completeCount: number = threads.length
   const tempArray: Array<TThreadObject> = []
   let activeCount: number = 0
-  const completeCount: number = threads.length
   const existingThreads = new Map(
     targetEmailListObject.threads.map((thread) => [thread.id, thread])
   )
@@ -132,8 +132,10 @@ export const handleAdditionToExistingEmailArray = ({
       q,
     }
     targetEmailListObject = newObject
-    if (arrayIndex && arrayIndex > -1) {
-      state.emailList[arrayIndex] = targetEmailListObject
+    if (arrayIndex !== undefined && arrayIndex > -1) {
+      if (state.emailList?.[arrayIndex]) {
+        state.emailList[arrayIndex] = targetEmailListObject
+      }
     } else {
       state.searchList = targetEmailListObject
     }
@@ -154,8 +156,8 @@ export const handleEmailListChange = ({
   }
   // Find emailList sub-array index
   const [firstLabel] = labels
-  const arrayIndex = state.emailList.findIndex((emailArray) =>
-    firstLabel ? emailArray.labels.includes(firstLabel) : -1
+  const arrayIndex = state.emailList?.findIndex((emailArray) =>
+    firstLabel ? emailArray.labels?.includes(firstLabel) : -1
   )
   if (threads.length) {
     // If the input contains a q - it is search request.
@@ -188,8 +190,8 @@ export const handleEmailListChange = ({
     }
     // If emailList sub-array index exists, if exists concat threads.
     // If not, push the new emailList
-    if (arrayIndex > -1) {
-      const targetEmailListObject = state.emailList[arrayIndex]
+    if (arrayIndex && arrayIndex > -1) {
+      const targetEmailListObject = state.emailList?.[arrayIndex]
       // It loops through all the newly fetched threads, and if check what to do with this.
       // Either push it to the tempArray, or update the entry in the emailList state.
       if (targetEmailListObject) {
@@ -213,7 +215,7 @@ export const handleEmailListChange = ({
         labels,
         threads: deduplicateItems(sortedThreads),
       }
-      state.emailList.push(sortedEmailList)
+      state.emailList?.push(sortedEmailList)
     }
     return
   }
@@ -223,7 +225,7 @@ export const handleEmailListChange = ({
       threads: [],
       nextPageToken: null,
     }
-    state.emailList.push(emptyResultObject)
+    state.emailList?.push(emptyResultObject)
   }
 }
 
@@ -242,16 +244,20 @@ const emailListSlice = createSlice({
             const { event, id } = loopingPayload
             if (event === 'add') {
               const currentState = state.selectedEmails
-              currentState.selectedIds.push(id)
-              const uniqueIds = [...new Set(currentState.selectedIds)]
-              state.selectedEmails.selectedIds = uniqueIds
+              if (currentState) {
+                currentState.selectedIds.push(id)
+                const uniqueIds = [...new Set(currentState.selectedIds)]
+                state.selectedEmails = { ...currentState, selectedIds: uniqueIds }
+              }
             }
             if (event === 'remove') {
               const currentState = state.selectedEmails
-              const filteredResult = currentState.selectedIds.filter(
-                (selectedId) => selectedId !== id
-              )
-              state.selectedEmails.selectedIds = filteredResult
+              if (currentState) {
+                const filteredResult = currentState.selectedIds.filter(
+                  (selectedId) => selectedId !== id
+                )
+                state.selectedEmails = { ...currentState, selectedIds: filteredResult }
+              }
             }
           }
         }
@@ -260,11 +266,8 @@ const emailListSlice = createSlice({
         const [firstPayload] = payload
         if (firstPayload) {
           if (
-            state.selectedEmails.labelIds &&
-            multipleIncludes(
-              firstPayload.labelIds,
-              state.selectedEmails.labelIds
-            )
+            state.selectedEmails?.labelIds &&
+            multipleIncludes(firstPayload.labelIds, state.selectedEmails.labelIds)
           ) {
             loopOverPayload()
             return
@@ -310,7 +313,7 @@ const emailListSlice = createSlice({
       { payload }: PayloadAction<{ threadId: string }>
     ) => {
       const { threadId } = payload
-      const emailList = state.emailList ?? {}
+      const emailList = state.emailList ?? []
       const currentEmailList = emailList[state.activeEmailListIndex]
       if (currentEmailList) {
         currentEmailList.threads = currentEmailList.threads.filter(
@@ -329,10 +332,10 @@ const emailListSlice = createSlice({
       }: {
         threadId: string
       } = payload
-      const currentState = state.emailList
+      const currentState = state.emailList ?? []
       const currentStateEmailListObject = currentState[4]
       const newStateEmailListObject =
-        state.emailList[state.activeEmailListIndex]
+        state.emailList?.[state.activeEmailListIndex]
       // Index 4 is used, this is the static predefined array based on BASE_ARRAY
       if (currentStateEmailListObject && newStateEmailListObject) {
         currentStateEmailListObject.threads =
@@ -352,7 +355,7 @@ const emailListSlice = createSlice({
       { payload }: PayloadAction<{ threadId: string; messageId: string }>
     ) => {
       const { threadId, messageId } = payload
-      const currentState = state.emailList ?? {}
+      const currentState = state.emailList ?? []
       const thread = currentState[state.activeEmailListIndex]?.threads.find(
         (t) => t.id === threadId
       )
@@ -373,7 +376,7 @@ const emailListSlice = createSlice({
     ) => {
       const { messageIds } = payload
       const currentState = state.emailList
-      const threadList = currentState[state.activeEmailListIndex]?.threads
+      const threadList = currentState?.[state.activeEmailListIndex]?.threads
       if (currentState && threadList) {
         threadList.filter(
           (thread) => !messageIds.some((id) => thread.id.startsWith(id))
@@ -503,35 +506,33 @@ export const loadEmailDetails =
         if (threads.length > 0) {
           const lastMessage = threads[0]?.messages[threads[0].messages.length - 1]
           if (lastMessage && lastMessage.labelIds.includes(global.DRAFT_LABEL)) {
-            const labelNames = lastMessage.labelIds
-            if (labelNames) {
-              const legalLabels = onlyLegalLabelObjects({
-                storageLabels,
-                labelNames,
-              })
-              if (legalLabels.length > 0) {
-                for (const label of legalLabels) {
-                  if (label.id) {
-                    dispatch(
-                      listAddEmailList({
-                        labels: [label.id],
-                        threads,
-                        nextPageToken: nextPageToken ?? null,
-                      })
-                    )
-                  } else {
-                    toast.custom((t) => (
-                      <CustomToast
-                        specificToast={t}
-                        title="Error updating label."
-                        variant="error"
-                      />
-                    ))
-                  }
+            const { labelIds } = lastMessage
+            const legalLabels = onlyLegalLabelObjects({
+              storageLabels,
+              labelIds,
+            })
+            if (legalLabels.length > 0) {
+              for (const label of legalLabels) {
+                if (label.id) {
+                  dispatch(
+                    listAddEmailList({
+                      labels: [label.id],
+                      threads,
+                      nextPageToken: nextPageToken ?? null,
+                    })
+                  )
+                } else {
+                  toast.custom((t) => (
+                    <CustomToast
+                      specificToast={t}
+                      title="Error updating label."
+                      variant="error"
+                    />
+                  ))
                 }
               }
             }
-          } else {
+          } else if (labels) {
             dispatch(
               listAddEmailList({
                 labels,
@@ -546,7 +547,7 @@ export const loadEmailDetails =
         } else {
           if (
             !getState().base.baseLoaded &&
-            labels.some((val) => !getState().labels.loadedInbox.includes(val))
+            labels?.some((val) => !getState().labels.loadedInbox.includes(val))
           ) {
             dispatch(setLoadedInbox(labels))
           }
@@ -583,7 +584,7 @@ export const updateEmailLabel =
         const staticActiveEmailList =
           activeEmailListIndex === -1
             ? searchList
-            : emailList[activeEmailListIndex]
+            : emailList?.[activeEmailListIndex]
 
         if (
           staticActiveEmailList &&
@@ -693,6 +694,16 @@ export const updateEmailLabelBatch =
     (dispatch, getState) => {
       try {
         const { selectedEmails } = getState().email
+        if (!selectedEmails) {
+          toast.custom((t) => (
+            <CustomToast
+              specificToast={t}
+              title="Error updating label."
+              variant="error"
+            />
+          ))
+          return
+        }
         if (
           (removeLabelIds && !removeLabelIds.includes(global.UNREAD_LABEL)) ||
           request.delete

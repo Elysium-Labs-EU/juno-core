@@ -9,14 +9,14 @@ import type { TLabelState } from 'store/storeTypes/labelsTypes'
  * @returns {number} the index of the threadList object in emailList that contains a label in labelIds, or -1 if no such threadList exists
  */
 
-interface IEmailListFilteredByLabel {
+interface EmailListFilteredByLabel {
   emailList: TEmailListState['emailList']
   labelIds: TLabelState['labelIds']
 }
 
-const getEmailListIndex = (props: IEmailListFilteredByLabel): number => {
+const getEmailListIndex = (props: EmailListFilteredByLabel): number => {
   const { emailList, labelIds } = props
-  if (emailList.length === 0 || labelIds.length === 0) {
+  if (!emailList || emailList.length === 0 || labelIds.length === 0) {
     return -1
   }
   const labelIdSet = new Set(labelIds)

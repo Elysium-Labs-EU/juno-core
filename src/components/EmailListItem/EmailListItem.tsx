@@ -45,7 +45,7 @@ export interface IExtractEmailData {
   memoizedDraftOrRegular: TThreadObject
 }
 
-interface IEmailListItem {
+interface EmailListItemProps {
   activeIndex: number
   email: TThreadObject
   index: number
@@ -59,7 +59,7 @@ const EmailListItem = ({
   index,
   showCheckbox,
   showLabel,
-}: IEmailListItem) => {
+}: EmailListItemProps) => {
   const [isFocused, setIsFocused] = useState(false)
   const { emailAddress } = useAppSelector(selectProfile)
   const inSearch = useAppSelector(selectInSearch)
@@ -127,7 +127,7 @@ const EmailListItem = ({
 
   const handleOpenEvent = useCallback(() => {
     dispatch(setViewIndex(index))
-    dispatch(
+    void dispatch(
       openEmail({
         id,
         email: memoizedDraftOrRegular,
@@ -170,14 +170,14 @@ const EmailListItem = ({
           )}
           <S.CellCheckbox
             inSelect={
-              selectedEmails.selectedIds.length > 0 &&
-              selectedEmails.labelIds.length > 0 &&
-              multipleIncludes(selectedEmails.labelIds, labelIds)
+              selectedEmails ? selectedEmails.selectedIds.length > 0 &&
+                selectedEmails.labelIds.length > 0 &&
+                multipleIncludes(selectedEmails.labelIds, labelIds) : false
             }
           >
             {showCheckbox && (
               <CustomCheckbox
-                isChecked={selectedEmails.selectedIds.includes(id)}
+                isChecked={selectedEmails ? selectedEmails.selectedIds.includes(id) : false}
                 onChange={handleCheckBox}
               />
             )}
@@ -202,7 +202,7 @@ const EmailListItem = ({
           </S.CellName>
           {showLabel && (
             <S.CellLabels onClick={handleOpenEvent}>
-              <EmailLabel labelNames={memoizedEmailLabels} />
+              <EmailLabel labelIds={memoizedEmailLabels} />
             </S.CellLabels>
           )}
           <S.CellMessage onClick={handleOpenEvent} aria-hidden="true">
@@ -215,7 +215,7 @@ const EmailListItem = ({
                   {draft.DRAFT_SNIPPET_INDICATOR}
                 </Span>
               )}
-              {email.messages && <MessageCount messages={email.messages} />}
+              <MessageCount messages={email.messages} />
               <Span>{memoizedSubject}</Span>
               <Snippet snippet={memoizedSnippet} />
             </S.TruncatedDiv>

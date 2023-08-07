@@ -10,7 +10,7 @@ const messageApi = () => ({
     ),
 
   sendMessage: ({ data, timeOut }: { data: FormData; timeOut: number }) =>
-    fetchWrapper<TGmailV1SchemaMessageSchema>(
+    fetchWrapper(
       `/api/send-message`,
       {
         method: 'POST',

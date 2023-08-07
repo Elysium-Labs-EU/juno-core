@@ -2,14 +2,15 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import * as global from 'constants/globalConstants'
 import type { TContact } from 'store/storeTypes/contactsTypes'
-import emailValidation from 'utils/emailValidation'
+import { emailValidationArray } from 'utils/emailValidation'
 import isEqual from 'utils/isEqual/isEqual'
 
-import type { IContactField } from './ComposeFieldTypes'
+import type { ContactFieldProps } from './ComposeFieldTypes'
+import EmailInput from './Generic/EmailInput/EmailInput'
 import RecipientField from './Generic/RecipientField'
-import type { IRecipientsList } from '../ComposeEmailTypes'
+import type { RecipientsList } from '../ComposeEmailTypes'
 
-const recipientListTransform = (recipientListRaw: IRecipientsList) => ({
+const recipientListTransform = (recipientListRaw: RecipientsList) => ({
   fieldId: recipientListRaw.fieldId,
   newValue: recipientListRaw.newValue.map((item: string | TContact) =>
     typeof item === 'string' ? { name: item, emailAddress: item } : item
@@ -26,7 +27,7 @@ const ContactField = ({
   setHasInteracted,
   showField,
   updateComposeEmail,
-}: IContactField) => {
+}: ContactFieldProps) => {
   const [inputValue, setInputValue] = useState<string>('')
   const [value, setValue] = useState<Array<TContact>>([])
   const [error, setError] = useState<boolean>(false)
@@ -59,9 +60,9 @@ const ContactField = ({
   )
 
   const handleChange = useCallback(
-    (recipientListRaw: IRecipientsList) => {
+    (recipientListRaw: RecipientsList) => {
       const recipientList = recipientListTransform(recipientListRaw)
-      const validation = emailValidation(recipientList.newValue)
+      const validation = emailValidationArray(recipientList.newValue)
       if (validation) {
         setValue(recipientList.newValue)
         error && setError(false)
@@ -94,14 +95,19 @@ const ContactField = ({
         error={error}
         fieldId={id}
         fieldLabel={label}
-        handleChangeRecipients={handleChange}
-        handleDelete={handleDelete}
-        inputValue={inputValue}
         recipientFieldValue={value}
-        registerOnKeyDown={registerOnKeyDown}
-        setInputValue={setInputValue}
-        showField={showField}
-      />
+
+      ><EmailInput
+          id={id}
+          handleChange={handleChange}
+          handleDelete={handleDelete}
+          inputValue={inputValue}
+          registerOnKeyDown={registerOnKeyDown}
+          setInputValue={setInputValue}
+          valueState={value}
+          willAutoFocus={showField &&
+            Object.keys(value).length === 0}
+        /></RecipientField>
     ),
     [dataCy, error, handleChange, id, inputValue, label, value]
   )

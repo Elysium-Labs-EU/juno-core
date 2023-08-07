@@ -91,7 +91,6 @@ const InlineThreadActionsRegular = ({
   const memoizeMarkToDoButton = useMemo(() => {
     const staticAllMessageLabelIds = getAllLegalMessagesLabelIds()
     return (
-      staticAllMessageLabelIds &&
       !staticAllMessageLabelIds.some(
         (item) =>
           item ===
@@ -161,10 +160,9 @@ const InlineThreadActionsRegular = ({
 
   return (
     <S.Wrapper data-testid="email-regular-inline-actions" isFocused={isFocused}>
-      {threadId && labelIds && (
+      {threadId && (
         <Stack spacing="large">
           {memoizedReplyButton}
-          {/* {memoizedForwardButton} */}
           {memoizeMarkToDoButton}
           {memoizedArchiveButton}
           {memoizedDeleteButton}

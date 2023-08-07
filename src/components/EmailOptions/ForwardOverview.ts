@@ -11,7 +11,7 @@ interface IForwardOverview {
 const ForwardOverview = ({ id, emailIndex, dispatch }: IForwardOverview) => {
   dispatch(setIsForwarding(true))
   dispatch(setViewIndex(emailIndex))
-  dispatch(openEmail({ id, isForwarding: true }))
+  void dispatch(openEmail({ id, isForwarding: true }))
 }
 
 export default ForwardOverview

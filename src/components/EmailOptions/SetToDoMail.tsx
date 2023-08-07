@@ -34,7 +34,7 @@ const setToDoMail = ({
       ),
       addLabelIds: [toDoLabel.id],
     }
-    dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
+    void dispatch(updateEmailLabel({ threadId, request, labelIds: onlyLegalLabels }))
   } else {
     toast.custom((t) => (
       <CustomToast

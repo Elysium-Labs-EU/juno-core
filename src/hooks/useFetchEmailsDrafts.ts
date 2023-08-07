@@ -27,7 +27,7 @@ const handleRequestTiming = (
   if (
     !timestampLastFiredWithLabel.timeStamp ||
     firedTimeStamp - timestampLastFiredWithLabel.timeStamp >
-      global.MIN_DELAY_REFRESH
+    global.MIN_DELAY_REFRESH
   ) {
     // If the request has the same labelIds, but is outside the set threshold to fire, allow the request to proceed
     timestampLastFiredWithLabel = { labelIds, timeStamp: firedTimeStamp }
@@ -54,7 +54,6 @@ export default function useFetchEmailsDrafts(
     const allowedToFire = handleRequestTiming(labelIds, firedTimeStamp)
 
     if (
-      labelIds &&
       labelIds.length > 0 &&
       allowedToFire &&
       !labelIds.includes(global.SEARCH_LABEL)
@@ -83,7 +82,7 @@ export default function useFetchEmailsDrafts(
           labelIds,
           timeStamp: Date.now(),
         }
-        dispatch(refreshEmailFeed())
+        void dispatch(refreshEmailFeed())
       }
       if (labelIds.includes(global.DRAFT_LABEL)) {
         draftPromise = dispatch(fetchDrafts())

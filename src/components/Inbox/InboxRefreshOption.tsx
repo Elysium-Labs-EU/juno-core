@@ -28,11 +28,11 @@ const rotatingIcon = css`
   animation: ${rotate} 1s ease infinite;
 `
 
-interface IRotatingIcon {
+interface RotatingIcon {
   disableRefresh: boolean
 }
 
-const RotatingIcon = styled.div<IRotatingIcon>`
+const RotatingIcon = styled.div<RotatingIcon>`
   ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
 `
 
@@ -57,7 +57,7 @@ const InboxRefresh = ({
   const dispatch = useAppDispatch()
 
   const handleRefreshTrigger = useCallback(() => {
-    dispatch(refreshEmailFeed())
+    void dispatch(refreshEmailFeed())
   }, [])
 
   useKeyboardShortcut({

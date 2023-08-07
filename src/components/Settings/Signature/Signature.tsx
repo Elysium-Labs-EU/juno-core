@@ -72,7 +72,7 @@ const Signature = () => {
             profile.emailAddress,
             request
           )
-          if (!('data' in response)) {
+          if (!response || !('data' in response)) {
             toast.custom((t) => (
               <CustomToast
                 specificToast={t}
@@ -109,7 +109,7 @@ const Signature = () => {
       debouncedValue !== profile.signature &&
       loadState === global.LOAD_STATE_MAP.loaded
     ) {
-      updateSignature()
+      void updateSignature()
     }
   }, [debouncedValue, profile.signature])
 

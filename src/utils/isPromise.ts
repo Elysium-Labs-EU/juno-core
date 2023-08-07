@@ -1,3 +1,3 @@
-export default function isPromise(promise: any) {
-  return !!promise && typeof promise.then === 'function'
+export default function isPromise(promise: unknown) {
+  return !!promise && promise instanceof Function && 'then' in promise && typeof promise.then === 'function'
 }

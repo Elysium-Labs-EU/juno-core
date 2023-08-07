@@ -23,7 +23,7 @@ const convertToMe = (
 export function convertToContact(
   data: string,
   emailAddress?: TProfile['emailAddress']
-): TContact {
+) {
   const splitted = data.split('<')
   const [first, second] = splitted
   if (splitted.length > 1 && first && second) {

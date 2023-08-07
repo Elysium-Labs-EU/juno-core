@@ -35,7 +35,7 @@ const SelectedOptions = () => {
   }, [])
 
   const handleSelectAll = useCallback(() => {
-    dispatch(selectAllEmailsCurrentInbox())
+    void dispatch(selectAllEmailsCurrentInbox())
   }, [])
 
   const handleArchiveAll = useCallback(() => {
@@ -45,12 +45,12 @@ const SelectedOptions = () => {
       ],
     }
 
-    dispatch(updateEmailLabelBatch({ request }))
+    void dispatch(updateEmailLabelBatch({ request }))
     dispatch(setSelectedEmails([]))
   }, [labelIds])
 
   const handleDeleteAll = useCallback(() => {
-    dispatch(
+    void dispatch(
       updateEmailLabelBatch({
         request: { delete: true },
       })
@@ -65,6 +65,10 @@ const SelectedOptions = () => {
   const handleShowMoreOptions = useCallback(() => {
     dispatch(setInSearch(true))
   }, [])
+
+  if (!selectedEmails) {
+    return null
+  }
 
   return (
     <S.Wrapper>
@@ -81,11 +85,10 @@ const SelectedOptions = () => {
         />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${
-          selectedEmails.selectedIds.length > 1
-            ? EMAILS_SELECTED_PLURAL
-            : EMAILS_SELECTED_SINGLE
-        }`}</S.SelectedLabelsText>
+        <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${selectedEmails.selectedIds.length > 1
+          ? EMAILS_SELECTED_PLURAL
+          : EMAILS_SELECTED_SINGLE
+          }`}</S.SelectedLabelsText>
         {location.pathname !== RoutesConstants.ARCHIVE &&
           (!labelIds.includes(global.DRAFT_LABEL) ? (
             <CustomButton

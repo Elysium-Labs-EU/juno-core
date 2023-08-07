@@ -1,9 +1,10 @@
+import type { ComponentPropsWithoutRef } from 'react'
 import { forwardRef } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Span } from 'styles/globalStyles'
 
-type CustomButton = {
+interface CustomButtonProps extends ComponentPropsWithoutRef<'button'> {
   attention?: boolean
   dataCy?: string
   disabled?: boolean
@@ -12,7 +13,7 @@ type CustomButton = {
   showIconAfterLabel?: boolean
   suppressed?: boolean
   type?: 'submit' | 'reset' | 'button'
-} & React.HTMLAttributes<HTMLButtonElement>
+}
 
 interface Button {
   attention: boolean | undefined
@@ -77,15 +78,15 @@ const InnerButton = styled.div<InnerButton>`
   .icon {
     line-height: 0;
     margin-right: ${({ hasLabel, showIconAfterLabel }) =>
-      hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
+    hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
     margin-left: ${({ hasLabel, showIconAfterLabel }) =>
-      hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
+    hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
 `
 
-const CustomButton = forwardRef<HTMLButtonElement, CustomButton>(
+const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
   (
     {
       attention = false,
@@ -120,16 +121,6 @@ const CustomButton = forwardRef<HTMLButtonElement, CustomButton>(
     </Button>
   )
 )
-
-CustomButton.defaultProps = {
-  attention: false,
-  dataCy: undefined,
-  disabled: false,
-  icon: null,
-  showIconAfterLabel: false,
-  suppressed: false,
-  type: 'button',
-}
 
 CustomButton.displayName = 'CustomButton'
 

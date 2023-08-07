@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react'
 
 import type { TContact } from 'store/storeTypes/contactsTypes'
 
-export interface IContactField {
+export interface ContactFieldProps {
   composeValue?: Array<TContact>
   dataCy?: string
   hasInteracted: boolean

@@ -1,12 +1,11 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable react/button-has-type */
+import type { ComponentPropsWithoutRef } from 'react'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
 
 import type { TAriaHaspopup } from 'globalTypes'
 import { Span } from 'styles/globalStyles'
 
-type CustomIconButton = {
+interface CustomIconButton extends ComponentPropsWithoutRef<'button'> {
   ariaControls?: string | undefined
   ariaExpanded?: boolean | undefined
   ariaHaspopup?: TAriaHaspopup
@@ -16,7 +15,7 @@ type CustomIconButton = {
   icon: JSX.Element
   isactive?: string
   type?: 'submit' | 'reset' | 'button'
-} & React.HTMLAttributes<HTMLButtonElement>
+}
 
 interface Button {
   hoverColor: string | undefined
@@ -73,17 +72,6 @@ const CustomIconButton = forwardRef<HTMLButtonElement, CustomIconButton>(
     </Button>
   )
 )
-
-CustomIconButton.defaultProps = {
-  ariaHaspopup: undefined,
-  ariaControls: undefined,
-  ariaExpanded: undefined,
-  dataCy: undefined,
-  disabled: false,
-  hoverColor: undefined,
-  isactive: 'false',
-  type: 'button',
-}
 
 CustomIconButton.displayName = 'CustomIconButton'
 

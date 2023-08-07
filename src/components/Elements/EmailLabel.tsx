@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import * as global from 'constants/globalConstants'
 import { useAppSelector } from 'store/hooks'
 import { selectStorageLabels } from 'store/labelsSlice'
+import type { TLabelState } from 'store/storeTypes/labelsTypes'
 import capFirstLetterOnly from 'utils/capFirstLetterOnly'
 import { onlyLegalLabelObjects } from 'utils/onlyLegalLabels'
 
@@ -14,11 +15,15 @@ const Wrapper = styled.div`
   }
 `
 
+interface EmailLabelProps {
+  labelIds: TLabelState['labelIds']
+}
+
 // Filter out the Category_ labels and Important labels etc. If there is nothing left, label it as Archive
-const EmailLabel = ({ labelNames }: { labelNames: Array<string> }) => {
+const EmailLabel = ({ labelIds }: EmailLabelProps) => {
   const storageLabels = useAppSelector(selectStorageLabels)
   const staticOnlyLegalLabels = onlyLegalLabelObjects({
-    labelNames,
+    labelIds,
     storageLabels,
   })
 
