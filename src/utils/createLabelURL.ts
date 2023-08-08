@@ -2,12 +2,13 @@ import * as global from 'constants/globalConstants'
 import convertArrayToString from 'utils/convertArrayToString'
 
 const labelURL = (labelIds: Array<string>) => {
-  if (labelIds && labelIds.length > 0) {
-    return convertArrayToString(
-      labelIds.filter((label) => label !== global.UNREAD_LABEL)
-    )
+  if (labelIds.length === 0) {
+    return null
   }
-  return null
+  return convertArrayToString(
+    labelIds.filter((label) => label !== global.UNREAD_LABEL)
+  )
+
 }
 
 export default labelURL

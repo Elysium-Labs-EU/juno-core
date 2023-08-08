@@ -30,7 +30,7 @@ const AttachmentModal = ({
       {fetchedAttachmentData?.mimeType?.includes('image') ? (
         <img
           src={fetchedAttachmentData.blobUrl ?? undefined}
-          alt={attachmentData.filename ?? 'undefined'}
+          alt={attachmentData.filename}
         />
       ) : (
         <Paragraph muted>

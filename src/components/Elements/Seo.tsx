@@ -29,7 +29,7 @@ const Seo = ({
     {/* <meta property="og:image" content={ogImage} /> */}
     <meta property="og:description" content={ogDescription} />
     <meta property="og:url" content={ogUrl} />
-    <meta property="og:type" content={ogType ?? 'website'} />
+    <meta property="og:type" content={ogType} />
   </Helmet>
 )
 

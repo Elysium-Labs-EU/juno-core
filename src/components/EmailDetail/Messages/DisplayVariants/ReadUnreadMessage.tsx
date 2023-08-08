@@ -35,40 +35,36 @@ const ReadUnreadMessage = ({
   setShouldRefreshDetail,
   threadDetail,
 }: IReadMessage) => {
-  const [open, setOpen] = useState<boolean>(message && messageIndex === 0)
+  const [open, setOpen] = useState<boolean>(messageIndex === 0)
   const labelIds = useAppSelector(selectLabelIds)
   const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
   useEffect(() => {
-    let mounted = true
-    if (threadDetail?.messages) {
-      if (threadDetail.messages.length > 1 && mounted) {
-        if (message && message.labelIds.includes(global.UNREAD_LABEL)) {
-          setOpen(true)
-        }
-        if (
-          message &&
-          !Object.prototype.hasOwnProperty.call(message, 'labelIds') &&
-          messageIndex === 0
-        ) {
-          setOpen(true)
-        }
-      }
-      if (threadDetail.messages.length === 1) {
+    if (!threadDetail?.messages) {
+      return
+    }
+    if (threadDetail.messages.length > 1) {
+      if (message.labelIds.includes(global.UNREAD_LABEL)) {
         setOpen(true)
       }
       if (
-        threadDetail.messages.length > 1 &&
-        threadDetail.messages.some((item) =>
-          item.labelIds.includes(global.DRAFT_LABEL)
-        )
+        !Object.prototype.hasOwnProperty.call(message, 'labelIds') &&
+        messageIndex === 0
       ) {
         setOpen(true)
       }
     }
-    return () => {
-      mounted = false
+    if (threadDetail.messages.length === 1) {
+      setOpen(true)
+    }
+    if (
+      threadDetail.messages.length > 1 &&
+      threadDetail.messages.some((item) =>
+        item.labelIds.includes(global.DRAFT_LABEL)
+      )
+    ) {
+      setOpen(true)
     }
   }, [])
 
@@ -76,21 +72,17 @@ const ReadUnreadMessage = ({
    * In case the only other email in this thread isn't visible during opening a Draft in tab view, open it.
    */
   useEffect(() => {
-    let mounted = true
-    if (threadDetail?.messages && !open) {
-      if (
-        isReplying &&
-        threadDetail.messages.length === 2 &&
-        threadDetail.messages.some((item) =>
-          item.labelIds.includes(global.DRAFT_LABEL)
-        ) &&
-        mounted
-      ) {
-        setOpen(true)
-      }
+    if (!threadDetail?.messages || open) {
+      return
     }
-    return () => {
-      mounted = false
+    if (
+      isReplying &&
+      threadDetail.messages.length === 2 &&
+      threadDetail.messages.some((item) =>
+        item.labelIds.includes(global.DRAFT_LABEL)
+      )
+    ) {
+      setOpen(true)
     }
   }, [isReplying, open])
 

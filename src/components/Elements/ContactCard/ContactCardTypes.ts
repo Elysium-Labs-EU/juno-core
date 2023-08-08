@@ -3,7 +3,7 @@ import type { MutableRefObject } from 'react'
 
 import type { TContact } from 'store/storeTypes/contactsTypes'
 
-export interface IContactCard {
+export interface ContactCardProps {
   userEmail: string | undefined | null
   children: JSX.Element
   contact: TContact
@@ -11,8 +11,8 @@ export interface IContactCard {
   placement?: PopperPlacementType
 }
 
-export interface IContactCardPopper
-  extends Pick<IContactCard, 'contact' | 'offset' | 'placement'> {
+export interface ContactCardPopperProps
+  extends Pick<ContactCardProps, 'contact' | 'offset' | 'placement'> {
   contactCardPopperId: string | undefined
   contactCardWrapper: MutableRefObject<HTMLElement | null>
   isHovering: boolean

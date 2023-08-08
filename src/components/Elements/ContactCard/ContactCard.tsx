@@ -12,7 +12,7 @@ import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
 import * as S from './ContactCardStyles'
-import type { IContactCard, IContactCardPopper } from './ContactCardTypes'
+import type { ContactCardProps, ContactCardPopperProps } from './ContactCardTypes'
 import CustomButton from '../Buttons/CustomButton'
 import Stack from '../Stack/Stack'
 
@@ -23,7 +23,7 @@ const NO_NAME = 'No display name'
 export const ContactCardContent = ({
   staticInitials,
   contact,
-}: Pick<IContactCardPopper, 'contact' | 'staticInitials'>) => {
+}: Pick<ContactCardPopperProps, 'contact' | 'staticInitials'>) => {
   const dispatch = useAppDispatch()
   const { name, emailAddress } = contact
 
@@ -97,7 +97,7 @@ const ContactCardPopper = ({
   offset = [20, 10],
   placement = 'bottom-start',
   staticInitials,
-}: IContactCardPopper) => (
+}: ContactCardPopperProps) => (
   <Popper
     id={contactCardPopperId}
     open={isHovering}
@@ -125,7 +125,7 @@ const ContactCard = ({
   offset,
   children,
   placement,
-}: IContactCard) => {
+}: ContactCardProps) => {
   const [isHovering, setIsHovering] = useState(false)
   const cardDelay = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contactCardWrapper = useRef<HTMLElement | null>(null)

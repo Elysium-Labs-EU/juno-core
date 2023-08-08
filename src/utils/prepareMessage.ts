@@ -37,7 +37,7 @@ interface PrepareFormData {
   name: TBaseState['profile']['name']
 }
 
-export async function prepareFormData({
+export function prepareFormData({
   composedEmail,
   emailAddress,
   localDraftDetails,
@@ -74,7 +74,7 @@ export async function prepareFormData({
   formData.append('body', composedEmail.body ?? '')
   formData.append('signature', composedEmail.signature ?? '')
   if (composedEmail.files && composedEmail.files.length > 0) {
-    await prepareFilesForSave({ files: composedEmail.files, formData })
+    prepareFilesForSave({ files: composedEmail.files, formData })
   } else {
     formData.append('files', '')
   }

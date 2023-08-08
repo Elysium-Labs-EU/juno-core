@@ -6,10 +6,10 @@ import type { TContact } from 'store/storeTypes/contactsTypes'
 
 import StyledChip from './RecipientChipStyles'
 
-interface IRecipientChip {
+interface RecipientChipProps {
   option: TContact
   getTagProps?: AutocompleteRenderGetTagProps
-  handleDelete: (data: any) => void
+  handleDelete: (value: TContact) => void
   index: number
 }
 
@@ -35,7 +35,7 @@ const RecipientChip = ({
   getTagProps = undefined,
   handleDelete,
   index,
-}: IRecipientChip) => {
+}: RecipientChipProps) => {
   const [showFull, setShowFull] = useState(false)
 
   const additionalProps = getTagProps ? getTagProps({ index }) : {}

@@ -60,7 +60,6 @@ const EmailDetailOptions = ({
         (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
       )
       if (
-        getOnlyLegalLabels &&
         !getOnlyLegalLabels.some(
           (item) =>
             item ===
@@ -118,8 +117,8 @@ const EmailDetailOptions = ({
           {memoizedTrashArchiveOption}
           {(coreStatus === global.CORE_STATUS_MAP.focused ||
             coreStatus === global.CORE_STATUS_MAP.sorting) && (
-            <SkipOption iconSize={ICON_SIZE} />
-          )}
+              <SkipOption iconSize={ICON_SIZE} />
+            )}
           {unsubscribeLink && (
             <>
               <S.Spacer />

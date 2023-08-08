@@ -9,7 +9,7 @@ import * as S from './CustomDialogStyles'
 import useDynamicHeight from './hooks/useDynamicHeight'
 import Stack from '../Stack/Stack'
 
-interface ICustomDialog<T> {
+interface CustomDialogProps<T> {
   children: ReactNode
   customOnClose?: T
   disableDefaultOnClose?: boolean
@@ -32,7 +32,7 @@ const Content = <T,>({
   height,
   enableDynamicHeight,
 }: Pick<
-  ICustomDialog<T>,
+  CustomDialogProps<T>,
   'children' | 'open' | 'noContentPadding' | 'onKeyDown' | 'enableDynamicHeight'
 > & { inSearch: boolean; height: string }) => {
   const dispatch = useAppDispatch()
@@ -77,7 +77,7 @@ const DialogClose = DialogPrimitive.Close
  * @return {void}
  */
 
-const CustomDialog = <T extends (...args: any[]) => any>({
+const CustomDialog = <T extends (...args: unknown[]) => unknown>({
   children,
   customOnClose = undefined,
   disableDefaultOnClose = false,
@@ -89,7 +89,7 @@ const CustomDialog = <T extends (...args: any[]) => any>({
   onKeyDown = undefined,
   open,
   subTitle = undefined,
-}: ICustomDialog<T>) => {
+}: CustomDialogProps<T>) => {
   const dispatch = useAppDispatch()
   const inSearch = useAppSelector(selectInSearch)
   const contentID = `modal-${modalAriaLabel}-content`

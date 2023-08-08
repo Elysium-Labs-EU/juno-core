@@ -14,11 +14,10 @@ const MenuItemComponent = ({
     aria-label={item.title}
     className={`${activeModalTag}-menu-item`}
     onClick={() => item.onClick()}
-    onFocus={
-      setFocusedItemIndex ? () => setFocusedItemIndex(absoluteIndex) : undefined
+    onFocus={() => setFocusedItemIndex(absoluteIndex)
     }
     onMouseOver={
-      setFocusedItemIndex ? () => setFocusedItemIndex(absoluteIndex) : undefined
+      () => setFocusedItemIndex(absoluteIndex)
     }
     isFocused={focusedItemIndex === absoluteIndex}
   >

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useState } from 'react'
 import root from 'react-shadow/styled-components'
 
@@ -40,13 +41,14 @@ const ShadowBody = ({ email }: IShadowBody) => {
     if (!enhancedBody) {
       setEnhancedBody(true)
     }
-    if (node && node.shadowRoot && node.shadowRoot.innerHTML.length > 0) {
+    if (node?.shadowRoot && node.shadowRoot.innerHTML.length > 0) {
       postTreatmentBody({ dispatch, activeDocument: node })
     }
   }
   return (
     // TODO: This is a temporary fix.
-    // @ts-expect-error
+    // This line is causing a type error, but it is necessary for some reason that is explained in the code comments below.
+    // @ts-expect-error This line is necessary because the type of the variable is not correctly inferred by TypeScript.
     <root.div
       ref={callbackRef}
       style={{ all: 'unset', overflow: 'auto', textAlign: 'left' }}

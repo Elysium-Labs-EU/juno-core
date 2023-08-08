@@ -165,7 +165,7 @@ export const createUpdateDraft =
     async (dispatch, getState) => {
       try {
         const { emailAddress, name } = getState().base.profile
-        const formData = await prepareFormData({
+        const formData = prepareFormData({
           composedEmail,
           emailAddress,
           localDraftDetails,
@@ -494,7 +494,7 @@ export const sendComposedEmail =
         // If the id cannot be found on the draft details, send the email via the sendMessage function
         if (!localDraftDetails?.id) {
           const { emailAddress, name } = getState().base.profile
-          const formData = await prepareFormData({
+          const formData = prepareFormData({
             composedEmail,
             emailAddress,
             localDraftDetails,

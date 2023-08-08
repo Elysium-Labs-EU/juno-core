@@ -15,12 +15,12 @@ import { handleContactConversion } from 'utils/convertToContact'
 
 const MAX_CONTACTS_UNOPENED = 3
 
-interface IMappedContacts {
+interface MappedContactsProps {
   contactsMap: Array<TContact>
   title: string
 }
 
-const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
+const MappedContacts = ({ contactsMap, title }: MappedContactsProps) => {
   const [showAll, setShowAll] = useState(false)
 
   return (
@@ -34,9 +34,8 @@ const MappedContacts = ({ contactsMap, title }: IMappedContacts) => {
             {contactsMap
               .slice(0, showAll ? contactsMap.length : MAX_CONTACTS_UNOPENED)
               .map((contact, index) => (
-                <S.ContactContainer>
+                <S.ContactContainer key={contact.emailAddress}>
                   <S.SmallTextTruncated
-                    key={contact.emailAddress}
                     showComma={
                       index !==
                       (showAll ? contactsMap.length : MAX_CONTACTS_UNOPENED) - 1

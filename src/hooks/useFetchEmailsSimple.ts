@@ -21,20 +21,25 @@ export default function useFetchEmailsSimple() {
 
   useEffect(() => {
     // Only preload the messages when the strict flow is active
-    if (
-      (timestampLastFired.current === 0 ||
-        timestampLastFired.current - Date.now() > global.MIN_DELAY_REFRESH) &&
-      !isFlexibleFlowActive &&
-      !loadedInbox.includes(global.INBOX_LABEL)
-    ) {
-      timestampLastFired.current = Date.now()
-      const params = {
-        labelIds: [global.INBOX_LABEL],
-        maxResults: 10,
-        nextPageToken: null,
-      }
 
-      void dispatch(fetchEmailsSimple(params))
+    // Conditions for early return
+    if (timestampLastFired.current !== 0 &&
+      timestampLastFired.current - Date.now() <= global.MIN_DELAY_REFRESH) {
+      return
     }
+
+    if (isFlexibleFlowActive || loadedInbox.includes(global.INBOX_LABEL)) {
+      return
+    }
+
+    // If the conditions aren't met, proceed with the logic
+    timestampLastFired.current = Date.now()
+    const params = {
+      labelIds: [global.INBOX_LABEL],
+      maxResults: 10,
+      nextPageToken: null,
+    }
+
+    void dispatch(fetchEmailsSimple(params))
   }, [isFlexibleFlowActive, loadedInbox])
 }

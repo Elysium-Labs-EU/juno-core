@@ -57,7 +57,7 @@ const isFileArray = (value: unknown): value is File[] =>
   Array.isArray(value) && value.every((item) => item instanceof File)
 
 const isEmailAttachmentTypeArray = (
-  value: any
+  value: unknown
 ): value is EmailAttachmentType[] =>
   Array.isArray(value) &&
   value.every(
@@ -91,6 +91,10 @@ interface ComposeEmailProps {
   ) => void
 }
 
+type Action = { id: string; value: string | TContact[] | null | File[] }
+type Actions = Action[]
+
+
 const Composer = ({
   presetValue = undefined,
   messageOverviewListener = undefined,
@@ -113,14 +117,11 @@ const Composer = ({
 
 
   const [composedEmail, updateComposedEmail] = useReducer(
-    (
-      state: { [key: string]: string | TContact[] | File[] } | null,
-      action: { id: string; value: string | TContact[] | null | File[] }
-    ) => {
+    (state: { [key: string]: string | TContact[] | File[] } | null, action: Action | Actions) => {
       if (Array.isArray(action)) {
         let updatedState = state
         action.forEach((item) => {
-          if (typeof item === 'object' && 'id' in item && 'value' in item) {
+          if (typeof item === 'object' && item.value !== null) {
             const { id, value } = item
             updatedState = {
               ...updatedState,
@@ -130,7 +131,7 @@ const Composer = ({
         })
         return updatedState
       }
-      if ('id' in action && 'value' in action && action.value !== null) {
+      if (action.value !== null) {
         const { id, value } = action
         return {
           ...state,
