@@ -38,7 +38,8 @@ const fetchContacts = async ({
   }
   try {
     const responseQueryContacts = await contactApi().queryContacts(params)
-    if (responseQueryContacts &&
+    if (
+      responseQueryContacts &&
       'data' in responseQueryContacts &&
       responseQueryContacts.status === 200
     ) {
@@ -90,16 +91,19 @@ const EmailInput = ({
       debouncedInputValue.length > 1 &&
       !completedSearch
     ) {
-      ; (() => {
-        const foundResults = availableContacts ? filterOptions(availableContacts, {
-          inputValue: debouncedInputValue,
-        }) : []
+      ;(() => {
+        const foundResults = availableContacts
+          ? filterOptions(availableContacts, {
+              inputValue: debouncedInputValue,
+            })
+          : []
         if (foundResults.length === 0) {
           void fetchContacts({ dispatch, inputValue, setCompletedSearch })
         }
         if (foundResults.length > 0) {
           setTimeout(
-            () => void fetchContacts({ dispatch, inputValue, setCompletedSearch }),
+            () =>
+              void fetchContacts({ dispatch, inputValue, setCompletedSearch }),
             1000
           )
         }

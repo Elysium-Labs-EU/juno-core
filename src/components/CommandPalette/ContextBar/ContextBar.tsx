@@ -44,10 +44,11 @@ const ContextBar = () => {
     }
   }, [emailList, selectedEmails])
 
-  return selectedEmails && multipleIncludes(selectedEmails.labelIds, labelIds) ? (
+  return selectedEmails &&
+    multipleIncludes(selectedEmails.labelIds, labelIds) ? (
     <S.Wrapper>
       <S.Inner>
-        <Span muted small>
+        <Span muted="true" small="true">
           {' '}
           Selected emails by:{' '}
         </Span>

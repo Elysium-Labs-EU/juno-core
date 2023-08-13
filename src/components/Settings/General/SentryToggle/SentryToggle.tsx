@@ -23,9 +23,15 @@ const SentryToggle = () => {
   return (
     <S.PageSection>
       <Paragraph>{HEADER}</Paragraph>
-      <Paragraph muted>{BODY}</Paragraph>
-      <Switch id={SWITCH_ID} checked={isSentryActive} onCheckedChange={(e) => switchSentry(e)}>{SWITCH_LABEL}</Switch>
-    </S.PageSection>
+      <Paragraph muted="true">{BODY}</Paragraph>
+      <Switch
+        id={SWITCH_ID}
+        checked={isSentryActive}
+        onCheckedChange={(e) => switchSentry(e)}
+      >
+        {SWITCH_LABEL}
+      </Switch>
+    </S.PageSection >
   )
 }
 

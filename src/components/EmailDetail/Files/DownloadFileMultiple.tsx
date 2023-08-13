@@ -119,14 +119,13 @@ const DownloadButtonMultiple = ({
     if (filesObjectArray.length > 0 && isMainButton) {
       return 'Download all files'
     }
-    return `Download ${
-      filesObjectArray[0]?.files ? filesObjectArray[0].files.length : 0
-    } files`
+    return `Download ${filesObjectArray[0]?.files ? filesObjectArray[0].files.length : 0
+      } files`
   }
 
   return (
     <CustomButton
-      onClick={handleClick}
+      onClick={() => void handleClick()}
       label={handleLabel()}
       icon={<RenderIcon downloaded={downloaded} loadState={loadState} />}
       title={

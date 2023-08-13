@@ -6,9 +6,9 @@ import AttachmentBubble from 'components/Elements/AttachmentBubble/AttachmentBub
 import StyledCircularProgress from 'components/Elements/CircularProgress/StyledCircularProgress'
 import FileUpload from 'components/Elements/FileUpload/FileUpload'
 import CustomToast from 'components/Elements/Toast/Toast'
-import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
+import type { Schema$MessagePart } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import convertB64AttachmentToFile from 'utils/convertB64AttachmentToFile'
 import isEqual from 'utils/isEqual/isEqual'
 import formatBytes from 'utils/prettierBytes'
@@ -19,12 +19,12 @@ const ATTACHMENTS = 'Attachments'
 const MAX_MB_UPLOAD_DIRECT = 25000000
 
 const customIsEqual = (
-  composeValue: Array<File> | Array<EmailAttachmentType> | undefined,
+  composeValue: Array<File> | Array<Schema$MessagePart> | undefined,
   uploadedFiles: Array<File>
 ) =>
   isEqual(
-    composeValue?.map((item: File | EmailAttachmentType) => ({
-      size: 'size' in item ? item.size : item.body.size,
+    composeValue?.map((item) => ({
+      size: 'size' in item ? item.size : item.body?.size,
       name: 'name' in item ? item.name : item.filename,
     })),
     uploadedFiles.map((item: File) => ({
@@ -33,8 +33,8 @@ const customIsEqual = (
     }))
   )
 
-interface IAttachments {
-  composeValue: Array<File> | Array<EmailAttachmentType> | undefined
+interface AttachmentsProps {
+  composeValue: Array<File> | Array<Schema$MessagePart> | undefined
   hasInteracted: boolean
   loadState: string
   messageId: string | undefined
@@ -49,7 +49,7 @@ const Attachments = ({
   loadState,
   setHasInteracted,
   hasInteracted,
-}: IAttachments) => {
+}: AttachmentsProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<Array<File>>([])
   const [localLoadState, setLocalLoadState] = useState(
     global.LOAD_STATE_MAP.idle
@@ -66,11 +66,11 @@ const Attachments = ({
       loadState === global.LOAD_STATE_MAP.loaded &&
       !customIsEqual(composeValue, uploadedFiles)
     ) {
-      if (composeValue.some((value: any) => 'partId' in value) && messageId) {
+      if (composeValue.some((value) => 'partId' in value) && messageId) {
         setLocalLoadState(global.LOAD_STATE_MAP.loading)
         const fetchAttachments = async () => {
-          const noneFileTypeItems: EmailAttachmentType[] = []
-          composeValue.forEach((item: File | EmailAttachmentType) => {
+          const noneFileTypeItems: Schema$MessagePart[] = []
+          composeValue.forEach((item: File | Schema$MessagePart) => {
             if ('partId' in item) {
               noneFileTypeItems.push(item)
             }
@@ -81,8 +81,8 @@ const Attachments = ({
           })
           if (response && response.length > 0) {
             const fileTypeItems: File[] = []
-            composeValue.forEach((item: File | EmailAttachmentType) => {
-              if (!('partId' in item)) {
+            composeValue.forEach((item: File | Schema$MessagePart) => {
+              if (item instanceof File) {
                 fileTypeItems.push(item)
               }
             })
@@ -104,7 +104,7 @@ const Attachments = ({
             setLocalLoadState(global.LOAD_STATE_MAP.loaded)
           }
         }
-        fetchAttachments()
+        void fetchAttachments()
       } else {
         const typedComposeValues = composeValue as File[]
         setUploadedFiles(typedComposeValues)

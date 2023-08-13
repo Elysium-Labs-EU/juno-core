@@ -49,7 +49,7 @@ const ListItem = ({
   showType?: boolean
   itemType?: TListItemType
   item: {
-    onClick?: any
+    onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void
     icon?: JSX.Element | null | undefined
     children: ReactNode
   } // TODO: type this better

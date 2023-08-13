@@ -29,11 +29,11 @@ const rotatingIcon = css`
 `
 
 interface RotatingIcon {
-  disableRefresh: boolean
+  disablerefresh: string
 }
 
 const RotatingIcon = styled.div<RotatingIcon>`
-  ${({ disableRefresh }) => (disableRefresh ? rotatingIcon : null)};
+  ${({ disablerefresh }) => (disablerefresh === 'true' ? rotatingIcon : null)};
 `
 
 const LABEL_INACTIVE = 'Refresh inbox'
@@ -91,7 +91,7 @@ const InboxRefresh = ({
         title={!disableRefresh ? LABEL_INACTIVE : LABEL_ACTIVE}
         style={styles(showButtonLabel)}
         icon={
-          <RotatingIcon disableRefresh={disableRefresh}>
+          <RotatingIcon disablerefresh={disableRefresh.toString()}>
             <MdRefresh size={20} />
           </RotatingIcon>
         }

@@ -1,5 +1,5 @@
-import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import messageApi from 'data/messageApi'
+import type { Schema$MessagePart } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
 import base64toBlob from './base64toBlob'
 
@@ -12,7 +12,6 @@ const FAIL_RESPONSE_OBJECT = {
 
 const handleFetchedAttachment = (
   fetchedAttachment: unknown,
-  filename: string,
   mimeType: string
 ) => {
   if (
@@ -26,7 +25,9 @@ const handleFetchedAttachment = (
       'data' in fetchedAttachment.data
     ) {
       const base64Data = fetchedAttachment.data.data
-      if (typeof base64Data !== 'string') { return FAIL_RESPONSE_OBJECT }
+      if (typeof base64Data !== 'string') {
+        return FAIL_RESPONSE_OBJECT
+      }
       const blobData = base64toBlob({ base64Data, mimeType })
       const blobUrl = URL.createObjectURL(blobData)
       return { success: true, message: null, blobUrl, mimeType }
@@ -45,24 +46,22 @@ export default async function viewAttachment({
   attachmentData,
   messageId,
 }: {
-  attachmentData: EmailAttachmentType
+  attachmentData: Schema$MessagePart
   messageId: string
 }) {
   const {
-    body: { attachmentId },
-    filename,
+    body,
     mimeType,
   } = attachmentData
   try {
-    if (attachmentId) {
+    if (body?.attachmentId) {
       const fetchedAttachment = await messageApi().getAttachment({
         messageId,
-        attachmentId,
+        attachmentId: body.attachmentId,
       })
-      if (fetchedAttachment) {
+      if (fetchedAttachment && mimeType) {
         const test = handleFetchedAttachment(
           fetchedAttachment,
-          filename,
           mimeType
         )
         // console.log(test)

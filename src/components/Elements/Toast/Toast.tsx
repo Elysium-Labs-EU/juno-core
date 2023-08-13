@@ -26,7 +26,20 @@ const CustomToast = ({
         <S.ToastAction>
           {cloneElement(button, {
             onClick: () => {
-              button.props?.onClick()
+              if (button.type === 'button') {
+                // Here we reset the type of the button so we can narrow the type down.
+                const buttonReset: unknown = button
+                if (
+                  buttonReset instanceof Object &&
+                  'props' in buttonReset &&
+                  buttonReset.props instanceof Object &&
+                  'onClick' in buttonReset.props
+                ) {
+                  if (typeof buttonReset.props.onClick === 'function') {
+                    buttonReset.props.onClick()
+                  }
+                }
+              }
               toast.dismiss(specificToast.id)
             },
           })}

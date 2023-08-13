@@ -17,33 +17,31 @@ interface QueryContactObject {
 
 const contactApi = () => ({
   // TODO: We currently do not use this api endpoint
-  getAllContacts: (
-    query: AllContactsQueryObject
-  ) => fetchWrapper(
-    `/api/contacts/`,
-    {
-      method: 'GET',
-      params: {
-        readMask: query.readMask,
-        pageSize: query.pageSize ?? 1000,
-        pageToken: query.nextPageToken ?? undefined,
+  getAllContacts: (query: AllContactsQueryObject) =>
+    fetchWrapper(
+      `/api/contacts/`,
+      {
+        method: 'GET',
+        params: {
+          readMask: query.readMask,
+          pageSize: query.pageSize ?? 1000,
+          pageToken: query.nextPageToken ?? undefined,
+        },
       },
-    },
-    peopleV1SchemaListOtherContactsResponseSchema
-  ),
-  queryContacts: (
-    query: QueryContactObject
-  ) => fetchWrapper(
-    `/api/contact/search/`,
-    {
-      method: 'GET',
-      params: {
-        readMask: query.readMask,
-        query: query.query,
+      peopleV1SchemaListOtherContactsResponseSchema
+    ),
+  queryContacts: (query: QueryContactObject) =>
+    fetchWrapper(
+      `/api/contact/search/`,
+      {
+        method: 'GET',
+        params: {
+          readMask: query.readMask,
+          query: query.query,
+        },
       },
-    },
-    z.array(Contact)
-  ),
+      z.array(Contact)
+    ),
 })
 
 export default contactApi

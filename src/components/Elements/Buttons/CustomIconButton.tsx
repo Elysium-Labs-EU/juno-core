@@ -18,7 +18,7 @@ interface CustomIconButton extends ComponentPropsWithoutRef<'button'> {
 }
 
 interface Button {
-  hoverColor: string | undefined
+  hovercolor: string | undefined
   isactive: string | undefined
 }
 
@@ -31,7 +31,7 @@ const Button = styled.button<Button>`
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
 
   &:hover {
-    color: ${({ hoverColor }) => hoverColor || 'var(--color-black)'};
+    color: ${({ hovercolor }) => hovercolor || 'var(--color-black)'};
     cursor: pointer;
   }
 
@@ -62,7 +62,7 @@ const CustomIconButton = forwardRef<HTMLButtonElement, CustomIconButton>(
       aria-expanded={ariaExpanded}
       data-cy={dataCy}
       disabled={disabled}
-      hoverColor={hoverColor}
+      hovercolor={hoverColor}
       isactive={isactive}
       ref={ref}
       type={type}

@@ -154,12 +154,12 @@ export const Base = styled.div`
   position: relative;
 `
 
-interface IOuterContainer {
-  tabbedView?: boolean
+interface OuterContainer {
+  tabbedView?: string
 }
 
-export const OuterContainer = styled.div<IOuterContainer>`
-  display: ${({ tabbedView }) => (tabbedView ? 'flex' : 'block')};
+export const OuterContainer = styled.div<OuterContainer>`
+  display: ${({ tabbedView }) => (tabbedView === 'true' ? 'flex' : 'block')};
   flex: 1 1 0%;
   margin-left: auto;
   margin-right: auto;
@@ -178,30 +178,30 @@ export const BACKGROUND_FADE = css`
 `
 
 interface TextProps {
-  extraBold?: boolean
-  bold?: boolean
-  muted?: boolean
-  small?: boolean
+  extrabold?: string
+  bold?: string
+  muted?: string
+  small?: string
 }
 
 export const Paragraph = styled.p<TextProps>`
   ${({ bold }) =>
-    bold &&
+    bold === 'true' &&
     css`
       font-weight: 500;
     `}
-  ${({ extraBold }) =>
-    extraBold &&
+  ${({ extrabold }) =>
+    extrabold === 'true' &&
     css`
       font-weight: 700;
     `}
     ${({ muted }) =>
-    muted &&
+    muted === 'true' &&
     css`
       color: var(--color-neutral-400);
     `}
   ${({ small }) =>
-    small &&
+    small === 'true' &&
     css`
       font-size: var(--text-small);
     `}
@@ -209,22 +209,22 @@ export const Paragraph = styled.p<TextProps>`
 
 export const Span = styled.span<TextProps>`
   ${({ bold }) =>
-    bold &&
+    bold === 'true' &&
     css`
       font-weight: 500;
     `}
-  ${({ extraBold }) =>
-    extraBold &&
+  ${({ extrabold }) =>
+    extrabold === 'true' &&
     css`
       font-weight: 700;
     `}
   ${({ muted }) =>
-    muted &&
+    muted === 'true' &&
     css`
       color: var(--color-neutral-400);
     `}
     ${({ small }) =>
-    small &&
+    small === 'true' &&
     css`
       font-size: var(--text-small);
     `}

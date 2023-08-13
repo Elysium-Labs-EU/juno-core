@@ -64,10 +64,17 @@ const StrictFlow = () => {
   return (
     <SettingsSection>
       <Paragraph>{HEADER}</Paragraph>
-      <Paragraph muted>{BODY}</Paragraph>
+      <Paragraph muted="true">{BODY}</Paragraph>
 
-      <Switch id={SWITCH_ID} checked={isFlexibleFlowActive} onCheckedChange={(e) => switchWorkFlow(e)} data-cy="flexible-flow-switch">{SWITCH_LABEL}</Switch>
-    </SettingsSection>
+      <Switch
+        id={SWITCH_ID}
+        checked={isFlexibleFlowActive}
+        onCheckedChange={(e) => switchWorkFlow(e)}
+        data-cy="flexible-flow-switch"
+      >
+        {SWITCH_LABEL}
+      </Switch>
+    </SettingsSection >
   )
 }
 

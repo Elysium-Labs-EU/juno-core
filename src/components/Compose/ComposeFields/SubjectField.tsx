@@ -62,7 +62,7 @@ const SubjectField = ({
         </S.Label>
         <StyledTextField
           id={local.SUBJECT}
-          value={value ?? ''}
+          value={value}
           onChange={handleChange}
           fullWidth
           variant="outlined"

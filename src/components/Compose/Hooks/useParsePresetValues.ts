@@ -2,10 +2,15 @@ import { useEffect } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
 
 import * as global from 'constants/globalConstants'
-import type { ComposeEmailConverted, ComposeEmailReceive } from 'store/storeTypes/composeTypes'
+import type {
+  ComposeEmailConverted,
+  ComposeEmailReceive,
+} from 'store/storeTypes/composeTypes'
 import { ComposeEmailReceiveSchema } from 'store/storeTypes/composeTypes'
 import { handleContactConversion } from 'utils/convertToContact'
 import parseQueryString from 'utils/parseQueryString'
+
+import type { Action, Actions } from '../Composer'
 
 /**
  * @function handlePresetvalueConversions
@@ -41,35 +46,20 @@ const handlePresetvalueConversions = (
         value = handleContactConversion(value)
       }
 
-      const test = value
-
       acc.push({
         id: field,
-        value: test,
+        value,
       })
       return acc
     }
     return acc
   }, [] as Array<{ id: string; value: ComposeEmailConverted }>)
 
-  // fieldsToConvert.forEach((field) => {
-  //   if (field in presetValueObject) {
-  //     let value = presetValueObject[field as keyof ComposeEmailReceive]
-  //     if (field === 'to' || field === 'cc' || field === 'bcc') {
-  //       if (typeof value === 'string') {
-  //         value = handleContactConversion(value)
-  //       }
-  //     }
-  //     convertedPresetValueArray.push({
-  //       id: field,
-  //       value,
-  //     })
-  //   }
-  // })
-
   return convertedPresetValueArray
 }
 
+
+// TODO: Make the output more aligned with what we want to use, or adapt what we use to the Gmail native way.
 export default function useParsePresetValues({
   setShowCC,
   setShowBCC,
@@ -80,7 +70,7 @@ export default function useParsePresetValues({
 }: {
   setShowCC: Dispatch<SetStateAction<boolean>>
   setShowBCC: Dispatch<SetStateAction<boolean>>
-  setComposedEmail: Dispatch<SetStateAction<ReturnType<typeof handlePresetvalueConversions>>>
+  setComposedEmail: Dispatch<Action | Actions>
   setLoadState: Dispatch<SetStateAction<string>>
   loadState: string
   presetValueObject?: ComposeEmailReceive
@@ -100,6 +90,7 @@ export default function useParsePresetValues({
         if ('bcc' in output) {
           setShowBCC(true)
         }
+        console.log({ output })
         setComposedEmail(output)
       }
     }
@@ -108,13 +99,13 @@ export default function useParsePresetValues({
       mailto,
       subject,
       body,
-    }: { mailto?: string; subject?: string; body?: string } =
-      parseQueryString(window.location.search, /[?&]/)
+    }: { mailto?: string; subject?: string; body?: string } = parseQueryString(
+      window.location.search,
+      /[?&]/
+    )
     if (mailto || subject || body) {
       const output = handlePresetvalueConversions({
-        to: mailto?.includes('@')
-          ? handleContactConversion(mailto)
-          : undefined,
+        to: mailto?.includes('@') ? handleContactConversion(mailto) : undefined,
         subject,
         body,
       })

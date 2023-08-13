@@ -31,9 +31,7 @@ const RecipientField = ({
 }: RecipientFieldProps) => (
   <>
     <S.Label
-      hasValue={
-        Object.keys(recipientFieldValue).length > 0
-      }
+      hasValue={Object.keys(recipientFieldValue).length > 0}
       data-cy={dataCy}
     >
       <label htmlFor={fieldId}>{fieldLabel}</label>

@@ -40,14 +40,14 @@ const DetailModal = ({
           return (
             <S.BlockedItemInformation key={convertedToString.href}>
               <p>{convertedToString.host}</p>
-              <Span muted>{convertedToString.href}</Span>
+              <Span muted="true">{convertedToString.href}</Span>
             </S.BlockedItemInformation>
           )
         }
         return null
       })}
     </Stack>
-  </CustomDialog>
+  </CustomDialog >
 )
 
 const RemovedTrackers = ({
@@ -64,7 +64,7 @@ const RemovedTrackers = ({
               <div>
                 <FiShield size={10} color={themeConstants.color.neutral[400]} />
               </div>
-              <Span small>{REMOVED_TRACKERS}</Span>
+              <Span small="true">{REMOVED_TRACKERS}</Span>
             </Stack>
           </S.StyledButton>
         </StyledTooltip>

@@ -8,10 +8,10 @@ const NoMobileOverlay = () => (
   <S.Wrapper>
     <S.Inner>
       <h1>{local.HEADER}</h1>
-      <Paragraph muted>{local.CONTENT}</Paragraph>
+      <Paragraph muted="true">{local.CONTENT}</Paragraph>
       <LogoutOption />
     </S.Inner>
-  </S.Wrapper>
+  </S.Wrapper >
 )
 
 export default NoMobileOverlay

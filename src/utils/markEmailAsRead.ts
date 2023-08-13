@@ -15,11 +15,7 @@ interface MarkEmailAsRead {
  * The output of the function is to remove the unread label.
  */
 
-const markEmailAsRead = ({
-  dispatch,
-  labelIds,
-  threadId,
-}: MarkEmailAsRead) => {
+const markEmailAsRead = ({ dispatch, labelIds, threadId }: MarkEmailAsRead) => {
   if (threadId.length > 0) {
     dispatch(
       updateEmailLabel({

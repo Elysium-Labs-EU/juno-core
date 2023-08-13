@@ -1,3 +1,4 @@
+import type { Editor } from '@tiptap/react'
 import {
   MdFormatBold,
   MdFormatClear,
@@ -18,7 +19,7 @@ const H3 = 'h3'
 const H4 = 'h4'
 const HARD_BREAK = 'hard break'
 
-const MenuBar = ({ editor }: any) => {
+const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
     return null
   }

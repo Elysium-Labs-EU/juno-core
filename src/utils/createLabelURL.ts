@@ -8,7 +8,6 @@ const labelURL = (labelIds: Array<string>) => {
   return convertArrayToString(
     labelIds.filter((label) => label !== global.UNREAD_LABEL)
   )
-
 }
 
 export default labelURL

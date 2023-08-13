@@ -22,7 +22,7 @@ const MappedFiles = ({
   return threadDetail?.messages ? (
     <Stack direction="vertical" spacing="huge">
       {/* <Stack align="center" justify="space-between">
-        <Span muted small>
+        <Span muted="true" small="true">
           {NO_IDENTICAL_FILES}
         </Span>
         <DownloadButtonMultiple
@@ -76,7 +76,7 @@ const MappedFiles = ({
                     <EmailAttachmentBubble
                       attachmentData={file}
                       messageId={message.id}
-                      key={file.body.attachmentId}
+                      key={file.body?.attachmentId ?? file.filename}
                     />
                   ))}
                 </Stack>

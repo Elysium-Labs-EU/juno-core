@@ -49,7 +49,11 @@ const GoogleCallBack = () => {
           dispatch(push(RoutesConstants.TODO))
         } else {
           toast.custom((t) => (
-            <CustomToast specificToast={t} title={SOMETHING_WRONG} variant="error" />
+            <CustomToast
+              specificToast={t}
+              title={SOMETHING_WRONG}
+              variant="error"
+            />
           ))
           dispatch(push(RoutesConstants.LOGIN))
         }

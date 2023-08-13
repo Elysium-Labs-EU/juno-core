@@ -45,13 +45,13 @@ export const ThreadRow = styled.div<IThreadRow>`
   }
 `
 
-interface ICellCheckbox {
-  inSelect: boolean
+interface CellCheckbox {
+  inselect: string
 }
 
-export const CellCheckbox = styled.div<ICellCheckbox>`
+export const CellCheckbox = styled.div<CellCheckbox>`
   display: flex;
-  opacity: ${({ inSelect }) => (inSelect ? 100 : 0)};
+  opacity: ${({ inselect }) => (inselect === 'true' ? 100 : 0)};
   place-items: center;
   transition: opacity ease-in 0.125s;
 

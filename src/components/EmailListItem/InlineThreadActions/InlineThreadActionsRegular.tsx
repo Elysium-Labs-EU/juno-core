@@ -159,7 +159,7 @@ const InlineThreadActionsRegular = ({
   }, [threadId, labelIds])
 
   return (
-    <S.Wrapper data-testid="email-regular-inline-actions" isFocused={isFocused}>
+    <S.Wrapper data-testid="email-regular-inline-actions" isfocused={isFocused.toString()}>
       {threadId && (
         <Stack spacing="large">
           {memoizedReplyButton}

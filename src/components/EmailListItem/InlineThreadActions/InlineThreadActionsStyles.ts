@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import styled from 'styled-components'
 
-import type { IInlineThreadActions } from './InlineThreadActionsTypes'
+import type { InlineThreadActionsStyles } from './InlineThreadActionsTypes'
 
-type TWrapper = Pick<IInlineThreadActions, 'isFocused'>
+type TWrapper = Pick<InlineThreadActionsStyles, 'isfocused'>
 
 export const Wrapper = styled.div<TWrapper>`
   align-items: center;
@@ -18,7 +18,7 @@ export const Wrapper = styled.div<TWrapper>`
   right: 1rem;
   bottom: 0;
   display: flex;
-  opacity: ${({ isFocused }) => (isFocused ? '1' : 0)};
+  opacity: ${({ isfocused }) => (isfocused === 'true' ? '1' : 0)};
   padding: 0 var(--spacing-4);
   justify-content: flex-end;
   position: absolute;

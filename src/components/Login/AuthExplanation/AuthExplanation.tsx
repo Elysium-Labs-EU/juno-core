@@ -1,9 +1,11 @@
+import toast from 'react-hot-toast'
 import { useLocation } from 'react-router-dom'
 import { push } from 'redux-first-history'
 
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
+import CustomToast from 'components/Elements/Toast/Toast'
 import { AUTH_SCREEN_ACCEPTED } from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import RoutesConstants from 'constants/routesConstants'
@@ -30,12 +32,25 @@ const AuthExplanation = () => {
     if (!(locationState instanceof Object)) {
       return null
     }
-    return 'googleURL' in locationState && typeof locationState.googleURL === 'string' ? locationState.googleURL : ''
+    return 'googleURL' in locationState &&
+      typeof locationState.googleURL === 'string'
+      ? locationState.googleURL
+      : ''
   }
 
   const googleURL = googleUrlFromState()
 
   const handleContinueToGoogle = () => {
+    if (!googleURL) {
+      toast.custom((t) => (
+        <CustomToast
+          variant="error"
+          specificToast={t}
+          title="We have no target page"
+        />
+      ))
+      return
+    }
     localStorage.setItem(AUTH_SCREEN_ACCEPTED, 'true')
     dispatch(push(googleURL))
   }

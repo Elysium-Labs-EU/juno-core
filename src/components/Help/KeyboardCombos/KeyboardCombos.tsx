@@ -24,7 +24,7 @@ interface ICreateSectionWithKeys {
 export const KeyCombinationSection = ({ combo }: { combo: IKeyCombos }) => (
   <>
     <div>{combo.title}</div>
-    {combo.subTitle ? <Span muted>{combo.subTitle}</Span> : null}
+    {combo.subTitle ? <Span muted="true">{combo.subTitle}</Span> : null}
     <Stack direction="horizontal" spacing="mini">
       {combo.keys.map((oneKey) => (
         <S.KeyBindShortcut key={JSON.stringify(oneKey)}>
@@ -62,7 +62,7 @@ const KeyboardCombos = () => {
       modalTitle={local.MODAL_TITLE}
       modalAriaLabel="keyboard-shortcuts"
       subTitle={
-        <Paragraph muted style={{ marginBottom: 'var(--spacing-1)' }}>
+        <Paragraph muted="true" style={{ marginBottom: 'var(--spacing-1)' }}>
           {local.MODAL_OS_SUB}{' '}
           <Span style={{ color: `var(--color-black)` }}>{getUserAgent()}</Span>
         </Paragraph>
@@ -85,7 +85,7 @@ const KeyboardCombos = () => {
           title={local.COMPOSE_KEY_TITLE}
         />
       </Stack>
-    </CustomModal>
+    </CustomModal >
   )
 }
 

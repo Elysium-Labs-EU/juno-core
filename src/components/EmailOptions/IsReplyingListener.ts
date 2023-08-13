@@ -13,10 +13,7 @@ interface IsReplyingListener {
  * @returns {void} sets the state for replying and turns off forwarding if needed.
  */
 
-const isReplyingListener = ({
-  dispatch,
-  isForwarding,
-}: IsReplyingListener) => {
+const isReplyingListener = ({ dispatch, isForwarding }: IsReplyingListener) => {
   if (isForwarding) {
     dispatch(setIsForwarding(false))
   }

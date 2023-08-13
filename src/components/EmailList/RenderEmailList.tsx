@@ -54,7 +54,8 @@ const RenderEmailList = ({
       sourceTag: SOURCE_TAG_EMAILLIST,
     })
     if (
-      selectedEmails && selectedEmails.selectedIds.length > 0 &&
+      selectedEmails &&
+      selectedEmails.selectedIds.length > 0 &&
       multipleIncludes(selectedEmails.labelIds, labelIds)
     ) {
       dispatch(setSelectedEmails([]))
@@ -99,7 +100,8 @@ const RenderEmailList = ({
   const { threads, nextPageToken } = filteredOnLabel
 
   const showSelectedOptions =
-    selectedEmails && selectedEmails.selectedIds.length > 0 &&
+    selectedEmails &&
+    selectedEmails.selectedIds.length > 0 &&
     multipleIncludes(selectedEmails.labelIds, labelIds)
 
   const handleLoadMore = useCallback(
@@ -181,7 +183,7 @@ const RenderEmailList = ({
         {nextPageToken && memoizedLoadMore}
         {!nextPageToken && threads.length > 0 && (
           <S.LoadMoreContainer>
-            <Paragraph small muted>
+            <Paragraph smallmuted="true">
               {global.NO_MORE_RESULTS}
             </Paragraph>
           </S.LoadMoreContainer>

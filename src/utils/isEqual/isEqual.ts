@@ -33,7 +33,9 @@ export default function isEqual(obj1: unknown, obj2: unknown): boolean {
       return false
     }
 
-    if (!isEqual(obj1[key as keyof typeof obj1], obj2[key as keyof typeof obj1])) {
+    if (
+      !isEqual(obj1[key as keyof typeof obj1], obj2[key as keyof typeof obj1])
+    ) {
       return false
     }
   }

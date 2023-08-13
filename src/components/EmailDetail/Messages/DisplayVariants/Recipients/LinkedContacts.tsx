@@ -25,7 +25,7 @@ const MappedContacts = ({ contactsMap, title }: MappedContactsProps) => {
 
   return (
     <S.ToFromBCCInner>
-      <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
+      <Span muted="true" small="true" style={{ marginRight: 'var(--spacing-0-5)' }}>
         {title}
       </Span>
       <S.SmallTextTruncated>
@@ -75,7 +75,7 @@ const MappedContacts = ({ contactsMap, title }: MappedContactsProps) => {
           ))
         )}
       </S.SmallTextTruncated>
-    </S.ToFromBCCInner>
+    </S.ToFromBCCInner >
   )
 }
 
@@ -110,7 +110,7 @@ const LinkedContants = ({
     <Stack direction="vertical">
       <Stack>
         <S.ToFromBCCInner>
-          <Span muted small style={{ marginRight: 'var(--spacing-0-5)' }}>
+          <Span muted="true" small="true" style={{ marginRight: 'var(--spacing-0-5)' }}>
             {emailDetail.FROM_LABEL}
           </Span>
           {firstSenderContact ? (
@@ -123,17 +123,21 @@ const LinkedContants = ({
       <Stack>
         <MappedContacts contactsMap={toNameFull} title={emailDetail.TO_LABEL} />
       </Stack>
-      {ccNameFull.length > 0 && (
-        <Stack>
-          <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
-        </Stack>
-      )}
-      {bccNameFull.length > 0 && (
-        <Stack>
-          <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
-        </Stack>
-      )}
-    </Stack>
+      {
+        ccNameFull.length > 0 && (
+          <Stack>
+            <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
+          </Stack>
+        )
+      }
+      {
+        bccNameFull.length > 0 && (
+          <Stack>
+            <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
+          </Stack>
+        )
+      }
+    </Stack >
   )
 }
 

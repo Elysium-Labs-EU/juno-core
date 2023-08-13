@@ -1,5 +1,5 @@
 import * as SwitchPrimitives from '@radix-ui/react-switch'
-import styled from "styled-components"
+import styled from 'styled-components'
 
 export const SwitchRoot = styled(SwitchPrimitives.Root)`
   all: unset;
@@ -9,7 +9,7 @@ export const SwitchRoot = styled(SwitchPrimitives.Root)`
   border-radius: 9999px;
   position: relative;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  &[data-state="checked"] {
+  &[data-state='checked'] {
     background-color: var(--color-purple-700);
   }
 `
@@ -24,7 +24,7 @@ export const SwitchThumb = styled(SwitchPrimitives.Thumb)`
   transition: transform 100ms;
   transform: translateX(2px);
   will-change: transform;
-  &[data-state="checked"] {
+  &[data-state='checked'] {
     transform: translateX(19px);
   }
 `
@@ -35,7 +35,7 @@ export const Label = styled.label`
 `
 
 export const Flex = styled.div`
-align-items: center;
+  align-items: center;
   display: flex;
   gap: var(--spacing-2);
 `

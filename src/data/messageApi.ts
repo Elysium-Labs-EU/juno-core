@@ -1,9 +1,19 @@
-import { gmailV1SchemaMessagePartBodySchema, gmailV1SchemaMessageSchema, type TGmailV1SchemaMessageSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
+import {
+  gmailV1SchemaMessagePartBodySchema,
+  gmailV1SchemaMessageSchema,
+  type TGmailV1SchemaMessageSchema,
+} from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 
 import { fetchWrapper } from './api'
 
 const messageApi = () => ({
-  getAttachment: ({ messageId, attachmentId }: { messageId: string; attachmentId: string }) =>
+  getAttachment: ({
+    messageId,
+    attachmentId,
+  }: {
+    messageId: string
+    attachmentId: string
+  }) =>
     fetchWrapper(
       `/api/message/attachment/${messageId}/${attachmentId}`,
       { method: 'GET' },
@@ -15,7 +25,7 @@ const messageApi = () => ({
       `/api/send-message`,
       {
         method: 'POST',
-        body: { data, timeOut }
+        body: { data, timeOut },
       },
       gmailV1SchemaMessageSchema
     ),
@@ -25,9 +35,9 @@ const messageApi = () => ({
       `/api/message/thrash/${messageId}`,
       {
         method: 'POST',
-        body: {}
+        body: {},
       }
-    )
+    ),
 })
 
 export type MessageApiReturnType = ReturnType<typeof messageApi>

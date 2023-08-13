@@ -16,7 +16,7 @@ interface CustomButtonProps extends ComponentPropsWithoutRef<'button'> {
 }
 
 interface Button {
-  attention: boolean | undefined
+  attention: string | undefined
   suppressed: string | undefined
 }
 
@@ -44,7 +44,7 @@ const Button = styled.button<Button>`
   vertical-align: middle;
 
   ${({ attention }) =>
-    attention &&
+    attention === 'true' &&
     css`
       color: var(--color-white);
       background-color: var(--color-black);
@@ -67,8 +67,8 @@ const Button = styled.button<Button>`
 `
 
 interface InnerButton {
-  hasLabel: boolean
-  showIconAfterLabel: boolean
+  haslabel: string
+  showiconafterlabel: string
 }
 
 const InnerButton = styled.div<InnerButton>`
@@ -77,10 +77,10 @@ const InnerButton = styled.div<InnerButton>`
 
   .icon {
     line-height: 0;
-    margin-right: ${({ hasLabel, showIconAfterLabel }) =>
-    hasLabel && !showIconAfterLabel && 'var(--spacing-1-5)'};
-    margin-left: ${({ hasLabel, showIconAfterLabel }) =>
-    hasLabel && showIconAfterLabel && 'var(--spacing-1-5)'};
+    margin-right: ${({ haslabel, showiconafterlabel }) =>
+    haslabel && !showiconafterlabel && 'var(--spacing-1-5)'};
+    margin-left: ${({ haslabel, showiconafterlabel }) =>
+    haslabel && showiconafterlabel && 'var(--spacing-1-5)'};
     text-align: center;
     transition: opacity 0.3s ease 0s;
   }
@@ -102,7 +102,7 @@ const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
     ref
   ) => (
     <Button
-      attention={attention}
+      attention={attention.toString()}
       data-cy={dataCy}
       disabled={disabled}
       ref={ref}
@@ -111,8 +111,8 @@ const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>(
       {...rest}
     >
       <InnerButton
-        hasLabel={Boolean(label)}
-        showIconAfterLabel={showIconAfterLabel}
+        haslabel={Boolean(label).toString()}
+        showiconafterlabel={showIconAfterLabel.toString()}
       >
         {icon && !showIconAfterLabel && <div className="icon">{icon}</div>}
         <Span>{label}</Span>

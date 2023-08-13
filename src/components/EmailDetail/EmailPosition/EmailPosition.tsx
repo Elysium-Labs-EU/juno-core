@@ -30,26 +30,31 @@ const EmailPosition = () => {
     <S.Wrapper>
       {loadingState === global.LOAD_STATE_MAP.loaded && (
         <StyledTooltip title={EXPLANATION}>
-          <Paragraph muted style={{ fontSize: 13 }}>
+          <Paragraph muted="true" style={{ fontSize: 13 }}>
             {sessionViewIndex + 1} /{' '}
             {(coreStatus === global.CORE_STATUS_MAP.focused ||
               (isFlexibleFlowActive &&
                 coreStatus === global.CORE_STATUS_MAP.sorting)) &&
-            selectedEmails &&
-            selectedEmails.selectedIds.length > 0
+              selectedEmails &&
+              selectedEmails.selectedIds.length > 0
               ? selectedEmails.selectedIds.length
               : totalThreads}
           </Paragraph>
         </StyledTooltip>
-      )}
-      {loadingState === global.LOAD_STATE_MAP.loading && (
-        <StyledCircularProgress size={10} />
-      )}
-      {loadingState === global.LOAD_STATE_MAP.error && (
-        <QiWarningAlt />
-        // TODO: Add explanation here (Something went wrong)
-      )}
-    </S.Wrapper>
+      )
+      }
+      {
+        loadingState === global.LOAD_STATE_MAP.loading && (
+          <StyledCircularProgress size={10} />
+        )
+      }
+      {
+        loadingState === global.LOAD_STATE_MAP.error && (
+          <QiWarningAlt />
+          // TODO: Add explanation here (Something went wrong)
+        )
+      }
+    </S.Wrapper >
   )
 }
 

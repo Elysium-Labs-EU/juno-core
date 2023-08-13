@@ -28,9 +28,10 @@ const MenuSectionComponent = ({
   setFocusedItemIndex,
 }: IMenuSection) => {
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     const nodeList = document.querySelectorAll(
       `.${activeModalTag}-menu-item`
-    ) 
+    ) as NodeListOf<HTMLButtonElement | HTMLAnchorElement>
 
     // eslint-disable-next-line default-case
     switch (event.code) {
@@ -69,6 +70,7 @@ const MenuSectionComponent = ({
       case 'Enter':
         event.preventDefault()
         event.stopPropagation()
+        nodeList[nodeList.length - 1]?.click()
         nodeList[focusedItemIndex]?.click()
         break
       // default:

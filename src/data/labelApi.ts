@@ -8,29 +8,26 @@ const labelApi = () => ({
     fetchWrapper<TGmailV1SchemaLabelSchema>(
       `/api/label/${id}`,
       {
-        method: 'GET'
+        method: 'GET',
       },
       gmailV1SchemaLabelSchema
     ),
 
-  updateLabel: (body: { id: string, requestBody: Record<string, unknown> }) =>
+  updateLabel: (body: { id: string; requestBody: Record<string, unknown> }) =>
     fetchWrapper<TGmailV1SchemaLabelSchema>(
       `/api/labels`,
       {
         method: 'PATCH',
-        body
+        body,
       },
       gmailV1SchemaLabelSchema
     ),
 
   deleteLabel: (id: string) =>
-    fetchWrapper<''>(
-      `/api/labels`,
-      {
-        method: 'DELETE',
-        body: { id }
-      }
-    )
+    fetchWrapper<''>(`/api/labels`, {
+      method: 'DELETE',
+      body: { id },
+    }),
 })
 
 export default labelApi

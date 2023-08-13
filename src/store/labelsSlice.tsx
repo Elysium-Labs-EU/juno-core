@@ -89,19 +89,10 @@ export const { setCurrentLabels, setLoadedInbox, setStorageLabels } =
 
 export const removeLabel =
   (labelId: string): AppThunk =>
-    async () => {
-      try {
-        const response = await labelApi().deleteLabel(labelId)
-        if (response && response.status !== 204) {
-          toast.custom((t) => (
-            <CustomToast
-              specificToast={t}
-              title="Unable to store the settings."
-              variant="error"
-            />
-          ))
-        }
-      } catch (err) {
+  async () => {
+    try {
+      const response = await labelApi().deleteLabel(labelId)
+      if (response && response.status !== 204) {
         toast.custom((t) => (
           <CustomToast
             specificToast={t}
@@ -110,8 +101,17 @@ export const removeLabel =
           />
         ))
       }
-      return null
+    } catch (err) {
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to store the settings."
+          variant="error"
+        />
+      ))
     }
+    return null
+  }
 
 export const setCurrentLabel = (): AppThunk => (dispatch, getState) => {
   const activePath = getState().router.location?.pathname
@@ -152,54 +152,41 @@ export const updateSettingsLabel =
     key: TUpdateSettingsLabelKeys
     value: string | number | boolean
   }): AppThunk =>
-    async (dispatch, getState) => {
-      const showIntroduction = false
+  async (dispatch, getState) => {
+    const showIntroduction = false
 
-      const {
-        alternateActions,
-        emailFetchSize,
-        isAvatarVisible,
-        isFlexibleFlowActive,
-        settingsLabel,
-      } = getState().utils
+    const {
+      alternateActions,
+      emailFetchSize,
+      isAvatarVisible,
+      isFlexibleFlowActive,
+      settingsLabel,
+    } = getState().utils
 
-      const storedSettings = {
-        alternateActions,
-        emailFetchSize,
-        isAvatarVisible,
-        isFlexibleFlowActive,
-        showIntroduction,
-      }
+    const storedSettings = {
+      alternateActions,
+      emailFetchSize,
+      isAvatarVisible,
+      isFlexibleFlowActive,
+      showIntroduction,
+    }
 
-      const adjustedSettings = { ...storedSettings, [key]: value }
+    const adjustedSettings = { ...storedSettings, [key]: value }
 
-      if (
-        !settingsLabel ||
-        isEmpty(adjustedSettings) ||
-        !settingsLabel.id
-      ) {
-        throw Error('Cannot find settingsLabel')
-      }
+    if (!settingsLabel || isEmpty(adjustedSettings) || !settingsLabel.id) {
+      throw Error('Cannot find settingsLabel')
+    }
 
-      try {
-        const response = await labelApi().updateLabel({
-          id: settingsLabel.id,
-          requestBody: {
-            value: adjustedSettings,
-            isSettings: true,
-            settingsLabel,
-          },
-        })
-        if (response && response.data.type !== 'user') {
-          toast.custom((t) => (
-            <CustomToast
-              specificToast={t}
-              title="Unable to store settings."
-              variant="error"
-            />
-          ))
-        }
-      } catch (err) {
+    try {
+      const response = await labelApi().updateLabel({
+        id: settingsLabel.id,
+        requestBody: {
+          value: adjustedSettings,
+          isSettings: true,
+          settingsLabel,
+        },
+      })
+      if (response && response.data.type !== 'user') {
         toast.custom((t) => (
           <CustomToast
             specificToast={t}
@@ -208,7 +195,16 @@ export const updateSettingsLabel =
           />
         ))
       }
+    } catch (err) {
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title="Unable to store settings."
+          variant="error"
+        />
+      ))
     }
+  }
 
 export const selectLabelIds = (state: RootState) => state.labels.labelIds
 export const selectLoadedInbox = (state: RootState) => state.labels.loadedInbox

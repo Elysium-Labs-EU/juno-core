@@ -41,7 +41,7 @@ const SearchResults = ({
       </S.FooterRow>
     ) : (
       <S.FooterRow>
-        <Paragraph small muted>
+        <Paragraph smallmuted="true">
           {global.NO_MORE_RESULTS}
         </Paragraph>
       </S.FooterRow>

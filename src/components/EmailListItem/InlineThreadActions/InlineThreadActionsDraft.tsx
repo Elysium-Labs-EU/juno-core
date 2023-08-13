@@ -18,11 +18,12 @@ const InlineThreadActionsDraft = ({
   const draftList = useAppSelector(selectDraftList)
 
   const draftId =
-    draftList.length > 0 &&
-    draftList.find((draft) => draft.message.threadId === threadId)?.id
+    draftList && draftList.length > 0
+      ? draftList.find((draft) => draft.message.threadId === threadId)?.id
+      : undefined
 
   return (
-    <S.Wrapper isFocused={isFocused}>
+    <S.Wrapper isfocused={isFocused.toString()}>
       <Stack>
         <CustomIconButton
           onClick={() =>

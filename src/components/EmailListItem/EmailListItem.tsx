@@ -169,15 +169,21 @@ const EmailListItem = ({
             <InlineThreadActionsDraft threadId={id} isFocused={isFocused} />
           )}
           <S.CellCheckbox
-            inSelect={
-              selectedEmails ? selectedEmails.selectedIds.length > 0 &&
+            inselect={(
+              selectedEmails
+                ? selectedEmails.selectedIds.length > 0 &&
                 selectedEmails.labelIds.length > 0 &&
-                multipleIncludes(selectedEmails.labelIds, labelIds) : false
-            }
+                multipleIncludes(selectedEmails.labelIds, labelIds)
+                : false
+            ).toString()}
           >
             {showCheckbox && (
               <CustomCheckbox
-                isChecked={selectedEmails ? selectedEmails.selectedIds.includes(id) : false}
+                isChecked={
+                  selectedEmails
+                    ? selectedEmails.selectedIds.includes(id)
+                    : false
+                }
                 onChange={handleCheckBox}
               />
             )}

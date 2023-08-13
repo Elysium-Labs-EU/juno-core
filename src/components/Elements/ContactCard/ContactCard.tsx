@@ -12,7 +12,10 @@ import getRandomColor from 'utils/getRandomColor'
 import getUserInitials from 'utils/getUserInitials'
 
 import * as S from './ContactCardStyles'
-import type { ContactCardProps, ContactCardPopperProps } from './ContactCardTypes'
+import type {
+  ContactCardProps,
+  ContactCardPopperProps,
+} from './ContactCardTypes'
 import CustomButton from '../Buttons/CustomButton'
 import Stack from '../Stack/Stack'
 
@@ -56,7 +59,7 @@ export const ContactCardContent = ({
               spacing="none"
               style={{ overflow: 'hidden' }}
             >
-              <Span small>{EMAIL_HEADER}</Span>
+              <Span small="true">{EMAIL_HEADER}</Span>
               <S.ContactCardEmail
                 title={emailAddress ?? ''}
                 onClick={() => {

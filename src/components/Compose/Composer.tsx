@@ -11,7 +11,6 @@ import { useLocation } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
 import Stack from 'components/Elements/Stack/Stack'
-import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import * as local from 'constants/composeEmailConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
@@ -34,7 +33,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks'
 import type { ComposeEmailReceive } from 'store/storeTypes/composeTypes'
 import type { TContact } from 'store/storeTypes/contactsTypes'
 import type { TEmailDetailState } from 'store/storeTypes/emailDetailTypes'
-import type { TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
+import type { Schema$MessagePart, TGmailV1SchemaDraftSchema } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import { selectActiveModal, selectInSearch } from 'store/utilsSlice'
 import { Base, Span } from 'styles/globalStyles'
 import findDraftMessageInList from 'utils/findDraftMessageInList'
@@ -48,7 +47,7 @@ import SignatureEmail from './ComposeFields/Signature/SignatureEmail'
 import SubjectField from './ComposeFields/SubjectField'
 import * as S from './ComposeStyles'
 import DiscardDraftButton from './DiscardDraftButton'
-import useParsePresetValues from './Hooks/useParsePresetValues'
+// import useParsePresetValues from './Hooks/useParsePresetValues'
 
 const isTContactArray = (value: unknown): value is TContact[] =>
   Array.isArray(value) && value.every((item) => 'emailAddress' in item)
@@ -58,7 +57,7 @@ const isFileArray = (value: unknown): value is File[] =>
 
 const isEmailAttachmentTypeArray = (
   value: unknown
-): value is EmailAttachmentType[] =>
+): value is Schema$MessagePart[] =>
   Array.isArray(value) &&
   value.every(
     (item) =>
@@ -91,9 +90,34 @@ interface ComposeEmailProps {
   ) => void
 }
 
-type Action = { id: string; value: string | TContact[] | null | File[] }
-type Actions = Action[]
+export type Action = { id: string; value: string | TContact[] | null | File[] | Schema$MessagePart[] }
+export type Actions = Action[]
 
+const intitialState = { to: [], cc: [], bcc: [], subject: null, body: null, files: null, signature: null }
+
+function reducer(state: { [key: string]: string | TContact[] | File[] } | null, action: Action | Actions) {
+  if (Array.isArray(action)) {
+    let updatedState = state
+    action.forEach((item) => {
+      if (typeof item === 'object' && item.value !== null) {
+        const { id, value } = item
+        updatedState = {
+          ...updatedState,
+          [id]: value,
+        }
+      }
+    })
+    return updatedState
+  }
+  if (action.value !== null) {
+    const { id, value } = action
+    return {
+      ...state,
+      [id]: value,
+    }
+  }
+  return state
+}
 
 const Composer = ({
   presetValue = undefined,
@@ -115,46 +139,27 @@ const Composer = ({
   const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
   const [hasInteracted, setHasInteracted] = useState(false)
 
+  // TODO: The types for the action are not matching the userParsePresetsValues function
+  const [composedEmail, updateComposedEmail] = useReducer(reducer, intitialState)
 
-  const [composedEmail, updateComposedEmail] = useReducer(
-    (state: { [key: string]: string | TContact[] | File[] } | null, action: Action | Actions) => {
-      if (Array.isArray(action)) {
-        let updatedState = state
-        action.forEach((item) => {
-          if (typeof item === 'object' && item.value !== null) {
-            const { id, value } = item
-            updatedState = {
-              ...updatedState,
-              [id]: value,
-            }
-          }
-        })
-        return updatedState
-      }
-      if (action.value !== null) {
-        const { id, value } = action
-        return {
-          ...state,
-          [id]: value,
-        }
-      }
-      return state
-    },
-    null
-  )
 
   const userInteractedRef = useRef(false)
   const snapshotComposeEmailRef = useRef<typeof composedEmail>(null)
 
+  useEffect(() => {
+    console.log({ composedEmail })
+  }, [composedEmail]
+  )
+
   // Use this hook to parse possible preset values at component mount
-  useParsePresetValues({
-    setShowCC,
-    setShowBCC,
-    setComposedEmail: updateComposedEmail,
-    setLoadState,
-    loadState,
-    presetValueObject: presetValue || (location.state as ComposeEmailReceive),
-  })
+  // useParsePresetValues({
+  //   setShowCC,
+  //   setShowBCC,
+  //   setComposedEmail: updateComposedEmail,
+  //   setLoadState,
+  //   loadState,
+  //   presetValueObject: presetValue || (location.state as ComposeEmailReceive),
+  // })
 
   // A function to change the userInteractedRef to true - this should only occur when the user has interacted with the opened draft.
   // The flag is used to allow the system to update the draft.
@@ -165,41 +170,41 @@ const Composer = ({
   }, [hasInteracted])
 
   // Listen to any changes of the composeEmail object to update the draft
-  useEffect(() => {
-    if (!composedEmail) {
-      return
-    }
-    const storedDraftDetails = findDraftMessageInList({
-      draftList,
-      target: composedEmail,
-    })
-    // For the first time running
-    if (
-      storedDraftDetails &&
-      !isEqual(localDraftDetails, storedDraftDetails) &&
-      !snapshotComposeEmailRef.current
-    ) {
-      // Attempt to use the fetched draft object it from the draftList Redux store.
-      // If possible set a snapshot of the compose email
-      setLocalDraftDetails(storedDraftDetails)
-      snapshotComposeEmailRef.current = composedEmail
-    } else if (
-      userInteractedRef.current &&
-      !isEqual(snapshotComposeEmailRef.current, composedEmail)
-    ) {
-      snapshotComposeEmailRef.current = composedEmail
-      // If the user is interacting with the draft, send an update request and set the response as the local state
-      const asyncDispatchAction = async () => {
-        const response = await dispatch(
-          createUpdateDraft({ composedEmail, localDraftDetails })
-        )
-        if (response) {
-          setLocalDraftDetails(response)
-        }
-      }
-      void asyncDispatchAction()
-    }
-  }, [composedEmail, localDraftDetails])
+  // useEffect(() => {
+  //   if (!composedEmail) {
+  //     return
+  //   }
+  //   const storedDraftDetails = findDraftMessageInList({
+  //     draftList,
+  //     target: composedEmail,
+  //   })
+  //   // For the first time running
+  //   if (
+  //     storedDraftDetails &&
+  //     !isEqual(localDraftDetails, storedDraftDetails) &&
+  //     !snapshotComposeEmailRef.current
+  //   ) {
+  //     // Attempt to use the fetched draft object it from the draftList Redux store.
+  //     // If possible set a snapshot of the compose email
+  //     setLocalDraftDetails(storedDraftDetails)
+  //     snapshotComposeEmailRef.current = composedEmail
+  //   } else if (
+  //     userInteractedRef.current &&
+  //     !isEqual(snapshotComposeEmailRef.current, composedEmail)
+  //   ) {
+  //     snapshotComposeEmailRef.current = composedEmail
+  //     // If the user is interacting with the draft, send an update request and set the response as the local state
+  //     const asyncDispatchAction = async () => {
+  //       const response = await dispatch(
+  //         createUpdateDraft({ composedEmail, localDraftDetails })
+  //       )
+  //       if (response) {
+  //         setLocalDraftDetails(response)
+  //       }
+  //     }
+  //     void asyncDispatchAction()
+  //   }
+  // }, [composedEmail, localDraftDetails])
 
   // Based on the changes in the draftDetails, notify the user that the save was successful
   useEffect(() => {
@@ -410,15 +415,18 @@ const Composer = ({
     isDisabled: inSearch || Boolean(activeModal),
   })
 
+  const isReplyingAsString = isReplying.toString()
+  const isForwardingAsString = isForwarding.toString()
+
   return (
-    <S.Wrapper tabbedView={(isReplying || isForwarding)}>
-      <S.ComposerContainer tabbedView={(isReplying || isForwarding)}>
+    <S.Wrapper tabbedView={isReplyingAsString || isForwardingAsString}>
+      <S.ComposerContainer tabbedView={isReplyingAsString || isForwardingAsString}>
         <Base>
           <form autoComplete="off">
             <S.TopRowControls>
               <S.UpdateContainer>
                 {saveSuccess && (
-                  <Span small muted>
+                  <Span smallmuted="true">
                     {local.DRAFT_SAVED}
                   </Span>
                 )}

@@ -31,10 +31,10 @@ const EmptyStateTemplate = ({
   <Wrapper>
     <SVGWrapper>{SVG}</SVGWrapper>
     <p>{header}</p>
-    <Paragraph muted style={{ marginTop: 0 }}>
+    <Paragraph muted="true" style={{ marginTop: 0 }}>
       {paragraph}
     </Paragraph>
-  </Wrapper>
+  </Wrapper >
 )
 
 export default EmptyStateTemplate

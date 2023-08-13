@@ -87,11 +87,7 @@ const InboxSortOption = () => {
 
   const isDisabled = () => {
     if (isFlexibleFlowActive) {
-      return (
-        isLoading ||
-        activeEmailListIndex === -1 ||
-        totalThreads === 0
-      )
+      return isLoading || activeEmailListIndex === -1 || totalThreads === 0
     }
     return isLoading || totalThreads === 0
   }
@@ -99,7 +95,8 @@ const InboxSortOption = () => {
   const selectLabel = useCallback(() => {
     if (isFlexibleFlowActive) {
       if (
-        selectedEmails && selectedEmails.selectedIds.length > 0 &&
+        selectedEmails &&
+        selectedEmails.selectedIds.length > 0 &&
         selectedEmails.labelIds.includes(INBOX_LABEL)
       ) {
         return (

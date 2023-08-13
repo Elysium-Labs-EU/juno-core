@@ -5,7 +5,9 @@
  */
 
 export default function deduplicateItems<T>(undoubleObject: T[]) {
-  return [...new Set(undoubleObject.map((item) => JSON.stringify(item)))].reduce((acc, curr) => {
+  return [
+    ...new Set(undoubleObject.map((item) => JSON.stringify(item))),
+  ].reduce((acc, curr) => {
     const key = JSON.stringify(curr) as keyof T[]
     if (curr && !acc[key]) {
       acc.push(JSON.parse(curr) as T)

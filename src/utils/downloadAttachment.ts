@@ -12,9 +12,7 @@ const FAIL_RESPONSE_OBJECT = {
 }
 
 const handleSaveAttachment = (
-  fetchedAttachment: Awaited<ReturnType<MessageApiReturnType[
-    'getAttachment'
-  ]>>,
+  fetchedAttachment: Awaited<ReturnType<MessageApiReturnType['getAttachment']>>,
   filename: string,
   mimeType: string
 ): { success: boolean; message: string | null } => {

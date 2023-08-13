@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { expect } from 'vitest'
 
 import type {
@@ -385,7 +386,7 @@ describe('handleAdditionToExistingEmailArray', () => {
       timestamp: Date.now(),
     })
 
-    expect(state.searchList.threads).toEqual(updatedThreads)
+    expect(state.searchList?.threads).toEqual(updatedThreads)
   })
 })
 
@@ -422,9 +423,9 @@ describe('handleEmailListChange', () => {
 
   it('updates the email list when q is not present and arrayIndex exists', () => {
     handleEmailListChange({ state, labels, threads, timestamp, nextPageToken })
-    expect(state.emailList.length).toEqual(1)
-    expect(state.emailList[0]?.labels).toEqual(labels)
-    expect(state.emailList[0]?.threads).toEqual(threads)
+    expect(state.emailList?.length).toEqual(1)
+    expect(state.emailList?.[0]?.labels).toEqual(labels)
+    expect(state.emailList?.[0]?.threads).toEqual(threads)
   })
 
   it('pushes a new email list when q is not present and arrayIndex does not exist', () => {
@@ -435,9 +436,9 @@ describe('handleEmailListChange', () => {
       timestamp,
       nextPageToken,
     })
-    expect(state.emailList.length).toEqual(2)
-    expect(state.emailList[1]?.labels).toEqual(['test'])
-    expect(state.emailList[1]?.threads).toEqual(threads)
+    expect(state.emailList?.length).toEqual(2)
+    expect(state.emailList?.[1]?.labels).toEqual(['test'])
+    expect(state.emailList?.[1]?.threads).toEqual(threads)
   })
 
   it('pushes an empty result object when threads is empty or undefined', () => {
@@ -447,9 +448,9 @@ describe('handleEmailListChange', () => {
       threads: [],
       timestamp: Date.now(),
     })
-    expect(state.emailList.length).toEqual(3)
-    expect(state.emailList[2]?.labels).toEqual(['empty'])
-    expect(state.emailList[2]?.threads).toEqual([])
+    expect(state.emailList?.length).toEqual(3)
+    expect(state.emailList?.[2]?.labels).toEqual(['empty'])
+    expect(state.emailList?.[2]?.threads).toEqual([])
   })
 })
 
@@ -471,7 +472,7 @@ describe('setSelectedEmails', () => {
       selectedEmails: { labelIds: [], selectedIds: [] },
     }
     const check = reducer(state, setSelectedEmails(payload))
-    expect(check.selectedEmails.selectedIds).toContain(emailId)
+    expect(check.selectedEmails?.selectedIds).toContain(emailId)
     // expect(state.selectedEmails.selectedIds).toContain(emailId)
   })
   it('removes email id from selectedIds when event is "remove"', () => {
@@ -492,7 +493,7 @@ describe('setSelectedEmails', () => {
       selectedEmails: { selectedIds: [emailId], labelIds },
     }
     const check = reducer(state, setSelectedEmails(payload))
-    expect(check.selectedEmails.selectedIds).not.toContain(emailId)
+    expect(check.selectedEmails?.selectedIds).not.toContain(emailId)
   })
   it('sets labelIds and selectedIds when payload is not empty', () => {
     const labelIds = ['label1', 'label2']
@@ -508,8 +509,8 @@ describe('setSelectedEmails', () => {
     }
     const check = reducer(state, setSelectedEmails(payload))
     // setSelectedEmails(state, { payload })
-    expect(check.selectedEmails.labelIds).toEqual(labelIds)
-    expect(check.selectedEmails.selectedIds).toContain('789')
+    expect(check.selectedEmails?.labelIds).toEqual(labelIds)
+    expect(check.selectedEmails?.selectedIds).toContain('789')
   })
   it('sets selectedEmails to initial state when payload is empty', () => {
     const emailId = '456'
@@ -521,7 +522,7 @@ describe('setSelectedEmails', () => {
       searchList: null,
       selectedEmails: { selectedIds: [emailId], labelIds },
     }
-    const payload: Array<any> = []
+    const payload: Array<ISelectedEmailAction> = []
     const check = reducer(state, setSelectedEmails(payload))
     expect(check).toEqual({
       activeEmailListIndex: -1,

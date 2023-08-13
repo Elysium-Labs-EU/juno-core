@@ -18,7 +18,7 @@ const LoadingComponent = ({ hasError }: ILoadingComponent) =>
       <S.LoaderContainer>
         <S.StyledLinearProgress />
       </S.LoaderContainer>
-      <Span muted>{BETA_VERSION}</Span>
+      <Span muted="true">{BETA_VERSION}</Span>
     </>
   ) : null
 

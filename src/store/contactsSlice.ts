@@ -17,7 +17,9 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {
     setAllContacts: (state, { payload }: PayloadAction<Array<TContact>>) => {
-      const uniqueContacts = deduplicateItems(state.allContacts ? [...state.allContacts, ...payload] : payload)
+      const uniqueContacts = deduplicateItems(
+        state.allContacts ? [...state.allContacts, ...payload] : payload
+      )
       state.allContacts = uniqueContacts
     },
     setContactsLoaded: (

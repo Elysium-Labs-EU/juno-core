@@ -102,7 +102,7 @@ const DraftMessage = ({
     <OpenMessageLayout
       draftHeaderControls={
         <S.DraftHeaderControls>
-          <Paragraph muted small style={{ marginRight: 'var(--spacing-4)' }}>
+          <Paragraph muted="true" small="true" style={{ marginRight: 'var(--spacing-4)' }}>
             {local.DRAFT_INDICATOR_HEADER}
           </Paragraph>
           <CustomButton
@@ -120,7 +120,7 @@ const DraftMessage = ({
             suppressed
             onClick={handleDiscardDraft}
           />
-        </S.DraftHeaderControls>
+        </S.DraftHeaderControls >
       }
       emailSubject={staticEmailSubject}
       handleClick={handleOpenClose}

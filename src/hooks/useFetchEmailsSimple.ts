@@ -23,8 +23,10 @@ export default function useFetchEmailsSimple() {
     // Only preload the messages when the strict flow is active
 
     // Conditions for early return
-    if (timestampLastFired.current !== 0 &&
-      timestampLastFired.current - Date.now() <= global.MIN_DELAY_REFRESH) {
+    if (
+      timestampLastFired.current !== 0 &&
+      timestampLastFired.current - Date.now() <= global.MIN_DELAY_REFRESH
+    ) {
       return
     }
 

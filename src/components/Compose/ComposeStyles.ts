@@ -2,22 +2,22 @@ import styled, { css } from 'styled-components'
 
 import { breakPoint } from 'constants/themeConstants'
 
-interface IWrapper {
-  tabbedView: boolean
+interface Wrapper {
+  tabbedView: string
 }
 
-export const Wrapper = styled.div<IWrapper>`
+export const Wrapper = styled.div<Wrapper>`
   margin-left: ${({ tabbedView }) =>
-    tabbedView ? 'var(--spacing-4)' : 'auto'};
+    tabbedView === 'true' ? 'var(--spacing-4)' : 'auto'};
   margin-right: auto;
   max-width: ${({ tabbedView }) =>
-    tabbedView ? '690px' : 'min(100vw - 340px, 860px)'};
-  min-width: ${({ tabbedView }) => (tabbedView ? '500px' : '665px')};
+    tabbedView === 'true' ? '690px' : 'min(100vw - 340px, 860px)'};
+  min-width: ${({ tabbedView }) => (tabbedView === 'true' ? '500px' : '665px')};
   position: static;
   width: 100%;
 
   ${({ tabbedView }) =>
-    tabbedView &&
+    tabbedView === 'true' &&
     css`
       @media only screen and (min-width: ${breakPoint.xl}) {
         margin-left: var(--spacing-8);
@@ -31,14 +31,14 @@ export const UpdateContainer = styled.div`
   min-height: 32px;
 `
 
-interface IComposerContainer {
-  tabbedView: boolean
+interface ComposerContainer {
+  tabbedView: string
 }
 
-export const ComposerContainer = styled.div<IComposerContainer>`
+export const ComposerContainer = styled.div<ComposerContainer>`
   padding-bottom: ${({ tabbedView }) =>
-    tabbedView ? '0' : 'var(--spacing-10)'};
-  padding-top: ${({ tabbedView }) => (tabbedView ? '0' : 'var(--spacing-4)')};
+    tabbedView === 'true' ? '0' : 'var(--spacing-10)'};
+  padding-top: ${({ tabbedView }) => (tabbedView === 'true' ? '0' : 'var(--spacing-4)')};
 `
 
 export const TopRowControls = styled.div`
@@ -49,11 +49,11 @@ export const TopRowControls = styled.div`
   margin-bottom: var(--spacing-2);
 `
 
-interface ILabel {
-  hasValue?: boolean
+interface Label {
+  hasValue?: string
 }
 
-export const Label = styled.div<ILabel>`
+export const Label = styled.div<Label>`
   font-size: var(--text-small);
   margin-bottom: var(--spacing-1);
 
@@ -67,9 +67,9 @@ export const Label = styled.div<ILabel>`
   }
 
   label {
-    color: ${({ hasValue }) => (hasValue ? 'rgb(83, 83, 88)' : 'default')};
+    color: ${({ hasValue }) => (hasValue === 'true' ? 'rgb(83, 83, 88)' : 'default')};
     cursor: default;
-    opacity: ${({ hasValue }) => (hasValue ? '0.3' : '1')};
+    opacity: ${({ hasValue }) => (hasValue === 'true' ? '0.3' : '1')};
     transition: opacity 0.3s ease 0s, color 0.3s ease 0s;
     user-select: none;
     &:hover {

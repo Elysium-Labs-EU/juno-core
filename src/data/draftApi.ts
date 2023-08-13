@@ -17,17 +17,17 @@ const draftApi = () => ({
       `/api/create-draft`,
       {
         method: 'POST',
-        body: data
+        body: data,
       },
       gmailV1SchemaDraftSchema
     ),
 
-  updateDrafts: ({ id, formData }: { id: string, formData: FormData }) =>
+  updateDrafts: ({ id, formData }: { id: string; formData: FormData }) =>
     fetchWrapper<TGmailV1SchemaDraftSchema>(
       `/api/update-draft/${id}`,
       {
         method: 'PUT',
-        body: formData
+        body: formData,
       },
       gmailV1SchemaDraftSchema
     ),
@@ -45,27 +45,21 @@ const draftApi = () => ({
     fetchWrapper<TDraftResponseEntry>(
       `/api/draft/${draftId}`,
       {
-        method: 'GET'
+        method: 'GET',
       },
       DraftResponseEntry
     ),
 
-  sendDraft: (data: { id: string, timeOut: number }) =>
-    fetchWrapper<TGmailV1SchemaMessageSchema>(
-      `/api/send-draft`,
-      {
-        method: 'POST',
-        body: data
-      }
-    ),
+  sendDraft: (data: { id: string; timeOut: number }) =>
+    fetchWrapper<TGmailV1SchemaMessageSchema>(`/api/send-draft`, {
+      method: 'POST',
+      body: data,
+    }),
   deleteDraft: (id: string) =>
-    fetchWrapper<''>(
-      `/api/draft`,
-      {
-        method: 'DELETE',
-        body: { id }
-      }
-    )
+    fetchWrapper<''>(`/api/draft`, {
+      method: 'DELETE',
+      body: { id },
+    }),
 })
 
 export type DraftApiReturnType = ReturnType<typeof draftApi>

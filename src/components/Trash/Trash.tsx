@@ -15,7 +15,7 @@ const Trash = () => {
       activePage={ACTIVE_PAGE_HEADER.more}
       headerTitle={HEADER_TRASH}
       additionalHeader={
-        <Paragraph small muted style={{ textAlign: 'center' }}>
+        <Paragraph smallmuted="true" style={{ textAlign: 'center' }}>
           {INFORMATION_MESSAGE}
         </Paragraph>
       }

@@ -30,12 +30,12 @@ export const object: TypeGuard<object> = (val: unknown) => {
 
 export const array =
   <T>(inner: TypeGuard<T>) =>
-    (val: unknown): T[] => {
-      if (!Array.isArray(val)) {
-        throw new Error('Not an array')
-      }
-      return val.map(inner)
+  (val: unknown): T[] => {
+    if (!Array.isArray(val)) {
+      throw new Error('Not an array')
     }
+    return val.map(inner)
+  }
 
 export const objectOf = <T extends Record<string, TypeGuard<any>>>(
   inner: T

@@ -26,7 +26,7 @@ const Button = styled.button<IButton>`
     margin: var(--spacing-1) var(--spacing-1-5);
     span {
       color: ${({ variant }) =>
-    variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
+        variant === 'primary' ? `var(--color-white)` : `var(--color-black)`};
       font-size: var(--text-base);
       line-height: 1rem;
     }
@@ -34,9 +34,9 @@ const Button = styled.button<IButton>`
 
   &:hover {
     background-color: ${({ variant }) =>
-    variant === 'primary'
-      ? `var(--color-neutral-800)`
-      : `var(--color-neutral-200)`};
+      variant === 'primary'
+        ? `var(--color-neutral-800)`
+        : `var(--color-neutral-200)`};
     cursor: pointer;
     box-shadow: var(--box-shadow-low);
   }

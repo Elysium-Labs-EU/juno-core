@@ -35,7 +35,7 @@ import * as S from './BodyFieldStyles'
  * @returns {JSX.Element}
  */
 
-interface IBodyField {
+interface BodyFieldProps {
   autofocus?: FocusPosition
   composeValue?: string
   composerMode: ReturnType<typeof assertComposerMode>
@@ -53,7 +53,7 @@ const BodyField = ({
   loadState,
   setHasInteracted,
   updateComposeEmail,
-}: IBodyField) => {
+}: BodyFieldProps) => {
   const [value, setValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const debouncedValue = useDebounce(value, 500)
@@ -92,8 +92,7 @@ const BodyField = ({
   })
 
   useEffect(() => {
-    let mounted = true
-    if (mounted && composeValue && composeValue.length > 0 && editorInstance) {
+    if (composeValue && composeValue.length > 0 && editorInstance) {
       if (composeValue.includes(global.JUNO_SIGNATURE)) {
         const response = removeSignature(composeValue)
 
@@ -104,9 +103,6 @@ const BodyField = ({
       } else {
         editorInstance.commands.setContent(composeValue, true)
       }
-    }
-    return () => {
-      mounted = false
     }
   }, [composeValue, editorInstance])
 

@@ -17,7 +17,7 @@ export const credentialsSchema = z.object({
     refresh_token: z.string().optional().nullable(),
     scope: z.string().optional(),
     token_type: z.string().optional().nullable(),
-  })
+  }),
 })
 
 export const sessionResponseSchema = z.object({

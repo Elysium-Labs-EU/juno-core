@@ -39,12 +39,19 @@ const AlternateActions = () => {
       <p>{HEADER}</p>
       <QiAlt />
       {BODY.map((content) => (
-        <Paragraph muted key={content.substring(0, 5)}>
+        <Paragraph muted="true" key={content.substring(0, 5)}>
           {content}
         </Paragraph>
-      ))}
-      <Switch id="alternate-actions" checked={alternateActions} onCheckedChange={(e) => alternateActionHandeler(e)}>{SWITCH_LABEL}</Switch>
-    </SettingsSection>
+      ))
+      }
+      <Switch
+        id="alternate-actions"
+        checked={alternateActions}
+        onCheckedChange={(e) => alternateActionHandeler(e)}
+      >
+        {SWITCH_LABEL}
+      </Switch>
+    </SettingsSection >
   )
 }
 

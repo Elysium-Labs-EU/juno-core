@@ -93,21 +93,21 @@ const CommandPaletteSuggestions = ({
 
     const newSuggestion: Array<IJsonStructure> | undefined = DISCORD_URL
       ? [
-        {
-          heading: 'More',
-          id: 'suggestion-header',
-          items: [
-            {
-              id: 'suggestion',
-              children:
-                'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
-              icon: <QiGift />,
-              type: 'Link',
-              onClick: () => window.open(DISCORD_URL, '_blank'),
-            },
-          ],
-        },
-      ]
+          {
+            heading: 'More',
+            id: 'suggestion-header',
+            items: [
+              {
+                id: 'suggestion',
+                children:
+                  'Cannot find what you are looking for? Try a different search term. Or make a suggestion.',
+                icon: <QiGift />,
+                type: 'Link',
+                onClick: () => window.open(DISCORD_URL, '_blank'),
+              },
+            ],
+          },
+        ]
       : undefined
 
     const filteredItemsWithSearch = [
@@ -130,8 +130,6 @@ const CommandPaletteSuggestions = ({
       filteredItemsWithSearch.push(...newSuggestion)
     }
     return filteredItemsWithSearch
-
-
   }, [searchValue])
 
   return (

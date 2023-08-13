@@ -14,7 +14,10 @@ import { selectEmailListSize } from 'store/utilsSlice'
 const handleRequestTiming = (
   labelIds: TLabelState['labelIds'],
   firedTimeStamp: number,
-  timestampLastFired: React.MutableRefObject<{ labelIds: TLabelState['labelIds'], timeStamp: number }>
+  timestampLastFired: React.MutableRefObject<{
+    labelIds: TLabelState['labelIds']
+    timeStamp: number
+  }>
 ) => {
   if (
     labelIds.length === 0 ||
@@ -27,7 +30,7 @@ const handleRequestTiming = (
   if (
     !timestampLastFired.current.timeStamp ||
     firedTimeStamp - timestampLastFired.current.timeStamp >
-    global.MIN_DELAY_REFRESH
+      global.MIN_DELAY_REFRESH
   ) {
     // If the request has the same labelIds, but is outside the set threshold to fire, allow the request to proceed
     timestampLastFired.current = { labelIds, timeStamp: firedTimeStamp }
@@ -50,9 +53,17 @@ export default function useFetchEmailsDrafts(
   // there is no next page token and the feed is only that shallow item.
   useEffect(() => {
     // This variable checks whether the current request isn't within a too short time period for a similar request.
-    const allowedToFire = handleRequestTiming(labelIds, firedTimeStamp, timestampLastFired)
+    const allowedToFire = handleRequestTiming(
+      labelIds,
+      firedTimeStamp,
+      timestampLastFired
+    )
 
-    if (labelIds.length === 0 || !allowedToFire || labelIds.includes(global.SEARCH_LABEL)) {
+    if (
+      labelIds.length === 0 ||
+      !allowedToFire ||
+      labelIds.includes(global.SEARCH_LABEL)
+    ) {
       return
     }
 
@@ -87,6 +98,5 @@ export default function useFetchEmailsDrafts(
       emailPromise?.abort()
       draftPromise?.abort()
     }
-
   }, [labelIds])
 }

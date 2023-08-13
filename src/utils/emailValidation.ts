@@ -10,13 +10,11 @@ const isValidEmailString = (emailEntry: string) => regexTest.test(emailEntry)
 const isValidEmailInContact = (emailEntry: TContact) =>
   emailEntry.emailAddress ? regexTest.test(emailEntry.emailAddress) : false
 
-
 /**
  * @function emailValidation
  * @param email - takes in an array of Contact objects and checks the validity of the email address.
  * @returns - the input if validation is succesful, otherwise returns false.
  */
-
 
 export const emailValidationArray = (email: Array<TContact | string>) => {
   const invalidEmails: Array<string | Record<string, unknown>> = []

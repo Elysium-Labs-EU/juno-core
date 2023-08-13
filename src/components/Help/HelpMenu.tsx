@@ -56,10 +56,10 @@ const HelpMenu = () => {
         },
         DOCUMENTATION_URL
           ? {
-            id: 'documentation',
-            title: 'Documentation',
-            onClick: () => window.open(DOCUMENTATION_URL, '_blank'),
-          }
+              id: 'documentation',
+              title: 'Documentation',
+              onClick: () => window.open(DOCUMENTATION_URL, '_blank'),
+            }
           : null,
       ],
     }
@@ -84,15 +84,15 @@ const HelpMenu = () => {
     const DISCORD_URL = import.meta.env.VITE_DISCORD_SOCIAL_URL
     return DISCORD_URL
       ? {
-        id: 'help-menu-social',
-        items: [
-          {
-            id: 'discord-social',
-            title: 'Join us @ Discord',
-            onClick: () => window.open(DISCORD_URL, '_blank'),
-          },
-        ],
-      }
+          id: 'help-menu-social',
+          items: [
+            {
+              id: 'discord-social',
+              title: 'Join us @ Discord',
+              onClick: () => window.open(DISCORD_URL, '_blank'),
+            },
+          ],
+        }
       : undefined
   }, [])
 

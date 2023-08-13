@@ -67,7 +67,11 @@ const Login = () => {
         } else {
           setLoadState(LOAD_STATE_MAP.error)
           toast.custom((t) => (
-            <CustomToast specificToast={t} title={ERROR_LOGIN} variant="error" />
+            <CustomToast
+              specificToast={t}
+              title={ERROR_LOGIN}
+              variant="error"
+            />
           ))
         }
       } catch (err) {
@@ -108,7 +112,7 @@ const Login = () => {
                 >
                   {COMPANY_TAG}
                 </S.StyledLink>
-                <Span muted>{BETA_VERSION}</Span>
+                <Span muted="true">{BETA_VERSION}</Span>
               </Stack>
             </S.Header>
             <S.LoginContainer>
@@ -121,14 +125,14 @@ const Login = () => {
                 />
                 {isError ? (
                   <Paragraph
-                    muted
-                    small
+                    muted="true"
+                    small="true"
                     style={{ color: 'var(--color-red-500)' }}
                   >
                     {ERROR_LOGIN}
                   </Paragraph>
                 ) : (
-                  <Paragraph muted small>
+                  <Paragraph muted="true" small="true">
                     {ENTER_HINT}
                   </Paragraph>
                 )}
@@ -163,8 +167,8 @@ const Login = () => {
             </S.AdditionalOptions>
           </S.LoginWrapper>
         </AnimatedMountUnmount>
-      </S.Wrapper>
-    </AppWrapper>
+      </S.Wrapper >
+    </AppWrapper >
   )
 }
 

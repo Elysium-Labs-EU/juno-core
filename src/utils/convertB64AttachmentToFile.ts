@@ -1,6 +1,6 @@
-import type { EmailAttachmentType } from 'components/EmailDetail/Attachment/EmailAttachmentTypes'
 import type { MessageApiReturnType } from 'data/messageApi'
 import messageApi from 'data/messageApi'
+import type { Schema$MessagePart } from 'store/storeTypes/gmailBaseTypes/gmailTypes'
 import base64toBlob from 'utils/base64toBlob'
 
 /**
@@ -14,13 +14,13 @@ export default async function convertB64AttachmentToFile({
   files,
 }: {
   id: string
-  files: EmailAttachmentType[]
+  files: Schema$MessagePart[]
 }) {
   if (id) {
     const buffer: ReturnType<MessageApiReturnType['getAttachment']>[] = []
     for (let i = 0; i < files.length; i += 1) {
       const loopFile = files[i]
-      if (loopFile?.body.attachmentId) {
+      if (loopFile?.body?.attachmentId) {
         buffer.push(
           messageApi().getAttachment({
             messageId: id,
@@ -36,7 +36,7 @@ export default async function convertB64AttachmentToFile({
       const loopFile = files[i]
       if (loopFile) {
         const base64Data = result[i]?.data?.data
-        if (!base64Data) {
+        if (!base64Data || !loopFile.mimeType || !loopFile.filename) {
           return
         }
         const blobData = base64toBlob({

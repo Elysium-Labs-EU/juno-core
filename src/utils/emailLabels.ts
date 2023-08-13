@@ -25,8 +25,7 @@ const emailLabels = (
           labelIds: foundLabels,
           storageLabels,
         }).filter(
-          (label) =>
-            label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
+          (label) => label !== global.SENT_LABEL && label !== global.DRAFT_LABEL
         )
       ),
     ]

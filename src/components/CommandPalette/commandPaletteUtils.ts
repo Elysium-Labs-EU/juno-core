@@ -11,9 +11,8 @@ interface IJsonStructureItem {
   index?: number
   keywords?: Array<string>
   onClick?: () =>
-    | void
     | undefined
-    | Promise<any>
+    | Promise<unknown>
     | { payload: string | null; type: string }
     | null
     | Window
@@ -27,8 +26,9 @@ export interface IJsonStructure {
   items: Array<IJsonStructureItem | undefined>
 }
 
-function retrieveChildrenFromElement(item: ReactElement) {
-  if (typeof item === 'object' && item !== null) {
+function retrieveChildrenFromElement(item: unknown) {
+  if (typeof item === 'object' && item !== null && 'props' in item && typeof item.props === 'object'
+    && item.props !== null && 'children' in item.props && typeof item.props.children === 'object') {
     const fetchedChildren = item.props.children
     if (
       Array.isArray(fetchedChildren) &&
@@ -37,19 +37,16 @@ function retrieveChildrenFromElement(item: ReactElement) {
       )
     ) {
       let output = ''
-      const recursiveChildrenCheck = (input: Array<string | ReactElement>) => {
+      const recursiveChildrenCheck = (input: Array<unknown>) => {
         input.forEach((child) => {
           if (typeof child === 'string') {
             output += child
+            return
           }
-          if (Array.isArray(child)) {
-            recursiveChildrenCheck(child)
-          }
-          if (typeof child === 'object' && child !== null) {
+          if (typeof child === 'object' && child !== null && 'props' in child && typeof child.props === 'object' && child.props !== null && 'children' in child.props) {
             if (Array.isArray(child.props.children)) {
               recursiveChildrenCheck(child.props.children)
-            }
-            if (typeof child.props.children === 'string') {
+            } else if (typeof child.props.children === 'string') {
               output += child.props.children
             }
           }
@@ -57,16 +54,9 @@ function retrieveChildrenFromElement(item: ReactElement) {
       }
       recursiveChildrenCheck(fetchedChildren)
       return output
+    } else if (typeof fetchedChildren === 'string') {
+      return fetchedChildren
     }
-    let output = ''
-    if (Array.isArray(fetchedChildren)) {
-      fetchedChildren.forEach((child) => {
-        if (typeof child === 'string') {
-          output += child
-        }
-      })
-    }
-    return output
   }
   return item
 }
@@ -92,7 +82,9 @@ function getLabelFromChildren(children: ReactNode) {
     } else if (child !== null && typeof child === 'object') {
       const typeCastChild = child as ReactElement
       const foundNestedLabel = retrieveChildrenFromElement(typeCastChild)
-      label += foundNestedLabel
+      if (typeof foundNestedLabel === 'string') {
+        label += foundNestedLabel
+      }
     }
   })
   return label
@@ -101,8 +93,8 @@ function getLabelFromChildren(children: ReactNode) {
 function doesChildMatchSearch(search: string, children?: ReactNode) {
   return children
     ? getLabelFromChildren(children)
-        .toLowerCase()
-        .includes(search.toLowerCase())
+      .toLowerCase()
+      .includes(search.toLowerCase())
     : false
 }
 
@@ -110,8 +102,8 @@ function doesKeywordsMatchSearch(search: string, keywords: Array<string>) {
   return keywords.includes('*')
     ? true
     : keywords.some((keyword) =>
-        keyword.toLowerCase().includes(search.toLowerCase())
-      )
+      keyword.toLowerCase().includes(search.toLowerCase())
+    )
 }
 
 export default function filterItems(
@@ -122,8 +114,8 @@ export default function filterItems(
   }: {
     filterOnListHeading: boolean
   } = {
-    filterOnListHeading: true,
-  }
+      filterOnListHeading: true,
+    }
 ) {
   return items
     .filter((list) => {
@@ -135,7 +127,7 @@ export default function filterItems(
 
       return filterOnListHeading
         ? list.heading?.toLowerCase().includes(search.toLowerCase()) ||
-            listHasMatchingItem
+        listHasMatchingItem
         : listHasMatchingItem
     })
     .map((list) => {

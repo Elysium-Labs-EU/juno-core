@@ -33,7 +33,13 @@ const ShowAvatar = () => {
   }
 
   return (
-    <Switch id={SWITCH_ID} checked={isAvatarVisible} onCheckedChange={(e) => switchAvatarView(e)}>{SWITCH_LABEL}</Switch>
+    <Switch
+      id={SWITCH_ID}
+      checked={isAvatarVisible}
+      onCheckedChange={(e) => switchAvatarView(e)}
+    >
+      {SWITCH_LABEL}
+    </Switch>
   )
 }
 

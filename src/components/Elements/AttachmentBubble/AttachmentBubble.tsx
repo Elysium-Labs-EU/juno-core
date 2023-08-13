@@ -100,95 +100,91 @@ const DeleteButton = ({
   />
 )
 
-interface ViewAttachmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ViewAttachmentButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   attachmentData: EmailAttachmentType
   messageId?: string
 }
 
-const ViewAttachmentButton = forwardRef<HTMLButtonElement, ViewAttachmentButtonProps>(
-  (
-    {
-      attachmentData,
-      messageId = undefined,
-    },
-    ref
-  ) => {
-    const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
-    const [fetchedAttachmentData, setFetchedAttachmentData] =
-      useState<null | IFetchedAttachment>(null)
-    const dispatch = useAppDispatch()
-    const activeModal = useAppSelector(selectActiveModal)
+const ViewAttachmentButton = forwardRef<
+  HTMLButtonElement,
+  ViewAttachmentButtonProps
+>(({ attachmentData, messageId = undefined }, ref) => {
+  const [loadState, setLoadState] = useState(global.LOAD_STATE_MAP.idle)
+  const [fetchedAttachmentData, setFetchedAttachmentData] =
+    useState<null | IFetchedAttachment>(null)
+  const dispatch = useAppDispatch()
+  const activeModal = useAppSelector(selectActiveModal)
 
-    const handleClick = async () => {
-      // Do not trigger this function if the attachment is already previewed
-      if (
-        activeModal ===
-        `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
-      ) {
+  const handleClick = async () => {
+    // Do not trigger this function if the attachment is already previewed
+    if (
+      activeModal ===
+      `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
+    ) {
+      return
+    }
+    if (messageId && fetchedAttachmentData === null) {
+      setLoadState(global.LOAD_STATE_MAP.loading)
+      const response = await viewAttachment({
+        messageId,
+        attachmentData,
+      })
+
+      if (response?.success) {
+        setLoadState(global.LOAD_STATE_MAP.loaded)
+        if (window.__TAURI_METADATA__.__currentWindow.label) {
+          // TODO: Write to save the file in temp folder, and open it right away.
+        } else {
+          setFetchedAttachmentData({
+            blobUrl: response.blobUrl,
+            mimeType: response.mimeType,
+          })
+          dispatch(
+            setActiveModal(
+              `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
+            )
+          )
+        }
         return
       }
-      if (messageId && fetchedAttachmentData === null) {
-        setLoadState(global.LOAD_STATE_MAP.loading)
-        const response = await viewAttachment({
-          messageId,
-          attachmentData,
-        })
-
-        if (response?.success) {
-          setLoadState(global.LOAD_STATE_MAP.loaded)
-          if (window.__TAURI_METADATA__.__currentWindow.label) {
-            // TODO: Write to save the file in temp folder, and open it right away.
-          } else {
-            setFetchedAttachmentData({
-              blobUrl: response.blobUrl,
-              mimeType: response.mimeType,
-            })
-            dispatch(
-              setActiveModal(
-                `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
-              )
-            )
-          }
-          return
-        }
-        setLoadState(global.LOAD_STATE_MAP.error)
-        toast.custom((t) => (
-          <CustomToast
-            specificToast={t}
-            title={response?.message ?? global.NETWORK_ERROR}
-            variant="error"
-          />
-        ))
-      } else {
-        // If the data is already fetched, just open the modal
-        dispatch(
-          setActiveModal(
-            `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
-          )
-        )
-      }
-    }
-
-    return loadState !== global.LOAD_STATE_MAP.loading ? (
-      <>
-        {fetchedAttachmentData && (
-          <AttachmentModal
-            fetchedAttachmentData={fetchedAttachmentData}
-            attachmentData={attachmentData}
-          />
-        )}
-        <CustomIconButton
-          ref={ref}
-          onClick={() => void handleClick()}
-          icon={<QiEye />}
-          title="View attachment"
+      setLoadState(global.LOAD_STATE_MAP.error)
+      toast.custom((t) => (
+        <CustomToast
+          specificToast={t}
+          title={response?.message ?? global.NETWORK_ERROR}
+          variant="error"
         />
-      </>
-    ) : (
-      <StyledCircularProgress size={ICON_SIZE} />
-    )
+      ))
+    } else {
+      // If the data is already fetched, just open the modal
+      dispatch(
+        setActiveModal(
+          `${global.ACTIVE_MODAL_MAP.attachment}${attachmentData.body.attachmentId}`
+        )
+      )
+    }
   }
-)
+
+  return loadState !== global.LOAD_STATE_MAP.loading ? (
+    <>
+      {fetchedAttachmentData && (
+        <AttachmentModal
+          fetchedAttachmentData={fetchedAttachmentData}
+          attachmentData={attachmentData}
+        />
+      )}
+      <CustomIconButton
+        ref={ref}
+        onClick={() => void handleClick()}
+        icon={<QiEye />}
+        title="View attachment"
+      />
+    </>
+  ) : (
+    <StyledCircularProgress size={ICON_SIZE} />
+  )
+})
 
 ViewAttachmentButton.displayName = 'ViewAttachmentButton'
 
@@ -210,17 +206,11 @@ const AttachmentBubble = ({
   const previewButtonRef = useRef<HTMLButtonElement>(null)
 
   const mimeType =
-    'mimeType' in attachmentData
-      ? attachmentData.mimeType
-      : attachmentData.type
+    'mimeType' in attachmentData ? attachmentData.mimeType : attachmentData.type
   const fileName =
-    'filename' in attachmentData
-      ? attachmentData.filename
-      : attachmentData.name
+    'filename' in attachmentData ? attachmentData.filename : attachmentData.name
   const fileSize =
-    'body' in attachmentData
-      ? attachmentData.body.size
-      : attachmentData.size
+    'body' in attachmentData ? attachmentData.body.size : attachmentData.size
 
   // TODO: Reinstate this with using the Tauri API
   const memoizedViewAttachmentButton = useMemo(
@@ -276,7 +266,7 @@ const AttachmentBubble = ({
           <EmailAttachmentIcon mimeType={mimeType} />
           <S.AttachmentDetails>
             <Span className="file_name">{fileName}</Span>
-            <Span muted small>
+            <Span muted="true" small="true">
               {global.FILE}
               {formatBytes(fileSize)}
             </Span>
@@ -286,7 +276,7 @@ const AttachmentBubble = ({
       </S.Attachment>
       {memoizedDownloadButton}
       {memoizedDeleteButton}
-    </S.AttachmentWrapper>
+    </S.AttachmentWrapper >
   )
 }
 

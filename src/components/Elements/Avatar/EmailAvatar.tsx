@@ -23,7 +23,7 @@ export const EmailAvatarComponent = ({
       data-testid="avatar"
       randomColor={getRandomColor(staticInitials)}
     >
-      <Span small>{staticInitials}</Span>
+      <Span small="true">{staticInitials}</Span>
     </S.EmailAvatarContainer>
   )
 }

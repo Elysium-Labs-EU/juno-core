@@ -85,10 +85,11 @@ const SelectedOptions = () => {
         />
       </S.Inner>
       <S.Inner>
-        <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${selectedEmails.selectedIds.length > 1
-          ? EMAILS_SELECTED_PLURAL
-          : EMAILS_SELECTED_SINGLE
-          }`}</S.SelectedLabelsText>
+        <S.SelectedLabelsText>{`${selectedEmails.selectedIds.length} ${
+          selectedEmails.selectedIds.length > 1
+            ? EMAILS_SELECTED_PLURAL
+            : EMAILS_SELECTED_SINGLE
+        }`}</S.SelectedLabelsText>
         {location.pathname !== RoutesConstants.ARCHIVE &&
           (!labelIds.includes(global.DRAFT_LABEL) ? (
             <CustomButton

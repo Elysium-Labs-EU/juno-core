@@ -1,5 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import type { Action, PreloadedState, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit'
+import type {
+  Action,
+  PreloadedState,
+  ThunkAction,
+  ThunkDispatch,
+} from '@reduxjs/toolkit'
 import { createBrowserHistory } from 'history'
 import { unstable_batchedUpdates } from 'react-dom'
 import { createReduxHistoryContext } from 'redux-first-history'
@@ -39,7 +44,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
       getDefaultMiddleware().concat(routerMiddleware),
     devTools: process.env.NODE_ENV !== 'production',
   })
-
 
 export const store = setupStore()
 export const history = createReduxHistory(store)

@@ -20,15 +20,11 @@ const Baseloader = () => {
   const hasError = Boolean(baseError)
 
   useEffect(() => {
-    let mounted = true
-    if (baseError && mounted && countDown === 1) {
+    if (baseError && countDown === 1) {
       dispatch(setBaseError(null))
     }
-    if (mounted && countDown === 0) {
+    if (countDown === 0) {
       handleLogout()
-    }
-    return () => {
-      mounted = false
     }
   }, [baseError, countDown])
 

@@ -133,7 +133,7 @@ const EmailDetail = () => {
         const selectedIds = selectedEmails?.selectedIds ?? []
         const hasTodoLabel = selectedEmails?.labelIds.includes(
           findLabelByName({ storageLabels, LABEL_NAME: TODO_LABEL_NAME })?.id ??
-          ''
+            ''
         )
         const hasInboxLabel = selectedEmails?.labelIds.includes(INBOX_LABEL)
         const isFocusedOrSorting =

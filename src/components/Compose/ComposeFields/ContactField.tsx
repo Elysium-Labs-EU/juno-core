@@ -96,8 +96,8 @@ const ContactField = ({
         fieldId={id}
         fieldLabel={label}
         recipientFieldValue={value}
-
-      ><EmailInput
+      >
+        <EmailInput
           id={id}
           handleChange={handleChange}
           handleDelete={handleDelete}
@@ -105,9 +105,9 @@ const ContactField = ({
           registerOnKeyDown={registerOnKeyDown}
           setInputValue={setInputValue}
           valueState={value}
-          willAutoFocus={showField &&
-            Object.keys(value).length === 0}
-        /></RecipientField>
+          willAutoFocus={showField && Object.keys(value).length === 0}
+        />
+      </RecipientField>
     ),
     [dataCy, error, handleChange, id, inputValue, label, value]
   )

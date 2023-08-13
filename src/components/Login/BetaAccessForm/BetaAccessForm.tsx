@@ -53,12 +53,12 @@ const BetaAccesForm = () => {
       modalAriaLabel="beta-access-form"
     >
       <>
-        <Paragraph muted>
+        <Paragraph muted="true">
           Request access to the private beta of Juno. Your email needs to be a
           Google email address.
         </Paragraph>
         {DISCORD_SOCIAL_URL ? (
-          <Paragraph muted>
+          <Paragraph muted="true">
             You can expect a reply on your request within a few hours. If you
             want to get in direct contact, use the{' '}
             <S.StyledLink href={DISCORD_SOCIAL_URL}>
@@ -68,7 +68,8 @@ const BetaAccesForm = () => {
               </Span>
             </S.StyledLink>
           </Paragraph>
-        ) : null}
+        ) : null
+        }
         <S.StyledForm onSubmit={onSubmit}>
           {!complete && (
             <>
@@ -98,14 +99,16 @@ const BetaAccesForm = () => {
             </S.SuccessMessage>
           )}
         </S.StyledForm>
-        {error && DISCORD_SOCIAL_URL ? (
-          <Span>
-            Something went wrong, reach out to us on{' '}
-            <a href={DISCORD_SOCIAL_URL}>Discord</a>
-          </Span>
-        ) : null}
+        {
+          error && DISCORD_SOCIAL_URL ? (
+            <Span>
+              Something went wrong, reach out to us on{' '}
+              <a href={DISCORD_SOCIAL_URL}>Discord</a>
+            </Span>
+          ) : null
+        }
       </>
-    </CustomModal>
+    </CustomModal >
   )
 }
 

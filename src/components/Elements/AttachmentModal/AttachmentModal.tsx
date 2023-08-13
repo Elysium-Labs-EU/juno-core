@@ -33,12 +33,13 @@ const AttachmentModal = ({
           alt={attachmentData.filename}
         />
       ) : (
-        <Paragraph muted>
+        <Paragraph muted="true">
           This file in format {fetchedAttachmentData?.mimeType} is not yet
           supported
         </Paragraph>
-      )}
-    </CustomModal>
+      )
+      }
+    </CustomModal >
   )
 }
 
