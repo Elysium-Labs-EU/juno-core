@@ -24,26 +24,16 @@ export const sessionResponseSchema = z.object({
   idToken: z.string(),
 })
 
-export type TSessionResponseSchema = z.infer<typeof sessionResponseSchema>
-
 export const authenticateClientResponseSchema = z.union([
   z.string(),
   sessionResponseSchema,
   credentialsSchema,
 ])
 
-export type TAuthenticateClientResponseSchema = z.infer<
-  typeof authenticateClientResponseSchema
->
-
 export const extendedGmailV1SchemaProfileSchemaSchema =
   gmailV1SchemaProfileSchema.and(
     peopleV1SchemaNameSchema.pick({ displayName: true })
   )
-
-export type TExtendedGmailV1SchemaProfileSchemaSchema = z.infer<
-  typeof extendedGmailV1SchemaProfileSchemaSchema
->
 
 export const profileExtendWithSignature = gmailV1SchemaSendAsSchema
   .pick({ signature: true })
@@ -65,5 +55,3 @@ export const baseCheckSchema = z.object({
   userSettings: userSettingsSchema,
   userSettingsLabel: gmailV1SchemaLabelSchema,
 })
-
-export type TBaseCheckSchema = z.infer<typeof baseCheckSchema>

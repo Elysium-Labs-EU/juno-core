@@ -28,11 +28,6 @@ export const LoadMoreContainer = styled.div`
   margin-bottom: var(--spacing-6);
 `
 
-export const ThreadListWrapper = styled.div`
-  overflow: auto;
-  height: 100vh;
-`
-
 export const ThreadList = styled.div`
   flex: 1 1;
   display: flex;

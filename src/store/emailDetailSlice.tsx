@@ -55,8 +55,6 @@ const initialState: TEmailDetailState = Object.freeze({
   coreStatus: null,
   currEmail: '',
   fetchStatus: 'idle',
-  isForwarding: false,
-  isReplying: false,
   sessionViewIndex: -1,
   viewIndex: -1,
 })
@@ -89,18 +87,6 @@ const emailDetailSlice = createSlice({
       { payload }: PayloadAction<TEmailDetailState['sessionViewIndex']>
     ) => {
       state.sessionViewIndex = payload
-    },
-    setIsReplying: (
-      state,
-      { payload }: PayloadAction<TEmailDetailState['isReplying']>
-    ) => {
-      state.isReplying = payload
-    },
-    setIsForwarding: (
-      state,
-      { payload }: PayloadAction<TEmailDetailState['isForwarding']>
-    ) => {
-      state.isForwarding = payload
     },
   },
   extraReducers: (builder) => {
@@ -256,10 +242,6 @@ export const selectCurrentEmail = (state: RootState) =>
 export const selectViewIndex = (state: RootState) => state.emailDetail.viewIndex
 export const selectSessionViewIndex = (state: RootState) =>
   state.emailDetail.sessionViewIndex
-export const selectIsReplying = (state: RootState) =>
-  state.emailDetail.isReplying
-export const selectIsForwarding = (state: RootState) =>
-  state.emailDetail.isForwarding
 export const selectFetchStatus = (state: RootState) =>
   state.emailDetail.fetchStatus
 

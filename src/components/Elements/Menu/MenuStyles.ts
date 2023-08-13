@@ -7,31 +7,6 @@ export const StartButtonWrapper = styled.div`
   z-index: var(--z-index-popover);
 `
 
-export const Container = styled.div`
-  animation: fadeInUp 0.2s both;
-  background: var(--color-black);
-  border-radius: var(--radius-l);
-  box-shadow: var(--box-shadow-low);
-  max-height: calc(100vh - 32px);
-  max-width: 800px;
-  min-width: 260px;
-  overflow: auto;
-  transition: all 0.2s ease-in;
-
-  /* Animation */
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translate3d(0, 5px, 0);
-    }
-
-    100% {
-      transform: translate3d(0, 0, 0);
-      opacity: 1;
-    }
-  }
-`
-
 interface IMenuItem {
   isFocused: boolean
 }
@@ -71,8 +46,4 @@ export const MenuItemContentSide = styled.div`
   span:not(:last-child) {
     margin-right: var(--spacing-1);
   }
-`
-
-export const OuterContainer = styled.div`
-  position: relative;
 `

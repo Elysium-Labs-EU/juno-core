@@ -28,8 +28,3 @@ export type TBaseState = z.infer<typeof BaseState>
 const PrefetchedBoxes = z.array(gmailV1SchemaLabelSchema)
 
 export type TPrefetchedBoxes = z.infer<typeof PrefetchedBoxes>
-
-export interface CustomError {
-  error: Record<string, unknown>
-  message?: unknown
-}

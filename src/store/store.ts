@@ -11,7 +11,6 @@ import { createReduxHistoryContext } from 'redux-first-history'
 
 import baseReducer from 'store/baseSlice'
 import contactsReducer from 'store/contactsSlice'
-import draftsReducer from 'store/draftsSlice'
 import emailDetailReducer from 'store/emailDetailSlice'
 import emailReducer from 'store/emailListSlice'
 import labelsReducer from 'store/labelsSlice'
@@ -26,7 +25,6 @@ const { createReduxHistory, routerMiddleware, routerReducer } =
 const rootReducer = combineReducers({
   base: baseReducer,
   contacts: contactsReducer,
-  drafts: draftsReducer,
   email: emailReducer,
   emailDetail: emailDetailReducer,
   labels: labelsReducer,
@@ -48,7 +46,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) =>
 export const store = setupStore()
 export const history = createReduxHistory(store)
 
-export type AppStore = ReturnType<typeof setupStore>
+type AppStore = ReturnType<typeof setupStore>
 export type AppDispatch = AppStore['dispatch']
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,

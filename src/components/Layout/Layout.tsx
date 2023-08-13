@@ -1,5 +1,4 @@
 import AppWrapper from 'components/AppWrapper/AppWrapper'
-import CommandPalette from 'components/CommandPalette/CommandPalette'
 import AnimatedMountUnmount from 'components/Elements/AnimatedMountUnmount'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import HelpMenu from 'components/Help/HelpMenu'
@@ -15,7 +14,7 @@ import { Base } from 'styles/globalStyles'
 
 const BUTTON_TITLE = 'Feedback and help'
 
-export interface ILayout {
+export interface LayoutProps {
   activePage: global.TActivePageHeader | undefined
   additionalHeader?: JSX.Element | Array<JSX.Element> | undefined
   children: JSX.Element | Array<JSX.Element>
@@ -31,7 +30,7 @@ const Layout = ({
   headerTitle,
   showNavigation = true,
   showBackButton = false,
-}: ILayout) => {
+}: LayoutProps) => {
   const activeModal = useAppSelector(selectActiveModal)
   return (
     <AppWrapper headerTitle={headerTitle}>
@@ -51,7 +50,6 @@ const Layout = ({
           showNavigation={showNavigation}
           showBackButton={showBackButton}
         />
-        <CommandPalette />
 
         <AnimatedMountUnmount>{children}</AnimatedMountUnmount>
 

@@ -3,42 +3,34 @@ import styled, { css } from 'styled-components'
 import { breakPoint } from 'constants/themeConstants'
 import { BACKGROUND_FADE } from 'styles/globalStyles'
 
-interface IEmailDetail {
-  tabbedView?: boolean
-}
-
-const MAX_WIDTH_EMAIL_DETAIL = css<IEmailDetail>`
+const MAX_WIDTH_EMAIL_DETAIL = css`
   max-width: min(
     100vw - 340px,
-    ${({ tabbedView }) => (tabbedView ? '740px' : '860px')}
+  860px
   );
   @media only screen and (max-width: ${breakPoint.lg}) {
     max-width: min(
       100vw - 200px,
-      ${({ tabbedView }) => (tabbedView ? '740px' : '860px')}
+      860px
     );
   }
 `
 
-export const Wrapper = styled.div<IEmailDetail>`
+export const Wrapper = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
   width: 100%;
   @media only screen and (max-width: ${breakPoint.lg}) {
-    align-items: ${({ tabbedView }) => (tabbedView ? 'center' : 'normal')};
+    align-items: normal;
   }
-`
-
-export const HiddenMessagesFeed = styled.div`
-  display: none;
 `
 
 export const EmailDetailWrapper = styled.div`
   display: flex;
 `
 
-export const EmailWithComposerContainer = styled.div`
+export const EmailContainer = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
@@ -61,7 +53,7 @@ export const Scroll = styled.div`
   }
 `
 
-export const EmailTopControlContainer = styled.div<IEmailDetail>`
+export const EmailTopControlContainer = styled.div`
   ${BACKGROUND_FADE};
   display: flex;
   justify-content: space-between;
@@ -116,17 +108,8 @@ export const EmailOpenWrapper = styled.div<IEmailWrapper>`
   overflow: auto;
 `
 
-export const DraftHeaderControls = styled.div`
-  align-items: center;
-  border-bottom: 1px solid var(--color-blue-100);
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--spacing-2);
-  padding-bottom: var(--spacing-2);
-`
-
-export const Placeholder = styled.div<IEmailDetail>`
-  display: ${({ tabbedView }) => (tabbedView ? 'none' : 'block')};
+export const Placeholder = styled.div`
+  display: block;
   width: 130px;
   @media only screen and (max-width: ${breakPoint.lg}) {
     display: none;
@@ -159,11 +142,11 @@ export const LoadingErrorWrapper = styled.div`
   width: 100%;
 `
 
-export const MessageFeedComposerContainer = styled.div`
+export const MessageFeedContainer = styled.div`
   display: flex;
 `
 
-export const EmailDetailContainer = styled.div<IEmailDetail>`
+export const EmailDetailContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   ${MAX_WIDTH_EMAIL_DETAIL};
@@ -178,20 +161,6 @@ export const EmailAvatarGrid = styled.div`
   grid-template-columns: auto auto;
 `
 
-export const SpecificMenuContainer = styled.div`
-  position: absolute;
-  right: 40px;
-  top: 50px;
-  z-index: 10;
-`
-
-export const ContactsContainer = styled.div`
-  align-items: center;
-  display: flex;
-  margin-top: var(--spacing-2);
-  margin-bottom: var(--spacing-2);
-`
-
 export const ToFromBCCInner = styled.div`
   display: flex;
   flex-direction: row;
@@ -201,13 +170,6 @@ export const ToFromBCCInner = styled.div`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-`
-
-export const BlockedTrackersContainer = styled.div`
-  align-items: center;
-  display: flex;
-  padding-top: var(--spacing-2);
-  padding-bottom: var(--spacing-1);
 `
 
 export const EmailBody = styled.div`
@@ -273,13 +235,6 @@ export const FullContactContainer = styled.div`
 
 export const ContactContainer = styled.div`
   margin-bottom: var(--spacing-0-5);
-`
-
-export const ComposeWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  position: relative;
 `
 
 export const Spacer = styled.div`

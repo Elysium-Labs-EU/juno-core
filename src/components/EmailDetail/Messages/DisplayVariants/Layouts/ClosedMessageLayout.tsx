@@ -4,10 +4,10 @@ import EmailHasAttachmentSimple from 'components/Elements/EmailHasAttachmentSimp
 import Stack from 'components/Elements/Stack/Stack'
 import TimeStamp from 'components/Elements/TimeStamp/TimeStampDisplay'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
-import { DRAFT_SNIPPET_INDICATOR } from 'constants/draftConstants'
 import { Span } from 'styles/globalStyles'
 
 import type { ClosedMessageLayoutProps } from './LayoutTypes'
+import { DRAFT_SNIPPET_INDICATOR } from 'constants/globalConstants'
 
 const ClosedMessageLayout = ({
   handleClick,

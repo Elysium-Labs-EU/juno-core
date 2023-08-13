@@ -5,7 +5,6 @@ import CustomButton from 'components/Elements/Buttons/CustomButton'
 import * as global from 'constants/globalConstants'
 import RoutesConstants from 'constants/routesConstants'
 import { QiMeatballsH } from 'images/svgIcons/quillIcons'
-import { deleteDraftBatch } from 'store/draftsSlice'
 import {
   selectSelectedEmails,
   setSelectedEmails,
@@ -19,7 +18,6 @@ import {
   EMAILS_SELECTED_PLURAL,
   EMAILS_SELECTED_SINGLE,
   ARCHIVE_BUTTON_LABEL,
-  DISCARD_BUTTON_LABEL,
   DELETE_BUTTON_LABEL,
 } from './SelectedOptionsConstants'
 import * as S from './SelectedOptionsStyles'
@@ -58,10 +56,6 @@ const SelectedOptions = () => {
     dispatch(setSelectedEmails([]))
   }, [])
 
-  const handleDiscardAll = useCallback(() => {
-    dispatch(deleteDraftBatch())
-  }, [labelIds])
-
   const handleShowMoreOptions = useCallback(() => {
     dispatch(setInSearch(true))
   }, [])
@@ -97,13 +91,8 @@ const SelectedOptions = () => {
               onClick={handleArchiveAll}
               title="Archive all the selected emails"
             />
-          ) : (
-            <CustomButton
-              label={DISCARD_BUTTON_LABEL}
-              onClick={handleDiscardAll}
-              title="Discard all the selected drafts"
-            />
-          ))}
+          ) : null
+          )}
 
         <CustomButton
           label={DELETE_BUTTON_LABEL}

@@ -2,8 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import Archive from 'components/Archive/Archive'
 import BaseLoader from 'components/BaseLoader/BaseLoader'
-import ComposeEmail from 'components/Compose/ComposeEmail'
-import Draft from 'components/Draft/Draft'
 import EmailDetail from 'components/EmailDetail/EmailDetail'
 import Inbox from 'components/Inbox/Inbox'
 import AuthExplanation from 'components/Login/AuthExplanation/AuthExplanation'
@@ -78,32 +76,6 @@ const RoutesComponent = () => {
         element={
           <ProtectedRouteTemplate>
             <EmailDetail />
-          </ProtectedRouteTemplate>
-        }
-      />
-      <Route path={RoutesConstants.COMPOSE_EMAIL}>
-        <Route
-          path=""
-          element={
-            <ProtectedRouteTemplate>
-              <ComposeEmail />
-            </ProtectedRouteTemplate>
-          }
-        />
-        <Route
-          path=":draftId"
-          element={
-            <ProtectedRouteTemplate>
-              <ComposeEmail />
-            </ProtectedRouteTemplate>
-          }
-        />
-      </Route>
-      <Route
-        path={RoutesConstants.DRAFT}
-        element={
-          <ProtectedRouteTemplate>
-            <Draft />
           </ProtectedRouteTemplate>
         }
       />

@@ -9,7 +9,7 @@ export type TStackSpacing =
   | 'large'
   | 'huge'
 
-export type TStackAlignment =
+type TStackAlignment =
   | 'start'
   | 'center'
   | 'end'

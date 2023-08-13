@@ -1,10 +1,5 @@
 import styled from 'styled-components'
 
-export const DialogContent = styled.div`
-  background-color: var(--color-neutral-100);
-  padding: var(--spacing-2) var(--spacing-4);
-`
-
 export const InnerContent = styled.div`
   padding: var(--spacing-2) 0;
   max-width: 550px;

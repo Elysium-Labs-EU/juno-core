@@ -1,5 +1,4 @@
 // SYSTEM CODE
-export const ACCESS_TOKEN = 'accessToken'
 export type TActivePageHeader =
   | 'compose'
   | 'inbox'
@@ -37,7 +36,6 @@ export const CORE_STATUS_MAP = {
 }
 export const CREDENTIALS = 'credentials'
 export const DRAFT_LABEL = 'DRAFT'
-export const EMAIL_BODY_INVISIBLE = 'invisible'
 export const EMAIL_BODY_VISIBLE = 'visible'
 export const HISTORY_NEXT_PAGETOKEN = 'history'
 export const HISTORY_TIME_STAMP = 0
@@ -45,7 +43,6 @@ export const ID_TOKEN = 'idToken'
 export const INBOX_LABEL = 'INBOX'
 export const TODO_LABEL_NAME = 'Juno/To Do'
 export const JUNO_SETTINGS_LOCAL = 'junoSettings'
-export const JUNO_SIGNATURE = 'juno_signature'
 export const JUNO_BASE_LABEL = 'Juno'
 export const LAST_REFRESH = 'lastRefresh'
 export const LOAD_STATE_MAP = {
@@ -54,10 +51,7 @@ export const LOAD_STATE_MAP = {
   loaded: 'loaded',
   error: 'error',
 }
-export const MAX_RESULTS = 20
-export const MESSAGE_SEND_DELAY = 3000
 export const MIN_DELAY_REFRESH = 3500
-export const REFRESH_TOKEN = 'refreshToken'
 export const SEARCH_LABEL = 'SEARCH'
 export const SENT_LABEL = 'SENT'
 export const SPAM_LABEL = 'SPAM'
@@ -68,7 +62,7 @@ export const TRASH_LABEL = 'TRASH'
 export const BETA_VERSION = 'Private Beta'
 export const BUTTON_BACK = 'Back'
 export const BUTTON_FOCUS = 'Focus mode'
-export const ERROR_MESSAGE = 'Something went wrong, try again.'
+export const DRAFT_SNIPPET_INDICATOR = '(Draft)'
 export const FILE = 'File - '
 export const HEADER_ARCHIVE = 'archive'
 export const HEADER_DRAFT = 'drafts'
@@ -77,14 +71,10 @@ export const HEADER_SENT = 'sent'
 export const HEADER_SPAM = 'spam'
 export const HEADER_TODO = 'todo'
 export const HEADER_TRASH = 'trash'
-export const INVALID_SESSION = 'Invalid session'
-export const INVALID_TOKEN = 'Invalid token'
 export const LOAD_MORE = 'Load more messages'
-export const LOADING_TEXT = 'Loading'
 export const ME_LABEL = 'me'
 export const NETWORK_ERROR = 'Network Error. Please try again later'
 export const NO_MORE_RESULTS = "You've reached the end."
-export const NO_SUBJECT = '(No subject)'
 export const NOTHING_TO_SEE = 'Nothing to see here'
 export const SOMETHING_WRONG = 'Something went wrong whilst loading data.'
 

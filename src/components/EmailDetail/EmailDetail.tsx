@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useParams } from 'react-router-dom'
 
 import CustomButton from 'components/Elements/Buttons/CustomButton'
@@ -6,22 +6,16 @@ import Stack from 'components/Elements/Stack/Stack'
 import Layout from 'components/Layout/Layout'
 import {
   CORE_STATUS_MAP,
-  DRAFT_LABEL,
   INBOX_LABEL,
   SEARCH_LABEL,
   TODO_LABEL_NAME,
 } from 'constants/globalConstants'
-import useFetchDraftList from 'hooks/useFetchDraftList'
 import useFetchEmailDetail from 'hooks/useFetchEmailDetail'
 import { QiSearch } from 'images/svgIcons/quillIcons'
 import {
   selectCoreStatus,
   selectCurrentEmail,
-  selectIsForwarding,
-  selectIsReplying,
   selectViewIndex,
-  setIsForwarding,
-  setIsReplying,
   setViewIndex,
 } from 'store/emailDetailSlice'
 import {
@@ -35,7 +29,6 @@ import { selectLabelIds, selectStorageLabels } from 'store/labelsSlice'
 import type { TEmailListObject } from 'store/storeTypes/emailListTypes'
 import {
   selectIsFlexibleFlowActive,
-  selectIsProcessing,
   setInSearch,
 } from 'store/utilsSlice'
 import filterTrashMessages from 'utils/filterTrashMessages'
@@ -77,9 +70,6 @@ const EmailDetail = () => {
   const currentEmail = useAppSelector(selectCurrentEmail)
   const emailList = useAppSelector(selectEmailList)
   const isFlexibleFlowActive = useAppSelector(selectIsFlexibleFlowActive)
-  const isForwarding = useAppSelector(selectIsForwarding)
-  const isProcessing = useAppSelector(selectIsProcessing)
-  const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
   const searchList = useAppSelector(selectSearchList)
   const selectedEmails = useAppSelector(selectSelectedEmails)
@@ -87,7 +77,6 @@ const EmailDetail = () => {
   const viewIndex = useAppSelector(selectViewIndex)
   const dispatch = useAppDispatch()
   const [shouldRefreshDetail, setShouldRefreshDetail] = useState(false)
-  const isComposerActiveRef = useRef(false)
   const { threadId } = useParams<{
     threadId: string
     overviewId: string
@@ -107,20 +96,7 @@ const EmailDetail = () => {
     forceRefresh: shouldRefreshDetail,
     setShouldRefreshDetail,
   })
-  useFetchDraftList({
-    shouldFetchDrafts: !!activeEmailList?.threads.some((thread) =>
-      thread.messages.some((message) => message.labelIds.includes(DRAFT_LABEL))
-    ),
-  })
   useEdgeLoadNextPage({ activeEmailList })
-
-  // On closing of the composer refresh the message feed
-  useEffect(() => {
-    isComposerActiveRef.current = isForwarding || isReplying
-    if (!isProcessing && !isComposerActiveRef.current) {
-      setShouldRefreshDetail(true)
-    }
-  }, [isForwarding, isReplying, isProcessing])
 
   // This will set the activeEmailList when first opening the email - and whenever the newly focused email detail is updating the emaillist.
   // It will also update the activeEmailList whenever an email is archived or removed, triggered by the change in emailList or searchList.
@@ -157,24 +133,6 @@ const EmailDetail = () => {
       }
     }
   }, [emailList, activeEmailListIndex, searchList])
-
-  // Based on the location and threadId, set the correct Redux state. Location state comes from openEmail function
-  useEffect(() => {
-    const locationState = location.state as unknown
-    if (!(locationState instanceof Object)) {
-      return
-    }
-    if (isReplying && 'isReplying' in locationState) {
-      if (!locationState.isReplying) {
-        dispatch(setIsReplying(false))
-      }
-    }
-    if (isForwarding && 'isForwarding' in locationState) {
-      if (!locationState.isForwarding) {
-        dispatch(setIsForwarding(false))
-      }
-    }
-  }, [threadId])
 
   // If there is no viewIndex yet - set it by finding the index of the email.
   useEffect(() => {

@@ -1,20 +1,5 @@
 import styled from 'styled-components'
 
-export const Wrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-export const Inner = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: white;
-  padding: 32px 64px;
-  box-shadow: 0 1px 2px 0 rgb(9 30 66 / 25%);
-`
-
 interface StyledButtonProps {
   isactive: string
   showloadingstate: string
@@ -64,8 +49,4 @@ export const StyledButton = styled.button<StyledButtonProps>`
 export const IconContainer = styled.div`
   padding-right: var(--spacing-1);
   display: flex;
-`
-
-export const TextContainer = styled.div`
-  padding-left: var(--spacing-1);
 `

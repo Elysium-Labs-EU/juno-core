@@ -8,7 +8,6 @@ import Contributions from './Contributions/Contributions'
 import General from './General/General'
 import SettingsSidebar from './SettingsSidebar/SettingsSidebar'
 import * as S from './SettingsStyles'
-import Signature from './Signature/Signature'
 import CustomModal from '../Elements/Dialog/CustomDialog'
 
 const SETTINGS = 'Settings'
@@ -18,7 +17,6 @@ const Settings = () => {
   const activeModal = useAppSelector(selectActiveModal)
 
   const memoizedGeneral = useMemo(() => <General />, [])
-  const memoizedSignature = useMemo(() => <Signature />, [])
 
   // handleChangeFocus({
   //   direction: 'down',
@@ -85,7 +83,6 @@ const Settings = () => {
           setFocusedItemIndex={setFocusedItemIndex}
         />
         {focusedItemIndex === 0 ? memoizedGeneral : null}
-        {focusedItemIndex === 1 ? memoizedSignature : null}
         {focusedItemIndex === 2 ? <Contributions /> : null}
       </S.SettingsContainer>
     </CustomModal>

@@ -1,5 +1,5 @@
 import BackButton from 'components/Elements/Buttons/BackButton'
-import type { ILayout } from 'components/Layout/Layout'
+import type { LayoutProps } from 'components/Layout/Layout'
 import * as S from 'components/MainHeader/HeaderStyles'
 import {
   selectActiveEmailListIndex,
@@ -17,7 +17,7 @@ const Header = ({
   headerTitle,
   showNavigation,
   showBackButton,
-}: Omit<ILayout, 'children'>) => {
+}: Omit<LayoutProps, 'children'>) => {
   const activeEmailListIndex = useAppSelector(selectActiveEmailListIndex)
   const emailList = useAppSelector(selectEmailList)
 

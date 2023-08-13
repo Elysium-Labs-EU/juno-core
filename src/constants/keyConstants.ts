@@ -35,5 +35,3 @@ export const KEY_SPECIAL = {
   os: 'metaKey',
   shift: 'shiftKey',
 }
-
-export const BLACKLISTED_DOM_TARGETS = ['TEXTAREA', 'INPUT']

@@ -1,15 +1,12 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import Stack from 'components/Elements/Stack/Stack'
 import * as local from 'constants/emailDetailConstants'
-import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 
 import EmailDetailOptions from './EmailDetailOptions'
-import ForwardingComposer from './InlineComposers/ForwardingComposer'
-import ReplyComposer from './InlineComposers/ReplyComposer'
 import MappedMessages from './MappedMessages'
 import MessagesOverview from './MessagesOverview'
 import DetailNavigationContainer from '../DetailNavigation/DetailNavigationContainer'
@@ -60,12 +57,7 @@ const RenderEmailDetail = ({
   showNoNavigation,
   threadDetail,
 }: IRenderEmailDetail) => {
-  const isForwarding = useAppSelector(selectIsForwarding)
-  const isReplying = useAppSelector(selectIsReplying)
   const labelIds = useAppSelector(selectLabelIds)
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(
-    undefined
-  )
   const [previousPropToWatch, setPreviousPropToWatch] = useState<
     IRenderEmailDetail['threadDetail'] | null
   >(null)
@@ -78,29 +70,12 @@ const RenderEmailDetail = ({
     setPreviousPropToWatch(threadDetail)
   }
 
-  // A callback function that will listen to the discard or cancel event on the composer
-  const messageOverviewListener = useCallback(
-    (eventType: 'cancel' | 'discard') => {
-      // TODO: Discard eventType is currently unused.
-      if (eventType === 'cancel') {
-        setSelectedIndex(undefined)
-      }
-    },
-    []
-  )
-
-  const tabbedViewActive = isForwarding || isReplying
-
   const messagesTab = (
     <MessagesOverview
       labelIds={labelIds}
-      tabbedViewActive={tabbedViewActive}
       threadDetail={threadDetail}
     >
       <MappedMessages
-        indexMessageListener={(value) => {
-          setSelectedIndex(value)
-        }}
         setShouldRefreshDetail={setShouldRefreshDetail}
         threadDetail={threadDetail}
       />
@@ -108,15 +83,15 @@ const RenderEmailDetail = ({
   )
 
   const showDetailOptions =
-    threadDetail?.messages.length && !isReplying && !isForwarding
+    threadDetail?.messages.length
 
   return (
-    <S.Wrapper tabbedView={tabbedViewActive}>
+    <S.Wrapper>
       <S.EmailDetailWrapper>
-        <S.Placeholder tabbedView={tabbedViewActive} />
-        <S.EmailWithComposerContainer>
+        <S.Placeholder />
+        <S.EmailContainer>
           <S.Scroll>
-            <S.EmailTopControlContainer tabbedView={tabbedViewActive}>
+            <S.EmailTopControlContainer>
               <Tabs activeEmailList={activeEmailList} />
               {showNoNavigation ? (
                 <EmailPosition />
@@ -131,22 +106,7 @@ const RenderEmailDetail = ({
               <FilesOverview threadDetail={threadDetail} />
             </RenderTab>
           </S.Scroll>
-          {isReplying && threadDetail?.messages ? (
-            <ReplyComposer
-              localThreadDetail={threadDetail}
-              messageOverviewListener={messageOverviewListener}
-              selectedIndex={selectedIndex}
-            />
-          ) : null}
-          {isForwarding && threadDetail?.messages ? (
-            <ForwardingComposer
-              isForwarding={isForwarding}
-              localThreadDetail={threadDetail}
-              messageOverviewListener={messageOverviewListener}
-              selectedIndex={selectedIndex}
-            />
-          ) : null}
-        </S.EmailWithComposerContainer>
+        </S.EmailContainer>
         {showDetailOptions ? (
           <EmailDetailOptions
             threadDetail={threadDetail}

@@ -1,10 +1,5 @@
 import styled from 'styled-components'
 
-export const TopMenu = styled.ul`
-  margin: 0;
-  padding: 0;
-`
-
 export const MenuItemButton = styled.button`
   background-color: transparent;
   border: none;

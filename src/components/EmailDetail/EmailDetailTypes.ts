@@ -23,18 +23,15 @@ export interface IMessagesOverview
   extends Pick<IRenderEmailDetail, 'threadDetail'> {
   children: JSX.Element
   labelIds: TLabelState['labelIds']
-  tabbedViewActive: boolean
 }
 
 export interface IMappedMessages
   extends Pick<IMessagesOverview, 'threadDetail'> {
-  indexMessageListener: (value: number) => void
   setShouldRefreshDetail: Dispatch<SetStateAction<boolean>>
 }
 
 export interface IReadMessage
   extends Pick<IMappedMessages, 'setShouldRefreshDetail' | 'threadDetail'> {
-  handleClickListener: ({ mIndex }: { mIndex: number }) => void
   message: TThreadObject['messages'][0]
   messageIndex: number
 }

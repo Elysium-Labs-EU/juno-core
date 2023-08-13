@@ -4,8 +4,6 @@ import Stack from 'components/Elements/Stack/Stack'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
 import ArchiveOption from 'components/EmailDetail/Options/ArchiveOption'
 import DeleteOption from 'components/EmailDetail/Options/DeleteOption'
-import ForwardOption from 'components/EmailDetail/Options/ForwardOption'
-import ReplyOption from 'components/EmailDetail/Options/ReplyOption'
 import SkipOption from 'components/EmailDetail/Options/SkipOption'
 import ToDoOption from 'components/EmailDetail/Options/ToDoOption'
 import UnsubscribeOption from 'components/EmailDetail/Options/UnsubscribeOption'
@@ -22,7 +20,7 @@ import { onlyLegalLabelStrings } from 'utils/onlyLegalLabels'
 
 import EmailDetailOptionStacker from './EmailDetailOptionsStacker/EmailDetailOptionStacker'
 
-interface IEmailDetailOptions {
+interface EmailDetailOptionsProps {
   threadDetail: TThreadObject
   unsubscribeLink: string | null
 }
@@ -32,22 +30,13 @@ const ICON_SIZE = 16
 const EmailDetailOptions = ({
   threadDetail,
   unsubscribeLink,
-}: IEmailDetailOptions) => {
+}: EmailDetailOptionsProps) => {
   const dispatch = useAppDispatch()
   const coreStatus = useAppSelector(selectCoreStatus)
   const storageLabels = useAppSelector(selectStorageLabels)
   const alternateActions = useAppSelector(selectAlternateActions)
 
   const staticEmailLabels = emailLabels(threadDetail, storageLabels)
-
-  const memoizedReplyOption = useMemo(
-    () => <ReplyOption threadDetail={threadDetail} iconSize={ICON_SIZE} />,
-    [threadDetail]
-  )
-  const memoizedForwardOption = useMemo(
-    () => <ForwardOption threadDetail={threadDetail} iconSize={ICON_SIZE} />,
-    [threadDetail]
-  )
 
   const memoizedToDoOption = useMemo(() => {
     const lastMessageLabels =
@@ -111,8 +100,6 @@ const EmailDetailOptions = ({
     <S.EmailOptionsContainer>
       <S.StickyOptions>
         <Stack direction="vertical" spacing="mini">
-          {memoizedReplyOption}
-          {memoizedForwardOption}
           {memoizedToDoOption}
           {memoizedTrashArchiveOption}
           {(coreStatus === global.CORE_STATUS_MAP.focused ||

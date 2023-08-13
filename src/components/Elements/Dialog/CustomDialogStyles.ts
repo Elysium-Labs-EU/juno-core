@@ -113,12 +113,12 @@ export const StyledTitle = styled(DialogPrimitive.Title)`
   padding-bottom: var(--spacing-1);
 `
 
-export const StyledDescription = styled(DialogPrimitive.Description)`
-  color: var(--color-neutral-800);
-  font-size: var(--text-base);
-  line-height: 1.5;
-  margin: var(--spacing-1) 0 var(--spacing-2);
-`
+// const StyledDescription = styled(DialogPrimitive.Description)`
+//   color: var(--color-neutral-800);
+//   font-size: var(--text-base);
+//   line-height: 1.5;
+//   margin: var(--spacing-1) 0 var(--spacing-2);
+// `
 
 export const ModalIconButton = styled.button`
   all: unset;

@@ -11,10 +11,6 @@ export const gmailV1SchemaModifyMessageRequestSchemaEnhanced =
     delete: z.boolean().optional(),
   })
 
-export type TGmailV1SchemaModifyMessageRequestSchemaEnhanced = z.infer<
-  typeof gmailV1SchemaModifyMessageRequestSchemaEnhanced
->
-
 export const gmailV1SchemaModifyThreadRequestSchemaEnhanced =
   gmailV1SchemaModifyThreadRequestSchema.extend({
     delete: z.boolean().optional(),
@@ -27,10 +23,6 @@ export type TGmailV1SchemaModifyThreadRequestSchemaEnhanced = z.infer<
 export const UpdateRequestParamsBatchMessage = z.object({
   request: gmailV1SchemaModifyMessageRequestSchemaEnhanced,
 })
-
-export type TUpdateRequestParamsBatchMessage = z.infer<
-  typeof UpdateRequestParamsBatchMessage
->
 
 export const UpdateRequestParamsBatchThread = z.object({
   request: gmailV1SchemaModifyThreadRequestSchemaEnhanced,
@@ -46,10 +38,6 @@ export const UpdateRequestParamsSingleMessage = z.object({
   labelIds: z.array(z.string()),
   location: Location.optional(),
 })
-
-export type TUpdateRequestParamsSingleMessage = z.infer<
-  typeof UpdateRequestParamsSingleMessage
->
 
 export const UpdateRequestParamsSingleThread = z.object({
   threadId: z.string(),

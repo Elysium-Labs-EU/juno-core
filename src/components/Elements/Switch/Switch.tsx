@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 import * as S from './SwitchStyles'
 
-export interface SwitchProps extends SwitchPrimitives.SwitchProps {
+interface SwitchProps extends SwitchPrimitives.SwitchProps {
   labelposition?: 'left' | 'right'
   children?: ReactNode
   id: string

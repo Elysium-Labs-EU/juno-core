@@ -11,7 +11,6 @@ import { selectCoreStatus, setCoreStatus } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import type { AppDispatch } from 'store/store'
 import { selectInSearch } from 'store/utilsSlice'
-import createComposeViaURL from 'utils/createComposeViaURL'
 import handleOpenLink from 'utils/handleOpenLink'
 import { setModifierKey } from 'utils/setModifierKey'
 
@@ -33,7 +32,7 @@ const handleUnsubscribe = ({
     ) {
       dispatch(setCoreStatus(null))
     }
-    createComposeViaURL({ dispatch, mailToLink: unsubscribeLink })
+    console.log('unsubscribeLink', unsubscribeLink)
   } else {
     window.open(unsubscribeLink)
     const newWindow = window.open(unsubscribeLink)

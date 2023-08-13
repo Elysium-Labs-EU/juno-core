@@ -9,7 +9,6 @@ import type {
   IEmailDetailBody,
 } from 'components/EmailDetail/EmailDetailTypes'
 import { useAppDispatch } from 'store/hooks'
-import handleEmailLink from 'utils/handleEmailLink'
 import sanitizeAndParseHtmlContent from 'utils/sanitizeAndParseHtmlContent'
 import openLinkInNewTabTauri from 'utils/tauri/openLinkInNewTabTauri'
 
@@ -27,7 +26,6 @@ const postTreatmentBody = ({
   activeDocument,
 }: IPostTreatmentBody): void => {
   openLinkInNewTabTauri(activeDocument)
-  handleEmailLink(activeDocument, dispatch)
 }
 
 // Use the shadowRoot body and trigger all the postTreatment functions

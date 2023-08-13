@@ -4,7 +4,6 @@ import CustomIconButton from 'components/Elements/Buttons/CustomIconButton'
 import Stack from 'components/Elements/Stack/Stack'
 import StyledTooltip from 'components/Elements/StyledTooltip'
 import archiveMail from 'components/EmailOptions/ArchiveMail'
-import ReplyOverview from 'components/EmailOptions/ReplyOverview'
 import setToDoMail from 'components/EmailOptions/SetToDoMail'
 import thrashMail from 'components/EmailOptions/ThrashMail'
 import * as global from 'constants/globalConstants'
@@ -12,7 +11,6 @@ import * as themeConstants from 'constants/themeConstants'
 import {
   QiFolderArchive,
   QiFolderTrash,
-  QiReply,
   QiToDo,
 } from 'images/svgIcons/quillIcons'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
@@ -35,7 +33,6 @@ const ICON_SIZE = 18
 const InlineThreadActionsRegular = ({
   threadId,
   email,
-  emailIndex,
   isFocused,
 }: IInlineThreadActionsRegular) => {
   const labelIds = useAppSelector(selectLabelIds)
@@ -45,26 +42,6 @@ const InlineThreadActionsRegular = ({
   const getAllLegalMessagesLabelIds = useCallback(
     () => emailLabels(email, storageLabels),
     [email, storageLabels]
-  )
-
-  const memoizedReplyButton = useMemo(
-    () => (
-      <StyledTooltip title="Reply">
-        <CustomIconButton
-          icon={<QiReply size={ICON_SIZE} />}
-          onClick={() =>
-            ReplyOverview({
-              id: threadId,
-              emailIndex,
-              dispatch,
-            })
-          }
-          title="Reply"
-          dataCy="reply-inline-button"
-        />
-      </StyledTooltip>
-    ),
-    [emailIndex, threadId]
   )
 
   // TODO: Do not enable right now. This takes more time to implement, due to the loading of the email detail only on email detail mount.
@@ -162,7 +139,6 @@ const InlineThreadActionsRegular = ({
     <S.Wrapper data-testid="email-regular-inline-actions" isfocused={isFocused.toString()}>
       {threadId && (
         <Stack spacing="large">
-          {memoizedReplyButton}
           {memoizeMarkToDoButton}
           {memoizedArchiveButton}
           {memoizedDeleteButton}

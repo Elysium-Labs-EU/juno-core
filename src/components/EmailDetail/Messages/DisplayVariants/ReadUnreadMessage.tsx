@@ -7,7 +7,6 @@ import getSenderNamePartial from 'components/Elements/SenderName/getSenderNamePa
 import type { IReadMessage } from 'components/EmailDetail/EmailDetailTypes'
 import * as global from 'constants/globalConstants'
 import { selectProfile } from 'store/baseSlice'
-import { selectIsReplying } from 'store/emailDetailSlice'
 import { useAppSelector } from 'store/hooks'
 import { selectLabelIds } from 'store/labelsSlice'
 
@@ -29,7 +28,6 @@ export const getRemovedTrackers = ({
 }
 
 const ReadUnreadMessage = ({
-  handleClickListener,
   message,
   messageIndex,
   setShouldRefreshDetail,
@@ -37,7 +35,6 @@ const ReadUnreadMessage = ({
 }: IReadMessage) => {
   const [open, setOpen] = useState<boolean>(messageIndex === 0)
   const labelIds = useAppSelector(selectLabelIds)
-  const isReplying = useAppSelector(selectIsReplying)
   const { emailAddress } = useAppSelector(selectProfile)
 
   useEffect(() => {
@@ -76,7 +73,6 @@ const ReadUnreadMessage = ({
       return
     }
     if (
-      isReplying &&
       threadDetail.messages.length === 2 &&
       threadDetail.messages.some((item) =>
         item.labelIds.includes(global.DRAFT_LABEL)
@@ -84,7 +80,7 @@ const ReadUnreadMessage = ({
     ) {
       setOpen(true)
     }
-  }, [isReplying, open])
+  }, [open])
 
   const handleClick = () => {
     setOpen((currState) => !currState)
@@ -133,7 +129,6 @@ const ReadUnreadMessage = ({
       senderNamePartial={staticSenderNamePartial}
       specificEmailOptions={
         <SpecificEmailOptions
-          handleClickListener={handleClickListener}
           messageIndex={messageIndex}
           setShouldRefreshDetail={setShouldRefreshDetail}
           threadDetail={threadDetail}

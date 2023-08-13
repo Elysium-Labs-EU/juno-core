@@ -62,10 +62,3 @@ export const Header = styled.div`
   margin-bottom: var(--spacing-4);
   text-align: center;
 `
-
-export const ErrorBox = styled.div`
-  background-color: var(--color-blue-100);
-  border-radius: var(--radius-m);
-  padding: var(--spacing-2);
-  text-align: center;
-`

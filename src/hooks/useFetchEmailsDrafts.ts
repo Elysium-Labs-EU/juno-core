@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 
 import * as global from 'constants/globalConstants'
-import { fetchDrafts } from 'store/draftsSlice'
 import { fetchEmailsSimple, refreshEmailFeed } from 'store/emailListSlice'
 import { useAppDispatch, useAppSelector } from 'store/hooks'
 import { selectLoadedInbox } from 'store/labelsSlice'
@@ -85,18 +84,10 @@ export default function useFetchEmailsDrafts(
       dispatch(refreshEmailFeed())
     }
 
-    const draftFetching = () => {
-      if (labelIds.includes(global.DRAFT_LABEL)) {
-        return dispatch(fetchDrafts())
-      }
-    }
-
     const emailPromise = emailFetching()
-    const draftPromise = draftFetching()
 
     return () => {
       emailPromise?.abort()
-      draftPromise?.abort()
     }
   }, [labelIds])
 }

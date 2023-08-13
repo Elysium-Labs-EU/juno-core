@@ -1,5 +1,3 @@
-import { selectIsForwarding, selectIsReplying } from 'store/emailDetailSlice'
-import { useAppSelector } from 'store/hooks'
 import { Span } from 'styles/globalStyles'
 import countUniqueFiles from 'utils/countUniqueFiles/countUniqueFiles'
 
@@ -10,11 +8,8 @@ import * as ES from '../EmailDetailStyles'
 import type { IFilesOverview } from '../EmailDetailTypes'
 
 const FilesOverview = ({ threadDetail }: IFilesOverview) => {
-  const isReplying = useAppSelector(selectIsReplying)
-  const isForwarding = useAppSelector(selectIsForwarding)
-
   return (
-    <ES.EmailDetailContainer tabbedView={isReplying || isForwarding}>
+    <ES.EmailDetailContainer>
       <S.FilesWrapper>
         {threadDetail && countUniqueFiles(threadDetail) > 0 ? (
           <MappedFiles threadDetail={threadDetail} />

@@ -9,7 +9,6 @@ import type { IMessagesOverview } from '../EmailDetailTypes'
 const MessagesOverview = ({
   children,
   threadDetail,
-  tabbedViewActive,
   labelIds,
 }: IMessagesOverview) => {
   // On mount of the email detail - mark the email as read when it is unread.
@@ -18,8 +17,8 @@ const MessagesOverview = ({
   // TODO: Create an error state for this. Potentially by using RTK Query
 
   return (
-    <S.MessageFeedComposerContainer>
-      <S.EmailDetailContainer tabbedView={tabbedViewActive}>
+    <S.MessageFeedContainer>
+      <S.EmailDetailContainer>
         <Stack direction="vertical" style={{ width: '100%' }}>
           {threadDetail?.messages ? (
             children
@@ -30,7 +29,7 @@ const MessagesOverview = ({
           )}
         </Stack>
       </S.EmailDetailContainer>
-    </S.MessageFeedComposerContainer>
+    </S.MessageFeedContainer>
   )
 }
 export default MessagesOverview

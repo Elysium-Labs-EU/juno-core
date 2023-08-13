@@ -10,17 +10,6 @@ export const NavContainer = styled.div`
   place-items: center;
 `
 
-export const InnerMenu = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1 1;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-2);
-  margin: var(--spacing-4) auto var(--spacing-2);
-  max-width: min(100vw - 340px, 860px);
-  min-width: 665px;
-`
-
 export const BackButtonContainer = styled.div`
   position: relative;
   right: var(--spacing-2);

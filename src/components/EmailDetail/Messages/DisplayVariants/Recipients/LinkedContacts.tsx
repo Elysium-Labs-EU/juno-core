@@ -4,7 +4,6 @@ import ContactCard from 'components/Elements/ContactCard/ContactCard'
 import getSenderNameFull from 'components/Elements/SenderName/getSenderNameFull'
 import Stack from 'components/Elements/Stack/Stack'
 import * as S from 'components/EmailDetail/EmailDetailStyles'
-import * as compose from 'constants/composeEmailConstants'
 import * as emailDetail from 'constants/emailDetailConstants'
 import { selectProfile } from 'store/baseSlice'
 import { useAppSelector } from 'store/hooks'
@@ -126,14 +125,14 @@ const LinkedContants = ({
       {
         ccNameFull.length > 0 && (
           <Stack>
-            <MappedContacts contactsMap={ccNameFull} title={compose.CC_LABEL} />
+            <MappedContacts contactsMap={ccNameFull} title={emailDetail.CC_LABEL} />
           </Stack>
         )
       }
       {
         bccNameFull.length > 0 && (
           <Stack>
-            <MappedContacts contactsMap={bccNameFull} title={compose.CC_LABEL} />
+            <MappedContacts contactsMap={bccNameFull} title={emailDetail.BCC_LABEL} />
           </Stack>
         )
       }

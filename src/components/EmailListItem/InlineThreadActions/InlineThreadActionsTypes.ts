@@ -1,6 +1,6 @@
 import type { TThreadObject } from 'store/storeTypes/emailListTypes'
 
-export interface IInlineThreadActions {
+interface IInlineThreadActions {
   threadId: string
   isFocused: boolean
 }
@@ -11,5 +11,4 @@ export interface InlineThreadActionsStyles {
 
 export interface IInlineThreadActionsRegular extends IInlineThreadActions {
   email: TThreadObject
-  emailIndex: number
 }

@@ -9,7 +9,7 @@ type ActiveModalMapType =
   (typeof ACTIVE_MODAL_MAP)[keyof typeof ACTIVE_MODAL_MAP]
 
 // We do not require the showIntroduction key here, since we will intercept it when setting the Settings.
-export interface IUtilsState extends Omit<TUserSettings, 'showIntroduction'> {
+export interface UtilsState extends Omit<TUserSettings, 'showIntroduction'> {
   activeModal: null | ActiveModalMapType | (string & Record<string, never>)
   inSearch: boolean
   isLoading: boolean

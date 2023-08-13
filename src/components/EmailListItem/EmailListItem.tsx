@@ -6,7 +6,6 @@ import MessageCount from 'components/Elements/MessageCount'
 import CustomCheckbox from 'components/Elements/StyledCheckbox/StyledCheckbox'
 import getTimeStamp from 'components/Elements/TimeStamp/GetTimeStamp'
 import TimeStampDisplay from 'components/Elements/TimeStamp/TimeStampDisplay'
-import * as draft from 'constants/draftConstants'
 import * as global from 'constants/globalConstants'
 import * as keyConstants from 'constants/keyConstants'
 import useKeyPress from 'hooks/useKeyPress'
@@ -24,7 +23,6 @@ import multipleIncludes from 'utils/multipleIncludes'
 
 import ContactCardAvatar from './ContactCardAvatar'
 import * as S from './EmailListItemStyles'
-import InlineThreadActionsDraft from './InlineThreadActions/InlineThreadActionsDraft'
 import InlineThreadActionsRegular from './InlineThreadActions/InlineThreadActionsRegular'
 import SenderRecipientName from './SenderRecipientName'
 import Snippet from './Snippet'
@@ -162,12 +160,11 @@ const EmailListItem = ({
             <InlineThreadActionsRegular
               threadId={id}
               email={email}
-              emailIndex={index}
               isFocused={isFocused}
             />
-          ) : (
-            <InlineThreadActionsDraft threadId={id} isFocused={isFocused} />
-          )}
+          ) :
+            null
+          }
           <S.CellCheckbox
             inselect={(
               selectedEmails
@@ -218,7 +215,7 @@ const EmailListItem = ({
                   style={{ fontWeight: 'bold', marginRight: '10px' }}
                   data-testid="email-draft-snippet-indicator"
                 >
-                  {draft.DRAFT_SNIPPET_INDICATOR}
+                  {global.DRAFT_SNIPPET_INDICATOR}
                 </Span>
               )}
               <MessageCount messages={email.messages} />

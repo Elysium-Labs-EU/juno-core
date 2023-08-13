@@ -3,7 +3,7 @@ import { z } from 'zod'
 /**
  * The body of a single MIME message part.
  */
-export interface Schema$MessagePartBody {
+interface Schema$MessagePartBody {
   /**
    * When present, contains the ID of an external attachment that can be retrieved in a separate `messages.attachments.get` request. When not present, the entire content of the message part body is contained in the data field.
    */
@@ -18,7 +18,7 @@ export interface Schema$MessagePartBody {
   size?: number | null
 }
 
-export interface Schema$MessagePartHeader {
+interface Schema$MessagePartHeader {
   /**
    * The name of the header before the `:` separator. For example, `To`.
    */
@@ -106,10 +106,6 @@ export const gmailV1SchemaListLabelsResponseSchema = z.object({
   labels: z.array(gmailV1SchemaLabelSchema).optional(),
 })
 
-export type TGmailV1SchemaListLabelsResponseSchema = z.infer<
-  typeof gmailV1SchemaListLabelsResponseSchema
->
-
 export const gmailV1SchemaModifyMessageRequestSchema = z.object({
   addLabelIds: z.array(z.string()).optional().nullable(),
   removeLabelIds: z.array(z.string()).optional().nullable(),
@@ -150,26 +146,16 @@ export const gmailV1SchemaThreadSchema = z.object({
   snippet: z.string().optional().nullable(),
 })
 
-export type TGmailV1SchemaThreadSchema = z.infer<
-  typeof gmailV1SchemaThreadSchema
->
-
 export const gmailV1SchemaDraftSchema = z.object({
   id: z.string().optional().nullable(),
   message: gmailV1SchemaMessageSchema.optional(),
 })
-
-export type TGmailV1SchemaDraftSchema = z.infer<typeof gmailV1SchemaDraftSchema>
 
 export const gmailV1SchemaListDraftsResponseSchema = z.object({
   drafts: z.array(gmailV1SchemaDraftSchema).optional(),
   nextPageToken: z.string().optional().nullable(),
   resultSizeEstimate: z.number().optional().nullable(),
 })
-
-export type TGmailV1SchemaListDraftsResponseSchema = z.infer<
-  typeof gmailV1SchemaListDraftsResponseSchema
->
 
 export const gmailV1SchemaSmtpMsaSchema = z.object({
   host: z.string().optional().nullable(),
@@ -190,7 +176,3 @@ export const gmailV1SchemaSendAsSchema = z.object({
   treatAsAlias: z.boolean().optional().nullable(),
   verificationStatus: z.string().optional().nullable(),
 })
-
-export type TGmailV1SchemaSendAsSchema = z.infer<
-  typeof gmailV1SchemaSendAsSchema
->
